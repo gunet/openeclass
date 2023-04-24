@@ -1,6 +1,6 @@
-/*
- * Released under BSD License
- * Copyright (c) 2014-2021 hizzgdev@163.com
+/**
+ * @license BSD
+ * @copyright 2014-2023 hizzgdev@163.com
  *
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
@@ -12,7 +12,7 @@
     // __name__ should be a const value, Never try to change it easily.
     var __name__ = 'jsMind';
     // library version
-    var __version__ = '0.4.6';
+    var __version__ = '0.5.2';
     // author
     var __author__ = 'hizzgdev@163.com';
 
@@ -60,24 +60,29 @@
             hmargin: 100,
             vmargin: 50,
             line_width: 2,
-            line_color: '#555'
+            line_color: '#555',
+            draggable: false, // drag the mind map with your mouse, when it's larger that the container
+            hide_scrollbars_when_draggable: false, // hide container scrollbars, when mind map is larger than container and draggable option is true.
+            node_overflow: 'hidden' // hidden or wrap
         },
         layout: {
             hspace: 30,
             vspace: 20,
-            pspace: 13
+            pspace: 13,
+            cousin_space: 0
         },
         default_event_handle: {
             enable_mousedown_handle: true,
             enable_click_handle: true,
-            enable_dblclick_handle: true
+            enable_dblclick_handle: true,
+            enable_mousewheel_handle: true
         },
         shortcut: {
             enable: true,
             handles: {
             },
             mapping: {
-                addchild: 45, // Insert
+                addchild: [45, 4096+13], // Insert, Ctrl+Enter
                 addbrother: 13, // Enter
                 editnode: 113,// F2
                 delnode: 46, // Delete
@@ -104,19 +109,37 @@
             return;
         }
         this.options = opts;
-        this.inited = false;
+        this.initialized = false;
         this.mind = null;
         this.event_handles = [];
         this.init();
     };
 
     // ============= static object =============================================
-    jm.direction = { left: -1, center: 0, right: 1 };
+    jm.direction = {
+        left: -1, center: 0, right: 1, of: function (dir) {
+            if (!dir || dir === -1 || dir === 0 || dir === 1) {
+                return dir;
+            }
+            if (dir === '-1' || dir === '0' || dir === '1') {
+                return parseInt(dir);
+            }
+            if (dir.toLowerCase() === 'left') {
+                return this.left;
+            }
+            if (dir.toLowerCase() === 'right') {
+                return this.right;
+            }
+            if (dir.toLowerCase() === 'center') {
+                return this.center;
+            }
+        }
+    };
     jm.event_type = { show: 1, resize: 2, edit: 3, select: 4 };
     jm.key = { meta: 1 << 13, ctrl: 1 << 12, alt: 1 << 11, shift: 1 << 10 };
 
     jm.node = function (sId, iIndex, sTopic, oData, bIsRoot, oParent, eDirection, bExpanded) {
-        if (!sId) { logger.error('invalid nodeid'); return; }
+        if (!sId) { logger.error('invalid node id'); return; }
         if (typeof iIndex != 'number') { logger.error('invalid node index'); return; }
         if (typeof bExpanded === 'undefined') { bExpanded = true; }
         this.id = sId;
@@ -171,6 +194,10 @@
         return false;
     };
 
+    jm.node.is_node = function (n) {
+        return !!n && n instanceof jm.node;
+    };
+
     jm.node.prototype = {
         get_location: function () {
             var vd = this._data.view;
@@ -212,37 +239,22 @@
             if (this.root == null) {
                 this.root = new jm.node(nodeid, 0, topic, data, true);
                 this._put_node(this.root);
+                return this.root;
             } else {
                 logger.error('root node is already exist');
+                return null;
             }
         },
 
-        add_node: function (parent_node, nodeid, topic, data, idx, direction, expanded) {
+        add_node: function (parent_node, nodeid, topic, data, direction, expanded, idx) {
             if (!jm.util.is_node(parent_node)) {
-                var the_parent_node = this.get_node(parent_node);
-                if (!the_parent_node) {
-                    logger.error('the parent_node[id=' + parent_node + '] can not be found.');
-                    return null;
-                } else {
-                    return this.add_node(the_parent_node, nodeid, topic, data, idx, direction, expanded);
-                }
+                logger.error('the parent_node ' + parent_node + ' is not a node.');
+                return null;
             }
-            var nodeindex = idx || -1;
-            var node = null;
+            var node_index = idx || -1;
+            var node = new jm.node(nodeid, node_index, topic, data, false, parent_node, parent_node.direction, expanded);
             if (parent_node.isroot) {
-                var d = jm.direction.right;
-                if (isNaN(direction)) {
-                    var children = parent_node.children;
-                    var children_len = children.length;
-                    var r = 0;
-                    for (var i = 0; i < children_len; i++) { if (children[i].direction === jm.direction.left) { r--; } else { r++; } }
-                    d = (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right;
-                } else {
-                    d = (direction != jm.direction.left) ? jm.direction.right : jm.direction.left;
-                }
-                node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, d, expanded);
-            } else {
-                node = new jm.node(nodeid, nodeindex, topic, data, false, parent_node, parent_node.direction, expanded);
+                node.direction = direction || jm.direction.right;
             }
             if (this._put_node(node)) {
                 parent_node.children.push(node);
@@ -254,18 +266,13 @@
             return node;
         },
 
-        insert_node_before: function (node_before, nodeid, topic, data) {
+        insert_node_before: function (node_before, nodeid, topic, data, direction) {
             if (!jm.util.is_node(node_before)) {
-                var the_node_before = this.get_node(node_before);
-                if (!the_node_before) {
-                    logger.error('the node_before[id=' + node_before + '] can not be found.');
-                    return null;
-                } else {
-                    return this.insert_node_before(the_node_before, nodeid, topic, data);
-                }
+                logger.error('the node_before ' + node_before + ' is not a node.');
+                return null;
             }
             var node_index = node_before.index - 0.5;
-            return this.add_node(node_before.parent, nodeid, topic, data, node_index);
+            return this.add_node(node_before.parent, nodeid, topic, data, direction, true, node_index);
         },
 
         get_node_before: function (node) {
@@ -287,18 +294,13 @@
             }
         },
 
-        insert_node_after: function (node_after, nodeid, topic, data) {
+        insert_node_after: function (node_after, nodeid, topic, data, direction) {
             if (!jm.util.is_node(node_after)) {
-                var the_node_after = this.get_node(node_after);
-                if (!the_node_after) {
-                    logger.error('the node_after[id=' + node_after + '] can not be found.');
-                    return null;
-                } else {
-                    return this.insert_node_after(the_node_after, nodeid, topic, data);
-                }
+                logger.error('the node_after ' + node_after + ' is not a node.');
+                return null;
             }
             var node_index = node_after.index + 0.5;
-            return this.add_node(node_after.parent, nodeid, topic, data, node_index);
+            return this.add_node(node_after.parent, nodeid, topic, data, direction, true, node_index);
         },
 
         get_node_after: function (node) {
@@ -314,27 +316,22 @@
             if (node.isroot) { return null; }
             var idx = node.index;
             var brothers = node.parent.children;
-            if (brothers.length >= idx) {
+            if (brothers.length > idx) {
                 return node.parent.children[idx];
             } else {
                 return null;
             }
         },
 
-        move_node: function (node, beforeid, parentid, direction) {
+        move_node: function (node, before_id, parent_id, direction) {
             if (!jm.util.is_node(node)) {
-                var the_node = this.get_node(node);
-                if (!the_node) {
-                    logger.error('the node[id=' + node + '] can not be found.');
-                    return null;
-                } else {
-                    return this.move_node(the_node, beforeid, parentid, direction);
-                }
+                logger.error('the parameter node ' + node + ' is not a node.');
+                return null;
             }
-            if (!parentid) {
-                parentid = node.parent.id;
+            if (!parent_id) {
+                parent_id = node.parent.id;
             }
-            return this._move_node(node, beforeid, parentid, direction);
+            return this._move_node(node, before_id, parent_id, direction);
         },
 
         _flow_node_direction: function (node, direction) {
@@ -370,6 +367,11 @@
 
         _move_node: function (node, beforeid, parentid, direction) {
             if (!!node && !!parentid) {
+                var parent_node = this.get_node(parentid)
+                if (jm.node.inherited(node, parent_node)) {
+                    logger.error('can not move a node to its children');
+                    return null;
+                }
                 if (node.parent.id != parentid) {
                     // remove from parent's children
                     var sibling = node.parent.children;
@@ -380,8 +382,8 @@
                             break;
                         }
                     }
-                    node.parent = this.get_node(parentid);
-                    node.parent.children.push(node);
+                    node.parent = parent_node;
+                    parent_node.children.push(node);
                 }
 
                 if (node.parent.isroot) {
@@ -401,16 +403,7 @@
 
         remove_node: function (node) {
             if (!jm.util.is_node(node)) {
-                var the_node = this.get_node(node);
-                if (!the_node) {
-                    logger.error('the node[id=' + node + '] can not be found.');
-                    return false;
-                } else {
-                    return this.remove_node(the_node);
-                }
-            }
-            if (!node) {
-                logger.error('fail, the node can not be found');
+                logger.error('the parameter node ' + node + ' is not a node.');
                 return false;
             }
             if (node.isroot) {
@@ -532,7 +525,7 @@
                 if (node_parent.isroot) {
                     d = node_json.direction == 'left' ? jm.direction.left : jm.direction.right;
                 }
-                var node = mind.add_node(node_parent, node_json.id, node_json.topic, data, null, d, node_json.expanded);
+                var node = mind.add_node(node_parent, node_json.id, node_json.topic, data, d, node_json.expanded);
                 if (!!node_json['children']) {
                     var children = node_json.children;
                     for (var i = 0; i < children.length; i++) {
@@ -611,9 +604,9 @@
                 var narray = node_array.slice(0);
                 // reverse array for improving looping performance
                 narray.reverse();
-                var root_id = df._extract_root(mind, narray);
-                if (!!root_id) {
-                    df._extract_subnode(mind, root_id, narray);
+                var root_node = df._extract_root(mind, narray);
+                if (!!root_node) {
+                    df._extract_subnode(mind, root_node, narray);
                 } else {
                     logger.error('root node can not be found');
                 }
@@ -626,15 +619,15 @@
                     if ('isroot' in node_array[i] && node_array[i].isroot) {
                         var root_json = node_array[i];
                         var data = df._extract_data(root_json);
-                        mind.set_root(root_json.id, root_json.topic, data);
+                        var node = mind.set_root(root_json.id, root_json.topic, data);
                         node_array.splice(i, 1);
-                        return root_json.id;
+                        return node;
                     }
                 }
                 return null;
             },
 
-            _extract_subnode: function (mind, parentid, node_array) {
+            _extract_subnode: function (mind, parent_node, node_array) {
                 var df = jm.format.node_array;
                 var i = node_array.length;
                 var node_json = null;
@@ -642,17 +635,17 @@
                 var extract_count = 0;
                 while (i--) {
                     node_json = node_array[i];
-                    if (node_json.parentid == parentid) {
+                    if (node_json.parentid == parent_node.id) {
                         data = df._extract_data(node_json);
                         var d = null;
                         var node_direction = node_json.direction;
                         if (!!node_direction) {
                             d = node_direction == 'left' ? jm.direction.left : jm.direction.right;
                         }
-                        mind.add_node(parentid, node_json.id, node_json.topic, data, null, d, node_json.expanded);
+                        var node = mind.add_node(parent_node, node_json.id, node_json.topic, data, d, node_json.expanded);
                         node_array.splice(i, 1);
                         extract_count++;
-                        var sub_extract_count = df._extract_subnode(mind, node_json.id, node_array);
+                        var sub_extract_count = df._extract_subnode(mind, node, node_array);
                         if (sub_extract_count > 0) {
                             // reset loop index after extract subordinate node
                             i = node_array.length;
@@ -789,7 +782,7 @@
                 return node;
             },
 
-            _load_node: function (mind, parent_id, xml_node) {
+            _load_node: function (mind, parent_node, xml_node) {
                 var df = jm.format.freemind;
                 var node_id = xml_node.getAttribute('ID');
                 var node_topic = xml_node.getAttribute('TEXT');
@@ -816,17 +809,18 @@
                     node_direction = node_position == 'left' ? jm.direction.left : jm.direction.right;
                 }
                 //logger.debug(node_position +':'+ node_direction);
-                if (!!parent_id) {
-                    mind.add_node(parent_id, node_id, node_topic, node_data, null, node_direction, node_expanded);
+                var node = null;
+                if (!!parent_node) {
+                    node = mind.add_node(parent_node, node_id, node_topic, node_data, node_direction, node_expanded);
                 } else {
-                    mind.set_root(node_id, node_topic, node_data);
+                    node = mind.set_root(node_id, node_topic, node_data);
                 }
                 var children = xml_node.childNodes;
                 var child = null;
                 for (var i = 0; i < children.length; i++) {
                     child = children[i];
                     if (child.nodeType == 1 && child.tagName == 'node') {
-                        df._load_node(mind, node_id, child);
+                        df._load_node(mind, node, child);
                     }
                 }
             },
@@ -886,31 +880,17 @@
             return !!node && node instanceof jm.node;
         },
         ajax: {
-            _xhr: function () {
-                var xhr = null;
-                if (window.XMLHttpRequest) {
-                    xhr = new XMLHttpRequest();
-                } else {
-                    try {
-                        xhr = new ActiveXObject('Microsoft.XMLHTTP');
-                    } catch (e) { }
-                }
-                return xhr;
-            },
-            _eurl: function (url) {
-                return encodeURIComponent(url);
-            },
             request: function (url, param, method, callback, fail_callback) {
                 var a = jm.util.ajax;
                 var p = null;
                 var tmp_param = [];
                 for (var k in param) {
-                    tmp_param.push(a._eurl(k) + '=' + a._eurl(param[k]));
+                    tmp_param.push(encodeURIComponent(k) + '=' + encodeURIComponent(param[k]));
                 }
                 if (tmp_param.length > 0) {
                     p = tmp_param.join('&');
                 }
-                var xhr = a._xhr();
+                var xhr = new XMLHttpRequest();
                 if (!xhr) { return; }
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState == 4) {
@@ -1006,28 +986,10 @@
 
         json: {
             json2string: function (json) {
-                if (!!JSON) {
-                    try {
-                        var json_str = JSON.stringify(json);
-                        return json_str;
-                    } catch (e) {
-                        logger.warn(e);
-                        logger.warn('can not convert to string');
-                        return null;
-                    }
-                }
+                return JSON.stringify(json);
             },
             string2json: function (json_str) {
-                if (!!JSON) {
-                    try {
-                        var json = JSON.parse(json_str);
-                        return json;
-                    } catch (e) {
-                        logger.warn(e);
-                        logger.warn('can not parse to json');
-                        return null;
-                    }
-                }
+                return JSON.parse(json_str);
             },
             merge: function (b, a) {
                 for (var o in a) {
@@ -1049,7 +1011,7 @@
 
         uuid: {
             newid: function () {
-                return (new Date().getTime().toString(16) + Math.random().toString(16).substr(2)).substr(2, 16);
+                return (new Date().getTime().toString(16) + Math.random().toString(16).substring(2)).substring(2, 18);
             }
         },
 
@@ -1063,8 +1025,8 @@
 
     jm.prototype = {
         init: function () {
-            if (this.inited) { return; }
-            this.inited = true;
+            if (this.initialized) { return; }
+            this.initialized = true;
 
             var opts = this.options;
 
@@ -1072,7 +1034,8 @@
                 mode: opts.mode,
                 hspace: opts.layout.hspace,
                 vspace: opts.layout.vspace,
-                pspace: opts.layout.pspace
+                pspace: opts.layout.pspace,
+                cousin_space: opts.layout.cousin_space
             }
             var opts_view = {
                 container: opts.container,
@@ -1081,7 +1044,10 @@
                 hmargin: opts.view.hmargin,
                 vmargin: opts.view.vmargin,
                 line_width: opts.view.line_width,
-                line_color: opts.view.line_color
+                line_color: opts.view.line_color,
+                draggable: opts.view.draggable,
+                hide_scrollbars_when_draggable: opts.view.hide_scrollbars_when_draggable,
+                node_overflow: opts.view.node_overflow
             };
             // create instance of function provider
             this.data = new jm.data_provider(this);
@@ -1135,6 +1101,7 @@
             this.view.add_event(this, 'mousedown', this.mousedown_handle);
             this.view.add_event(this, 'click', this.click_handle);
             this.view.add_event(this, 'dblclick', this.dblclick_handle);
+            this.view.add_event(this, "mousewheel", this.mousewheel_handle)
         },
 
         mousedown_handle: function (e) {
@@ -1176,6 +1143,22 @@
                 if (!!nodeid) {
                     this.begin_edit(nodeid);
                 }
+            }
+        },
+
+        // Use [Ctrl] + Mousewheel, to zoom in/out.
+        mousewheel_handle: function (event) {
+            // Test if mousewheel option is enabled and Ctrl key is pressed.
+            if (!this.options.default_event_handle["enable_mousewheel_handle"] || !window.event.ctrlKey) {
+                return
+            }
+            // Avoid default page scrolling behavior.
+            event.preventDefault()
+
+            if (event.deltaY < 0) {
+                this.view.zoomIn()
+            } else {
+                this.view.zoomOut()
             }
         },
 
@@ -1318,20 +1301,28 @@
             return this.mind.root;
         },
 
-        get_node: function (nodeid) {
-            return this.mind.get_node(nodeid);
+        get_node: function (node) {
+            if (jm.util.is_node(node)) {
+                return node;
+            }
+            return this.mind.get_node(node);
         },
 
-        add_node: function (parent_node, nodeid, topic, data) {
+        add_node: function (parent_node, nodeid, topic, data, direction) {
             if (this.get_editable()) {
-                var node = this.mind.add_node(parent_node, nodeid, topic, data);
+                var the_parent_node = this.get_node(parent_node);
+                var dir = jm.direction.of(direction)
+                if (dir === undefined) {
+                    dir = this.layout.calculate_next_child_direction(the_parent_node);
+                }
+                var node = this.mind.add_node(the_parent_node, nodeid, topic, data, dir);
                 if (!!node) {
                     this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
                     this.view.reset_node_custom_style(node);
-                    this.expand_node(parent_node);
-                    this.invoke_event_handle(jm.event_type.edit, { evt: 'add_node', data: [parent_node.id, nodeid, topic, data], node: nodeid });
+                    this.expand_node(the_parent_node);
+                    this.invoke_event_handle(jm.event_type.edit, { evt: 'add_node', data: [the_parent_node.id, nodeid, topic, data, dir], node: nodeid });
                 }
                 return node;
             } else {
@@ -1340,15 +1331,19 @@
             }
         },
 
-        insert_node_before: function (node_before, nodeid, topic, data) {
+        insert_node_before: function (node_before, nodeid, topic, data, direction) {
             if (this.get_editable()) {
-                var beforeid = jm.util.is_node(node_before) ? node_before.id : node_before;
-                var node = this.mind.insert_node_before(node_before, nodeid, topic, data);
+                var the_node_before = this.get_node(node_before);
+                var dir = jm.direction.of(direction)
+                if (dir === undefined) {
+                    dir = this.layout.calculate_next_child_direction(the_node_before.parent);
+                }
+                var node = this.mind.insert_node_before(the_node_before, nodeid, topic, data, dir);
                 if (!!node) {
                     this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
-                    this.invoke_event_handle(jm.event_type.edit, { evt: 'insert_node_before', data: [beforeid, nodeid, topic, data], node: nodeid });
+                    this.invoke_event_handle(jm.event_type.edit, { evt: 'insert_node_before', data: [the_node_before.id, nodeid, topic, data, dir], node: nodeid });
                 }
                 return node;
             } else {
@@ -1357,15 +1352,19 @@
             }
         },
 
-        insert_node_after: function (node_after, nodeid, topic, data) {
+        insert_node_after: function (node_after, nodeid, topic, data, direction) {
             if (this.get_editable()) {
-                var afterid = jm.util.is_node(node_after) ? node_after.id : node_after;
-                var node = this.mind.insert_node_after(node_after, nodeid, topic, data);
+                var the_node_after = this.get_node(node_after);
+                var dir = jm.direction.of(direction)
+                if (dir === undefined) {
+                    dir = this.layout.calculate_next_child_direction(the_node_after.parent);
+                }
+                var node = this.mind.insert_node_after(the_node_after, nodeid, topic, data, dir);
                 if (!!node) {
                     this.view.add_node(node);
                     this.layout.layout();
                     this.view.show(false);
-                    this.invoke_event_handle(jm.event_type.edit, { evt: 'insert_node_after', data: [afterid, nodeid, topic, data], node: nodeid });
+                    this.invoke_event_handle(jm.event_type.edit, { evt: 'insert_node_after', data: [the_node_after.id, nodeid, topic, data, dir], node: nodeid });
                 }
                 return node;
             } else {
@@ -1433,9 +1432,10 @@
 
         move_node: function (nodeid, beforeid, parentid, direction) {
             if (this.get_editable()) {
-                var node = this.mind.move_node(nodeid, beforeid, parentid, direction);
-                if (!!node) {
-                    this.view.update_node(node);
+                var node = this.get_node(nodeid);
+                var updated_node = this.mind.move_node(node, beforeid, parentid, direction);
+                if (!!updated_node) {
+                    this.view.update_node(updated_node);
                     this.layout.layout();
                     this.view.show(false);
                     this.invoke_event_handle(jm.event_type.edit, { evt: 'move_node', data: [nodeid, beforeid, parentid, direction], node: nodeid });
@@ -1664,7 +1664,7 @@
             for (var i = 0; i < l; i++) {
                 this.event_handles[i](type, data);
             }
-        }
+        },
 
     };
 
@@ -1738,10 +1738,23 @@
         init: function () {
             logger.debug('layout.init');
         },
+
         reset: function () {
             logger.debug('layout.reset');
             this.bounds = { n: 0, s: 0, w: 0, e: 0 };
         },
+
+        calculate_next_child_direction: function (node) {
+            if (this.isside) {
+                return jm.direction.right;
+            }
+            var children = node.children || [];
+            var children_len = children.length;
+            var r = 0;
+            for (var i = 0; i < children_len; i++) { if (children[i].direction === jm.direction.left) { r--; } else { r++; } }
+            return (children_len > 1 && r > 0) ? jm.direction.left : jm.direction.right;
+        },
+
         layout: function () {
             logger.debug('layout.layout');
             this.layout_direction();
@@ -1868,6 +1881,9 @@
                     this.set_visible(node.children, false);
                 }
                 node_outer_height = Math.max(node._data.view.height, node_outer_height);
+                if (node.children.length > 1) {
+                    node_outer_height += this.opts.cousin_space;
+                }
 
                 layout_data.outer_height = node_outer_height;
                 layout_data.offset_y = base_y - node_outer_height / 2;
@@ -1913,6 +1929,9 @@
                     node_outer_height = 0;
                 }
                 node_outer_height = Math.max(node._data.view.height, node_outer_height);
+                if (node.children.length > 1) {
+                    node_outer_height += this.opts.cousin_space;
+                }
 
                 layout_data.outer_height = node_outer_height;
                 layout_data.offset_y = base_y - node_outer_height / 2;
@@ -2311,8 +2330,7 @@
             this.e_editor = $c('input');
 
             this.graph = this.opts.engine.toLowerCase() === 'svg' ? new jm.graph_svg(this) : new jm.graph_canvas(this);
-
-            this.e_panel.className = 'jsmind-inner';
+            this.e_panel.className = 'jsmind-inner jmnode-overflow-' + this.opts.node_overflow;
             this.e_panel.tabIndex = 1;
             this.e_panel.appendChild(this.graph.element());
             this.e_panel.appendChild(this.e_nodes);
@@ -2335,6 +2353,11 @@
             });
 
             this.container.appendChild(this.e_panel);
+
+            // Used to avoid dragging, while editing node.
+            this.dragging_enabled = true
+
+            this.draggable_canvas()
         },
 
         add_event: function (obj, event_name, event_handle) {
@@ -2495,8 +2518,16 @@
                     $t(element, node.topic);
                 }
             }
-            view_data.width = element.clientWidth;
-            view_data.height = element.clientHeight;
+            if (this.layout.is_visible(node)) {
+                view_data.width = element.clientWidth;
+                view_data.height = element.clientHeight;
+            } else {
+                let origin_style = element.getAttribute('style');
+                element.style = 'visibility: visible; left:0; top:0;';
+                view_data.width = element.clientWidth;
+                view_data.height = element.clientHeight;
+                element.style = origin_style;
+            }
         },
 
         select_node: function (node) {
@@ -2565,6 +2596,7 @@
                     this.jm.update_node(node.id, topic);
                 }
             }
+            this.e_panel.focus();
         },
 
         get_view_offset: function () {
@@ -2607,7 +2639,7 @@
             }
             this.actualZoom = zoom;
             for (var i = 0; i < this.e_panel.children.length; i++) {
-                this.e_panel.children[i].style.transform = 'scale(' + zoom + ')';
+                this.e_panel.children[i].style.zoom = zoom;
             };
             this.show(true);
             return true;
@@ -2620,10 +2652,10 @@
             var outer_h = this.e_panel.clientHeight;
             if (this.size.w > outer_w) {
                 var _offset = this.get_view_offset();
-                this.e_panel.scrollLeft = _offset.x - outer_w / 2;
+                this.e_panel.scrollLeft = _offset.x * this.actualZoom - outer_w / 2;
             }
             if (this.size.h > outer_h) {
-                this.e_panel.scrollTop = (this.size.h - outer_h) / 2;
+                this.e_panel.scrollTop = (this.size.h * this.actualZoom - outer_h) / 2;
             }
         },
 
@@ -2797,6 +2829,53 @@
                 this.graph.draw_line(pout, pin, _offset);
             }
         },
+
+        // Drag the whole mind map with your mouse (usefull when it's larger that the container).
+        draggable_canvas: function () {
+            // If draggable option is true.
+            if (this.opts.draggable) {
+                // Dragging disabled by default.
+                let dragging = false
+                let x, y
+                if (this.opts.hide_scrollbars_when_draggable) {
+                    // Avoid scrollbars when mind map is larger than the container (e_panel = id jsmind-inner)
+                    this.e_panel.style = 'overflow: hidden'
+                }
+                // Move the whole mind map with mouse moves, while button is down.
+                jm.util.dom.add_event(this.container, 'mousedown', (eventDown) => {
+                    dragging = true
+                    // Record current mouse position.
+                    x = eventDown.clientX
+                    y = eventDown.clientY
+                })
+                // Stop moving mind map once mouse button is released.
+                jm.util.dom.add_event(this.container, 'mouseup', () => {
+                    dragging = false
+                })
+                // Follow current mouse position and move mind map accordingly.
+                jm.util.dom.add_event(this.container, 'mousemove', (eventMove) => {
+                    if (this.dragging_enabled && dragging) {
+                        this.e_panel.scrollBy(x - eventMove.clientX, y - eventMove.clientY)
+                        // Record new current position.
+                        x = eventMove.clientX
+                        y = eventMove.clientY
+                    }
+                })
+            }
+        },
+
+        get_draggable_canvas: function () {
+            return this.opts.draggable
+        },
+
+        enable_draggable_canvas: function () {
+            this.dragging_enabled = true
+        },
+
+        disable_draggable_canvas: function () {
+            this.dragging_enabled = false
+        },
+
     };
 
     // shortcut provider
@@ -2825,7 +2904,13 @@
 
             for (var handle in this.mapping) {
                 if (!!this.mapping[handle] && (handle in this.handles)) {
-                    this._mapping[this.mapping[handle]] = this.handles[handle];
+                    var keys = this.mapping[handle];
+                    if(!Array.isArray(keys)){
+                        keys = [keys]
+                    }
+                    for(let key of keys){
+                        this._mapping[key] = this.handles[handle];
+                    }
                 }
             }
 
@@ -3008,8 +3093,8 @@
         }
     };
 
-    // quick way
     jm.show = function (options, mind) {
+        logger.warn('`jsMind.show(options, mind)` is deprecated, please use `jm = new jsMind(options); jm.show(mind);` instead')
         var _jm = new jm(options);
         _jm.show(mind);
         return _jm;
@@ -3024,4 +3109,3 @@
         $w[__name__] = jm;
     }
 })(typeof window !== 'undefined' ? window : global);
-
