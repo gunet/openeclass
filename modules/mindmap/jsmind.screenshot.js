@@ -1,6 +1,6 @@
-/*
- * Released under BSD License
- * Copyright (c) 2014-2021 hizzgdev@163.com
+/**
+ * @license BSD
+ * @copyright 2014-2023 hizzgdev@163.com
  * 
  * Project Home:
  *   https://github.com/hizzgdev/jsmind/
@@ -170,7 +170,7 @@
             ctx.textBaseline = 'bottom';
             ctx.fillStyle = '#000';
             ctx.font = '11px Verdana,Arial,Helvetica,sans-serif';
-            ctx.fillText('hizzgdev.github.io/jsmind', c.width - 5.5, c.height - 2.5);
+            ctx.fillText('github.com/hizzgdev/jsmind', c.width - 5.5, c.height - 2.5);
             ctx.textAlign = 'left';
             ctx.fillText($w.location, 5.5, c.height - 2.5);
         },
