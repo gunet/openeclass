@@ -122,7 +122,7 @@ function getUserLessonInfo($uid) {
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $dateFormatLong, $langAdminAn;
+    global $urlAppend, $langAdminAn;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -233,7 +233,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
  */
 function getUserMessages() {
 
-    global $uid, $urlServer, $langFrom, $dateFormatLong;
+    global $uid, $urlServer, $langFrom;
 
     $message_content = '';
 
