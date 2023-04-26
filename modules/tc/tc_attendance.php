@@ -19,11 +19,10 @@
  * ========================================================================
  */
 
-global $require_current_course,$require_login,$head_content,$pageName,$tool_content;
-global $langBBBRecordUserParticipation,$langWangBBBAttendance;
-
-$require_current_course = TRUE;
-$require_login = TRUE;
+if (!defined('TC_CRON')) {
+    $require_current_course = TRUE;
+    $require_login = TRUE;
+}
 
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
@@ -67,27 +66,32 @@ foreach($q as $server) {
         $course = Database::get()->querySingle("SELECT code, course.title, tc_session.title AS mtitle
             FROM course LEFT JOIN tc_session ON course.id = tc_session.course_id
             WHERE tc_session.meeting_id = ?s", $meet_id);
-        // don't list meetings from other APIs
+        // Don't list meetings from other APIs
         if (!$course) {
             continue;
         }
-        /****************************************************/
-        /*		write attendes in SQL database		*/
-        /****************************************************/
+        // Write attendees in SQL database
         $joinParams = array(
             'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
             'password' => $moder_pw, // REQUIRED - Must match either attendee or moderator pass for meeting.
         );
         // Get the URL to meeting info:
-        $room_xml = $bbb-> getMeetingInfoUrl($bbb_url, $salt, $joinParams);
-        /****************************************************/
-        /*		XML read from URL and write to SQL	*/
-        /****************************************************/
+        $room_xml = $bbb->getMeetingInfoUrl($bbb_url, $salt, $joinParams);
+        // Read XML from BBB URL and write to SQL
         xml2sql($room_xml, $bbb);
     }
 }
-// draws pop window
-draw_popup();
+if (defined('TC_CRON')) {
+    // update TC cron timestamp
+    $ts = date('Y-m-d H:i', time());
+    Database::get()->querySingle("INSERT INTO config
+        SET `key` = 'tc_cron_ts', value = ?s
+        ON DUPLICATE KEY UPDATE value = ?s",
+        $ts, $ts);
+} else {
+    // draw pop window
+    draw_popup();
+}
 
 /**
  * @brief record users attendance in db
@@ -96,7 +100,7 @@ draw_popup();
 function xml2sql($room_xml, $bbb) {
 
     $xml = $bbb->getMeetingInfo($room_xml);
-    $xml_meet_id = $xml->meetingID;   //meetingID of specific bbb request meeting room
+    $xml_meet_id = $xml->meetingID;   // meetingID of specific bbb request meeting room
 
     foreach ($xml->attendees->attendee as $row) {
             $bbbuserid = strval($row->userID);
@@ -108,9 +112,7 @@ function xml2sql($room_xml, $bbb) {
         /*	per room				    */
         /*	SQL table: tc_log			    */
         /****************************************************/
-        $nextid = Database::get()->querySingle("SELECT MAX(id) as id FROM tc_log")->id;
-        $nextid++;
-
+        $nextid = Database::get()->querySingle("SELECT MAX(id) + 1 as id FROM tc_log")->id;
         Database::get()->query("INSERT INTO tc_log (id, meetingid, bbbuserid, fullName)
                     VALUES (?d, ?s, ?s, ?s)", $nextid, $meetingid, $bbbuserid, $fullName);
 
@@ -125,7 +127,7 @@ function xml2sql($room_xml, $bbb) {
         $tcDateBegin = strtotime($q2->start_date);
         $tcDateEnd = strtotime($q2->end_date);
 
-        if($currentDate > $tcDateBegin && ($currentDate < $tcDateEnd || empty($tcDateEnd))) {
+        if ($currentDate > $tcDateBegin && ($currentDate < $tcDateEnd || empty($tcDateEnd))) {
             $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM tc_attendance
                                             WHERE bbbuserid = ?s AND meetingid = ?s AND
                                                   TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
@@ -135,7 +137,7 @@ function xml2sql($room_xml, $bbb) {
                                                 SET totaltime = totaltime + 1,
                                                     `date` = NOW()
                                             WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIMESTAMPDIFF(SECOND, `date`, NOW()) >= 60",
+                                                  TIME_FORMAT(now(), '%H:%i') <> TIME_FORMAT(`date`, '%H:%i')",
                                             $bbbuserid, $meetingid);
             } else {
                 $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
@@ -145,7 +147,7 @@ function xml2sql($room_xml, $bbb) {
             }
             $u = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
             if (!empty($u->id)) {
-                update_attendance_book($u, get_tc_id($meetingid),GRADEBOOK_ACTIVITY_TC);
+                update_attendance_book($u->id, get_tc_id($meetingid), GRADEBOOK_ACTIVITY_TC);
             }
         }
     }
