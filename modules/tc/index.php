@@ -183,6 +183,15 @@ if ($is_editor) {
                 $tc_server_type = '';
             }
 
+            $tc_cron_running = false;
+            $tc_cron_ts = Database::get()->querySingle("SELECT value FROM config WHERE `key` = 'tc_cron_ts'");
+            if ($tc_cron_ts) {
+                $tc_cron_ts = DateTime::createFromFormat('Y-m-d H:i', $tc_cron_ts->value)->add(new DateInterval('PT10M'));
+                $now = new DateTime();
+                if ($tc_cron_ts > $now) { // If cron timestamp is in last 10 minutes
+                    $tc_cron_running = true;
+                }
+            }
             $action_bar = action_bar([
                 [ 'title' => $langNewBBBSession,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
@@ -201,7 +210,7 @@ if ($is_editor) {
                   'icon' => 'fa-user-group',
                   'level' => 'primary-label',
                   'link-attrs' => "id=popupattendance1",
-                  'show' => is_active_tc_server('bbb', $course_id) ],
+                  'show' => !$tc_cron_running && is_active_tc_server('bbb', $course_id) ],
                 [ 'title' => $langParticipate,
                   'url' => "tcuserduration.php?course=$course_code",
                   'icon' => 'fa-clock',
