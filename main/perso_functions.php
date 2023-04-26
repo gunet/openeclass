@@ -33,10 +33,10 @@ require_once 'modules/message/class.msg.php';
  * @return string
  */
 function getUserLessonInfo($uid) {
-    global $teacher_courses_count, $student_courses_count, $langCourse, $langActions;
-    global $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite;
-    global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect, $langCode, $langPreview, $langOfCourse;
-    global $langPopular,$langThisCourseDescriptionIsEmpty;
+    global $teacher_courses_count, $student_courses_count, $langCourse, $langActions,
+           $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
+           $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
+           $langWelcomeSelect, $langPreview, $langOfCourse, $langPopular,$langThisCourseDescriptionIsEmpty;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -69,7 +69,7 @@ function getUserLessonInfo($uid) {
     //getting user's lesson info
     $teacher_courses_count = 0;
     $student_courses_count = 0;
-    
+
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table table-default portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
@@ -123,9 +123,9 @@ function getUserLessonInfo($uid) {
                                 </div>
                                 <div class='col-3 d-flex justify-content-end align-items-center pe-4 blackBlueText'>
                                     " . course_access_icon($data->visible) . " ";
-                                     if($data->popular_course == 1){ 
+                                     if($data->popular_course == 1){
                                         $lesson_content .= "<span class='fa fa-star textgreyColor ps-3' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-bs-original-title='$langPopular&nbsp$langCourse'' aria-label='$langPopular&nbsp$langCourse'></span>";
-                                     } 
+                                     }
                                 $lesson_content .= "</div>
                             </div>
                         
@@ -183,7 +183,7 @@ function getUserLessonInfo($uid) {
  */
 function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') {
 
-    global $urlAppend, $dateFormatLong, $langAdminAn, $langNoRecentAnnounce;
+    global $urlAppend, $langAdminAn;
 
     if ($type == 'more') {
         $sql_append = '';
@@ -253,7 +253,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         return $arr_an;
     } else {
         //Προσθήκη μετρητή ώστε να εμφανίζονται μέχρι 2 ανακοινώσεις σαν pagination
-        // Ολες οι τελευταιες ανακοινωσεις εμφανιζονται οταν πατησει ο χρηστης το κουμπι.
+        // Ολες οι τελευταίες ανακοινωσεις εμφανίζονται όταν πατήσει ο χρήστης το κουμπί.
         $counterAn = 0;
         $ann_content = '';
         if($q){
@@ -303,7 +303,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
  */
 function getUserMessages() {
 
-    global $uid, $urlServer, $langFrom, $dateFormatLong, $langDropboxNoMessage;
+    global $uid, $urlServer, $langFrom;
 
     $message_content = '';
 
@@ -313,7 +313,7 @@ function getUserMessages() {
     if($msgs){
          $message_content .= "<ul class='list-group list-group-flush mb-4'>";
     }
-   
+
     foreach ($msgs as $message) {
         if($counterMs <= 1){
             if ($message->course_id > 0) {
@@ -344,7 +344,7 @@ function getUserMessages() {
 
 /**
  * @brief check if user has accepted or rejected the current privacy policy
- * @global integer $uid
+ * @param $uid
  * @return boolean
  */
 function user_has_accepted_policy($uid) {
@@ -375,7 +375,7 @@ function user_accept_policy($uid, $accept = true) {
  * @DIKH MOY SYNARTHSH GIA NA FTIAKSW TO PAGINATION ME TIS EIKONES TWN MATHIMATWN STO PORTFOLIO BLADE ARXEIO
 */
 
-function getUserCoursesPic($uid){
+function getUserCoursesPic($uid) {
 
     global $session;
     if ($session->status == USER_TEACHER) {
