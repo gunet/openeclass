@@ -42,6 +42,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
     require_once 'modules/progress/AssignmentEvent.php';
     require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
     require_once 'include/log.class.php';
+    require_once 'include/sendMail.inc.php';
 
     // validate outcomes_tool_placement_url
     $launch_url = strtok($data['outcomes_tool_placement_url'], "?");
@@ -115,6 +116,7 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
 
                 // submit work
                 $student_name = trim(uid_to_name($uid));
+                $student_email = uid_to_email($uid);
                 $local_name = !empty($student_name)? $student_name : uid_to_name($uid, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
                 $local_name .= (!empty($am)) ? $am : '';
@@ -147,6 +149,44 @@ if ( is_array($data) && count($data) > 0 && isset($data['lis_result_sourcedid'])
                     triggerGame($assignment->course_id, $uid, $assignment_id);
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
                     triggerAssignmentAnalytics($assignment->course_id, $uid, $assignment_id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
+                }
+                // notify course admin (if requested)
+                if ($assignment->notification) {
+                    $emailSubject = "$logo - $langAssignmentPublished";
+                    $emailHeaderContent = "
+                        <div id='mail-header'>
+                            <br>
+                            <div>
+                                <div id='header-title'>$langHasAssignmentPublished $langTo $langsCourse <a href='{$urlServer}courses/$course_code/'>" . q(course_id_to_title($assignment->course_id)) . "</a>.</div>
+                                <ul id='forum-category'>
+                                    <li><span><b>$langSender:</b></span> <span class='left-space'>" . $student_name . "</span></li>
+                                </ul>
+                            </div>
+                        </div>";
+                    $emailBodyContent = "
+                        <div id='mail-body'>
+                            <br>
+                            <div><b>$langAssignment:</b> <span class='left-space'>".q($assignment->title)."</span></div><br>
+                        </div>";
+
+                    $emailContent = $emailHeaderContent . $emailBodyContent;
+                    $emailBody = html2text($emailContent);
+
+                    $profs = Database::get()->queryArray("SELECT user.id AS prof_uid, user.email AS email,
+                              user.surname, user.givenname
+                           FROM course_user JOIN user ON user.id = course_user.user_id
+                           WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $assignment->course_id);
+
+                    foreach ($profs as $prof) {
+                        if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $assignment->course_id))) {
+                            continue;
+                        } else {
+                            $to_name = $prof->givenname . " " . $prof->surname;
+                            if (!send_mail_multipart($logo, $student_email, $to_name, $prof->email, $emailSubject, $emailBody, $emailContent)) {
+                                continue;
+                            }
+                        }
+                    }
                 }
             }
         }
