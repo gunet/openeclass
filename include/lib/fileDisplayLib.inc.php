@@ -176,7 +176,7 @@ function file_url($path, $filename = null, $courseCode = null) {
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .
-                "modules/ebook/show.php/$courseCode/$ebook_id/_" .
+                "modules/ebook/show.php?$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
         if (defined('COMMON_DOCUMENTS')) {
@@ -191,7 +191,7 @@ function file_url($path, $filename = null, $courseCode = null) {
             $gid = '';
         }
         return htmlspecialchars($urlServer .
-                "modules/document/file.php/$courseCode$gid" .
+                "modules/document/file.php?$courseCode$gid" .
                 public_file_path($path, $filename), ENT_QUOTES);
     }
 }
@@ -212,7 +212,7 @@ function file_playurl($path, $filename = null, $courseCode = null) {
 
     if (defined('EBOOK_DOCUMENTS')) {
         return htmlspecialchars($urlServer .
-                "modules/ebook/play.php/$courseCode/$ebook_id/_" .
+                "modules/ebook/play.php?$courseCode/$ebook_id/_" .
                 public_file_path($path, $filename), ENT_QUOTES);
     } else {
         $gid = defined('GROUP_DOCUMENTS') ? ",$group_id" : '';

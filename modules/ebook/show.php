@@ -49,7 +49,10 @@ $file_path = false;
 $full_url_found = false;
 $show_orphan_file = false;
 
-$uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
+$uri = preg_replace('/\?[^?]*$/', '', str_replace(
+    ['/ebook/show.php?', '/ebook/play.php?'],
+    ['/ebook/show.php/', '/ebook/play.php/'],
+    $_SERVER['REQUEST_URI']));
 
 // If URI contains backslashes, redirect to forward slashes
 if (stripos($uri, '%5c') !== false) {
@@ -58,8 +61,8 @@ if (stripos($uri, '%5c') !== false) {
     exit;
 }
 
-$uri = (!$is_in_playmode) ? preg_replace('/\?[^?]*$/', '', strstr($_SERVER['REQUEST_URI'], 'ebook/show.php')) :
-        preg_replace('/\?[^?]*$/', '', strstr($_SERVER['REQUEST_URI'], 'ebook/play.php'));
+$uri = (!$is_in_playmode) ? strstr($uri, 'ebook/show.php') : strstr($uri, 'ebook/play.php');
+
 $path_components = explode('/', $uri);
 if (count($path_components) >= 4) {
     $course_code = $_SESSION['dbname'] = $path_components[2];
@@ -115,7 +118,7 @@ if ($not_found) {
 }
 
 triggerGame($ebook_id);
-$ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
+$ebook_url_base = "{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
     if (!preg_match('/\.html?$/i', $file_path)) {

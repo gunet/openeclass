@@ -749,7 +749,7 @@ function file_playurl_replacement($path, $filename, $subsystem, $uid) {
     }
 
     return htmlspecialchars($urlServer .
-            "modules/document/play.php/$course_code" .
+            "modules/document/play.php?$course_code" .
             public_file_path($path, $filename), ENT_QUOTES);
 }
 
@@ -765,6 +765,6 @@ function file_url_replacement($path, $filename, $subsystem, $uid) {
     }
 
     return htmlspecialchars($urlServer .
-            "modules/document/file.php/$course_code" .
+            "modules/document/file.php?$course_code" .
             public_file_path($path, $filename), ENT_QUOTES);
 }

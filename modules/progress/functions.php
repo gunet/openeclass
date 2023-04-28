@@ -1632,7 +1632,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
                                         ORDER BY CONVERT(psid, UNSIGNED), psid,
                                                  CONVERT(pssid, UNSIGNED), pssid", $catrow->id, $course_id, $course_id);
 
-            $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow->id/";
+            $ebook_url_base = "{$urlServer}modules/ebook/show.php?$course_code/$catrow->id/";
             $old_sid = false;
             foreach ($q as $row) {
                 $sid = $row->sid;
@@ -2313,7 +2313,7 @@ function student_view_progress() {
                                         </div>";
                                     $tool_content .= "
                                         <div class='col-sm-9'>
-                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>                                    
+                                        <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user' style='display: block; width: 100%'>" . ellipsize($badge->title, 40) . "</a>
                                             <div class='progress' style='margin-top: 15px; margin-bottom: 15px;'>
                                                 <p class='progress-bar active from-control-static' role='progressbar'
                                                         aria-valuenow='" . str_replace('%','',$badge_percentage) . "'

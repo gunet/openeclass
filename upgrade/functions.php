@@ -2387,6 +2387,8 @@ function upgrade_to_3_14($tbl_options) : void {
     if (DBHelper::fieldExists('tc_session', 'meeting_id')) {
         Database::get()->query("ALTER TABLE `tc_session` CHANGE `meeting_id` `meeting_id` varchar(255) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
     }
+    Database::get()->query('ALTER TABLE tc_log MODIFY id int(11) NOT NULL AUTO_INCREMENT');
+    Database::get()->query('ALTER TABLE tc_attendance MODIFY id int(11) NOT NULL AUTO_INCREMENT');
 
     // question feedback
     if (!DBHelper::fieldExists('exercise_question', 'feedback')) {

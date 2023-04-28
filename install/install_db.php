@@ -391,7 +391,7 @@ $db->query("CREATE TABLE monthly_summary (
     profesNum int(11) NOT NULL default 0,
     studNum int(11) NOT NULL default 0,
     visitorsNum int(11) NOT NULL default 0,
-    coursNum int(11) NOT NULL default 0,    
+    coursNum int(11) NOT NULL default 0,
     PRIMARY KEY (id)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -1124,7 +1124,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
     `password_lock` VARCHAR(255) NULL DEFAULT NULL,
     `continue_time_limit` INT(11) NOT NULL DEFAULT 0,
     `calc_grade_method` TINYINT DEFAULT 1,
-    `general_feedback` TEXT DEFAULT NULL                                      
+    `general_feedback` TEXT DEFAULT NULL
     ) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
@@ -1656,7 +1656,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `tc_servers` (
 
 
 $db->query("CREATE TABLE `tc_attendance` (
-    `id` int(11) NOT NULL DEFAULT '0',
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(20) DEFAULT NULL,
     `totaltime` int(11) NOT NULL DEFAULT '0',
@@ -1666,7 +1666,7 @@ $db->query("CREATE TABLE `tc_attendance` (
     KEY `meetingid` (`meetingid`)) $tbl_options");
 
 $db->query("CREATE TABLE `tc_log` (
-    `id` int(11) NOT NULL,
+    `id` int(11) NOT NULL AUTO_INCREMENT,
     `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `meetingid` varchar(42) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
     `bbbuserid` varchar(255) DEFAULT NULL,

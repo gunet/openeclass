@@ -570,14 +570,22 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         load_global_messages();
 
         $url_prefix_map = array(
+            $config_data['urlServer'] . 'modules/ebook/show.php?' . $course_data['code'] =>
+            $urlServer . 'modules/ebook/show.php?' . $new_course_code,
+            $config_data['urlAppend'] . 'modules/ebook/show.php?' . $course_data['code'] =>
+            $urlAppend . 'modules/ebook/show.php?' . $new_course_code,
+            $config_data['urlServer'] . 'modules/document/file.php?' . $course_data['code'] =>
+            $urlServer . 'modules/document/file.php?' . $new_course_code,
+            $config_data['urlAppend'] . 'modules/document/file.php?' . $course_data['code'] =>
+            $urlAppend . 'modules/document/file.php?' . $new_course_code,
             $config_data['urlServer'] . 'modules/ebook/show.php/' . $course_data['code'] =>
-            $urlServer . 'modules/ebook/show.php/' . $new_course_code,
+            $urlServer . 'modules/ebook/show.php?' . $new_course_code,
             $config_data['urlAppend'] . 'modules/ebook/show.php/' . $course_data['code'] =>
-            $urlAppend . 'modules/ebook/show.php/' . $new_course_code,
+            $urlAppend . 'modules/ebook/show.php?' . $new_course_code,
             $config_data['urlServer'] . 'modules/document/file.php/' . $course_data['code'] =>
-            $urlServer . 'modules/document/file.php/' . $new_course_code,
+            $urlServer . 'modules/document/file.php?' . $new_course_code,
             $config_data['urlAppend'] . 'modules/document/file.php/' . $course_data['code'] =>
-            $urlAppend . 'modules/document/file.php/' . $new_course_code,
+            $urlAppend . 'modules/document/file.php?' . $new_course_code,
             $config_data['urlServer'] . 'courses/' . $course_data['code'] =>
             $urlServer . 'courses/' . $new_course_code,
             $config_data['urlAppend'] . 'courses/' . $course_data['code'] =>

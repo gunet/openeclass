@@ -112,9 +112,8 @@ function xml2sql($room_xml, $bbb) {
         /*	per room				    */
         /*	SQL table: tc_log			    */
         /****************************************************/
-        $nextid = Database::get()->querySingle("SELECT MAX(id) + 1 as id FROM tc_log")->id;
-        Database::get()->query("INSERT INTO tc_log (id, meetingid, bbbuserid, fullName)
-                    VALUES (?d, ?s, ?s, ?s)", $nextid, $meetingid, $bbbuserid, $fullName);
+        Database::get()->query("INSERT INTO tc_log (meetingid, bbbuserid, fullName)
+                    VALUES (?s, ?s, ?s)", $meetingid, $bbbuserid, $fullName);
 
         /****************************************************/
         /*	Write users' presence in summary            */
@@ -122,33 +121,24 @@ function xml2sql($room_xml, $bbb) {
         /*	per room                                    */
         /*	SQL table: tc_attendance                   */
         /****************************************************/
-        $currentDate = strtotime(date("Y-m-d H:i:s"));
-        $q2 = Database::get()->querySingle("SELECT start_date, end_date FROM tc_session WHERE meeting_id = ?s", strval($xml_meet_id));
-        $tcDateBegin = strtotime($q2->start_date);
-        $tcDateEnd = strtotime($q2->end_date);
-
-        if ($currentDate > $tcDateBegin && ($currentDate < $tcDateEnd || empty($tcDateEnd))) {
-            $cnt = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM tc_attendance
-                                            WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
-                                            $bbbuserid, $meetingid)->cnt;
-            if ($cnt > 0) {
-                Database::get()->querySingle("UPDATE tc_attendance
-                                                SET totaltime = totaltime + 1,
-                                                    `date` = NOW()
-                                            WHERE bbbuserid = ?s AND meetingid = ?s AND
-                                                  TIME_FORMAT(now(), '%H:%i') <> TIME_FORMAT(`date`, '%H:%i')",
-                                            $bbbuserid, $meetingid);
-            } else {
-                $nextid = Database::get()->querySingle("SELECT MAX(id) AS id FROM tc_attendance")->id;
-                $nextid++;
-                Database::get()->query('INSERT INTO tc_attendance (`id`, `meetingid`, `bbbuserid`, `totaltime`)
-                    SELECT COALESCE(MAX(id) + 1, 1), ?s, ?s, 1 FROM tc_attendance', $meetingid, $bbbuserid);
-            }
-            $u = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
-            if (!empty($u->id)) {
-                update_attendance_book($u->id, get_tc_id($meetingid), GRADEBOOK_ACTIVITY_TC);
-            }
+        $record = Database::get()->querySingle("SELECT id FROM tc_attendance
+                                        WHERE bbbuserid = ?s AND meetingid = ?s AND
+                                              TIMESTAMPDIFF(HOUR, `date`, NOW()) < 24",
+                                        $bbbuserid, $meetingid);
+        if ($record) {
+            Database::get()->querySingle("UPDATE tc_attendance
+                                            SET totaltime = totaltime + 1,
+                                                `date` = NOW()
+                                        WHERE id = ?d AND
+                                              TIME_FORMAT(now(), '%H:%i') <> TIME_FORMAT(`date`, '%H:%i')",
+                                        $record->id);
+        } else {
+            Database::get()->query('INSERT INTO tc_attendance (`meetingid`, `bbbuserid`, `totaltime`)
+                VALUES (?s, ?s, 1)', $meetingid, $bbbuserid);
+        }
+        $user = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $bbbuserid);
+        if ($user) {
+            update_attendance_book($user->id, get_tc_id($meetingid), GRADEBOOK_ACTIVITY_TC);
         }
     }
 }

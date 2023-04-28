@@ -190,7 +190,7 @@ if (!$q && !isset($_GET['create'])) {
         if (is_null($r->sid)) {
             $title_link = q($r->title) . ' <i>(' . $langEBookNoSections . ')</i>';
         } else {
-            $title_link = "<a href='show.php/$course_code/$r->id/'>" . q($r->title) . "</a>";
+            $title_link = "<a href='show.php?$course_code/$r->id/'>" . q($r->title) . "</a>";
         }
         if ($is_editor) {
             $title_link .= '&nbsp;' . icon('fa-edit', $langEditChange, "edit.php?course=$course_code&amp;id=" . $r->id);

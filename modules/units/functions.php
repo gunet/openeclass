@@ -838,7 +838,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         } else {
             $gids_sql_ready = "''";
         }
-        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d 
+        $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d
                                  AND
                                 (assign_to_specific = 0 OR id IN
                                     (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d
@@ -919,7 +919,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 $gids_sql_ready = implode("','", array_keys($gids));
             }
         }
-        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d 
+        $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d
                        AND
                           (assign_to_specific = '0' OR
                            (assign_to_specific != '0' AND id IN (
@@ -1301,7 +1301,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
+        $link = "<a href='{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-book') . "";
     }
@@ -1421,7 +1421,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/$display_id/unit=$id'>";
+        $link = "<a href='{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
         $exlink = $link . q($title) . '</a>';
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
