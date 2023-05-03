@@ -764,16 +764,18 @@ function getLTILinksForTools() {
 
 function is_active_external_lti_app($externalapp, $lti_type, $course_id) {
     if ($externalapp->isEnabled()) {
-        $q = Database::get()->querySingle("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = ?s", $lti_type);
-        if (!is_null($q->course_id)) {
-            return true;
-        } else {
-            if ($q->all_courses == 1) { // external app is enabled for all courses
+        $q = Database::get()->queryArray("SELECT id, course_id, all_courses FROM lti_apps WHERE `type` = ?s", $lti_type);
+        foreach ($q as $data) {
+            if (!is_null($data->course_id)) {
                 return true;
-            } else { // otherwise check if external app is enabled for specific course
-                $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = $q->id", $course_id);
-                if ($s) {
+            } else {
+                if ($data->all_courses == 1) { // external app is enabled for all courses
                     return true;
+                } else { // otherwise check if external app is enabled for specific course
+                    $s = Database::get()->querySingle("SELECT * FROM course_lti_app WHERE course_id = ?d AND lti_app = $data->id", $course_id);
+                    if ($s) {
+                        return true;
+                    }
                 }
             }
         }
