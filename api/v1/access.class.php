@@ -62,7 +62,7 @@ class Access {
         $access->token = $token;
 
         $ip = Log::get_client_ip();
-        $result = Database::get()->querySingle('SELECT *, expired > NOW() AS token_expired
+        $result = Database::get()->querySingle('SELECT *, expired < NOW() AS token_expired
             FROM api_token WHERE token = ?s', $token);
         if ($result and $result->enabled and !$result->token_expired and (!$result->ip or match_ip_to_ip_or_cidr($ip, [$result->ip]))) {
             $access->isValid = true;

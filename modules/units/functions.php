@@ -1301,7 +1301,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/unit=$id'>";
+        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-book') . "";
     }
@@ -1421,7 +1421,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        $link = "<a href='{$urlServer}modules/ebook/show.php?$course_code/$ebook_id/$display_id/unit=$id'>";
+        $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/$display_id/unit=$id'>";
         $exlink = $link . q($title) . '</a>';
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
