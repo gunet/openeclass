@@ -2294,6 +2294,7 @@ $db->query("CREATE TABLE h5p_content_dependency (
     dependency_type VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)) $tbl_options");
 
+
 $db->query("CREATE TABLE api_token (
     `id` smallint NOT NULL AUTO_INCREMENT,
     `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,

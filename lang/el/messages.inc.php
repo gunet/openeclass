@@ -5652,6 +5652,10 @@ $langClearSettings = "Καθαρισμός Ρυθμίσεων";
 $langNotConfigured = 'Δεν έχει ρυθμιστεί';
 $langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.';
 $langUnknownSetting = 'Άγνωστη ρύθμιση';
+$langAPITokenExists = "Έχει δημιουργηθεί ήδη ένα token. Αν θέλετε να δημιουργήσετε νέο, κάντε κλικ στο 'Δημιουργία νέου token'";
+$langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API";
+$langCreateAPIToken = 'Δημιουργία νέου Token';
+$langAPITokenCreated = "Το token δημιουργήθηκε. Αντιγράψτε το έτσι ώστε να το χρησιμοποιήσετε στην εφαρμογή σας.";
 
 /* * ***********************************************************
  * Auto Judge
