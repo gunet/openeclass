@@ -736,12 +736,18 @@ function count_course_groups($cid){
  * @return array(int, string) an array with the number of visits and their duration formatted as h:mm:ss
 */
 function course_hits($cid, $userid = 0){
-    $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(duration) dur FROM actions_daily WHERE course_id=?d", $cid);
     if ($userid > 0) {
-        $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(duration) dur FROM actions_daily
-                            WHERE course_id = ?d AND user_id = ?d", $cid, $userid);
+        $r = Database::get()->querySingle("SELECT SUM(hits) hits FROM actions_daily
+                            WHERE course_id = ?d 
+                            AND user_id = ?d
+                            AND module_id != " . MODULE_ID_TC . "
+                            AND module_id != " . MODULE_ID_LP . "", $cid, $userid);
+
+        return $r->hits;
+    } else {
+        $r = Database::get()->querySingle("SELECT SUM(hits) hits, SUM(ABS(duration)) dur FROM actions_daily WHERE course_id=?d", $cid);
+        return array('hits' => $r->hits, 'duration' => user_friendly_seconds($r->dur));
     }
-    return array('hits' => $r->hits, 'duration' => user_friendly_seconds($r->dur));
 }
 
 /**
@@ -774,10 +780,26 @@ function user_friendly_seconds($seconds){
 }
 
 /**
- * Create the panel to show a plot
- * @param string plot_id the id of the id of the div where the plot will be drwan
- * @param string title the caption of the plot
- * @return string a formated element ready to display a plot
+ * @brief get course user registration date
+ * @param $course_id
+ * @param $user_id
+ * @return void
+ */
+function get_course_user_registration($course_id, $user_id) {
+    $q = Database::get()->querySingle("SELECT DATE_FORMAT(DATE(reg_date),'%e-%c-%Y') AS reg_date
+                    FROM course_user
+                    WHERE course_id = ?d AND user_id = ?d ORDER BY reg_date ASC LIMIT 1", $course_id, $user_id);
+    if ($q) {
+        return $q->reg_date;
+    }
+}
+
+
+/**
+ * @brief Create the panel to show a plot
+ * @param string $plot_id the id of the id of the div where the plot will be drawn
+ * @param string $title the caption of the plot
+ * @return string a formatted element ready to display a plot
 */
 function plot_placeholder($plot_id, $title = null){
     $p = "<div class='panel panel-default'><div class='panel-body'>";

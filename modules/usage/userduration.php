@@ -68,6 +68,7 @@ if (isset($_GET['u'])) { //  stats per user
 
 
     if (isset($_GET['format']) and $_GET['format'] == 'xls') { // xls output
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle($langParticipate);
@@ -78,11 +79,15 @@ if (isset($_GET['u'])) { //  stats per user
         $data[] = [ $user_details ];
 
         $ud = user_duration_course($_GET['u']);
+        $uhits = course_hits($course_id, $_GET['u']);
+        $ureg = get_course_user_registration($course_id, $_GET['u']);
+        $data[] = [ $langCourseRegistrationDate, $ureg];
+        $data[] = [ $langHits, $uhits ];
         $data[] = [ $langTotalDuration, $ud];
+
         $data[] = [];
 
         $data[] = [ $langModule, $langDuration ];
-
         foreach ($user_actions as $ua) {
             $mod = which_module($ua->module_id);
             $dur = format_time_duration(0 + $ua->duration);
@@ -92,8 +97,8 @@ if (isset($_GET['u'])) { //  stats per user
         $sheet->mergeCells("A1:B1");
         $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
         $sheet->getCell('A2')->getStyle()->getFont()->setBold(true);
+        $sheet->getCell('A3')->getStyle()->getFont()->setBold(true);
         $sheet->getCell('A4')->getStyle()->getFont()->setBold(true);
-        $sheet->getCell('B4')->getStyle()->getFont()->setBold(true);
         // create spreadsheet
         $sheet->fromArray($data, NULL);
         // file output
@@ -130,10 +135,14 @@ if (isset($_GET['u'])) { //  stats per user
                     'level' => 'primary-label')
             ), false);
             $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span>";
+            $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h5><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h5>";
             $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
             $tool_content .= "</div></div>";
         } else {
             $tool_content .= "<h3>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h3>";
+            $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h5><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h5>";
             $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
         }
 
@@ -380,10 +389,6 @@ if (isset($_GET['u'])) { //  stats per user
     } else {
         draw($tool_content, 2);
     }
-
-} else {
-    Session::Messages($langCheckCourseAdmin, 'alert-danger');
-    redirect_to_home_page("courses/$course_code/");
 }
 
 /**
