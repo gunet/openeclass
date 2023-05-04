@@ -46,10 +46,7 @@ if (isset($_SESSION['FILE_PHP__LP_MODE']) && $_SESSION['FILE_PHP__LP_MODE'] == t
     $is_in_lpmode = true;
 }
 
-$uri = preg_replace('/\?[^?]*$/', '', str_replace(
-    ['/document/file.php?', '/document/play.php?'],
-    ['/document/file.php/', '/document/play.php/'],
-    $_SERVER['REQUEST_URI']));
+$uri = preg_replace('/\?[^?]*$/', '', $_SERVER['REQUEST_URI']);
 
 // If URI contains backslashes, redirect to forward slashes
 if (stripos($uri, '%5c') !== false) {

@@ -1632,7 +1632,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
                                         ORDER BY CONVERT(psid, UNSIGNED), psid,
                                                  CONVERT(pssid, UNSIGNED), pssid", $catrow->id, $course_id, $course_id);
 
-            $ebook_url_base = "{$urlServer}modules/ebook/show.php?$course_code/$catrow->id/";
+            $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow->id/";
             $old_sid = false;
             foreach ($q as $row) {
                 $sid = $row->sid;
