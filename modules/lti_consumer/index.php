@@ -120,10 +120,11 @@ elseif(isset($_GET['choice']))
 } elseif(isset($_POST['new_lti_app'])) { // new lti app
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     add_update_lti_app($_POST['title'], $_POST['desc'], $_POST['lti_url'], $_POST['lti_key'], $_POST['lti_secret'],
-        $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], $course_id, false,
-        false, null, LTI_TYPE);
-        Session::flash('message',$langLTIAppAddSuccessful);
-        Session::flash('alert-class', 'alert-success');
+                       $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, $course_id, false,
+                       false, null);
+    Session::flash('message',$langLTIAppAddSuccessful);
+    Session::flash('alert-class', 'alert-success');
+
     redirect("../course_tools/index.php?course=$course_code");
 }
 else {
