@@ -65,13 +65,15 @@
                                 <div class='col-12 d-flex justify-content-center homepage_intro-margin @if($warning) mt-3 @endif mb-3'>
                                     <div class="panel panel-default homepageIntroPanel w-100 border-0 shadow-none">
                                         <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif p-5">
-                                            {!! get_config('homepage_intro') !!}
+                                            @if(get_config('homepage_title'))
+                                                <p class='text-center fs-4 normalBlueText TextBold mb-5'>{!! get_config('homepage_title') !!}</p>
+                                            @endif
+                                            @if(get_config('homepage_intro'))
+                                                {!! get_config('homepage_intro') !!}
+                                            @endif
+                                        
                                         </div>
-                                        @if(get_config('homepage_title'))
-                                            <div class='panel-footer'>
-                                                <p class='text-center text-uppercase fs-6 TextExtraBold normalBlueText pb-4'> {!! get_config('homepage_title') !!}</p>
-                                            </div>
-                                        @endif
+                                       
                                     </div>
                                 </div>
                             @endif
@@ -462,14 +464,15 @@
                         @if(get_config('homepage_title') or get_config('homepage_intro'))
                             <div class='col-12 mt-3'>
                                 <div class="panel panel-default homepageIntroPanel w-100 border-0 shadow-none">
-                                    <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif">
-                                        {!! get_config('homepage_intro') !!}
+                                    <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif p-3">
+                                            @if(get_config('homepage_title'))
+                                                <p class='text-center fs-4 normalBlueText TextSemiBold mb-3'>{!! get_config('homepage_title') !!}</p>
+                                            @endif
+                                            @if(get_config('homepage_intro'))
+                                                {!! get_config('homepage_intro') !!}
+                                            @endif
                                     </div>
-                                    @if(get_config('homepage_title'))
-                                        <div class='panel-footer'>
-                                            <p class='text-center text-uppercase fs-6 TextExtraBold normalBlueText pb-4'> {!! get_config('homepage_title') !!}</p>
-                                        </div>
-                                    @endif
+                                
                                 </div>
                             </div>
                         @endif

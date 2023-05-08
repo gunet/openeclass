@@ -217,7 +217,7 @@ function generate_single_post_html($post) {
                                   <div class="panel panel-default p-0">
                                         <div class="panel-heading p-1">
                                             <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                                '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') .'
+                                                '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') .'
                                             </a>
                                             '.$post_actions.'
                                         </div>
@@ -339,7 +339,7 @@ function generate_infinite_container_html($posts, $next_page) {
                     <div class="panel panel-default">
                       <div class="panel-heading p-1">
                         <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .
-                          profile_image($user_id, IMAGESIZE_SMALL, 'img-circle') . '
+                          profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '
                         </a>' .
                         $post_actions . '
                       </div>

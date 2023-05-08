@@ -132,19 +132,19 @@
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label class='col-sm-2 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
+                                    <label class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}</label>
                                     <div class='col-sm-12 d-inline-flex'>
                                         <div class='checkbox'>
-                                            <label class='col-sm-3 control-label-notes'>
+                                            <label class='me-2'>
                                                 <input type='checkbox' name='email_public' value='1' {{ $email_public_selected }}>{{ trans('langEmail') }}
                                             </label>
-                                            <label class='col-sm-3 control-label-notes'>
+                                            <label class='me-2'>
                                                 <input type='checkbox' name='am_public' value='1' {{ $am_public_selected }}>{{ trans('langAm') }}
                                             </label>
-                                            <label class='col-sm-3 control-label-notes'>
+                                            <label class='me-2'>
                                                 <input type='checkbox' name='phone_public' value='1' {{ $phone_public_selected }}>{{ trans('langPhone') }}
                                             </label>
-                                            <label class='col-sm-2 control-label-notes'>
+                                            <label>
                                                 <input type='checkbox' name='pic_public' value='1' {{ $pic_public_selected }}>{{ trans('langProfileImage') }}
                                             </label>
                                         </div>

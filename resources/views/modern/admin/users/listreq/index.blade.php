@@ -39,6 +39,7 @@
 
 
                     @if ($user_requests)
+                    <div class='col-12'>
                         <div class='table-responsive'>
                             <table id='requests_table' class='table-default'>
                                 {!! table_header() !!}
@@ -101,6 +102,7 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
                     @else
                         <div class='col-sm-12'><div class='alert alert-warning'>{{ trans('langUserNoRequests') }}</div></div>
                     @endif

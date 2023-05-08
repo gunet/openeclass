@@ -64,80 +64,82 @@
                         </div>
                     </div>
 
-                    <div class='table-responsive'>
-                        <table class='table-default'>
-                            <thead class='list-header'>
-                                <th>{{ trans('langAllAuthTypes') }}</th>
-                                <th class='text-center'>{!! icon('fa-gears', trans('langActions')) !!}</th>
-                            </thead>
-                            <tbody>
-                            @foreach ($authMethods as $authMethod)
-                                <tr>
-                                    <td{!! $authMethod->auth_default? '' : ' class=InvisibleAuth' !!}>
-                                        {{ strtoupper($authMethod->auth_name) }}
-                                        @if ($authMethod->auth_default > 1)
-                                            &nbsp;&nbsp;
-                                            <small>
-                                                <span class='label label-default'>{{ trans('langPrimaryAuthType') }}</span>
-                                            </small>
-                                        @endif
-                                    </td>
-                                    <td class='option-btn-cell text-center'>
-                                        {!! action_button(
-                                        [
+                    <div class='col-12'>
+                        <div class='table-responsive'>
+                            <table class='table-default'>
+                                <thead class='list-header'>
+                                    <th>{{ trans('langAllAuthTypes') }}</th>
+                                    <th class='text-center'>{!! icon('fa-gears', trans('langActions')) !!}</th>
+                                </thead>
+                                <tbody>
+                                @foreach ($authMethods as $authMethod)
+                                    <tr>
+                                        <td{!! $authMethod->auth_default? '' : ' class=InvisibleAuth' !!}>
+                                            {{ strtoupper($authMethod->auth_name) }}
+                                            @if ($authMethod->auth_default > 1)
+                                                &nbsp;&nbsp;
+                                                <small>
+                                                    <span class='label label-default'>{{ trans('langPrimaryAuthType') }}</span>
+                                                </small>
+                                            @endif
+                                        </td>
+                                        <td class='option-btn-cell text-center'>
+                                            {!! action_button(
                                             [
-                                                'title' => $authMethod->auth_default ? trans('langDeactivate') : trans('langActivate'),
-                                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;q=" . !$authMethod->auth_default,
-                                                'icon' => $authMethod->auth_default ? 'fa-toggle-off' : 'fa-toggle-on',
-                                                'show' => $authMethod->auth_id == 1 || $authMethod->auth_settings
-                                            ],
-                                            [
-                                                'title' => trans('langAuthSettings'),
-                                                'url' => "auth_process.php?auth=" . $authMethod->auth_id,
-                                                'icon' => 'fa-gear'
-                                            ],
-                                            [
-                                                'title' => trans('langPrimaryAuthType'),
-                                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=1",
-                                                'icon' => 'fa-flag',
-                                                'show' => $authMethod->auth_default and !$authMethod->auth_default > 1
-                                            ],
-                                            [
-                                                'title' => trans('langSecondaryAuthType'),
-                                                'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=0",
-                                                'icon' => 'fa-circle-o',
-                                                'show' => $authMethod->auth_default > 1
-                                            ],
-                                            [
-                                                'title' => trans('langConnTest'),
-                                                'url' => "auth_test.php?auth=$authMethod->auth_id",
-                                                'icon' => 'fa-plug',
-                                                'show' => $authMethod->auth_id != 1 && $authMethod->auth_settings
-                                            ],
-                                            [   'title' => "Ενεργοποίηση μετάβασης",
-                                                'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
-                                                'icon' => 'fa-bell',
-                                                'show' => $auth_name == 'cas' && !get_config('sso_transition')
-                                            ],
-                                            [
-                                                'title' => "Απενεργοποίηση μετάβασης",
-                                                'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
-                                                'icon' => 'fa-bell-slash',
-                                                'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')
-                                            ],
-                                            [
-                                                'title' => "Αιτήματα εξαιρέσεων μετάβασης",
-                                                'url' => "../auth/transition/admin_auth_transition.php",
-                                                'icon' => 'fa-exclamation',
-                                                'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')
-                                            ]
-                                        ])
-                                    !!}
-                                    </td>
-                                </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                                [
+                                                    'title' => $authMethod->auth_default ? trans('langDeactivate') : trans('langActivate'),
+                                                    'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;q=" . !$authMethod->auth_default,
+                                                    'icon' => $authMethod->auth_default ? 'fa-toggle-off' : 'fa-toggle-on',
+                                                    'show' => $authMethod->auth_id == 1 || $authMethod->auth_settings
+                                                ],
+                                                [
+                                                    'title' => trans('langAuthSettings'),
+                                                    'url' => "auth_process.php?auth=" . $authMethod->auth_id,
+                                                    'icon' => 'fa-gear'
+                                                ],
+                                                [
+                                                    'title' => trans('langPrimaryAuthType'),
+                                                    'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=1",
+                                                    'icon' => 'fa-flag',
+                                                    'show' => $authMethod->auth_default and !$authMethod->auth_default > 1
+                                                ],
+                                                [
+                                                    'title' => trans('langSecondaryAuthType'),
+                                                    'url' => "$_SERVER[PHP_SELF]?auth=" . $authMethod->auth_id . "&amp;p=0",
+                                                    'icon' => 'fa-circle-o',
+                                                    'show' => $authMethod->auth_default > 1
+                                                ],
+                                                [
+                                                    'title' => trans('langConnTest'),
+                                                    'url' => "auth_test.php?auth=$authMethod->auth_id",
+                                                    'icon' => 'fa-plug',
+                                                    'show' => $authMethod->auth_id != 1 && $authMethod->auth_settings
+                                                ],
+                                                [   'title' => "Ενεργοποίηση μετάβασης",
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?transition=true",
+                                                    'icon' => 'fa-bell',
+                                                    'show' => $auth_name == 'cas' && !get_config('sso_transition')
+                                                ],
+                                                [
+                                                    'title' => "Απενεργοποίηση μετάβασης",
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?transition=false",
+                                                    'icon' => 'fa-bell-slash',
+                                                    'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')
+                                                ],
+                                                [
+                                                    'title' => "Αιτήματα εξαιρέσεων μετάβασης",
+                                                    'url' => "../auth/transition/admin_auth_transition.php",
+                                                    'icon' => 'fa-exclamation',
+                                                    'show' => $auth_name == 'cas' && !is_null(get_config('sso_transition')) && get_config('sso_transition')
+                                                ]
+                                            ])
+                                        !!}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

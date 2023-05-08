@@ -143,7 +143,7 @@ Class Commenting {
                            <div class='media panel-default'>
                             <div class='panel-heading p-1'>
                                 <a class='media-left p-0' href='#'>
-                                ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
+                                ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."
                                 </a>
                                 ".$post_actions."
                             </div>

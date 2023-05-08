@@ -134,23 +134,23 @@ if (isset($_GET['u'])) { //  stats per user
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ), false);
-            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span>";
-            $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h5><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h5>";
-            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
+            $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default p-3 shadow-sm'><h5 class='normalBlueText TextBold'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h5>";
+            $tool_content .= "<h6 class='small-text'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h6 class='small-text'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h6 class='small-text'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h6>";
             $tool_content .= "</div></div>";
         } else {
-            $tool_content .= "<h3>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h3>";
-            $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h5><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h5>";
-            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
+            $tool_content .= "<h5>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h5>";
+            $tool_content .= "<h6 class='small-text'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h6 class='small-text'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h6 class='small-text'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h6>";
         }
 
         $tool_content .= "
         <div class='col-sm-12'>
         <div class='table-responsive'>
             <table class='table-default'>
-            <tr>
+            <tr class='list-header'>
               <th>$langModule</th>
               <th>$langDuration</th>
             </tr>";
