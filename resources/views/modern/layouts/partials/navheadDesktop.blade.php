@@ -76,7 +76,7 @@
             </div>
             
 
-            <div class="col-lg-3 ps-0">
+            <div class="col-lg-3 ps-0  @if(!get_config('enable_search') and isset($_SESSION['uid'])) d-flex justify-content-end align-items-end @endif">
 
                 <div class='row mt-0'>
                     <form class="d-flex justify-content-end d-inline-flex ps-0  @if(isset($_SESSION['uid'])) pe-0 @endif" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
@@ -91,7 +91,7 @@
                 </div>
 
                 @if (isset($_SESSION['uid']))
-                    <div class="row mt-5 pe-0">
+                    <div class="row @if(get_config('enable_search')) mt-5 @endif @if(!get_config('enable_search') and isset($_SESSION['uid'])) mb-2 @endif pe-0">
                         <div class='col-12 d-flex justify-content-end p-0 mt-xl-3 mt-lg-2 themeId'>
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 @if ((isset($is_admin) and $is_admin) or
