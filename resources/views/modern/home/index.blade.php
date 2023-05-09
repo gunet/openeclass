@@ -44,12 +44,12 @@
                                 </div>
                             </div>
                         @else
-                        <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-lg-flex justify-content-lg-end align-items-lg-end bg-transparent px-4 py-lg-0 py-4'>
+                        <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 contentLoginMobile d-lg-flex justify-content-lg-end align-items-lg-end d-flex justify-content-center align-items-center bg-transparent px-4 py-lg-0 py-4'>
                             <div class='card-body p-0' style='z-index:2;'>
                                 <div class='card-header bg-transparent border-0 d-flex justify-content-lg-end justify-content-center p-0'>
-                                    <a class='text-uppercase TextSemiBold text-white small-text' href="{{$urlAppend}}main/login_form.php">
+                                    <a class='d-flex align-items-center text-uppercase TextSemiBold userLoginMobile small-text' href="{{$urlAppend}}main/login_form.php">
                                         <img class="UserLoginIcon2" src="{{ $urlAppend }}template/modern/img/user_login_2.svg"> 
-                                        {{ trans('langUserLogin') }}
+                                        <span class='ms-2 ms-lg-0 loginText'>{{ trans('langUserLogin') }}</span>
                                     </a>
                                 </div>
                                 
