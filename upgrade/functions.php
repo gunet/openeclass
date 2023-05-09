@@ -2629,6 +2629,14 @@ function upgrade_to_4_0($tbl_options): void {
     if (!$current_theme or $current_theme == 'default') {
         set_config('theme', 'modern');
     }
+
+    if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
+        Database::get()->query("ALTER TABLE `group_properties`ADD `public_users_list` tinyint NOT NULL DEFAULT '1'");
+    }
+
+    if (!DBHelper::fieldExists('user','pic_public')) {
+        Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
+    }
 }
 
 

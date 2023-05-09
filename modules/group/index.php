@@ -759,7 +759,7 @@ if ($is_editor) {
 
             initialize_group_info($group_id);
 
-            print_r('allow_unreg:'.$allow_unreg);
+           
             // group visibility
             if (!is_group_visible($group_id, $course_id)) {
                 continue;
