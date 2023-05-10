@@ -24,7 +24,7 @@ $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 $app = ExtAppManager::getApp('apitoken');
 $duration_time = 365*24*60*60; // one year (in seconds)
 
-$toolName = $app->getShortDescription();
+$toolName = $langCreateAPIToken;
 $tool_content .= action_bar(array(
         array('title' => $langAdd,
           'url' => 'apitokenconf.php?add',
@@ -32,9 +32,11 @@ $tool_content .= action_bar(array(
           'level' => 'primary-label',
           'button-class' => 'btn-success'),
         array('title' => $langBack,
-            'url' => 'apitokenconf.php',
+            'url' => 'extapp.php',
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
+
+$tool_content .= "<div class='alert alert-info'>" . $app->getLongDescription() . "</div>";
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);

@@ -5632,7 +5632,9 @@ $langNotConfigured = 'Δεν έχει ρυθμιστεί';
 $langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.';
 $langUnknownSetting = 'Άγνωστη ρύθμιση';
 $langAPITokenExists = "Έχει δημιουργηθεί ήδη ένα token. Αν θέλετε να δημιουργήσετε νέο, κάντε κλικ στο 'Δημιουργία νέου token'";
-$langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API";
+$langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API.";
+$langAPITokenLongDesc = "Λεπτομέρειες σχετικά με τις υποστηριζόμενες κλήσεις του API μπορείτε να βρείτε 
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>εδώ</a>.";
 $langCreateAPIToken = 'Δημιουργία νέου Token';
 $langAPITokenCreated = "Το token δημιουργήθηκε. Αντιγράψτε το έτσι ώστε να το χρησιμοποιήσετε στην εφαρμογή σας.";
 

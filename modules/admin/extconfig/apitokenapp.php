@@ -29,7 +29,7 @@ class APITokenApp extends ExtApp
 
     public function getLongDescription()
     {
-        return $GLOBALS['langAPITokenShortDesc'];
+        return $GLOBALS['langAPITokenLongDesc'];
     }
 
     public function getConfigUrl() {
