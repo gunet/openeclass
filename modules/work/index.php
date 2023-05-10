@@ -2458,13 +2458,13 @@ function new_assignment() {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-select h-100' id='assign_box' size='10' multiple></select>
+                                <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple></select>
                               </td>
                               <td class='text-center'>
                                 <input class='btn btn-outline-primary btn-sm rounded-pill'type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='mt-2 btn btn-outline-primary btn-sm h-30px rounded-pill' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
-                                <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple></select>
+                                <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple></select>
                               </td>
                             </tr>
                         </table>
@@ -3525,7 +3525,7 @@ function show_edit_assignment($id) {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-select h-100' id='assign_box' size='10' multiple>
+                                <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
                                 ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                 </select>
                               </td>
@@ -3533,7 +3533,7 @@ function show_edit_assignment($id) {
                                 <input class='btn btn-outline-primary btn-sm rounded-pill' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm rounded-pill mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td>
-                                <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
                                 ".((isset($assignee_options)) ? $assignee_options : '')."
                                 </select>
                               </td>

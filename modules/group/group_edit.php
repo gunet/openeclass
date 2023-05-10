@@ -325,7 +325,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-select h-100' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-select h-100 rounded-0' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -338,7 +338,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-select h-100' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select class='form-select h-100 rounded-0' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -408,16 +408,16 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                 </div>
             </div>
             
-            <div class='form-group mt-4'>
-                <label class='col-sm-12 control-label-notes mb-2'>$langGroupPublicUserList:</label>
-                <div class='col-sm-12'>
+            <div class='form-group mt-4 d-inline-flex flex-wrap'>
+                <label class='col-auto control-label-notes'>$langGroupPublicUserList:</label>
+                <div class='col-auto ms-2'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='public_users_list' $checked[public_users_list]>
                       </label>
                     </div>
                 </div>
-            </div>
+            </div></br>
             
             <div class='form-group mt-4 d-inline-flex'>
                 <label class='col-auto control-label-notes'>$langGroupForum:</label>
@@ -428,7 +428,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                       </label>
                     </div>
                 </div>
-            </div>
+            </div></br>
             
             <div class='form-group mt-4 d-inline-flex'>
                 <label class='col-auto control-label-notes'>$langDoc:</label>
@@ -439,7 +439,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                       </label>
                     </div>
                 </div>
-            </div>
+            </div></br>
+
+
             <div class='form-group mt-4 d-inline-flex'>
             <label class='col-auto control-label-notes'>$langWiki:</label>
                 <div class='col-auto ms-2'>

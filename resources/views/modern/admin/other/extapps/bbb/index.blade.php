@@ -35,6 +35,7 @@
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     @if (count($bbb_servers) > 0)
+                    <div class='col-12'>
                         <div class='table-responsive'>
                             <table class='table-default'>
                                 <thead>
@@ -72,7 +73,7 @@
                                 </td>
                             </tr>
                         @endforeach            	
-                        </table>
+                        </table></div>
                     </div>
                     @else
                         <div class='col-12'>

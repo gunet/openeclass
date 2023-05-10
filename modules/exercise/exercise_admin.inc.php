@@ -536,7 +536,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                 </tr>
                                 <tr>
                                   <td>
-                                    <select class='form-select h-100' id='assign_box' size='10' multiple>
+                                    <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
                                     ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                     </select>
                                   </td>
@@ -544,7 +544,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     <input class='btn btn-sm btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm rounded-pill h-30px mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                                   </td>
                                   <td width='40%'>
-                                    <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                    <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
                                     ".((isset($assignee_options)) ? $assignee_options : '')."
                                     </select>
                                   </td>

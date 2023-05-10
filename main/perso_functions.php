@@ -267,8 +267,8 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                         <li class='list-group-item ps-0 pe-0'>
-                            <div class='item-wholeline text-center'>
-                                <a class='TextSemiBold fs-6' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            <div class='item-wholeline text-start'>
+                                <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                     
                                 <div class='blackBlueText TextBold'>$course_title</div>
                                 <div class='blackBlueText TextRegular'>$ann_date</div>
@@ -279,8 +279,8 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
                     <li class='list-group-item ps-0 pe-0'>
-                        <div class='item-wholeline text-center'>
-                            <a class='TextSemiBold fs-6' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                        <div class='item-wholeline text-start'>
+                            <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             
                             <div class='blackBlueText TextBold'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
                             <div class='blackBlueText TextRegular'>$ann_date</div>
@@ -323,7 +323,7 @@ function getUserMessages() {
             }
             $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item ps-0 pe-0'>
-                                    <div class='item-wholeline text-center'>
+                                    <div class='item-wholeline text-start'>
                                         <div class='text-title TextSemiBold'><span>$langFrom:</span>".display_user($message->author_id, false, false)."</div>
                                         
                                         <a class='TextSemiBold fs-6 mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>

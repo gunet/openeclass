@@ -53,11 +53,11 @@
                                             </div>
                                         </div>
                                         <div class="row justify-content-md-start justify-content-center text-center mt-2" >
-                                            <h5 class='text-center blackBlueText TextSemiBold'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h5>
+                                            <h5 class='text-center blackBlueText TextSemiBold mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h5>
                                             <p class='text-center'>
-                                                @if(($session->status == USER_TEACHER))
+                                                @if(($userdata->status == USER_TEACHER))
                                                     {{ trans('langMetaTeacher') }}
-                                                @elseif(($session->status == USER_STUDENT))
+                                                @elseif(($userdata->status == USER_STUDENT))
                                                     {{ trans('langCStudent') }}
                                                 @else
                                                     {{ trans('langAdministrator')}}
@@ -94,9 +94,9 @@
                                                         <div class="col-xl-4 col-lg-6 col-12 mb-2">
                                                             <p class='text-secondary TextMedium small-text'>{{ trans('langStatus') }}:</p>
                                                             <p class='blackBlueText small-text'>
-                                                                @if(($session->status == USER_TEACHER))
+                                                                @if(($userdata->status == USER_TEACHER))
                                                                     {{ trans('langMetaTeacher') }}
-                                                                @elseif(($session->status == USER_STUDENT))
+                                                                @elseif(($userdata->status == USER_STUDENT))
                                                                     {{ trans('langCStudent') }}
                                                                 @else
                                                                     {{ trans('langAdministrator')}}

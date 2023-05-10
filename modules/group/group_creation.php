@@ -124,7 +124,7 @@ if (isset($_GET['all'])) {
     </div></div>";
 } else {
     if ($is_editor) {
-            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select h-100'>";
+            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select h-100 rounded-0'>";
             $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname
                                                 FROM course_user, user
                                                 WHERE course_user.user_id = user.id AND
@@ -218,7 +218,7 @@ if (isset($_GET['all'])) {
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-select h-100' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-select h-100 rounded-0' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -231,7 +231,7 @@ if (isset($_GET['all'])) {
                               </div>
                           </td>
                           <td class='text-end'>
-                            <select class='form-select h-100' id='members_box' name='ingroup[]' size='15' multiple>
+                            <select class='form-select h-100 rounded-0' id='members_box' name='ingroup[]' size='15' multiple>
                               $tool_content_group_members
                             </select>
                           </td>
@@ -303,39 +303,38 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='row'>
-                    <label class='col-auto control-label-notes'>$langGroupForum:</label>
-                    <div class='col-auto pt-1'>
-                        <div class='checkbox'>
+                <div class='d-inline-flex'>
+                    <label class='pe-2 control-label-notes'>$langGroupForum:</label>
+                    
+                    <div class='checkbox'>
                         <label>
                             <input type='checkbox' name='forum'>
                         </label>
-                        </div>
                     </div>
+                    
                 </div>
             </div>
             <div class='form-group mt-4'>
-               <div class='row'>
-                    <label class='col-auto control-label-notes'>$langDoc:</label>
-                    <div class='col-auto pt-1'>
-                        <div class='checkbox'>
+               <div class='d-inline-flex'>
+                    <label class='control-label-notes pe-2'>$langDoc:</label>
+                
+                    <div class='checkbox'>
                         <label>
                             <input type='checkbox' name='documents'>
                         </label>
-                        </div>
                     </div>
+                   
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='row'>
-                    <label class='col-auto control-label-notes'>$langWiki:</label>
-                    <div class='col-auto pt-1'>
-                        <div class='checkbox'>
+                <div class='d-inline-flex'>
+                    <label class='pe-2 control-label-notes'>$langWiki:</label>
+                    <div class='checkbox'>
                         <label>
                             <input type='checkbox' name='wiki'>
                         </label>
-                        </div>
                     </div>
+                    
                 </div>
             </div>";
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";

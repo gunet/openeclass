@@ -2637,6 +2637,10 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('user','pic_public')) {
         Database::get()->query("ALTER TABLE user ADD pic_public TINYINT(1) NOT NULL DEFAULT 0 AFTER am_public");
     }
+
+    if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
+        Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
+    }
 }
 
 

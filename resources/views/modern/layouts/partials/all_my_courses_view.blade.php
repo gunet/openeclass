@@ -89,7 +89,7 @@
                                             </span><span class="sr-only">{{trans('langAdm')}}</span>
                                         </a>
                                         @else
-                                        <button class='btn deleteAdminBtn m-auto d-block' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                        <button class='btn deleteAdminBtn m-auto d-block rounded-2' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
                                             <i class="fa fa-times"></i>
                                         </button>
                                         @endif

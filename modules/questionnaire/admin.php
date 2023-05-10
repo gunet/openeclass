@@ -472,7 +472,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             </tr>
                             <tr>
                               <td>
-                                <select class='form-select h-100' id='assign_box' size='10' multiple>
+                                <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
                                 ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                 </select>
                               </td>
@@ -480,7 +480,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <input class='btn-outline-primary h-30px rounded-pill' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn-outline-primary h-30px rounded-pill mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
-                                <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
                                 ".((isset($assignee_options)) ? $assignee_options : '')."
                                 </select>
                               </td>

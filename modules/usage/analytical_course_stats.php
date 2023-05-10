@@ -19,17 +19,17 @@ $tool_content .= action_bar(array(
                     ));
 
 $tool_content .= "<div class='table-responsive'>
-                    <table class='table'>            
+                    <table class='table-default'>            
                     <tr class='list-header'>
-                        <th>$langFaculties</th>
-                        <th>$langTeachers</th>
-                        <th>$langStudents</th>                
-                        <th>$langCourses</th>
-                        <th>$langAnnouncements</th>
-                        <th>$langMessages</th>
-                        <th>$langDoc</th>
-                        <th>$langExercises</th>
-                        <th>$langWorks</th>
+                        <th class='text-white'>$langFaculties</th>
+                        <th class='text-white'>$langTeachers</th>
+                        <th class='text-white'>$langStudents</th>                
+                        <th class='text-white'>$langCourses</th>
+                        <th class='text-white'>$langAnnouncements</th>
+                        <th class='text-white'>$langMessages</th>
+                        <th class='text-white'>$langDoc</th>
+                        <th class='text-white'>$langExercises</th>
+                        <th class='text-white'>$langWorks</th>
                     </tr>";
 
 $r = $tree->buildRootIdsArray();

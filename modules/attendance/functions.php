@@ -1169,14 +1169,14 @@ function user_attendance_settings($attendance_id) {
                                     </tr>
                                     <tr>
                                       <td>
-                                        <select class='form-select h-100' id='users_box' size='10' multiple></select>
+                                        <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td class='text-center'>
                                         <input class='btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
                                         <input class='btn-outline-primary rounded-pill h-30px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
                                       </td>
                                       <td width='40%'>
-                                        <select class='form-select h-100' id='participants_box' name='specific[]' size='10' multiple></select>
+                                        <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
                                       </td>
                                     </tr>
                                 </table>

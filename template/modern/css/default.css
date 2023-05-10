@@ -273,7 +273,6 @@ textarea {
 }
 
 
-
 /* --------------------------------------------- BREADCRUMBS --------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -978,7 +977,7 @@ label:has(input[type="checkbox"]:disabled){
     .lesson-image img{ width:100%; height:208px; }
   }
   @media(min-width:992px){
-    .lesson-image img{ width:100%; height:170px; }
+    .lesson-image img{ width:100%; height:200px; object-fit: cover;}
   }
 
   .lesson-image:hover{ opacity:0.5; }
@@ -987,7 +986,7 @@ label:has(input[type="checkbox"]:disabled){
   
   .user-details-collapse-less{ display: none; cursor: pointer; float:right; }
   
-  .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8;}
+  .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8; }
   
   .btn_left_rigth{ height:30px; width:30px; border-radius:50%; border:solid 1px blue; }
 
@@ -1454,8 +1453,15 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
   .img-public-profile{ 
-    width:150px;
-    height:150px;
+    max-width: 200px;
+    max-height: 200px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: auto;
+    display: block;
+    border: solid 1px #e8e8e8;
+    border-radius: 50%;
   }
 
 /* -------------------------------------------- Forum ---------------------------------------------------------------------------------------*/
@@ -2762,8 +2768,29 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
-.panelGroupCourse.not_visible .card-body, .panelGroupCourse.not_visible .card-footer, .panelGroupCourse.not_visible .ViewGroup{
+.borderBoxPanel{
+  background-clip: border-box; border: 1px solid rgba(0,0,0,.125);
+  box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 8%); 
+}
+
+.borderBoxPanelNoShadow{
+  background-clip: border-box; border: 1px solid rgba(0,0,0,.125);
+}
+
+.panelCard.not_visible .card-body, .panelCard.not_visible .card-footer, .panelCard.not_visible .ViewGroup{
   opacity: 0.3;
+}
+
+.panelCard{
+  border-radius: 15px !important;
+}
+.panelCard .card-header{
+  border-top-left-radius: 15px !important;
+  border-top-right-radius: 15px !important;
+}
+.panelCard .card-footer{
+  border-bottom-left-radius: 15px !important;
+  border-bottom-right-radius: 15px !important;
 }
 
 

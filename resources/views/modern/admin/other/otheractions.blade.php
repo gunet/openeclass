@@ -38,6 +38,7 @@
                         @if (in_array($_GET['stats'], ['failurelogin', 'unregusers']))
                                 {!! $extra_info !!}
                         @elseif ($_GET['stats'] == 'musers')
+                        <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
@@ -66,7 +67,9 @@
                                     @endif
                                 </table>
                             </div>
+                        </div>
                         @elseif ($_GET['stats'] == 'memail')
+                        <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
@@ -93,7 +96,9 @@
                                     @endif
                                 </table>
                             </div>
+                        </div>
                         @elseif ($_GET['stats'] == 'mlogins')
+                        <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
@@ -122,6 +127,7 @@
                                     @endif
                                 </table>
                             </div>
+                        </div>
                         @elseif  ($_GET['stats'] == 'vmusers')
                                 <div class='col-12'>
                                     <div class='shadow-sm p-3 rounded'>
@@ -157,6 +163,7 @@
                                     </div>
                                 </div>
                         @elseif  ($_GET['stats'] == 'cusers')
+                        <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class='list-header'>
@@ -173,7 +180,9 @@
                                     @endforeach
                                 </table>
                             </div>
+                        </div>
                         @elseif ($_GET['stats'] == 'popularcourses')
+                        <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class="list-header">
@@ -188,6 +197,7 @@
                                     @endforeach
                                 </table>
                             </div>
+                        </div>
                         @endif
                    @endif
                 </div>

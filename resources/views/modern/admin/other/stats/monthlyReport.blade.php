@@ -19,35 +19,38 @@
 
                     {!! isset($action_bar) ?  $action_bar : '' !!}
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+                    <div class='col-12'>
+                        <div class='alert alert-info'>
+                            {{ trans('langMonthlyReportInfo') }}
+                        </div>
                     </div>
 
-                    <div class='alert alert-info'>
-                        {{ trans('langMonthlyReportInfo') }}
-                    </div>
-                    <table class='table-default'>
-                        <tbody>
-                            <th class='list-header'>{{ trans('langMonth') }}</th>
-                            <th class='list-header text-center'>{{ trans('langTeachers') }}</th>
-                            <th class='list-header text-center'>{{ trans('langStudents') }}</th>
-                            <th class='list-header text-center'>{{ trans('langGuests') }}</th>
-                            <th class='list-header text-center'>{{ trans('langCourses') }}</th>
+                    <div class='col-12'>
+                        <div class='table-responsive'>
+                            <table class='table-default'>
+                                <tbody>
+                                    <th class='list-header text-white'>{{ trans('langMonth') }}</th>
+                                    <th class='list-header text-center text-white'>{{ trans('langTeachers') }}</th>
+                                    <th class='list-header text-center text-white'>{{ trans('langStudents') }}</th>
+                                    <th class='list-header text-center text-white'>{{ trans('langGuests') }}</th>
+                                    <th class='list-header text-center text-white'>{{ trans('langCourses') }}</th>
 
-                            @foreach ($monthly_data as $data)
-                                @php
-                                    $formatted_data = date_format(date_create($data[0]), "n / Y")
-                                @endphp
-                                <tr>
-                                    <td>{{ $formatted_data }}</td>
-                                    <td class='text-center'>{{ $data[1] }}</td>
-                                    <td class='text-center'>{{ $data[2] }}</td>
-                                    <td class='text-center'>{{ $data[3] }}</td>
-                                    <td class='text-center'>{{ $data[4] }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                    @foreach ($monthly_data as $data)
+                                        @php
+                                            $formatted_data = date_format(date_create($data[0]), "n / Y")
+                                        @endphp
+                                        <tr>
+                                            <td>{{ $formatted_data }}</td>
+                                            <td class='text-center'>{{ $data[1] }}</td>
+                                            <td class='text-center'>{{ $data[2] }}</td>
+                                            <td class='text-center'>{{ $data[3] }}</td>
+                                            <td class='text-center'>{{ $data[4] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -500,14 +500,14 @@ function user_gradebook_settings() {
                                     </tr>
                                     <tr>
                                       <td>
-                                        <select class='form-select h-100' id='users_box' size='10' multiple></select>
+                                        <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td class='text-center'>
                                         <input class='btn btn-outline-primary rounded-pill' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
                                         <input class='btn btn-outline-primary rounded-pill mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
                                       </td>
                                       <td width='40%'>
-                                        <select class='form-select h-100' id='participants_box' name='specific[]' size='10' multiple></select>
+                                        <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
                                       </td>
                                     </tr>
                                 </table>
@@ -1202,14 +1202,15 @@ function register_user_grades($gradebook_id, $actID) {
         }
         $tool_content .= "</tbody></table></div></div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<div class='col-xs-12'>" .
+        $tool_content .= "<div class='col-12 d-flex'>" .
                         form_buttons(array(
                             array(
                                 'text' => $langGradebookBooking,
                                 'name' => 'bookUsersToAct',
-                                'value'=> $langGradebookBooking
+                                'value'=> $langGradebookBooking,
+                                'class' => 'submitAdminBtn',
                                 ))).
-                        "<a href='index.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "' class='btn btn-default'>$langCancel</a>";
+                        "<a href='index.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "' class='btn cancelAdminBtn'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field()."</form></div></div>";
     }

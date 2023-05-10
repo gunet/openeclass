@@ -40,13 +40,25 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-secondary')
                             ),false);
 if ($numOfAnnouncements > 0) {
-    $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default bg-white'><div class='panel-body bg-white'>";
+    
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
-        $tool_content .= "<div class='single_announcement'><div class='announcement-title control-label-notes'>" . q($announceArr[$i]->title) . "</div><hr>
-		<div class='announcement-main mt-3'>" . standard_text_escape($announceArr[$i]->body) . "</div>
-        <div class='announcement-date info-date text-end'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</div>
-		</div>";
+        $tool_content .= "
+                    <div class='col-sm-12 mt-3'>
+                        <div class='card panelCard'>
+                            <div class='card-header bg-light'>
+                                <div class='announcement-title control-label-notes'>" . q($announceArr[$i]->title) . "</div>
+                            </div>
+                            <div class='panel-body'>
+                                <div class='single_announcement'>
+                                    <div class='announcement-main'>" . standard_text_escape($announceArr[$i]->body) . "</div>
+                                </div>
+                            </div>
+                            <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                <div class='announcement-date info-date text-end'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</div>
+                            </div>
+                        </div>
+                    </div>";
     }
-    $tool_content .= "</div></div></div>";
+   
 }
 draw($tool_content, 0);
