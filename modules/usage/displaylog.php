@@ -31,9 +31,9 @@ if (isset($_GET['from_admin'])) {
 } else {
     $require_current_course = true;
     $require_login = true;
+    $require_editor = true;
 }
 
-$require_editor = true;
 $require_help = true;
 $helpTopic = 'course_stats';
 $helpSubTopic = 'users_actions';
@@ -93,7 +93,7 @@ if (!isset($_REQUEST['course_code'])) {
 if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
-    $navigation[] = array('url' => '../admin/otheractions.php', 'name' => $langRecordLog);
+    $navigation[] = array('url' => '../usage/index.php?t=a', 'name' => $langUsage);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "../admin/index.php",
