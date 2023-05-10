@@ -637,6 +637,15 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 }
             }
         }
+        $forum_ids = '(' . implode(', ', array_values($forum_map))  . ')';
+        Database::get()->query("UPDATE forum
+            SET num_topics = (SELECT COUNT(*) FROM forum_topic WHERE forum_id = forum.id),
+                num_posts = (SELECT COUNT(*) FROM forum_topic, forum_post WHERE topic_id = forum_topic.id AND forum_id = forum.id),
+                last_post_id = (SELECT forum_post.id FROM forum_topic, forum_post WHERE topic_id = forum_topic.id AND forum_id = forum.id ORDER BY post_time LIMIT 1)
+            WHERE forum.id IN $forum_ids");
+        Database::get()->query("UPDATE forum_topic
+            SET last_post_id = (SELECT id FROM forum_post WHERE topic_id = forum_topic.id ORDER BY post_time LIMIT 1)
+            WHERE forum_id IN $forum_ids");
 
         $forumLastPosts = Database::get()->queryArray("SELECT DISTINCT last_post_id FROM forum WHERE course_id = ?d ", intval($new_course_id));
         if (is_array($forumLastPosts) && count($forumLastPosts) > 0) {
@@ -1130,7 +1139,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('badge' => $badge_map),
             'map_function' => 'badge_criterion_map_function',
             'map_function_data' => array($document_map, $video_map, $videolink_map,
-                                         $blog_map, $comment_map, $forum_map, $forum_topic_map,
+                                         $blog_map, $forum_map, $forum_topic_map,
                                          $lp_learnPath_map, $ebook_map, $poll_map,
                                          $wiki_map, $assignments_map, $exercise_map),
             'delete' => array('id')
@@ -1184,7 +1193,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $assignments_map,
                     $exercise_map,
                     $forum_map,
-                    $forum_topic_map)
+                    $forum_topic_map,
+                    $poll_map)
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
 
@@ -1225,7 +1235,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                     $assignments_map,
                     $exercise_map,
                     $forum_map,
-                    $forum_topic_map)
+                    $forum_topic_map,
+                    $poll_map)
                 ), $url_prefix_map, $backupData, $restoreHelper);
         }
 
@@ -1721,7 +1732,7 @@ function unit_map_function(&$data, $maps) {
     // opoy yparxei if isset, isxyei h:
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
-    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map) = $maps;
+    list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $video_category_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map, $forum_map, $forum_topic_map, $poll_map) = $maps;
     if ($data['type'] == 'videolinks') {
         $data['type'] == 'videolink';
     }
@@ -1770,6 +1781,8 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = @$forum_map[$data['res_id']];
     } elseif ($type == 'topic') {
         $data['res_id'] = @$forum_topic_map[$data['res_id']];
+    } elseif ($type == 'poll') {
+        $data['res_id'] = @$poll_map[$data['res_id']];
     }
     return true;
 }
@@ -1784,7 +1797,6 @@ function comments_not_null(&$data) {
 function ratings_map_function(&$data, $maps) {
     list($blog_post_map, $forum_post_map, $link_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
-    $data['rid'] = null;
     if ($rtype == 'blogpost') {
         $data['rid'] = @$blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
@@ -1796,13 +1808,12 @@ function ratings_map_function(&$data, $maps) {
     } elseif ($rtype == 'wallpost') {
         $data['rid'] = @$wall_map[$data['rid']];
     }
-    return !is_null($data['rid']);
+    return $data['rid'];
 }
 
 function comments_map_function(&$data, $maps) {
     list($blog_post_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
-    $data['rid'] = null;
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
@@ -1810,7 +1821,7 @@ function comments_map_function(&$data, $maps) {
     } elseif ($rtype == 'wallpost') {
         $data['rid'] = $wall_map[$data['rid']];
     }
-    return !is_null($data['rid']);
+    return $data['rid'];
 }
 
 function abuse_report_map_function(&$data, $maps) {
@@ -1872,7 +1883,7 @@ function attendance_gradebook_activities_map_function(&$data, $maps) {
 
 function certificate_criterion_map_function(&$data, $maps) {
     list($document_map, $video_map, $videolink_map,
-         $blog_map, $comment_map, $forum_map, $forum_topic_map,
+         $blog_map, $forum_map, $forum_topic_map,
          $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map,
          $assignments_map, $exercise_map) = $maps;
 
@@ -1887,12 +1898,11 @@ function certificate_criterion_map_function(&$data, $maps) {
         case 'videolink': $data['resource'] = $videolink_map[$data['resource']];
                     $data['module'] = MODULE_ID_VIDEO;
                     break;
-        case 'blog': $data['resource'] = $blog_map[$data['resource']];
-                    $data['module'] = MODULE_ID_BLOG;
+        case 'blog': $data['module'] = MODULE_ID_BLOG;
                     break;
-        /*case 'blogpost': $data['resource'] = $blog_map[$data['resource']];
+        case 'blogpost': $data['resource'] = $blog_map[$data['resource']];
                     $data['module'] = MODULE_ID_COMMENTS;
-                    break; */
+                    break;
         case 'forum': $data['resource'] = $forum_map[$data['resource']];
                     $data['module'] = MODULE_ID_FORUM;
                     break;
@@ -1928,7 +1938,7 @@ function certificate_criterion_map_function(&$data, $maps) {
 
 function badge_criterion_map_function(&$data, $maps) {
     list($document_map, $video_map, $videolink_map,
-         $blog_map, $comment_map, $forum_map, $forum_topic_map,
+         $blog_map, $forum_map, $forum_topic_map,
          $lp_learnPath_map, $ebook_map, $poll_map, $wiki_map,
          $assignments_map, $exercise_map) = $maps;
 
@@ -1943,12 +1953,11 @@ function badge_criterion_map_function(&$data, $maps) {
         case 'videolink': $data['resource'] = $videolink_map[$data['resource']];
                     $data['module'] = MODULE_ID_VIDEO;
                     break;
-        case 'blog': $data['resource'] = $blog_map[$data['resource']];
-                    $data['module'] = MODULE_ID_BLOG;
+        case 'blog': $data['module'] = MODULE_ID_BLOG;
                     break;
-        /*case 'blogpost': $data['resource'] = $blog_map[$data['resource']];
+        case 'blogpost': $data['resource'] = $blog_map[$data['resource']];
                     $data['module'] = MODULE_ID_COMMENTS;
-                    break; */
+                    break;
         case 'forum': $data['resource'] = $forum_map[$data['resource']];
                     $data['module'] = MODULE_ID_FORUM;
                     break;
