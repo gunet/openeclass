@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,9 +20,6 @@
  * ========================================================================
  */
 
-
-/**** Summary info    ****/
-
 $tool_content .= action_bar(array(
                 array('title' => $langSystemActions,
                     'url' => "../usage/displaylog.php?from_other=TRUE",
@@ -31,25 +28,24 @@ $tool_content .= action_bar(array(
                     'button-class' => 'btn-success'),
                 array('title' => $langPlatformGenStats,
                     'url' => "index.php?t=a&g_stats",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
+                    'icon' => 'fa-bar-chart'),
                 array('title' => $langStatOfFaculty,
                     'url' => "faculty_stats.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
+                    'icon' => 'fa-bar-chart'),
                 array('title' => $langMonthlyReport,
                     'url' => "../admin/monthlyReport.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
+                    'icon' => 'fa-bar-chart'),
                 array('title' => $langUsageVisits,
                     'url' => "../admin/login_stats.php",
-                    'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
+                    'icon' => 'fa-bar-chart'),
+                array('title' => $langDetails,
+                    'url' => "analytical_course_stats.php",
+                    'icon' => 'fa-bar-chart'),
                 array('title' => $langBack,
                     'url' => "../admin/",
                     'icon' => 'fa-reply',
-                    'level' => 'primary')
-            ),false);
+                    'level' => 'primary-label')
+            ), false);
 
 $tool_content .= "
     <div class='row'>
@@ -69,8 +65,7 @@ $tool_content .= "
                         <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge'>".count_users()."</span></li>
                         <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_users(USER_TEACHER)."</span></li>
                         <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_users(USER_STUDENT)."</span></li>
-                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li> 
-                        <li class='list-group-item li-indented text-center'><a href='analytical_course_stats.php' class='btn btn-success' role='button'>$langDetails</a></li>
+                        <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge'>".count_users(USER_GUEST)."</span></li>                         
                     </ul>
                 </div>
                 <div class='col-sm-12'>
