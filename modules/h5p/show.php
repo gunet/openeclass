@@ -62,7 +62,7 @@ $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $cont
 $workspaceLibs = $urlAppend . 'courses/h5p/libraries';
 
 $head_content .= "
-    <script type='text/javascript' src='" . $urlAppend . "node_modules/h5p-standalone/dist/main.bundle.js'></script>";
+    <script type='text/javascript' src='" . $urlAppend . "js/h5p-standalone/dist/main.bundle.js'></script>";
 
 $tool_content .= "<div class='row'>
         <div class='col-xs-12'>
@@ -77,8 +77,8 @@ $head_content .= "
             const options = {
               h5pJsonPath:  '$workspaceUrl',
               librariesPath: '$workspaceLibs',
-              frameJs: '" . $urlAppend . "node_modules/h5p-standalone/dist/frame.bundle.js',
-              frameCss: '" . $urlAppend . "node_modules/h5p-standalone/dist/styles/h5p.css',
+              frameJs: '" . $urlAppend . "js/h5p-standalone/dist/frame.bundle.js',
+              frameCss: '" . $urlAppend . "js/h5p-standalone/dist/styles/h5p.css',
               frame: true,
               copyright: true,
               icon: true,
