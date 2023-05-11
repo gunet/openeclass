@@ -3368,7 +3368,7 @@ function show_edit_assignment($id) {
 						</div>
                     </div>
                     <div class='input-append date".(Session::getError('WorkEnd_review') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd_review' data-date-format='dd-mm-yyyy'>
-                        <label for='exerciseEndDate' class='col-sm-6 control-label-notes'>$langReviewEn</label>
+                        <label for='exerciseEndDate' class='col-sm-6 control-label-notes'>$langReviewEnd:</label>
                         <div class='col-sm-12'>
                            <div class='input-group'>
                                <span class='input-group-addon'>

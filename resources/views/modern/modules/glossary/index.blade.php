@@ -30,7 +30,7 @@
                                     </div>
 
                                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-                   
+
 
                                     @if($is_editor)
                                         {!! isset($action_bar) ?  $action_bar : '' !!}
@@ -60,7 +60,7 @@
                                         <div class="col-12">
                                             <nav aria-label="...">
                                                 <ul class="pagination p-0 pagination-glossary" id="myPag">
-                                                   
+
                                                     <li class="page-item disabled">
                                                         <span class="page-link">{{trans('langGlossaryIndex')}}:</span>
                                                     </li>
@@ -160,7 +160,7 @@
                                         </div>
                                     </div>
                                     @else
-                                        <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}</div></div>
+                                        <div class='col-sm-12'><div class='alert alert-warning'>{{ trans('langNoGlossary') }}</div></div>
                                     @endif
                         </div>
                 </div>

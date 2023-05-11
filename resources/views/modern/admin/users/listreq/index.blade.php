@@ -32,11 +32,7 @@
                     </div>
                     @endif
 
-                    @if($message2) <div class='alert alert-info'>{!! $message2 !!}</div> @endif
-
-
                     {!! isset($action_bar) ?  $action_bar : '' !!}
-
 
                     @if ($user_requests)
                     <div class='col-12'>

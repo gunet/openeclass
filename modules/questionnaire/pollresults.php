@@ -114,7 +114,6 @@ if (!$thePoll) {
 $PollType = $thePoll->type;
 $default_answer = $thePoll->default_answer;
 if (!$is_editor && !$thePoll->show_results) {
-   // Session::Messages($langPollResultsAccess);
     Session::flash('message',$langPollResultsAccess);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -125,20 +124,6 @@ if (!$total_participants) {
    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
-$export_box = "";
-if ($is_editor) {
-    $export_box .= "
-    <div class='col-sm-12'><div class='alert alert-info'>
-            <b>$langDumpUserDurationToFile:</b>
-            <ul>
-              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
-                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
-              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
-                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
-            </ul>
-        </div></div>";
-}
-
 if (isset($_REQUEST['unit_id'])) {
     $back_link = "../units/index.php?course=$course_code&amp;id=" . intval($_REQUEST['unit_id']);
 } else {
@@ -146,15 +131,24 @@ if (isset($_REQUEST['unit_id'])) {
 }
 
 $tool_content .= action_bar(array(
-            array(
-                'title' => $langBack,
-                'url' => $back_link,
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'
-            )
-        ))."
-$export_box
-<div class='col-12'>
+                    array('title' => $langPollPercentResults,
+                          'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_editor),
+                    array('title' => $langPollFullResults,
+                          'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1",
+                          'icon' => 'fa-download',
+                          'level' => 'primary-label',
+                          'show' => $is_editor),
+                    array(
+                         'title' => $langBack,
+                         'url' => $back_link,
+                         'icon' => 'fa-reply',
+                         'level' => 'primary-label'
+                        )
+                ));
+$tool_content .= "<div class='col-12'>
 <div class='panel panel-primary'>
     <div class='panel-heading'>
         <div class='panel-title'>$langInfoPoll</div>
