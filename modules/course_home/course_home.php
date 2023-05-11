@@ -63,6 +63,12 @@ $course_info = Database::get()->querySingle("SELECT title, keywords, visible, pr
                                                view_type, start_date, end_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
 
+if ($course_info->view_type == 'wall') {
+    $displayWall = true;
+} else {
+    $displayWall = false;
+}
+
 // Handle unit reordering
 if ($is_editor and isset($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['toReorder'])) {
@@ -930,9 +936,6 @@ $displayCalendar = Database::get()->querySingle('SELECT MAX(visible) AS vis FROM
                             MODULE_ID_TC, MODULE_ID_ASSIGN)->vis;
 $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course_module
                             WHERE course_id = ?d AND module_id = ' . MODULE_ID_ANNOUNCE,
-                            $course_id)->visible;
-$displayWall = $course_info->view_type == 'wall' && Database::get()->querySingle('SELECT visible FROM course_module
-                            WHERE course_id = ?d AND module_id = ' . MODULE_ID_WALL,
                             $course_id)->visible;
 
 if (($total_cunits > 0 or $is_editor) and $course_info->view_type == 'units') {
