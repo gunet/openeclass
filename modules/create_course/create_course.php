@@ -258,25 +258,14 @@ if (!isset($_POST['create_course'])) {
                         $langCourseWallFormat
                       </label>
                     </div>
-                </div>
-            </div>
-			<div class='form-group'>
-                <label for='localize' class='col-sm-2 control-label'>$langFlippedClassroom:</label>
-                <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input id='flippedenabled' type='radio' name='flippedclassroom' value='2'>
-                             $langCΕnabled
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input id='flippeddisabled' type='radio' name='flippedclassroom' value='1' checked>
-                            $langTypeInactive
+                        <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom'>
+                        $langFlippedClassroom
                       </label>
                     </div>
                 </div>
-            </div>
+            </div>			
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langOpenCoursesLicense:</label>
                 <div class='col-sm-10'>
@@ -359,18 +348,16 @@ if (!isset($_POST['create_course'])) {
     </form>
 </div>";
 
-}else if($_POST['flippedclassroom'] == "2"){
-    $_SESSION['title']= $title;
-    $_SESSION['code']= $departments ;
-    $_SESSION['language']= $language ;
-    $_SESSION['formvisible']= $_POST['formvisible'] ;
-    $_SESSION['l_radio']= $_POST['l_radio'];
-    $_SESSION['cc_use']=$_POST['cc_use'] ;
-    $_SESSION['public_code']=$public_code ;
-    $_SESSION['password']= $_POST['password'];
-    $_SESSION['flipped_flag']=$_POST['flippedclassroom'] ;
-    $_SESSION['view_type']= $_POST['view_type'];
-    $_SESSION['description']=purify($_POST['description']);
+} else if ($_POST['view_type'] == "flippedclassroom") {
+    $_SESSION['title'] = $title;
+    $_SESSION['code'] = $departments ;
+    $_SESSION['language'] = $language ;
+    $_SESSION['formvisible'] = $_POST['formvisible'] ;
+    $_SESSION['l_radio'] = $_POST['l_radio'];
+    $_SESSION['cc_use'] = $_POST['cc_use'] ;
+    $_SESSION['public_code'] = $public_code ;
+    $_SESSION['password'] = $_POST['password'];
+    $_SESSION['description'] = purify($_POST['description']);
 
     if (empty($title)) {
         Session::Messages($langFieldsMissing);
@@ -380,10 +367,8 @@ if (!isset($_POST['create_course'])) {
     if ($validationFailed) {
         redirect_to_home_page('modules/create_course/create_course.php');
     }
-
     redirect_to_home_page('modules/create_course/flipped_classroom.php');
-
-}else  { // create the course and the course database
+} else { // create the course and the course database
     // validation in case it skipped JS validation
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -453,11 +438,6 @@ if (!isset($_POST['create_course'])) {
         $view_type = $_POST['view_type'];
     }
 
-	//get flipped model DS
-    if (ctype_alnum($_POST['flippedclassroom'])) {
-        $flipped_flag = $_POST['flippedclassroom'];
-    }
-
     if (empty($_POST['public_code'])) {
         $public_code = $code;
     } else {
@@ -488,7 +468,7 @@ if (!isset($_POST['create_course'])) {
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, $flipped_flag, $view_type, $description);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
         Session::Messages($langGeneralError);
