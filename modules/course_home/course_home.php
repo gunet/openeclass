@@ -857,7 +857,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = format_locale_date(strtotime($ann->date));
                 $ann_content .= "<li class='list-group-item ps-0 pe-0'>
-                                    <span class='item-wholeline'><div class='text-title'><a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
+                                    <span class='item-wholeline'><div class='text-title'><a style='font-size:15px;' class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
                 }
                 $counter_ann++;

@@ -2481,6 +2481,29 @@ label:has(input[type="checkbox"]:disabled){
     padding:15px; 
   }
 
+  .wallWrapper{
+    background-clip: border-box !important; border: 1px solid rgba(0,0,0,.125) !important;
+    border-radius: 15px;
+  }
+
+  .walltabs .nav-link{
+    border:0 ;
+    color:#003e87 ;
+    font-size: 15px;
+  }
+  .walltabs .nav-link.active{
+    border-bottom: solid 2px #003e87 ;
+    font-size: 15px;
+    color: #003e87;
+    font-weight: 600;
+  }
+
+
+  .commentPress:hover{
+    color: #0d6efd;
+    
+  }
+
 /* ------------------------------------- progress -------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/

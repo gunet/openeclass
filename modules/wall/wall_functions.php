@@ -193,7 +193,7 @@ function generate_single_post_html($post) {
             }
         }
         $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
-                          <span class="fa fa-fw fa-edit float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                          <span class="fa fa-fw fa-edit text-primary float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
 
         if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
             $head_content .= abuse_report_add_js();
@@ -214,16 +214,17 @@ function generate_single_post_html($post) {
     $ret = '
     <div class="col-12">
         <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">
-                                  <div class="panel panel-default p-0">
-                                        <div class="panel-heading p-1">
+                                  <div class="card panelCard ps-0 pe-0">
+                                        <div class="card-header bg-white border-0">
                                             <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                 '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') .'
+                                                &nbsp<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                             </a>
                                             '.$post_actions.'
                                         </div>
-                                        <div class="panel-body bubble overflow-auto Borders">
+                                        <div class="card-body bubble overflow-auto Borders">
                                             <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
-                                            <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                            
 
                                             <div class="margin-top-thin" style="padding:20px">
                                                 '.$extvideo_block.'
@@ -242,7 +243,7 @@ function generate_single_post_html($post) {
 function generate_infinite_container_html($posts, $next_page) {
     global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
     $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
-    $langWallPinPost, $langWallUnPinPost;
+    $langWallPinPost, $langWallUnPinPost, $langWall, $langWallPostsShow;
 
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
@@ -256,8 +257,13 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-        <div class="form-wrapper form-edit rounded">
-          <div class="col-12">
+        <div class="panel panel-default px-lg-4 py-lg-3 wallWrapper mt-4">
+          <div class="panel-heading bg-white border-0">
+            <div class="col-12 Help-panel-heading mb-3">
+                <span class="panel-title text-uppercase Help-text-panel-heading">'.$langWallPostsShow.'</span>
+            </div>
+          </div>
+          <div class="panel-body pt-0">
             <div class="infinite-container">';
 
     foreach ($posts as $post) {
@@ -289,7 +295,9 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='btn submitAdminBtn float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+        $comm_content = "<a class='btn commentPress TextSemiBold blackBlueText float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
+                            <span class='fa fa-comments'></span>&nbsp$langComments (".$comm->getCommentsNum().")
+                        </a>";
 
 
         if (allow_to_edit($id, $uid, $is_editor)) {
@@ -310,7 +318,7 @@ function generate_infinite_container_html($posts, $next_page) {
                 }
             }
             $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
-                              <span class="fa fa-fw fa-edit float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                              <span class="fa fa-fw fa-edit text-primary float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
                 //if ($next_page == 2) { //needed only for the first page and not for dynamically added content
                     $head_content .= abuse_report_add_js(".infinite-container");
@@ -333,30 +341,31 @@ function generate_infinite_container_html($posts, $next_page) {
         }
 
         $ret .= '
-              <div class="infinite-item">
+              <div class="infinite-item ">
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
-                  <div class="col-12 mt-4">
-                    <div class="panel panel-default">
-                      <div class="panel-heading p-1">
+                  <div class="col-12 mt-3 mb-2">
+                    <div class="card panelCard">
+                      <div class="card-header bg-white border-0">
                         <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .
                           profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '
+                          &nbsp<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                         </a>' .
                         $post_actions . '
                       </div>
 
-                      <div class="panel-body bubble overflow-auto Borders">
+                      <div class="card-body bubble overflow-auto Borders">
                         <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
-                        <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                       
                         <div class="margin-top-thin" style="padding:20px">' .
                           $extvideo_block . '
                         <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
                       </div>' .
                       show_resources($id) . '
                       <div class="row">
-                        <div class="col-md-9 col-12">' .
+                        <div class="col-lg-8 col-md-9 col-12">' .
                           $rating_content . '
                         </div>
-                        <div class="col-md-3 col-12 mt-md-0 mt-3">' .
+                        <div class="col-lg-4 col-md-3 col-12 mt-md-0 mt-3">' .
                           $comm_content.'
                         </div>
                       </div>

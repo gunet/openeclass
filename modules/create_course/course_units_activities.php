@@ -163,12 +163,12 @@ if(!isset($_POST['final_submit'])){
 
                 <div class='form-wrapper '>
                     <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <div class='paenel-title h4'>
+                    <div class='card cardPanel'>
+                        <div class='card-header border-0'>
+                            
                                 $langActSelect
 
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -280,9 +280,9 @@ if(!isset($_POST['final_submit'])){
                         </table>
                     </div>
                     <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
-                            <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
+                        <div class='col-12 d-flex'>
+                            <input id='final_sub' class='btn submitAdminBtn me-2' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                            <a class='btn cancelAdminBtn' href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                         </div>
                     </div>
                     <input type='hidden' name='next'>

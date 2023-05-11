@@ -29,12 +29,12 @@
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
                         <fieldset> 
                             <div class="form-group">
-                                <label for="message_input text-dark">{{ trans('langMessage') }}</label>
-                                <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
+                                
+                                <textarea id="textr" onfocus="expand_form();" class="form-control" placeholder="{{ trans('langTypeOutMessage') }}" rows="1" name="message" id="message_input">{!! $content !!}</textarea>
                             </div>
-                            <div id="resources_panel" class="panel panel-default collapse mt-3">
-                                <div class="panel-body">
-                                    <ul class="nav nav-tabs">
+                            <div id="resources_panel" class="panel panel-default collapse mt-3 border-0">
+                                <div class="panel-body border-0">
+                                    <ul class="nav nav-tabs walltabs border-0">
                                         <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
                                         @if ($is_editor || visible_module(MODULE_ID_VIDEO))
                                             <li><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">{{ trans('langVideo') }}</a></li>
@@ -64,7 +64,7 @@
                                             <li><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">{{ trans('langForum') }}</a></li>
                                         @endif
                                     </ul>
-                                    <div class="tab-content">
+                                    <div class="tab-content mt-4">
                                         <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
                                             <label for="extvideo_video">{{ trans('langWallExtVideoLink') }}</label>
                                             <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="{!! $extvideo !!}">

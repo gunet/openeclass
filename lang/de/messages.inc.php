@@ -4220,6 +4220,7 @@ $langTypeInactive = "Inactive";
 $langWall = 'Wand';
 $langWallYoutubeVideo = 'Youtube video';
 $langWallPostSaved = 'Post saved';
+$langWallPostsShow = "posts";
 $langWallMessageEmpty = 'Post was empty';
 $langWallYoutubeVideoLink = 'Youtube link address';
 $langWallYoutubeVideoLinkNotValid = 'Not valid YouTube address';
@@ -5523,4 +5524,5 @@ $langUseOfServiceInfo = "Select in which $langsCourses the service will be avail
 $langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
 $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
 $langSubjectArea = "Subject Area";
+$langTypeOutMessage = "Schreibe deine Nachricht...";
 

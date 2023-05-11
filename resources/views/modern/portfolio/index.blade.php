@@ -176,40 +176,40 @@
         </div>
         <div class='col-xl-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-xl-3 px-lg-0 px-0 pb-lg-0 pb-3'>
             @include('portfolio.portfolio-calendar')
-            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                <div class='panel-heading bg-body p-0'>
+            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
+                <div class='panel-heading bg-body '>
                     <div class='col-12 Help-panel-heading'>
                         <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoAnnouncements') }}</span>
                     </div>
                 </div>
-                <div class='panel-body p-0'>
+                <div class='panel-body'>
                     @if(empty($user_announcements))
                         <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langNoRecentAnnounce') }}</span></div>
                     @else
                         {!! $user_announcements !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-start p-0'>
+                <div class='panel-footer d-flex justify-content-start'>
                     <a class='all_announcements' href="{{$urlAppend}}modules/announcements/myannouncements.php">
                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                     </a>
                 </div>
             </div>
 
-            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                <div class='panel-heading bg-body p-0'>
+            <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
+                <div class='panel-heading bg-body'>
                     <div class='col-12 Help-panel-heading'>
                     <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyPersoMessages') }}</span>
                     </div>
                 </div>
-                <div class='panel-body p-0'>
+                <div class='panel-body'>
                     @if(empty($user_messages))
                         <div class='text-start mb-3'><span class='text-title not_visible'>{{ trans('langDropboxNoMessage') }}</span></div>
                     @else
                         {!! $user_messages !!}
                     @endif
                 </div>
-                <div class='panel-footer d-flex justify-content-start p-0'>
+                <div class='panel-footer d-flex justify-content-start'>
                     <a class='all_messages' href="{{$urlAppend}}modules/message/index.php">
                         {{ trans('langAllMessages') }} <span class='fa fa-chevron-right'></span>
                     </a>
@@ -217,7 +217,7 @@
             </div>
 
             @if($portfolio_page_sidebar_widgets)
-                <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                     <div class='panel-heading bg-body p-0'>
                         <div class='col-12 Help-panel-heading'>
                             <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMyWidgets') }}</span>

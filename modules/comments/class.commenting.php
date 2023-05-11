@@ -76,7 +76,7 @@ Class Commenting {
      */
     public function put($courseCode, $isEditor, $uid, $always_open = false) {
         global $langComments, $langBlogPostUser, $langSubmit, $langModify, $langDelete,
-        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content, $langClose;
+        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content, $langClose, $langTypeOutMessage;
 
         $commentsNum = $this->getCommentsNum();
 
@@ -126,7 +126,7 @@ Class Commenting {
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa fa-edit pe-2 float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        $post_actions .= '<span class="fa fa-edit text-primary pe-2 float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
 
                         $post_actions .='</div>';
                     } else {
@@ -140,19 +140,18 @@ Class Commenting {
                 }
                 $out .= "<div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                           <div class='media panel-default'>
-                            <div class='panel-heading p-1'>
-                                <a class='media-left p-0' href='#'>
-                                ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."
-                                </a>
-                                ".$post_actions."
-                            </div>
-                            <div class='media-body bubble panel-body overflow-auto'>
-                             <p class='blackBlueText TextSemiBold'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
-                              "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
-                                
-                               <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
-                               </div>
+                            <div class='media panel panel-default'>
+                                <div class='panel-heading bg-white border-0'>
+                                    <a class='media-left p-0' href='#'>
+                                        ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."
+                                        <small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
+                                    </a>
+                                    ".$post_actions."
+                                </div>
+                                <div class='media-body bubble panel-body overflow-auto'>
+                                    <p class='blackBlueText TextSemiBold'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
+                                    "<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                                </div>
                             </div>
                           </div>
                          </div>";
@@ -170,7 +169,7 @@ Class Commenting {
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
                 $out .= '<div class="col-12"><div class="form-wrapper form-edit rounded pb-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
-                $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
+                $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn submitAdminBtn m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form></div></div>';
             }
