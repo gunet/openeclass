@@ -13,21 +13,10 @@ if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we 
 }
 
 require_once 'include/log.class.php';
-require_once 'include/lib/course.class.php';
-require_once 'include/lib/user.class.php';
-require_once 'include/lib/hierarchy.class.php';
 require_once 'functions.php';
-
-
-
-$tree = new Hierarchy();
-$course = new Course();
-$user = new User();
 
 $toolName = $langCourseCreate;
 
-load_js('jstree3');
-load_js('pwstrength.js');
 load_js('tools.js');
 
 $head_content .= <<<hContent
@@ -37,7 +26,7 @@ $head_content .= <<<hContent
 
 $(document).ready(function() {
     var i = 2;
-    var j=2;
+    var j = 2;
     $('#add_g').click(function() {
         if (i <= 20) {
             
@@ -76,7 +65,7 @@ $(document).ready(function() {
                 
                 }
             }
-        }else{
+        } else {
             var confirm = window.confirm('$langConfirmDeleteUnit');
             if(confirm){
                 var nrlz_button_id = button_id.split("_")
@@ -88,17 +77,11 @@ $(document).ready(function() {
                     document.getElementById('row_u_'+String(k)).setAttribute('id','row_u_'+String(k-1));
                     document.getElementById('utitle_'+String(k)).setAttribute('for', 'unit_' + String(k-1));           
                     document.getElementById('utitle_'+String(k)).innerHTML = String(k-1) + ':';
-                    document.getElementById('utitle_'+String(k)).setAttribute('id', 'utitle_' + String(k-1));
-                
+                    document.getElementById('utitle_'+String(k)).setAttribute('id', 'utitle_' + String(k-1));               
                 }
             }
-
-        }
-        
-        
-    });
-    
-    
+        }        
+    });    
 });
 
 
@@ -137,13 +120,10 @@ function checkedBoxes() {
         if(checkboxes_after_class[k].checked){
             checked_after_class.push(checkboxes[k].attr('id'));
         }
-    }
-    
+    }    
     document.getElementsByName('checked_in_class').value=checked_in_class;
     document.getElementsByName('checked_in_home').value=checked_in_home;
     document.getElementsByName('checked_after_class').value=checked_after_class;
-
-   
 }
 
 /* ]]> */
@@ -167,9 +147,7 @@ if (!isset($_POST['next'])) {
     ), false);
 }
 
-
-
-if(!isset($_POST['next'])){
+if (!isset($_POST['next'])) {
 
     $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours ='';
      $tool_content .= "
@@ -179,7 +157,7 @@ if(!isset($_POST['next'])){
         </div>
         <div class='col-lg-6 col-12'>
         <div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
+        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
             <fieldset>
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
@@ -187,18 +165,16 @@ if(!isset($_POST['next'])){
                         <input name='title' id='title' type='text' class='form-control pe-none greyColor text-info fw-bold' value='" . q($_SESSION['title']) . "' placeholder='$langTitle' readonly>
                     </div>
                 </div>
-
-                
                 <div class='form-group mt-4'>
                     <label for='stunum' class='col-sm-12 control-label-notes'>$langStuNum</label>
                     <div class='col-sm-12'>  
                             <input name='stunum' id='stunum' type='text' class='form-control' value='".q($stuNum)."' >
                     </div>
                 </div>
-                <div class='form-group mt-4'>
-                    
+                <div class='form-group mt-4'>                    
                     <label for='lectnum' class='col-sm-12 control-label-notes'>$langLectNum</label>
                     <div class='col-sm-12'>
+
                         <input name='lectnum' id='lectnum' type='number' min='1' max='50' class='form-control' value='".q($lectNum)."' >
                     </div>
                 </div>
@@ -233,24 +209,20 @@ if(!isset($_POST['next'])){
                         <label for='goal_1' id='gtitle_1' class= 'control-label-notes'>1: </label>
                         <input name='goals[]' id='goal_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langGoals'>
                     </div>   
-
                     <div id='dynamic_goals'></div>
-
                     <input id='goal_count' type='hidden' name='goal_count' value='1'>
-                </div>
-                    
-                
+                </div>                                    
                 <div class='form-group mt-4'>
                     <label for='description' class='col-sm-12 control-label-notes'>$langCont <small>$langOptional</small></label>
                     <div class='col-sm-12'>
                           " .  rich_text_editor('description', 4, 20, purify($_SESSION['description'])) . "
                     </div>
                 </div>
-
                 <div class='form-group mt-4'>
                     <label for='localize' class='col-sm-12 control-label-notes mb-1'>$langLectModel</label>
                     <div class='row'>
                         <div class='col-md-6 col-12 radio'>
+
                             <label>
                                 <input id='fromHome' type='radio' name='lectModel' value='2'>
                                     $langLectFromHome
@@ -264,7 +236,6 @@ if(!isset($_POST['next'])){
                         </div>
                     </div>
                 </div>
-
                 <div class='form-group mt-4'>
                     <div class='col-12 d-inline-flex mb-2'>
                         <label for='units' class='control-label-notes me-2'>$langUnits</label>
@@ -273,7 +244,6 @@ if(!isset($_POST['next'])){
                             </span>
                         </a>
                     </div>
-
                     <div id='row_u_1' class='col-12 d-inline-flex'>
                         <label for='unit_1' id='utitle_1' class='control-label-notes'>1: </label>
                         <input name='units[]' id='unit_1' type='text' class='form-control w-100 ms-2' value='"."' placeholder='$langUnits'>               
@@ -283,25 +253,15 @@ if(!isset($_POST['next'])){
 
                     <input id='unit_count' type='hidden' name='unit_count' value='1'>     
                 </div>
-
-                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                              
-                        
-                                       
-                               <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn me-1'>$langCancel</a>
-                           
-                           
-                                <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
-                          
-                       
-                   
+                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>                                       
+                       <a href='{$urlServer}main/portfolio.php' class='btn cancelAdminBtn me-1'>$langCancel</a>
+                       <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "&nbsp;&nbsp;&raquo;'>
                 </div>     
             </fieldset>" . generate_csrf_token_form_field() . "
         </form>
         </div></div></div>";
 
-} else if(!isset($_POST['final_submit'])){
-
+} else if (!isset($_POST['final_submit'])) {
     $_SESSION['lectures_model'] = $_POST['lectModel'];
     $_SESSION['content'] = $_POST['description'];
     $_SESSION['stunum'] = $_POST['stunum'];
@@ -314,7 +274,6 @@ if(!isset($_POST['next'])){
     $_SESSION['units'] = $_POST['units'];
     $_SESSION['goals'] = $_POST['goals'];
     redirect_to_home_page('modules/create_course/course_units_activities.php');
-
 }
 
 draw($tool_content, 1, null, $head_content);
