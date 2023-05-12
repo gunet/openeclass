@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2023-03-24 12:20:07
+// Generated 2023-05-12 17:49:21
 
 $langYes = "Sì";
 $langNo = "No";
@@ -739,7 +739,7 @@ $langScore = "Punteggio";
 $langQuestionScore = "Punteggio della domanda";
 $langCorrespondsTo = "Corrisponde al";
 $langExpectedChoice = "Risposta aspettata";
-$langTotalScore = "Punteggio totale";
+$langYourTotalScore = "Punteggio totale dell' esercizio";
 $langDoAnEx = "Fare un esercizio";
 $langCorrect = "Esatto";
 $langExerciseNotFound = "La risposta non viene trovata";
@@ -4278,6 +4278,7 @@ $langUnits = "Units";
 $langRegistrationLink = 'User registration link';
 $langRegistrationShowText = 'Show instructions instead of links';
 $langRegistrationInfo = 'Registration instructions';
+$langShow = "Display";
 $langHide = 'Hide';
 $langQuestionAlreadyDeleted = "Question has been deleted!";
 $langUpgForVersion = 'Upgrades for version:';
@@ -4332,6 +4333,7 @@ CC mail address.';
 $langSumFrom = "total in";
 $langVisibleVals = array('Invisible', 'Visible');
 $langStudentTotalScore = "$langStudent score";
+$langTotalScore = "Total score";
 $langOfGradebookActivity = "of activity";
 $langOfGradebookUsers = "of user";
 $langOfGradebookGroups = "of groups";
@@ -5514,7 +5516,7 @@ $langImportGradesGradebookHelp = "You can upload an Excel file (e.g. xls, xlsx) 
 $langPeerReviewAssignmentInfo1 = "Assignments assigned to users. Old assignments have been deleted.";
 $langPeerReviewAssignmentInfo2 = "Assignments assigned.";
 $langAPITokenExists = "A token already exists. To create a new one, please click on 'Create New Token'";
-$langAPITokenShortDesc = "Create Open eClass API access token";
+$langAPITokenShortDesc = "Create a new Open eClass API access token";
 $langCreateAPIToken = 'Create new Token';
 $langBBBLongDescription = "Connect with the BigBlueButton teleconference service.";
 $langGoogleMeetShortDescription = "Connect with the Google Meet video conference service.";
@@ -5541,3 +5543,23 @@ $langUseOfServiceInfo = "Select in which $langsCourses the service will be avail
 $langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
 $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
 $langSubjectArea = "Subject Area";
+$langInfoUserDuration = "The following participation times do not include time spent in <em>Learning Paths</em> and <em>Teleconferences</em>.";
+$langInfoUserDuration2 = "For these modules, please click on the corresponding buttons.";
+$langNoPeerReviewMultipleFiles = "The assignment can't be distributed for peer review because it accepts multiple files for each submission.";
+$langBBBCronRunning = 'Automatic registration of teleconference attendance is enabled.';
+$langBBBCronStopped = 'Warning! Automatic registration of teleconference attendance has stopped! {Check again your configuration}';
+$langBBBCronEnable = 'Please note: You can enable automatic registration of teleconference attendance with no explicit actions by the instructors (opening of attendance monitor window). {Instructions}';
+$langBBBCronEnableTitle = 'Automatic Teleconference Attendance Registration Instructions';
+$langBBBCronEnableInstructions = '
+<p>Εφόσον η υπηρεσία φιλοξενείται σε περιβάλλον Unix / Linux, μπορείτε να προσθέσετε την παρακάτω εντολή ως cron job στον εξυπηρετητή, δίνοντας <code>crontab -e</code>:</p>
+<pre>
+* * * * *  /usr/bin/php {webRoot}/modules/tc/tc_cron_attendance.php
+</pre>
+<p>Ανάλογα με το σύστημα φιλοξενίας, πιθανόν να χρειαστεί κάποια αλλαγή στην πλήρη διαδρομή της εντολής της php.</p>
+<p>Εναλλακτικά, μπορείτε να ενεργοποιήσετε φόρτωση της διεύθυνση / URL:<br>
+<code>{cronURL}</code><br>
+Για παράδειγμα, αυτό μπορεί να γίνει μέσω κάποιου εξωτερικού συστήματος webcron.</p>
+<p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
+$langAPITokenLongDesc = "Information for calls currently supported by the API can be found
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
+$langAPITokenCreated = "Token created. Please copy it for use in your application.";
