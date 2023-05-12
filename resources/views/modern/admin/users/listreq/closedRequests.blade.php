@@ -36,7 +36,7 @@
 
                     <div class='table-responsive'>
                         <table id = 'requests_table' class='table-default'>
-                        {!! table_header(1, trans('langDateClosed_small')) !!}
+                        {!! table_header(1) !!}
                         @foreach ($user_requests as $user_request)
                             <tr>
                                 <td>{{ $user_request->givenname }} {{ $user_request->surname }} </td>
