@@ -704,6 +704,62 @@ else {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
+        $tc_cron_enabled = $tc_cron_running = false;
+        $tc_cron_ts = Database::get()->querySingle("SELECT value FROM config WHERE `key` = 'tc_cron_ts'");
+        if ($tc_cron_ts) {
+            if ($tc_cron_ts->value) {
+                $tc_cron_enabled = true;
+            }
+            $tc_cron_ts = DateTime::createFromFormat('Y-m-d H:i', $tc_cron_ts->value)->add(new DateInterval('PT10M'));
+            $now = new DateTime();
+            if ($tc_cron_ts > $now) { // If cron timestamp is in last 10 minutes
+                $tc_cron_running = true;
+            }
+        }
+        if ($tc_cron_running) {
+            $tc_cron_icon = 'fa-check-circle';
+            $tc_cron_message = $langBBBCronRunning;
+            $tc_cron_class = 'alert-success';
+        } elseif ($tc_cron_enabled) {
+            $tc_cron_icon = 'fa-exclamation-triangle';
+            $tc_cron_message = $langBBBCronStopped;
+            $tc_cron_class = 'alert-danger';
+        } else {
+            $tc_cron_icon = 'fa-info-circle';
+            $tc_cron_message = $langBBBCronEnable;
+            $tc_cron_class = 'alert-info';
+        }
+        if (!$tc_cron_running) {
+            $langBBBCronEnableInstructions = str_replace(['{webRoot}', '{cronURL}'],
+                [$webDir, $urlServer . 'modules/tc/tc_cron_attendance.php'],
+                $langBBBCronEnableInstructions);
+            $tc_cron_message = preg_replace('/\{(.*)\}/',
+                "<p class='text-center' style='padding-top: 5px'><button class='btn btn-default' data-toggle='modal' data-target='#bbbCronInfoModal'>\\1</button></p>",
+                $tc_cron_message);
+            $tool_content .= "
+                <div class='modal fade' id='bbbCronInfoModal' tabindex='-1' role='dialog' aria-labelledby='bbbCronInfoModalLabel'>
+                  <div class='modal-dialog' role='document'>
+                    <div class='modal-content'>
+                      <div class='modal-header'>
+                        <button type='button' class='close' data-dismiss='modal' aria-label='$langClose'><span aria-hidden='true'>&times;</span></button>
+                        <h4 class='modal-title' id='bbbCronInfoModal'>$langBBBCronEnableTitle</h4>
+                      </div>
+                      <div class='modal-body'>
+                        $langBBBCronEnableInstructions
+                      </div>
+                      <div class='modal-footer'>
+                        <button type='button' class='btn btn-default' data-dismiss='modal'>$langClose</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>";
+        }
+        $tool_content .= "
+            <div class='alert $tc_cron_class' style='display: flex; align-items: center;'>
+                <div style='margin-right: 15px'><span class='fa $tc_cron_icon fa-2x'></span></div>
+                <div style='width: 100%'>$tc_cron_message</div>
+            </div>";
+
         $q = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'bbb' ORDER BY weight");
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";
@@ -763,7 +819,7 @@ else {
                 } else {
                     $tool_content .= "<tr>" .
                         "<td class = 'text-center'>$srv->hostname</td>" .
-                        "<td class = 'text-center'>$enabled_bbb_server $mess</td>" .
+                        "<td class = 'text-center'>$enabled_bbb_server$courses_note</td>" .
                         "<td class = 'text-center'>&mdash;</td>" .
                         "<td class = 'text-center'>&mdash;</td>" .
                         "<td class = 'text-center'>&mdash;</td>" .

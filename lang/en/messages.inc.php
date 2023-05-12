@@ -5578,3 +5578,17 @@ $langUseOfServiceInfo = "Select in which $langsCourses the service will be avail
 $langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
 $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
 $langSubjectArea = "Subject Area";
+$langBBBCronRunning = 'Automatic registration of teleconference attendance is enabled.';
+$langBBBCronStopped = 'Warning! Automatic registration of teleconference attendance has stopped! {Check again your configuration}';
+$langBBBCronEnable = 'Please note: You can enable automatic registration of teleconference attendance with no explicit actions by the instructors (opening of attendance monitor window). {Instructions}';
+$langBBBCronEnableTitle = 'Automatic Teleconference Attendance Registration Instructions';
+$langBBBCronEnableInstructions = '
+<p>Εφόσον η υπηρεσία φιλοξενείται σε περιβάλλον Unix / Linux, μπορείτε να προσθέσετε την παρακάτω εντολή ως cron job στον εξυπηρετητή, δίνοντας <code>crontab -e</code>:</p>
+<pre>
+* * * * *  /usr/bin/php {webRoot}/modules/tc/tc_cron_attendance.php
+</pre>
+<p>Ανάλογα με το σύστημα φιλοξενίας, πιθανόν να χρειαστεί κάποια αλλαγή στην πλήρη διαδρομή της εντολής της php.</p>
+<p>Εναλλακτικά, μπορείτε να ενεργοποιήσετε φόρτωση της διεύθυνση / URL:<br>
+<code>{cronURL}</code><br>
+Για παράδειγμα, αυτό μπορεί να γίνει μέσω κάποιου εξωτερικού συστήματος webcron.</p>
+<p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
