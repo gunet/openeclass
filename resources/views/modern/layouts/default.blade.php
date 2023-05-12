@@ -25,6 +25,9 @@
      <!-- Font Manrope -->
     <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet">
 
+    <!-- fullcalendar v3.10.2-->
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
+
     <!-- DataTables 1.10.19 version -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css">
 
@@ -75,6 +78,10 @@
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
     <!-- cLICKbOARD -->
     <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
+    <!-- fullcalendar v3.10.2 and moment v 2.29.1-->
+    <script src="{{ $urlAppend }}js/fullcalendar/moment.min.js"></script>
+    <script src="{{ $urlAppend }}js/fullcalendar/fullcalendar.min.js"></script>
+    <script src="{{ $urlAppend }}js/fullcalendar/locales/fullcalendar.{{ $language }}.js"></script>
 
     <script>
         $(function() {
