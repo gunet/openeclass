@@ -157,6 +157,7 @@
   #portfolio_lessons{
     border: 0px;
     border-radius: 0px;
+    margin-bottom:10px;
   }
   #portfolio_lessons tbody tr{
     background-color: #ffffff;

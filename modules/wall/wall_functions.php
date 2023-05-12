@@ -257,13 +257,13 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-        <div class="panel panel-default px-lg-4 py-lg-3 wallWrapper mt-4">
-          <div class="panel-heading bg-white border-0">
-            <div class="col-12 Help-panel-heading mb-3">
-                <span class="panel-title text-uppercase Help-text-panel-heading">'.$langWallPostsShow.'</span>
-            </div>
+        <div class="card panelCard px-lg-4 py-lg-3 wallWrapper mt-4">
+          <div class="card-header bg-white border-0">
+            
+                <span class="text-uppercase normalBlueText TextBold fs-6">'.$langWallPostsShow.'</span>
+            
           </div>
-          <div class="panel-body pt-0">
+          <div class="card-body pt-0">
             <div class="infinite-container">';
 
     foreach ($posts as $post) {

@@ -144,20 +144,20 @@ function show_post_form() {
 
         $tool_content .= '
             <div class="col-12">
-                <div class="panel panel-default px-lg-4 py-lg-3 wallWrapper">
-                    <div class="panel-heading border-0 bg-white">
-                        <div class="col-12 Help-panel-heading mb-3">
-                            <span class="panel-title text-uppercase Help-text-panel-heading">'.$langWall.'&nbsp'.$langOfCourse.'</span>
-                        </div>
+                <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
+                    <div class="card-header border-0 bg-white">
+                        
+                            <span class="text-uppercase normalBlueText TextBold fs-6">'.$langWall.'&nbsp'.$langOfCourse.'</span>
+                        
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body">
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
                             <fieldset> 
                                 <div class="form-group">
                                     <textarea style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
                                 </div>
-                                <div id="resources_panel" class="panel panel-default collapse mt-3 border-0">
-                                    <div class="panel-body border-0">
+                                <div id="resources_panel" class="card cardPanel collapse mt-3 border-0">
+                                    <div class="card-body border-0">
                                         <ul class="nav nav-tabs walltabs border-0">
                                             <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                             '.$video_li.'
