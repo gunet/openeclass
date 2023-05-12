@@ -61,18 +61,18 @@
                     @endif
 
                     <div class='col-12'>
-                        <div class="panel panel-default">
-                            <div class='panel-heading'>
-                                <div class='panel-title text-center'>{{ trans('langActivateCourseTools') }}</div>
+                        <div class="card panelCard">
+                            <div class='card-header border-0 bg-white'>
+                                <div class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langActivateCourseTools') }}</div>
                             </div>
                             <div class='panel-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
                                     <div class="table-responsive mt-0">
-                                        <table class="table-default">
-                                            <tr class='list-header bg-light'>
-                                            <th width="45%" class="text-center text-dark">{{ trans('langInactiveTools') }}</th>
-                                            <th width="10%" class="text-center text-dark">{{ trans('langMove') }}</th>
-                                            <th width="45%" class="text-center text-dark">{{ trans('langActiveTools') }}</th>
+                                        <table class="table-default rounded-2">
+                                            <tr class='list-header'>
+                                            <th width="45%" class="text-center">{{ trans('langInactiveTools') }}</th>
+                                            <th width="10%" class="text-center">{{ trans('langMove') }}</th>
+                                            <th width="45%" class="text-center">{{ trans('langActiveTools') }}</th>
                                             </tr>
                                             <tr>
                                                 <td class="text-center">
@@ -108,55 +108,60 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
-                                <div class='row'>
-                                    <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
-                                        <span class='panel-title'> {{ trans('langOperations') }}</span>
-                                    </div>
-                                    <div class='col-md-6 col-2 d-flex justify-content-end'>
-                                        <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
-                                    </div>
+                        <div class='card panelCard'>
+                            <div class='card-header d-flex justify-content-between align-items-center border-0 bg-white'>
+                                
+                                <div class='text-uppercase normalBlueText TextBold fs-6'>
+                                    {{ trans('langOperations') }}
                                 </div>
+                                <div>
+                                    <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
+                                </div>
+                                
                             </div>
-                            <div class='panel-body'>
-                                <table class='table-default mb-2 bg-light'>
-                                @foreach($q as $externalLinks)
-                                    <tr class='bg-body'>
-                                        <td class='text-start'>
-                                            <div class='row'>
-                                                <div class='col-10'>
-                                                    <strong>{{  $externalLinks->title }}</strong></br>
-                                                    <small class='text-muted'>{{ $externalLinks->url }}</small>
-                                                </div>
-                                                <div class='col-2 text-end'>
-                                                    <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa fa-times'></span></a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </table>
+                            <div class='card-body'>
+                                @if(count($q) > 0)
+                                    <table class='table-default mb-2 bg-light'>
+                                        @foreach($q as $externalLinks)
+                                            <tr class='bg-body'>
+                                                <td class='text-start'>
+                                                    <div class='row'>
+                                                        <div class='col-10'>
+                                                            <strong>{{  $externalLinks->title }}</strong></br>
+                                                            <small class='text-muted'>{{ $externalLinks->url }}</small>
+                                                        </div>
+                                                        <div class='col-2 text-end'>
+                                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa fa-times'></span></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </table>
+                                @else
+                                    {{ trans('langNoInfoAvailable')}}
+                                @endif
                             </div>
                             
                         </div>
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
-                                <div class='row'>
-                                    <div class='col-md-6 col-10 text-start pt-md-1 pt-0'>
-                                        <span class='panel-title'>{{ trans('langLtiConsumer') }}</span>
-                                    </div>
-                                    <div class='col-md-6 col-2 d-flex justify-content-end'>
-                                        <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
-                                            <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs'>{{ trans('langNewLTITool') }}</span>
-                                        </a>
-                                    </div>
+                        <div class='card panelCard'>
+                            <div class='card-header d-flex justify-content-between align-items-center border-0 bg-white'>
+                                
+                                <div class='text-uppercase normalBlueText TextBold fs-6'>
+                                    {{ trans('langLtiConsumer') }}
                                 </div>
+                                   
+                                <div>
+                                    <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
+                                        <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs'>{{ trans('langNewLTITool') }}</span>
+                                    </a>
+                                </div>
+                                
                             </div>
-                            <div class='panel-body'>
+                            <div class='card-body'>
                                 @php 
                                     load_js('trunk8');
                                     $activeClause = ($is_editor) ? '' : "AND enabled = 1";
@@ -165,11 +170,9 @@
                                 @endphp
 
                                 @if($result)
-            
-                                        <div class='col-sm-12'>
-                                            <div class='table-responsive mt-0'>
-                                            <table class='table-default'>
-                                                <tr class='bg-light'>
+                                        <div class='table-responsive mt-0'>
+                                            <table class='table-default rounded-2'>
+                                                <tr class='list-header'>
                                                     <th style='width:30%'>{{ trans('langTitle') }}</th>
                                                     <th class='text-start'>{{ trans('langUnitDescr') }}</th>
                                                     <th class='text-start'>{{ trans('langLTIAppActions') }}</th>
@@ -244,15 +247,15 @@
                                                 @endforeach
                                                     @if ($headingsSent)
                                             </table>
+                                        
                                         </div>
-                                    </div>
                                     @endif
 
                                     @if (!$is_editor and !$headingsSent)
-                                        <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langNoLTIApps')}}</div></div>
+                                        {{trans('langNoLTIApps')}}
                                     @endif
                                 @else
-                                    <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langNoLTIApps')}}</div></div>
+                                    {{trans('langNoLTIApps')}}
                                 @endif
                             </div>
                         </div>

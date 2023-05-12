@@ -55,58 +55,58 @@
 
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
-                                <div class='col-12 mb-3'>      
-                                    <div class='panel panel-action-btn-default'>
-                                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                                            <div class='row w-100'>
-                                                <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                                    <div class='panel-title'>
-                                                        <span class='text-white'>{{ $course_desc->title}}</span>
-                                                        @if ($course_desc->visible && $is_editor)
-                                                            &nbsp;&nbsp;
-                                                            <span data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom' class='label label-primary'>
-                                                                <i class='fa fa-eye'></i>
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                @if ($is_editor)
-                                                <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
-                                                    <div>
-                                                        {!! action_button(
-                                                            array(
-                                                                array(
-                                                                    'title' => trans('langEditChange'),
-                                                                    'url' => "edit.php?course=$course_code&amp;id=" . getIndirectReference($course_desc->id),
-                                                                    'icon' => 'fa-edit'
-                                                                ),
-                                                                array('title' => $course_desc->visible ? trans('langRemoveFromCourseHome') : trans('langAddToCourseHome'),
-                                                                    'url' => "index.php?course=$course_code&amp;vis=" . getIndirectReference($course_desc->id),
-                                                                    'icon' => $course_desc->visible ? 'fa-eye-slash' : 'fa-eye'
-                                                                ),
-                                                                array('title' => trans('langUp'),
-                                                                    'level' => 'primary',
-                                                                    'icon' => 'fa-arrow-up',
-                                                                    'url' => "index.php?course=$course_code&amp;up=" . getIndirectReference($course_desc->id),
-                                                                    'disabled' => $key <= 0),
-                                                                array('title' => trans('langDown'),
-                                                                    'level' => 'primary',
-                                                                    'icon' => 'fa-arrow-down',
-                                                                    'url' => "index.php?course=$course_code&amp;down=" . getIndirectReference($course_desc->id),
-                                                                    'disabled' => $key + 1 >= count($course_descs)),
-                                                                array('title' => trans('langDelete'),
-                                                                    'url' => "index.php?course=$course_code&amp;del=" . getIndirectReference($course_desc->id),
-                                                                    'icon' => 'fa-times',
-                                                                    'class' => 'delete',
-                                                                    'confirm' => trans('langConfirmDelete'))                            
-                                                            )
-                                                        ) !!}
-                                                    </div>
-                                                </div>
+                                <div class='col-12 mb-4'>      
+                                    <div class='card panelCard'>
+                                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                           
+                                            
+                                            <div class='panel-title'>
+                                                <span>{{ $course_desc->title}}</span>
+                                                @if ($course_desc->visible && $is_editor)
+                                                    &nbsp;&nbsp;
+                                                    <span data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom' class='label label-primary'>
+                                                        <i class='fa fa-eye'></i>
+                                                    </span>
                                                 @endif
                                             </div>
+                                            
+                                            @if ($is_editor)
+                                            
+                                                <div>
+                                                    {!! action_button(
+                                                        array(
+                                                            array(
+                                                                'title' => trans('langEditChange'),
+                                                                'url' => "edit.php?course=$course_code&amp;id=" . getIndirectReference($course_desc->id),
+                                                                'icon' => 'fa-edit'
+                                                            ),
+                                                            array('title' => $course_desc->visible ? trans('langRemoveFromCourseHome') : trans('langAddToCourseHome'),
+                                                                'url' => "index.php?course=$course_code&amp;vis=" . getIndirectReference($course_desc->id),
+                                                                'icon' => $course_desc->visible ? 'fa-eye-slash' : 'fa-eye'
+                                                            ),
+                                                            array('title' => trans('langUp'),
+                                                                'level' => 'primary',
+                                                                'icon' => 'fa-arrow-up',
+                                                                'url' => "index.php?course=$course_code&amp;up=" . getIndirectReference($course_desc->id),
+                                                                'disabled' => $key <= 0),
+                                                            array('title' => trans('langDown'),
+                                                                'level' => 'primary',
+                                                                'icon' => 'fa-arrow-down',
+                                                                'url' => "index.php?course=$course_code&amp;down=" . getIndirectReference($course_desc->id),
+                                                                'disabled' => $key + 1 >= count($course_descs)),
+                                                            array('title' => trans('langDelete'),
+                                                                'url' => "index.php?course=$course_code&amp;del=" . getIndirectReference($course_desc->id),
+                                                                'icon' => 'fa-times',
+                                                                'class' => 'delete',
+                                                                'confirm' => trans('langConfirmDelete'))                            
+                                                        )
+                                                    ) !!}
+                                                </div>
+                                            
+                                            @endif
+                                            
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             {!! handleType($course_desc->type) !!} 
                                             @if(!empty($course_desc->type))
                                                 <br>
