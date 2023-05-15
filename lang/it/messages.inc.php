@@ -5599,3 +5599,4 @@ $langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
 $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
 $langSubjectArea = "Subject Area";
 $langTypeOutMessage = "Scrivi il tuo messaggio...";
+$langDateHasExpire = "La data è passata. Riprova.";

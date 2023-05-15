@@ -6119,3 +6119,4 @@ $langAnalyticsEditElements = 'Επεξεργασία Στοιχείων';
 $langViewStatics = "Στατιστικά Επισκεψιμότητας";
 $langCommands = "Ενέργειες";
 $langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας...";
+$langDateHasExpire = "Η ημερομηνία έχει παρέλθει. Δοκιμάστε πάλι.";

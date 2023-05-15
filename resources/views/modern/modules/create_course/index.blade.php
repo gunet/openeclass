@@ -176,7 +176,7 @@
                                     <span class='ps-2'>{{trans('langCourseActivityFormat') }}</span>
                                   </label>
                                 </div>
-                                <div class='radio'>
+                                <div class='radio mb-2'>
                                   <label>
                                     <input type='radio' name='view_type' value='wall' id='wall'>
                                     <span class='ps-2'>{{ trans('langCourseWallFormat') }}</span>
