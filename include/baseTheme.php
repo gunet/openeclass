@@ -361,9 +361,6 @@ function view($view_file, $view_data = array()) {
                     }
                 }
             
-                .modal-content-opencourses{
-                    background:$theme_options_styles[leftNavBgColor];
-                }
 
                 .block-title {
                     color: $theme_options_styles[leftNavBgColor];
@@ -438,9 +435,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
-                .modal-content-opencourses{
-                    border:solid 8px $theme_options_styles[linkColor];
-                }
+                
 
                 .Help-text-panel-heading {
                     color:  $theme_options_styles[linkColor] !important;
