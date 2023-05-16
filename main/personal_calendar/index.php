@@ -512,7 +512,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 
                             <div class='col-12 overflow-auto'>
-                                <div id='calendarEvents' class=''></div>
+                                <div id='calendarEvents' class='myCalendarEvents'></div>
                             </div>
 
                             <div id='createEventModal' class='modal fade in' role='dialog'>
@@ -819,30 +819,33 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
         $month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
         $year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
-        $tool_content .= '<div class="row p-2"></div>
-                <div id="calendar_wrapper" class="row">
-                    <div class="col-md-12">
-                        <div class="row calendar-header mb-4">
-                        <div class="col-md-12">
-                        <div id="calendar-header">
-                            <div class="float-end form-inline">
-                                <div class="btn-group">
-                                        <button class="btn submitAdminBtn" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                        <button class="btn submitAdminBtn" data-calendar-nav="today">' . $langToday . '</button>
-                                        <button class="btn submitAdminBtn" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+        $tool_content .= '
+                <div id="calendar_wrapper">
+                    <div class="col-12">
+                        <div class="calendar-header">
+                            <div class="col-12">
+                                <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center bgNormalBlueText flex-wrap">
+                                   
+                                        <div class="btn-group">
+                                                <button class="btn bg-transparent text-white" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                                <button class="btn bg-transparent text-white" data-calendar-nav="today">' . $langToday . '</button>
+                                                <button class="btn bg-transparent text-white" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+                                        </div>
+
+                                        <div class="btn-group">
+                                                <button class="btn bg-transparent text-white" data-calendar-view="year">' . $langYear . '</button>
+                                                <button class="btn bg-transparent active text-white" data-calendar-view="month">' . $langMonth . '</button>
+                                                <button class="btn bg-transparent text-white" data-calendar-view="week">' . $langWeek . '</button>
+                                                <button class="btn bg-transparent text-white" data-calendar-view="day">' . $langDay . '</button>
+                                        </div>
+
+                                        <h6 class="text-white d-none"></h6>
+                                    
+                                        
                                 </div>
-                                <div class="btn-group">
-                                        <button class="btn submitAdminBtn" data-calendar-view="year">' . $langYear . '</button>
-                                        <button class="btn submitAdminBtn active" data-calendar-view="month">' . $langMonth . '</button>
-                                        <button class="btn submitAdminBtn" data-calendar-view="week">' . $langWeek . '</button>
-                                        <button class="btn submitAdminBtn" data-calendar-view="day">' . $langDay . '</button>
-                                </div>
-                            </div>
-                            <h6></h6>
-                            </div>
                             </div>
                         </div>'
-                . '<div class="row"><div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div></div>'
+                . '<div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>'
                 . '</div></div>' .
                 "<script type='text/javascript'>" .
                 '$(document).ready(function(){

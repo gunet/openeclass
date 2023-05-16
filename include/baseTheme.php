@@ -351,12 +351,12 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[leftNavBgColor];
                 }
 
-                #bgr-cheat-header{
+                #bgr-cheat-header, .ContentLeftNav{
                     background:$rgba_no_alpha
                 };
 
                 @media(max-width: 992px){
-                    #leftnav{
+                    #leftnav,.ContentLeftNav{
                         background:$rgba_no_alpha;
                     }
                 }

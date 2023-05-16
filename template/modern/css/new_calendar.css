@@ -27,20 +27,37 @@
 /***************** this is mypersonal-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/
 
+.personal-calendar-header{
+  padding:7px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.personal-calendar-header .btn-group .btn{
+  font-size: 15px;
+}
+.personal-calendar-header .btn-group .btn.active{
+  background: #005ad9 !important;
+  border-radius: 5px !important;
+}
 .myPersonalCalendar .cal-row-fluid.cal-row-head{
-  background-color: #003e87;
-  padding: 5px;
-  
+  background: #f8f9fa;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom:0px;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1{
- color: #ffffff;font-weight: 500 ;
+  color:#003e87;
+  text-transform: uppercase;
+  font-size: 14px;
+  text-shadow: none;
+  font-weight: 600;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1:hover{
-  background-color: #003e87;
+  background-color: transparent;
 }
 .myPersonalCalendar .number-day-cal{
-  color: #005ad9;
-  font-size: 19px !important;
+  color: #003e87;
+  font-size: 17px !important;
 }
 .myPersonalCalendar .cal-day-today .number-day-cal{
   color: #ffffff !important;
@@ -49,6 +66,120 @@
   border: solid 1px #f4f7f9 !important;
 }
 
+
+.myCalendarEvents .fc-header-toolbar{
+  background: #003e87;
+  border-color: #003e87;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:7px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  margin-bottom: 0px;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button{
+  background: transparent;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button .fc-icon-left-single-arrow{
+  color:#ffffff;
+  text-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button.fc-state-hover{
+  background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button.fc-state-hover .fc-icon-left-single-arrow{
+  color:#ffffff;
+  text-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button{
+  background: transparent;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button .fc-icon-right-single-arrow{
+  color:#ffffff;
+  text-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button.fc-state-hover{
+  background: transparent;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button.fc-state-hover .fc-icon-right-single-arrow{
+  color:#ffffff;
+  text-shadow: none;
+}
+.myCalendarEvents .fc-today-button{
+  background: transparent;
+  color: #ffffff;
+  text-shadow: none;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-center h2{
+  font-size: 15px !important;
+  color: #ffffff;
+  padding: 8px;
+  border-radius: 15px;
+  background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button{
+  background: transparent;
+  color: #ffffff;
+  text-shadow: none;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
+  background: #005ad9;
+  border-radius: 5px;
+  color: #ffffff;
+  text-shadow: none;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button{
+  background: transparent;
+  color: #ffffff;
+  text-shadow: none;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active{
+  background: #005ad9;
+  border-radius: 5px;
+  color: #ffffff;
+  text-shadow: none;
+  border: 0px;
+  box-sizing:content-box;
+  box-shadow: none;
+}
+.myCalendarEvents .fc-head-container.fc-widget-header{
+  background: #f8f9fa;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.myCalendarEvents .fc-head-container.fc-widget-header .fc-day-header span{
+  color:#003e87;
+  text-transform: uppercase;
+  font-size: 14px;
+  text-shadow: none;
+  font-weight: 600;
+}
+.myCalendarEvents .fc-widget-content table tbody td{
+  height:70px;
+  border: solid 1px #f0f0f0;
+}
 
 /****************************************************************************************************/
 /*************************************** this is datetimepicker-calendar *************************************/

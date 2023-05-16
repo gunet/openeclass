@@ -553,13 +553,13 @@ label:has(input[type="checkbox"]:disabled){
 
 .alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:14px; }
 
-.alert-success { border: 1px solid #22B473; background-color: rgb(223,240,216); color: #22B473; border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-success { border: 1px solid #22B473; background-color: #ffffff; color: #22B473; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-info { border: 1px solid #3D80D0; background-color: rgb(217,237,247); color: #3D80D0; border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-info { border: 1px solid #3D80D0; background-color: #ffffff; color: #3D80D0; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-warning { border: 1px solid #FFA023; background-color: rgb(252,248,227); color: #FFA023; border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-warning { border: 1px solid #FFA023; background-color: #ffffff; color: #FFA023; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-danger { border: 1px solid rgb(244,17,14); background-color: rgb(242,222,222); color: rgb(244, 17, 14); border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-danger { border: 1px solid rgb(244,17,14); background-color: #ffffff; color: rgb(244, 17, 14); border-radius: 5px; font-weight: 500; font-style: normal; }
 
 /* -------------------------------- testimonials-OWL_CAROUSEL ------------------------------------------------------------------------------ */
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1363,7 +1363,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1387,7 +1387,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1406,7 +1406,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1426,7 +1426,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;

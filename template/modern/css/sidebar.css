@@ -43,8 +43,7 @@
   transition: 0.4s;  
   min-height: calc(100vh - 147px - 188.56px - 32px); 
   background-color: white; 
-  border-bottom-right-radius: 15px; 
-  border-top-right-radius: 15px; 
+  border-radius: 15px; 
 }
 
 .col_maincontent_active_Homepage{ 
@@ -90,7 +89,17 @@
   transition: 0.4s;  
   border-top-left-radius: 15px;  
   border-bottom-left-radius: 15px;  
-  background-color: #003e85 ;
+  background-color: transparent !important ;
+}
+
+.ContentLeftNav{
+ width:100%;
+  background: #003e85;
+  border-radius: 15px;
+}
+
+.lineSidebar{
+  height:1px; background-color:white; opacity: 0.3;
 }
 
 .navrbar_menu_btn{ 
@@ -197,9 +206,9 @@
 /************************************** THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
-.switch-sidebar { position: relative; display: inline-block; height: 30px;  width:165px; }
+.switch-sidebar { position: relative; display: inline-block; height: 30px;  width:140px; }
 
-.slider-btn-on{ width:165px; }
+.slider-btn-on{ width:140px; }
 
 .switch-sidebar input {display:none;}
 
@@ -215,7 +224,7 @@ input:checked + .slider-round { background-color: #4682B4; }
 
 input:focus + .slider-round { box-shadow: 0 0 1px #005ad7; }
 
-input:checked + .slider-round:before { -webkit-transform: translateX(130px); -ms-transform: translateX(130px); transform: translateX(130px); }
+input:checked + .slider-round:before { -webkit-transform: translateX(105px); -ms-transform: translateX(105px); transform: translateX(105px); }
 
 .on { display: none; }
 

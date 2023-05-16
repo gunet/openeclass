@@ -300,8 +300,8 @@ $tool_content .= "<div class='row margin-bottom-fat mt-3'>
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
     $tool_content .= "
             <div class='btn-group btn-group-sm' style='float:right;'>
-                <a class='btn submitAdminBtn rounded-pill' id='all'>$langAllExercises</a>
-                <a class='btn cancelAdminBtn rounded-pill ms-1' id='ungraded'>$langAttemptPending</a>
+                <a class='btn submitAdminBtn' id='all'>$langAllExercises</a>
+                <a class='btn cancelAdminBtn ms-1' id='ungraded'>$langAttemptPending</a>
             </div>";
 }
 $tool_content .= "

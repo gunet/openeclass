@@ -3589,7 +3589,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $href = " href='$url'";
         }
         if (!isset($option['button-class'])) {
-            $button_class = 'submitAdminBtn rounded-pill d-flex justify-content-center align-items-center me-2';
+            $button_class = 'submitAdminBtn d-flex justify-content-center align-items-center me-2';
         } else {
             $oldButton = '';
 
@@ -3615,9 +3615,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             //replace button-class with myclass;
             $button_class = $option['button-class'];
             if($oldButton == 'btn-danger'){
-                $new_button = str_replace($oldButton,'deleteAdminBtn rounded-pill d-flex justify-content-center align-items-center me-2',$button_class);
+                $new_button = str_replace($oldButton,'deleteAdminBtn d-flex justify-content-center align-items-center me-2',$button_class);
             }else{
-                $new_button = str_replace($oldButton,'submitAdminBtn rounded-pill d-flex justify-content-center align-items-center me-2',$button_class);
+                $new_button = str_replace($oldButton,'submitAdminBtn d-flex justify-content-center align-items-center me-2',$button_class);
             }
 
             $button_class = $new_button;
@@ -3690,7 +3690,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn submitAdminBtn rounded-pill dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn submitAdminBtn dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
         $action_button .= "<ul class='dropdown-menu dropdown-menu-md-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
                      ".implode('', $out_secondary)."
                   </ul>";

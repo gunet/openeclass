@@ -379,7 +379,7 @@ if ($is_editor) {
             $tool_content .= "
 
                             <div class='col-12 overflow-auto'>
-                                <div id='AgendaEvents' class=''></div>
+                                <div id='AgendaEvents' class='myCalendarEvents'></div>
                             </div>
 
                             <div id='createAgendaEventModal' class='modal fade in' role='dialog'>
@@ -662,26 +662,26 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $tool_content .= "<div class='row'><div class='col-md-12'>$cal_content_list</div></div>";
     } else {
         $tool_content .= ''
-                 . '<div class="row p-2"></div>
+                 . '
                     <div id="calendar_wrapper">
                         
-                            <div class="row calendar-header mb-4">
+                            <div class="calendar-header">
                                 
-                                    <div id="calendar-header">
-                                        <div class="float-end form-inline">
+                                    <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center bgNormalBlueText flex-wrap">
+                                        
                                             <div class="btn-group">
-                                                    <button class="btn submitAdminBtn" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                                    <button class="btn submitAdminBtn" data-calendar-nav="today">' . $langToday . '</button>
-                                                    <button class="btn submitAdminBtn" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+                                                    <button class="btn bg-transparent text-white" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                                    <button class="btn bg-transparent text-white" data-calendar-nav="today">' . $langToday . '</button>
+                                                    <button class="btn bg-transparent text-white" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                             </div>
                                             <div class="btn-group">
-                                                    <button class="btn submitAdminBtn" data-calendar-view="year">' . $langYear . '</button>
-                                                    <button class="btn submitAdminBtn active" data-calendar-view="month">' . $langMonth . '</button>
-                                                    <button class="btn submitAdminBtn" data-calendar-view="week">' . $langWeek . '</button>
-                                                    <button class="btn submitAdminBtn" data-calendar-view="day">' . $langDay . '</button>
+                                                    <button class="btn bg-transparent text-white" data-calendar-view="year">' . $langYear . '</button>
+                                                    <button class="btn bg-transparent active text-white" data-calendar-view="month">' . $langMonth . '</button>
+                                                    <button class="btn bg-transparent text-white" data-calendar-view="week">' . $langWeek . '</button>
+                                                    <button class="btn bg-transparent text-white" data-calendar-view="day">' . $langDay . '</button>
                                             </div>
-                                        </div>
-                                        <h6></h6>
+                                       
+                                        <h6 class="d-none"></h6>
                                     </div>
                                 
                             </div>'

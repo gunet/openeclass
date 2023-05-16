@@ -11,8 +11,8 @@
         <div class="row rowMedium">
 
             @if($course_code)
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active">
-                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3">
+                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
@@ -88,8 +88,8 @@
                     @if (count($fileInfo) or $curDirName)
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-3 @endif'>
-                            <div class='panel Borders'>
-                                <div class='panel-body docPanel Borders'>
+                            <div class='panel rounded-3'>
+                                <div class='panel-body docPanel rounded-3'>
                                     <div class='row'>
                                         <div class='col-9 d-flex justify-content-start align-items-center'>
                                             {!! make_clickable_path($curDirPath) !!}
