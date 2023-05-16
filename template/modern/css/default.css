@@ -2348,10 +2348,12 @@ label:has(input[type="checkbox"]:disabled){
     overflow:auto; 
   }
 
-  .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
-    overflow:hidden !important;
-
+  @media(min-width:992px){
+     .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
+       overflow:hidden !important;
+     }
   }
+ 
   #questions_filter{
     padding-right: 10px;
   }
@@ -2816,6 +2818,10 @@ label:has(input[type="checkbox"]:disabled){
   border-bottom-right-radius: 15px !important;
 }
 
+.smallRadius{
+  border-radius: 5px;
+}
+
 
 /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2872,6 +2878,8 @@ label:has(input[type="checkbox"]:disabled){
     .breadcrumb-item span{ max-width:325px; flex-wrap: wrap; }
 
     .navrbar_menu_btn{ margin-left: 0px; }
+
+    .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
 
     .dropdownLanguage{ width:230px ;  background-color: #003F87 ; }
 

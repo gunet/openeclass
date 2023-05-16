@@ -40,7 +40,7 @@
   border-radius: 5px !important;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head{
-  background: #f8f9fa;
+  background: #e8e8e8;
   padding-top: 5px;
   padding-bottom: 5px;
   border-bottom:0px;
@@ -63,7 +63,7 @@
   color: #ffffff !important;
 }
 .myPersonalCalendar .cal-cell{
-  border: solid 1px #f4f7f9 !important;
+  border: solid 0.5px #f5f4f4 !important;
 }
 
 
@@ -165,7 +165,7 @@
   box-shadow: none;
 }
 .myCalendarEvents .fc-head-container.fc-widget-header{
-  background: #f8f9fa;
+  background: #e8e8e8;
   padding-top: 5px;
   padding-bottom: 5px;
 }
@@ -178,8 +178,10 @@
 }
 .myCalendarEvents .fc-widget-content table tbody td{
   height:70px;
-  border: solid 1px #f0f0f0;
+  border: solid 1px #f5f4f4 !important;
+  
 }
+
 
 /****************************************************************************************************/
 /*************************************** this is datetimepicker-calendar *************************************/

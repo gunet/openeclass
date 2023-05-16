@@ -3866,7 +3866,7 @@ function setOpenCoursesExtraHTML() {
         $langOpenCoursesShort, $langListOpenCoursesShort,$langCourses,$langCourse,$langNationalOpenCourses,
         $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
-    if ($openCoursesNum > 0) {
+    
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
             <div class='row w-100'>
@@ -3897,7 +3897,7 @@ function setOpenCoursesExtraHTML() {
                     </div>
                 </div>
             </div>";
-    }
+    
 }
 
 /**

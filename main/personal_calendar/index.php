@@ -523,7 +523,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             <div class='modal-content'>
                                                 <div class='modal-header'>
                                                     <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
-                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                    <button type='button' class='btn-close bg-danger' data-bs-dismiss='modal' aria-label='Close'></button>
                                                 </div>
                                                 <div class='modal-body'>
                                                     <div class='form-wrapper form-edit rounded'>

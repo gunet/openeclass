@@ -1,15 +1,15 @@
 
-.tool-sidebar-text{color:white; font-size: 12px;}
+.tool-sidebar-text{color:#ffffff; font-size: 12px;}
 
 /* ------------------------ LEFT MENU HOVER ITEMS --------------------- */
 
 .leftMenuToolCourse{ background: transparent; }
 
-.toolSidebarTxt{ font-size: 13px; color: white; font-family: 'Manrope' ,'Fontawesome', sans-serif; font-weight: 500; font-style: normal;}
+.toolSidebarTxt{ font-size: 13px; color: #ffffff; font-family: 'Manrope' ,'Fontawesome', sans-serif; font-weight: 500; font-style: normal;}
 
 .posTool { margin-top:2px; }
 
-.leftMenuToolCourse.active{ background-color:  white; border: 0; }
+.leftMenuToolCourse.active{ background-color:  #ffffff; border: solid 4px #003e85 !important;}
 
 .leftMenuToolCourse.active span{ color: #003F87; }
 
@@ -35,7 +35,7 @@
 
 /* --------------------------------------- Basic classes ------------------------------- */
 
-.nav-link{ font-size:14px;  border-bottom: solid 1px white; }
+.nav-link{ font-size:14px;  border-bottom: solid 1px #ffffff; }
 
 .nav-item:active{  border:0; }
 

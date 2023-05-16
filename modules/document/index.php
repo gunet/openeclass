@@ -1475,7 +1475,7 @@ function make_clickable_path($path) {
             $row = Database::get()->querySingle("SELECT filename FROM document
                                         WHERE path LIKE '%/$component' AND $group_sql");
             $dirname = $row->filename;
-            $out .= " &raquo; <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
+            $out .= " <span class='fa fa-chevron-right px-2 small-text'></span> <a href='{$base_url}openDir=$cur'>".q($dirname)."</a>";
         }
     }
     return $out;

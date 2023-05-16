@@ -25,7 +25,7 @@
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                     <div class="panel-sidebar-heading ps-lg-3 pe-lg-3">
                         <div class="panel-title h3">
-                            <div class='d-flex justify-content-between align-items-end'>
+                            <div class='d-flex justify-content-between align-items-end bg-transparent'>
                                 <span class='text-wrap tool-sidebar-text ps-0 text-uppercase'>{{ $tool_group[0]['text'] }}</span>
                                 <span class="fa fa-chevron-right tool-sidebar"></span>
                             </div>

@@ -88,22 +88,22 @@
                     @if (count($fileInfo) or $curDirName)
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-3 @endif'>
-                            <div class='panel rounded-3'>
-                                <div class='panel-body docPanel rounded-3'>
+                            <div class='panel smallRadius'>
+                                <div class='panel-body docPanel smallRadius'>
                                     <div class='row'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center'>
+                                        <div class='col-9 d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
-                                                &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
+                                                &nbsp&nbsp{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
                                             @endif
                                             @if ($curDirName and $dirComment)
                                                 {{ $dirComment }}
                                             @endif
                                         </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center'>
+                                        <div class='col-3 d-flex justify-content-end align-items-center flex-wrap'>
                                             @if ($curDirName)
                                                 <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
-                                                    <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
+                                                    <span class='fa fa-level-up'></span>&nbsp{{ trans('langUp') }}
                                                 </a>
                                             @endif
                                         </div>
