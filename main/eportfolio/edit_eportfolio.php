@@ -92,7 +92,7 @@ $head_content .= "<script type='text/javascript'>
                 stickywidget.addClass('affix');
             }
         });
-    }
+    });
     </script>";
 
 $head_content .= "

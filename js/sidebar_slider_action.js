@@ -18,13 +18,13 @@ $(document).ready(function(){
 
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.show").length > 0) { //when page first loads the show.bs.collapse event is not triggered
-        $(".collapse.show").prev("a").find("span.fa").addClass("fa-rotate-90");
+        $(".collapse.show").prev("a").find("span.fa").addClass("fa-rotate-180");
     }
     $('.panel-collapse').on('show.bs.collapse', function () {
-        $(this).prev("a").find("span.fa").addClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").addClass("fa-rotate-180");
     });
     $('.panel-collapse').on('hide.bs.collapse', function () {
-        $(this).prev("a").find("span.fa").removeClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").removeClass("fa-rotate-180");
     });
 
     if ($("#leftnav").hasClass("float-menu-in")) {

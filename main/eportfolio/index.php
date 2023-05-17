@@ -82,21 +82,19 @@ if ($userdata) {
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
-                            <div class='panel panel-default mt-3'>
-                                <div class='panel-heading'>$langPageLink</div>
-                                <div class='panel-body'>
+                            <div class='card mt-3'>
+                                <div class='card-header d-flex justify-content-between aling-items-center'>
+                                    <span class='normalBlueText TextSemiBold fs-6 mt-1'>$langPageLink</span>
+                                    <button class='btn submitAdminBtn' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
+                                        <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
+                                    </button>
+                                </div>
+                                <div class='card-body'>
                                     <input class='form-control' id='page-link' value='{$urlServer}main/eportfolio/index.php?id=$id&token=$token'>
-                                    <div class='input-group-btn float-end mt-2'>
-                                        <button class='btn submitAdminBtn' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
-                                            <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
-                                        </button>
-                                    </div>
                                 </div>                              
                             </div>";
-            $tool_content .= "<script type='text/javascript'>
-                                // $('#copy-btn').tooltip({
-                                // });
-                    
+            $head_content .= "<script type='text/javascript'>
+                               
                                 $(function() {
                                   var clipboard = new Clipboard('#copy-btn');
                     
@@ -168,11 +166,6 @@ if ($userdata) {
             send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
         }
     }
-    
-    // $tool_content .= "
-    //     <div class='row p-2'>
-    //         <div class='col-sm-12'>
-    //                ";
 
     $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {
@@ -198,32 +191,8 @@ if ($userdata) {
                 stickywidget.addClass('affix');
             }
         });
-    }
+    });
     </script>";
-    
-    $head_content .= "
-        <script>
-        // $(function() {
-        //     $('body').scrollspy({ target: '#affixedSideNav' });
-        // });
-        </script>
-    ";
-    
-    $head_content .= "
-        <script>
-        
-            $(function() {
-                // $('#floatMenu').affix({
-                // offset: {
-                //     top: 230,
-                //     bottom: function () {
-                //       return (this.bottom = $('.footer').outerHeight(true))
-                //     }
-                // }
-                // })
-            });
-        
-        </script>";
     
     $ret_str = render_eportfolio_fields_content($id);
 
@@ -237,7 +206,7 @@ if ($userdata) {
     } else {
         $tool_content .= "
                             <div class='col-sm-12'>
-                            <div data-bs-spy='scroll' data-bs-target='#navbar-exampleIndexPortfolio' data-bs-offset='0' tabindex='0'>".$ret_str['panels']."</div>";
+                            <div class='row row-cols-1 row-cols-md-2 g-4'>".$ret_str['panels']."</div>";
     }
 
     

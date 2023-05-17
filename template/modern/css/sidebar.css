@@ -7,9 +7,9 @@
 
 .toolSidebarTxt{ font-size: 13px; color: #ffffff; font-family: 'Manrope' ,'Fontawesome', sans-serif; font-weight: 500; font-style: normal;}
 
-.posTool { margin-top:2px; }
+.posTool { margin-top:3px; }
 
-.leftMenuToolCourse.active{ background-color:  #ffffff; border: solid 4px #003e85 !important;}
+.leftMenuToolCourse.active{ background-color:  #ffffff; }
 
 .leftMenuToolCourse.active span{ color: #003F87; }
 

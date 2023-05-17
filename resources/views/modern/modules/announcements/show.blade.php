@@ -38,23 +38,17 @@
 
                        
                         <div class='col-12'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading'>
-                                   <div class='panel-title'>{!! $title !!}</div>
-                                </div>
-                                <div class='panel-body'>
-                                    <span class='text-secondary'>{!! $content !!}</span>
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">{!! $title !!}</h5>
+                                    <p class="card-text">{!! $content !!}</p>
                                     @if ($tags_list)
-                                        <div class='text-start'>{{ trans('langTags') }}: {!! $tags_list !!}</div>
+                                        <p class='card-text'>{{ trans('langTags') }}: {!! $tags_list !!}</p>
                                     @endif
                                 </div>
-                                <div class='panel-footer'>
-                                    
-                                    <div class='text-center info-date'>
-                                        {!! $date !!}
-                                    </div>
+                                <div class='card-footer small-text bg-white border-0'>
+                                    {!! $date !!}
                                 </div>
-                                
                             </div>
                         </div>
                         

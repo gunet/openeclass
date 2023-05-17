@@ -58,12 +58,12 @@ function render_eportfolio_fields_content($uid) {
         if (count($res) > 0) {
     
             $cat_return_string['panels'] .= '
-            <div class="col-sm-12 mt-3">
-            <div class="panel panel-default" id="IndexPortfolio'.$c->id.'">
-                                                <div class="panel-heading">
-                                                        <div class="panel-title">'.$c->name.'</div>
-                                                    </div>
-                                                 <div class="panel-body">
+            <div class="col-lg-6 col-12">
+            <div class="card h-100" id="IndexPortfolio'.$c->id.'">
+                                                <div class="card-header bgTheme">
+                                                    <p class="card-title text-white mb-0 TextMedium fs-6">'.$c->name.'</p>
+                                                </div>
+                                                 <div class="card-body">
                                                      
                                                      <fieldset class="row p-2 fieldset-eportfolio">';
             if ($j == 0) {
@@ -89,8 +89,8 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
                     $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
-                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-md-4 col-12"><span class="tag"><strong class="panel-title control-label-notes">'.q($f->name).': </strong></span></div>';
-                    $cat_return_string['panels'] .= '<div class="col-md-4 col-12"><span>';
+                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-12"><span class="tag"><strong class="panel-title control-label-notes">'.q($f->name).': </strong></span></div>';
+                    $cat_return_string['panels'] .= '<div class="col-12"><span>';
                     
                     switch ($f->datatype) {
                         case EPF_TEXTBOX:
@@ -119,7 +119,8 @@ function render_eportfolio_fields_content($uid) {
     
             $cat_return_string['panels'] .= '</fieldset>
                        </div>
-                   </div></div>';
+                   </div>
+                </div>';
     
         }
         
@@ -168,8 +169,8 @@ function render_eportfolio_fields_form() {
         if (count($res) > 0) {
             
             $return_string['panels'] .= '
-            <div class="row p-2"></div>
-            <div class="panel panel-default" id="EditPortfolio'.$c->id.'">
+           
+            <div class="panel panel-admin mt-3" id="EditPortfolio'.$c->id.'">
                                        <div class="panel-heading">
                                            <div class="panel-title">'.$c->name.'</div>
                                        </div>
