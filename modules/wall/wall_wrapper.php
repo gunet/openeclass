@@ -34,8 +34,8 @@ require_once 'include/log.class.php';
 
 function show_post_form() {
     global $head_content, $tool_content, $urlServer, $course_id, $course_code, $uid, $is_editor,
-           $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink,
-           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit;
+           $langVideo, $langDoc, $langMyDocs, $langMessage, $langWallExtVideo, $langWallExtVideoLink, $langTypeOutMessage,
+           $langLinks, $langExercises, $langWorks, $langChat, $langQuestionnaire, $langForum, $langSubmit, $langWall, $langOfCourse;
 
     if (allow_to_post($course_id, $uid, $is_editor)) {
 
@@ -144,56 +144,62 @@ function show_post_form() {
 
         $tool_content .= '
             <div class="col-12">
-                <div class="form-wrapper form-edit rounded">
-                    <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
-                        <fieldset> 
-                            <div class="form-group">
-                                <label for="message_input">'.$langMessage.'</label>
-                                <textarea id="textr" onfocus="expand_form();" class="form-control" rows="1" name="message" id="message_input">'.$content.'</textarea>
-                            </div>
-                            <div id="resources_panel" class="panel panel-default collapse mt-3">
-                                <div class="panel-body">
-                                    <ul class="nav nav-tabs">
-                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
-                                        '.$video_li.'
-                                        '.$docs_li.'
-                                        '.$mydocs_li.'
-                                        '.$links_li.'
-                                        '.$exercises_li.'
-                                        '.$assignments_li.'
-                                        '.$chats_li.'
-                                        '.$polls_li.'
-                                        '.$forums_li.'
-                                    </ul>
-                                    <div class="tab-content">
-                                        <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
-                                            <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
-                                            <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
+                <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
+                    <div class="card-header border-0 bg-white">
+                        
+                            <span class="text-uppercase normalBlueText TextBold fs-6">'.$langWall.'&nbsp'.$langOfCourse.'</span>
+                        
+                    </div>
+                    <div class="card-body">
+                        <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
+                            <fieldset> 
+                                <div class="form-group">
+                                    <textarea style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
+                                </div>
+                                <div id="resources_panel" class="card cardPanel collapse mt-3 border-0">
+                                    <div class="card-body border-0">
+                                        <ul class="nav nav-tabs walltabs border-0">
+                                            <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                            '.$video_li.'
+                                            '.$docs_li.'
+                                            '.$mydocs_li.'
+                                            '.$links_li.'
+                                            '.$exercises_li.'
+                                            '.$assignments_li.'
+                                            '.$chats_li.'
+                                            '.$polls_li.'
+                                            '.$forums_li.'
+                                        </ul>
+                                        <div class="tab-content mt-4">
+                                            <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
+                                                <label for="extvideo_video mb-1 TextBold">'.$langWallExtVideoLink.'</label>
+                                                <input class="form-control rounded-pill" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
+                                            </div>
+                                            '.$video_div.'
+                                            '.$docs_div.'
+                                            '.$mydocs_div.'
+                                            '.$links_div.'
+                                            '.$exercises_div.'
+                                            '.$assignments_div.'
+                                            '.$chats_div.'
+                                            '.$polls_div.'
+                                            '.$forums_div.'
                                         </div>
-                                        '.$video_div.'
-                                        '.$docs_div.'
-                                        '.$mydocs_div.'
-                                        '.$links_div.'
-                                        '.$exercises_div.'
-                                        '.$assignments_div.'
-                                        '.$chats_div.'
-                                        '.$polls_div.'
-                                        '.$forums_div.'
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group mt-3">'.
-                            form_buttons(array(
-                                array(
-                                    'class' => 'btn submitAdminBtn',
-                                    'text'  =>  $langSubmit,
-                                    'name'  =>  'submit',
-                                    'value' =>  $langSubmit
-                                )
-                            ))
-                            .'</div>  
-                        </fieldset>      
-                    </form>
+                                <div class="form-group mt-5"><div class="col-12 d-flex justify-content-center aling-items-center">'.
+                                form_buttons(array(
+                                    array(
+                                        'class' => 'btn submitAdminBtn',
+                                        'text'  =>  $langSubmit,
+                                        'name'  =>  'submit',
+                                        'value' =>  $langSubmit
+                                    )
+                                ))
+                                .'</div></div>  
+                            </fieldset>      
+                        </form>
+                    </div>
                 </div>
             </div>';
 

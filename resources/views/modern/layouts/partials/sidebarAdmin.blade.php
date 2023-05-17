@@ -19,20 +19,18 @@
 @endif
 
 <div class='col-12'>
-    <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-        <div class='panel-heading bg-body'>
-            <div class='col-12 Help-panel-heading'>
-                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langQuickLinks') }}</span>
-            </div>
+    <div class='card panelCard BorderSolid px-lg-4 py-lg-3'>
+        <div class='card-header border-0 bg-white'>
+            <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langQuickLinks') }}</span>
         </div>
-        <div class='panel-body'>
+        <div class='card-body'>
             <div class='d-flex flex-wrap'>
-                <a class='btn btn-outline-primary btn-sm small-text me-2 mb-2' href="search_user.php">
+                <a class='btn submitAdminBtn btn-sm small-text me-2 mb-2' href="search_user.php">
                     {{ trans('langSearchUser') }}
                 </a>
             
                 @if($is_admin or $is_departmentmanage_user or $is_power_user)
-                    <a  href="searchcours.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    <a  href="searchcours.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
                         {{ trans('langSearchCourse') }} 
                     </a>
                 @else
@@ -42,7 +40,7 @@
                 @endif
             
                 @if($is_admin)
-                    <a href="hierarchy.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    <a href="hierarchy.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
                     {{ trans('langHierarchy') }}
                     </a>
                 @else
@@ -52,7 +50,7 @@
                 @endif
 
                 @if($is_admin)
-                    <a href="eclassconf.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    <a href="eclassconf.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
                         {{ trans('langConfig') }}
                     </a>
                 @else
@@ -62,7 +60,7 @@
                 @endif
 
                 @if($is_admin)
-                    <a href="theme_options.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    <a href="theme_options.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
                     {{ trans('langThemeSettings') }}   
                     </a>
                 @else
@@ -72,7 +70,7 @@
                 @endif
 
                 @if($is_admin)
-                    <a href="extapp.php" class='btn btn-outline-primary btn-sm small-text me-2 mb-2'>
+                    <a href="extapp.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
                     {{ trans('langExternalTools') }}  
                     </a>
                 @else
@@ -90,13 +88,11 @@
 <div class='@if(count($toolArr) == 1) and ($is_power_user) col-lg-12 col-12 mt-3 @else col-lg-6 col-12 mt-3 @endif'>
     
     @if($countNewPanel == 2)
-    <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mb-3'>
-        <div class='panel-heading bg-body'>
-            <div class='col-12 Help-panel-heading'>
-                <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langAdministratorTools')}}</span>
-            </div>
+    <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white mb-3'>
+        <div class='card-header border-0 bg-white'>
+            <span class='text-uppercase normalBlueText TextBold fs-6'>{{trans('langAdministratorTools')}}</span>
         </div>
-        <div class='panel-body'>
+        <div class='card-body'>
             <ul>
                 @if ($is_power_user or $is_departmentmanage_user)
                     @if ($is_admin)
@@ -125,13 +121,11 @@
     </div>
     @endif
 
-    <div class='panel panel-admin px-lg-4 py-lg-3 bg-white m-auto'>
-        <div class='panel-heading bg-body'>
-            <div class='col-12 Help-panel-heading'>
-                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ $tool_group[0]['text'] }}</span>
-            </div>
+    <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white m-auto'>
+        <div class='card-header border-0 bg-white'>
+             <span class='text-uppercase normalBlueText TextBold fs-6'>{{ $tool_group[0]['text'] }}</span>
         </div>
-        <div class='panel-body'>
+        <div class='card-body'>
             <ul>
                 @foreach ($tool_group[1] as $key2 => $tool)
                     <li class="p-1">
@@ -147,13 +141,11 @@
     @if($countNewPanel == 1)
         @if($is_power_user or $is_departmentmanage_user)
             @if($is_admin)
-                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mt-3'>
-                    <div class='panel-heading bg-body'>
-                        <div class='col-12 Help-panel-heading'>
-                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langFaculties')}}</span>
-                        </div>
+                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white mt-3'>
+                    <div class='card-header border-0 bg-white'>
+                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{trans('langFaculties')}}</span>
                     </div>
-                    <div class='panel-body'>
+                    <div class='card-body'>
                         <ul>
                             <li class="p-1">
                                 <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='fs-6 TextSemiBold link_admin_tool'>

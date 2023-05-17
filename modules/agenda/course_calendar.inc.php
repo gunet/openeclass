@@ -558,7 +558,7 @@ require_once 'include/lib/references.class.php';
                $langEditChange, $langViewHide, $langViewShow, $id, $is_admin;
 
         $barMonth = '';
-        $eventlist = "<div class='table-responsive'><table class='table-default'>";
+        $eventlist = "<div class='table-responsive mt-0'><table class='table-default'>";
         foreach ($events as $myrow) {
             $content = standard_text_escape($myrow->content);
             $d = strtotime($myrow->start);
@@ -568,7 +568,7 @@ require_once 'include/lib/references.class.php';
                 $barYear = date("Y", $d);
                 $eventlist .= "<tr>";
                 $eventlist .= "<td colspan='2' class='monthLabel list-header'>";
-                $eventlist .= "<div class='text-center'><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
+                $eventlist .= "<div class='text-center text-white'><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
                 $eventlist .= "</td>";
                 $eventlist .= "</tr>";
             }

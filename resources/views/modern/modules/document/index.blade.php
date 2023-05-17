@@ -11,8 +11,8 @@
         <div class="row rowMedium">
 
             @if($course_code)
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active">
-                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3">
+                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
@@ -88,22 +88,22 @@
                     @if (count($fileInfo) or $curDirName)
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-3 @endif'>
-                            <div class='panel Borders'>
-                                <div class='panel-body docPanel Borders'>
+                            <div class='panel smallRadius'>
+                                <div class='panel-body docPanel smallRadius'>
                                     <div class='row'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center'>
+                                        <div class='col-9 d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
-                                                &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
+                                                &nbsp&nbsp{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
                                             @endif
                                             @if ($curDirName and $dirComment)
                                                 {{ $dirComment }}
                                             @endif
                                         </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center'>
+                                        <div class='col-3 d-flex justify-content-end align-items-center flex-wrap'>
                                             @if ($curDirName)
                                                 <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
-                                                    <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
+                                                    <span class='fa fa-level-up'></span>&nbsp{{ trans('langUp') }}
                                                 </a>
                                             @endif
                                         </div>

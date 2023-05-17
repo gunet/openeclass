@@ -553,13 +553,13 @@ label:has(input[type="checkbox"]:disabled){
 
 .alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:14px; }
 
-.alert-success { border: 1px solid #22B473; background-color: rgb(223,240,216); color: #22B473; border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-success { border: 1px solid #22B473; background-color: #ffffff; color: #22B473; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-info { border: 1px solid #3D80D0; background-color: rgb(217,237,247); color: #3D80D0; border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-info { border: 1px solid #3D80D0; background-color: #ffffff; color: #3D80D0; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-warning { border: 1px solid #FFA023; background-color: rgb(252,248,227); color: #FFA023; border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-warning { border: 1px solid #FFA023; background-color: #ffffff; color: #FFA023; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-danger { border: 1px solid rgb(244,17,14); background-color: rgb(242,222,222); color: rgb(244, 17, 14); border-radius: 15px; font-weight: 500; font-style: normal; }
+.alert-danger { border: 1px solid rgb(244,17,14); background-color: #ffffff; color: rgb(244, 17, 14); border-radius: 5px; font-weight: 500; font-style: normal; }
 
 /* -------------------------------- testimonials-OWL_CAROUSEL ------------------------------------------------------------------------------ */
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1363,7 +1363,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1387,7 +1387,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1406,7 +1406,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1426,7 +1426,7 @@ label:has(input[type="checkbox"]:disabled){
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2307,7 +2307,7 @@ label:has(input[type="checkbox"]:disabled){
     background: #f5f5f5; 
     border-collapse: collapse;
     overflow: hidden;
-    border-radius: 1em;
+    border-radius: 0.5em;
     border: solid 1px #e8e8e8;
   }
 
@@ -2348,10 +2348,12 @@ label:has(input[type="checkbox"]:disabled){
     overflow:auto; 
   }
 
-  .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
-    overflow:hidden !important;
-
+  @media(min-width:992px){
+     .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
+       overflow:hidden !important;
+     }
   }
+ 
   #questions_filter{
     padding-right: 10px;
   }
@@ -2479,6 +2481,29 @@ label:has(input[type="checkbox"]:disabled){
 
   .media-body.bubble{ 
     padding:15px; 
+  }
+
+  .wallWrapper{
+    background-clip: border-box !important; border: 1px solid rgba(0,0,0,.125) !important;
+    border-radius: 15px;
+  }
+
+  .walltabs .nav-link{
+    border:0 ;
+    color:#003e87 ;
+    font-size: 15px;
+  }
+  .walltabs .nav-link.active{
+    border-bottom: solid 2px #003e87 ;
+    font-size: 15px;
+    color: #003e87;
+    font-weight: 600;
+  }
+
+
+  .commentPress:hover{
+    color: #0d6efd;
+    
   }
 
 /* ------------------------------------- progress -------------------------------------------------------------------------------------------*/
@@ -2793,6 +2818,10 @@ label:has(input[type="checkbox"]:disabled){
   border-bottom-right-radius: 15px !important;
 }
 
+.smallRadius{
+  border-radius: 5px;
+}
+
 
 /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2849,6 +2878,8 @@ label:has(input[type="checkbox"]:disabled){
     .breadcrumb-item span{ max-width:325px; flex-wrap: wrap; }
 
     .navrbar_menu_btn{ margin-left: 0px; }
+
+    .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
 
     .dropdownLanguage{ width:230px ;  background-color: #003F87 ; }
 

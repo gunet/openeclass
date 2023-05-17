@@ -24,14 +24,14 @@
 
                 @if(isset($_SESSION['uid']))
 
-                        <button class="btn btn-transparent dropdown-toogle d-flex justify-content-center align-items-center" type="button"
+                        <button class="btn btn-transparent dropdown-toogle d-flex justify-content-end align-items-center" type="button"
                                 id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user orangeText"></i>
+                                <img class="user-icon-filename mt-0 me-2" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                         </button>
 
                         <ul class="m-0 p-0 dropdown-menu dropdown-menu-end dropdown_menu_user bg-body border-0 shadow-lg" aria-labelledby="dropdownMenuButton1">
                             <li>
-                                <a class='list-group-item pe-none bg-light text-center'><i class="fa fa-user lightBlueText mt-1 pe-2"></i> <span class='lightBlueText fs-6 fw-bold'>{{ $_SESSION['uname'] }}</span></a>
+                                <a class='list-group-item pe-none bg-light text-center'><span class='normalBlueText fs-6 fw-bold'>{{ $_SESSION['uname'] }}</span></a>
                             </li>
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or

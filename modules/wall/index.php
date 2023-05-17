@@ -386,16 +386,16 @@ if (isset($_GET['showPost'])) { //show comments case
 
         $tool_content .= '<div class="row">
             <div class="col-12">
-                <div class="form-wrapper form-edit rounded">
+                <div class="form-wrapper form-edit py-lg-4 px-lg-5 py-0 px-0 wallWrapper ">
                     <form id="wall_form" method="post" action="" enctype="multipart/form-data">
                         <fieldset>
                             <div class="form-group">
                                 <label for="message_input">'.$langMessage.'</label>
                                 <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>
                             </div>
-                            <div class="panel panel-default mt-3">
-                                <div class="panel-body">
-                                    <ul class="nav nav-tabs">
+                            <div class="panel panel-default mt-3 border-0">
+                                <div class="panel-body border-0">
+                                    <ul class="nav nav-tabs walltabs border-0">
                                         <li class="active"><a id="nav_edit_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
@@ -407,7 +407,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                         '.$polls_li.'
                                         '.$forums_li.'
                                     </ul>
-                                    <div class="tab-content">
+                                    <div class="tab-content mt-4">
                                         <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_edit_extvideo" style="padding:10px">
                                             <label for="extvideo_video">'.$langWallExtVideoLink.'</label>
                                             <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">

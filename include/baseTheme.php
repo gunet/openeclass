@@ -351,19 +351,16 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[leftNavBgColor];
                 }
 
-                #bgr-cheat-header{
+                #bgr-cheat-header, .ContentLeftNav{
                     background:$rgba_no_alpha
                 };
 
                 @media(max-width: 992px){
-                    #leftnav{
+                    #leftnav,.ContentLeftNav{
                         background:$rgba_no_alpha;
                     }
                 }
             
-                .modal-content-opencourses{
-                    background:$theme_options_styles[leftNavBgColor];
-                }
 
                 .block-title {
                     color: $theme_options_styles[leftNavBgColor];
@@ -438,9 +435,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
-                .modal-content-opencourses{
-                    border:solid 8px $theme_options_styles[linkColor];
-                }
+                
 
                 .Help-text-panel-heading {
                     color:  $theme_options_styles[linkColor] !important;

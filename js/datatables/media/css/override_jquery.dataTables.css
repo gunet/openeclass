@@ -10,7 +10,7 @@
     background: #f5f5f5; 
     border-collapse: collapse;
     overflow: hidden;
-    border-radius: 1em;
+    border-radius: 0.5em;
     border: solid 1px #e8e8e8; 
   }
 
@@ -157,6 +157,7 @@
   #portfolio_lessons{
     border: 0px;
     border-radius: 0px;
+    margin-bottom:10px;
   }
   #portfolio_lessons tbody tr{
     background-color: #ffffff;

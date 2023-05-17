@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
         }
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-3'>";
-        $tool_content .= "<ul class='list-group Borders'>
+        $tool_content .= "<ul class='list-group smallRadius'>
                                   <li class='list-group-item bg-light'><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
                                   </li>";

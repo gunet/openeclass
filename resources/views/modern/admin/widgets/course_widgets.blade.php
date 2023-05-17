@@ -9,8 +9,8 @@
 
         <div class="row rowMedium">
 
-                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active">
-                    <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+                <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3">
+                    <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                         @php $dont_display_array_in_sidebar = ''; @endphp
 
                         @if($count_home_sidebar_widgets >= 0)

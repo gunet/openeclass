@@ -257,7 +257,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         $counterAn = 0;
         $ann_content = '';
         if($q){
-           $ann_content .= "<ul class='list-group list-group-flush mb-4'>";
+           $ann_content .= "<ul class='list-group list-group-flush mb-2'>";
         }
         foreach ($q as $ann) {
             if ($counterAn <= 1){
@@ -311,7 +311,7 @@ function getUserMessages() {
     $msgs = $mbox->getInboxMsgs('', 5);
     $counterMs = 0;
     if($msgs){
-         $message_content .= "<ul class='list-group list-group-flush mb-4'>";
+         $message_content .= "<ul class='list-group list-group-flush mb-2'>";
     }
 
     foreach ($msgs as $message) {

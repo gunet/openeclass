@@ -250,7 +250,7 @@ if (isset($_POST['submit'])) {
 
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                	       course_license, password, id, view_type, start_date, finish_date
+                	       course_license, password, id, view_type
                       FROM course WHERE code = ?s", $course_code);
     if ($depadmin_mode) {
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
@@ -278,8 +278,6 @@ if (isset($_POST['submit'])) {
     $data['course_keywords'] = q($c->keywords);
 
     $data['password'] = q($c->password);
-    $data['start_date'] = $c->start_date ? $c->start_date: '';
-    $data['finish_date'] = $c->finish_date ? $c->finish_date: '';
 
     $course_type = array('simple' => '', 'units' => '', 'wall' => '', 'activity' => '');
     $course_type[$c->view_type] = 'checked';

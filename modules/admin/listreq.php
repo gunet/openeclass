@@ -143,7 +143,7 @@ if (!empty($show) and $show == 'closed') {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         //Session::Messages($langReintroductionApplication, 'alert-success');
-        Session::flash('message',$langReintroductionApplication); 
+        Session::flash('message',$langReintroductionApplication);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
@@ -166,12 +166,10 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) && ($id > 0)) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        //Session::Messages($langReintroductionApplication, 'alert-success');
-        Session::flash('message',$langReintroductionApplication); 
+        Session::flash('message',$langReintroductionApplication);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
-
         $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
@@ -191,13 +189,11 @@ if (!empty($show) and $show == 'closed') {
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
             if ($list_status == 1) {
-                //Session::Messages($langProfessorRequestClosed, 'alert-info');
-                Session::flash('message',$langProfessorRequestClosed); 
+                Session::flash('message',$langProfessorRequestClosed);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/admin/listreq.php');
             } else {
-                //Session::Messages($langRequestStudent, 'alert-info');
-                Session::flash('message',$langRequestStudent); 
+                Session::flash('message',$langRequestStudent);
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/admin/listreq.php');
             }
@@ -253,8 +249,7 @@ if (!empty($show) and $show == 'closed') {
                         $message = $list_status == 1 ? $langTeacherRequestHasRejected : $langRequestReject;
                         $message .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
                         //$message .= "<p><b class='pe-3'>$langComments:</b>" . q($_POST['comment']) . "</p>";
-                        //Session::Messages($message, 'alert-success');
-                        Session::flash('message',$message); 
+                        Session::flash('message',$message);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/admin/listreq.php');
 

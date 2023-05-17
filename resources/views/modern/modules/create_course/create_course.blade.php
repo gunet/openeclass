@@ -9,7 +9,7 @@
         <div class="row rowMedium">
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-                    
+
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -41,7 +41,7 @@
                             </div>
                             <p class='float-end'>
                                 <a class='btn btn-secondary' href='create_course.php'>{{ trans('langBack') }}</a>
-                            </p>    
+                            </p>
                         </div>
                     @else
                     <div class='col-12'>

@@ -12,20 +12,10 @@ if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we 
 
 require_once 'include/log.class.php';
 require_once 'include/lib/course.class.php';
-require_once 'include/lib/user.class.php';
-require_once 'include/lib/hierarchy.class.php';
 require_once 'functions.php';
 
-
-
-$tree = new Hierarchy();
 $course = new Course();
-$user = new User();
 
-
-
-load_js('jstree3');
-load_js('pwstrength.js');
 load_js('tools.js');
 
 $head_content .= <<<hContent
@@ -65,20 +55,16 @@ function checkedBoxes() {
     document.getElementsByName('checked_in_home').value=checked_in_home;
     document.getElementsByName('checked_after_class').value=checked_after_class;
 
-
 }
-
-
 
 /* ]]> */
 </script>
 hContent;
 
 
-if(isset($_GET['edit_act'])){
+if (isset($_GET['edit_act'])) {
     $unit_id = $_GET['edit_act'];
     $course_code = $_GET['course'];
-
 }
 
 register_posted_variables(array('title' => true, 'password' => true, 'prof_names' => true));
@@ -176,13 +162,13 @@ if(!isset($_POST['final_submit'])){
             $tool_content .= "
 
                 <div class='form-wrapper '>
-                    <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <div class='paenel-title h4'>
+                    <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
+                    <div class='card cardPanel'>
+                        <div class='card-header border-0'>
+                            
                                 $langActSelect
 
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -232,8 +218,7 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>
-                        ";
+                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>";
 
                 $end=end($mtitles_in_class);
                 foreach($mtitles_in_class as $title_class) {
@@ -241,23 +226,20 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "<td>$title_class</td>";
                     $newUnitId =$maxUnitId->muid +1;
                     foreach ($_SESSION['units'] as $utitle) {
-
                         $tool_content .= "
                             <td><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input></td>";
                         $newUnitId ++;
                         $k++;
                     }
 
-                    ;
-                    if($title_class == $end){
+                    if ($title_class == $end) {
                         $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>
-                ";
+                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
 
                 foreach ($_SESSION['units'] as $utitle) {
                     $tool_content .="<td style='background-color:#d1d9e5;'></td>";
@@ -297,12 +279,10 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-
-
                     <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
-                            <a href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
+                        <div class='col-12 d-flex'>
+                            <input id='final_sub' class='btn submitAdminBtn me-2' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
+                            <a class='btn cancelAdminBtn' href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                         </div>
                     </div>
                     <input type='hidden' name='next'>
@@ -327,183 +307,177 @@ if(!isset($_POST['final_submit'])){
         $unit_title = Database::get()->querySingle("SELECT title FROM course_units WHERE id =?d",$unit_id);
         $_SESSION['title'] = $unit_title->title;
         $_SESSION['edit_act'] = $_GET['edit_act'];
-            $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
+        $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
 
-            $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
+        $act_list_in_home = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_HOME."'");
 
-            $act_list_after_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_AFTER_CLASS."'");
+        $act_list_after_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_AFTER_CLASS."'");
 
-            $act_list_in_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_CLASS."'");
+        $act_list_in_class = Database::get()->queryArray("SELECT DISTINCT activity_ID FROM course_activities WHERE activity_type ='".MODULE_IN_CLASS."'");
 
 
-            foreach ($act_list_in_home as $item_in_home) {
-                if ($item_in_home->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
-                    continue;
-                }
-
-                $mid = getIndirectReference($item_in_home->activity_ID);
-                $mtitle = q($activities[$item_in_home->activity_ID]['title']);
-
-                $mtitles_in_home[$item_in_home->activity_ID] =$mtitle;
+        foreach ($act_list_in_home as $item_in_home) {
+            if ($item_in_home->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                continue;
             }
 
-            foreach ($act_list_after_class as $item_after_class) {
-                if ($item_after_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
-                    continue;
-                }
-                $mid = getIndirectReference($item_after_class->activity_ID);
-                $mtitle = q($activities[$item_after_class->activity_ID]['title']);
+            $mid = getIndirectReference($item_in_home->activity_ID);
+            $mtitle = q($activities[$item_in_home->activity_ID]['title']);
 
-                $mtitles_after_class[$item_after_class->activity_ID]=$mtitle;
+            $mtitles_in_home[$item_in_home->activity_ID] =$mtitle;
+        }
 
+        foreach ($act_list_after_class as $item_after_class) {
+            if ($item_after_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                continue;
             }
+            $mid = getIndirectReference($item_after_class->activity_ID);
+            $mtitle = q($activities[$item_after_class->activity_ID]['title']);
 
-            foreach ($act_list_in_class as $item_in_class) {
-                if ($item_in_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
-                    continue;
-                }
-                $mid = getIndirectReference($item_in_class->activity_ID);
-                $mtitle = q($activities[$item_in_class->activity_ID]['title']);
+            $mtitles_after_class[$item_after_class->activity_ID]=$mtitle;
 
-                $mtitles_in_class[$item_in_class->activity_ID]=$mtitle;
+        }
 
+        foreach ($act_list_in_class as $item_in_class) {
+            if ($item_in_class->activity_ID == MODULE_ID_TC and count(is_configured_tc_server()) == 0) { // hide teleconference when no tc servers are enabled
+                continue;
             }
+            $mid = getIndirectReference($item_in_class->activity_ID);
+            $mtitle = q($activities[$item_in_class->activity_ID]['title']);
+
+            $mtitles_in_class[$item_in_class->activity_ID]=$mtitle;
+
+        }
 
 
 
-            $tool_content .= "<div class='form-wrapper'><fieldset>
-                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <div class='paenel-title h4'>
-                                $langActSelect:
-                            </div>
+        $tool_content .= "<div class='form-wrapper'><fieldset>
+            <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <div class='paenel-title h4'>
+                            $langActSelect:
                         </div>
                     </div>
+                </div>
 
-                    <fieldset>
-                        <div class='table-responsive'>
-                        <table class='table table-bordered table-striped '>
+                <fieldset>
+                    <div class='table-responsive'>
+                    <table class='table table-bordered table-striped '>
+                        <tr>
+                        <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>";
+            $i=1;
+
+            $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
+            $tool_content .= "
+                            </tr>
                             <tr>
-                            <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>";
-                $i=1;
+                                <th scope='row' style='color:#31708f;'>$langActInHome:</th>";
 
-                $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
-                $tool_content .= "
-                                </tr>
-                                <tr>
-                                    <th scope='row' style='color:#31708f;'>$langActInHome:</th>";
+            $end=end($mtitles_in_home);
+            foreach($mtitles_in_home as $title_home) {
 
-                $end=end($mtitles_in_home);
-                foreach($mtitles_in_home as $title_home) {
+                $act_id = array_search($title_home,$mtitles_in_home);
 
-                    $act_id = array_search($title_home,$mtitles_in_home);
+                $q =Database::get()->querySingle("SELECT id FROM course_units_activities WHERE unit_id =?d and activity_id=?s and course_code=?s",$unit_id,$act_id,$course_code);
 
-                    $q =Database::get()->querySingle("SELECT id FROM course_units_activities WHERE unit_id =?d and activity_id=?s and course_code=?s",$unit_id,$act_id,$course_code);
+                $tool_content .= "<td>$title_home</td>";
 
-                    $tool_content .= "<td>$title_home</td>";
-
-                    if ($q) {
-                        $tool_content .= "
-                            <td ><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></td>";
-                    } else {
-                        $tool_content .= "
-                            <td><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>";
-                    }
-
-                    if ($title_home == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
-                    } else {
-                        $tool_content .= "</tr><tr><td></td>";
-                    }
-
-
-                }
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                $tool_content .= "
-                    </tr>
-                    <tr>
-                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>";
-
-                $end=end($mtitles_in_class);
-                foreach($mtitles_in_class as $title_class) {
-
-                    $act_id = array_search($title_class,$mtitles_in_class);
-
-                    $q =Database::get()->querySingle("SELECT id FROM course_units_activities WHERE unit_id =?d and activity_id=?s and course_code=?s",$unit_id,$act_id,$course_code);
-
-                    $tool_content .= "<td>$title_class</td>";
-
-                    if($q) {
-                        $tool_content .= "
-                            <td><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>";
-                    } else {
-                        $tool_content .= "<td><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>";
-                    }
-
-                    if ($title_class == $end) {
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
-                    } else {
-                        $tool_content .= "</tr><tr><td></td>";
-                    }
+                if ($q) {
+                    $tool_content .= "
+                        <td ><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></td>";
+                } else {
+                    $tool_content .= "
+                        <td><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>";
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                $tool_content .= "
+                if ($title_home == $end){
+                    $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                } else {
+                    $tool_content .= "</tr><tr><td></td>";
+                }
+            }
+            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .= "
                 </tr>
                 <tr>
-                    <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
+                    <th scope='row' style='color:#31708f;'>$langActInClass:</th>";
 
-                $end=end($mtitles_after_class);
-                foreach($mtitles_after_class as $title_after_class) {
+            $end=end($mtitles_in_class);
+            foreach($mtitles_in_class as $title_class) {
+                $act_id = array_search($title_class,$mtitles_in_class);
+                $q =Database::get()->querySingle("SELECT id FROM course_units_activities WHERE unit_id =?d and activity_id=?s and course_code=?s",$unit_id,$act_id,$course_code);
 
-                    $act_id =array_search($title_after_class,$mtitles_after_class);
+                $tool_content .= "<td>$title_class</td>";
 
-                    $q =Database::get()->querySingle("SELECT id FROM course_units_activities WHERE unit_id =?d and activity_id=?s and course_code=?s",$unit_id,$act_id,$course_code);
-
-                    $tool_content .= "<td>$title_after_class</td>";
-
-                    if($q) {
-                        $tool_content .= "
-                            <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>";
-                    } else {
-                        $tool_content .= "
-                            <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>";
-                    }
-
-                    if ($title_after_class == $end) {
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
-                    } else {
-                        $tool_content .= "</tr><tr><td></td>";
-                    }
-
+                if($q) {
+                    $tool_content .= "
+                        <td><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>";
+                } else {
+                    $tool_content .= "<td><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>";
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                if ($title_class == $end) {
+                    $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                } else {
+                    $tool_content .= "</tr><tr><td></td>";
+                }
+            }
 
-                $tool_content .= "</tr>
-                        </table>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-default'>$langCancel</a>
-                            <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
-                        </div>
-                    </div>
-                    <input type='hidden' name='next'>
-                    <input name='checked_in_class' type='hidden' value='1'></input>
-                    <input name='checked_in_home' type='hidden' value='2'></input>
-                    <input name='checked_after_class' type='hidden' value='3'></input>
+            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .= "
+            </tr>
+            <tr>
+                <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
 
-                    </form></fieldset>". generate_csrf_token_form_field() ."
+            $end=end($mtitles_after_class);
+            foreach($mtitles_after_class as $title_after_class) {
+
+                $act_id =array_search($title_after_class,$mtitles_after_class);
+
+                $q =Database::get()->querySingle("SELECT id FROM course_units_activities WHERE unit_id =?d and activity_id=?s and course_code=?s",$unit_id,$act_id,$course_code);
+
+                $tool_content .= "<td>$title_after_class</td>";
+
+                if($q) {
+                    $tool_content .= "
+                        <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>";
+                } else {
+                    $tool_content .= "
+                        <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>";
+                }
+
+                if ($title_after_class == $end) {
+                    $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                } else {
+                    $tool_content .= "</tr><tr><td></td>";
+                }
+
+            }
+
+            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+
+            $tool_content .= "</tr>
+                    </table>
                 </div>
-                ";
-    }
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-default'>$langCancel</a>
+                        <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                    </div>
+                </div>
+                <input type='hidden' name='next'>
+                <input name='checked_in_class' type='hidden' value='1'></input>
+                <input name='checked_in_home' type='hidden' value='2'></input>
+                <input name='checked_after_class' type='hidden' value='3'></input>
 
+                </form></fieldset>". generate_csrf_token_form_field() ."
+            </div>";
+    }
 
 } else {   //complete actions
 
@@ -524,22 +498,6 @@ if(!isset($_POST['final_submit'])){
             $validationFailed_activities = false;
 
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-
-            // print("in_class:");
-            // print_r(array_values($_POST['in_class']));
-
-            // print("in_home:");
-            // print_r(array_values($_POST['in_home']));
-
-            // print("after_class");
-            // print_r(array_values($_POST['after_class']));
-
-            // if((!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
-            //      Session::Messages($langFieldsMissing);
-            //     $validationFailed_activities = true;
-            // }
-
-
 
             if (count($_SESSION['code']) < 1 || empty($_SESSION['code'][0])) {
                 Session::Messages($langEmptyAddNode);
@@ -602,16 +560,6 @@ if(!isset($_POST['final_submit'])){
                 }
             }
 
-            if (ctype_alnum($_SESSION['view_type'])) {
-                $view_type =$_SESSION['view_type'];
-            }
-
-            //get flipped model DS
-            if (ctype_alnum($_SESSION['flipped_flag'])) {
-                $flipped_flag = $_SESSION['flipped_flag'];
-            }
-
-
             if (empty($_SESSION['public_code'])) {
                 $public_code = $code;
             } else {
@@ -635,39 +583,34 @@ if(!isset($_POST['final_submit'])){
                                 group_quota = ?f,
                                 dropbox_quota = ?f,
                                 password = ?s,
-                                flipped_flag = ?d,
+                                flipped_flag = 2,
                                 lectures_model = ?d,
-                                view_type = ?s,
+                                view_type = 'units',
                                 start_date = " . DBHelper::timeAfter() . ",
                                 keywords = '',
                                 created = " . DBHelper::timeAfter() . ",
                                 glossary_expand = 0,
                                 glossary_index = 1,
                                 description = ?s",
-                $code,
-                $language,
-                $_SESSION['title'],
-                $_SESSION['formvisible'],
-                $course_license,
-                $prof_names,
-                $public_code,
-                $doc_quota * 1024 * 1024,
-                $video_quota * 1024 * 1024,
-                $group_quota * 1024 * 1024,
-                $dropbox_quota * 1024 * 1024,
-                $_SESSION['password'],
-                $flipped_flag,
-                $_SESSION['lectures_model'],
-                $view_type,
-                $description
-            );
-
-
+                        $code,
+                        $language,
+                        $_SESSION['title'],
+                        $_SESSION['formvisible'],
+                        $course_license,
+                        $prof_names,
+                        $public_code,
+                        $doc_quota * 1024 * 1024,
+                        $video_quota * 1024 * 1024,
+                        $group_quota * 1024 * 1024,
+                        $dropbox_quota * 1024 * 1024,
+                        $_SESSION['password'],
+                        $_SESSION['lectures_model'],
+                        $description);
 
             $new_course_id = $result->lastInsertID;
             if (!$new_course_id) {
-            Session::Messages($langGeneralError);
-            redirect_to_home_page('modules/create_course/create_course.php');
+                Session::Messages($langGeneralError);
+                redirect_to_home_page('modules/create_course/create_course.php');
             }
 
             //create course modules
@@ -675,15 +618,14 @@ if(!isset($_POST['final_submit'])){
 
             Database::get()->query(
                 "INSERT INTO course_user SET
-                                            course_id = ?d,
-                                            user_id = ?d,
-                                            status = " . USER_TEACHER . ",
-                                            tutor = 1,
-                                            reg_date = " . DBHelper::timeAfter() . ",
-                                            document_timestamp = " . DBHelper::timeAfter() . "",
-                $new_course_id,
-                $uid
-            );
+                                    course_id = ?d,
+                                    user_id = ?d,
+                                    status = " . USER_TEACHER . ",
+                                    tutor = 1,
+                                    reg_date = " . DBHelper::timeAfter() . ",
+                                    document_timestamp = " . DBHelper::timeAfter() . "",
+                                $new_course_id,
+                                $uid);
 
             $maxOrderUnit = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_units WHERE course_id=?d",$new_course_id);
 
@@ -708,9 +650,7 @@ if(!isset($_POST['final_submit'])){
 
             $maxOrderGoal = Database::get()->querySingle("SELECT MAX(`order`) as morder FROM course_description WHERE course_id=?d",$new_course_id);
 
-
-            if(empty($maxOrderGoal->morder)){
-
+            if(empty($maxOrderGoal->morder)) {
                 $maxOrderGoal->morder = 1;
             }
 
@@ -733,18 +673,13 @@ if(!isset($_POST['final_submit'])){
                 $commentLectModel .="$langLectFromHome";
             }
 
-
-
             $commentsClassInfo ="<ul>
                                     <li>$langStuNum: $stunum </li>
                                     <li>$langLectNum: $lectnum </li>
                                     <li>$langLectHours: $lecthours </li>
                                     <li>$langHomeHours: $homehours </li>
                                     <li>$langTotalHours: $totalhours</li>
-                                </ul>
-            ";
-
-
+                                </ul>";
 
             Database::get()->query("INSERT INTO course_description SET
                         course_id = ?d,
@@ -923,13 +858,7 @@ if(!isset($_POST['final_submit'])){
             ));
 
     }else{      //complete actions if it is edit course activities
-
         $validationFailed = false;
-        // if(!isset($_POST['in_class'])||!isset($_POST['in_home'])||!isset($_POST['after_class'])){
-        //     Session::Messages($langFieldsMissing);
-        //     $validationFailed = true;
-        // }
-
         if ($validationFailed) {
             redirect_to_home_page('modules/create_course/course_units_activities.php?course='.$course_code.'&edit_act='.$unit_id);
         }
@@ -958,8 +887,6 @@ if(!isset($_POST['final_submit'])){
                     $nrlz_tools_in_class .=$ids." ";
                 }
 
-
-
                 Database::get()->query(
                     "INSERT INTO course_units_activities SET
                                                 course_code = ?s,
@@ -975,9 +902,7 @@ if(!isset($_POST['final_submit'])){
                     0,
                     1
                 );
-
                 $nrlz_tools_in_class ="";
-
             }
         }
 

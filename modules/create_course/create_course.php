@@ -107,21 +107,18 @@ if (!isset($_POST['create_course'])) {
         $data['menuTypeID'] = 1;
         view('modules.create_course.index', $data);
 
-}else if($_POST['flippedclassroom'] == "2"){
-    $_SESSION['title']= $title;
-    $_SESSION['code']= $departments ;
-    $_SESSION['language']= $language ;
-    $_SESSION['formvisible']= $_POST['formvisible'] ;
-    $_SESSION['l_radio']= $_POST['l_radio'];
-    $_SESSION['cc_use']=$_POST['cc_use'] ;
-    $_SESSION['public_code']=$public_code ;
-    $_SESSION['password']= $_POST['password'];
-    $_SESSION['flipped_flag']=$_POST['flippedclassroom'] ;
-    $_SESSION['view_type']= $_POST['view_type'];
-    $_SESSION['description']=purify($_POST['description']);
+} else if ($_POST['view_type'] == "flippedclassroom") {
+    $_SESSION['title'] = $title;
+    $_SESSION['code'] = $departments ;
+    $_SESSION['language'] = $language ;
+    $_SESSION['formvisible'] = $_POST['formvisible'] ;
+    $_SESSION['l_radio'] = $_POST['l_radio'];
+    $_SESSION['cc_use'] = $_POST['cc_use'] ;
+    $_SESSION['public_code'] = $public_code ;
+    $_SESSION['password'] = $_POST['password'];
+    $_SESSION['description'] = purify($_POST['description']);
 
     if (empty($title)) {
-        //Session::Messages($langFieldsMissing);
         Session::flash('message',$langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
         $validationFailed = true;
@@ -174,7 +171,6 @@ if (!isset($_POST['create_course'])) {
 
     // create course directories
     if (!create_course_dirs($code)) {
-        //Session::Messages($langGeneralError, 'alert-danger');
         Session::flash('message',$langGeneralError);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/create_course/create_course.php');
@@ -227,6 +223,7 @@ if (!isset($_POST['create_course'])) {
                         group_quota = ?f,
                         dropbox_quota = ?f,
                         password = ?s,
+                        flipped_flag = ?s,
                         view_type = ?s,
                         start_date = " . DBHelper::timeAfter() . ",
                         keywords = '',
@@ -237,10 +234,9 @@ if (!isset($_POST['create_course'])) {
             $code, $language, $title, $_POST['formvisible'],
             $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, $view_type, $description);
+            $dropbox_quota * 1024 * 1024, $password, 0, $view_type, $description);
     $new_course_id = $result->lastInsertID;
     if (!$new_course_id) {
-       // Session::Messages($langGeneralError);
         Session::flash('message',$langGeneralError);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/create_course/create_course.php');

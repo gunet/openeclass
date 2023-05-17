@@ -49,13 +49,11 @@
                                         <div class='row'>
 
                                             <div class='col-12'>
-                                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-                                                    <div class='panel-heading bg-body'>
-                                                        <div class='col-12 Help-panel-heading'>
-                                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPlatformIdentity') }}</span>
-                                                        </div>
+                                                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white'>
+                                                    <div class='card-header border-0 bg-white'>
+                                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langPlatformIdentity') }}</span>
                                                     </div>
-                                                    <div class='panel-body'>
+                                                    <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-6'>
                                                                 <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
@@ -92,13 +90,11 @@
                                                 </div>
                                             </div>
                                             <div class='col-12 mt-3'>
-                                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-                                                    <div class='panel-heading bg-body'>
-                                                        <div class='col-12 Help-panel-heading'>
-                                                            <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langIndexInfo') }}</span>
-                                                        </div>
+                                                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white'>
+                                                    <div class='card-header border-0 bg-white'>
+                                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langIndexInfo') }}</span>
                                                     </div>
-                                                    <div class='panel-body'>
+                                                    <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
                                                             <div class='col-6'>
                                                             <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>

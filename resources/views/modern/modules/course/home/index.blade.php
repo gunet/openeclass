@@ -111,8 +111,8 @@
     <div class="container-fluid main-container">
         <div class="row rowMedium">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active">
-                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3">
+                <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
@@ -153,22 +153,23 @@
 
 
                     <div class='col-12'>
-                        <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-                            <div class='panel-heading bg-body'>
-                                <div class='col-12 Help-panel-heading'>
-                                    <div class='row'>
-                                        <div class='col-md-9 col-auto d-flex align-items-end'>
-                                            <span class="panel-title text-uppercase Help-text-panel-heading">{{ trans('langCourseProgram') }}</span>
+                        <div class='card panelCard BorderSolid px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                
+                                    
+                                        <div>
+                                            <span class="text-uppercase normalBlueText TextBold fs-6">{{ trans('langCourseProgram') }}</span>
                                             @if ($is_editor)
                                                 @php
                                                     warnCourseInvalidDepartment(true);
-                                                @endphp;
+                                                @endphp
                                                 <a class='mt-2' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
                                                     <span class='fa fa-pencil' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEditMeta') }}'></span>
                                                 </a>
                                             @endif
                                         </div>
-                                        <div class='col-md-3 col'>
+
+                                        <div>
                                             {!! $email_notify_icon !!}
                                             <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end mt-2'>
                                                 <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
@@ -201,11 +202,9 @@
                                                 </a>
                                             @endif
                                         </div>
-                                    </div>
-
-                                </div>
+                               
                             </div>
-                            <div class='panel-body'>
+                            <div class='card-body'>
                                 <div class='row'>
                                     @if($course_info->home_layout == 1)
                                         <div class='col-12'>
@@ -287,7 +286,7 @@
                             </div>
 
                             @if(isset($rating_content) || isset($social_content) || isset($comment_content))
-                                <div class='panel-footer mt-0 mb-0 p-0'>
+                                <div class='card-footer bg-white border-0 mt-0 mb-0 p-0'>
                                     <div class='row'>
                                         @if(isset($rating_content) and isset($social_content) and isset($comment_content))
                                             <div class='col-md-4 col-12 d-flex justify-content-md-start justify-content-center align-items-center'>
@@ -352,11 +351,11 @@
 
                         @if($course_info->view_type == 'units')
                             @if($total_cunits > 0)
-                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-                                    <div class='panel-heading bg-body'>
-                                        <div class='col-12 d-inline-flex Help-panel-heading'>
-                                            <div class='col-6'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>
+                                <div class='card panelCard px-lg-4 py-lg-3'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        
+                                            <div>
+                                                <span class='text-uppercase normalBlueText TextBold fs-6'>
                                                     {{ trans('langCourseUnits') }}
                                                     @if($is_editor)
                                                         @php $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE id = ?d", $course_id); @endphp
@@ -367,7 +366,8 @@
                                                     @endif
                                                 </span>
                                             </div>
-                                            <div class='col-6'>
+
+                                            <div>
                                                 @if ($is_editor and $course_info->view_type == 'units')
 
                                                     <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
@@ -387,20 +387,21 @@
                                                     <span class='fa fa-question-circle @if($is_editor) pe-2 @endif'></span>
                                                 </a>
                                             </div>
-                                        </div>
+                                        
                                     </div>
-                                    <div class='panel-body' id='boxlistSort'>
+                                    <div class='card-body' id='boxlistSort'>
                                         {!! $cunits_content !!}
                                     </div>
                                 </div>
                             @else
-                                <div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-                                    <div class='panel-heading bg-body'>
-                                        <div class='col-12 d-inline-flex Help-panel-heading'>
-                                            <div class='col-6 panel-title text-uppercase Help-text-panel-heading'>
+                                <div class='card panelCard px-lg-4 py-lg-3'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        
+                                            <div class='text-uppercase normalBlueText TextBold fs-6'>
                                                 {{ trans('langCourseUnits') }}
                                             </div>
-                                            <div class='col-6'>
+
+                                            <div>
                                                 @if($is_editor)
 
                                                     <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
@@ -412,11 +413,11 @@
                                                     <span class='fa fa-question-circle @if($is_editor) pe-2 @endif'></span>
                                                 </a>
                                             </div>
-                                        </div>
+                                        
 
                                     </div>
-                                    <div class='panel-body'>
-                                        <div class='not_visible text-center'> - {{ trans('langNoUnits') }} - </div>
+                                    <div class='card-body'>
+                                        <div class='not_visible text-start'> {{ trans('langNoUnits') }} </div>
                                     </div>
                                 </div>
                             @endif
@@ -442,35 +443,36 @@
 
                                 @foreach ($items as $item)
                                     @if (trim($item->content))
-                                        <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mb-3'>
-                                            <div class='panel-heading bg-body'>
-                                                <div class='col-12 Help-panel-heading'>
-                                                    <span class='panel-title text-uppercase Help-text-panel-heading'>
+                                        <div class='card panelCard px-lg-4 py-lg-3 mb-3'>
+                                            <div class='card-header bg-white border-0'>
+                                               
+                                                    <span class='text-uppercase normalBlueText TextBold fs-6'>
                                                         {!! q(getSerializedMessage($item->heading)) !!}
                                                     </span>
-                                                </div>
+                                               
                                             </div>
-                                            <div class='panel-body'>
+                                            <div class='card-body'>
                                                 {!! standard_text_escape($item->content) !!}
+
+                                                @php
+                                                    $resources = Database::get()->queryArray("SELECT * FROM unit_resources
+                                                        WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
+                                                @endphp
+
+                                                @if (count($resources))
+                                                    <div class='table-responsive'>
+                                                        <table class='table-default table-striped table-hover'>
+                                                            <tbody>
+                                                                @foreach ($resources as $info)
+                                                                    @php $info->comments = standard_text_escape($info->comments); @endphp
+                                                                    {!! show_resourceWeek($info) !!}
+                                                                @endforeach
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                @endif
+
                                             </div>
-
-                                            @php
-                                                $resources = Database::get()->queryArray("SELECT * FROM unit_resources
-                                                    WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
-                                            @endphp
-
-                                            @if (count($resources))
-                                                <div class='table-responsive'>
-                                                    <table class='table-default table-striped table-hover'>
-                                                        <tbody>
-                                                            @foreach ($resources as $info)
-                                                                @php $info->comments = standard_text_escape($info->comments); @endphp
-                                                                {!! show_resourceWeek($info) !!}
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            @endif
                                         </div>
                                     @endif
                                 @endforeach
@@ -483,19 +485,19 @@
                         @endif
 
                         @if($course_info->view_type == 'simple')
-                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
-                                <div class='panel-heading bg-body'>
-                                    <div class='col-12 d-inline-flex Help-panel-heading'>
-                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
-                                    </div>
+                            <div class="card panelCard px-lg-4 py-lg-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
+                                <div class='card-header border-0 bg-white'>
+                                    
+                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langAnnouncements') }}</span>
+                                   
                                 </div>
-                                <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
+                                <div class='card-body bg-white ps-0 pe-0 pt-1 pb-1'>
                                     <ul class='list-group list-group-flush Borders ps-3 pe-3'>
                                         {!! course_announcements() !!}
                                     </ul>
                                 </div>
-                                <div class='panel-footer'>
-                                    <a class='all_announcements ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
+                                <div class='card-footer border-0 bg-white'>
+                                    <a class='all_announcements' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
                                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                                     </a>
                                 </div>
@@ -507,7 +509,7 @@
 
                     <div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="panel panel-admin p-0 bg-white">
+                        <div class="panel panel-admin p-0 bg-white borderBoxPanelNoShadow">
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer'>
                                 <div class='col-12'>
@@ -544,19 +546,19 @@
                         </div>
 
                         @if($course_info->view_type != 'simple')
-                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
-                                <div class='panel-heading bg-body'>
-                                    <div class='col-12 d-inline-flex Help-panel-heading'>
-                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langAnnouncements') }}</span>
-                                    </div>
+                            <div class="card panelCard px-lg-4 py-lg-3 mt-4">
+                                <div class='card-header border-0 bg-white'>
+                                    
+                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langAnnouncements') }}</span>
+                                    
                                 </div>
-                                <div class='panel-body bg-white ps-0 pe-0 pt-1 pb-1'>
+                                <div class='card-body bg-white ps-0 pe-0 pt-1 pb-1'>
                                     <ul class='list-group list-group-flush Borders ps-3 pe-3'>
                                         {!! course_announcements() !!}
                                     </ul>
                                 </div>
-                                <div class='panel-footer'>
-                                    <a class='all_announcements ps-2' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
+                                <div class='card-footer border-0 bg-white'>
+                                    <a class='all_announcements ps-0' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
                                         {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
                                     </a>
                                 </div>
@@ -564,13 +566,13 @@
                         @endif
 
                         @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white mt-4">
-                                <div class='panel-heading bg-body'>
-                                    <div class='col-12 Help-panel-heading'>
-                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseCompletion') }}</span>
-                                    </div>
+                            <div class="card panelCard px-lg-4 py-lg-3 mt-4">
+                                <div class='card-header border-0 bg-white'>
+                                   
+                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langCourseCompletion') }}</span>
+                                   
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     <div class='text-center'>
                                         <div class='col-sm-12'>
                                             <div class="center-block d-inline-block">
@@ -592,13 +594,13 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mt-4'>
-                                <div class='panel-heading bg-body'>
-                                    <div class='col-12 Help-panel-heading'>
-                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOpenCourseShort') }}</span>
-                                    </div>
+                            <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+                                <div class='card-header border-0 bg-white'>
+                                   
+                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langOpenCourseShort') }}</span>
+                                    
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     {!! $opencourses_level !!}
                                     <div class='mt-3 text-center'>
                                         {!! $opencourses_level_footer !!}
@@ -608,13 +610,13 @@
                         @endif
 
                         @if($course_home_main_area_widgets)
-                            <div class='panel panel-admin px-lg-4 py-lg-3 bg-white mt-4'>
-                                <div class='panel-heading bg-body'>
-                                    <div class='col-12 Help-panel-heading'>
-                                        <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langWidgets') }}</span>
-                                    </div>
+                            <div class='card panelCard px-lg-4 py-lg-3 bg-white mt-4'>
+                                <div class='card-header border-0 bg-white'>
+                                    
+                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langWidgets') }}</span>
+                                    
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     {!! $course_home_main_area_widgets !!}
                                 </div>
                             </div>
