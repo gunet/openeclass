@@ -371,16 +371,12 @@
                                         </div>
                                     </div>
                                     <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-md-8 col-12">
-                                                <div class="profile-content-panel-text">
-                                                    {{ trans('langExplain') }}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4 col-12 mt-md-0 mt-3">
-                                                {!! $action_bar_unreg !!}
-                                            </div>
+                                        <div class="profile-content-panel-text">
+                                            {{ trans('langExplain') }}
                                         </div>
+                                    </div>
+                                    <div class='panel-footer'>
+                                         {!! $action_bar_unreg !!}
                                     </div>
                                 </div>
                             </div>
