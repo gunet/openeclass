@@ -36,7 +36,7 @@ function getUserLessonInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions,
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
-           $langWelcomeSelect, $langPreview, $langOfCourse, $langPopular,$langThisCourseDescriptionIsEmpty;
+           $langWelcomeSelect, $langPreview, $langOfCourse, $langPopular,$langThisCourseDescriptionIsEmpty,$langRegCourses;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -163,6 +163,7 @@ function getUserLessonInfo($uid) {
         }
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses
+        $lesson_content .= "<div class='col-12 d-flex justify-content-start'><a class='btn submitAdminBtn mb-1' href='{$urlServer}modules/auth/courses.php'>$langRegCourses</a></div>";
         $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNotEnrolledToLessons!</div></div>";
         if ($session->status == USER_TEACHER) {
             $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div></div>";
