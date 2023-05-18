@@ -225,11 +225,11 @@ if (isset($_POST['newTitle'])) {
         }
         if ($resp['success']) {
             //Session::Messages($langEventModify, 'alert-success');
-            Session::flash('message', $langEventModify); 
+            Session::flash('message', $langEventModify);
             Session::flash('alert-class', 'alert-success');
         } else {
             //Session::Messages($resp['message']);
-            Session::flash('message', $resp['message']); 
+            Session::flash('message', $resp['message']);
             Session::flash('alert-class', 'alert-warning');
         }
         redirect_to_home_page('main/personal_calendar/index.php');
@@ -241,11 +241,11 @@ if (isset($_POST['newTitle'])) {
         $resp = Calendar_Events::add_event($newTitle, $newContent, $start, $duration, $recursion, $refobjid, $visibility);
         if ($resp['success']) {
             //Session::Messages($langEventAdd, 'alert-success');
-            Session::flash('message', $langEventAdd); 
+            Session::flash('message', $langEventAdd);
             Session::flash('alert-class', 'alert-success');
         } else {
             //Session::Messages($resp['message']);
-            Session::flash('message', $resp['message']); 
+            Session::flash('message', $resp['message']);
             Session::flash('alert-class', 'alert-warning');
         }
         redirect_to_home_page('main/personal_calendar/index.php');
@@ -262,11 +262,11 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
     }
     if ($resp['success']) {
         //Session::Messages($langEventDel, 'alert-success');
-        Session::flash('message', $langEventDel); 
+        Session::flash('message', $langEventDel);
         Session::flash('alert-class', 'alert-success');
     } else {
         //Session::Messages($resp['message']);
-        Session::flash('message', $resp['message']); 
+        Session::flash('message', $resp['message']);
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page('main/personal_calendar/index.php');
@@ -576,7 +576,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                                             if($is_recursive_event){
                                                                                 $selected[$repeatperiod] = ' selected';
                                                                             }
-                                                    $tool_content .= 
+                                                    $tool_content .=
                                                                     "</select>
                                                                 </div>
                                                                 <div class='col-md-6 col-12 mt-md-0 mt-4'>
@@ -628,8 +628,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                                     </div>
                                                                 </div>";
                                                         }
-                                                        
-                                                        
+
+
                                 $tool_content .=   "</div>
                                                 </div>
                                             
@@ -678,13 +678,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 contentHeight:'auto',
                                 selectable: true,
                                 allDaySlot: false,
-                                displayEventTime: true,
-                                
+                                displayEventTime: true,                               
 
                                 eventClick:  function(event) {
-
-                                    var id = event.id;
-                                    
+                                    var id = event.id;                                   
                                 },
                                     
                                 //header and other values
@@ -693,64 +690,59 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
                                     var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
         
-                                    if(!start.isBefore(moment())){
+                                    //if(!start.isBefore(moment())){
 
-                                        endtime = $.fullCalendar.moment(end).format('h:mm');
-                                        starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
-                                        var mywhen = starttime + ' - ' + endtime;
-                                        
-                                        startS = moment(start).format('DD-MM-YYYY HH:mm');
+                                    endtime = $.fullCalendar.moment(end).format('h:mm');
+                                    starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
+                                    var mywhen = starttime + ' - ' + endtime;
+                                    
+                                    startS = moment(start).format('DD-MM-YYYY HH:mm');
 
-                                        //duration time
-                                        var time_start = new Date();
-                                        var time_end = new Date();
+                                    //duration time
+                                    var time_start = new Date();
+                                    var time_end = new Date();
 
-                                        var value_start = max_start.split(':');
-                                        var value_end = max_end.split(':');
+                                    var value_start = max_start.split(':');
+                                    var value_end = max_end.split(':');
 
-                                        time_start.setHours(value_start[0], value_start[1], value_start[2], 0)
-                                        time_end.setHours(value_end[0], value_end[1], value_end[2], 0)
+                                    time_start.setHours(value_start[0], value_start[1], value_start[2], 0)
+                                    time_end.setHours(value_end[0], value_end[1], value_end[2], 0)
 
-                                        var diff_minutes = time_end - time_start;
+                                    var diff_minutes = time_end - time_start;
 
-                                        var milliseconds = parseInt((diff_minutes%1000))
-                                                            , seconds = parseInt((diff_minutes/1000)%60)
-                                                            , minutes = parseInt((diff_minutes/(1000*60))%60)
-                                                            , hours = parseInt((diff_minutes/(1000*60*60))%24);
+                                    var milliseconds = parseInt((diff_minutes%1000))
+                                                        , seconds = parseInt((diff_minutes/1000)%60)
+                                                        , minutes = parseInt((diff_minutes/(1000*60))%60)
+                                                        , hours = parseInt((diff_minutes/(1000*60*60))%24);
 
-                                        var hours = (hours < 10) ? '0' + hours : hours;
-                                        var minutes = (minutes < 10) ? '0' + minutes : minutes;
-                                        var seconds = (seconds < 10) ? '0' + seconds : seconds;
-                                        var duration = hours+':'+minutes+':'+seconds;
+                                    var hours = (hours < 10) ? '0' + hours : hours;
+                                    var minutes = (minutes < 10) ? '0' + minutes : minutes;
+                                    var seconds = (seconds < 10) ? '0' + seconds : seconds;
+                                    var duration = hours+':'+minutes+':'+seconds;
 
-                                        $('#createEventModal #from').text(mywhen);
-                                        $('#createEventModal #startdate').val(startS);
+                                    $('#createEventModal #from').text(mywhen);
+                                    $('#createEventModal #startdate').val(startS);
 
-                                        if(isOnDuration == 'true'){
+                                    if(isOnDuration == 'true'){
+                                        $('#createEventModal #duration').val(duration);
+                                    }else{
+                                        $('#createEventModal #duration').val('00:00:00');
+                                    }
+                                    
+                                    $('#OnOffDuration').on('click',function(){
+                                        if($('#OnOffDuration').is(':checked')){
                                             $('#createEventModal #duration').val(duration);
                                         }else{
                                             $('#createEventModal #duration').val('00:00:00');
                                         }
-                                        
-                                        $('#OnOffDuration').on('click',function(){
-                                            if($('#OnOffDuration').is(':checked')){
-                                                $('#createEventModal #duration').val(duration);
-                                            }else{
-                                                $('#createEventModal #duration').val('00:00:00');
-                                            }
-                                        }); 
+                                    }); 
 
-                                        
-                                        $('#createEventModal #idDuration').text(duration);
-                                        $('#createEventModal').modal('toggle');
-                                    }else{
-                                        alert('$langDateHasExpire');
-                                    }
-                                
+                                    
+                                    $('#createEventModal #idDuration').text(duration);
+                                    $('#createEventModal').modal('toggle');
                                 },
 
-                                eventDrop: function(event){
-                                    
+                                eventDrop: function(event){                                    
                                     
                                 },
 

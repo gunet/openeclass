@@ -584,7 +584,7 @@ require_once 'include/lib/references.class.php';
             } else {
                 $eventlist .= "<td style='padding:15px;' colspan='2'>";
             }
-            if (($myrow->duration != '0:00') and ($myrow->duration != '')) {
+            if (($myrow->duration != '00:00:00') and ($myrow->duration != '')) {
                 if ($myrow->duration == 1) {
                     $message = $langHour;
                 } else {

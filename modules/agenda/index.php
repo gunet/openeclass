@@ -48,7 +48,7 @@ $dateNow = date("j-n-Y / H:i", time());
 $toolName = $langAgenda;
 
 if (isset($_GET['v'])) {
-    $v = intval($_GET['v']); // get agenda view    
+    $v = intval($_GET['v']); // get agenda view
     if ($v == 1) {
         $view = EVENT_LIST_VIEW; // list view
     } else {
@@ -60,8 +60,8 @@ if (isset($_GET['v'])) {
 } else {
     $view = EVENT_CALENDAR_VIEW; // default is calendar view
 }
- 
-// list view if we want a specific event 
+
+// list view if we want a specific event
 
 
 load_js('tools.js');
@@ -73,7 +73,7 @@ if (!empty($langLanguageCode)) {
 }
 load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
- 
+
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar.css' />
 <script type='text/javascript'>
@@ -154,7 +154,7 @@ $(function() {
 if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 
     //--if add event
-    $head_content .= 
+    $head_content .=
 "<script type='text/javascript'>
 function checkrequired(thisform) {
     if ($('#event_title').val()=='' || $('#startdate').val()=='') {
@@ -169,7 +169,7 @@ function checkrequired(thisform) {
 }
 </script>";
 }
-    
+
 if ($is_editor) {
     $agdx = new AgendaIndexer();
     // modify visibility
@@ -190,7 +190,7 @@ if ($is_editor) {
             $recursion = null;
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
-            }            
+            }
             if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
                 $resp = update_recursive_event($id, $event_title, $startdate, $duration, $content, $recursion);
             } else {
@@ -198,17 +198,17 @@ if ($is_editor) {
             }
             $agdx->store($id);
         } else { // add new event
-            $recursion = null;            
+            $recursion = null;
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
-            }            
-            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);                                   
+            }
+            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);
             foreach($ev['event'] as $id) {
-                $agdx->store($id);                
+                $agdx->store($id);
             }
         }
         //Session::Messages($langStoredOK, 'alert-success');
-        Session::flash('message',$langStoredOK); 
+        Session::flash('message',$langStoredOK);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/agenda/index.php?course=$course_code");
     } elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
@@ -216,11 +216,11 @@ if ($is_editor) {
         $agdx->remove($id);
         $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
         $alerttype = ($resp['success'])? 'alert-success' : 'alert-error';
-        
+
         //Session::Messages($msgresp, $alerttype);
-        Session::flash('message',$msgresp); 
+        Session::flash('message',$msgresp);
         Session::flash('alert-class', $alerttype);
-        redirect_to_home_page("modules/agenda/index.php?course=$course_code");              
+        redirect_to_home_page("modules/agenda/index.php?course=$course_code");
     }
     $is_recursive_event = false;
 
@@ -231,7 +231,7 @@ if ($is_editor) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label',
-                      'show' => $is_editor)));        
+                      'show' => $is_editor)));
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
         $applytogroup = '';
         if (isset($id) && $id) {
@@ -259,7 +259,7 @@ if ($is_editor) {
             $duration = "0:00";
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = '';
-        } 
+        }
 
 
         if(isset($_GET['edit'])){
@@ -314,8 +314,8 @@ if ($is_editor) {
                         }
                         $tool_content .= ">$i</option>";
                     }
-                    
-                    $tool_content .= "</select></div>";            
+
+                    $tool_content .= "</select></div>";
                     $selected = array('D'=>'', 'W'=>'','M'=>'');
                     if($is_recursive_event){
                         $selected[$repeatperiod] = ' selected';
@@ -373,254 +373,229 @@ if ($is_editor) {
                                 </div>
                             </div>                
                     </form></div></div>";
-        }else{
-
+        } else {
+            $event_title = '';
 
             $tool_content .= "
+                <div class='col-12 overflow-auto'>
+                    <div id='AgendaEvents' class='myCalendarEvents'></div>
+                </div>
 
-                            <div class='col-12 overflow-auto'>
-                                <div id='AgendaEvents' class='myCalendarEvents'></div>
-                            </div>
+                <div id='createAgendaEventModal' class='modal fade in' role='dialog'>
+                    <form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                        <div class='modal-dialog modal-md'>
 
-                            <div id='createAgendaEventModal' class='modal fade in' role='dialog'>
-                                <form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                                    <div class='modal-dialog modal-md'>
+                            <!-- Modal content-->
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='form-wrapper form-edit rounded'>
 
-                                        <!-- Modal content-->
-                                            <div class='modal-content'>
-                                                <div class='modal-header'>
-                                                    <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
-                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                            <input type='hidden' id='id' name='id' value='$id'>
+                                            <input type='hidden' name='rep' id='rep' value='$applytogroup'>
+
+                                            <div class='form-group'>
+                                                <div class='control-label-notes'>$langStartDate</div>
+                                                <div id='from'></div>
+                                                <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
+                                                <div class='d-flex justify-content-start align-items-center'>
+                                                    <div id='idDuration'></div>
+                                                    <input style='height:15px; width:15px;' class='ms-2' type='checkbox' id='OnOffDuration' checked>
                                                 </div>
-                                                <div class='modal-body'>
-                                                    <div class='form-wrapper form-edit rounded'>
+                                            </div>
+                                                  
+                                            <input name='startdate' id='startdate' type='hidden' value = '" .$startdate . "'>
+                                            <input name='duration' id='durationcal' type='hidden' value='" . $duration . "'>
+                                                      
+                                            <div class='form-group mt-4'>
+                                                <label for='event_title' class='col-12 control-label-notes text-capitalize'>$langTitle</label>
+                                                <div class='col-12'>
+                                                    <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class='row form-group mt-4'>
+                                                <label class='col-12 control-label-notes text-capitalize'>$langDetail</label>
+                                                <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
+                                            </div>";
 
-                                                        <input type='hidden' id='id' name='id' value='$id'>
-                                                        <input type='hidden' name='rep' id='rep' value='$applytogroup'>
+                                            /**** Recursion parameters *****/
+                                            $tool_content .= "<div class='row form-group mt-4'>
+                                                                    <label class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
+                                                                    
+                                                                    <div class='col-12'>
+                                                                    <div class='row'>
+                                                                <div class='col-md-6 col-12'>
+                                                                    <select class='form-select' name='frequencynumber' id='frequencynumber'>
+                                                                    <option value='0'>$langSelectFromMenu</option>";
+                                            for($i = 1;$i<10;$i++) {
+                                                $tool_content .= "<option value=\"$i\"";
+                                                if($is_recursive_event && $i == $repeatnumber){
+                                                    $tool_content .= ' selected';
+                                                }
+                                                $tool_content .= ">$i</option>";
+                                            }
 
-                                                        <div class='form-group'>
-                                                            <div class='control-label-notes'>$langStartDate</div>
-                                                            <div id='from'></div>
-                                                            <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
-                                                            <div class='d-flex justify-content-start align-items-center'>
-                                                                <div id='idDuration'></div>
-                                                                <input style='height:15px; width:15px;' class='ms-2' type='checkbox' id='OnOffDuration' checked>
-                                                            </div>
-                                                        </div>
-
-                                                               
-                                                        <input name='startdate' id='startdate' type='hidden' value = '" .$startdate . "'>
-                                                        <input name='duration' id='durationcal' type='hidden' value='" . $duration . "'>
-                                                                  
-
-                                                        <div class='form-group mt-4'>
-                                                            <label for='event_title' class='col-12 control-label-notes text-capitalize'>$langTitle</label>
-                                                            <div class='col-12'>
-                                                                <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class='row form-group mt-4'>
-                                                            <label class='col-12 control-label-notes text-capitalize'>$langDetail</label>
-                                                            <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
-                                                        </div>  
-                                                        
-                                                        ";
-
-                                                        /**** Recursion paramneters *****/
-                                                        $tool_content .= "<div class='row form-group mt-4'>
-                                                                                <label class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
-                                                                                
-                                                                                <div class='col-12'>
-                                                                                <div class='row'>
-                                                                            <div class='col-md-6 col-12'>
-                                                                                <select class='form-select' name='frequencynumber' id='frequencynumber'>
-                                                                                <option value='0'>$langSelectFromMenu</option>";
-                                                        for($i = 1;$i<10;$i++) {
-                                                            $tool_content .= "<option value=\"$i\"";
-                                                            if($is_recursive_event && $i == $repeatnumber){
-                                                                $tool_content .= ' selected';
-                                                            }
-                                                            $tool_content .= ">$i</option>";
-                                                        }
-                                                        
-                                                        $tool_content .= "</select></div>";            
-                                                        $selected = array('D'=>'', 'W'=>'','M'=>'');
-                                                        if($is_recursive_event){
-                                                            $selected[$repeatperiod] = ' selected';
-                                                        }
-                                                        $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-4'>
-                                                                    <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
-                                                                        <option value=\"\">$langSelectFromMenu...</option>
-                                                                        <option value=\"D\"{$selected['D']}>$langDays</option>
-                                                                        <option value=\"W\"{$selected['W']}>$langWeeks</option>
-                                                                        <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
-                                                                    </select>
-                                                                    </div></div></div>
-                                                                ";
-                                                        $tool_content .= "<div class='input-append date mt-4' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                                                            <label for='enddate' class='col-12 control-label-notes text-capitalize'>$langUntil</label>
-                                                                <div class='col-12'>
-                                                                    <div class='input-group'>
-                                                                        <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                                                                        <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>";
-
-                                  $tool_content .= "</div>
-                                                </div>        
-
-                                                <div class='modal-footer'>
-                                                    <div class='form-group d-flex justify-content-center align-items-center'>
-                                                        ".
-                                                        form_buttons(array(
-                                                            array(
-                                                                'class' => 'submitAdminBtn',
-                                                                'text'  => $langSave,
-                                                                'name'  => 'submitbtn',
-                                                                'value' => $langAddModify,
-                                                                'id' => 'submitbtn'
-                                                            ),
-                                                            array(
-                                                                'class' => 'cancelAdminBtn ms-1',
-                                                                'href' => "index.php?course=$course_code",
-                                                            )
-                                                        ))
-                                                        ."
-                                                
+                                            $tool_content .= "</select></div>";
+                                            $selected = array('D'=>'', 'W'=>'','M'=>'');
+                                            if($is_recursive_event){
+                                                $selected[$repeatperiod] = ' selected';
+                                            }
+                                            $tool_content .= "<div class='col-md-6 col-12 mt-md-0 mt-4'>
+                                                        <select class='form-select' name='frequencyperiod' id='frequencyperiod'>
+                                                            <option value=\"\">$langSelectFromMenu...</option>
+                                                            <option value=\"D\"{$selected['D']}>$langDays</option>
+                                                            <option value=\"W\"{$selected['W']}>$langWeeks</option>
+                                                            <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
+                                                        </select>
+                                                        </div></div></div>
+                                                    ";
+                                        $tool_content .= "<div class='input-append date mt-4' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                                            <label for='enddate' class='col-12 control-label-notes text-capitalize'>$langUntil</label>
+                                                <div class='col-12'>
+                                                    <div class='input-group'>
+                                                        <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                                                        <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>";
 
-                                    </div>
-                                </form>
+                  $tool_content .= "</div>
                             </div>
+                            <div class='modal-footer'>
+                                <div class='form-group d-flex justify-content-center align-items-center'>
+                                    ".
+                                    form_buttons(array(
+                                        array(
+                                            'class' => 'submitAdminBtn',
+                                            'text'  => $langSave,
+                                            'name'  => 'submitbtn',
+                                            'value' => $langAddModify,
+                                            'id' => 'submitbtn'
+                                        ),
+                                        array(
+                                            'class' => 'cancelAdminBtn ms-1',
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        ";
+
+            $head_content .= "
+
+                <script type='text/javascript'>
+                    $(document).ready(function () {
+
+                        //initial clicker duration
+                        var isOnDuration = '';
+                        if($('#OnOffDuration').is(':checked')){
+                            isOnDuration = 'true';
+                        }else{
+                            isOnDuration = 'false';
+                        }
                 
-                
-                ";
+                        var calendar = $('#AgendaEvents').fullCalendar({
+                            header:{
+                                left: 'prev,next today',
+                                center: 'title',
+                                right: 'agendaDay,agendaWeek'
+                            },
+                            defaultView: 'agendaWeek',
+                            slotDuration: '00:30' ,
+                            minTime: '08:00:00',
+                            maxTime: '23:00:00',
+                            editable: true,
+                            contentHeight:'auto',
+                            selectable: true,
+                            allDaySlot: false,
+                            displayEventTime: true,
+                            
 
+                            eventClick:  function(event) {
 
-
-                $head_content .= "
-
-                    <script type='text/javascript'>
-                        $(document).ready(function () {
-
-                            //initial clicker duration
-                            var isOnDuration = '';
-                            if($('#OnOffDuration').is(':checked')){
-                                isOnDuration = 'true';
-                            }else{
-                                isOnDuration = 'false';
-                            }
-                    
-                            var calendar = $('#AgendaEvents').fullCalendar({
-                                header:{
-                                    left: 'prev,next today',
-                                    center: 'title',
-                                    right: 'agendaDay,agendaWeek'
-                                },
-                                defaultView: 'agendaWeek',
-                                slotDuration: '00:30' ,
-                                minTime: '08:00:00',
-                                maxTime: '23:00:00',
-                                editable: true,
-                                contentHeight:'auto',
-                                selectable: true,
-                                allDaySlot: false,
-                                displayEventTime: true,
+                                var id = event.id;
                                 
-
-                                eventClick:  function(event) {
-
-                                    var id = event.id;
-                                    
-                                },
-                                    
-                                //header and other values
-                                select: function(start, end) {
-                                    
-                                    var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
-                                    var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
-        
-                                    if(!start.isBefore(moment())){
-
-                                        endtime = $.fullCalendar.moment(end).format('h:mm');
-                                        starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
-                                        var mywhen = starttime + ' - ' + endtime;
-                                        
-                                        startS = moment(start).format('DD-MM-YYYY HH:mm');
-
-                                        //duration time
-                                        var time_start = new Date();
-                                        var time_end = new Date();
-
-                                        var value_start = max_start.split(':');
-                                        var value_end = max_end.split(':');
-
-                                        time_start.setHours(value_start[0], value_start[1], value_start[2], 0)
-                                        time_end.setHours(value_end[0], value_end[1], value_end[2], 0)
-
-                                        var diff_minutes = time_end - time_start;
-
-                                        var milliseconds = parseInt((diff_minutes%1000))
-                                                            , seconds = parseInt((diff_minutes/1000)%60)
-                                                            , minutes = parseInt((diff_minutes/(1000*60))%60)
-                                                            , hours = parseInt((diff_minutes/(1000*60*60))%24);
-
-                                        var hours = (hours < 10) ? '0' + hours : hours;
-                                        var minutes = (minutes < 10) ? '0' + minutes : minutes;
-                                        var seconds = (seconds < 10) ? '0' + seconds : seconds;
-                                        var duration = hours+':'+minutes+':'+seconds;
-
-                                        $('#createAgendaEventModal #from').text(mywhen);
-                                        $('#createAgendaEventModal #startdate').val(startS);
-
-                                        if(isOnDuration == 'true'){
-                                            $('#createAgendaEventModal #durationcal').val(duration);
-                                        }else{
-                                            $('#createAgendaEventModal #durationcal').val('00:00:00');
-                                        }
-                                        
-                                        $('#OnOffDuration').on('click',function(){
-                                            if($('#OnOffDuration').is(':checked')){
-                                                $('#createAgendaEventModal #durationcal').val(duration);
-                                            }else{
-                                                $('#createAgendaEventModal #durationcal').val('00:00:00');
-                                            }
-                                        }); 
-                                        
-
-                                        $('#createAgendaEventModal #idDuration').text(duration);
-                                        $('#createAgendaEventModal').modal('toggle');
-
-                                    }else{
-                                        alert('$langDateHasExpire');
-                                    }
+                            },
                                 
-                                },
+                            //header and other values
+                            select: function(start, end) {
+                                
+                                var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
+                                var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
+    
+                                //if(!start.isBefore(moment())){
 
-                                eventDrop: function(event){
-                                    
-                                    
-                                },
+                                endtime = $.fullCalendar.moment(end).format('h:mm');
+                                starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
+                                var mywhen = starttime + ' - ' + endtime;
+                                
+                                startS = moment(start).format('DD-MM-YYYY HH:mm');
 
-                                eventResize: function(event) {
-                                    
+                                //duration time
+                                var time_start = new Date();
+                                var time_end = new Date();
+
+                                var value_start = max_start.split(':');
+                                var value_end = max_end.split(':');
+
+                                time_start.setHours(value_start[0], value_start[1], value_start[2], 0)
+                                time_end.setHours(value_end[0], value_end[1], value_end[2], 0)
+
+                                var diff_minutes = time_end - time_start;
+
+                                var milliseconds = parseInt((diff_minutes%1000))
+                                                    , seconds = parseInt((diff_minutes/1000)%60)
+                                                    , minutes = parseInt((diff_minutes/(1000*60))%60)
+                                                    , hours = parseInt((diff_minutes/(1000*60*60))%24);
+
+                                var hours = (hours < 10) ? '0' + hours : hours;
+                                var minutes = (minutes < 10) ? '0' + minutes : minutes;
+                                var seconds = (seconds < 10) ? '0' + seconds : seconds;
+                                var duration = hours+':'+minutes+':'+seconds;
+
+                                $('#createAgendaEventModal #from').text(mywhen);
+                                $('#createAgendaEventModal #startdate').val(startS);
+
+                                if(isOnDuration == 'true'){
+                                    $('#createAgendaEventModal #durationcal').val(duration);
+                                }else{
+                                    $('#createAgendaEventModal #durationcal').val('00:00:00');
                                 }
                                 
-                            });
+                                $('#OnOffDuration').on('click',function(){
+                                    if($('#OnOffDuration').is(':checked')){
+                                        $('#createAgendaEventModal #durationcal').val(duration);
+                                    }else{
+                                        $('#createAgendaEventModal #durationcal').val('00:00:00');
+                                    }
+                                });                                         
+                                $('#createAgendaEventModal #idDuration').text(duration);
+                                $('#createAgendaEventModal').modal('toggle');
+                            },
 
+                            eventDrop: function(event){
+                                                                    
+                            },
+
+                            eventResize: function(event) {
+                                
+                            }
+                            
                         });
 
-                    </script>
-                
-                ";
-
-
-
+                    });
+                </script>                
+            ";
         }
     }
 }
@@ -628,7 +603,7 @@ if ($is_editor) {
      *  End  of  prof only
      * ------------------------------------------- */
 // display action bar
-if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {        
+if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
     $tool_content .= action_bar(array(
             array('title' => $langAddEvent,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
@@ -652,7 +627,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'url' => "icalendar.php?c=$course_id",
                   'icon' => 'fa-calendar',
                   'level' => 'primary')
-        ));    
+        ));
     if (isset($_GET['id'])) {
        $cal_content_list = event_list_view($id);
     } else {
@@ -724,7 +699,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
     });
 
     </script>';
-}   
+}
 }
 add_units_navigation(TRUE);
 
