@@ -41,6 +41,7 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                      course.prof_names professor,
                      course.lang,
                      course.visible visible,
+                     course.course_image course_image,
                      course_user.status status,
                      course_user.favorite favorite
                FROM course JOIN course_user

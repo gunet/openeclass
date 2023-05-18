@@ -2826,6 +2826,90 @@ label:has(input[type="checkbox"]:disabled){
   border-radius: 5px;
 }
 
+/* ------------------------------------------------------- MY COURSES ----------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
+
+.cardImgCourse{
+  height: 200px;
+}
+
+.mycourses-pagination .page-item .page-link:focus, .mentors-pagination .page-item .page-link:active{
+  outline: none !important;
+ box-shadow: none;
+}
+
+
+/* prev button */
+.mycourses-pagination .page-item-previous.disabled{
+  opacity: 0.3;
+}
+/* next button */
+.mycourses-pagination .page-item-next.disabled{
+  opacity: 0.3;
+}
+
+.mycourses-pagination .page-item{
+  padding: 5px;
+  background-color: #f3f3f3;
+}
+@media(max-width:991px){
+  .mycourses-pagination .page-item{
+      padding: 0px;
+  }
+}
+.mycourses-pagination .page-item .page-link{
+  border-radius: 30%;
+  color: #003e87;
+  font-weight: 400;
+  font-size: 12px;
+  border:none;
+}
+
+.mycourses-pagination .page-item .page-link:hover{
+  background-color: #e8e8e8;
+}
+.mycourses-pagination .page-item .page-link.active:hover{
+  background-color: #93b9e5;
+  color: #ffffff;
+}
+
+.mycourses-pagination .page-item .fa::before{
+  font-size: 12px;
+  font-weight: 300;
+}
+
+.mycourses-pagination .page-item .page-link.active{
+  background-color: #003e87;
+  color: #ffffff;
+}
+
+.mycourses-pagination .page-item-pages{
+  background-color: #ffffff;
+  box-shadow: slategrey;
+}
+.mycourses-pagination .page-item-previous{
+  background-color: #ffffff;
+  border-top-left-radius:10px;
+  border-bottom-left-radius:10px;
+  border: none !important;
+}
+.mycourses-pagination .page-item-next{
+  background-color: #ffffff;
+  border-top-right-radius:10px;
+  border-bottom-right-radius:10px;
+}
+.mycourses-pagination .page-item-next .page-link,.mentors-pagination .page-item-next .page-link:hover{
+  border: none;
+}
+.mycourses-pagination .page-item-previous .page-link,.mentors-pagination .page-item-previous .page-link:hover{
+  border: none;
+}
+.mycourses-pagination .page-item-next .page-link:hover,.mentors-pagination .page-item-previous .page-link:hover{
+  background-color: #e8e8e8 !important;
+}
 
 /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
