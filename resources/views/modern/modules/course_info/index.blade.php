@@ -214,6 +214,12 @@
                                                         {{ trans('langCourseWallFormat') }}
                                                     </label>
                                                     </div>
+                                                    <div class='radio'>
+                                                       <label>
+                                                          <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
+                                                          {{ trans('langFlippedClassroom') }}
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -487,9 +493,6 @@
                                         </div>
                                     </div>
 
-
-
-
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langAbuseReport') }}</label>
                                         <div class='col-sm-12'>
@@ -508,8 +511,6 @@
                                         </div>
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
-
-
 
                                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
