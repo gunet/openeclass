@@ -241,9 +241,10 @@ function printPollForm() {
                     </div>
                 </div>";
         }
+
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $incomplete_resubmission = isset($_SESSION["poll_answers_$pid"]);
-        $incomplete_answers = $_SESSION["poll_answers_$pid"];
+        $incomplete_answers = isset($_SESSION["poll_answers_$pid"]);
         unset($_SESSION["poll_answers_$pid"]);
         $i = 1;
         foreach ($questions as $theQuestion) {
