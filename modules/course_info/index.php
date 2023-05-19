@@ -181,6 +181,14 @@ if (isset($_POST['submit'])) {
             $_POST['formvisible'] = '2';
         }
 
+        // flipped classroom settings
+        if ($view_type == 'flippedclassroom') {
+            $view_type = 'units';
+            $flipped_flag = 2;
+        } else {
+            $flipped_flag = 0;
+        }
+
         // validate departments
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
@@ -211,11 +219,12 @@ if (isset($_POST['submit'])) {
                                 prof_names = ?s,
                                 lang = ?s,
                                 password = ?s,
-                                view_type = ?s
+                                view_type = ?s,
+                                flipped_flag = ?s
                             WHERE id = ?d",
                                 $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
-                                $session->language, $password, $view_type, $course_id);
+                                $session->language, $password, $view_type, $flipped_flag, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
@@ -313,7 +322,7 @@ if (isset($_POST['submit'])) {
     <div id='operations_container'>" . action_bar($action_bar_array) . "</div>";
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
-                           course_license, password, id, view_type
+                           course_license, password, id, view_type, flipped_flag
                       FROM course WHERE code = ?s", $course_code);
     $title = $c->title;
     $visible = $c->visible;
@@ -523,6 +532,12 @@ if (isset($_POST['submit'])) {
                         $langCourseWallFormat
                       </label>
                     </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom'".(($c->view_type == "units" && $c->flipped_flag == 2)? " checked" : "").">
+                        $langFlippedClassroom
+                      </label>
+                    </div>
                 </div>
             </div>";
 
@@ -648,13 +663,13 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </div>
-            
+
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langUsersListAccess:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='1' name='enable_access_users_list' $check_enable_access_users_list> $langActivate                           
+                            <input type='radio' value='1' name='enable_access_users_list' $check_enable_access_users_list> $langActivate
                       </label>
                     </div>
                     <div class='radio'>
@@ -665,7 +680,7 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
             </div>
-                                                
+
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langCourseSharing:</label>
                 <div class='col-sm-10'>
