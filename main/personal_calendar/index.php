@@ -748,7 +748,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         
                                         duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                                        if(hours > 12 && value_start[0] > value_end[0]){
+                                        if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
                                             if(hours == 13){
                                                 hours = 1;
                                             }else if(hours == 14){
@@ -832,7 +832,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         
                                         duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                                        if(hours > 12 && value_start[0] > value_end[0]){
+                                        if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
                                             if(hours == 13){
                                                 hours = 1;
                                             }else if(hours == 14){
@@ -914,7 +914,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         
                                         duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                                        if(hours > 12 && value_start[0] > value_end[0]){
+                                        if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
                                             if(hours == 13){
                                                 hours = 1;
                                             }else if(hours == 14){
@@ -1193,7 +1193,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     
                                     duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                                    if(hours > 12 && value_start[0] > value_end[0]){
+                                    if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
                                         if(hours == 13){
                                             hours = 1;
                                         }else if(hours == 14){
