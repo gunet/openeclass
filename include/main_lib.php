@@ -3645,8 +3645,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $form_end = '</div>';
             $subMenu = '<ul class="dropdown-menu dropdown-menu-end mydropdownsSecond shadow-lg m-0 p-0">';
             foreach ($option['options'] as $subOption) {
-               $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-center">';
-               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' pe-2"></span>' : '';
+               $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
+               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' pe-2 pt-1"></span>' : '';
                $subMenu .= q($subOption['title']) . '</div></a></li>';
 
             }
@@ -3677,7 +3677,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item border border-top-0 border-bottom-secondary TextMedium'" . $href .
                 " $link_attrs>" .
-                "<div class='d-inline-flex align-items-center'><span class='fa $option[icon] pe-2'></span> $title</div></a>$form_end</li>");
+                "<div class='d-inline-flex align-items-start'><span class='fa $option[icon] pe-2 pt-1'></span> $title</div></a>$form_end</li>");
         }
         $i++;
     }

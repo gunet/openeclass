@@ -2641,6 +2641,14 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
         Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
     }
+
+    if (!DBHelper::fieldExists('personal_calendar', 'end')) {
+        Database::get()->query("ALTER TABLE `personal_calendar` ADD `end` DATETIME NOT NULL");
+    }
+
+    if (!DBHelper::fieldExists('admin_calendar', 'end')) {
+        Database::get()->query("ALTER TABLE `admin_calendar` ADD `end` DATETIME NOT NULL");
+    }
 }
 
 

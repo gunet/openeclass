@@ -342,7 +342,7 @@ class Calendar_Events {
      * @param string $reference_obj_id refernced object by note containing object type (from $ref_object_types) and object id (is in the corresponding db table), e.g., video_link:5
      * @return int $eventid which is the id of the new event
      */
-    public static function add_event($title, $content, $start, $duration, $recursion = NULL, $reference_obj_id = NULL, $admin_event_visibility = null) {
+    public static function add_event($title, $content, $start, $end, $duration, $recursion = NULL, $reference_obj_id = NULL, $admin_event_visibility = null) {
         global $uid, $langNotValidInput, $is_admin;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         // insert
@@ -350,11 +350,14 @@ class Calendar_Events {
         $enddate = null;
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
+        $d3 = DateTime::createFromFormat('d-m-Y H:i', $end);
+        $d4 = DateTime::createFromFormat('d-m-Y H:i:s', $end);
         $title = trim($title);
         if (empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start))) {
             return array('success' => false, 'message' => $langNotValidInput);
         }
         $start = $d1->format('Y-m-d H:i');
+        $end = $d3->format('Y-m-d H:i');
         if (!empty($recursion)) {
             $period = "P".$recursion['repeat'].$recursion['unit'];
             $enddate = $recursion['end'];
@@ -382,20 +385,20 @@ class Calendar_Events {
 
         if (is_null($admin_event_visibility)) {
             $eventid = Database::get()->query("INSERT INTO personal_calendar "
-                . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, duration = ?t, "
+                . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, end =?t, duration = ?t, "
                 . "recursion_period = ?s, recursion_end = ?t, "
                 . "reference_obj_module = ?d, reference_obj_type = ?s, reference_obj_id = ?d, reference_obj_course = ?d",
-                purify($content), $title, $uid, $start, $duration, $period, $enddate, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
+                purify($content), $title, $uid, $start, $end, $duration, $period, $enddate, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
             if (isset($eventid) && !is_null($eventid)) {
                Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE id = ?d",$eventid);
             }
         }
         elseif ($is_admin) {
             $eventid = Database::get()->query("INSERT INTO admin_calendar "
-                . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, duration = ?t, "
+                . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, end = ?t, duration = ?t, "
                 . "recursion_period = ?s, recursion_end = ?t, "
                 . "visibility_level = ?d",
-                purify($content), $title, $uid, $start, $duration, $period, $enddate, $admin_event_visibility)->lastInsertID;
+                purify($content), $title, $uid, $start, $end, $duration, $period, $enddate, $admin_event_visibility)->lastInsertID;
             if (isset($eventid) && !is_null($eventid)) {
                Database::get()->query("UPDATE admin_calendar SET source_event_id = id WHERE id = ?d",$eventid);
             }
@@ -410,19 +413,24 @@ class Calendar_Events {
             $enddatetime = new DateTime($recursion['end']." 23:59:59");
             $newdate = date_add($startdatetime, $interval);
             while($newdate <= $enddatetime) {
+
+                $tmp_date = $newdate->format('Y-m-d');
+                $tmp_time = date('H:i:s',strtotime($_POST['enddateEvent']));
+                $end = date('Y-m-d H:i:s', strtotime("$tmp_date $tmp_time"));
+
                 if (is_null($admin_event_visibility)) {
                     $neweventid = Database::get()->query("INSERT INTO personal_calendar "
-                        . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, duration = ?t, "
+                        . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, end = ?t, duration = ?t, "
                         . "recursion_period = ?s, recursion_end = ?t, "
                         . "source_event_id = ?d, reference_obj_module = ?d, reference_obj_type = ?s, "
                         . "reference_obj_id = ?d, reference_obj_course = ?d",
-                        purify($content), $title, $uid, $newdate->format('Y-m-d H:i'), $duration, $period, $enddate, $sourceevent, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
+                        purify($content), $title, $uid, $newdate->format('Y-m-d H:i'), $end, $duration, $period, $enddate, $sourceevent, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
                 } else {
                     $neweventid = Database::get()->query("INSERT INTO admin_calendar "
-                        . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, duration = ?t, "
+                        . "SET content = ?s, title = ?s, user_id = ?d, start = ?t, end = ?t, duration = ?t, "
                         . "recursion_period = ?s, recursion_end = ?t, "
                         . "source_event_id = ?d, visibility_level = ?d",
-                        purify($content), $title, $uid, $newdate->format('Y-m-d H:i'), $duration, $period, $enddate, $sourceevent, $admin_event_visibility)->lastInsertID;
+                        purify($content), $title, $uid, $newdate->format('Y-m-d H:i'), $end, $duration, $period, $enddate, $sourceevent, $admin_event_visibility)->lastInsertID;
                 }
                 $newdate = date_add($startdatetime, $interval);
             }
@@ -448,7 +456,7 @@ class Calendar_Events {
      * @param boolean $recursivelly specifies if the update should be applied to all events of the group of recursive events or to the specific one
      * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      */
-    public static function update_event($eventid, $title, $start, $duration, $content, $recursivelly = false, $recursion = NULL, $reference_obj_id = NULL) {
+    public static function update_event($eventid, $title, $start, $end, $duration, $content, $recursivelly = false, $recursion = NULL, $reference_obj_id = NULL) {
         global $uid, $langNotValidInput;
 
         if($recursivelly && !is_null($recursion)){
@@ -457,18 +465,20 @@ class Calendar_Events {
             $e = DateTime::createFromFormat('d-m-Y', $recursion['end'])->format('Y-m-d');
             if($oldrec->recursion_period != $p || $oldrec->recursion_end != $e){
                 Calendar_Events::delete_recursive_event($eventid, 'personal');
-                return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, $reference_obj_id);
+                return Calendar_Events::add_event($title, $content, $start, $end, $duration, $recursion, $reference_obj_id);
             }
         }
         if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid, 'personal')){
             Calendar_Events::delete_event($eventid, 'personal');
-            return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, $reference_obj_id);
+            return Calendar_Events::add_event($title, $content, $start, $end, $duration, $recursion, $reference_obj_id);
         }
 
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
 
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
+        $d3 = DateTime::createFromFormat('d-m-Y H:i', $end);
+        $d4 = DateTime::createFromFormat('d-m-Y H:i:s', $end);
         $title = trim($title);
         if (empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start))) {
             return array('success' => false, 'message' => $langNotValidInput);
@@ -477,9 +487,12 @@ class Calendar_Events {
         $where_clause = ($recursivelly)? "WHERE source_event_id = ?d":"WHERE id = ?d";
         $startdatetimeformatted = ($recursivelly)? $d1->format('H:i'):$d1->format('Y-m-d H:i');
         $start_date_update_clause = ($recursivelly)? "start = CONCAT(date_format(start, '%Y-%m-%d '),?t), ":"start = ?t, ";
+        $end = ($recursivelly)? $d3->format('H:i'):$d3->format('Y-m-d H:i');
+        $end_date_update_clause = ($recursivelly)? "end = CONCAT(date_format(end, '%Y-%m-%d '),?t), ":"end = ?t, ";
         Database::get()->query("UPDATE personal_calendar SET "
                 . "title = ?s, "
                 . $start_date_update_clause
+                . $end_date_update_clause
                 . "duration = ?t, "
                 . "content = ?s, "
                 . "reference_obj_module = ?d, "
@@ -487,7 +500,7 @@ class Calendar_Events {
                 . "reference_obj_id = ?d, "
                 . "reference_obj_course = ?d "
                 . $where_clause,
-                $title, $startdatetimeformatted, $duration, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $eventid);
+                $title, $startdatetimeformatted, $end, $duration, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $eventid);
 
         Log::record(0, MODULE_ID_PERSONALCALENDAR, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
@@ -504,11 +517,11 @@ class Calendar_Events {
      * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      */
 
-    public static function update_recursive_event($eventid, $title, $start, $duration, $content, $recursion = NULL, $reference_obj_id = NULL) {
+    public static function update_recursive_event($eventid, $title, $start, $end, $duration, $content, $recursion = NULL, $reference_obj_id = NULL) {
         global $langNotValidInput;
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM personal_calendar WHERE id=?d',$eventid);
         if ($rec_eventid) {
-            return Calendar_Events::update_event($rec_eventid->source_event_id, $title, $start, $duration, $content, true, $recursion, $reference_obj_id);
+            return Calendar_Events::update_event($rec_eventid->source_event_id, $title, $start, $end, $duration, $content, true, $recursion, $reference_obj_id);
         } else {
             return array('success' => false, 'message' => $langNotValidInput);
         }
@@ -521,7 +534,7 @@ class Calendar_Events {
      * @param text $content note body
      * @param int $visibility_level min user level to show this event to
      */
-    public static function update_admin_event($eventid, $title, $start, $duration, $content, $visibility_level, $recursion = NULL, $recursivelly = false) {
+    public static function update_admin_event($eventid, $title, $start, $end, $duration, $content, $visibility_level, $recursion = NULL, $recursivelly = false) {
         global $uid, $is_admin, $langNotValidInput, $langNotAllowed;
         if (!$is_admin) {
             return array('success' => false, 'message' => $langNotAllowed);
@@ -533,18 +546,20 @@ class Calendar_Events {
             $e = DateTime::createFromFormat('d-m-Y', $recursion['end'])->format('Y-m-d');
             if($oldrec->recursion_period != $p || $oldrec->recursion_end != $e){
                 Calendar_Events::delete_recursive_event($eventid, 'admin');
-                return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, null, $visibility_level);
+                return Calendar_Events::add_event($title, $content, $start, $end, $duration, $recursion, null, $visibility_level);
             }
         }
 
         if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid, 'admin'))
         {
             Calendar_Events::delete_event($eventid, 'admin');
-            return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, null, $visibility_level);
+            return Calendar_Events::add_event($title, $content, $start, $end, $duration, $recursion, null, $visibility_level);
         }
 
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
+        $d3 = DateTime::createFromFormat('d-m-Y H:i', $end);
+        $d4 = DateTime::createFromFormat('d-m-Y H:i:s', $end);
         $title = trim($title);
         if (empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start))) {
             return array('success' => false, 'message' => $langNotValidInput);
@@ -553,14 +568,17 @@ class Calendar_Events {
         $where_clause = ($recursivelly)? "WHERE source_event_id = ?d":"WHERE id = ?d";
         $startdatetimeformatted = ($recursivelly)? $d1->format('H:i'):$d1->format('Y-m-d H:i');
         $start_date_update_clause = ($recursivelly)? "start = CONCAT(date_format(start, '%Y-%m-%d '),?t), ":"start = ?t, ";
+        $enddatetimeformatted = ($recursivelly)? $d3->format('H:i'):$d3->format('Y-m-d H:i');
+        $end_date_update_clause = ($recursivelly)? "end = CONCAT(date_format(end, '%Y-%m-%d '),?t), ":"end = ?t, ";
         Database::get()->query("UPDATE admin_calendar SET "
                 . "title = ?s, "
                 . $start_date_update_clause
+                . $end_date_update_clause
                 . "duration = ?t, "
                 . "content = ?s, "
                 . "visibility_level = ?d "
                 . $where_clause,
-                $title, $startdatetimeformatted, $duration, purify($content), $visibility_level, $eventid);
+                $title, $startdatetimeformatted, $enddatetimeformatted, $duration, purify($content), $visibility_level, $eventid);
 
         Log::record(0, MODULE_ID_ADMINCALENDAR, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
@@ -577,11 +595,11 @@ class Calendar_Events {
      * @param string $reference_obj_id refernced object by note. It contains the object type (from $ref_object_types) and object id (id in the corresponding db table), e.g., video_link:5
      */
 
-    public static function update_recursive_admin_event($eventid, $title, $start, $duration, $content, $visibility_level, $recursion = NULL){
+    public static function update_recursive_admin_event($eventid, $title, $start, $end, $duration, $content, $visibility_level, $recursion = NULL){
         global $langNotValidInput;
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM admin_calendar WHERE id=?d',$eventid);
         if ($rec_eventid) {
-            return Calendar_Events::update_admin_event($rec_eventid->source_event_id, $title, $start, $duration, $content, $visibility_level, $recursion, true);
+            return Calendar_Events::update_admin_event($rec_eventid->source_event_id, $title, $start, $end, $duration, $content, $visibility_level, $recursion, true);
         } else {
             return array('success' => false, 'message' => $langNotValidInput);
         }

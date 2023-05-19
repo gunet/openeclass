@@ -5526,4 +5526,5 @@ $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
 $langSubjectArea = "Subject Area";
 $langTypeOutMessage = "Schreibe deine Nachricht...";
 $langDateHasExpire = "Das Datum ist abgelaufen. Versuchen Sie es erneut.";
+$langCalculateNewDuration = "Berechnung der neuen Dauer";
 
