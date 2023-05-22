@@ -827,11 +827,11 @@ if ($action == "showBlog") {
             }
             if ($comments_enabled && ($post->getCommenting() == 1)) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $comment_content = "<a class='btn submitAdminBtn float-end' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+                $comment_content = "<a class='btn submitAdminBtn float-end mt-3' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
-            $tool_content .= "<div class='panel panel-action-btn-default rounded-2'>
+            $tool_content .= "<div class='panel panel-action-btn-default rounded-2 mb-3 mt-1'>
                                 <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center rounded-0'>
                                     <div class='row w-100'>
                                         <div class='col-9 d-flex justify-content-start align-items-center ps-0'>

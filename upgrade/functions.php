@@ -2649,6 +2649,10 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('admin_calendar', 'end')) {
         Database::get()->query("ALTER TABLE `admin_calendar` ADD `end` DATETIME NOT NULL");
     }
+
+    if (!DBHelper::fieldExists('agenda', 'end')) {
+        Database::get()->query("ALTER TABLE `agenda` ADD `end` DATETIME NOT NULL");
+    }
 }
 
 

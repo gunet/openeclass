@@ -173,7 +173,7 @@ require_once 'include/lib/references.class.php';
      * @param array $recursion event recursion period as array('unit'=>'D|W|M', 'repeat'=>number to multiply time unit, 'end'=>'YYYY-mm-dd')
      * @return int $eventid which is the id of the new event
      */
-    function add_event($title, $content, $start, $duration, $recursion = NULL){
+    function add_event($title, $content, $start, $enddateEvent, $duration, $recursion = NULL){
         global $course_id, $langNotValidInput, $is_admin, $is_editor, $langNotAllowed;
         $eventids = array();
         // insert
@@ -182,12 +182,15 @@ require_once 'include/lib/references.class.php';
         $multiple_events = false;
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
+        $d3 = DateTime::createFromFormat('d-m-Y H:i', $enddateEvent);
+        $d4 = DateTime::createFromFormat('d-m-Y H:i:s', $enddateEvent);
         $title = trim($title);
         if(empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start)))
         {
             return array('success'=>false, 'message'=>$langNotValidInput);
         } else {
             $startdate = $d1->format('Y-m-d H:i');
+            $enddateEventIn = $d3->format('Y-m-d H:i');
         }
         if(!empty($recursion))
         {
@@ -205,9 +208,9 @@ require_once 'include/lib/references.class.php';
         }
         if($is_editor || $is_admin){
             $eventid = Database::get()->query("INSERT INTO agenda "
-                . "SET content = ?s, title = ?s, course_id = ?d, start = ?t, duration = ?t, "
+                . "SET content = ?s, title = ?s, course_id = ?d, start = ?t, end = ?t, duration = ?t, "
                 . "recursion_period = ?s, recursion_end = ?t, visible = 1",
-                purify($content), $title, $course_id, $startdate, $duration, $period, $enddate)->lastInsertID;
+                purify($content), $title, $course_id, $startdate, $enddateEventIn, $duration, $period, $enddate)->lastInsertID;
 
             if(isset($eventid) && !is_null($eventid)){
                 Database::get()->query("UPDATE agenda SET source_event_id = id WHERE id = ?d",$eventid);
@@ -224,12 +227,17 @@ require_once 'include/lib/references.class.php';
                 $newdate = date_add($startdatetime, $interval);
                 while($newdate <= $enddatetime)
                 {
+
+                    $tmp_date = $newdate->format('Y-m-d');
+                    $tmp_time = date('H:i:s',strtotime($enddateEvent));
+                    $enddateEventIn = date('Y-m-d H:i:s', strtotime("$tmp_date $tmp_time"));
+
                     $multiple_events = true;
                     $neweventid = Database::get()->query("INSERT INTO agenda "
-                        . "SET content = ?s, title = ?s, course_id = ?d, start = ?t, duration = ?t, "
+                        . "SET content = ?s, title = ?s, course_id = ?d, start = ?t, end = ?t, duration = ?t, "
                         . "recursion_period = ?s, recursion_end = ?t, "
                         . "source_event_id = ?d, visible = 1",
-                        purify($content), $title, $course_id, $newdate->format('Y-m-d H:i'), $duration, $period, $enddate, $sourceevent)->lastInsertID;
+                        purify($content), $title, $course_id, $newdate->format('Y-m-d H:i'), $enddateEventIn, $duration, $period, $enddate, $sourceevent)->lastInsertID;
                     $newdate = date_add($startdatetime, $interval);
                     $eventids[] = $neweventid;
                 }
@@ -266,7 +274,7 @@ require_once 'include/lib/references.class.php';
      * @param text $content event details
      * @param boolean $recursivelly specifies if the update should be applied to all events of the group of recursive events or to the specific one
      */
-    function update_event($eventid, $title, $start, $duration, $content, $recursion, $recursivelly = false){
+    function update_event($eventid, $title, $start, $enddateEvent, $duration, $content, $recursion, $recursivelly = false){
         global $uid, $langNotValidInput, $course_id;
 
         if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $duration)) {
@@ -275,35 +283,41 @@ require_once 'include/lib/references.class.php';
 
         if($recursivelly && !is_null($recursion)){
             delete_recursive_event($eventid);
-            return add_event($title, $content, $start, $duration, $recursion);
+            return add_event($title, $content, $start, $enddateEvent, $duration, $recursion);
         }
 
         if(!is_null($recursion) && !is_recursive($eventid))
         {
             delete_event($eventid);
-            return add_event($title, $content, $start, $duration, $recursion);
+            return add_event($title, $content, $start, $enddateEvent, $duration, $recursion);
         }
 
         $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
         $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
+        $d3 = DateTime::createFromFormat('d-m-Y H:i', $enddateEvent);
+        $d4 = DateTime::createFromFormat('d-m-Y H:i:s', $enddateEvent);
         $title = trim($title);
         if(empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start)))
         {
             return array('success'=>false, 'message'=>$langNotValidInput);
         } else {
             $start = $d1->format('Y-m-d H:i');
+            $enddateEventIn = $d3->format('Y-m-d H:i');
         }
 
         $where_clause = ($recursivelly)? "WHERE source_event_id = ?d AND course_id = ?d":"WHERE id = ?d AND course_id = ?d";
         $startdatetimeformatted = ($recursivelly)? $d1->format('H:i'):$d1->format('Y-m-d H:i');
         $start_date_update_clause = ($recursivelly)? "start = CONCAT(date_format(start, '%Y-%m-%d '),?t), ":"start = ?t, ";
+        $enddatetimeformatted = ($recursivelly)? $d3->format('H:i'):$d3->format('Y-m-d H:i');
+        $end_date_update_clause = ($recursivelly)? "end = CONCAT(date_format(end, '%Y-%m-%d '),?t), ":"end = ?t, ";
         Database::get()->query("UPDATE agenda SET "
             . "title = ?s, "
             . $start_date_update_clause
+            . $end_date_update_clause
             . "duration = ?t, "
             . "content = ?s "
             . $where_clause,
-            $title, $startdatetimeformatted, $duration, purify($content), $eventid, $course_id);
+            $title, $startdatetimeformatted, $enddatetimeformatted, $duration, purify($content), $eventid, $course_id);
 
         Log::record($course_id, MODULE_ID_AGENDA, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
@@ -319,11 +333,11 @@ require_once 'include/lib/references.class.php';
      * @param string $start event datetime
      * @param text $content event details
      */
-    function update_recursive_event($eventid, $title, $start, $duration, $content, $recursion){
+    function update_recursive_event($eventid, $title, $start, $enddateEvent, $duration, $content, $recursion){
         global $langNotValidInput;
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM agenda WHERE id=?d',$eventid);
         if($rec_eventid){
-            return update_event($rec_eventid, $title, $start, $duration, $content, $recursion, true);
+            return update_event($rec_eventid, $title, $start, $enddateEvent, $duration, $content, $recursion, true);
         } else {
             return array('success'=>false, 'message'=>$langNotValidInput);
         }

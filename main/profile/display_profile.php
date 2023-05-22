@@ -92,12 +92,12 @@ if ($data['userdata']) {
                     'url' => "profile.php",
                     'icon' => 'fa-edit',
                     'button-class' => 'submitAdminBtn mb-2 me-2 rounded-pill',
-                    'level' => 'primary-label'),
-                array('title' => $langUnregUser,
-                    'url' => $urlAppend."main/unreguser.php",
-                    'icon' => 'fa-trash-o',
-                    'button-class' => 'deleteAdminBtn mb-2 me-2 rounded-pill',
                     'level' => 'primary-label')
+                // array('title' => $langUnregUser,
+                //     'url' => $urlAppend."main/unreguser.php",
+                //     'icon' => 'fa-trash-o',
+                //     'button-class' => 'deleteAdminBtn mb-2 me-2 rounded-pill',
+                //     'level' => 'primary-label')
                 ));
 
 

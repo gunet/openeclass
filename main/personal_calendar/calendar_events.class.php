@@ -415,7 +415,7 @@ class Calendar_Events {
             while($newdate <= $enddatetime) {
 
                 $tmp_date = $newdate->format('Y-m-d');
-                $tmp_time = date('H:i:s',strtotime($_POST['enddateEvent']));
+                $tmp_time = date('H:i:s',strtotime($end));
                 $end = date('Y-m-d H:i:s', strtotime("$tmp_date $tmp_time"));
 
                 if (is_null($admin_event_visibility)) {

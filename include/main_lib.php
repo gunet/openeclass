@@ -3580,7 +3580,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $accept_conf = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='deleteAdminBtn'";
-            $confirm_modal_class = ' confirmAction';
+            $confirm_modal_class = ' confirmAction text-wrap';
             $form_begin = "<form class='form-action-button-mydropdowns mb-0' method=post action='$url' class='mb-0'>";
             $form_end = '</form>';
             $href = '';
@@ -3771,10 +3771,10 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
                 $primary_form_begin = $form_begin;
                 $primary_form_end = $form_end;
                 $form_begin = $form_end = '';
-                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
+                $primary_icon_class = " confirmAction text-wrap' data-title='$title' data-message='" .
                     q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='deleteAdminBtn'";
             } else {
-                $icon_class .= " confirmAction' data-title='$title' data-message='" .
+                $icon_class .= " confirmAction text-wrap' data-title='$title' data-message='" .
                     q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='deleteAdminBtn'";
                 $primary_icon_class = '';
             }

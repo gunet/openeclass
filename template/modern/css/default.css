@@ -1552,6 +1552,7 @@ label:has(input[type="checkbox"]:disabled){
     margin: 0 auto;
     width:100%;
     margin-bottom: 10px;
+    word-wrap: break-word;
   }
 
   .menu-popover .list-group-item.disabled{ 
@@ -2948,7 +2949,7 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
-  @media (min-width:321px) and (max-width: 375px){
+  @media (max-width: 375px){
 
     .login-form-Homepage{ border-bottom-left-radius: 15px; border-top-left-radius: 15px; background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg); }
 
