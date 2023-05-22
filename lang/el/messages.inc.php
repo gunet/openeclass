@@ -6121,3 +6121,4 @@ $langCommands = "Ενέργειες";
 $langTypeOutMessage = "Πληκτρολογήστε το μήνυμα σας...";
 $langDateHasExpire = "Η ημερομηνία έχει παρέλθει. Δοκιμάστε πάλι.";
 $langCalculateNewDuration = "Υπολογισμός νέας διάρκειας";
+$langChooseDayAgain = "Δεν μπορείτε να επιλέξετε διαφορετικές μέρες. Δοκιμάστε πάλι.";

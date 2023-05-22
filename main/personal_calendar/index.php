@@ -717,83 +717,63 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         var eventStart = event.start;
                                         var eventEnd = event.end;  
 
-                                        startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
-                                        endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
+                                        startDay =  moment(eventStart).format('DD');
+                                        endDay = moment(eventEnd).format('DD');
 
-                                        $('#editEventModal #fromNewDate').text(startS);
-                                        $('#editEventModal #startdate').val(startS);
-                                        $('#editEventModal #enddateEvent').val(endS);
+                                        if(parseInt(startDay)==parseInt(endDay)){
 
-                                        //duration time
-                                        var max_start = $.fullCalendar.moment(eventStart).format('h:mm:ss');
-                                        var max_end = $.fullCalendar.moment(eventEnd).format('h:mm:ss');
-                                        value_start = max_start.split(':');
-                                        value_end = max_end.split(':');
-                                        if(value_start[0] == 12){
-                                            value_start[0] = 00;
-                                        }
-                                        if(value_end[0] == 12){
-                                            value_end[0] = 00;
-                                        }
-                                        var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
-                                        var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
-                                        var diff = endDate.getTime() - startDate.getTime();
-                                        var hours = Math.floor(diff / 1000 / 60 / 60);
-                                        diff -= hours * 1000 * 60 * 60;
-                                        var minutes = Math.floor(diff / 1000 / 60);
+                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
+                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
     
-                                        if (hours < 0){
-                                            hours = hours + 24;
-                                        }
-                                        
-                                        duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-
-                                        if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
-                                            if(hours == 13){
-                                                hours = 1;
-                                            }else if(hours == 14){
-                                                hours = 2;
-                                            }else if(hours == 15){
-                                                hours = 3;
-                                            }else if(hours == 16){
-                                                hours = 4;
-                                            }else if(hours == 17){
-                                                hours = 5;
-                                            }else if(hours == 18){
-                                                hours = 6;
-                                            }else if(hours == 19){
-                                                hours = 7;
-                                            }else if(hours == 20){
-                                                hours = 8;
-                                            }else if(hours == 21){
-                                                hours = 9;
-                                            }else if(hours == 22){
-                                                hours = 10;
-                                            }else if(hours == 23){
-                                                hours = 11;
+                                            $('#editEventModal #fromNewDate').text(startS);
+                                            $('#editEventModal #startdate').val(startS);
+                                            $('#editEventModal #enddateEvent').val(endS);
+    
+                                            //duration time
+                                            var duration_start = moment(eventStart).format('HH:mm');
+                                            var duration_end = moment(eventEnd).format('HH:mm');
+                                            var value_start = duration_start.split(':');
+                                            var value_end = duration_end.split(':');
+    
+                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
+                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
+                                            var diff = endDate.getTime() - startDate.getTime();
+                                            var hours = Math.floor(diff / 1000 / 60 / 60);
+                                            diff -= hours * 1000 * 60 * 60;
+                                            var minutes = Math.floor(diff / 1000 / 60);
+        
+                                            if (hours < 0){
+                                                hours = hours + 24;
                                             }
-
+                                            
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-                                        }
-
-                                        if(isOnDuration == 'true'){
-                                            $('#editEventModal #duration').val(duration);
-                                        }else{
-                                            $('#editEventModal #duration').val('00:00:00');
-                                        }
-                                        
-                                        $('#OnOffDuration').on('click',function(){
-                                            if($('#OnOffDuration').is(':checked')){
+    
+                                            
+    
+                                            if(isOnDuration == 'true'){
                                                 $('#editEventModal #duration').val(duration);
                                             }else{
                                                 $('#editEventModal #duration').val('00:00:00');
                                             }
-                                        }); 
+                                            
+                                            $('#OnOffDuration').on('click',function(){
+                                                if($('#OnOffDuration').is(':checked')){
+                                                    $('#editEventModal #duration').val(duration);
+                                                }else{
+                                                    $('#editEventModal #duration').val('00:00:00');
+                                                }
+                                            }); 
+        
+                                            
+                                            $('#editEventModal #idNewDuration').text(duration);
     
-                                        
-                                        $('#editEventModal #idNewDuration').text(duration);
+                                            $('#editEventModal').modal('toggle');    
+                                        }else{
+                                            alert('$langChooseDayAgain');
+                                            window.location.reload();
+                                        }
 
-                                        $('#editEventModal').modal('toggle');                               
+                                                                   
                                     },
 
                                     eventDrop: function(event){                                    
@@ -801,83 +781,60 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         var eventStart = event.start;
                                         var eventEnd = event.end;  
 
-                                        startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
-                                        endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
+                                        startDay =  moment(eventStart).format('DD');
+                                        endDay = moment(eventEnd).format('DD');
 
-                                        $('#editEventModal #fromNewDate').text(startS);
-                                        $('#editEventModal #startdate').val(startS);
-                                        $('#editEventModal #enddateEvent').val(endS);
+                                        if(parseInt(startDay)==parseInt(endDay)){
+                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
+                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
 
-                                        //duration time
-                                        var max_start = $.fullCalendar.moment(eventStart).format('h:mm:ss');
-                                        var max_end = $.fullCalendar.moment(eventEnd).format('h:mm:ss');
-                                        value_start = max_start.split(':');
-                                        value_end = max_end.split(':');
-                                        if(value_start[0] == 12){
-                                            value_start[0] = 00;
-                                        }
-                                        if(value_end[0] == 12){
-                                            value_end[0] = 00;
-                                        }
-                                        var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
-                                        var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
-                                        var diff = endDate.getTime() - startDate.getTime();
-                                        var hours = Math.floor(diff / 1000 / 60 / 60);
-                                        diff -= hours * 1000 * 60 * 60;
-                                        var minutes = Math.floor(diff / 1000 / 60);
-    
-                                        if (hours < 0){
-                                            hours = hours + 24;
-                                        }
-                                        
-                                        duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
+                                            $('#editEventModal #fromNewDate').text(startS);
+                                            $('#editEventModal #startdate').val(startS);
+                                            $('#editEventModal #enddateEvent').val(endS);
 
-                                        if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
-                                            if(hours == 13){
-                                                hours = 1;
-                                            }else if(hours == 14){
-                                                hours = 2;
-                                            }else if(hours == 15){
-                                                hours = 3;
-                                            }else if(hours == 16){
-                                                hours = 4;
-                                            }else if(hours == 17){
-                                                hours = 5;
-                                            }else if(hours == 18){
-                                                hours = 6;
-                                            }else if(hours == 19){
-                                                hours = 7;
-                                            }else if(hours == 20){
-                                                hours = 8;
-                                            }else if(hours == 21){
-                                                hours = 9;
-                                            }else if(hours == 22){
-                                                hours = 10;
-                                            }else if(hours == 23){
-                                                hours = 11;
+                                            //duration time
+                                            var duration_start = moment(eventStart).format('HH:mm');
+                                            var duration_end = moment(eventEnd).format('HH:mm');
+                                            var value_start = duration_start.split(':');
+                                            var value_end = duration_end.split(':');
+
+                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
+                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
+                                            var diff = endDate.getTime() - startDate.getTime();
+                                            var hours = Math.floor(diff / 1000 / 60 / 60);
+                                            diff -= hours * 1000 * 60 * 60;
+                                            var minutes = Math.floor(diff / 1000 / 60);
+        
+                                            if (hours < 0){
+                                                hours = hours + 24;
                                             }
-
+                                            
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-                                        }
 
-                                        if(isOnDuration == 'true'){
-                                            $('#editEventModal #duration').val(duration);
-                                        }else{
-                                            $('#editEventModal #duration').val('00:00:00');
-                                        }
-                                        
-                                        $('#OnOffDuration').on('click',function(){
-                                            if($('#OnOffDuration').is(':checked')){
+                                            
+
+                                            if(isOnDuration == 'true'){
                                                 $('#editEventModal #duration').val(duration);
                                             }else{
                                                 $('#editEventModal #duration').val('00:00:00');
                                             }
-                                        }); 
-    
-                                        
-                                        $('#editEventModal #idNewDuration').text(duration);
+                                            
+                                            $('#OnOffDuration').on('click',function(){
+                                                if($('#OnOffDuration').is(':checked')){
+                                                    $('#editEventModal #duration').val(duration);
+                                                }else{
+                                                    $('#editEventModal #duration').val('00:00:00');
+                                                }
+                                            }); 
+        
+                                            
+                                            $('#editEventModal #idNewDuration').text(duration);
 
-                                        $('#editEventModal').modal('toggle');  
+                                            $('#editEventModal').modal('toggle');  
+                                        }else{
+                                            alert('$langChooseDayAgain');
+                                            window.location.reload();
+                                        }
 
                                     },
 
@@ -887,79 +844,62 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         var eventStart = event.start;
                                         var eventEnd = event.end;  
 
-                                        startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
-                                        endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-                                        
 
-                                        $('#editEventModal #fromNewDate').text(startS);
-                                        $('#editEventModal #startdate').val(startS);
-                                        $('#editEventModal #enddateEvent').val(endS);
+                                        startDay =  moment(eventStart).format('DD');
+                                        endDay = moment(eventEnd).format('DD');
 
-                                        //duration time
-                                        var max_start = $.fullCalendar.moment(eventStart).format('hh:mm:ss');
-                                        var max_end = $.fullCalendar.moment(eventEnd).format('hh:mm:ss');
-                                        value_start = max_start.split(':');
-                                        value_end = max_end.split(':');
-                                        
-                                        var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
-                                        var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
-                                        var diff = endDate.getTime() - startDate.getTime();
-                                        var hours = Math.floor(diff / 1000 / 60 / 60);
-                                        diff -= hours * 1000 * 60 * 60;
-                                        var minutes = Math.floor(diff / 1000 / 60);
-    
-                                        if (hours < 0){
-                                            hours = hours + 24;
-                                        }
-                                        
-                                        duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
+                                        if(parseInt(startDay)==parseInt(endDay)){
+                                            startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
+                                            endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
+                                            
 
-                                        if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
-                                            if(hours == 13){
-                                                hours = 1;
-                                            }else if(hours == 14){
-                                                hours = 2;
-                                            }else if(hours == 15){
-                                                hours = 3;
-                                            }else if(hours == 16){
-                                                hours = 4;
-                                            }else if(hours == 17){
-                                                hours = 5;
-                                            }else if(hours == 18){
-                                                hours = 6;
-                                            }else if(hours == 19){
-                                                hours = 7;
-                                            }else if(hours == 20){
-                                                hours = 8;
-                                            }else if(hours == 21){
-                                                hours = 9;
-                                            }else if(hours == 22){
-                                                hours = 10;
-                                            }else if(hours == 23){
-                                                hours = 11;
+                                            $('#editEventModal #fromNewDate').text(startS);
+                                            $('#editEventModal #startdate').val(startS);
+                                            $('#editEventModal #enddateEvent').val(endS);
+
+                                            //duration time
+                                            var duration_start = moment(eventStart).format('HH:mm');
+                                            var duration_end = moment(eventEnd).format('HH:mm');
+                                            var value_start = duration_start.split(':');
+                                            var value_end = duration_end.split(':');
+                                            
+                                            var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
+                                            var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
+                                            var diff = endDate.getTime() - startDate.getTime();
+                                            var hours = Math.floor(diff / 1000 / 60 / 60);
+                                            diff -= hours * 1000 * 60 * 60;
+                                            var minutes = Math.floor(diff / 1000 / 60);
+        
+                                            if (hours < 0){
+                                                hours = hours + 24;
                                             }
-
+                                            
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-                                        }
 
-                                        if(isOnDuration == 'true'){
-                                            $('#editEventModal #duration').val(duration);
-                                        }else{
-                                            $('#editEventModal #duration').val('00:00:00');
-                                        }
-                                        
-                                        $('#OnOffDuration').on('click',function(){
-                                            if($('#OnOffDuration').is(':checked')){
+                    
+
+                                            if(isOnDuration == 'true'){
                                                 $('#editEventModal #duration').val(duration);
                                             }else{
                                                 $('#editEventModal #duration').val('00:00:00');
                                             }
-                                        }); 
-    
-                                        
-                                        $('#editEventModal #idNewDuration').text(duration);
+                                            
+                                            $('#OnOffDuration').on('click',function(){
+                                                if($('#OnOffDuration').is(':checked')){
+                                                    $('#editEventModal #duration').val(duration);
+                                                }else{
+                                                    $('#editEventModal #duration').val('00:00:00');
+                                                }
+                                            }); 
+        
+                                            
+                                            $('#editEventModal #idNewDuration').text(duration);
 
-                                        $('#editEventModal').modal('toggle');  
+                                            $('#editEventModal').modal('toggle');  
+                                        }else{
+                                            alert('$langChooseDayAgain');
+                                            window.location.reload();
+                                        }
                                     }
                                     
                                 });
@@ -1160,97 +1100,71 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                     
                                 //header and other values
                                 select: function(start, end) {
-                                    
-                                    var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
-                                    var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
-    
-                                    endtime = $.fullCalendar.moment(end).format('h:mm');
-                                    starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
-                                    var mywhen = starttime + ' - ' + endtime;
-                                    
-                                    startS = moment(start).format('DD-MM-YYYY HH:mm');
-                                    endS = moment(end).format('DD-MM-YYYY HH:mm');
 
-                                    //duration time
-                                    value_start = max_start.split(':');
-                                    value_end = max_end.split(':');
-                                    if(value_start[0] == 12){
-                                        value_start[0] = 00;
-                                    }
-                                    if(value_end[0] == 12){
-                                        value_end[0] = 00;
-                                    }
-                                    var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
-                                    var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
-                                    var diff = endDate.getTime() - startDate.getTime();
-                                    var hours = Math.floor(diff / 1000 / 60 / 60);
-                                    diff -= hours * 1000 * 60 * 60;
-                                    var minutes = Math.floor(diff / 1000 / 60);
+                                    startDay =  moment(start).format('DD');
+                                    endDay = moment(end).format('DD');
 
-                                    if (hours < 0){
-                                        hours = hours + 24;
-                                    }
+                                    if(parseInt(startDay)==parseInt(endDay)){
                                     
-                                    duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
+                                        var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
+                                        var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
+        
+                                        endtime = $.fullCalendar.moment(end).format('h:mm');
+                                        starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
+                                        var mywhen = starttime + ' - ' + endtime;
+                                        
+                                        startS = moment(start).format('DD-MM-YYYY HH:mm');
+                                        endS = moment(end).format('DD-MM-YYYY HH:mm');
 
-                                    if((hours >= 12 && value_start[0] > value_end[0]) || (hours>12 && value_start[0]==12 && value_end[0]==13)){
-                                        if(hours == 13){
-                                            hours = 1;
-                                        }else if(hours == 14){
-                                            hours = 2;
-                                        }else if(hours == 15){
-                                            hours = 3;
-                                        }else if(hours == 16){
-                                            hours = 4;
-                                        }else if(hours == 17){
-                                            hours = 5;
-                                        }else if(hours == 18){
-                                            hours = 6;
-                                        }else if(hours == 19){
-                                            hours = 7;
-                                        }else if(hours == 20){
-                                            hours = 8;
-                                        }else if(hours == 21){
-                                            hours = 9;
-                                        }else if(hours == 22){
-                                            hours = 10;
-                                        }else if(hours == 23){
-                                            hours = 11;
+                                        //duration time
+                                        var duration_start = moment(start).format('HH:mm');
+                                        var duration_end = moment(end).format('HH:mm');
+                                        var value_start = duration_start.split(':');
+                                        var value_end = duration_end.split(':');
+
+                                        var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
+                                        var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
+                                        var diff = endDate.getTime() - startDate.getTime();
+                                        var hours = Math.floor(diff / 1000 / 60 / 60);
+                                        diff -= hours * 1000 * 60 * 60;
+                                        var minutes = Math.floor(diff / 1000 / 60);
+
+                                        if (hours < 0){
+                                            hours = hours + 24;
                                         }
-
+                                        
                                         duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-                                    }
 
-                                    $('#createEventModal #from').text(mywhen);
-                                    $('#createEventModal #startdate').val(startS);
-                                    $('#createEventModal #enddateEvent').val(endS);
+                                        
 
-                                    if(isOnDuration == 'true'){
-                                        $('#createEventModal #duration').val(duration);
-                                    }else{
-                                        $('#createEventModal #duration').val('00:00:00');
-                                    }
-                                    
-                                    $('#OnOffDuration').on('click',function(){
-                                        if($('#OnOffDuration').is(':checked')){
+                                        $('#createEventModal #from').text(mywhen);
+                                        $('#createEventModal #startdate').val(startS);
+                                        $('#createEventModal #enddateEvent').val(endS);
+
+                                        if(isOnDuration == 'true'){
                                             $('#createEventModal #duration').val(duration);
                                         }else{
                                             $('#createEventModal #duration').val('00:00:00');
                                         }
-                                    }); 
+                                        
+                                        $('#OnOffDuration').on('click',function(){
+                                            if($('#OnOffDuration').is(':checked')){
+                                                $('#createEventModal #duration').val(duration);
+                                            }else{
+                                                $('#createEventModal #duration').val('00:00:00');
+                                            }
+                                        }); 
 
-                                    
-                                    $('#createEventModal #idDuration').text(duration);
-                                    $('#createEventModal').modal('toggle');
+                                        
+                                        $('#createEventModal #idDuration').text(duration);
+                                        $('#createEventModal').modal('toggle');
+                                    }else{
+                                        alert('$langChooseDayAgain');
+                                        window.location.reload();
+                                    }
                                 },
 
-                                eventDrop: function(event){                                    
-                                    
-                                },
-
-                                eventResize: function(event) {
-                                    
-                                }
+                                
                                 
                             });
 
