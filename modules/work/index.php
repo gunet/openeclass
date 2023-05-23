@@ -1515,7 +1515,7 @@ function submit_work($id, $on_behalf_of = null) {
                     if ($errorsComment !== '') {
                         $comment .= '<br /><br />'.$errorsComment;
                     }
-                    submit_grade_comments(array(
+                    submit_grade_comments([
                         'assignment' => $id,
                         'submission' => $sid,
                         'grade' => $grade,
@@ -1523,12 +1523,20 @@ function submit_work($id, $on_behalf_of = null) {
                         'send_email' => false,
                         'auto_judge_scenarios_output' => $auto_judge_scenarios_output,
                         'preventUiAlterations' => true,
-                    ));
+                    ]);
 
             } else if ($auto_judge && $ext !== $langExt[$lang]) {
                 if($lang == null) { die('Auto Judge is enabled but no language is selected'); }
                 if($langExt[$lang] == null) { die('An unsupported language was selected. Perhaps platform-wide auto judge settings have been changed?'); }
-                submit_grade_comments($id, $sid, 0, sprintf($langAutoJudgeInvalidFileType, $langExt[$lang], $ext), false, null, true);
+                submit_grade_comments([
+                    'assignment' => $id,
+                    'submission' => $sid,
+                    'grade' => 0,
+                    'comments' => sprintf($langAutoJudgeInvalidFileType, $langExt[$lang], $ext),
+                    'send_email' => false,
+                    'auto_judge_scenarios_output' => null,
+                    'preventUiAlterations' => true,
+                ]);
             }
         }
         // End Auto-judge
