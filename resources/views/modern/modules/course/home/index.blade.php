@@ -348,42 +348,45 @@
                     </div>
 
                     <div class="col-xxl-8 col-xl-7 col-lg-12 col-md-12 col_maincontent_unit mt-4">
-                        <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalBlueText TextBold fs-6'>
-                                    {{ trans('langCourseUnits') }}
-                                </div>
-                            </div>
-                            @if($course_info->view_type == 'units')
-                                <div>
-                                    @if ($is_editor)
-                                        <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                            <span class='fa fa-plus-circle'></span>
-                                        </a>
-                                        @if($course_info->flipped_flag == 2)
-                                            <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langFlippedEdit') }}">
-                                                <span class='fa fa-pencil text-warning'></span>
+                        @if($course_info->view_type == 'units')
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='text-uppercase normalBlueText TextBold fs-6'>
+                                        {{ trans('langCourseUnits') }}
+                                    </div>
+                                    <div class='d-flex'>
+                                        @if ($is_editor)
+                                            <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
+                                                <span class='fa fa-plus-circle text-success'></span>
+                                            </a>
+                                            @if($course_info->flipped_flag == 2)
+                                                <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langFlippedEdit') }}">
+                                                    <span class='fa fa-pencil text-warning'></span>
+                                                </a>
+                                            @endif
+                                        @endif
+                                        @if($total_cunits > 0)
+                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
+                                                <span class='fa fa-columns'></span>
+                                            </a>
+                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
+                                                <span class='fa fa-list pe-2 mb-0'></span>
                                             </a>
                                         @endif
-                                    @endif
-                                    @if($total_cunits > 0)
-                                        <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
-                                            <span class='fa fa-columns pe-2'></span>
+                                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                            <span class='fa fa-question-circle pe-2'></span>
                                         </a>
-                                        <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
-                                            <span class='fa fa-list pe-2 mb-0'></span>
-                                        </a>
-                                    @endif
-                                    <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                        <span class='fa fa-question-circle @if($is_editor) pe-2 @endif'></span>
-                                    </a>
+                                    </div>
                                 </div>
+
                                 <div class='card-body' id='boxlistSort'>
                                     {!! $cunits_content !!}
                                 </div>
-                            @endif
-                        </div>
-                    </div>
+                                
+                            </div>
+                        @endif
+                    
 
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)

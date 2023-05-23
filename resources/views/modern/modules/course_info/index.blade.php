@@ -370,18 +370,18 @@
 
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langUsersListAccess') }}</label>
-                                        <span class='help-block ps-5'><small>{{ trans('langUsersListAccessInfo') }}</small></span>
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
                                                     <input type='radio' value='1' name='enable_access_users_list' {{ $check_enable_access_users_list }} >
-                                                    <span class='ps-s'> {{ trans('langActivate') }}</span>
+                                                    <span class='ps-2'> {{ trans('langActivate') }}</span>
                                                 </label>
+                                                <div class='help-block ps-5'>{{ trans('langUsersListAccessInfo') }}</div>
                                             </div>
                                             <div class='radio'>
                                                 <label>
                                                     <input type='radio' value='0' name='enable_access_users_list' {{ $check_disable_access_users_list}} >
-                                                    <span class='ps-s'>{{ trans('langDeactivate') }}</span>
+                                                    <span class='ps-2'>{{ trans('langDeactivate') }}</span>
 
                                                 </label>
                                             </div>
