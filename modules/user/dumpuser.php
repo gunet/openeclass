@@ -36,16 +36,16 @@ $course_title = course_id_to_title($course_id);
 
 $data[] = [ $course_title ];
 $data[] = [];
-$data[] = [ $langSurname, $langName, $langEmail, $langAm, $langUsername, $langGroups ];
+$data[] = [ $langSurname, $langName, $langEmail, $langAm, $langUsername, $langRegistrationDate, $langGroups ];
 
-$sql = Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username
+$sql = Database::get()->queryFunc("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.username, course_user.reg_date
                         FROM course_user, user
                         WHERE `user`.`id` = `course_user`.`user_id` AND
                               `course_user`.`course_id` = ?d
                         ORDER BY user.surname, user.givenname",
             function ($item) use (&$data, $course_id) {
                     $ug = user_groups($course_id, $item->id, 'txt');
-                    $data[] =  [ $item->surname, $item->givenname, $item->email, $item->am, $item->username, $ug ];
+                    $data[] =  [ $item->surname, $item->givenname, $item->email, $item->am, $item->username, $item->reg_date, $ug ];
             }, $course_id);
 
 $sheet->mergeCells("A1:F1");
