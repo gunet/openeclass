@@ -68,7 +68,7 @@ load_js('tools.js');
 
 // INCOMING CHANGE AFTER install_db
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
-                                               view_type, start_date, end_date, description, home_layout, course_image, password
+                                               view_type, start_date, end_date, description, home_layout, course_image, flipped_flag, password
                                           FROM course WHERE id = ?d", $course_id);
 
 // Handle unit reordering
@@ -438,7 +438,6 @@ if (isset($level) && !empty($level)) {
     };
 
     $(document).ready(function() {
-
         dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
     });
 

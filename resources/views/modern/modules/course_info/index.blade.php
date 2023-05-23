@@ -208,13 +208,13 @@
                                                         {{ trans('langCourseActivityFormat') }}
                                                     </label>
                                                     </div>
-                                                    <div class='radio'>
+                                                    <div class='radio mb-2'>
                                                     <label>
                                                         <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
                                                         {{ trans('langCourseWallFormat') }}
                                                     </label>
                                                     </div>
-                                                    <div class='radio'>
+                                                    <div class='radio mb-2'>
                                                        <label>
                                                           <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
                                                           {{ trans('langFlippedClassroom') }}

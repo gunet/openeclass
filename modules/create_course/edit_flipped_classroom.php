@@ -57,8 +57,8 @@ $(document).ready(function() {
         var button_id = $(this).attr('id');
         var buttonName = $(this).attr('name');
 
-        if (buttonName == "remove_g"){
-            var confirm = window.confirm('$langConfirmDeleteGoal');
+        if (buttonName == "remove_g") {
+            var confirm = window.confirm('" . js_escape($langConfirmDeleteGoal) . "');
             if (confirm) {
                 var nrlz_button_id = button_id.split("_")
                 i--;
@@ -73,8 +73,8 @@ $(document).ready(function() {
 
                 }
             }
-        } elseif (buttonName == "remove_u") {
-            var confirm = window.confirm('$langConfirmDeleteUnit');
+        } else if (buttonName == "remove_u") {
+            var confirm = window.confirm('" . js_escape($langConfirmDeleteUnit) . "');
             if(confirm){
                 var nrlz_button_id = button_id.split("_")
                 j--;
@@ -92,7 +92,6 @@ $(document).ready(function() {
         }
     });
 });
-
 
 function hoursSum() {
     var lecthours = parseInt(document.getElementById('lecthours').value);
@@ -132,8 +131,6 @@ function checkedBoxes() {
     document.getElementsByName('checked_in_class').value=checked_in_class;
     document.getElementsByName('checked_in_home').value=checked_in_home;
     document.getElementsByName('checked_after_class').value=checked_after_class;
-
-
 }
 
 /* ]]> */
@@ -229,7 +226,7 @@ if (!isset($_POST['next'])) {
                 <div class='form-group mt-4'>
                     <label for='homehours' class='col-sm-12 control-label-notes mb-1'>$langHomeHours <small>($langHoursSmall)</small></label>
                     <div class='col-sm-12'>
-                        <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='" . (isset($q1->home_hours)? q($q1->home_hours) : "") ."' onchange='hoursSum()' >
+                        <input name='homehours' id='homehours' type='number' min='1' max='150' class='form-control' value='" . (isset($q1->home_hours)? q($q1->home_hours) : "") . "' onchange='hoursSum()'>
                     </div>
                 </div>        
                 <div class='form-group mt-4'>
