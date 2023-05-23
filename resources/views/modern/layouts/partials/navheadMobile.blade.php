@@ -7,6 +7,7 @@
             @endif
 
             <div class="btn-group w-100" role="group" aria-label="Basic example">
+            <a type='button' class="btn btn-transparent text-white d-flex justify-content-center align-items-center" href="{{ $urlServer }}"><i class="fas fa-home"></i></a>
                 @if (!isset($_SESSION['uid']))
                     <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif d-flex justify-content-center align-items-center" href="{{ $urlAppend }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
                 @endif
@@ -18,8 +19,9 @@
                     <a type="button" class='btn btn-transparent text-white d-flex justify-content-center align-items-center' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
                 @endif
 
-                
-                {!! lang_selections_Mobile() !!}
+                @if (!isset($_SESSION['uid']))
+                    {!! lang_selections_Mobile() !!}
+                @endif
 
 
                 @if(isset($_SESSION['uid']))

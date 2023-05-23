@@ -1229,7 +1229,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
         $tool_content .= '
                 <div id="calendar_wrapper">
-                    <div class="col-12">
+                    <div class="col-12 overflow-auto">
                         <div class="calendar-header">
                             <div class="col-12">
                                 <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center bgNormalBlueText flex-wrap">
