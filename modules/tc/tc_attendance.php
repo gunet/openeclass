@@ -59,26 +59,28 @@ foreach($q as $server) {
     $bbb = new BigBlueButton($salt, $bbb_url);
     $xml = $bbb->getMeetingInfo($xml_url);
     // ... for each meeting room scan connected users
-    foreach ($xml->meetings->meeting as $row) {
-        $meet_id = $row->meetingID;
-        $moder_pw = $row->moderatorPW;
+    if ($xml and $xml->meetings) {
+        foreach ($xml->meetings->meeting as $row) {
+            $meet_id = $row->meetingID;
+            $moder_pw = $row->moderatorPW;
 
-        $course = Database::get()->querySingle("SELECT code, course.title, tc_session.title AS mtitle
-            FROM course LEFT JOIN tc_session ON course.id = tc_session.course_id
-            WHERE tc_session.meeting_id = ?s", $meet_id);
-        // Don't list meetings from other APIs
-        if (!$course) {
-            continue;
+            $course = Database::get()->querySingle("SELECT code, course.title, tc_session.title AS mtitle
+                FROM course LEFT JOIN tc_session ON course.id = tc_session.course_id
+                WHERE tc_session.meeting_id = ?s", $meet_id);
+            // Don't list meetings from other APIs
+            if (!$course) {
+                continue;
+            }
+            // Write attendees in SQL database
+            $joinParams = array(
+                'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
+                'password' => $moder_pw, // REQUIRED - Must match either attendee or moderator pass for meeting.
+            );
+            // Get the URL to meeting info:
+            $room_xml = $bbb->getMeetingInfoUrl($bbb_url, $salt, $joinParams);
+            // Read XML from BBB URL and write to SQL
+            xml2sql($room_xml, $bbb);
         }
-        // Write attendees in SQL database
-        $joinParams = array(
-            'meetingId' => $meet_id, // REQUIRED - We have to know which meeting to join.
-            'password' => $moder_pw, // REQUIRED - Must match either attendee or moderator pass for meeting.
-        );
-        // Get the URL to meeting info:
-        $room_xml = $bbb->getMeetingInfoUrl($bbb_url, $salt, $joinParams);
-        // Read XML from BBB URL and write to SQL
-        xml2sql($room_xml, $bbb);
     }
 }
 if (defined('TC_CRON')) {
