@@ -260,7 +260,7 @@ function generate_infinite_container_html($posts, $next_page) {
         <div class="card panelCard px-lg-4 py-lg-3 wallWrapper mt-4">
           <div class="card-header bg-white border-0">
             
-                <span class="text-uppercase normalBlueText TextBold fs-6">'.$langWallPostsShow.'</span>
+                <span class="text-uppercase normalColorBlueText TextBold fs-6">'.$langWallPostsShow.'</span>
             
           </div>
           <div class="card-body pt-0">

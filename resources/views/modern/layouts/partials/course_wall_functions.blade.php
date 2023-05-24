@@ -21,7 +21,7 @@
         <div class='card panelCard p-md-3 bg-white'>
             <div class='card-header bg-white border-0'>
                
-                    <span class='text-uppercase normalBlueText TextBold fs-6'>{{trans('langWall')}}</span>
+                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langWall')}}</span>
                 
             </div>
             <div class='card-body'>

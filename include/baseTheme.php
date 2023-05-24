@@ -351,8 +351,12 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[leftNavBgColor];
                 }
 
-                #bgr-cheat-header, .ContentLeftNav, .bgTheme{
+                #bgr-cheat-header, .ContentLeftNav{
                     background:$rgba_no_alpha;
+                }
+
+                .bgTheme{
+                    background-color:$rgba_no_alpha !important;
                 }
 
                 .myCalendarEvents .fc-header-toolbar{
@@ -441,9 +445,10 @@ function view($view_file, $view_data = array()) {
 
                 
 
-                .Help-text-panel-heading {
+                .Help-text-panel-heading, .normalColorBlueText {
                     color:  $theme_options_styles[linkColor] !important;
                 }
+                
 
                 .slider-round { 
                     background-color: $theme_options_styles[linkColor];

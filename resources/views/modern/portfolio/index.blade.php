@@ -16,7 +16,7 @@
             <div class='card panelCard BorderSolid px-lg-4 py-lg-3 border-0'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
 
-                    <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langSummaryProfile') }}</span>
+                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langSummaryProfile') }}</span>
                 
                 
                     <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
@@ -76,7 +76,7 @@
         <div class='col-xl-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
             <div class='card panelCard BorderSolid border-0 px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                    <span class="text-uppercase normalBlueText TextBold fs-6">{{ trans('langMyCoursesSide') }}</span>
+                    <span class="text-uppercase normalColorBlueText TextBold fs-6">{{ trans('langMyCoursesSide') }}</span>
                     
                     <div>
                         <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
@@ -169,7 +169,7 @@
             @include('portfolio.portfolio-calendar')
             <div class='card panelCard border-0 BorderSolid mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                 <div class='card-header bg-white border-0 text-start'>
-                     <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langMyPersoAnnouncements') }}</span>
+                     <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoAnnouncements') }}</span>
                 </div>
                 <div class='card-body'>
                     @if(empty($user_announcements))
@@ -188,7 +188,7 @@
             <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                 <div class='card-header bg-white border-0 text-start'>
                    
-                    <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langMyPersoMessages') }}</span>
+                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoMessages') }}</span>
                     
                 </div>
                 <div class='card-body'>
@@ -209,7 +209,7 @@
                 <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                     <div class='card-header bg-white border-0 text-start'>
                        
-                            <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langMyWidgets') }}</span>
+                            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyWidgets') }}</span>
                         
                     </div>
                     <div class='card-body'>

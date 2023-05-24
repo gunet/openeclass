@@ -43,18 +43,18 @@ if ($numOfAnnouncements > 0) {
     
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
         $tool_content .= "
-                    <div class='col-sm-12 mt-3'>
-                        <div class='card panelCard'>
-                            <div class='card-header bg-light'>
-                                <div class='announcement-title control-label-notes'>" . q($announceArr[$i]->title) . "</div>
+                    <div class='col-12 mt-3'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q($announceArr[$i]->title) . "</div>
                             </div>
-                            <div class='panel-body'>
+                            <div class='card-body'>
                                 <div class='single_announcement'>
                                     <div class='announcement-main'>" . standard_text_escape($announceArr[$i]->body) . "</div>
                                 </div>
                             </div>
                             <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
-                                <div class='announcement-date info-date text-end'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</div>
+                                <div class='announcement-date info-date small-text'>- " . format_locale_date(strtotime($announceArr[$i]->date)) . " -</div>
                             </div>
                         </div>
                     </div>";

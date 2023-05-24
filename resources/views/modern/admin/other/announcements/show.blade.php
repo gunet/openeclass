@@ -20,18 +20,18 @@
 
                     @if($announcementsID)
                        
-                        <div class='col-sm-12'>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">                   
-                                    <div class='panel-title'>{{$announcementsID->title}}</div>
+                        <div class='col-12'>
+                            <div class="card panelCard px-lg-4 py-lg-3">
+                                <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">                   
+                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{$announcementsID->title}}</div>
                                 </div>
-                                <div class="panel-body">
-                                    <span class="text-secondary">
+                                <div class="card-body">
+                                    
                                         {!! $announcementsID->body !!}
-                                    </span>
+                                    
                                 </div>
-                                <div class='panel-footer'>
-                                    <div class='text-dark fw-bold text-center'>{{trans('langDate')}}: <span class='info-date fw-normal'>{{ $announcementsID->date }}</span></div>
+                                <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                    <div class='announcement-date info-date small-text'>{!! format_locale_date(strtotime($announcementsID->date)) !!}</div>
                                 </div>
                             </div>
                         </div>

@@ -21,20 +21,20 @@
 
                     
                     <div class="col-12">
-                        <div class="panel panel-default">
-                            <div class='panel-heading'>
-                                <div class='panel-title'>{!! $title !!}</div>
+                        <div class="card panelCard px-lg-4 py-lg-3">
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{!! $title !!}</div>
                             </div>
                         
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <div class="single_announcement">
                                     <div class='announcement-main'>
                                         {!! $body !!}
                                     </div>
                                 </div>
                             </div>
-                            <div class='panel-footer d-flex justify-content-end'>
-                                <div class="text-center info-date">
+                            <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                <div class="announcement-date info-date small-text">
                                      {!! $date !!} 
                                 </div>
                             </div>

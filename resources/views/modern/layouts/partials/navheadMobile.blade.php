@@ -3,11 +3,11 @@
         <div class='col-12 d-flex justify-content-center'>
 
             @if(!get_config('hide_login_link'))
-                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ms-2 ps-2 pe-2" src="{{$logo_img_small}}"></a>
+                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}"><img class="eclass-nav-icon ms-2 ps-2 pe-2 bg-transparent text-white" src="{{$logo_img_small}}"></a>
             @endif
 
             <div class="btn-group w-100" role="group" aria-label="Basic example">
-            <a type='button' class="btn btn-transparent text-white d-flex justify-content-center align-items-center" href="{{ $urlServer }}"><i class="fas fa-home"></i></a>
+                <a type='button' class="btn btn-transparent text-white d-flex justify-content-center align-items-center" href="{{ $urlServer }}"><i class="fas fa-home"></i></a>
                 @if (!isset($_SESSION['uid']))
                     <a type="button" class="btn btn-transparent text-white @if(get_config('registration_link')=='hide') d-none @endif d-flex justify-content-center align-items-center" href="{{ $urlAppend }}modules/auth/registration.php"><i class="fas fa-pen-nib pen-nib-navhead"></i></a>
                 @endif
@@ -16,7 +16,7 @@
                     <a type='button' class="btn btn-transparent text-white d-flex justify-content-center align-items-center" href="{{ $urlAppend }}info/faq.php"><i class="fa fa-question-circle fa-fw text-white"></i></a>
                 @endif
                 @if(get_config('enable_search'))
-                    <a type="button" class='btn btn-transparent text-white d-flex justify-content-center align-items-center' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></button>
+                    <a type="button" class='btn btn-transparent text-white d-flex justify-content-center align-items-center' href="{{ $urlAppend }}modules/search/{{ $search_action }}"><i class="fa fa-search"></i></a>
                 @endif
 
                 @if (!isset($_SESSION['uid']))

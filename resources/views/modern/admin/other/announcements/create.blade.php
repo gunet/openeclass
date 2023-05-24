@@ -81,7 +81,7 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input type='checkbox' name='enddate_active'{{ $end_checkbox }} {{ $end_disabled}}>
+                                                <input type='checkbox' name='enddate_active'{{ $end_checkbox }} >
                                             </span>
                                             <input class='form-control' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
                                         </div>

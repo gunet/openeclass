@@ -19,7 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/search/indexer.class.php';
@@ -54,14 +53,14 @@ if (isset($_GET['vis'])) {
         } else {
             $show_public =  0;
         }
-        if (isset($_POST['startdate_active']) and isset($_POST['startdate'])) {
+        if (isset($_POST['startdate_active']) and isset($_POST['startdate']) and !empty($_POST['startdate'])) {
             $start_sql = 'begin = ?s';
             $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['startdate']);
             $dates[] = $date_started->format("Y-m-d H:i:s");
         } else {
             $start_sql = 'begin = NULL';
         }
-        if (isset($_POST['enddate_active']) and isset($_POST['enddate'])) {
+        if (isset($_POST['enddate_active']) and isset($_POST['enddate']) and !empty($_POST['enddate'])) {
             $end_sql = 'end = ?s';
             $date_ended = DateTime::createFromFormat("d-m-Y H:i", $_POST['enddate']);
             $dates[] = $date_ended->format("Y-m-d H:i:s");
@@ -219,19 +218,28 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     if (isset($announcement)) {
         $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body));
         
-        $begindate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->begin);
-        $enddate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->end);
+        $begindate = NULL;
+        if(!is_null($announcement->begin) and !empty($announcement->begin)){
+            $begindate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->begin);
+        }
+        $enddate = NULL;
+        if(!is_null($announcement->end) and !empty($announcement->end)){
+            $enddate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->end);
+        }
+        
         
         $data['checked_public'] = $announcement->visible == 1 ? " checked" : "";
-        $data['start_checkbox'] = isset($begindate) ? " checked" : "";
+        $data['start_checkbox'] = !is_null($begindate) ? " checked" : "";
         if($begindate){
-            //$data['startdate'] = $begindate->format("d-m-Y H:i");
-            $data['startdate'] = isset($begindate) ? $begindate->format("d-m-Y H:i") : date('d-m-Y H:i', strtotime('now'));
+            $data['startdate'] = $begindate->format("d-m-Y H:i");
+        }else{
+            $data['startdate'] = NULL;
         }
-        $data['end_checkbox'] = isset($enddate) ? " checked" : "";
+        $data['end_checkbox'] = !is_null($enddate) ? " checked" : "";
         if($enddate){
-            //$data['enddate'] = $enddate->format("d-m-Y H:i");
-            $data['enddate'] = isset($enddate) ? $enddate->format("d-m-Y H:i") : date('d-m-Y H:i', strtotime('now +1 month'));
+            $data['enddate'] = $enddate->format("d-m-Y H:i");
+        }else{
+            $data['enddate'] = NULL;
         }
                
     } else {

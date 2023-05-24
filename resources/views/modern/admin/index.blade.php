@@ -51,7 +51,7 @@
                                             <div class='col-12'>
                                                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white'>
                                                     <div class='card-header border-0 bg-white'>
-                                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langPlatformIdentity') }}</span>
+                                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langPlatformIdentity') }}</span>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
@@ -92,7 +92,7 @@
                                             <div class='col-12 mt-3'>
                                                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white'>
                                                     <div class='card-header border-0 bg-white'>
-                                                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langIndexInfo') }}</span>
+                                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langIndexInfo') }}</span>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>

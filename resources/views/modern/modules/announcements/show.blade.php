@@ -38,10 +38,13 @@
 
                        
                         <div class='col-12'>
-                            <div class="card">
+                            <div class="card panelCard px-lg-4 py-lg-3">
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>{!! $title !!}</div>
+                                </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">{!! $title !!}</h5>
-                                    <p class="card-text">{!! $content !!}</p>
+                                   
+                                    {!! $content !!}
                                     @if ($tags_list)
                                         <p class='card-text'>{{ trans('langTags') }}: {!! $tags_list !!}</p>
                                     @endif

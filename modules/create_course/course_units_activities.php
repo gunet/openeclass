@@ -354,22 +354,23 @@ if(!isset($_POST['final_submit'])){
 
         $tool_content .= "<div class='form-wrapper'><fieldset>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        <div class='paenel-title h4'>
-                            $langActSelect:
+                <div class='card border-0'>
+                    <div class='card-header bg-white border-0 text-center'>
+                        <div class='TextSemiBold fs-6 text-uppercase normalBlueText p-2'>
+                            $langActSelect
                         </div>
                     </div>
                 </div>
 
                 <fieldset>
-                    <div class='table-responsive'>
-                    <table class='table table-bordered table-striped '>
-                        <tr>
-                        <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>";
+                    <div class='table-responsive mt-0'>
+                    <table class='table table-default'>
+                        <tr class='list-header'>
+                        <td></td>
+                        <th scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
             $i=1;
 
-            $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
+            $tool_content .= "<th scope='col'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
             $tool_content .= "
                             </tr>
                             <tr>
@@ -393,13 +394,13 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_home == $end){
-                    $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    $tool_content .= "</tr><tr><td style='background-color:#ffffff;'></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
             }
-            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .="<td style='background-color:#ffffff;'></td>";
+            $tool_content .="<td style='background-color:#ffffff;'></td>";
             $tool_content .= "
                 </tr>
                 <tr>
@@ -420,14 +421,14 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_class == $end) {
-                    $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    $tool_content .= "</tr><tr><td style='background-color:#ffffff;'></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
             }
 
-            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .="<td style='background-color:#ffffff;'></td>";
+            $tool_content .="<td style='background-color:#ffffff;'></td>";
             $tool_content .= "
             </tr>
             <tr>
@@ -451,23 +452,23 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_after_class == $end) {
-                    $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                    $tool_content .= "</tr><tr><td></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
 
             }
 
-            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
-            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+            $tool_content .="<td></td>";
+            $tool_content .="<td></td>";
 
             $tool_content .= "</tr>
                     </table>
                 </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn btn-default'>$langCancel</a>
-                        <input id='final_sub' class='btn btn-primary' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
+                <div class='form-group mt-5'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <a href='{$urlServer}modules/units/?course=".$course_code."&id=".$unit_id."' class='btn cancelAdminBtn me-2'>$langCancel</a>
+                        <input id='final_sub' class='btn submitAdminBtn' type='submit' name='final_submit' value='" . q($langSubmit) . "' >
                     </div>
                 </div>
                 <input type='hidden' name='next'>
@@ -976,7 +977,7 @@ if(!isset($_POST['final_submit'])){
         $tool_content .= action_bar(array(
             array(
                 'title' => $langEnter,
-                'url' => $urlAppend . "modules/units/?course=$course_code&id=$unit_id",
+                'url' => $urlAppend . "modules/units/index.php?course=$course_code&id=$unit_id",
                 'icon' => 'fa-arrow-right',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'

@@ -959,15 +959,15 @@ switch ($action) {
 $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title));
 if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
         $tool_content .= "<div class='col-12'>
-                            <div class='panel panel-action-btn-default'>
-                                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                                    <div class='row w-100'>
-                                        <div class='col-7 d-flex justify-content-start align-items-center ps-0'>
-                                            <div class='panel-title'>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    
+                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                          
                                                 ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ."
-                                            </div>
+                                            
                                         </div>
-                                        <div class='col-5 d-flex justify-content-end align-items-center pe-0'>
+                                        <div>
                                             <div>
                                                 ".action_button(array(
                                                     array(
@@ -998,9 +998,9 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                                   ))."
                                             </div>
                                         </div>
-                                    </div>
+                                   
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     ". (isset($wiki_content) ? $wiki_content : "") ."
                                 </div>
                             </div>

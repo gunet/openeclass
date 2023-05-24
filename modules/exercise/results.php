@@ -133,10 +133,11 @@ if ($is_editor) {
     ]);
 }
 
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
-    <div class='panel panel-heading'>" . q_math($exerciseTitle) . "</div>";
+$tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+        <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q_math($exerciseTitle) . "</div></div>";
 if ($exerciseDescription_temp) {
-    $tool_content .= "<div class='panel panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
+    $tool_content .= "<div class='card-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }
 $tool_content .= "</div></div>";
 
@@ -199,22 +200,22 @@ foreach ($result as $row) {
             $user_group = $studentam = '';
             $ug = user_groups($course_id, $sid, 'txt');
             if ($ug != '-') {
-                $user_group = "<span class='fw-bold'>$langGroup</span>: $ug";
+                $user_group = "<span class='fw-bold normalColorBlueText'>$langGroup</span>: $ug";
             }
             if (uid_to_am($sid) != '') {
-                $studentam = "<span class='fw-bold'>$langAmShort</span>: " . uid_to_am($sid);
+                $studentam = "<span class='fw-bold normalColorBlueText'>$langAmShort</span>: " . uid_to_am($sid);
             }
-            $tool_content .= "<strong class='text-dark'>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
-                            <div><small class='text-dark'>$studentam<span style='padding-left: 10px;'>$user_group</span></small></div>";
+            $tool_content .= "<strong class='normalColorBlueText'>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
+                            <div>$studentam<span style='padding-left: 10px;'>$user_group</span></div>";
         }
         $tool_content .= "</td>
                 </tr>
                 <tr class='list-header lightColor'>
-                  <th class='text-center text-dark'>" . $langStart . "</th>
-                  <th class='text-center text-dark'>" . $langExerciseDuration . "</th>
-                  <th class='text-center text-dark'>" . $langTotalScore . "</th>
-                  <th class='text-center text-dark'>" . $langCurrentStatus. "</th>
-                  ". ($is_editor ? "<th class='text-center text-dark'>" . icon('fa-gears'). "</th>" : "") ."
+                  <th class='text-center normalColorBlueText'>" . $langStart . "</th>
+                  <th class='text-center normalColorBlueText'>" . $langExerciseDuration . "</th>
+                  <th class='text-center normalColorBlueText'>" . $langTotalScore . "</th>
+                  <th class='text-center normalColorBlueText'>" . $langCurrentStatus. "</th>
+                  ". ($is_editor ? "<th class='text-center normalColorBlueText'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
 
         $k = 0;

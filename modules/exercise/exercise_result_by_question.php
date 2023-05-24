@@ -142,12 +142,12 @@ $TotalExercisesUngraded = Database::get()->querySingle("SELECT COUNT(eurid) AS u
        ." WHERE eid = ?d AND attempt_status=2 "
        . "GROUP BY all_answers.answers", $exerciseId, $exerciseId);
 
-$tool_content .= "<div class='panel panel-primary'>
-                <div class='panel-heading'>
-                  <div class='panel-title'>" .$langQuestionCorrectionTitle . "</div>
+$tool_content .= "<div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                  <div class='text-uppercase normalColorBlueText TextBold fs-6'>" .$langQuestionCorrectionTitle . "</div>
                   <h5>" . $langQuestionCorrectionTitle2 . $TotalExercisesUngraded->ungraded_answers . $langUngradedAnswers . "</h5>
                 </div>
-                <div class='panel-body'>";
+                <div class='card-body'>";
 
 // for each question
 if (count($exercise_question_ids) > 0) {

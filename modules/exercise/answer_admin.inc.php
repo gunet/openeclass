@@ -413,12 +413,13 @@ if (isset($_GET['modifyAnswers'])) {
             }
         }
     }
-    $tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
-                      <div class='panel-heading'>
-                        <div class='panel-title'>$langQuestion &nbsp;" .
-                            icon('fa-edit text-white', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."</div>
+    $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
+                      <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langQuestion &nbsp;" .
+                            icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."
+                        </div>
                       </div>
-                      <div class='panel-body'>
+                      <div class='card-body'>
                             <h6><small class='fw-bold'>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h6>
                                 <p>$questionDescription</p>
                                 ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
@@ -427,14 +428,16 @@ if (isset($_GET['modifyAnswers'])) {
 
    if ($answerType != FREE_TEXT) {
 
-        $tool_content .= "<div class='col-12 mt-3'><div class='panel panel-info'>
-                           <div class='panel-heading text-center'>
-                             <span class='panel-title text-uppercase'>$langQuestionAnswers</span>";
+        $tool_content .= "<div class='col-12 mt-3'><div class='card panelCard px-lg-4 py-lg-3'>
+                           <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                             <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langQuestionAnswers";
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<br><small>$langNegativeScoreLegend</small>";
                              }
-                             $tool_content .= "</div>
-                       <div class='panel-body'>";
+                            
+        $tool_content .= "   </div>
+                           </div>
+                       <div class='card-body'>";
 
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
             if (!empty($msgErr)) {

@@ -18,7 +18,9 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 include 'exercise.class.php';
 include 'question.class.php';
 include 'answer.class.php';
@@ -619,15 +621,15 @@ if (isset($timeleft)) { // time remaining
     if ($timeleft <= 1) {
         $timeleft = 1;
     }
-    $tool_content .= "<div class='row alert alert-danger' style='margin-left:0px; margin-right:0px; border:1px solid #cab4b4; border-radius:5px;'>";
-    $tool_content .= "<div class='col-sm-12'><h4 class='text-center'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
+    $tool_content .= "<div class='alert alert-warning bg-warning' style='border-radius:15px;'>";
+    $tool_content .= "<div class='col-sm-12'><h4 class='text-center text-dark mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
     $tool_content .= "</div>";
 }
 
 if (!empty($exerciseDescription)) { // description
-    $tool_content .= "<div class='col-sm-12 mb-3'><div class='panel panel-admin px-lg-4 py-lg-3 bg-white'>
-    <div class='panel-heading bg-body'><div class='col-12 Help-panel-heading'><span class='panel-title text-uppercase Help-text-panel-heading'>$langDescription</span></div></div>";
-    $tool_content .= "<div class='panel-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
+    $tool_content .= "<div class='col-sm-12 mb-3'><div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'><div class='text-uppercase normalColorBlueText TextBold fs-6'>$langDescription</div></div>";
+    $tool_content .= "<div class='card-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }
 
@@ -724,14 +726,16 @@ if ($questionList) {
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             // display question numbering buttons
-            $tool_content .= "<div class='d-flex justify-content-center p-2'>";
+            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 bg-light'>";
+            $tool_content .= "<div class='card-body p-0 bg-light' style='border-radius:15px;'>";
+            $tool_content .= "<div class='d-flex justify-content-center p-0 bg-light' style='border-radius:15px;'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
-                    $class = 'btn-primary rounded-pill text-white';
+                    $class = 'submitAdminBtn';
                     $title = q($langHasAnswered);
                 } else {
-                    $class = 'btn-default rounded-pill';
+                    $class = 'submitAdminBtn';
                     $title = q($langPendingAnswered);
                 }
                 if ($questionNumber == $k) { // we are in the current question
@@ -744,7 +748,7 @@ if ($questionList) {
                         <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
                     </div>";
             }
-            $tool_content .= "</div>";
+            $tool_content .= "</div></div></div>";
         }
 
         $question = $questions[$questionList[$questionNumber]];
@@ -798,20 +802,20 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     }
     $tool_content .= "</div>";
 } else {
-    $head_content .= "<style>
-            @media only screen and (max-width: 460px) {
-                .exercise-action-buttons { text-align: center; width: 100%; }
-            }
-            .exercise-action-buttons { margin-top: 15px; }
-            .exercise-action-buttons .btn { margin: 0 5px; }
-            .exercise-action-buttons { float: right; }
-        </style>";
+    // $head_content .= "<style>
+    //         @media only screen and (max-width: 460px) {
+    //             .exercise-action-buttons { text-align: center; width: 100%; }
+    //         }
+    //         .exercise-action-buttons { margin-top: 15px; }
+    //         .exercise-action-buttons .btn { margin: 0 5px; }
+    //         .exercise-action-buttons { float: right; }
+    //     </style>";
 }
 
-$tool_content .= "<div class='exercise-action-buttons d-inline-flex'>";
+$tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn cancelAdminBtn' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+$tool_content .= "<input class='btn cancelAdminBtn me-2' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
 // "Submit" button
 $tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";

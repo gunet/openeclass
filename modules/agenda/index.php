@@ -1027,6 +1027,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
     } else {
         $tool_content .= ''
                  . '
+                 <div class="col-12 overflow-auto">
                     <div id="calendar_wrapper">
                         
                             <div class="calendar-header">
@@ -1053,7 +1054,8 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                                 <div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
                             '
                       . '
-                    </div>';
+                    </div>
+                </div>';
 
         $tool_content .= "<script type='text/javascript'>" .
         '$(document).ready(function(){        

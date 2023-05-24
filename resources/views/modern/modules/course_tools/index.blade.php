@@ -63,7 +63,7 @@
                     <div class='col-12'>
                         <div class="card panelCard">
                             <div class='card-header border-0 bg-white'>
-                                <div class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langActivateCourseTools') }}</div>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langActivateCourseTools') }}</div>
                             </div>
                             <div class='panel-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
@@ -111,7 +111,7 @@
                         <div class='card panelCard'>
                             <div class='card-header d-flex justify-content-between align-items-center border-0 bg-white'>
                                 
-                                <div class='text-uppercase normalBlueText TextBold fs-6'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     {{ trans('langOperations') }}
                                 </div>
                                 <div>
@@ -150,7 +150,7 @@
                         <div class='card panelCard'>
                             <div class='card-header d-flex justify-content-between align-items-center border-0 bg-white'>
                                 
-                                <div class='text-uppercase normalBlueText TextBold fs-6'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     {{ trans('langLtiConsumer') }}
                                 </div>
                                    

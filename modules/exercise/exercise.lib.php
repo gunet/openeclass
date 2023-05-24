@@ -55,7 +55,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
     }
     $tool_content .= "
             <div class='panel panel-default qPanel mt-3' id='qPanel$questionId'>
-              <div class='panel-heading'>
+              <div class='panel-heading bgTheme'>
                 <div class='panel-title'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
@@ -317,15 +317,15 @@ function display_exercise($exercise_id) {
 
 
     $tool_content .= "
-    <div class='col-12'><div class='panel panel-primary'>
-            <div class='panel-heading'>
-              <div class='panel-title'>" . q_math($exercise->selectTitle()) . "
+    <div class='col-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+              <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
-                  <span class='fa fa-edit text-white' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
+                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
               </div>
             </div>
-            <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
+            <div class='card-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>
     </div>";
 
@@ -350,12 +350,12 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-12 mt-3'><div class='table-responsive Shadow-cols Borders'><table class = 'table-default'>";
+        $tool_content .= "<div class='col-12 mt-3'><div class='table-responsive'><table class='table-default table-exercise'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
                                 <td colspan='$colspan'>
-                                    <strong><u class='text-dark'>$langQuestion</u>: $i</strong>
+                                    <strong><u>$langQuestion</u>: $i</strong>
                                 </td>
                                </tr>";
             if ($qid['criteria'] == 'difficulty') {
@@ -390,7 +390,7 @@ function display_exercise($exercise_id) {
             }
             $tool_content .= "
             <tr class='active'>
-              <td colspan='$colspan'>
+              <td class='bgTheme' colspan='$colspan'>
                 <strong><u>$langQuestion</u>: $i</strong>
                 <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
                   <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
@@ -513,6 +513,6 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-sm-12 mt-2'><span class='float-end'><strong class='text-success'>$langTotalScore: $totalWeighting</strong></span></div>";
+        $tool_content .= "<div class='col-12 mt-5 text-center fs-3 TextBold normalColorBlueText'>$langTotalScore: $totalWeighting</div>";
     }
 }

@@ -41,21 +41,21 @@ if(isset($ann_id)){
     $tool_content .= "
                     
                         <div class='col-12'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading'>
-                                    <div class='panel-title fw-bold'>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                             ".standard_text_escape($announcement->title)."
                                     </div>
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     <div class='single_announcement'>
                                         <div class='announcement-main'>
                                             ".standard_text_escape($announcement->body)."
                                         </div>
                                     </div>
                                 </div>
-                                <div class='panel-footer'>
-                                    <div class='text-center info-date'>
+                                <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                    <div class='announcement-date info-date small-text'>
                                         " . format_locale_date(strtotime($announcement->date)) . "
                                     </div>
                                 </div>

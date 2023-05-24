@@ -147,7 +147,7 @@ function show_post_form() {
                 <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
                     <div class="card-header border-0 bg-white">
                         
-                            <span class="text-uppercase normalBlueText TextBold fs-6">'.$langWall.'&nbsp'.$langOfCourse.'</span>
+                            <span class="text-uppercase normalColorBlueText TextBold fs-6">'.$langWall.'&nbsp'.$langOfCourse.'</span>
                         
                     </div>
                     <div class="card-body">

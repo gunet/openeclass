@@ -21,7 +21,7 @@
 <div class='col-12'>
     <div class='card panelCard BorderSolid px-lg-4 py-lg-3'>
         <div class='card-header border-0 bg-white'>
-            <span class='text-uppercase normalBlueText TextBold fs-6'>{{ trans('langQuickLinks') }}</span>
+            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langQuickLinks') }}</span>
         </div>
         <div class='card-body'>
             <div class='d-flex flex-wrap'>
@@ -90,7 +90,7 @@
     @if($countNewPanel == 2)
     <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white mb-3'>
         <div class='card-header border-0 bg-white'>
-            <span class='text-uppercase normalBlueText TextBold fs-6'>{{trans('langAdministratorTools')}}</span>
+            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langAdministratorTools')}}</span>
         </div>
         <div class='card-body'>
             <ul>
@@ -123,7 +123,7 @@
 
     <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white m-auto'>
         <div class='card-header border-0 bg-white'>
-             <span class='text-uppercase normalBlueText TextBold fs-6'>{{ $tool_group[0]['text'] }}</span>
+             <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ $tool_group[0]['text'] }}</span>
         </div>
         <div class='card-body'>
             <ul>
@@ -143,7 +143,7 @@
             @if($is_admin)
                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white mt-3'>
                     <div class='card-header border-0 bg-white'>
-                        <span class='text-uppercase normalBlueText TextBold fs-6'>{{trans('langFaculties')}}</span>
+                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langFaculties')}}</span>
                     </div>
                     <div class='card-body'>
                         <ul>

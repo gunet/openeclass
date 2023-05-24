@@ -56,14 +56,14 @@
                         @if ($course_descs)
                             @foreach ($course_descs as $key => $course_desc)    
                                 <div class='col-12 mb-4'>      
-                                    <div class='card panelCard'>
+                                    <div class='card panelCard px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                            
                                             
-                                            <div class='panel-title'>
+                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                                 <span>{{ $course_desc->title}}</span>
                                                 @if ($course_desc->visible && $is_editor)
-                                                    &nbsp;&nbsp;
+                                                   
                                                     <span data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom' class='label label-primary'>
                                                         <i class='fa fa-eye'></i>
                                                     </span>

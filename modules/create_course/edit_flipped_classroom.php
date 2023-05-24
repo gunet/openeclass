@@ -41,14 +41,14 @@ $(document).ready(function() {
     var j = parseInt(units.length) +1;
     $('#add_g').click(function() {
         if (i <= 20) {
-            $('#dynamic_goals').append('<div id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="col-sm-3 control-label">' + i + ':</label><div class="col-sm-8"><input type=\"text\" name=\"goals[]\" class=\"form-control\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div></div>')
+            $('#dynamic_goals').append('<div class=\"col-12 d-inline-flex mb-4"\ id=\"row_g_' + i + '\"><label for=\"goal_' + i + '\" id=\"gtitle_'+i+'\" class="control-label-notes mt-2">' + i + ':</label><input type=\"text\" name=\"goals[]\" class=\"form-control w-100 ms-2\" value=\"\" placeholder=\"$langGoals\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_g\" id=\"rm_g_' + i + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             i++;
         }
         document.getElementById('goal_count').value = i-1;
     });
     $('#add_u').click(function() {
         if (j <= 20) {
-            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mt-3"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes mt-2">' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
+            $('#dynamic_units').append('<div id=\"row_u_' + j + '\" class="col-12 d-inline-flex mb-4"><label for=\"unit_' + j + '\" id=\"utitle_'+j+'\" class="control-label-notes mt-2">' + j + ':</label><input type=\"text\" name=\"units[]\" class=\"form-control ms-2\" value=\"\" placeholder=\"$langUnits\"><a href=\"#!\" class=\"btn_remove text-danger mt-2\" name=\"remove_u\" id=\"rm_u_' + j + '\"><span class=\"fa fa-minus-circle\"></span></a></div>')
             j++;
         }
         document.getElementById('unit_count').value = j-1;
@@ -156,7 +156,7 @@ if (!isset($_POST['next'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'url' => $urlServer."modules/create_course/edit_flipped_classroom.php?course=$course_code",
+            'url' => $urlServer."modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1",
             'icon' => 'fa-reply',
             'level' => 'primary-label',
             'button-class' => 'btn-secondary'
@@ -192,12 +192,12 @@ if (!isset($_POST['next'])) {
     $stuNum = $lectNum = $lectHours = $homeHours = $lectTotalHours = '';
      $tool_content .= "
      <div class='row'>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+        <div class='col-lg-6 col-12 d-none d-lg-block'>
             <div class='col-12 h-100 left-form'></div>
         </div>
         <div class='col-lg-6 col-12'>
         <div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
+        <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
                     <label for='title' class='col-sm-12 control-label-notes mb-1'>$langTitle</label>
@@ -315,8 +315,8 @@ if (!isset($_POST['next'])) {
                 }
             $tool_content .="
                     <div class='form-group mt-4'>
-                        <div class='col-12 d-inline-flex mb-2'>
-                            <label for='units' class='col-sm-3 control-label-notes me-2'>$langUnits:</label>
+                        <div class='col-12 mb-2'>
+                            <label for='units' class='control-label-notes'>$langUnits:</label>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -325,17 +325,19 @@ if (!isset($_POST['next'])) {
                     if (count($q5_b) > 0) {
                         foreach ($q5_b as $unit) {
                             $tool_content .= "
-                                            <label for='unit_$count_units' id='utitle_$count_units' class= 'col-sm-3 control-label'>$count_units: </label>
+                                            
                                             <div class='col-12 d-inline-flex mb-4' id='row_u_".$count_units."'>
-                                            <input name='units[]' id='unit_$count_units' type='text' class='form-control' value='" . $unit->title . "' placeholder='$langUnits'>
+                                            <label for='unit_$count_units' id='utitle_$count_units' class= 'control-label-notes mt-2'>$count_units: </label>
+                                            <input name='units[]' id='unit_$count_units' type='text' class='form-control ms-2' value='" . $unit->title . "' placeholder='$langUnits'>
                                             <input name='ids[]' type='hidden' value='$unit->id'>";
                             if ($count_units == 1) {
-                                $tool_content .= "<a href='#!' id='add_u'>
+                                $tool_content .= "<a href='#!' id='add_u' class='mt-2'>
                                                     <span class='fa fa-plus-circle add-unit-btn'></span>
                                                 </a>";
                             } else {
-                                $tool_content .= "<a href='#!' class='btn_remove mt-2 btn disabled' name='remove_u' id='rm_u_" . $count_units . "' disabled></a>
-                                                  <span class='fa fa-minus-circle text-danger'></a>";
+                                $tool_content .= "<a href='#!' class='btn_remove p-0 mt-2 btn disabled' name='remove_u' id='rm_u_" . $count_units . "' disabled>
+                                                    <span class='fa fa-minus-circle text-danger'></span>
+                                                  </a>";
                             }
                             $tool_content .= "</div>";
                             $count_units += 1;
@@ -401,7 +403,7 @@ if (!isset($_POST['next'])) {
             }
 
             if ($validationFailed) {
-                redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code");
+                redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1");
             }
             $mtitles_in_home = $mtitles_in_class = $mtitles_after_class = $mids_in_home = $mids_in_class = $mids_after_class = array();
 
@@ -448,19 +450,20 @@ if (!isset($_POST['next'])) {
             }
 
             $tool_content .= " <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm();\">
-                <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        <div class='panel-title'>
-                            $langActSelect:
+                <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">        
+                <div class='card border-0'>
+                    <div class='card-header bg-white border-0 text-center'>
+                        <div class='TextSemiBold fs-6 text-uppercase normalBlueText p-2'>
+                            $langActSelect
                         </div>
-                    </div>               
-                <div class='panel-body overflow-auto'>
+                    </div>
+                </div>    
+               
                 <fieldset>
-                    <div class='table-responsive'>
-                        <table class='table table-bordered table-striped'>
-                        <tr><td style='background-color:#d1d9e5;' ></td>
-                        <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
+                    <div class='table-responsive mt-0'>
+                        <table class='table table-default'>
+                        <tr class='list-header'><td></td>
+                        <th scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
             $i=1;
 
@@ -470,7 +473,7 @@ if (!isset($_POST['next'])) {
                 if(!isset($_SESSION['ids'][$count_ids])){
 
                     $tool_content .= "
-                        <th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
+                        <th scope='col'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
                     $i++;
                 }
                 $count_ids += 1;
@@ -494,18 +497,18 @@ if (!isset($_POST['next'])) {
                         $count_ids +=1;
                     }
                     if($title_home == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#ffffff;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
 
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                $tool_content .="<td style='background-color:#ffffff;'></td>";
                     $count_ids =0;
                     foreach ($_SESSION['units'] as $utitle) {
                         if(!isset($_SESSION['ids'][$count_ids])){
-                            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                            $tool_content .="<td style='background-color:#ffffff;'></td>";
                         }
                         $count_ids += 1;
                     }
@@ -530,19 +533,19 @@ if (!isset($_POST['next'])) {
                     }
 
                     if ($title_class == $end) {
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#ffffff;'></td>";
                     } else {
                         $tool_content .= "</tr><tr><td></td>";
                     }
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>
+                $tool_content .="<td style='background-color:#ffffff;'></td>
                     ";
                     $count_ids = 0;
                     foreach ($_SESSION['units'] as $utitle) {
 
                         if(!isset($_SESSION['ids'][$count_ids])){
-                            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                            $tool_content .="<td style='background-color:#ffffff;'></td>";
                         }
                         $count_ids += 1;
                     }
@@ -567,17 +570,17 @@ if (!isset($_POST['next'])) {
                         $count_ids += 1;
                     }
                     if($title_after_class == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#f5f5f5;'></td>";
                     } else {
                         $tool_content .= "</tr><tr><td></td>";
                     }
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                $tool_content .="<td style='background-color:#f5f5f5;'></td>";
                     $count_ids =0;
                     foreach ($_SESSION['units'] as $utitle) {
                         if(!isset($_SESSION['ids'][$count_ids])){
-                            $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                            $tool_content .="<td style='background-color:#f5f5f5;'></td>";
                         }
                         $count_ids += 1;
                     }
@@ -595,7 +598,7 @@ if (!isset($_POST['next'])) {
                     <input name='checked_in_home' type='hidden' value='2'></input>
                     <input name='checked_after_class' type='hidden' value='3'></input>
 
-                </fieldset></div></div>". generate_csrf_token_form_field() ." 
+                </fieldset>". generate_csrf_token_form_field() ." 
             </form>
         </div>
         ";
@@ -615,7 +618,7 @@ if (!isset($_POST['next'])) {
 
 
         if ($validationFailed) {
-            redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code");
+            redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1");
         }
         $commentsGoals = "";
 
@@ -643,7 +646,7 @@ if (!isset($_POST['next'])) {
         }
 
         if ($validationFailed) {
-            redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code");
+            redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1");
         }
 
         $result = Database::get()->query(
@@ -803,7 +806,7 @@ if (!isset($_POST['next'])) {
         }
 
         if ($validationFailed) {
-            redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code");
+            redirect_to_home_page("modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1");
         }
 
         $result = Database::get()->query(

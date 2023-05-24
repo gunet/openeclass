@@ -8,7 +8,7 @@
 
         <div class="row rowMedium">
 
-            @if($course_code and $currentCourseName)
+            @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
@@ -16,7 +16,7 @@
             </div>
             @endif
 
-            @if($course_code and $currentCourseName)
+            @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))
             <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active">
             @else
             <div class="col-12 col_maincontent_active_Homepage">

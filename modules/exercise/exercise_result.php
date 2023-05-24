@@ -17,9 +17,7 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 
 include 'exercise.class.php';
 include 'question.class.php';
@@ -258,15 +256,17 @@ if (!isset($_GET['pdf'])) {
     }
 }
 
-$tool_content .= "<div class='col-sm-12'><div class='alert alert-info text-center'>";
-
+$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
+$tool_content .= "<div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>";
 if ($user) { // user details
-    $tool_content .= "<span class='panel-title'>" . q($user->surname) . " " . q($user->givenname);
+    $tool_content .= "<div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
         $tool_content .= " ($langAmShort: " . q($user->am) . ")";
     }
-    $tool_content .= "</span>";
+    $tool_content .= "</div>";
 }
+$tool_content .= "</div>";
+$tool_content .= "<div class='card-body'>";
 
 $message_range = '';
 $canonicalized_message_range = "<strong><span>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</strong>";
@@ -276,21 +276,23 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<h4 class='panel-title' style='margin-top: 10px;'>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</h4>";
+    $tool_content .= "<p class='panel-title'>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</p>";
 }
 $tool_content .= "
-    <h5 style='margin-top: 20px;'>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
-    $langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></h5>" .
-    ($user && $exerciseAttemptsAllowed ? "<h5>$langAttempt: <em>{$exercise_user_record->attempt}</em></h5>" : '') . "
-  </div></div>";
+    <p>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
+    $langDuration: <em>" . format_time_duration($exercise_user_record->time_duration) . "</em></p>" .
+    ($user && $exerciseAttemptsAllowed ? "<p>$langAttempt: <em>{$exercise_user_record->attempt}</em></p>" : '') . "
+  </div></div>
+</div>
+";
 
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-default'>
-                      <div class='panel-heading'>
-                            <div class='panel-title'>" . q_math($exerciseTitle) . "</div>
+$tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'>
+                      <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q_math($exerciseTitle) . "</div>
                       </div>";
 
 if (!empty($exerciseDescription)) {
-    $tool_content .= "<div class='panel-body'>$exerciseDescription</div>";
+    $tool_content .= "<div class='card-body'>$exerciseDescription</div>";
 }
 
 $tool_content .= "</div></div>";
@@ -346,12 +348,12 @@ if (count($exercise_question_ids) > 0) {
         $question_weight = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE question_id = ?d AND eurid =?d", $row->question_id, $eurid)->weight;
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
 
-        $tool_content .= "<div class='panel panel-admin mt-3'>";
-        $tool_content .= "<div class='panel-body Borders p-0'>";
+        
+        $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "
-            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default mb-0'>
+            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise mb-3'>
             <tr class='active'>
-              <td colspan='2'>
+              <td class='bgTheme' colspan='2'>
                 <strong><u>$langQuestion</u>: $i</strong>";
 
         if ($answerType == FREE_TEXT) {
@@ -375,7 +377,7 @@ if (count($exercise_question_ids) > 0) {
                  $tool_content .= " <small>($langGradebookGrade: <strong>$qw_legend1 / $questionWeighting</strong></span>$qw_legend2)</small>";
              }
         }
-        $tool_content .= "<small class='help-block'>($questionType)</small>"; // question type
+        $tool_content .= "<small>($questionType)</small>"; // question type
         $tool_content .= "</td></tr>";
 
         $tool_content .= "<tr><td colspan='2'>";
@@ -662,7 +664,7 @@ if (count($exercise_question_ids) > 0) {
 
         if (!is_null($questionFeedback)) {
             $tool_content .= "<tr style='background-color:#fffbe3'><td colspan='2'>";
-            $tool_content .= "<div style='margin-top: 10px;'><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
+            $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
 
@@ -704,7 +706,7 @@ if (count($exercise_question_ids) > 0) {
         }
 
         $tool_content .= "</table>";
-        $tool_content .= "</div></div>";
+        $tool_content .= "</div>";
 
         $totalScore += $questionScore;
         $totalWeighting += $questionWeighting;
@@ -774,7 +776,7 @@ if ($is_editor and ($totalScore != $oldScore or $totalWeighting != $oldWeighting
 
              Session::flash('message',$langScoreDiffers .
              "<form action='exercise_result.php?course=$course_code&amp;eurId=$eurid' method='post'>
-                 <button class='btn submitAdminBtn' type='submit' name='regrade' value='true'>$langRegrade</button>
+                 <button class='btn submitAdminBtn mt-3' type='submit' name='regrade' value='true'>$langRegrade</button>
               </form>");
             Session::flash('alert-class', 'alert-warning');
     }
