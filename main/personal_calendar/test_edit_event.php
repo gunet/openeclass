@@ -41,10 +41,13 @@ if(isset($_GET['eventID'])){
 
     $eventArr = array();
 
+    $bgColor = '';
     if(isset($_GET['theUser']) and $_GET['theUser'] == 'admin'){
         $result_events = Database::get()->queryArray("SELECT *FROM admin_calendar WHERE id = ?d",$eventId);
+        $bgColor = '#006400';
     }else{
         $result_events = Database::get()->queryArray("SELECT *FROM personal_calendar WHERE id = ?d",$eventId);
+        $bgColor = '#800080';
     }
    
 
@@ -56,7 +59,8 @@ if(isset($_GET['eventID'])){
                 'title' => $row->title,
                 'start' => $row->start,
                 'end' => $row->end,
-                'user_id' => $row->user_id
+                'user_id' => $row->user_id,
+                'backgroundColor' => $bgColor
             ];
         }
     }

@@ -546,7 +546,10 @@ if ($is_editor) {
                                     eventRender: function( event, element, view ) {
                                         var title = element.find( '.fc-title' );
                                         title.html( title.text() );
+                                        title.addClass('text-center');
 
+                                        var time = element.find( '.fc-time' );
+                                        time.addClass('text-center mb-2 bagde bg-white normalBlueText');
                                     },
 
                                     eventClick:  function(event) {

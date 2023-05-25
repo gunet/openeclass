@@ -48,12 +48,14 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         }
         if ($tag->module_id !== $latest_module_id){
             $tool_content .= "
-            <div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            " . $modules[$tag->module_id]['title'] . "
+            <div class='col-12 mt-3'>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                " . $modules[$tag->module_id]['title'] . "
+                            </div>
                         </div>
-                        <div class='panel-body'>";
+                        <div class='card-body'>";
         }
         if ($tag->module_id == MODULE_ID_ANNOUNCE){
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);

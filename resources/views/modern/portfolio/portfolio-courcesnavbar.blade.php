@@ -4,7 +4,7 @@
     <div class="col-md-6 col-12 d-flex justify-content-md-start justify-content-center">
         <div class="cources-{{$paging_type}}-num-group d-flex" >
             <div type="button" onclick="cources_paging_left('{{$paging_type}}')"> 
-                <div class="btn_left_rigth"><i class="fas fa-chevron-left  cources-paging-arrow arrow-left"></i></div> 
+                <div class="btn_left_rigth"><i class="fas fa-chevron-left  cources-paging-arrow arrow-left normalColorBlueText"></i></div> 
             </div>&emsp;
             @for($i=0; $i<$cource_pages; $i++ )
                 @if( $i==1 )
@@ -26,7 +26,7 @@
                 @endif
             @endfor&emsp;
             <div type="button" onclick="cources_paging_right('{{$paging_type}}')"> 
-                <div class="btn_left_rigth"><i class="fas fa-chevron-right cources-paging-arrow arrow-right"></i></div>
+                <div class="btn_left_rigth"><i class="fas fa-chevron-right cources-paging-arrow arrow-right normalColorBlueText"></i></div>
             </div>
         </div>
     </div>

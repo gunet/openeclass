@@ -67,18 +67,18 @@ function display_learning_analytics() {
     $tool_content .= "
 
             <div class='col-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                        <div class='row w-100'>
-                            <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                <div class='panel-title'>$langLearningAnalytics</div>
-                            </div>
-                            <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        
+                           
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langLearningAnalytics</div>
+                           
+                            <div>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
                             </div>
-                        </div>
+                        
                     </div>
-                    <div class='panel-body'>
+                    <div class='card-body'>
                         <div class='res-table-wrapper'>
                             $results
                         </div>  
@@ -174,18 +174,18 @@ function display_general_lists($analytics_id) {
 
         $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                            <div class='row w-100'>
-                                <div class='col-12 d-flex justify-content-start align-items-center ps-0'>
-                                    <strong>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                    
                                         <a data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
                                         <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
-                                    </strong>
+                                   
                                 </div>
-                            </div>
+                            
                         </div>          
-                        <div class='panel-body'>         
+                        <div class='card-body'>         
                             <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
                                 <h6 class='text-success'>$message_advanced</h6>
                                 <div class='res-table-wrapper'>
@@ -300,18 +300,18 @@ function display_analytics_elements($analytics_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='panel panel-default'>
-                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                    <div class='row w-100'>
-                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                            <div class='panel-title'>$langAnalyticsParameters</div>
-                        </div>
-                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    
+                       
+                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langAnalyticsParameters</div>
+                        
+                        <div>
                             $addParametersBtn
                         </div>
-                    </div>
+                    
                 </div>
-                <div class='panel-body'>
+                <div class='card-body'>
                     <div class='table-responsive mt-0'>
                         $results
                     </div>  
@@ -341,20 +341,20 @@ function display_analytics_information($analytics_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='panel panel-default'>
-                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                    <div class='row w-100'>
-                        <div class='col-10 d-flex justify-content-start align-items-center ps-0'>
-                            $title<span class='$active_vis'>($active_msg)</span>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    
+                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                            $title<span class='$active_vis small-text ms-1'>($active_msg)</span>
                         </div>
-                        <div class='col-2 d-flex justify-content-end align-items-center pe-0'>
+                        <div>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
                             </a>
                         </div>
-                    </div>
+                   
                 </div>
-                <div class='panel-body'>
+                <div class='card-body'>
                     
                         <div class='row'>
                             <div class='col-md-4 col-12'>
@@ -513,11 +513,11 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
 
     $tool_content .= "
         <div class='col-12 mt-3'>                 
-            <div class='panel panel-default'>
-                <div class='panel-heading'>             
-                    <div class='panel-title text-center'>$analytics_title->title</div>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>             
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$analytics_title->title</div>
                 </div>
-                <div class='panel-body'>
+                <div class='card-body'>
                      $results
                 </div>
             </div>
@@ -669,11 +669,11 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
 
     $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            <div class='panel-title'>$analytics_title->title</div>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$analytics_title->title</div>
                         </div>
-                        <div class='panel-body'>
+                        <div class='card-body'>
                             $results
                         </div>
                     </div>
@@ -702,11 +702,13 @@ function display_user_info($user_id) {
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='panel panel-default'>
-                <div class='panel-heading'>
-                    $givenname $surname
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                        $givenname $surname
+                    </div>
                 </div>
-                <div class='panel-body'>
+                <div class='card-body'>
                     
                         <div class='row'>
                             <div class='col-md-5 col-12'>

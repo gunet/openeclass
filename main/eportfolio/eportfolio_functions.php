@@ -74,7 +74,7 @@ function render_eportfolio_fields_content($uid) {
     
             $j++;
     
-            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools' href='#IndexPortfolio$c->id'>$c->name</a>";
+            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools normalColorBlueText' href='#IndexPortfolio$c->id'>$c->name</a>";
             
             foreach ($res as $f) {
     
@@ -184,7 +184,7 @@ function render_eportfolio_fields_form() {
             
             $j++;
             
-            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools' href='#EditPortfolio$c->id'>$c->name</a>";
+            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools normalColorBlueText' href='#EditPortfolio$c->id'>$c->name</a>";
             
             foreach ($res as $f) {
 

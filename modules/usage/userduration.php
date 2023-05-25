@@ -134,16 +134,15 @@ if (isset($_GET['u'])) { //  stats per user
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ), false);
-            $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default p-3 shadow-sm'><h5 class='normalBlueText TextBold'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h5>";
-            $tool_content .= "<h6 class='small-text'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h6 class='small-text'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h6 class='small-text'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h6>";
-            $tool_content .= "</div></div>";
+            $tool_content .= "<p class='normalColorBlueText TextBold text-start fs-5'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</p>";
+            $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
+            $tool_content .= "<p class='small-text text-start mb-1'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</p>";
+            $tool_content .= "<p class='small-text text-start mb-1'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</p>";
         } else {
-            $tool_content .= "<h5>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h5>";
-            $tool_content .= "<h6 class='small-text'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h6 class='small-text'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h6 class='small-text'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h6>";
+            $tool_content .= "<p class='normalColorBlueText TextBold text-start fs-5'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</p>";
+            $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
+            $tool_content .= "<p class='small-text text-start mb-1'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</p>";
+            $tool_content .= "<p class='small-text text-start mb-1'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</p>";
         }
 
         $tool_content .= "

@@ -61,11 +61,11 @@
                     @endif
 
                     <div class='col-12'>
-                        <div class="card panelCard">
-                            <div class='card-header border-0 bg-white'>
+                        <div class="card panelCard px-lg-4 py-lg-3">
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langActivateCourseTools') }}</div>
                             </div>
-                            <div class='panel-body'>
+                            <div class='card-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
                                     <div class="table-responsive mt-0">
                                         <table class="table-default rounded-2">
@@ -108,14 +108,14 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='card panelCard'>
-                            <div class='card-header d-flex justify-content-between align-items-center border-0 bg-white'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 
                                 <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     {{ trans('langOperations') }}
                                 </div>
                                 <div>
-                                    <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs'>{{ trans('langAddExtLink') }}</span></a>
+                                    <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
                                 
                             </div>
@@ -147,8 +147,8 @@
                     </div>
 
                     <div class='col-12 mt-5'>
-                        <div class='card panelCard'>
-                            <div class='card-header d-flex justify-content-between align-items-center border-0 bg-white'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 
                                 <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     {{ trans('langLtiConsumer') }}
@@ -156,7 +156,7 @@
                                    
                                 <div>
                                     <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
-                                        <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs'>{{ trans('langNewLTITool') }}</span>
+                                        <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs hidden-lg'>{{ trans('langNewLTITool') }}</span>
                                     </a>
                                 </div>
                                 

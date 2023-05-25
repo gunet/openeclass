@@ -51,7 +51,8 @@ if(isset($_GET['eventID']) and isset($_GET['course_id'])){
                 'title' => $row->title,
                 'start' => $row->start,
                 'end' => $row->end,
-                'course_id' => $row->course_id
+                'course_id' => $row->course_id,
+                'backgroundColor' => '#1e90ff'
             ];
         }
     }

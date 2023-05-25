@@ -131,8 +131,8 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group mt-3'>
-                            <label for='userfile' class='col-sm-6 control-label-notes'>$langWorkFile:</label>
-                            <div class='col-sm-10'>" . fileSizeHidenInput() . "
+                            <label for='userfile' class='col-sm-12 control-label-notes'>$langWorkFile:</label>
+                            <div class='col-sm-12'>" . fileSizeHidenInput() . "
                                 <input type='file' id='userfile' name='userfile'>
                             </div>
                         </div>

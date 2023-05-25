@@ -118,10 +118,10 @@ switch ($cmd) {
                         <form method='post' name='rename' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                         <div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='list-header'>
-                        <td width=\"160\"><label class='text-white' for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
+                        <tr>
+                        <td width=\"160\"><label class='control-label-notes' for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
                         <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
-                                <input class='btn submitAdminBtn' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
+                                <input class='btn submitAdminBtn btn-sm mt-2' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
                                 <input type=\"hidden\" name=\"module_id\" value=\"" . (int) $_GET['module_id'] . "\">
                         </td>

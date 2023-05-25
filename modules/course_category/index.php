@@ -68,12 +68,12 @@ if (isset($_POST['submit'])) {
 
 $tool_content .= "
 <div class='col-sm-12'>
-<div class='panel panel-default panel-action-btn-default mt-3'>
-    <div class='panel-heading'>
-        <div class='panel-title text-center'><span class='fas fa-tools pe-2'></span>" . $langCourseCategoryActions . "</div>
+<div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+        <div class='text-uppercase normalColorBlueText TextBold fs-6'><span class='fas fa-tools pe-2'></span>" . $langCourseCategoryActions . "</div>
 
     </div>
-    <div class='panel-body'>
+    <div class='card-body'>
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>
         <div class='table-responsive mt-0'>
             <table class='table-default'>

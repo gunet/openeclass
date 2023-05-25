@@ -38,38 +38,44 @@
                         @endif
                         <div class='alert alert-info'>{!! trans('langInfoUnsubscribe') !!}</div>
 
-                        <div class='row'>
-                            
-                            <div class='col-lg-6 col-12 ms-auto me-auto'>
-                                <div class='form-wrapper form-edit rounded'>
-                                    <div id='unsubscontrols'>
-                                    @if(isset($_REQUEST['cid']))
-                                    <div class='col-12 mb-3 label d-inline-flex align-items-top'>
-                                        <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;
-                                        @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp {{ $course_title }}<br />
-                                        <input type='hidden' name='cid' value='{{ $cid }}'>
-                                    </div>
-                                    @else
-                                        @foreach($_SESSION['courses'] as $code => $status)
-                                            @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
-                                            <div class='col-12 mb-3 label d-inline-flex align-items-top'>
-                                                <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
-                                            </div>
-                                            @endif
-                                        @endforeach
-                                    @endif
-                                    </div>
-                                    <br>
-                                    <div class='col-12 d-flex justify-content-center align-items-center mt-5'>
-                                      
-                                            <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                     
-                                   
-                                             <a class='btn cancelAdminBtn ms-1' href='display_profile.php'>{{ trans('langCancel') }}</a>
-                                      
-                                    </div>
+                        <div class='col-12 mt-5'>
+                            <div class='row'>
+                                
+                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                    <div class='col-12 h-100 left-form'></div>
+                                </div>
+
+                                <div class='col-lg-6 col-12'>
+                                    <div class='form-wrapper form-edit rounded'>
+                                        <div id='unsubscontrols'>
+                                        @if(isset($_REQUEST['cid']))
+                                        <div class='col-12 mb-3 label d-inline-flex align-items-top'>
+                                            <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;
+                                            @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp {{ $course_title }}<br />
+                                            <input type='hidden' name='cid' value='{{ $cid }}'>
+                                        </div>
+                                        @else
+                                            @foreach($_SESSION['courses'] as $code => $status)
+                                                @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
+                                                <div class='col-12 mb-3 label d-inline-flex align-items-top'>
+                                                    <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
+                                                </div>
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                        </div>
+                                        <br>
+                                        <div class='col-12 d-flex justify-content-center align-items-center mt-5'>
+                                        
+                                                <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
+                                        
                                     
-                                   
+                                                <a class='btn cancelAdminBtn ms-1' href='display_profile.php'>{{ trans('langCancel') }}</a>
+                                        
+                                        </div>
+                                        
+                                    
+                                    </div>
                                 </div>
                             </div>
                         </div>

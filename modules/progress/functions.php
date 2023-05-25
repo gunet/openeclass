@@ -55,18 +55,18 @@ function display_certificates() {
         $tool_content .= "
 
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                            <div class='row w-100'>
-                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center ps-0'>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     $langCertificates
                                 </div>
-                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center pe-0'>
+                                <div>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
-                            </div>
+                            
                         </div>
-                        <div class='panel-body pt-0'>
+                        <div class='card-body'>
                             <div class='res-table-wrapper'>";
     if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
@@ -162,18 +162,18 @@ function display_badges() {
     }
         $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                            <div class='row w-100'>
-                                <div class='col-md-7 col-6 d-flex justify-content-start align-items-center ps-0'>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     $langBadges
                                 </div>
-                                <div class='col-md-5 col-6 d-flex justify-content-end align-items-center pe-0'>
+                                <div>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
-                            </div>
+                            
                         </div>
-                        <div class='panel-body pt-0'>
+                        <div class='card-body'>
                             <div class='res-table-wrapper'>";
 
     if (count($sql_cer) == 0) { // no badges
@@ -254,7 +254,7 @@ function display_course_completion() {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-success'>
-                        <div class='panel-heading'>
+                        <div class='panel-heading bgTheme'>
                             <div class='row'>
                                 <div class='col-sm-7 text-md-start text-center'>
                                     $langCourseCompletion
@@ -510,18 +510,18 @@ function display_activities($element, $id, $unit_id = 0) {
     if (!$unit_id) {
         $tool_content .= "
             <div class='col-12 mt-3'>
-                <div class='panel panel-default'>
-                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                        <div class='row w-100'>
-                            <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                 $langAttendanceActList
                             </div>
-                            <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                            <div>
                                 $addActivityBtn
                             </div>
-                        </div>
+                        
                     </div>
-                    <div class='panel-body'>
+                    <div class='card-body'>
                         <div class='table-responsive mt-0'>
                             <table class='table-default'>
                                 <tr class='list-header'>
@@ -582,20 +582,20 @@ function display_activities($element, $id, $unit_id = 0) {
         </div>";
     } else {
             $tool_content .= "<div class='main-content'>
-                                <div class='col-sm-12'>
+                                <div class='col-12'>
 
-                                        <div class='panel panel-default'>
-                                            <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                                                <div class='row w-100'>
-                                                    <div class='col-md-7 col-9 d-flex justify-content-start align-items-center ps-0'>
+                                        <div class='card panelCard px-lg-4 py-lg-3'>
+                                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                               
+                                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                                         $langUnitCompletion
                                                     </div>
-                                                    <div class='col-md-5 col-3 d-flex justify-content-end align-items-center pe-0'>
+                                                    <div>
                                                        
                                                             $addActivityBtn
                                                       
                                                     </div>
-                                                </div>
+                                               
                                             </div>
                                             <div class='panel-body'>
                                                 <div class='res-table-wrapper'>
@@ -681,18 +681,18 @@ function display_activities($element, $id, $unit_id = 0) {
             ));
         $tool_content .= "
 
-                    <div class='panel panel-default mt-3'>
-                        <div class='panel-heading pb-1 pt-1 d-flex justify-content-center align-items-center'>
-                            <div class='row w-100'>
-                                <div class='col-md-7 col-9 d-flex justify-content-start align-items-center ps-0'>
+                    <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                           
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     $langUnitPrerequisites
                                 </div>
-                                <div class='col-md-5 col-3 d-flex justify-content-end align-items-center pe-0'>
-                                $addPrereqBtn
+                                <div>
+                                    $addPrereqBtn
                                 </div>
-                            </div>
+                           
                         </div>
-                        <div class='panel-body'>
+                        <div class='card-body'>
                             <div class='res-table-wrapper'>";
 
 
@@ -2000,20 +2000,20 @@ function display_settings($element, $element_id, $unit_id = 0) {
         }
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                            <div class='row w-100'>
-                                <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     $langProgressBasicInfo
                                 </div>
-                                <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                                <div>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                     </a>
                                 </div>
-                            </div>
+                            
                         </div>
-                        <div class='panel-body'>
+                        <div class='card-body'>
                             <div class='row'>
                                 <div class='col-md-4 col-12'>
                                     <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
@@ -2262,7 +2262,7 @@ function student_view_progress() {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-success'>
-                        <div class='panel-heading'>
+                        <div class='panel-heading bgTheme'>
                             $langCourseCompletion
                         </div>
                         <div class='panel-body'>
@@ -2312,11 +2312,11 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
-                                $langBadges
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class=card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langBadges</div>
                             </div>
-                            <div class='panel-body'>";
+                            <div class='card-body'>";
 
             foreach ($game_badge as $key => $badge) {
                 // badge icon
@@ -2363,11 +2363,11 @@ function student_view_progress() {
 
             $tool_content .= "
                     <div class='col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
-                               $langCertificates
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langCertificates</div>
                             </div>
-                            <div class='panel-body'>";
+                            <div class='card-body'>";
 
 
             foreach ($game_certificate as $key => $certificate) {
@@ -2576,11 +2576,11 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        $element_title
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$element_title</div>
                     </div>
-                    <div class='panel-body'>
+                    <div class='card-body'>
 
                         <div class='row'>
                             <div class='col-sm-12'>
@@ -2622,11 +2622,11 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
 	$tool_content .= "
             <div class='col-12 mt-3'>
-                <div class='panel panel-default'>
-                    <div class='panel-heading'>
-                        $langAttendanceActivity
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langAttendanceActivity</div>
                     </div>
-                    <div class='panel-body'>
+                    <div class='card-body'>
                         <div class='res-table-wrapper'>
                             <div class='row p-2 res-table-header'>
                                 <div class='col-md-9 col-12 control-label-notes'>

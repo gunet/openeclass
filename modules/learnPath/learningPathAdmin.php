@@ -426,8 +426,10 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                             $dialogBox .= "<div class='mb-2'></div>
                             <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
                             <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
-                            <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
-                            <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn\" value=\"" . $langCancel . "\" >$langCancel</a>
+                            <div class='d-flex'>
+                                <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
+                                <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -486,20 +488,21 @@ $lp_action_button = action_button(array(
         'secondary_btn_class' => 'submitAdminBtn'
     )
 );
-$tool_content .= "<div class='col-sm-12 mt-3'>
-                    <div class='panel panel-default panel-action-btn-default' style='overflow-y:auto;'>
+$tool_content .= "<div class='col-12 mt-3'>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
                      
-                        <div class='panel-heading'>
-                            <div class='row'>
-                               <div class='col-9 d-flex justify-content-start align-items-center'>
-                                   <span class='panel-title'>$langLearningPathStructure</span>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                           
+                               <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                   $langLearningPathStructure
                                </div> 
-                               <div class='col-3 d-flex justify-content-end align-items-center'>
+                               <div>
                                     $lp_action_button
                                </div>
-                            </div>
                            
-                        </div>";
+                           
+                        </div>
+                        <div class='card-body'>";
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`
@@ -516,7 +519,7 @@ $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 if (count($result) == 0) {
     // handle exceptional requirement to add label before exiting early
     if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-        $tool_content .= "<div class='panel-body'><div class='table-responsive'><table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>" . $createLabelHTML . "</table></div></div></div></div>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div></div>";
     }
@@ -567,7 +570,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .= "<table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>";
+$tool_content .= "<table class='table-default'>";
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
     $tool_content .= $createLabelHTML;
@@ -662,5 +665,5 @@ foreach ($flatElementList as $module) {
     $tool_content .= "</tr>";
 } // end of foreach
 
-$tool_content .= "</table></div></div>";
+$tool_content .= "</table></div></div></div>";
 draw($tool_content, 2, null, $head_content, $body_action);

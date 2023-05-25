@@ -53,6 +53,7 @@
                             @endif
 
                             @if (count($categories))
+                            <div class='col-12'>
                                 <div class='table-responsive'>    
                                     <table class='table-default' id="glossary_table">
                                             
@@ -95,8 +96,9 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
                             @else 
-                                <div class='col-sm-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}.</div></div>
+                                <div class='col-12'><div class='alert alert-warning'>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}.</div></div>
                             @endif
                                    
                             

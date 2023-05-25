@@ -199,7 +199,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $user_role_string = implode(',<br>', $user_roles);
 
         if (!get_user_email_notification($myrow->id, $course_id)) {
-            $email_exlamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langNoUserEmailLegend'></span>";
+            $email_exlamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langNoUserEmailLegend'></span>";
         } else {
             $email_exlamation_icon = '';
         }

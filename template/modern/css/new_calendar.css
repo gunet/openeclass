@@ -69,6 +69,11 @@
 .myPersonalCalendar .cal-cell{
   border: solid 0.5px #f5f4f4 !important;
 }
+.myPersonalCalendar .fc-time-grid-event{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
 
 @media(max-width:991px){
   .myCalendarEvents{
@@ -147,7 +152,7 @@
   box-shadow: none;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
-  background: #005ad9;
+  background: #005ad9 !important;
   border-radius: 5px;
   color: #ffffff;
   text-shadow: none;
@@ -164,7 +169,7 @@
   box-shadow: none;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active{
-  background: #005ad9;
+  background: #005ad9 !important;
   border-radius: 5px;
   color: #ffffff;
   text-shadow: none;
@@ -189,6 +194,12 @@
   border: solid 1px #f5f4f4 !important;
   
 }
+.myCalendarEvents .fc-time-grid-event{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
 
 
 /****************************************************************************************************/

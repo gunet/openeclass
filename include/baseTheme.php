@@ -351,6 +351,11 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[leftNavBgColor];
                 }
 
+                .nav-link-adminTools.normalColorBlueText.active{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                    color: #ffffff !important;
+                }
+
                 #bgr-cheat-header, .ContentLeftNav{
                     background:$rgba_no_alpha;
                 }
@@ -359,16 +364,34 @@ function view($view_file, $view_data = array()) {
                     background-color:$rgba_no_alpha !important;
                 }
 
+                @media(max-width:991px){
+                    .offcanvas-start.d-lg-none.show{
+                        background-color:$rgba_no_alpha !important;
+                    }
+                }
+
                 .myCalendarEvents .fc-header-toolbar{
                     background:$rgba_no_alpha;
                 }
 
-                @media(max-width: 992px){
+                @media(max-width: 991px){
                     #leftnav,.ContentLeftNav{
                         background:$rgba_no_alpha;
                     }
+                    .userLoginMobile:hover{
+                        background-color:$rgba_no_alpha;
+                    }
                 }
-            
+
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active,
+                .personal-calendar-header .btn-group .btn.active{
+                    background:$theme_options_styles[linkColor] !important;
+                }
+
+                .btn_left_rigth{
+                    border:solid 1px $theme_options_styles[leftNavBgColor];
+                }
 
                 .block-title {
                     color: $theme_options_styles[leftNavBgColor];

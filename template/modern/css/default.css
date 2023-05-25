@@ -555,7 +555,8 @@ label:has(input[type="checkbox"]:disabled){
 
 .alert-success { border: 1px solid #22B473; background-color: #ffffff; color: #22B473; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-info { border: 1px solid #3D80D0; background-color: #ffffff; color: #3D80D0; border-radius: 5px; font-weight: 500; font-style: normal; }
+/* .alert-info { border: 1px solid #3D80D0; background-color: #ffffff; color: #3D80D0; border-radius: 5px; font-weight: 500; font-style: normal; } */
+.alert-info { border: 1px solid #003e85; background-color: #ffffff; color: #003e85; border-radius: 5px; font-weight: 500; font-style: normal; }
 
 .alert-warning { border: 1px solid #FFA023; background-color: #ffffff; color: #FFA023; border-radius: 5px; font-weight: 500; font-style: normal; }
 
@@ -1152,9 +1153,9 @@ label:has(input[type="checkbox"]:disabled){
     }
     .userLoginMobile{
       color:#ffffff;
-      padding:25px;
+      padding:15px;
       border-radius: 50px;
-      background-color: rgba(29, 78, 137, 0.8);
+      background-color: rgba(95, 106, 119, 0.8);
       border:solid 1px #ffffff;
 
     }
@@ -2353,6 +2354,7 @@ label:has(input[type="checkbox"]:disabled){
      .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
        overflow:hidden !important;
      }
+
   }
  
   #questions_filter{
@@ -2930,12 +2932,33 @@ label:has(input[type="checkbox"]:disabled){
   background-color: #e8e8e8 !important;
 }
 
+/* ------------------------------------------------------- AFFIXED SIDENAV -----------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+
+.nav-link-adminTools.normalColorBlueText.active{
+  background-color: #003e85;
+  color: #ffffff !important;
+}
+
 /* ------------------------------------------------------- ultra small mobile - portrait-----------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
+  @media (min-width:992px) and (max-width:1199px){
+    .hidden-lg{
+      display: none;
+    }
+  }
+  @media (min-width:768px) and (max-width:991px){
+    .hidden-md{
+      display: none;
+    }
+  }
   @media (max-width: 320px){
 
     .login-form-Homepage{ border-bottom-left-radius: 15px; border-top-left-radius: 15px; background-repeat: no-repeat; background-size: cover;  background-image: url(../images/books.jpeg); }

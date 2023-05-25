@@ -368,11 +368,11 @@ function show_submission_details($id) {
 
     $tool_content .= "
     <div class='col-12 mt-3'>
-        <div class='panel panel-default'>
-            <div class='panel-heading'>
-                <div class='panel-title'>$m[SubmissionWorkInfo]</div>
+        <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$m[SubmissionWorkInfo]</div>
             </div>
-            <div class='panel-body'>
+            <div class='card-body'>
                 <div class='row p-2 margin-bottom-fat'>
                     <div class='col-sm-4'>
                         <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>

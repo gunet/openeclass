@@ -1218,20 +1218,20 @@
 
                             <nav id="navbar-example3" class="navbar navbar-light bg-white flex-column align-items-stretch p-3 sticky-top BorderSolidDes Borders" style="z-index:2;">
                                 <nav class="nav nav-pills flex-column">
-                                    <a class="nav-link nav-link-adminTools" href="#one">{{ trans('langBasicCfgSetting') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#two">{{ trans('langUpgReg') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#three">{{ trans('langEclassThemes') }}</a>
-                                    <a class="nav-link" href="#four">{{ trans('langHomePageSettings') }}</a>
-                                    <a class="nav-link" href="#five">{{ trans('langEmailSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#six">{{ trans('langCourseSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#seven">{{ trans('langMetaCommentary') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#eight">{{ trans('langOtherOptions') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#nine">{{ trans('langDocumentSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#ten">{{ trans('langDefaultQuota') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#twelve">{{ trans('langLogActions') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
-                                    <a class="nav-link nav-link-adminTools" href="#fourteen">{{ trans('langPrivacyPolicy') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#one">{{ trans('langBasicCfgSetting') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#two">{{ trans('langUpgReg') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#three">{{ trans('langEclassThemes') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#four">{{ trans('langHomePageSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#five">{{ trans('langEmailSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#six">{{ trans('langCourseSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#seven">{{ trans('langMetaCommentary') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eight">{{ trans('langOtherOptions') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#nine">{{ trans('langDocumentSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#ten">{{ trans('langDefaultQuota') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#fourteen">{{ trans('langPrivacyPolicy') }}</a>
                                 </nav>
                             </nav>
                         </div>

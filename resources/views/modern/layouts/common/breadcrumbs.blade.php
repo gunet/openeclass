@@ -5,11 +5,11 @@
         <!-- this is toggle-button in breadcrumb -->
         @if($course_code and !$is_in_tinymce and $currentCourseName)
             <nav class="me-2">
-                <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn btn-outline-primary btn-sm menu_btn_button">
+                <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn submitAdminBtn btn-sm menu_btn_button">
                     <i class="fas fa-align-left"></i>
                     <span></span>
                 </button>
-                <a class="btn btn-sm btn-outline-primary d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
+                <a class="btn submitAdminBtn btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
                     <i class="fa fa-bars"></i>
                 </a>
             </nav>

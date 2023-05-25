@@ -4316,8 +4316,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $label = sprintf($langWorkFileLimit, $assignment->max_submissions);
                 $maxFiles = $assignment->max_submissions;
                 $inputName = 'userfile[]';
-                $moreButton = "<div class='float-end'>
-                                 <button class='btn submitAdminBtn moreFiles'>
+                $moreButton = "<div>
+                                 <button class='btn submitAdminBtn btn-sm moreFiles'>
                                    <span class='fa fa-plus'></span>
                                  </button>
                                </div>";
@@ -4616,18 +4616,18 @@ function assignment_details($id, $row, $x =false) {
 
     $moduleTag = new ModuleElement($id);
     $tool_content .= "
-    <div class='col-sm-12'>
-    <div class='panel panel-action-btn-primary'>
-        <div class='panel-heading'>
-            <div class='panel-title'>
+    <div class='col-12'>
+    <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
-                    <span class='fa fa-edit text-white' title='' data-bs-toggle='tooltip' data-original-title='$langEditChange'></span>
+                    <span class='fa fa-edit' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
             </div>
         </div>
-        <div class='panel-body ps-3 pb-3 pt-3 pe-3'>
+        <div class='card-body'>
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTitle:</strong>
@@ -5182,7 +5182,7 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "</tbody></table></div>";
             $tool_content .= "
                 <div class='form-group'>
-                    <div class='col-xs-12'>
+                    <div class='col-12'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' value='1' name='send_email' checked> $langMailToUsers
