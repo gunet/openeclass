@@ -264,27 +264,26 @@
                     @if(count($cert_completed) > 0 or count($badge_completed) > 0)
 
                         @if (count($cert_completed) > 0)
-                        <div class='col-12 mt-3'>
-                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
-                                <div class='panel-heading bg-body'>
-                                    <div class='panel-heading bg-body ps-0 pe-0'>
-                                        <div class='col-12 Help-panel-heading'>
-                                            <span class='text-uppercase fw-bold Help-text-panel-heading'>{{ trans('langMyCertificates') }}</span>
+                            <div class='col-12 mt-3'>
+                                <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
+                                    <div class='panel-heading bg-body'>
+                                        <div class='panel-heading bg-body ps-0 pe-0'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='text-uppercase fw-bold Help-text-panel-heading'>{{ trans('langMyCertificates') }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class='row'>
-                                        <div class='badge-container'>
-                                            <div class='clearfix'>
-                                            @php $counterCertificate = 0; @endphp
-                                                @foreach ($cert_completed as $key => $certificate)
-                                                    <div class='col-sm-12 d-flex justify-content-center'>
-                                                        <a href='../out.php?i={{ $certificate->identifier }}'>
-                                                            <div class='certificate_panel'>
-                                                                <h4 class='certificate_panel_title text-center'>
+                                    <div class="panel-body">
+                                        <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                            @foreach ($cert_completed as $key => $certificate)
+                                                <div class='col'>
+                                                    <div class="card h-100 border-0">
+                                                        <img style='height:150px; width:150px;' src="{{ $urlServer }}template/modern/img/game/badge.png" class="card-img-top ms-auto me-auto mt-3" alt="certificate">
+                                                        <div class="card-body">
+                                                            <a href='../out.php?i={{ $certificate->identifier }}'>
+                                                                <h5 class='certificate_panel_title text-center'>
                                                                     {!! $certificate->cert_title !!}
-                                                                </h4>
+                                                                </h5>
                                                                 <div class='text-center text-success'>
                                                                     {!! format_locale_date(strtotime($certificate->assigned), null, false) !!}
                                                                 </div>
@@ -292,71 +291,56 @@
                                                                     {!! $certificate->cert_issuer !!}
                                                                 </div>
 
-                                                                <div class='certificate_panel_state text-center'>
-                                                                    <i class='fa fa-check-circle fa-inverse state_success'></i>
+                                                                <div class='certificate_panel_state text-center mt-2'>
+                                                                    <i class='fa fa-check-circle fa-inverse state_success fs-5'></i>
                                                                 </div>
-
-                                                                <div class='certificate_panel_badge mt-2'>
-                                                                    <img class='m-auto d-block' src='{{$urlServer}}template/modern/img/game/badge.png' width='100' height='100'>
-                                                                </div>
-                                                            </div>
-                                                        </a>
+                                                            </a>
+                                                        </div>
                                                     </div>
-                                                    @if($counterCertificate < (count($cert_completed)-1) and count($cert_completed)>=2)
-                                                    <hr>
-                                                    @endif
-                                                    @php $counterCertificate++; @endphp
-
-                                                @endforeach
-                                            </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
 
                         @if (count($badge_completed) > 0)
-                        <div class='col-12 mt-3'>
-                            <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
-                                <div class='panel-heading bg-body'>
-                                    <div class='panel-heading bg-body ps-0 pe-0'>
-                                        <div class='col-12 Help-panel-heading'>
-                                            <span class='text-uppercase fw-bold Help-text-panel-heading'>{{ trans('langBadges') }}</span>
+                            <div class='col-12 mt-3'>
+                                <div class="panel panel-admin px-lg-4 py-lg-3 bg-white">
+                                    <div class='panel-heading bg-body'>
+                                        <div class='panel-heading bg-body ps-0 pe-0'>
+                                            <div class='col-12 Help-panel-heading'>
+                                                <span class='text-uppercase fw-bold Help-text-panel-heading'>{{ trans('langBadges') }}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="panel-body">
-                                    <div class='row'>
-                                        <div class='badge-container'>
-                                            <div class='clearfix'>
-                                            @php $counterBagde = 0; @endphp
-                                                @foreach ($badge_completed as $key => $badge)
-                                                <div class='col-sm-12 d-flex justify-content-center'>
-                                                    <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}'>
-                                                        <h4 class='text-center'>
-                                                            {{ ellipsize($badge->title, 40) }}
-                                                        </h4>
-                                                        <div class='badge_date text-center text-success'>
-                                                            {!! format_locale_date(strtotime($badge->assigned), null, false) !!}
+                                    <div class="panel-body">
+                                        <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                            @foreach ($badge_completed as $key => $badge)
+                                                <div class='col'>
+                                                    <div class="card h-100 border-0">
+                                                        <img style='height:150px; width:150px;' src="{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}" class="card-img-top ms-auto me-auto mt-3" alt="badge">
+                                                        <div class="card-body">
+                                                            <a href='../../modules/progress/index.php?course={{ course_id_to_code($badge->course_id) }}&amp;badge_id={{ $badge->badge }}&amp;u={{ $badge->user }}'>
+                                                                <h5 class='text-center'>
+                                                                    {{ ellipsize($badge->title, 40) }}
+                                                                </h5>
+                                                                <div class='badge_date text-center text-success'>
+                                                                    {!! format_locale_date(strtotime($badge->assigned), null, false) !!}
+                                                                </div>
+                                                                <div class='bagde_panel_issuer text-center text-secondary'>
+                                                                    {!! $badge->issuer !!}
+                                                                </div>
+                                                            </a>
                                                         </div>
-                                                        <div class='bagde_panel_issuer text-center text-secondary'>
-                                                            {!! $badge->issuer !!}
-                                                        </div>
-                                                        <img class='m-auto d-block' src='{{ $urlServer . BADGE_TEMPLATE_PATH . get_badge_filename($badge->badge) }}' width='100' height='100'>
-                                                    </a>
+                                                    </div>
                                                 </div>
-                                                @if($counterBagde < (count($badge_completed)-1) and count($badge_completed)>=2)
-                                                <hr>
-                                                @endif
-                                                @php $counterBagde++; @endphp
-                                                @endforeach
-                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                         @endif
 
                     @endif

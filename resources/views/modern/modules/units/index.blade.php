@@ -147,19 +147,21 @@
                     @if ($previousLink or $nextLink)
 
                         <div class='col-12 mt-3'>
-                            <div class='form-wrapper course_units_pager clearfix'>
-                                @if ($previousLink)
-                                    <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
-                                        <span class='fa fa-arrow-left space-after-icon'></span>
-                                        {{ ellipsize($previousTitle, 30) }}
-                                    </a>
-                                @endif
-                                @if ($nextLink)
-                                    <a class='float-end' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
-                                        {{ ellipsize($nextTitle, 30) }}
-                                        <span class='fa fa-arrow-right space-before-icon'></span>
-                                    </a>
-                                @endif
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class="card-body d-flex justify-content-between align-items-center p-3">              
+                                    @if ($previousLink)
+                                        <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
+                                            <span class='fa fa-arrow-left space-after-icon'></span>
+                                            {{ ellipsize($previousTitle, 30) }}
+                                        </a>
+                                    @endif
+                                    @if ($nextLink)
+                                        <a class='float-end' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
+                                            {{ ellipsize($nextTitle, 30) }}
+                                            <span class='fa fa-arrow-right space-before-icon'></span>
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
                         </div>
 
@@ -168,7 +170,7 @@
 
                     <div class='col-12 mt-3'>
                         <div class='panel panel-default'>
-                            <div class='panel-heading'>
+                            <div class='panel-heading bgTheme'>
                                 <div class='panel-title'>{{ $pageName }}
                                     @if($course_start_week or $course_finish_week)
                                     <span class='orangeText'>
@@ -199,7 +201,7 @@
                     @if ($is_editor and $q->flipped_flag == 2)
                         <div class='col-12 mt-3'>
                             <div class='panel panel-default'>
-                                <div class='panel-heading'>
+                                <div class='panel-heading bgTheme'>
                                     <div class='d-inline-flex align-items-top'>
                                         {{ trans('langActivities')}}
                                         <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
@@ -684,7 +686,7 @@
 
                     <div class='col-12 mt-3'>
                         <div class='panel panel-default'>
-                            <div class='panel-heading'>{{ trans('langCourseUnits') }}</div>
+                            <div class='panel-heading bgTheme'>{{ trans('langCourseUnits') }}</div>
                             <div class='panel-body'>
                                 <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                                     <input type='hidden' name='course' value='{{ $course_code }}'>

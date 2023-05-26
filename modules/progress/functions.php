@@ -512,221 +512,217 @@ function display_activities($element, $id, $unit_id = 0) {
             <div class='col-12 mt-3'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                        
-                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
-                                $langAttendanceActList
-                            </div>
-                            <div>
-                                $addActivityBtn
-                            </div>
-                        
+                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                            $langAttendanceActList
+                        </div>
+                        <div>
+                            $addActivityBtn
+                        </div>
                     </div>
-                    <div class='card-body'>
-                        <div class='table-responsive mt-0'>
-                            <table class='table-default'>
-                                <tr class='list-header'>
-                                    <th>
-                                        $langTitle
-                                    </th>
-                                    <th>
-                                        $langType
-                                    </th>
-                                    <th>
-                                        $langValue
-                                    </div>
-                                    <th class='text-center'>
-                                        <i class='fa fa-cogs'></i>
-                                    </th>
-
-                                </tr>";
-        if (count($result) == 0) {
-            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
-        } else {
-            foreach ($result as $details) {
-                $resource_data = get_resource_details($element, $details->id);
-                $tool_content .= "
-                <tr>
-                    <td>".$resource_data['title']."</td>
-                    <td>". $resource_data['type']."</td>
-                    <td>";
-                        if (!empty($details->operator)) {
-                            $op = get_operators();
-                            $tool_content .= $op[$details->operator];
+                    <div class='card-body'>";
+                        if (count($result) == 0) {
+                            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
                         } else {
-                            $tool_content .= "&mdash;";
+                          $tool_content .= "<div class='table-responsive mt-0'>
+                                                <table class='table-default'>
+                                                    <tr class='list-header'>
+                                                        <th>
+                                                            $langTitle
+                                                        </th>
+                                                        <th>
+                                                            $langType
+                                                        </th>
+                                                        <th>
+                                                            $langValue
+                                                        </div>
+                                                        <th class='text-center'>
+                                                            <i class='fa fa-cogs'></i>
+                                                        </th>
+                                                    </tr>";
+                                                    foreach ($result as $details) {
+                                                        $resource_data = get_resource_details($element, $details->id);
+                                                        $tool_content .= "
+                                                        <tr>
+                                                            <td>".$resource_data['title']."</td>
+                                                            <td>". $resource_data['type']."</td>
+                                                            <td>";
+                                                                if (!empty($details->operator)) {
+                                                                    $op = get_operators();
+                                                                    $tool_content .= $op[$details->operator];
+                                                                } else {
+                                                                    $tool_content .= "&mdash;";
+                                                                }
+                                                                $tool_content .= "$details->threshold</td>";
+                                                                $tool_content .= "<td>";
+                                                                $tool_content .= "<div class='text-center'>".
+                                                                    action_button(array(
+                                                                        array('title' => $langEditChange,
+                                                                            'icon' => 'fa-edit',
+                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                            'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                        ),
+                                                                        array('title' => $langDelete,
+                                                                            'icon' => 'fa-times',
+                                                                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                            'confirm' => $langConfirmDelete,
+                                                                            'class' => 'delete'))).
+                                                                "</div>
+                                                            </td>
+                                                        </tr>";
+                                                    }
+
+                                    $tool_content .= "
+                                                </table>
+                                            </div>";
                         }
-                        $tool_content .= "$details->threshold</td>";
-                        $tool_content .= "<td>";
-                        $tool_content .= "<div class='text-center'>".
-                            action_button(array(
-                                array('title' => $langEditChange,
-                                    'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                                    'show' => in_array($details->activity_type, criteria_with_operators())
-                                ),
-                                array('title' => $langDelete,
-                                    'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                                    'confirm' => $langConfirmDelete,
-                                    'class' => 'delete'))).
-                        "</div>
-                    </td>
-                </tr>";
-            }
-        }
         $tool_content .= "
-                </table>
-            </div>
-        </div>
-        </div>
-        </div>";
+                    </div>
+                </div>
+            </div>";
     } else {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-12'>
-
-                                        <div class='card panelCard px-lg-4 py-lg-3'>
-                                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                               
-                                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
-                                                        $langUnitCompletion
-                                                    </div>
-                                                    <div>
-                                                       
-                                                            $addActivityBtn
-                                                      
-                                                    </div>
-                                               
+                                    <div class='card panelCard px-lg-4 py-lg-3'>
+                                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                $langUnitCompletion
                                             </div>
-                                            <div class='panel-body'>
-                                                <div class='res-table-wrapper'>
-                                                    <div class='table-responsive'>
-                                                        <table class='table-default'>
-                                                            <tr class='list-header'>
-                                                                <th>
-                                                                    $langTitle
-                                                                </th>
-                                                                <th>
-                                                                    $langType
-                                                                </th>
-                                                                <th>
-                                                                    $langValue
-                                                                </th>
-                                                                <th class='text-center'>
-                                                                    <i class='fa fa-cogs'></i>
-                                                                </th>
-                                                            </tr>";
+                                            <div>
+                                                $addActivityBtn
+                                            </div>
+                                        </div>
+                                        <div class='panel-body'>";
 
-        if (count($result) == 0) {
-            $tool_content .= "<p class='margin-top-fat text-center text-muted mb-3'>$langNoActivCert</p>";
-        } else {
-            foreach ($result as $details) {
-                $resource_data = get_resource_details($element, $details->id, $unit_id);
-                $tool_content .= "
-                <tr>
-                    <td>".$resource_data['title']."</td>
-                    <td>". $resource_data['type']."</td>
-                    <td>";
-                if (!empty($details->operator)) {
-                    $op = get_operators();
-                    $tool_content .= $op[$details->operator];
-                } else {
-                    $tool_content .= "&mdash;";
-                }
-                $tool_content .= "&nbsp;$details->threshold</td>";
-                $tool_content .= "<td class='text-center'>".
-                    action_button(array(
-                        array('title' => $langEditChange,
-                            'icon' => 'fa-edit',
-                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
-                            'show' => in_array($details->activity_type, criteria_with_operators())
-                        ),
-                        array('title' => $langDelete,
-                            'icon' => 'fa-times',
-                            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
-                            'confirm' => $langConfirmDelete,
-                            'class' => 'delete'))).
-                    "</td></tr>";
-            }
-        }
-        $tool_content .= "</table></div></div></div></div>";
+                                            if (count($result) == 0) {
+                                                $tool_content .= "<p class='margin-top-fat text-center text-muted mb-3'>$langNoActivCert</p>";
+                                            } else {
 
-        //************* UNIT PREREQUISITES *************//
-        $course_units = Database::get()->queryArray("SELECT * FROM course_units
-                                                            WHERE course_id = ?d", $course_id);
+                                                $tool_content .= " <div class='res-table-wrapper'>
+                                                                        <div class='table-responsive'>
+                                                                            <table class='table-default'>
+                                                                                <tr class='list-header'>
+                                                                                    <th>
+                                                                                        $langTitle
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        $langType
+                                                                                    </th>
+                                                                                    <th>
+                                                                                        $langValue
+                                                                                    </th>
+                                                                                    <th class='text-center'>
+                                                                                        <i class='fa fa-cogs'></i>
+                                                                                    </th>
+                                                                                </tr>";
+                                                                                foreach ($result as $details) {
+                                                                                    $resource_data = get_resource_details($element, $details->id, $unit_id);
+                                                                                    $tool_content .= "
+                                                                                    <tr>
+                                                                                        <td>".$resource_data['title']."</td>
+                                                                                        <td>". $resource_data['type']."</td>
+                                                                                        <td>";
+                                                                                    if (!empty($details->operator)) {
+                                                                                        $op = get_operators();
+                                                                                        $tool_content .= $op[$details->operator];
+                                                                                    } else {
+                                                                                        $tool_content .= "&mdash;";
+                                                                                    }
+                                                                                    $tool_content .= "&nbsp;$details->threshold</td>";
+                                                                                    $tool_content .= "<td class='text-center'>".
+                                                                                        action_button(array(
+                                                                                            array('title' => $langEditChange,
+                                                                                                'icon' => 'fa-edit',
+                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                                                                                'show' => in_array($details->activity_type, criteria_with_operators())
+                                                                                            ),
+                                                                                            array('title' => $langDelete,
+                                                                                                'icon' => 'fa-times',
+                                                                                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                                                                                'confirm' => $langConfirmDelete,
+                                                                                                'class' => 'delete'))).
+                                                                                        "</td></tr>";
+                                                                                }
 
-        $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit
-                                                                    FROM unit_prerequisite up
-                                                                    JOIN course_units cu ON (cu.id = up.unit_id)
-                                                                    WHERE cu.id = ".$unit_id);
+                                                          $tool_content .= "</table>
+                                                                        </div>
+                                                                    </div>";
+                                            }
+                       $tool_content .= "</div>
+                                    </div>";
 
-        $action_button_content = [];
+                        //************* UNIT PREREQUISITES *************//
+                        $course_units = Database::get()->queryArray("SELECT * FROM course_units
+                                                                            WHERE course_id = ?d", $course_id);
 
-        foreach ($course_units as $prereq) {
-            if ($prereq->id == $unit_id) { // Don't include current unit on prerequisites list
-                continue;
-            }
-            $action_button_content[] = [
-                'title' =>  $prereq->title,
-                'icon'  =>  'fa fa-book fa-fw',
-                'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&unit_id=$unit_id",
-                'class' =>  '',
-                'show'  =>  !is_unit_prereq_enabled($unit_id),
-            ];
-        }
-        $addPrereqBtn = action_button($action_button_content,
-            array(
-                'secondary_title' => $langNewUnitPrerequisite,
-                'secondary_icon' => 'fa-plus',
-                'secondary_btn_class' => 'submitAdminBtn',
-            ));
+                        $unit_prerequisite_id = Database::get()->querySingle("SELECT up.prerequisite_unit
+                                                                                    FROM unit_prerequisite up
+                                                                                    JOIN course_units cu ON (cu.id = up.unit_id)
+                                                                                    WHERE cu.id = ".$unit_id);
+
+                        $action_button_content = [];
+
+                        foreach ($course_units as $prereq) {
+                            if ($prereq->id == $unit_id) { // Don't include current unit on prerequisites list
+                                continue;
+                            }
+                            $action_button_content[] = [
+                                'title' =>  $prereq->title,
+                                'icon'  =>  'fa fa-book fa-fw',
+                                'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&prereq=$prereq->id&unit_id=$unit_id",
+                                'class' =>  '',
+                                'show'  =>  !is_unit_prereq_enabled($unit_id),
+                            ];
+                        }
+                        $addPrereqBtn = action_button($action_button_content,
+                            array(
+                                'secondary_title' => $langNewUnitPrerequisite,
+                                'secondary_icon' => 'fa-plus',
+                                'secondary_btn_class' => 'submitAdminBtn',
+                            ));
         $tool_content .= "
 
-                    <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                           
+                        <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     $langUnitPrerequisites
                                 </div>
                                 <div>
                                     $addPrereqBtn
                                 </div>
-                           
+                            </div>
+                            <div class='card-body'>
+                                <div class='res-table-wrapper'>";
+                                        $delPrereqBtn = action_button(array(
+                                        array('title' => $langDelete,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&unit_id=$unit_id",
+                                            'icon' => 'fa-times',
+                                            'class' => 'delete',
+                                            'confirm' => $langConfirmDelete)));
+
+                                if ( $unit_prerequisite_id ) {
+                                    $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units
+                                                                                                WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
+
+                                        $tool_content .= "
+                                        <div class='table-responsive'>
+                                            <table class='table-default'>
+                                                <tr>
+                                                    <td><p class='text-start'>$prereq_unit_title</p></td>
+
+                                                    <td>$delPrereqBtn</td>
+                                                </tr>
+                                            </table>
+                                        </div>";
+                                } else {
+                                    $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
+                                }
+
+            $tool_content .= "  </div>
+                            </div>
                         </div>
-                        <div class='card-body'>
-                            <div class='res-table-wrapper'>";
 
-
-        $delPrereqBtn = action_button(array(
-            array('title' => $langDelete,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&unit_id=$unit_id",
-                'icon' => 'fa-times',
-                'class' => 'delete',
-                'confirm' => $langConfirmDelete)));
-
-        if ( $unit_prerequisite_id ) {
-            $prereq_unit_title = Database::get()->querySingle("SELECT title FROM course_units
-                                                                        WHERE id = ?d", $unit_prerequisite_id->prerequisite_unit)->title;
-
-            $tool_content .= "
-            <div class='table-responsive'>
-                <table class='table-default'>
-                <tr>
-                    <td><p class='text-start'>$prereq_unit_title</p></td>
-
-                    <td>$delPrereqBtn</td>
-                </tr>
-               </table>
+                </div>
             </div>";
-        } else {
-            $tool_content .= "<p class='text-center text-muted'>$langNoUnitPrerequisite</p>";
-        }
-
-        $tool_content .= " </div>
-                        </div>
-                    </div>
-
-            </div>
-        </div>";
     }
 }
 
