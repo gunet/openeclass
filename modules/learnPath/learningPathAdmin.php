@@ -416,21 +416,23 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
 
         <div class='col-12 mt-3'>
-            <div class='panel panel-body'>
-                <div class='row'>
-                    <div class='col-md-2'><strong>$langMove:</strong></div>
-                    <div class='col-md-10'>
-                        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
-                            // build select input - $elementList has been declared in the previous big cmd case
-                            $dialogBox .= build_nested_select_menu("newPos", $elementList);
-                            $dialogBox .= "<div class='mb-2'></div>
-                            <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
-                            <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
-                            <div class='d-flex'>
-                                <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
-                                <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
-                            </div>
-                        </form>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div class='row'>
+                        <div class='col-md-2'><strong>$langMove:</strong></div>
+                        <div class='col-md-10'>
+                            <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
+                                // build select input - $elementList has been declared in the previous big cmd case
+                                $dialogBox .= build_nested_select_menu("newPos", $elementList);
+                                $dialogBox .= "<div class='mb-2'></div>
+                                <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
+                                <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
+                                <div class='d-flex mt-3'>
+                                    <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
+                                    <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

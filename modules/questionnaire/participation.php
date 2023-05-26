@@ -102,11 +102,11 @@ $toolName = $langUserDuration;
 $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langQuestionnaire];
 
 $tool_content .= "
-    <div class='panel panel-action-btn-primary'>
-        <div class='panel-heading'>
-            <div class='panel-title'>$langSurvey</div>
+    <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langSurvey</div>
         </div>
-        <div class='panel-body'>
+        <div class='card-body'>
             <div class='row margin-bottom-thin p-2'>
                 <div class='col-sm-3'>
                     <strong>$langTitle:</strong>

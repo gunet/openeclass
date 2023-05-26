@@ -4904,8 +4904,8 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
-                <div class='margin-bottom-thin lightColor rounded-pill p-2 text-center'>
-                    <strong class='fw-bold'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
+                <div class='margin-bottom-thin lightColor Borders p-2 text-center'>
+                    <strong class='fw-bold normalColorBlueText'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
                 // button for transferring student peer review grades to teacher grades
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
                     $tool_content .= "<div class='text-end' style='margin-bottom: 15px;'><a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
@@ -5111,7 +5111,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $comments = '';
                 //emfanizei pote vathmologhthhke
                 if ($row->grade != '') { // grade submission date
-                    $label = "<h6>($langGradedAt " .format_locale_date(strtotime($row->grade_submission_date), 'short', false) . ")</h6>";
+                    $label = "<p>($langGradedAt " .format_locale_date(strtotime($row->grade_submission_date), 'short', false) . ")</p>";
                 }
                 // professor comments
                 if ($row->grade_comments or $row->grade_comments_filename) {
@@ -5315,7 +5315,7 @@ function show_non_submitted($id) {
                 $num_of_submissions = sprintf("$m[more_non_submissions]", $num_results);
             }
                 $tool_content .= "
-                            <p><div class='sub_title1 bg-light p-2 text-center fw-bold'>$m[WorkUserNoSubmission]:</div><p>
+                            <p><div class='sub_title1 bg-light p-2 text-center fw-bold Borders normalColorBlueText'>$m[WorkUserNoSubmission]:</div><p>
                             <p class='text-center'>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive mt-0'>

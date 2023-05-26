@@ -127,15 +127,21 @@ $export_box = "";
 
 if ($is_editor) {
     $export_box .= "
-        <div class='col-sm-12'><div class='alert alert-info'>
-            <b>$langDumpUserDurationToFile:</b>
-            <ul>
-              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
-                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
-              <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
-                  (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
-            </ul>
-        </div></div>";
+        <div class='col-12 mb-3'>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                   
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langDumpUserDurationToFile</div>
+                </div>
+                <div class='card-body'>
+                    <ul>
+                    <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langPollPercentResults</a>
+                        (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
+                    <li><a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langPollFullResults</a>
+                        (<a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1&amp;enc=UTF-8'>$langcsvenc2</a>)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>";
 }
 
 $tool_content .= action_bar(array(
@@ -147,11 +153,11 @@ $tool_content .= action_bar(array(
             )
         ))."
 $export_box
-<div class='panel panel-primary'>
-    <div class='panel-heading'>
-        <div class='panel-title'>$langInfoPoll</div>
+<div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langInfoPoll</div>
     </div>
-    <div class='panel-body'>
+    <div class='card-body'>
         <div class='row  margin-bottom-fat p-2'>
             <div class='col-sm-4'>
                 <strong>$langTitle:</strong>
@@ -327,13 +333,13 @@ $chart_data = array();
 $this_chart_data = array();
 
 $tool_content .= "
-<div class='col-sm-12 mt-3'>
-<div class='panel panel-success'>
-    <div class='panel-heading'>
-        <div class='panel-title'>$lang_result_summary</div>
+<div class='col-12 mt-3'>
+<div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$lang_result_summary</div>
     </div>
-    <div class='panel-body'>
-        <h6>$lang_ckw_skw_chart</h6>";
+    <div class='card-body'>
+        <p>$lang_ckw_skw_chart</p>";
 
 $this_chart_data['category'][] = $langConnected;
 $this_chart_data['category'][] = $langSeparated;

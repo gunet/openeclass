@@ -118,7 +118,7 @@ function printPollForm() {
     $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content, $langPollParticipantInfo, $langCollesLegend,
-    $pageName, $lang_rate1, $lang_rate5;
+    $pageName, $lang_rate1, $lang_rate5, $langDescription;
 
     $refresh_time = 300000; // Refresh PHP session every 5 min. (in ms)
     $head_content .= "
@@ -184,11 +184,16 @@ function printPollForm() {
         ));
 
         if ($thePoll->description) {
-            $tool_content .= "<div class='col-12'><div class='panel panel-primary' style='border:0;'>
-                <div class='panel-body form-wrapper form-edit rounded'>
-                    <p class='text-center'>" . standard_text_escape($thePoll->description) . "</p>
-                </div>
-            </div></div>";
+            $tool_content .= "<div class='col-12 mb-4'>
+                                <div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langDescription</div>
+                                    </div>
+                                    <div class='card-body'>
+                                        " . standard_text_escape($thePoll->description) . "
+                                    </div>
+                                </div>
+                             </div>";
         }
         if (isset($_REQUEST['unit_id'])) {
             $form_link = "../units/view.php?course=$course_code&amp;res_type=questionnaire&amp;id=$_REQUEST[unit_id]";
@@ -213,14 +218,14 @@ function printPollForm() {
             $email = Session::has('participantEmail') ? Session::get('participantEmail') : '';
             $email_error = Session::getError('participantEmail') ? " has-error" : "";
             $tool_content .= "
-                <div class='panel panel-info'>
-                    <div class='panel-heading'>
-                        $langPollParticipantInfo
+                <div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langPollParticipantInfo</div>
                     </div>
-                    <div class='panel-body'>
+                    <div class='card-body'>
                         <div class='form-group$email_error'>
-                            <label for='participantEmail' class='col-sm-1  control-label'>Email:</label>
-                            <div class='col-sm-11'>
+                            <label for='participantEmail' class='col-12  control-label-notes'>Email:</label>
+                            <div class='col-12'>
                                 <input type='text' name='participantEmail' id='participantEmail' class='form-control' value='$email'>
                                 ".(Session::getError('participantEmail') ? "<span class='help-block'>" . Session::getError('participantEmail') . "</span>" : "")."
                             </div>
@@ -230,23 +235,29 @@ function printPollForm() {
         }
         $pollType = Database::get()->querySingle("SELECT `type` FROM poll WHERE pid = ?d", $pid)->type;
         $i=1;
+        $tool_content .= " <div class='row row-cols-1 row-cols-md-2 g-4'>";
         foreach ($questions as $theQuestion) {
             $pqid = $theQuestion->pqid;
             $qtype = $theQuestion->qtype;
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "
-                <div class='col-sm-12 mt-3'><div class='alert alert-info text-center' role='alert'>
-                        <strong class='text-uppercase'>" . standard_text_escape($theQuestion->question_text) . "</strong>
-                    </div></div>";
+                <div class='col-12 mb-0 text-center'>
+                   <p style='border:solid 1px #e8e8e8;' class='text-wrap p-3 Borders bg-light normalColorBlueText text-uppercase TextBold fs-6 mb-0'>" . standard_text_escape($theQuestion->question_text) . "</p>
+                </div>";
             } else {
+                $columnPanel = 'col';
+                if($qtype==QTYPE_LABEL){
+                    $columnPanel = 'col-12';
+                }
                 $tool_content .= "
-                <div class='col-sm-12 mt-3'>
-                    <div class='panel panel-success'>
-                        <div class='panel-heading'>
+               
+                <div class='$columnPanel'>
+                    <div class='panel panel-success h-100'>
+                        <div class='panel-heading bgTheme'>
                             $langQuestion $i
                         </div>
                         <div class='panel-body panel-body-questionaire'>
-                            <h6>".q_math($theQuestion->question_text)."</h6>
+                            <p class='TextMedium normalColorBlueText mb-2'>".q_math($theQuestion->question_text)."</p>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
@@ -303,7 +314,8 @@ function printPollForm() {
                 $i++;
             }
         }
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='d-flex justify-content-center mt-5'>";
         if ($is_editor) {
             $tool_content .= "<a class='btn cancelAdminBtn' href='index.php?course=$course_code'>" . q($langBack). "</a>";
         } else {
@@ -418,7 +430,7 @@ function submitPoll() {
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }
-        $tool_content .= "<br><div class='text-center'>";
+        $tool_content .= "<br><div class='d-flex text-center'>";
         if (isset($_REQUEST['unit_id'])) {
             $tool_content .= "<a class='btn cancelAdminBtn' href='../units/index.php?course=$course_code&amp;id=$_REQUEST[unit_id]'>$langBack</a>";
         } else {

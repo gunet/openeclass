@@ -149,11 +149,11 @@ $tool_content .= action_bar(array(
                         )
                 ));
 $tool_content .= "<div class='col-12'>
-<div class='panel panel-primary'>
-    <div class='panel-heading'>
-        <div class='panel-title'>$langInfoPoll</div>
+<div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langInfoPoll</div>
     </div>
-    <div class='panel-body'>
+    <div class='card-body'>
         <div class='row p-2 margin-bottom-fat'>
             <div class='col-md-5 col-12'>
                 <strong class='control-label-notes'>$langTitle:</strong>
@@ -209,12 +209,12 @@ if ($PollType == POLL_NORMAL) {
             $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'>$theQuestion->question_text</div></div>";
         } else {
             $tool_content .= "
-            <div class='col-sm-12 mt-3'>
-            <div class='panel panel-success'>
-                <div class='panel-heading'>
-                    <div class='panel-title'>$langQuestion $j</div>
+            <div class='col-12 mt-3'>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langQuestion $j</div>
                 </div>
-                <div class='panel-body'>";
+                <div class='card-body'>";
 
             $j++;
 
