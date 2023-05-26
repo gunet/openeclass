@@ -692,19 +692,20 @@ if ($action == "showPost") {
                 $rating_content = $rating->put(NULL, $uid, $user_id);
             }
         }
+
+        
         $tool_content .= "
-        <div class='col-sm-12'>
-                        <div class='panel panel-action-btn-default'>
-                            <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
+                    <div class='col-xl-7 col-12 ms-xl-auto me-xl-auto'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
 
 
-                                    <div class='row w-100'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                            <span class='panel-title'>
+                                    
+                                       
+                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                                 ".q($post->getTitle())."
-                                            </span>
-                                        </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
+                                            </div>
+                                       
                                             <div>
                                                 ". action_button(array(
                                                     array(
@@ -729,33 +730,37 @@ if ($action == "showPost") {
                                                     ),
                                                 ))."
                                             </div>
-                                        </div>
                                         
-                                    </div>
+                                        
+                                   
 
 
                                
                             </div>
-                            <div class='panel-body ps-3 panel-body-blog'><p class='blackBlueText TextSemiBold mb-2'>" . format_locale_date(strtotime($post->getTime())). "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
-                            <div class='panel-footer ps-3 panel-footer-blog pb-4'>
+                            <div class='card-body'>" . format_locale_date(strtotime($post->getTime())). "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='card-footer bg-white border-0 d-flex justify-content-between align-items-center'>
 
-                                <div class='row'>
-                                    <div class='col-md-6 col-5'>$rating_content</div>
-                                    <div class='col-md-6 col-7 text-end'>$sharing_content</div>
-                                </div>
+                               
+                                    <div>$rating_content</div>
+                                    <div>$sharing_content</div>
+                             
                             </div>
-                        </div></div>";
+                        </div>
+                    </div>";
 
         if ($comments_enabled) {
-            if ($post->getCommenting() == 1) {
-                commenting_add_js(); //add js files needed for comments
-                $comm = new Commenting('blogpost', $post->getId());
-            if ($blog_type == 'course_blog') {
-                $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
-            } elseif ($blog_type == 'perso_blog') {
-                $tool_content .= $comm->put(NULL, $is_blog_editor, $uid, true);
-            }
-            }
+            $tool_content .= "
+                    <div class='col-xl-7 col-12 ms-xl-auto me-xl-auto'>";
+                        if ($post->getCommenting() == 1) {
+                            commenting_add_js(); //add js files needed for comments
+                            $comm = new Commenting('blogpost', $post->getId());
+                            if ($blog_type == 'course_blog') {
+                                $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
+                            } elseif ($blog_type == 'perso_blog') {
+                                $tool_content .= $comm->put(NULL, $is_blog_editor, $uid, true);
+                            }
+                        }
+            $tool_content .= "</div>";
         }
 
     } else {
@@ -827,56 +832,62 @@ if ($action == "showBlog") {
             }
             if ($comments_enabled && ($post->getCommenting() == 1)) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $comment_content = "<a class='btn submitAdminBtn float-end mt-3' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+                //$comment_content = "<a class='btn submitAdminBtn float-end mt-3' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+                
+
+                $comment_content = "<a class='btn commentPress TextSemiBold blackBlueText float-end mt-3 pe-0' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>
+                                        <span class='fa fa-comments'></span>&nbsp;$langComments (".$comm->getCommentsNum().")
+                                    </a>";
+
+
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
-            $tool_content .= "<div class='panel panel-action-btn-default rounded-2 mb-3 mt-1'>
-                                <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center rounded-0'>
-                                    <div class='row w-100'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                            <span class='panel-title'>
-                                                <a class='text-white' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
-                                            </span>
+            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3 mt-2' style='border-radius:3px !important;'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                   
+                                       
+                                     
+                                        <a class='text-uppercase normalColorBlueText TextBold fs-6' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                       
+                                       
+                                        <div>
+                                            ". action_button(array(
+                                                array(
+                                                    'title' => $langEditChange,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
+                                                    'icon' => 'fa-edit',
+                                                    'show' => $allow_to_edit
+                                                ),
+                                                array(
+                                                    'title' => $langDelete,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
+                                                    'icon' => 'fa-times',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langSureToDelBlogPost,
+                                                    'show' => $allow_to_edit
+                                                ),
+                                                array(
+                                                    'title' => $langAddResePortfolio,
+                                                    'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
+                                                    'icon' => 'fa-star',
+                                                    'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
+                                                ),
+                                            ))."
                                         </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
-                                            <div>
-                                                ". action_button(array(
-                                                    array(
-                                                        'title' => $langEditChange,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
-                                                        'icon' => 'fa-edit',
-                                                        'show' => $allow_to_edit
-                                                    ),
-                                                    array(
-                                                        'title' => $langDelete,
-                                                        'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
-                                                        'icon' => 'fa-times',
-                                                        'class' => 'delete',
-                                                        'confirm' => $langSureToDelBlogPost,
-                                                        'show' => $allow_to_edit
-                                                    ),
-                                                    array(
-                                                        'title' => $langAddResePortfolio,
-                                                        'url' => "$urlServer"."main/eportfolio/resources.php?token=".token_generate('eportfolio' . $uid)."&amp;action=add&amp;type=blog&amp;rid=".$post->getId(),
-                                                        'icon' => 'fa-star',
-                                                        'show' => (get_config('eportfolio_enable') && $post->getAuthor()==$uid)
-                                                    ),
-                                                ))."
-                                            </div>
-                                        </div>
+                                       
                                         
-                                    </div>
+                                   
                                 </div>
-                                <div class='panel-body ps-3 panel-body-blog overflow-auto rounded-2'>
+                                <div class='card-body'>
                                     <p class='blackBlueText TextSemiBold mb-2'>" . format_locale_date(strtotime($post->getTime())) . "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='panel-footer panel-footer-blog p-3 rounded-2' style='border-top: solid 1px #e8e8e8;'>
-                                    <div class='row'>
-                                        <div class='col-md-6 col-5'>$rating_content</div>
-                                        <div class='col-md-6 col-7 text-end'>$sharing_content</div>
-                                    </div>
+                                <div class='card-footer bg-white d-flex justify-content-between align-items-center pt-lg-3'>
+                                    
+                                        <div>$rating_content</div>
+                                        <div>$sharing_content</div>
+                                    
                                 </div>
                              </div>";
         }

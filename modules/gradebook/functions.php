@@ -493,7 +493,7 @@ function user_gradebook_settings() {
                         <div class='col-sm-12 col-sm-offset-2'>
                             <div class='table-responsive'>
                                 <table id='participants_tbl' class='table-default hide'>
-                                    <tr class='title1'>
+                                    <tr class='title1 list-header'>
                                       <td id='users'>$langStudents</td>
                                       <td class='text-center'>$langMove</td>
                                       <td>$langParticipate</td>

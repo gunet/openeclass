@@ -373,34 +373,34 @@ if ($userdata) {
             } else {
                 $post->course_title = $langUserBlog;
             }
-            $tool_content .= "<div class='panel panel-action-btn-default mb-3'>
-                                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                                        <div class='row w-100'>
-                                           <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                              <div class='panel-title'>".q($data['title'])."</div>
-                                           </div>
-                                           <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
-                                                <div>
-                                                    ". action_button(array(
-                                                                        array(
-                                                                                'title' => $langePortfolioRemoveResource,
-                                                                                'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                                                'icon' => 'fa-times',
-                                                                                'class' => 'delete',
-                                                                                'confirm' => $langePortfolioSureToRemoveResource,
-                                                                                'show' => ($post->user_id == $uid)
-                                                                        )))."
-                                                </div>
-                                           </div>
-                                        </div>   
+            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                       
+                                           
+                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($data['title'])."</div>
+                                           
+                                           
+                                            <div>
+                                                ". action_button(array(
+                                                                    array(
+                                                                            'title' => $langePortfolioRemoveResource,
+                                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                                            'icon' => 'fa-times',
+                                                                            'class' => 'delete',
+                                                                            'confirm' => $langePortfolioSureToRemoveResource,
+                                                                            'show' => ($post->user_id == $uid)
+                                                                    )))."
+                                            </div>
+                                           
+                                         
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='card-body'>
                                         <p class='blackBlueText TextSemiBold'>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
                                     </div>
-                                    <div class='panel-footer'>
-                                        <div class='row'>
-                                            <div class='col-sm-6'>$post->course_title</div>
-                                        </div>
+                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                        
+                                            <div class='small-text'>$post->course_title</div>
+                                        
                                     </div>
                                 </div>";
             }
@@ -472,47 +472,49 @@ if ($userdata) {
         if ($blog_posts) {
             $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             //usort($blog_posts, "cmp");
-            $tool_content .= "<div class='row'>";
-            $tool_content .= "<div class='col-sm-12'>";
+            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+            
             foreach ($blog_posts as $post) {
+                $tool_content .= "<div class='col'>";
                 $data = unserialize($post->data);
                 if (!empty($post->course_title)) {
                     $post->course_title = $langCourse.': '.$post->course_title;
                 } else {
                     $post->course_title = $langUserBlog;
                 }
-                $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                                        <div class='row w-100'>
-                                            <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                                <div class='panel-title'>".q($data['title'])."</div>
-                                            </div>
-                                            <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
-                                                <div>
-                                                    ". action_button(array(
-                                                        array(
-                                                            'title' => $langePortfolioRemoveResource,
-                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                            'icon' => 'fa-times',
-                                                            'class' => 'delete',
-                                                            'confirm' => $langePortfolioSureToRemoveResource,
-                                                            'show' => ($post->user_id == $uid)
-                                                        )))."
-                                                </div>
-                                            </div>
+                $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-3 h-100'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        
+                                           
+                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($data['title'])."</div>
+                                    
+                                        <div>
+                                            ". action_button(array(
+                                                array(
+                                                    'title' => $langePortfolioRemoveResource,
+                                                    'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
+                                                    'icon' => 'fa-times',
+                                                    'class' => 'delete',
+                                                    'confirm' => $langePortfolioSureToRemoveResource,
+                                                    'show' => ($post->user_id == $uid)
+                                                )))."
                                         </div>
+                                          
+                                       
                                     </div>
-                                    <div class='panel-body'>
-                                        <button class='rounded-pill bg-info ps-2 pe-2 text-white border-0'>" . format_locale_date(strtotime($data['timestamp'])) . "</button><br><br>".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
+                                    <div class='card-body'>
+                                        <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
+                                        ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
-                                    <div class='panel-footer'>
-                                        <div class='row'>
-                                            <div class='col-sm-6'>$post->course_title</div>
-                                        </div>
+                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                       
+                                            <div class='small-text'>$post->course_title</div>
+                                       
                                     </div>
                                 </div>";
+            $tool_content .= "</div>";
             }
-            $tool_content .= "</div>
+            $tool_content .= "
                             </div>
                           </div>";
         }
@@ -521,9 +523,10 @@ if ($userdata) {
         if ($submissions) {
             $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" aria-labelledby="worktab" style="padding-top:20px">';
             //usort($submissions, "cmp");
-            $tool_content .= "<div class='row'>";
-            $tool_content .= "<div class='col-sm-12'>";
-            foreach ($submissions as $submission) {
+            $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
+           
+            foreach ($submissions as $submission) { 
+                $tool_content .= "<div class='col'>";
                 $data = unserialize($submission->data);
                 if (is_null($data['grade'])) {
                     $data['grade'] = '-';
@@ -533,61 +536,61 @@ if ($userdata) {
                 } else {
                     $assignment_type = $m['group_work'];
                 }
-                $submission_header_content = "<div class='panel-title'>".$langTitle.": ".q($data['title'])."</div>";
+                $submission_header_content = "<div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($data['title'])."</div>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>";
-                $submission_content .= "<div><button type='button' class='btn submitAdminBtn' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
+                $submission_content .= "<div><button type='button' class='btn submitAdminBtn mb-3 btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
                                        <div id='header_more_$submission->id' class='collapse panel-body'>";
                 if (!empty($data['descr'])) {
-                    $submission_content .= "<div><b class='control-label-notes pt-3 pb-3'>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
+                    $submission_content .= "<div class='mb-3'><b class='control-label-notes pt-3 pb-3'>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
                 }
-                $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
+                $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
-                $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langSubmit</b>: " . format_locale_date(strtotime($data['subm_date'])) . "</div>
-                                       <div><b class='control-label-notes pt-3 pb-3 fs-6'>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
-                                       <div><b class='control-label-notes pt-3 pb-3 fs-6'>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
+                $submission_content .= "<div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>$langSubmit</b>: " . format_locale_date(strtotime($data['subm_date'])) . "</div>
+                                       <div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
+                                       <div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
 
                 if (!is_null($data['subm_text'])) {
-                    $submission_content .= "<div><b class='control-label-notes pt-3 pb-3 fs-6'>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
+                    $submission_content .= "<div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
                 } else {
-                   $submission_content .= "<div><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
+                   $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
-                $submission_footer = "<div class='panel-footer'>
-                                          <div class='row'>
-                                              <div class='col-sm-6'>$submission->course_title</div>
-                                          </div>
+                $submission_footer = "<div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                                         
+                                              <div class='small-text'>$submission->course_title</div>
+                                          
                                       </div>";
-                $tool_content .= "<div class='panel panel-action-btn-default mt-3'>
-                                    <div class='panel-heading pt-1 pb-1 d-flex justify-content-center align-items-center'>
-                                        <div class='row w-100'>
-                                           <div class='col-9 d-flex justify-content-start align-items-center ps-0'>
-                                                $submission_header_content
-                                           </div>
-                                           <div class='col-3 d-flex justify-content-end align-items-center pe-0'>
-                                              <div>
-                                                ". action_button(array(
-                                                    array(
-                                                            'title' => $langePortfolioRemoveResource,
-                                                            'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
-                                                            'icon' => 'fa-times',
-                                                            'class' => 'delete',
-                                                            'confirm' => $langePortfolioSureToRemoveResource,
-                                                            'show' => ($submission->user_id == $uid)
-                                                    )))."
-                                              </div>
-                                           </div>
-                                        </div>
+                $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        
+                                           
+                                            $submission_header_content
+                                           
+                                           
+                                            <div>
+                                            ". action_button(array(
+                                                array(
+                                                        'title' => $langePortfolioRemoveResource,
+                                                        'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
+                                                        'icon' => 'fa-times',
+                                                        'class' => 'delete',
+                                                        'confirm' => $langePortfolioSureToRemoveResource,
+                                                        'show' => ($submission->user_id == $uid)
+                                                )))."
+                                            </div>
+                                           
+                                        
                                     </div>
-                                    <div class='panel-body'>
+                                    <div class='card-body'>
                                     $submission_content    
                                     </div>
                                     $submission_footer
                                 </div>";
+                $tool_content .= "</div>";
             }
             $tool_content .= "</div>
-                            </div>
-                          </div>";
+                            </div>";
         }
 
         //show mydocs collection
@@ -648,7 +651,7 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 1) {
-            $social_share = "<div class='col-sm-12 mt-3'><div class='shadow-sm p-3 rounded float-end bg-light'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
+            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end bg-light'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
         } else {
             $social_share = '';
         }
