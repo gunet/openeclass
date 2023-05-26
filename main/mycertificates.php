@@ -61,8 +61,9 @@ if (count($courses) > 0) {
                             "</td></tr>";
         }
     }
-        
     
+    $counter_game_certificate = 0;
+    $counter_game_badge = 0;
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
         $code = $course1->code;
@@ -96,6 +97,7 @@ if (count($courses) > 0) {
         // get incomplete certificates
         $cert_content = '';
         if (count($game_certificate) > 0) {
+            $counter_game_certificate++;
             foreach ($game_certificate as $key => $certificate) {
                 $cert_content = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) . "%";                
                 $invisible = 'not_visible';
@@ -111,6 +113,7 @@ if (count($courses) > 0) {
                 
         // get badges
         if (count($game_badge) > 0) {
+            $counter_game_badge++;
             foreach ($game_badge as $key => $badge) {
                 $cert_content = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
                 $icon_content = '';
@@ -125,6 +128,9 @@ if (count($courses) > 0) {
                             "</td></tr>";
             }
         }
+    }
+    if (count($sql) == 0 && $counter_game_certificate == 0 && $counter_game_badge == 0){
+        $table_content .= "<tr><td>$langNoInfoAvailable</td><td></td></tr>";
     }
     $table_content .= "</table></div>";
     if (!$table_content) {

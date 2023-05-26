@@ -274,7 +274,11 @@
                                         </div>
                                     </div>
                                     <div class="panel-body">
+                                        @if(count($cert_completed) == 1)
+                                        <div class='row row-cols-1 row-cols-md-1 g-4'>
+                                        @else
                                         <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                        @endif
                                             @foreach ($cert_completed as $key => $certificate)
                                                 <div class='col'>
                                                     <div class="card h-100 border-0">
@@ -316,7 +320,11 @@
                                         </div>
                                     </div>
                                     <div class="panel-body">
+                                        @if(count($badge_completed) == 1)
+                                        <div class='row row-cols-1 row-cols-md-1 g-4'>
+                                        @else
                                         <div class='row row-cols-1 row-cols-md-2 g-4'>
+                                        @endif
                                             @foreach ($badge_completed as $key => $badge)
                                                 <div class='col'>
                                                     <div class="card h-100 border-0">
