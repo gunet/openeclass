@@ -45,33 +45,33 @@
 
 
                                 @if ($is_admin)
-                                    <div class='col-lg-6 col-12 mt-3'>
-                                        <div class='row'>
+                                    <div class='col-12 mt-4'>
+                                        <div class='row row-cols-1 row-cols-lg-2 g-4'>
 
-                                            <div class='col-12'>
-                                                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white'>
+                                            <div class='col'>
+                                                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
                                                     <div class='card-header border-0 bg-white'>
                                                         <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langPlatformIdentity') }}</span>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <strong class='control-label-notes'>{{ trans('langWebServerVersion') }}</strong>
                                                             </div>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <em>{{ $_SERVER['SERVER_SOFTWARE'] }}</em>
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <strong class='control-label-notes'>{{ trans('langPHPVersion') }}</strong>
                                                             </div>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <em>{{ PHP_VERSION }}</em>
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <strong class='control-label-notes'>{{ trans('langMySqlVersion') }}</strong>
                                                             </div>
                                                             <div class='col-6'>
@@ -79,47 +79,48 @@
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <strong class='control-label-notes'>{{ trans('langVersion') }}:</strong>
                                                             </div>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 <em>{{ $siteName }} {{ ECLASS_VERSION }}</em>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class='col-12 mt-3'>
-                                                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white'>
+
+                                            <div class='col'>
+                                                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
                                                     <div class='card-header border-0 bg-white'>
                                                         <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langIndexInfo') }}</span>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-6'>
-                                                            <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>
+                                                            <div class='col-lg-6 col-12'>
+                                                                <strong class='control-label-notes'>{{ trans('langIndexNumDocs') }}:</strong>
                                                             </div>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 {{ $numDocs }}
                                                             </div>
                                                         </div>
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-6'>
-                                                            <strong class='control-label-notes'>{{ trans('langIndexIsOptimized') }}</strong>
+                                                            <div class='col-lg-6 col-12'>
+                                                                <strong class='control-label-notes'>{{ trans('langIndexIsOptimized') }}</strong>
                                                             </div>
-                                                            <div class='col-6'>
+                                                            <div class='col-lg-6 col-12'>
                                                                 {{ $isOpt }}
                                                             </div>
                                                         </div>
                                                         @if ($idxHasDeletions)
                                                             <div class='row p-2 margin-bottom-thin'>
-                                                                <div class='col-9 col-offset-3'>
+                                                                <div class='12'>
                                                                     <a href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
                                                                 </div>
                                                             </div>
                                                         @endif
                                                         <div class='row p-2 margin-bottom-thin'>
-                                                            <div class='col-9 col-offset-3'>
+                                                            <div class='12'>
                                                                 <a id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
                                                             </div>
                                                         </div>
@@ -133,128 +134,133 @@
 
                                 @endif
 
-                                <div class='col-12'>
-                                    <div class='col-12 d-flex justify-content-start border-primary border-bottom mt-5'>
-                                        <a class="d-flex justify-content-center align-items-center" data-bs-toggle="collapse" href="#collapseMoreInfoAdmin" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                            <span class='text-uppercase'>{{trans('langMore')}}</span>
-                                            <span class='fa fa-arrow-down'></span>
-                                        </a>
-                                    </div>
-                                </div>
+                               
 
-                                <div class="collapse" id="collapseMoreInfoAdmin">
-                                    <div class='col-12 mt-5'>
+                               
+                                <div class='col-12 mt-5'>
+                                    <p class='text-center text-uppercase TextBold fs-4 normalColorBlueText'>{{ trans('langOnlineUsers') }} :{{ getOnlineUsers() }}</p>
+                                    @php 
+                                        $colSize = '';
+                                        if (count($cronParams) > 0){
+                                            $colSize = '2';
+                                        }else{
+                                            $colSize = '1';
+                                        }
+                                    @endphp
+                                    <div class="row row-cols-1 row-cols-lg-{{ $colSize }} g-4">
+                                        
 
-
-                                        <p class='text-center text-uppercase TextBold fs-5'>{{ trans('langOnlineUsers') }} :{{ getOnlineUsers() }}</p>
-
-
-                                        <div class='panel panel-admin px-lg-4 py-lg-3 mt-3'>
-                                            <div class='panel-heading bg-body'>
-                                                <div class='col-12 Help-panel-heading'>
-                                                    <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langInfoAdmin') }}</span>
-                                                </div>
-                                            </div>
-                                            <div class='panel-body'>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-md-5 col-12'>
-                                                        <strong class='control-label-notes'>{{ trans('langOpenRequests') }}:</strong>
-                                                    </div>
-                                                    <div class='col-md-7 col-12'>
-                                                        @if ($count_prof_requests)
-                                                            {{ trans('langThereAre') }} {{ $count_prof_requests }} {{ trans('langOpenRequests') }}
-                                                        @else
-                                                            {{ trans('langNoOpenRequests') }}
-                                                        @endif
+                                        <div class='col'>
+                                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                       {{ trans('langInfoAdmin') }}
                                                     </div>
                                                 </div>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-md-5 col-12'>
-                                                        <strong class='control-label-notes'>{{ trans('langLastLesson') }}</strong>
+                                                <div class='card-body'>
+                                                    <div class='row p-2 margin-bottom-thin'>
+                                                        <div class='col-12'>
+                                                            <strong class='control-label-notes'>{{ trans('langOpenRequests') }}:</strong>
+                                                        </div>
+                                                        <div class='col-12'>
+                                                            @if ($count_prof_requests)
+                                                                {{ trans('langThereAre') }} {{ $count_prof_requests }} {{ trans('langOpenRequests') }}
+                                                            @else
+                                                                {{ trans('langNoOpenRequests') }}
+                                                            @endif
+                                                        </div>
                                                     </div>
-                                                    <div class='col-md-7 col-12'>
-                                                        @if ($lastCreatedCourse)
-                                                            <b>{{ $lastCreatedCourse->title }}</b>
-                                                            ({{ $lastCreatedCourse->code }}, {{ $lastCreatedCourse->prof_names }})
-                                                        @else
-                                                            {{ trans('langNoCourses') }}
-                                                        @endif
+                                                    <div class='row p-2 margin-bottom-thin'>
+                                                        <div class='col-12'>
+                                                            <strong class='control-label-notes'>{{ trans('langLastLesson') }}</strong>
+                                                        </div>
+                                                        <div class='col-12'>
+                                                            @if ($lastCreatedCourse)
+                                                                <b>{{ $lastCreatedCourse->title }}</b>
+                                                                ({{ $lastCreatedCourse->code }}, {{ $lastCreatedCourse->prof_names }})
+                                                            @else
+                                                                {{ trans('langNoCourses') }}
+                                                            @endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-md-5 col-12'>
-                                                        <strong class='control-label-notes'>{{ trans('langLastProf') }}</strong>
+                                                    <div class='row p-2 margin-bottom-thin'>
+                                                        <div class='col-12'>
+                                                            <strong class='control-label-notes'>{{ trans('langLastProf') }}</strong>
+                                                        </div>
+                                                        <div class='col-12'>
+                                                            <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
+                                                            ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
+                                                        </div>
                                                     </div>
-                                                    <div class='col-md-7 col-12'>
-                                                        <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
-                                                        ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
+                                                    <div class='row p-2 margin-bottom-thin'>
+                                                        <div class='col-12'>
+                                                            <strong class='control-label-notes'>{{ trans('langLastStud') }}</strong>
+                                                        </div>
+                                                        <div class='col-12'>
+                                                            @if ($lastStudReg)
+                                                                <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
+                                                                ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
+                                                            @else
+                                                                {{ trans('langLastStudNone') }}
+                                                            @endif
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-md-5 col-12'>
-                                                        <strong class='control-label-notes'>{{ trans('langLastStud') }}</strong>
-                                                    </div>
-                                                    <div class='col-md-7 col-12'>
-                                                        @if ($lastStudReg)
-                                                            <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
-                                                            ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
-                                                        @else
-                                                            {{ trans('langLastStudNone') }}
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-md-5 col-12'>
-                                                        <strong class='control-label-notes'>{{ trans('langAfterLastLoginInfo') }}</strong>
-                                                    </div>
-                                                    <div class='col-md-7 col-12'>
-                                                    {{ trans('langAfterLastLogin') }}
-                                                        <ul class='custom_list'>
-                                                        <li>
-                                                            <b>{{ $lastregisteredprofs }}</b>
-                                                            {{ trans('langTeachers') }}
-                                                        </li>
-                                                        <li>
-                                                            <b>{{ $lastregisteredstuds }}</b>
-                                                            {{ trans('langStudents') }}
-                                                        </li>
-                                                        </ul>
+                                                    <div class='row p-2 margin-bottom-thin'>
+                                                        <div class='col-12'>
+                                                            <strong class='control-label-notes'>{{ trans('langAfterLastLoginInfo') }}</strong>
+                                                        </div>
+                                                        <div class='col-12'>
+                                                            {{ trans('langAfterLastLogin') }}
+                                                            <ul class='custom_list'>
+                                                            <li>
+                                                                <b>{{ $lastregisteredprofs }}</b>
+                                                                {{ trans('langTeachers') }}
+                                                            </li>
+                                                            <li>
+                                                                <b>{{ $lastregisteredstuds }}</b>
+                                                                {{ trans('langStudents') }}
+                                                            </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         @if (count($cronParams) > 0)
-                                        <div class='panel panel-admin px-lg-4 py-lg-3 mt-3'>
+                                            <div class='col'>
+                                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
 
-                                            <div class='panel-heading bg-body'>
-                                                <div class='col-12 Help-panel-heading'>
-                                                    <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCronInfo') }}</span>
-                                                </div>
-                                            </div>
-                                            <div class='panel-body panel-body-admin'>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-md-5 col-12'>
-                                                    <strong class='control-label-notes'>{{ trans('langCronName') }}</strong>
+                                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                            {{ trans('langCronInfo') }}
+                                                        </div>
                                                     </div>
-                                                    <div class='col-md-7 col-12'>
-                                                        {{ trans('langCronLastRun') }}
-                                                        <div class='row p-2'>
-                                                            @foreach ($cronParams as $cronParam)
-                                                                <div class='col-6'>{{ $cronParam->name }}</div>
-                                                                <div class='col-6'>{{ $cronParam->last_run }}</div>
-                                                            @endforeach
+                                                    <div class='card-body'>
+                                                        <div class='row p-2 margin-bottom-thin'>
+                                                            <div class='col-12'>
+                                                                <strong class='control-label-notes'>{{ trans('langCronName') }}</strong>
+                                                            </div>
+                                                            <div class='col-12'>
+                                                                {{ trans('langCronLastRun') }}
+                                                                <div class='row p-2'>
+                                                                    @foreach ($cronParams as $cronParam)
+                                                                        <div class='col-lg-6 col-12'>{{ $cronParam->name }}</div>
+                                                                        <div class='col-lg-6 col-12'>{{ $cronParam->last_run }}</div>
+                                                                    @endforeach
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         @endif
                                     </div>
                                 </div>
-                    </div>
+                                
+                        </div>
+                </div>
             </div>
         </div>
-    </div>
 </div>
 @endsection

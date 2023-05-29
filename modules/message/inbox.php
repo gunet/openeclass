@@ -81,96 +81,110 @@ if (isset($_GET['mid'])) {
             }
         }
         $out .= "
-        <div id='del_msg'></div>
+                <div id='del_msg'></div>
                 <div id='msg_area'>
-                    <div class='panel panel-primary'>
-                        <div class='panel-heading'>$langMessage</div>
-                        <div class='panel-body'>
-                            <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong class='control-label-notes'>$langSubject:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    ".q($msg->subject)."
-                                </div>
-                            </div>";
-        if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "       
-              <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong class='control-label-notes'>$langCourse:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
-                                </div>
-                            </div>";
-        }
-        $out .= "
-                            <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong class='control-label-notes'>$langDate:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    ". format_locale_date($msg->timestamp, 'short') ."
+                        <div class='row row-cols-1 row-cols-lg-2 g-4'>
+                            <div class='col'>
+                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langMessageInfo</div>
+                                    </div>
+                                    <div class='card-body'>
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-12'>
+                                                <strong class='control-label-notes'>$langSubject:</strong>
+                                            </div>
+                                            <div class='col-12'>
+                                                ".q($msg->subject)."
+                                            </div>
+                                        </div>";
+                                    if ($msg->course_id != 0 && $course_id == 0) {
+                                        $out .= "       
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-12'>
+                                                <strong class='control-label-notes'>$langCourse:</strong>
+                                            </div>
+                                            <div class='col-12'>
+                                                <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                                            </div>
+                                        </div>";
+                                    }
+                                    $out .= "
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-12'>
+                                                <strong class='control-label-notes'>$langDate:</strong>
+                                            </div>
+                                            <div class='col-12'>
+                                                ". format_locale_date($msg->timestamp, 'short') ."
+                                            </div>
+                                        </div>
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-12'>
+                                                <strong class='control-label-notes'>$langSender:</strong>
+                                            </div>
+                                            <div class='col-12'>
+                                                ".display_user($msg->author_id, false, false, "outtabs")."
+                                            </div>
+                                        </div>
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-12'>
+                                                <strong class='control-label-notes'>$langRecipients:</strong>
+                                            </div>
+                                            <div class='col-12'>
+                                                $recipients
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
                             </div>
-                            <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong class='control-label-notes'>$langSender:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    ".display_user($msg->author_id, false, false, "outtabs")."
+
+                            <div class='col'>
+                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langMessageContent</div>
+                                    </div>
+                                    <div class='card-body'>
+                                        <div class='row p-2 margin-bottom-thin'>
+                                            <div class='col-12'>
+                                                ".standard_text_escape($msg->body)."
+                                            </div>
+                                        </div>";
+                                        if ($msg->filename != '' && $msg->filesize != 0) {
+                                            $out .= "<hr>
+                                                    <div class='row p-2 margin-top-thin'>
+                                                        <div class='col-12'>
+                                                            $langAttachedFile
+                                                        </div>
+                                                        <div class='col-12'>
+                                                        <a href='message_download.php?course=" .
+                                                            course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank'>" .
+                                                            q($msg->real_filename) . "
+                                                        </a>
+                                                        &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
+                                                            format_file_size($msg->filesize). ")
+                                                        </div>
+                                                    </div>";
+                    }
+                            $out .= "</div>
                                 </div>
                             </div>
-                            <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-sm-2'>
-                                    <strong class='control-label-notes'>$langRecipients:</strong>
-                                </div>
-                                <div class='col-sm-10'>
-                                    $recipients
-                                </div>
-                            </div>
-                            <div class='row p-2'></div>
-                        </div>
-                    </div>
-                    <div class='col-sm-12 mt-3 mb-3'>
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>$langMessage</div>
-                        <div class='panel-body'>
-                            <div class='row p-2 margin-bottom-thin'>
-                                <div class='col-12'>
-                                    ".standard_text_escape($msg->body)."
-                                </div>
-                            </div>";
-                if ($msg->filename != '' && $msg->filesize != 0) {
-                   $out .= "<hr>
-                            <div class='row p-2 margin-top-thin'>
-                                <div class='col-sm-2'>
-                                    $langAttachedFile
-                                </div>
-                                <div class='col-sm-10'>
-                                  <a href='message_download.php?course=" .
-                                     course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank'>" .
-                                     q($msg->real_filename) . "</a>&nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
-                                     format_file_size($msg->filesize). ")
-                                </div>
-                            </div>";
-               }
-               $out .= "</div>
-                    </div></div>";
+                    
+                    
+                        </div>";
 
         /*****Reply Form****/
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
         } else {
             if($course_id == 0){
-                $out .= "<div class='row'>
+                $out .= "<div class='row mt-4'>
                         <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
                             <div class='col-12 h-100 left-form'></div>
                         </div>
                         <div class='col-lg-6 col-12'>";
             }else{
-                $out .= "<div class='col-12'>";
+                $out .= "<div class='col-12 mt-4'>";
             }
             $out .= "<div class='form-wrapper form-edit rounded' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
@@ -292,7 +306,7 @@ if (isset($_GET['mid'])) {
                         </div>
                         <div class='col-lg-6 col-12'>";
             }else{
-                $out .= "<div class='col-12'>";
+                $out .= "<div class='col-12 mt-4'>";
             }
             $out .= "<div class='form-wrapper form-edit rounded' id='forwardBox' style='display:none;'>";
             if ($course_id == 0) {

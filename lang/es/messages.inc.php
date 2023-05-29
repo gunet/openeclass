@@ -5611,3 +5611,5 @@ $langTypeOutMessage = "Escribe tu mensaje...";
 $langDateHasExpire = "La fecha ha pasado. Intentar otra vez.";
 $langCalculateNewDuration = "Cálculo de nueva duración";
 $langChooseDayAgain = "No se pueden elegir días diferentes. Intentar otra vez.";
+$langMessageInfo = "Información del mensaje";
+$langMessageContent = "Contenido del mensaje";

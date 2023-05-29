@@ -5,12 +5,12 @@
 <!------------------------------------------------------------------------------------------------>
 
 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
-    <div class='col-12 mb-3'>
-        <div class='panel panel-info'>
-            <div class='panel-heading text-center'>
-                {{ trans('langNewEclassVersion') }}
+    <div class='col-12 mb-4'>
+        <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langNewEclassVersion') }}</div>
             </div>
-            <div class='panel-body'>
+            <div class='card-body'>
                 {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
                             "<a href='https://www.openeclass.org/' target='_blank'>www.openeclass.org</a>") !!}
             </div>
@@ -83,92 +83,103 @@
     </div>
 </div>
 
-@php $countNewPanel = 0; @endphp
-@foreach ($toolArr as $key => $tool_group)
-<div class='@if(count($toolArr) == 1) and ($is_power_user) col-lg-12 col-12 mt-3 @else col-lg-6 col-12 mt-3 @endif'>
-    
-    @if($countNewPanel == 2)
-    <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white mb-3'>
-        <div class='card-header border-0 bg-white'>
-            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langAdministratorTools')}}</span>
-        </div>
-        <div class='card-body'>
-            <ul>
-                @if ($is_power_user or $is_departmentmanage_user)
-                    @if ($is_admin)
-                        <li class="p-1">
-                            <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
-                                <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
-                            </a>
-                        </li>
-                    @endif
-                    @if (isset($is_admin) and $is_admin)
-                        <li class="p-1">
-                            <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
-                            </a>
-                        </li>
-                        @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
-                        <li class="p-1">
-                            <a class='fs-6 TextSemiBold link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
-                                <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
-                            </a>
-                        </li>
-                    @endif
-                @endif
-            </ul>
-        </div>
-    </div>
-    @endif
 
-    <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white m-auto'>
-        <div class='card-header border-0 bg-white'>
-             <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ $tool_group[0]['text'] }}</span>
-        </div>
-        <div class='card-body'>
-            <ul>
-                @foreach ($tool_group[1] as $key2 => $tool)
-                    <li class="p-1">
-                        <a href="{!! $tool_group[2][$key2] !!}" class='link_admin_tool fs-6 TextSemiBold {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                            <span class='msmall-text toolAdminText'>{!! $tool !!}</span>  
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
-
-    @if($countNewPanel == 1)
-        @if($is_power_user or $is_departmentmanage_user)
-            @if($is_admin)
-                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white mt-3'>
+@php 
+    $col_size = '';
+    if($is_admin){
+        $col_size = '3';
+    }
+    else if($is_power_user or $is_departmentmanage_user){
+        $col_size = '2';
+    }else if($is_usermanage_user){
+        $col_size = '1';
+    }
+@endphp
+<div class='col-12 mt-4'>
+    <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-4">
+        @foreach ($toolArr as $key => $tool_group)
+            <div class='col'>
+                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white m-auto h-100'>
                     <div class='card-header border-0 bg-white'>
-                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langFaculties')}}</span>
+                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ $tool_group[0]['text'] }}</span>
                     </div>
                     <div class='card-body'>
                         <ul>
-                            <li class="p-1">
-                                <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='fs-6 TextSemiBold link_admin_tool'>
-                                    <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>     
-                                </a>
-                            </li>
-                            <li class="p-1">
-                                <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='fs-6 TextSemiBold link_admin_tool'>
-                                    <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>   
-                                </a>
-                            </li>
+                            @foreach ($tool_group[1] as $key2 => $tool)
+                                <li class="p-1">
+                                    <a href="{!! $tool_group[2][$key2] !!}" class='link_admin_tool fs-6 TextSemiBold {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                                        <span class='msmall-text toolAdminText'>{!! $tool !!}</span>  
+                                    </a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>
-            @endif
-        @endif
-    @endif
-
+            </div>
+        @endforeach
+    </div>
 </div>
 
-@php $countNewPanel++; @endphp
-@endforeach
-
+@if($is_admin)
+    <div class='col-12 mt-4'>
+        <div class="row row-cols-1 row-cols-lg-2 g-4">
+            <div class='col'>
+                <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
+                    <div class='card-header border-0 bg-white'>
+                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langAdministratorTools')}}</span>
+                    </div>
+                    <div class='card-body'>
+                        <ul>
+                            @if ($is_admin)
+                                <li class="p-1">
+                                    <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
+                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
+                                    </a>
+                                </li>
+                            @endif
+                            @if (isset($is_admin) and $is_admin)
+                                <li class="p-1">
+                                    <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
+                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
+                                    </a>
+                                </li>
+                                @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
+                                <li class="p-1">
+                                    <a class='fs-6 TextSemiBold link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
+                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class='col'>
+                @if($is_admin)
+                    <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
+                        <div class='card-header border-0 bg-white'>
+                            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langFaculties')}}</span>
+                        </div>
+                        <div class='card-body'>
+                            <ul>
+                                <li class="p-1">
+                                    <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='fs-6 TextSemiBold link_admin_tool'>
+                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>     
+                                    </a>
+                                </li>
+                                <li class="p-1">
+                                    <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='fs-6 TextSemiBold link_admin_tool'>
+                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>   
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+@endif
 
 
 

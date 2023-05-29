@@ -5643,3 +5643,5 @@ $langTypeOutMessage = "Write your message...";
 $langDateHasExpire = "The date has passed. Try again.";
 $langCalculateNewDuration = "Calculation of new duration";
 $langChooseDayAgain = "You cannot choose different days. Try again.";
+$langMessageInfo = "Message informations";
+$langMessageContent = "Message content";

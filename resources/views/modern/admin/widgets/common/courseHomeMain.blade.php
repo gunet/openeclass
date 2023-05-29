@@ -7,7 +7,7 @@
     <div class="panel-body Borders" id="course_home_widget_main" data-widget-area-id="5">
         @foreach ($course_home_main_area_widgets as $key => $course_home_main_area_widget)
         <div class="panel{{!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget ? ' panel-success widget' : ' panel-default'}} mt-3" data-widget-id="{{ $course_home_main_area_widget->id }}" data-widget-widget-area-id="{{ $key }}">
-            <div class="panel-heading">
+            <div class="panel-heading {{!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget ? ' ' : ' rounded-2'}}">
                 <a data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" href="#widget_desc_{{ $key }}" class="text-white widget_title">
                     {{ $course_home_main_area_widget->getName() }} 
                     <span class='fa fa-arrow-down ms-1'></span>

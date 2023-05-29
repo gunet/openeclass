@@ -124,15 +124,18 @@ $head_content .=
                         // Changed sorting within list
                         onUpdate: function (e) {
                             changePos(e);
+                            window.location.reload();
                         },
                         onRemove: function (e) {
                             // When a widget is moved between widgets areas
                             moveWidget(e);
+                            window.location.reload();
                         },
                         onAdd: function (e) {
                             // When a widget is added to a widget area
                             // from the widgets list
                             addWidget(e);
+                            window.location.reload();
                         }
                     });
                 });

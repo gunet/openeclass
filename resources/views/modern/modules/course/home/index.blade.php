@@ -391,7 +391,9 @@
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
                                 <div class='col-12 d-flex justify-content-center mb-3'>
-                                    <a class='btn submitAdminBtn w-100 mt-0 mb-0' href="{{ $urlServer }}modules/course_info/activity_edit.php?course{{$course_code}}"><span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}</a>
+                                    <a class='btn submitAdminBtn bgTheme text-white w-100 mt-0 mb-2' href="{{ $urlServer }}modules/course_info/activity_edit.php?course{{$course_code}}" style='border-radius:15px !important;'>
+                                        <span class='fa fa-edit me-2'></span>{{trans('langActivityEdit')}}
+                                    </a>
                                 </div>
                             @endif
                             <div class='col-12'>
@@ -405,41 +407,47 @@
                                         ORDER BY `order`", $course_id);
                                 @endphp
 
-                                @foreach ($items as $item)
-                                    @if (trim($item->content))
-                                        <div class='card panelCard px-lg-4 py-lg-3 mb-3'>
-                                            <div class='card-header bg-white border-0'>
+                                @if(count($items) > 0)
+                                    <div class="row row-cols-1 row-cols-lg-2 g-4">
+                                        @foreach ($items as $item)
+                                            @if (trim($item->content))
+                                            <div class='col'>
+                                                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                                    <div class='card-header bg-white border-0'>
 
-                                                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>
-                                                        {!! q(getSerializedMessage($item->heading)) !!}
-                                                    </span>
+                                                            <span class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                                {!! q(getSerializedMessage($item->heading)) !!}
+                                                            </span>
 
-                                            </div>
-                                            <div class='card-body'>
-                                                {!! standard_text_escape($item->content) !!}
-
-                                                @php
-                                                    $resources = Database::get()->queryArray("SELECT * FROM unit_resources
-                                                        WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
-                                                @endphp
-
-                                                @if (count($resources))
-                                                    <div class='table-responsive'>
-                                                        <table class='table-default table-striped table-hover'>
-                                                            <tbody>
-                                                                @foreach ($resources as $info)
-                                                                    @php $info->comments = standard_text_escape($info->comments); @endphp
-                                                                    {!! show_resourceWeek($info) !!}
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
                                                     </div>
-                                                @endif
+                                                    <div class='card-body'>
+                                                        {!! standard_text_escape($item->content) !!}
 
+                                                        @php
+                                                            $resources = Database::get()->queryArray("SELECT * FROM unit_resources
+                                                                WHERE unit_id = ?d AND `order` >= 0 $qVisible ORDER BY `order`", $item->id);
+                                                        @endphp
+
+                                                        @if (count($resources))
+                                                            <div class='table-responsive'>
+                                                                <table class='table-default table-striped table-hover'>
+                                                                    <tbody>
+                                                                        @foreach ($resources as $info)
+                                                                            @php $info->comments = standard_text_escape($info->comments); @endphp
+                                                                            {!! show_resourceWeek($info) !!}
+                                                                        @endforeach
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        @endif
+
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endif
-                                @endforeach
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                @endif
                             </div>
                         @endif
 

@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
 
 $boolean_field = "";
 $tool_content .= "
-    <div class='row extapp'><div class='col-xs-12'>
+    <div class='row extapp'><div class='col-12'>
       <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 

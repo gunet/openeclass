@@ -191,14 +191,15 @@ function register_user_presences($attendance_id, $actID) {
         }
         $tool_content .= "</tbody></table>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<div class='col-xs-12'>" .
+        $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center mt-5'>" .
                         form_buttons(array(
                             array(
+                                'class' => 'submitAdminBtn',
                                 'text' => $langAttendanceBooking,
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langAttendanceBooking
                                 ))).
-                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn cancelAdminBtn'>$langCancel</a>";
+                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn cancelAdminBtn ms-2'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field() ."</form></div></div>";
         $tool_content .= "</tbody></table>";

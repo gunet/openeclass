@@ -4144,7 +4144,7 @@ function show_assignment_review($id, $display_graph_results = false) {
                 </table>
             </div>
             <div class='form-group'>
-              <div class='col-xs-12'>
+              <div class='col-12'>
                  <div class='checkbox'>
                    <label>
                      <input type='checkbox' value='1' name='send_email' checked> $m[email_users]

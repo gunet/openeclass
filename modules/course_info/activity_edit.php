@@ -68,14 +68,17 @@ $tool_content .= action_bar(array(
 
 $tool_content .= "
 <form method='post' action='activity_edit.php?course=$course_code'>
-    <div class='col-md-12'>
-        <div class='row'>
-            <div class='col-md-12'>";
+    <div class='col-12'>
+        <div class='row row-cols-1 row-cols-lg-2 g-4'>";
+           
 foreach ($items as $item) {
     $tool_content .= "
-                <div class='panel panel-default clearfix mb-3'>
-                    <div class='panel-heading'>" . q(getSerializedMessage($item->heading)) . "</div>
-                    <div class='panel-body'>" .
+            <div class='col'>
+                <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q(getSerializedMessage($item->heading)) . "</div>
+                    </div>
+                    <div class='card-body'>" .
                         rich_text_editor("content[{$item->heading_id}]", 5, 40, $item->content, true) . "</div>";
     $resources = Database::get()->queryArray("SELECT * FROM unit_resources
             WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $item->id);
@@ -94,10 +97,10 @@ foreach ($items as $item) {
                     </div>";
     }
     $tool_content .= "
-                </div>";
+                </div>
+            </div>";
 }
 $tool_content .= "
-            </div>
         </div>
         <div class='row'>
             <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>

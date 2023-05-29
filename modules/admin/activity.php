@@ -222,23 +222,23 @@ $(function() {
             $heading = q($heading);
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
-      <div class='panel panel-default mt-3' data-id='$indirectId'>
-        <div class='panel-heading'>
-          <div class='row'>
-            <div class='col-md-6 col-12'>
-                <span class='panel-title'>$heading</span>
+      <div class='card panelCard px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
+        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+          
+           
+            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$heading</div>
+            
+            
+            <div class='d-flex justify-content-end align-items-center'>$type " .
+                icon('fa-edit ps-2 pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
+                <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
+                    <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
+                <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
             </div>
-            <div class='col-md-6 col-12'>
-                <div class='d-flex justify-content-end align-items-center'>$type " .
-                    icon('fa-edit pe-2', $langEdit, 'activity.php?edit=' . $indirectId) . "
-                    <a class='confirm-delete pe-2' href='activity.php?delete=$indirectId' title='$langDelete' data-bs-toggle='tooltip'>
-                        <span class='fa fa-times delete_btn text-danger'></span><span class='sr-only'>$langDelete</span></a>
-                    <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
-                </div>
-            </div>
-          </div>
+           
+          
         </div>
-        <div class='panel-body'>";
+        <div class='card-body'>";
             foreach ($headings as $lang => $msg) {
                 $tool_content .= "
           <div class='row'>
