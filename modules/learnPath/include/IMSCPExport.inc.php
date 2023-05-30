@@ -250,7 +250,7 @@ if (!class_exists('IMSCPExport')) {
     <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
     <meta http-equiv="expires" content="Tue, 05 DEC 2000 07:00:00 GMT">
     <meta http-equiv="Pragma" content="no-cache">
-    <link rel="stylesheet" type="text/css" href="bootstrap-custom.css" />
+    <link rel="stylesheet" type="text/css" href="default.css" />
     <link rel="stylesheet" type="text/css" href="' . $claro_stylesheet . '" media="screen, projection, tv" />
     <script language="javascript" type="text/javascript" src="APIWrapper.js"></script>
     <script language="javascript" type="text/javascript" src="scores.js"></script>

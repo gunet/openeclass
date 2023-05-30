@@ -208,7 +208,7 @@ echo "<!DOCTYPE HTML>
     <!-- DataTables and Checkitor js-->
     <script src='{$urlAppend}js/jquery.dataTables.min.js'></script>
 
-    <!-- Latest compiled and minified CSS -->
+    <!-- Latest compiled and minified css -->
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".ECLASS_VERSION."'>
 
     <!-- Font Awesome - A font of icons -->

@@ -21,15 +21,12 @@
 
 /* ===========================================================================
   showCourseDescription.php
-  @last update: 30-06-2006 by Thanos Kyritsis
+  @last update: 30-06-2023 by Thanos Kyritsis
   @authors list: Thanos Kyritsis <atkyritsis@upnet.gr>
   ==============================================================================
   @Description: This script displays the Course Description when
   the user is navigating in a learning path.
 
-  @Comments:
-
-  @todo:
   ==============================================================================
  */
 
@@ -42,24 +39,23 @@ $pageName = $langCourseProgram;
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
-        <link href="../../../template/<?php echo $theme ?>/CSS/lp.css" rel="stylesheet" type="text/css" />
+        <link href="../../../template/modern/css/default.css" rel="stylesheet" type="text/css" />
+        <link href="../../../template/modern/css/lp.css" rel="stylesheet" type="text/css" />
         <title><?php echo $langCourseProgram ?></title>
     </head>
     <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
         <div id="content" style="width:800px; margin: 0 auto;">
-
-            <?php
+        <?php
             $q = Database::get()->queryArray("SELECT id, title, comments FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);
 
             if ($q && count($q) > 0) {
                 foreach ($q as $row) {
                     echo "
-			<table class='table-default'>
-			<tr>
-			<td><strong>" . q($row->title) . "</strong></td>\n
-			</tr>
-			<tr>";
-
+                    <table class='table-default'>
+                    <tr>
+                    <td><strong>" . q($row->title) . "</strong></td>\n
+                    </tr>
+                    <tr>";
                     if ($is_editor) {
                         echo "\n<td colspan='6'>" . standard_text_escape($row->comments) . "</td>";
                     } else {
@@ -70,5 +66,7 @@ $pageName = $langCourseProgram;
             } else {
                 echo "   <div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</div>";
             }
-            ?></div></body></html>
-
+        ?>
+        </div>
+    </body>
+</html>

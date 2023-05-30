@@ -30,9 +30,9 @@ require_once '../../../include/init.php';
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
         <title>-</title>
-        <link href="../../../template/<?php echo $theme ?>/CSS/lp.css" rel="stylesheet" type="text/css" />
+        <link href="../../../template/modern/css/lp.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="../../../template/modern/css/bootstrap.min.css">
-        <script src="../../../js/bootstrap.bundle.min.js"></script>                
+        <script src="../../../js/bootstrap.bundle.min.js"></script>
     </head>
     <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
         <div id="content" style="width:800px; margin: 0 auto;">
@@ -40,7 +40,7 @@ require_once '../../../include/init.php';
             <?php
             if ($_GET['op'] == 'cancel') {
                 echo "<div class='alert alert-warning'>$langExerciseCancelled</div>";
-            } elseif ($_GET['op'] == 'finish') { // exercise done                                            
+            } elseif ($_GET['op'] == 'finish') { // exercise done
                 echo "<div class='alert alert-success'>$langExerciseDone</div>";
             }
             ?>

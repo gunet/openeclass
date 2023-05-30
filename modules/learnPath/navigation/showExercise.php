@@ -219,9 +219,9 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <html>
  <head>
      <meta http-equiv='Content-Type' content='text/html' charset='" . $charset . "'>
+     <link href='{$urlAppend}template/$theme/css/default.css' rel='stylesheet'>
      <script type='text/javascript' src='{$urlAppend}js/jquery3-6-0.min.js'></script>
-     <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>
-     <link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>
+     <link href='{$urlAppend}template/$theme/css/all.css' rel='stylesheet'>
      <title>$langExercice</title>" . $head_content ."
  </head>
  <body style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;'>
