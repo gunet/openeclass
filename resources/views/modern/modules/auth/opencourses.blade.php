@@ -64,7 +64,7 @@
 
                     <div class='col-12 mt-4'>
                         <ul class='list-group smallRadius'>
-                            <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='orangeText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
+                            <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='normalBlueText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
                             {!! $childHTML !!}
                         </ul>
                     </div>

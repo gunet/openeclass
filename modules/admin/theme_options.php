@@ -413,15 +413,16 @@ if (isset($_POST['optionsSave'])) {
         ),false);
     if (isset($preview_theme)) {
         $tool_content .= "
-                <div class='alert alert-warning'>
-                    <div class='row'>
-                        <div class='col-sm-9'>
+                <div class='alert alert-warning d-flex justify-content-between align-items-center'>
+                    
+                        <div>
                             $langPreviewState &nbsp;".$themes_arr[$preview_theme].".
                         </div>
-                        <div class='col-sm-3'>
-                            <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-sm'>$langLogout</a>
+                        <div class='d-lg-flex'>
+                            <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a> 
+                            <a href='theme_options.php?reset_theme_options=true' class='btn cancelAdminBtn ms-lg-2 mt-lg-0 mt-2'>$langLogout</a>
                         </div>
-                    </div>
+                    
                 </div>
                 ";
     }
@@ -466,7 +467,7 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
         <div class='form-wrapper form-edit rounded'>
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-4'>$langLayoutConfig</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-4'>$langLayoutConfig</legend>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langLayout:</label>
                 <div class='form-inline col-sm-12'>
@@ -500,7 +501,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langLogoConfig</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langLogoConfig</legend>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
@@ -516,7 +517,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langBgColorConfig</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langBgColorConfig</legend>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
@@ -550,7 +551,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langLinksCongiguration</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langLinksCongiguration</legend>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
@@ -564,7 +565,7 @@ $tool_content .= "
             <hr>
 
 
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langLoginConfiguration</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langLoginConfiguration</legend>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                     <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient:</label>
                     <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
@@ -608,7 +609,7 @@ $tool_content .= "
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
         <div class='form-wrapper form-edit rounded'>
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-4'>$langBgColorConfig</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-4'>$langBgColorConfig</legend>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
               <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
@@ -617,7 +618,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langMainMenuConfiguration</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langMainMenuConfiguration</legend>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuBgColor' class='control-label-notes me-2 mb-2'>$langMainMenuBgColor:</label>
               <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
@@ -638,7 +639,7 @@ $tool_content .= "
             <hr>
 
 
-            <legend class='theme_options_legend control-label-notes text-uppercase fs-5 mt-2'>$langSubMenuConfig</legend>
+            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langSubMenuConfig</legend>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftSubMenuFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColor:</label>
               <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>

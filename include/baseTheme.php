@@ -422,10 +422,6 @@ function view($view_file, $view_data = array()) {
                 input[type='checkbox']{
                     accent-color: $theme_options_styles[leftNavBgColor];
                 }
-                
-                .cal-day-today > .number-day-cal{ 
-                    background-color: $theme_options_styles[leftNavBgColor];
-                }
 
                 .manage-course-li-active{
                     background-color:$theme_options_styles[leftNavBgColor];

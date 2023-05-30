@@ -44,6 +44,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<script type='text/javascript' src='{$urlAppend}js/jquery3-6-0.min.js'></script>
+    <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
     <link href='{$urlAppend}template/$theme/css/lp.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/css/default.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/css/font-awesome-4.7.0/css/font-awesome.min.css' rel='stylesheet'>\n"
@@ -124,7 +125,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     $iplus = $i + 1;
     echo "<br>
         <table class='table-default graded'>
-        <tr class='odd list-header'>
+        <tr class='odd list-header text-white'>
             <td colspan='$colspan'><b><u>$langQuestion</u>: $iplus</b></td>
         </tr>
         <tr>

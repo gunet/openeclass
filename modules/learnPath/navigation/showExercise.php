@@ -219,6 +219,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <html>
  <head>
      <meta http-equiv='Content-Type' content='text/html' charset='" . $charset . "'>
+     <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
      <link href='{$urlAppend}template/$theme/css/default.css' rel='stylesheet'>
      <script type='text/javascript' src='{$urlAppend}js/jquery3-6-0.min.js'></script>
      <link href='{$urlAppend}template/$theme/css/all.css' rel='stylesheet'>
@@ -227,8 +228,8 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <body style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;'>
  <div id='content' style='padding:20px;'>";
 
-echo "<div class='panel panel-primary'>
-    <div class='panel-heading'>
+echo "<div class='panel panel-primary mb-4'>
+    <div class='panel-heading bgTheme'>
         <div class='panel-title'>" . q_math($exerciseTitle) . "</div>
     </div>";
 if (!empty($exerciseDescription_temp)) {
@@ -271,10 +272,11 @@ foreach ($questionList as $questionId) {
     }
 
     // shows the question and its answers
-    echo "<div class='panel panel-success'>
-            <div class='panel-heading'>" . $langQuestion . ": " . $i .
+    echo "<div class='panel panel-default'>
+            <div class='panel-heading bgTheme'>
+                <div class='panel-title'>" . $langQuestion . ": " . $i .
                ($exerciseType == 2 ?  " / $nbrQuestions" : '') .
-            "</div>" .
+            "</div></div>" .
          "<div class='panel-body'>";
     showQuestion($questionId);
     echo "</div></div>";

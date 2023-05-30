@@ -34,27 +34,23 @@
                         {!! $action_bar !!}
                     
                         <div class='col-12'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading'>
-                                    <div class='panel-title'>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                        {!! $announcement->title !!}
                                     </div>
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     {!! $announcement->content !!}
                                 </div>
-                                <div class='panel-footer'>
-                                    <div class='row'>
-                                        <div class='col-6'>
-                                            @if($announcement->code)
-                                            <div class='text-start fw-bold'>
-                                                <a href='{{$urlAppend}}modules/announcements/index.php?course={{$announcement->code}}&an_id={{$announcement->id}}'>{!! $announcement->course_title !!}</a></div>
-                                            @endif
-                                        </div>
-                                        <div class='col-6'>
-                                            <div class='text-center info-date'>{!! $announcement->an_date !!}</div>
-                                        </div>
-                                    </div>
+                                <div class='card-footer d-flex justify-content-between align-items-center small-text bg-white border-0'>
+                                       
+                                    @if($announcement->code)
+                                        <a class='TextBold' href='{{$urlAppend}}modules/announcements/index.php?course={{$announcement->code}}&an_id={{$announcement->id}}'>{!! $announcement->course_title !!}</a>
+                                    @endif
+                                
+                                    <div>{!! $announcement->an_date !!}</div>
+                                        
                                 </div>
                             </div>
                         </div>

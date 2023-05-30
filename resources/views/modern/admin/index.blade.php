@@ -136,9 +136,16 @@
 
                                
 
+                                <div class='col-12 mt-4'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                        <div class='card-body'>
+                                            <p class='text-center text-uppercase TextBold fs-5 normalColorBlueText mb-0'>{{ trans('langOnlineUsers') }} :{{ getOnlineUsers() }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                                
-                                <div class='col-12 mt-5'>
-                                    <p class='text-center text-uppercase TextBold fs-4 normalColorBlueText'>{{ trans('langOnlineUsers') }} :{{ getOnlineUsers() }}</p>
+                                <div class='col-12 mt-4'>
+                                    
                                     @php 
                                         $colSize = '';
                                         if (count($cronParams) > 0){

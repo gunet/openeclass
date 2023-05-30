@@ -39,6 +39,7 @@ $pageName = $langCourseProgram;
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
+        <link href='../../../template/modern/css/bootstrap.min.css' rel='stylesheet' type="text/css">
         <link href="../../../template/modern/css/default.css" rel="stylesheet" type="text/css" />
         <link href="../../../template/modern/css/lp.css" rel="stylesheet" type="text/css" />
         <title><?php echo $langCourseProgram ?></title>

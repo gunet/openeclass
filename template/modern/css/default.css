@@ -272,6 +272,14 @@ textarea {
   font-size: 22px;
 }
 
+.h-5px{
+  height: 5px;
+}
+
+.h-10px{
+  height: 10xp;
+}
+
 
 /* --------------------------------------------- BREADCRUMBS --------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -996,6 +1004,11 @@ label:has(input[type="checkbox"]:disabled){
   .cources-paging-arrow.arrow-right{ padding-left:10px; color:blue; margin-top:6px; }
 
   .Courses-Content { border-radius: 15px; background-color: white; }
+  @media(min-width:992px){
+    .Courses-Content{
+      min-height: calc(100vh - 147px - 261px - 188.55px - 32px);
+    }
+  }
 
   .event-important, .event-info, .event-success, .event-special{ float:left; }
 
@@ -1668,6 +1681,7 @@ label:has(input[type="checkbox"]:disabled){
   .ClickCourseModalImg{
     width:16px; height:16px;
   }
+
 
   @media(max-width:767px){
     .modal-content-opencourses{

@@ -366,7 +366,7 @@
                                                 </a>
                                             @endif
                                         @endif
-                                        @if($total_cunits > 0)
+                                        @if($total_cunits > 0 and $is_editor)
                                             <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
                                                 <span class='fa fa-columns'></span>
                                             </a>
@@ -489,27 +489,27 @@
                                         <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
                                             <div class='d-inline-flex align-items-top'>
                                                 <span class='event event-important mt-1'></span>
-                                                <span>{{ trans('langAgendaDueDay') }}</span>
+                                                <span class='small-text'>{{ trans('langAgendaDueDay') }}</span>
                                             </div>
                                         </div>
 
                                         <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
                                             <div class='d-inline-flex align-items-top'>
                                                 <span class='event event-info mt-1'></span>
-                                                <span>{{ trans('langAgendaCourseEvent') }}</span>
+                                                <span class='small-text'>{{ trans('langAgendaCourseEvent') }}</span>
                                             </div>
                                         </div>
 
                                         <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
                                             <div class='d-inline-flex align-items-top'>
                                                 <span class='event event-success mt-1'></span>
-                                                <span>{{ trans('langAgendaSystemEvent') }}</span>
+                                                <span class='small-text'>{{ trans('langAgendaSystemEvent') }}</span>
                                             </div>
                                         </div>
                                         <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
                                             <div class='d-inline-flex align-items-top'>
                                                 <span class='event event-special mt-1'></span>
-                                                <span>{{ trans('langAgendaPersonalEvent') }}</span>
+                                                <span class='small-text'>{{ trans('langAgendaPersonalEvent') }}</span>
                                             </div>
                                         </div>
                                     </div>

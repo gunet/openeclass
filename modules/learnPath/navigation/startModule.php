@@ -194,7 +194,7 @@ $unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.org/TR/html4/frameset.dtd'>
 <html><head>
-<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>";
+<script type='text/javascript' src='{$urlAppend}js/jquery" . JQUERY_VERSION . ".min.js'></script>";
 
 // add the update frame if this is a SCORM module
 if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {

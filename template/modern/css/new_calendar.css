@@ -19,11 +19,17 @@
 
 .cal-day-outmonth > .number-day-cal {opacity: 0.2;}
 
-.cal-day-today > .number-day-cal{ color:white; padding:3px 6px 2px 6px; border-radius: 50%; background-color: #005ad9;}
+/* .cal-day-today > .number-day-cal{ color:white; padding:3px 6px 2px 6px; border-radius: 50%; background-color: #005ad9;} */
+.cal-day-today > .number-day-cal{  border-radius: 4px; }
 
 .btn-calendar-prev, .btn-calendar-next{height:25px; width:25px; border-radius:50%; border:solid 1px #ffffff; font-size:11px;}
 
-/****************************************************************************************************/
+#cal-slide-content {
+  -webkit-box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) !important;
+  box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) !important;
+  background: #ffffff !important;
+}
+/************************************rgba(255, 255, 255, 0.5)**********************************************/
 /***************** this is mypersonal-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/
 @media(max-width:991px){
