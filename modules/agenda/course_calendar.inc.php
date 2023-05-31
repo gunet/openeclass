@@ -335,9 +335,10 @@ require_once 'include/lib/references.class.php';
      */
     function update_recursive_event($eventid, $title, $start, $enddateEvent, $duration, $content, $recursion){
         global $langNotValidInput;
+
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM agenda WHERE id=?d',$eventid);
         if($rec_eventid){
-            return update_event($rec_eventid, $title, $start, $enddateEvent, $duration, $content, $recursion, true);
+            return update_event($rec_eventid->source_event_id, $title, $start, $enddateEvent, $duration, $content, $recursion, true);
         } else {
             return array('success'=>false, 'message'=>$langNotValidInput);
         }
@@ -369,9 +370,10 @@ require_once 'include/lib/references.class.php';
 
     function delete_recursive_event($eventid){
         global $langNotValidInput;
+
         $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM agenda WHERE id=?d',$eventid);
         if($rec_eventid){
-            return delete_event($rec_eventid, true);
+            return delete_event($rec_eventid->source_event_id, true);
         } else {
             return array('success'=>false, 'message'=>$langNotValidInput);
         }
