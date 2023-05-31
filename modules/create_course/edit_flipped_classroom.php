@@ -58,7 +58,7 @@ $(document).ready(function() {
         var buttonName = $(this).attr('name');
 
         if (buttonName == "remove_g"){
-            var confirm = window.confirm('$langConfirmDeleteGoal');
+            var confirm = window.confirm('" . js_escape($langConfirmDeleteGoal) . "');
             if (confirm) {
                 var nrlz_button_id = button_id.split("_")
                 i--;
@@ -73,8 +73,8 @@ $(document).ready(function() {
 
                 }
             }
-        } elseif (buttonName == "remove_u") {
-            var confirm = window.confirm('$langConfirmDeleteUnit');
+        } else if (buttonName == "remove_u") {
+            var confirm = window.confirm('" . js_escape($langConfirmDeleteUnit) . "');
             if(confirm){
                 var nrlz_button_id = button_id.split("_")
                 j--;
