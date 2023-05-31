@@ -728,7 +728,7 @@ if ($questionList) {
             // display question numbering buttons
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 bg-light'>";
             $tool_content .= "<div class='card-body p-0 bg-light' style='border-radius:15px;'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 bg-light' style='border-radius:15px;'>";
+            $tool_content .= "<div class='d-flex justify-content-center p-0 bg-light flex-wrap' style='border-radius:15px;'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {
@@ -744,7 +744,7 @@ if ($questionList) {
                     $extra_style = '';
                 }
                 $tool_content .= "
-                    <div style='display: inline-block; margin-right: 10px;'>
+                    <div class='p-2' style='display: inline-block; margin-right: 10px;'>
                         <input class='btn $class' $extra_style type='submit' name='q_id' id='q_num$k' value='$k' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$title'>
                     </div>";
             }

@@ -105,7 +105,7 @@ if (!isset($_GET['pdf'])) {
 
 // table header
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                    <tr class='list-header text-left'>
+                    <tr class='list-header text-start'>
                         <th>$langLearnPath</th>
                         <th>$langAttempts</th>
                         <th>$langAttemptStarted</th>

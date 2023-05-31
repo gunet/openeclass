@@ -133,10 +133,10 @@ foreach ($usersList as $user) {
         }
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
-        $lp_content .= "<td class='text-left'>" . q($learningPath->name) . "</td>";
-        $lp_content .= "<td class='text-right'>" . q($lpAttemptsNb) . "</td>";
-        $lp_content .= "<td class='text-right'>" . q($lpTotalTime) . "</td>";
-        $lp_content .= "<td class='text-right'>" . disp_progress_bar($prog, 1) . "</td>";
+        $lp_content .= "<td class='text-start'>" . q($learningPath->name) . "</td>";
+        $lp_content .= "<td class='text-end'>" . q($lpAttemptsNb) . "</td>";
+        $lp_content .= "<td class='text-end'>" . q($lpTotalTime) . "</td>";
+        $lp_content .= "<td class='text-end'>" . disp_progress_bar($prog, 1) . "</td>";
         $lp_content .= "</tr>";
         $iterator++;
     }
@@ -153,10 +153,10 @@ foreach ($usersList as $user) {
         $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
     }
 
-    $tool_content .= "<td class='text-left'></td>
-            <td class='text-right'></td>
-            <td class='text-right'>" . q($globaltime) . "</td>
-            <td class='text-right'>"
+    $tool_content .= "<td class='text-start'></td>
+            <td class='text-end'></td>
+            <td class='text-end'>" . q($globaltime) . "</td>
+            <td class='text-end'>"
             . disp_progress_bar($total, 1) . "
             </td>";
     $tool_content .= "</tr>";

@@ -93,7 +93,7 @@
             bStateSave: true,
             bProcessing: true,
             bServerSide: true,
-            sScrollX: true,
+            sScrollX: false,
             drawCallback: function(oSettings) {
                 tooltip_init();
                 popover_init();
@@ -240,28 +240,32 @@
                     </div>
                     @endif
  
-                    <table id='users_table_{{ $course_code }}' class='table-default w-100 ms-0'>
-                        <thead>
-                            <tr class="list-header">
-                                <th>{{ trans('langSurnameName') }}</th>
-                                <th class='text-center'>{{ trans('langRole') }}</th>
-                                <th class='text-center'>{{ trans('langGroup') }}</th>
-                                <th class='text-center' width='80'>{{ trans('langRegistrationDate') }}</th>
-                                <th class='text-center'>{!! icon('fa-cogs') !!}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                        </tfoot>
-                    </table>
+                    <div class='col-12'>
+                        <div class='table-responsive'>
+                            <table id='users_table_{{ $course_code }}' class='table-default w-100 ms-0'>
+                                <thead>
+                                    <tr class="list-header">
+                                        <th>{{ trans('langSurnameName') }}</th>
+                                        <th class='text-center'>{{ trans('langRole') }}</th>
+                                        <th class='text-center'>{{ trans('langGroup') }}</th>
+                                        <th class='text-center' width='80'>{{ trans('langRegistrationDate') }}</th>
+                                        <th class='text-center'>{!! icon('fa-cogs') !!}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
             </div>

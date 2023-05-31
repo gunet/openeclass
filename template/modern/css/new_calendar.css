@@ -29,6 +29,15 @@
   box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) !important;
   background: #ffffff !important;
 }
+#cal-slide-content a.event-item {
+  color: #005ad9;
+  font-weight: normal;
+  line-height: 22px;
+}
+#cal-slide-content .event{
+  width: 100%;
+  height:5px;
+}
 /************************************rgba(255, 255, 255, 0.5)**********************************************/
 /***************** this is mypersonal-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/

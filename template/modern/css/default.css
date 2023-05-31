@@ -2364,12 +2364,12 @@ label:has(input[type="checkbox"]:disabled){
     overflow:auto; 
   }
 
-  @media(min-width:992px){
+  /* @media(min-width:992px){
      .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
        overflow:hidden !important;
      }
 
-  }
+  } */
  
   #questions_filter{
     padding-right: 10px;
@@ -2897,7 +2897,7 @@ label:has(input[type="checkbox"]:disabled){
 }
 .mycourses-pagination .page-item .page-link{
   border-radius: 30%;
-  color: #003e87;
+  color: #001146;
   font-weight: 400;
   font-size: 12px;
   border:none;
@@ -2907,8 +2907,8 @@ label:has(input[type="checkbox"]:disabled){
   background-color: #e8e8e8;
 }
 .mycourses-pagination .page-item .page-link.active:hover{
-  background-color: #93b9e5;
-  color: #ffffff;
+  background-color: #e8e8e8;
+  color: #001146;
 }
 
 .mycourses-pagination .page-item .fa::before{
@@ -2917,8 +2917,8 @@ label:has(input[type="checkbox"]:disabled){
 }
 
 .mycourses-pagination .page-item .page-link.active{
-  background-color: #003e87;
-  color: #ffffff;
+  background-color: #e8e8e8;
+  color: #001146;
 }
 
 .mycourses-pagination .page-item-pages{

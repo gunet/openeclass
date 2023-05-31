@@ -147,7 +147,7 @@ if ($learnPathName) {
         $lp_total_started = format_locale_date(strtotime($lpTotalStarted), 'short');
         $lp_total_accessed = format_locale_date(strtotime($lpTotalAccessed), 'short');
 
-        $tool_content .= "<td class='text-left'>" . q($user->email) . "</td>
+        $tool_content .= "<td class='text-start'>" . q($user->email) . "</td>
                             <td class='text-center'>" . q($lpAttemptsNb) ."</td>  
                             <td>" . $lp_total_started . "</td>
                             <td>" . $lp_total_accessed . "</td>

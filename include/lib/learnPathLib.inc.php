@@ -251,11 +251,9 @@ function nameBox($type, $mode, $formlabel = FALSE) {
             $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
 
             if ($formlabel != FALSE) {
-                $output .= '<div class="col-xs-10"><div class="input-group">'
+                $output .= '<div class="col-12"><div class="d-flex justify-content-start align-items-center">'
                         . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
-                        . '<span class="input-group-btn">'
                         . '<button class="btn submitAdminBtn" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
-                        . '</span>'
                         . '</div></div>'
                         . '<input type="hidden" name="cmd" value="updateName" />' . ""
                         . '</form>';

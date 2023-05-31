@@ -3,7 +3,7 @@
 	<ul class="unstyled list-unstyled p-3 basicBorderSolid">
 		<% _.each(events, function(event) { %>
 			<li class="mb-3">
-				<div class="w-100 rounded-2 pull-left event <%= event['class'] %>"></div>
+				<div class="pull-left event <%= event['class'] %>"></div>
 				<a href="<%= event.url ? event.url : 'javascript:void(0)' %>" data-event-id="<%= event.id %>"
 					data-event-class="<%= event['class'] %>" class="event-item normalColorBlueText TextBold small-text">
 					<%= event.title %>

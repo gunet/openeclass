@@ -406,7 +406,7 @@ $tool_content .= "
     <table class='table-default'>
     <thead class='list-header'>
     <tr>
-      <th><div class='text-left'>$langLearningPaths</div></th>";
+      <th><div class='text-start'>$langLearningPaths</div></th>";
 
 if ($is_editor) {
     // Titles for teachers
@@ -635,7 +635,7 @@ foreach ($result as $list) { // while ... learning path list
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);
         $tool_content .= "<td>$lpTotalTime</td>";
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($lpProgress, 1) . "</td>";
+        $tool_content .= "<td class='text-end' width='120'>" . disp_progress_bar($lpProgress, 1) . "</td>";
     }
 
     $tool_content .= "</tr>";
@@ -651,9 +651,9 @@ if (!$is_editor && $iterator != 1 && $uid) {
     $total = round($lpProgress / ($iterator - 1));
     $tool_content .= "
     <tr>
-      <td class='text-left'><strong>$langTotal</strong>:</td>
-      <td class='text-left'><strong>$globaltime</strong:</td>
-      <td class='text-right'>" . disp_progress_bar($total, 1) . "</td>
+      <td class='text-start'><strong>$langTotal</strong>:</td>
+      <td class='text-start'><strong>$globaltime</strong:</td>
+      <td class='text-end'>" . disp_progress_bar($total, 1) . "</td>
     </tr>";
 }
 $tool_content .= "</tbody></table></div>";

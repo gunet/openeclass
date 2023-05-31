@@ -156,14 +156,14 @@ foreach ($usersList as $user) {
     } else {
         $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
     }
-    $tool_content .= "<td class='text-left'>" . q($user->email). "</td>
+    $tool_content .= "<td class='text-start'>" . q($user->email). "</td>
                       <td class='text-center'>" . q($user->am) . "</td>";
     if (!isset($_GET['pdf'])) {
         $tool_content .= "<td class='text-start' > " . user_groups($course_id, $user->id) . "</td>";
     } else {
-        $tool_content .= "<td class='text-left' > " . user_groups($course_id, $user->id, false) . "</td>";
+        $tool_content .= "<td class='text-start' > " . user_groups($course_id, $user->id, false) . "</td>";
     }
-    $tool_content .= "<td class='text-right'>" . q($globaltime) . "</td>
+    $tool_content .= "<td class='text-end'>" . q($globaltime) . "</td>
             <td class='text-end' width='120'>"
             . disp_progress_bar($total, 1) . "
             </td>";

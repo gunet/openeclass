@@ -237,7 +237,7 @@ function display_analytics_elements($analytics_id) {
     if (count($sql_data) == 0) {
         $results = "<p class='text-center text-muted'>$langAnalyticsNoElements</p>";
     } else {
-        $results ="<table class='table-default'>
+        $results ="<div class='col-12'><div class='table-responsive'><table class='table-default'>
                     <tr class='list-header'>
                         <th>
                             $langAnalyticsType
@@ -295,7 +295,7 @@ function display_analytics_elements($analytics_id) {
                 </tr>";
         }
 
-        $results .= "</table>";
+        $results .= "</table></div></div>";
     }
 
     $tool_content .= "

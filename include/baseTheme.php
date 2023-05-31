@@ -398,6 +398,10 @@ function view($view_file, $view_data = array()) {
                     border-bottom: 1px solid $theme_options_styles[leftNavBgColor];
                 }
 
+                #cal-slide-content a.event-item {
+                    color: $theme_options_styles[leftNavBgColor];
+                }
+
                 .openCoursesTextHome{
                     color: $theme_options_styles[leftNavBgColor];
                 }
