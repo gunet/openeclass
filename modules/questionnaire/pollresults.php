@@ -219,7 +219,7 @@ if ($PollType == POLL_NORMAL) {
                 $names_array = [];
                 $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
                 foreach ($all_answers as $row) {
-                    $this_chart_data['answer'][] = $row->answer_text;
+                    $this_chart_data['answer'][] = q($row->answer_text);
                     $this_chart_data['percentage'][] = 0;
                 }
                 $set_default_answer = false;
