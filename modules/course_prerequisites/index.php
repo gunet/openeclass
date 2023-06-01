@@ -242,7 +242,7 @@ function show_prereqs() {
                             'level' => 'primary',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . $cid,
                             'icon' => 'fa-times',
-                            'btn_class' => 'delete_btn btn-default'
+                            'btn_class' => 'delete_btn deleteAdminBtn'
                         )
                     )
                 ) . "</td>

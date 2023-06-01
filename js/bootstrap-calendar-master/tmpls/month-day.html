@@ -1,7 +1,7 @@
 <div class="cal-month-day <%= cls %> d-flex justify-content-center align-items-center">
 	<div class="number-day-cal m-0 fs-6 TextBold rounded-circle" data-cal-date="<%= data_day %>" data-cal-view="day" data-bs-toggle="tooltip" title="<%= tooltip %>">
 		<% if (cls == 'cal-day-inmonth cal-day-today'){ %>
-			<span class="badge bgTheme px-1"><%= day %></span>
+			<span class="badge bgTheme px-2"><%= day %></span>
 		<% }else{ %>
 			<%= day %>
 		<% } %>

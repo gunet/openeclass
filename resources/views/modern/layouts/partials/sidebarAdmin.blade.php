@@ -25,56 +25,56 @@
         </div>
         <div class='card-body'>
             <div class='d-flex flex-wrap'>
-                <a class='btn submitAdminBtn btn-sm small-text me-2 mb-2' href="search_user.php">
+                <a class='m-2' href="search_user.php">
                     {{ trans('langSearchUser') }}
                 </a>
             
                 @if($is_admin or $is_departmentmanage_user or $is_power_user)
-                    <a  href="searchcours.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
+                    <a  href="searchcours.php" class='m-2'>
                         {{ trans('langSearchCourse') }} 
                     </a>
                 @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
                         {{ trans('langSearchCourse') }}
                     </a>
                 @endif
             
                 @if($is_admin)
-                    <a href="hierarchy.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
+                    <a href="hierarchy.php" class='m-2'>
                     {{ trans('langHierarchy') }}
                     </a>
                 @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
                     {{ trans('langHierarchy') }}  
                     </a>
                 @endif
 
                 @if($is_admin)
-                    <a href="eclassconf.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
+                    <a href="eclassconf.php" class='m-2'>
                         {{ trans('langConfig') }}
                     </a>
                 @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
                         {{ trans('langConfig') }}
                     </a>
                 @endif
 
                 @if($is_admin)
-                    <a href="theme_options.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
+                    <a href="theme_options.php" class='m-2'>
                     {{ trans('langThemeSettings') }}   
                     </a>
                 @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
                         {{ trans('langThemeSettings') }} 
                     </a>
                 @endif
 
                 @if($is_admin)
-                    <a href="extapp.php" class='btn submitAdminBtn btn-sm small-text me-2 mb-2'>
+                    <a href="extapp.php" class='m-2'>
                     {{ trans('langExternalTools') }}  
                     </a>
                 @else
-                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='btn btn-outline-secondary btn-sm small-text opacity-help me-2 mb-2'>
+                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
                     {{ trans('langExternalTools') }} 
                     </a>
                 @endif

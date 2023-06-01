@@ -30,9 +30,15 @@
                                     </div>
                                     <form class='mt-0' action="{{ $urlAppend }}" method="post">
                                         <div class="login-form-spacing mt-3">
-                                            <input id='username_id' class="rounded-pill login-input w-75 TextSemiBold" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" autocomplete="on">
-                                            <input id='password_id' class="rounded-pill login-input w-75 mt-2 TextSemiBold" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass" autocomplete="on">
-                                            <input class="rounded-pill btn w-75 login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                            <div class='col-xxl-9 col-xl-10 col-lg-10 col-md-8 col-10 ms-auto me-auto'>
+                                                <input id='username_id' class="rounded-pill login-input w-100 TextSemiBold" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" autocomplete="on">
+                                            </div>
+                                            <div class='col-xxl-9 col-xl-10 col-lg-10 col-md-8 col-10 ms-auto me-auto'>
+                                                <input id='password_id' class="rounded-pill login-input w-100 mt-2 TextSemiBold" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass" autocomplete="on">
+                                            </div>
+                                            <div class='col-xxl-9 col-xl-10 col-lg-10 col-md-8 col-10 ms-auto me-auto'>
+                                                <input class="rounded-pill btn w-100 login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                            </div>
                                         </div>
                                     </form>
                                     <div class='col-12 text-center mt-3'>

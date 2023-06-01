@@ -134,6 +134,16 @@ a{
   font-style: normal;
 }
 
+a:hover{
+  text-decoration:underline;
+}
+#leftnav a:hover, .manage-course-ul a:hover, 
+.dropdown_menu_user a:hover, .submitAdminBtn:hover, 
+.cancelAdminBtn:hover, .deleteAdminBtn:hover, .menu-popover a:hover,
+#bgr-cheat-header a:hover{
+  text-decoration: none;
+}
+
 @media(max-width:1023px){ a{ font-size: 15px; } }
 
 .msmall-text { font-size: 14px; }
@@ -1467,8 +1477,8 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
   
   .img-public-profile{ 
-    max-width: 200px;
-    max-height: 200px;
+    width: 200px !important;
+    height: 200px !important;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;

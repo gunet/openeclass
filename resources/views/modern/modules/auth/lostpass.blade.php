@@ -69,11 +69,9 @@
                                 </div>
                             @endif
                             @if(!$change_ok)
-                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                                    <div class='col-12 h-100 left-form'></div>
-                                </div>
-                                <div class='col-lg-6 col-12'>
-                                    <div class='form-wrapper form-edit rounded'>
+                                
+                                <div class='col-xl-6 col-lg-8 col-md-8 col-12 ms-auto me-auto'>
+                                    <div class='form-wrapper form-edit rounded shadow-sm p-3'>
 
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
@@ -168,11 +166,9 @@
                                 <div class='alert alert-info'>{!! trans('lang_pass_intro') !!}</div>
                             </div>
 
-                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                                <div class='col-12 h-100 left-form'></div>
-                            </div>
-                            <div class='col-lg-6 col-12'>
-                                <div class='form-wrapper form-edit rounded'>
+
+                            <div class='col-xl-6 col-lg-8 col-md-8 col-12 ms-auto me-auto mt-3'>
+                                <div class='form-wrapper form-edit rounded shadow-sm p-3'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{!! trans('langUserData') !!}</h4></div></div>
                                         <div class='form-group'>

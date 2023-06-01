@@ -58,14 +58,14 @@ $tool_content .= "
         <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
 
           <div class='form-group mt-3'>
-            <div class='col-12'>
-              <input class='form-control rounded-pill' name='login' placeholder='$langUsername'>
+            <div class='col-lg-6 12 ms-auto me-auto'>
+              <input class='form-control' name='login' placeholder='$langUsername' type='text'>
             </div>
           </div>
 
           <div class='form-group mt-3'>
-            <div class='col-12'>
-              <input class='form-control rounded-pill' name='password' placeholder='$langPass' type='password'>
+            <div class='col-lg-6 col-12 ms-auto me-auto'>
+              <input class='form-control' name='password' placeholder='$langPass' type='password'>
             </div>
           </div>
 
