@@ -4482,6 +4482,14 @@ function assignment_details($id, $row, $x =false) {
             });
         });</script>";
 
+    if ($row->assign_to_specific == 1) {
+        $assign_to_users_message = "$m[WorkToUser]";
+    } else if ($row->assign_to_specific == 2) {
+        $assign_to_users_message = "$m[WorkToGroup]";
+    } else {
+        $assign_to_users_message = "$m[WorkToAllUsers]";
+    }
+
     $preview_rubric = '';
     $grade_type = $row->grading_type;
     if ($grade_type == 0){
@@ -4737,7 +4745,16 @@ function assignment_details($id, $row, $x =false) {
                 <div class='col-sm-8'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
                 </div>
-            </div>";
+            </div>
+            <div class='row margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$m[WorkAssignTo]:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $assign_to_users_message
+                </div>
+            </div>            
+            ";
         $tags_list = $moduleTag->showTags();
         if ($tags_list) {
             $tool_content .= "
