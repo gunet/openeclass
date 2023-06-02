@@ -264,8 +264,7 @@ function printPolls() {
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
-        $langUserDuration;
-
+        $langUserDuration, $m;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -311,7 +310,6 @@ function printPolls() {
         }
         $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
         $tool_content .= "</tr></thead><tbody>";
-        $k = 0;
         foreach ($result as $thepoll) {
             if (!$is_editor && !resource_access($thepoll->active, $thepoll->public)) {
                 continue;
@@ -326,7 +324,6 @@ function printPolls() {
                     $visibility_css = " class=\"not_visible\"";
                     $visibility_func = "activate";
                 }
-                $k++;
                 $tool_content .= "<tr $visibility_css>";
 
                 $temp_CurrentDate = new DateTime('NOW');
@@ -353,7 +350,14 @@ function printPolls() {
                     if (!$thepoll->public) {
                         $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
                     }
-                    $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon";
+                    if ($thepoll->assign_to_specific == 1) {
+                        $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                    } else if ($thepoll->assign_to_specific == 2) {
+                        $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                    } else {
+                        $assign_to_users_message = '';
+                    }
+                    $tool_content .= "<a href='pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid'>".q($thepoll->name)."</a>$lock_icon $assign_to_users_message";
                 } else {
                     if  ($poll_ended == 1 || $poll_not_started == 1) { // poll out of date
                         $tool_content .= q($thepoll->name);
