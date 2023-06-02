@@ -134,10 +134,6 @@ if ($is_editor) {
         add_assignment_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
-    } elseif (isset($_POST['add_blog'])) {
-        add_blog_to_certificate($element, $element_id);
-        Session::Messages("$langQuotaSuccess", 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_blogcomment'])) {
         add_blogcomment_to_certificate($element, $element_id);
         Session::Messages("$langQuotaSuccess", 'alert-success');

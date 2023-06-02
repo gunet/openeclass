@@ -426,7 +426,6 @@ function display_activities($element, $id, $unit_id = 0) {
 
     // certificate details
     $tool_content .= display_settings($element, $id, $unit_id);
-
     $addActivityBtn = action_button(array(
         array('title' => $unit_id ? $langOfUnitCompletion : $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". $unit_id ? "unitcompletion" : "coursecompletion",
@@ -443,10 +442,12 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $langOfBlog,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
             'icon' => 'fa fa-columns fa-fw',
+            'show' => ($unit_id == 0),
             'class' => ''),
         array('title' => $langOfBlogComments,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=blogcomments",
             'icon' => 'fa fa-comment fa-fw',
+            'show' => ($unit_id == 0),
             'class' => ''),
         /*array('title' => $langOfCourseComments,
               'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=coursecomments",
@@ -455,6 +456,7 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $langNumInForum,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumEvent::ACTIVITY,
             'icon' => 'fa fa-comments fa-fw',
+            'show' => ($unit_id == 0),
             'class' => ''),
         array('title' => $langNumInForumTopic,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ForumTopicEvent::ACTIVITY,
@@ -499,6 +501,7 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $langOfGradebook,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . GradebookEvent::ACTIVITY,
             'icon' => 'fa fa-sort-numeric-desc space-after-icon',
+            'show' => ($unit_id == 0),
             'class' => ''),
         array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
@@ -876,7 +879,15 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT assignment.id, assignment.title, assignment.description, submission_date
+                                            FROM assignment, unit_resources 
+                                            WHERE assignment.id = unit_resources.res_id
+                                                AND unit_id = ?d 
+                                                AND unit_resources.type = 'work'
+                                                AND visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d
                                     AND active = 1
                                     AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")
                                     AND id NOT IN
@@ -885,6 +896,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0) {
                                         AND activity_type = '" . AssignmentEvent::ACTIVITY . "'
                                         AND module = " . MODULE_ID_ASSIGN . ")
                                     ORDER BY title", $course_id, $element_id);
+    }
 
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
@@ -935,7 +947,16 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
+
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT exercise.id, exercise.title, exercise.description, exercise.active 
+                                            FROM exercise, unit_resources 
+                                            WHERE exercise.id = unit_resources.res_id
+                                                AND unit_id = ?d 
+                                                AND unit_resources.type = 'exercise'
+                                                AND visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                     AND exercise.active = 1
                                     AND (exercise.end_date IS NULL OR exercise.end_date >= ". DBHelper::timeAfter() . ")
                                     AND exercise.id NOT IN
@@ -943,6 +964,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
                                             AND resource != ''
                                             AND activity_type = '" . ExerciseEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_EXERCISE . ") ORDER BY title", $course_id, $element_id);
+    }
 
     $quizinfo = array();
     foreach ($result as $row) {
@@ -990,7 +1012,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0) {
  */
 function display_available_documents($element, $element_id, $unit_id = 0) {
 
-    global $webDir, $course_code, $tool_content,
+    global $webDir, $tool_content,
             $langDirectory, $langUp, $langName, $langSize,
             $langDate, $langAddModulesButton, $langChoice,
             $langNoDocuments, $course_code, $group_sql;
@@ -1012,14 +1034,25 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT document.id, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key 
+                                            FROM document, unit_resources 
+                                            WHERE document.id = unit_resources.res_id
+                                                AND unit_id = ?d 
+                                                AND unit_resources.type = 'doc'
+                                                AND unit_resources.visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                                      WHERE $group_sql AND visible = 1 AND
                                           path LIKE ?s AND
                                           path NOT LIKE ?s AND id NOT IN
                                         (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource!='' AND activity_type = '" . ViewingEvent::DOCUMENT_ACTIVITY . "' AND module = " . MODULE_ID_DOCS . ")
                                 ORDER BY sort_key COLLATE utf8mb4_general_ci",
-        "$path/%", "$path/%/%", $element_id);
+            "$path/%", "$path/%/%", $element_id);
+    }
+
+
 
     $fileinfo = array();
     $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;$element_name=$element_id&amp;add=true&amp;act=document$dir_setter&amp;type=doc&amp;path=";
@@ -1139,15 +1172,6 @@ function display_available_documents($element, $element_id, $unit_id = 0) {
 
 /**
  * @brief blog display form
- * @global type $tool_content
- * @global type $langAddModulesButton
- * @global type $course_code
- * @global type $langTitle
- * @global type $langValue
- * @global type $langChoice
- * @global type $langOperator
- * @global type $langNumOfBlogs
- * @global type $langResourceAlreadyAdded
  * @param type $element
  * @param type $element_id
  * @param int $unit_id
@@ -1161,9 +1185,9 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
     $res = Database::get()->queryArray("SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                                            AND resource IS NULL
-                                            AND activity_type = '" . BlogEvent::ACTIVITY . "'
-                                            AND module = " . MODULE_ID_BLOG, $element_id);
+                                        AND resource IS NULL
+                                        AND activity_type = '" . BlogEvent::ACTIVITY . "'
+                                        AND module = " . MODULE_ID_BLOG, $element_id);
 
     if (count($res) > 0) {
         $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
@@ -1198,17 +1222,6 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
 
 /**
  * @brief blog comment display form
- * @global type $tool_content
- * @global type $langAddModulesButton
- * @global type $langBlogEmpty
- * @global type $urlServer
- * @global type $course_code
- * @global type $langTitle
- * @global type $langValue
- * @global type $langChoice
- * @global type $langDate
- * @global type $course_id
- * @global type $langOperator
  * @param type $element
  * @param type $element_id
  * @param int $unit_id
@@ -1337,12 +1350,21 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT ft.* FROM forum_topic ft JOIN forum f ON (f.id = ft.forum_id) WHERE f.course_id = ?d
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT forum_topic.id, forum_topic.title, topic_time, forum_id 
+                                            FROM forum_topic, unit_resources 
+                                            WHERE forum_topic.id = unit_resources.res_id
+                                                AND unit_id = ?d 
+                                                AND unit_resources.type = 'topic'
+                                                AND visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT ft.* FROM forum_topic ft JOIN forum f ON (f.id = ft.forum_id) WHERE f.course_id = ?d
                                         AND ft.id NOT IN
                                         (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                             AND resource != ''
                                             AND activity_type = '" . ForumTopicEvent::ACTIVITY . "'
                                             AND module = " . MODULE_ID_FORUM . ")", $course_id, $element_id);
+    }
 
     $topicinfo = array();
     foreach ($result as $topicrow) {
@@ -1376,7 +1398,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0) {
             $topic_id = $topicentry['topic_id'];
             $forum_id = $topicentry['forum_id'];
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='${urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}/modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
             $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='forumtopic[]' value='$topic_id'></td>";
@@ -1403,13 +1425,23 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT learnPath_id, name, comment, `rank` 
+                                        FROM lp_learnPath, unit_resources 
+                                            WHERE learnPath_id = unit_resources.res_id
+                                                AND unit_id = ?d 
+                                                AND unit_resources.type = 'lp'
+                                                AND unit_resources.visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE lp_learnPath.course_id = ?d
                                             AND lp_learnPath.visible = 1
                                             AND lp_learnPath.learnPath_id NOT IN
                                         (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                                     AND resource!=''
                                                     AND activity_type = '" . LearningPathEvent::ACTIVITY . "'
                                                     AND module = " . MODULE_ID_LP . ")", $course_id, $element_id);
+    }
+
 
     $lpinfo = array();
     foreach ($result as $row) {
@@ -1419,10 +1451,10 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
             'comment' => $row->comment,
             'rank' => $row->rank);
     }
+
     if (count($lpinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoLearningPath</div>";
     } else {
-
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
         } else {
@@ -1445,7 +1477,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0) {
                 $lp_id = $entry['id'];
                 $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
                 $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
                 $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$lp_id]' value=''></td>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$lp_id'></td>";
@@ -1505,13 +1537,29 @@ function display_available_multimedia($element, $element_id, $unit_id = 0) {
                          "</tr>";
 
         foreach (array('video', 'videolink') as $table) {
-            $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0)
+            if ($unit_id > 0) {
+                if ($table == 'video') {
+                    $sql_extra = ' ,path';
+                } else {
+                    $sql_extra = '';
+                }
+                $result = Database::get()->queryArray("SELECT $table.id, $table.title, description, url, $table.date $sql_extra 
+                                    FROM $table, unit_resources 
+                                    WHERE $table.id = unit_resources.res_id
+                                    AND unit_id = ?d 
+                                    AND unit_resources.type = ?s
+                                    AND unit_resources.visible = 1",
+                    $unit_id, $table);
+            } else {
+                $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0)
                                                         AND course_id = ?d
                                                         AND visible = 1
                                                         AND id NOT IN
                                                 (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                                     AND resource!=''
                                                     AND activity_type IN ('" . ViewingEvent::VIDEO_ACTIVITY . "', '" . ViewingEvent::VIDEOLINK_ACTIVITY . "') AND module = ". MODULE_ID_VIDEO . ")", $course_id, $element_id);
+            }
+
             foreach ($result as $row) {
                 $row->course_id = $course_id;
                 $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". q($row->description). "</div>";
@@ -1583,11 +1631,20 @@ function display_available_ebooks($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT ebook.id, ebook.title
+                                        FROM ebook, unit_resources 
+                                        WHERE ebook.id = unit_resources.res_id
+                                        AND unit_id = ?d 
+                                        AND unit_resources.type = 'ebook'
+                                        AND unit_resources.visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM ebook WHERE ebook.course_id = ?d
                                                 AND ebook.visible = 1
                                                 AND ebook.id NOT IN
                                         (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                         AND resource!='' AND activity_type = '" . ViewingEvent::EBOOK_ACTIVITY . "' AND module = " . MODULE_ID_EBOOK . ")", $course_id, $element_id);
+    }
 
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
@@ -1679,14 +1736,23 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
 
-    $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
+    if ($unit_id) {
+        $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, unit_resources 
+                                            WHERE poll.pid = unit_resources.res_id
+                                                AND poll.active = 1
+                                                AND poll.end_date >= ". DBHelper::timeAfter() . "
+                                                AND unit_id = ?d 
+                                                AND unit_resources.type = 'poll'
+                                                AND visible = 1", $unit_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM poll WHERE poll.course_id = ?d
                                     AND poll.active = 1
                                     AND poll.end_date >= ". DBHelper::timeAfter() . "
                                     AND poll.pid NOT IN
                                 (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                     AND resource != '' AND activity_type = '" . ViewingEvent::QUESTIONNAIRE_ACTIVITY . "' AND module = " . MODULE_ID_QUESTIONNAIRE . ")",
-        $course_id, $element_id);
-
+            $course_id, $element_id);
+    }
 
     $pollinfo = array();
     foreach ($result as $row) {
@@ -1725,15 +1791,6 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
 
 /**
  * @brief wiki display form
- * @global type $tool_content
- * @global type $langAddModulesButton
- * @global type $langChoice
- * @global type $course_code
- * @global type $langValue
- * @global type $langTitle
- * @global type $langWikiPages
- * @global type $langOperator
- * @global type $langResourceAlreadyAdded
  * @param type $element
  * @param type $element_id
  * @param int $unit_id
@@ -1774,7 +1831,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
                             <td>$langWikiPages</td>
                             <td>". selection(get_operators(), "operator") . "</td>
                             <td class='text-center'><input style='width:50px;' type='text' name='threshold' value=''></td>
-                            <td align='center'><input type='checkbox' name='wiki' value='1'></td>
+                            <td class='text-center'><input type='checkbox' name='wiki' value='1'></td>
                         </tr>";
 
         $tool_content .= "
