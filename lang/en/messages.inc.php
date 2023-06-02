@@ -5645,3 +5645,14 @@ $langCalculateNewDuration = "Calculation of new duration";
 $langChooseDayAgain = "You cannot choose different days. Try again.";
 $langMessageInfo = "Message informations";
 $langMessageContent = "Message content";
+
+
+
+
+$langCreateCourseLeftForm = "Creating a course is the most important action of the user – instructor on the platform.</br></br>
+Enter a title for your lesson.</br></br>
+Type a short description for the course.</br></br>
+Select the Faculty or Department within which the course is offered or the course category to which it belongs.</br></br>
+Choose one of the available course formats. </br></br>
+Optionally specify the distribution license of your course.</br></br>
+Specify the type of access to your course. </br></br>";

@@ -5531,3 +5531,12 @@ $langChooseDayAgain = "Sie können keine unterschiedlichen Tage auswählen. Vers
 $langMessageInfo = "Nachrichteninformationen";
 $langMessageContent = "Nachrichteninhalt";
 
+
+$langCreateCourseLeftForm = "Das Erstellen eines Kurses ist die wichtigste Aktion des Benutzers – Dozenten auf der Plattform.</br></br>
+Geben Sie einen Titel für Ihre Lektion ein.</br></br>
+Geben Sie eine kurze Beschreibung für den Kurs ein.</br></br>
+Wählen Sie die Fakultät oder Abteilung aus, innerhalb derer der Kurs angeboten wird, oder die Kurskategorie, zu der er gehört.</br></br>
+Wählen Sie eines der verfügbaren Kursformate. </br></br>
+Geben Sie optional die Vertriebslizenz Ihres Kurses an.</br></br>
+Geben Sie die Art des Zugangs zu Ihrem Kurs an. </br></br>";
+

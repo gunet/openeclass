@@ -292,11 +292,20 @@ function view($view_file, $view_data = array()) {
              $eclass_banner_value = 0;
         }
         if (!empty($theme_options_styles['leftNavBgColor'])) {
+
+            $aboutLeftForm = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
+            $aboutLeftForm[3] = '0.1';
+            $aboutLeftForm = 'rgba(' . implode(',', $aboutLeftForm) . ')';
+
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
             $rgba_no_alpha[3] = '1';
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
             $styles_str .= " 
+                .left-form{ 
+                    background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
+                }
+
                 .breadcrumb-item::before{margin-top:0px;}
 
                 .submitAdminBtn {

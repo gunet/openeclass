@@ -26,56 +26,56 @@
         <div class='card-body'>
             <div class='d-flex flex-wrap'>
                 <a class='m-2' href="search_user.php">
-                    {{ trans('langSearchUser') }}
+                    <span class='fa fa-link'></span>&nbsp{{ trans('langSearchUser') }}
                 </a>
             
                 @if($is_admin or $is_departmentmanage_user or $is_power_user)
                     <a  href="searchcours.php" class='m-2'>
-                        {{ trans('langSearchCourse') }} 
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langSearchCourse') }} 
                     </a>
                 @else
                     <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
-                        {{ trans('langSearchCourse') }}
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langSearchCourse') }}
                     </a>
                 @endif
             
                 @if($is_admin)
                     <a href="hierarchy.php" class='m-2'>
-                    {{ trans('langHierarchy') }}
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langHierarchy') }}
                     </a>
                 @else
                     <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
-                    {{ trans('langHierarchy') }}  
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langHierarchy') }}  
                     </a>
                 @endif
 
                 @if($is_admin)
                     <a href="eclassconf.php" class='m-2'>
-                        {{ trans('langConfig') }}
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langConfig') }}
                     </a>
                 @else
                     <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
-                        {{ trans('langConfig') }}
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langConfig') }}
                     </a>
                 @endif
 
                 @if($is_admin)
                     <a href="theme_options.php" class='m-2'>
-                    {{ trans('langThemeSettings') }}   
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langThemeSettings') }}   
                     </a>
                 @else
                     <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
-                        {{ trans('langThemeSettings') }} 
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langThemeSettings') }} 
                     </a>
                 @endif
 
                 @if($is_admin)
                     <a href="extapp.php" class='m-2'>
-                    {{ trans('langExternalTools') }}  
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langExternalTools') }}  
                     </a>
                 @else
                     <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='m-2 opacity-help'>
-                    {{ trans('langExternalTools') }} 
+                        <span class='fa fa-link'></span>&nbsp{{ trans('langExternalTools') }} 
                     </a>
                 @endif
             </div>
@@ -107,8 +107,8 @@
                         <ul>
                             @foreach ($tool_group[1] as $key2 => $tool)
                                 <li class="p-1">
-                                    <a href="{!! $tool_group[2][$key2] !!}" class='link_admin_tool fs-6 TextSemiBold {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                                        <span class='msmall-text toolAdminText'>{!! $tool !!}</span>  
+                                    <a href="{!! $tool_group[2][$key2] !!}" class='link_admin_tool {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                                        <span class='toolAdminText'>{!! $tool !!}</span>  
                                     </a>
                                 </li>
                             @endforeach
@@ -132,21 +132,21 @@
                         <ul>
                             @if ($is_admin)
                                 <li class="p-1">
-                                    <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
-                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
+                                    <a class='link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
+                                        <span class='toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
                                     </a>
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
                                 <li class="p-1">
-                                    <a class='fs-6 TextSemiBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
+                                    <a class='link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
+                                        <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
                                     </a>
                                 </li>
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="p-1">
-                                    <a class='fs-6 TextSemiBold link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
-                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
+                                    <a class='link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
+                                        <span class='toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
                                     </a>
                                 </li>
                             @endif
@@ -163,13 +163,13 @@
                         <div class='card-body'>
                             <ul>
                                 <li class="p-1">
-                                    <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='fs-6 TextSemiBold link_admin_tool'>
-                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>     
+                                    <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='link_admin_tool'>
+                                        <span class='toolAdminText'>{!!  $GLOBALS['langHierarchy'] !!}</span>     
                                     </a>
                                 </li>
                                 <li class="p-1">
-                                    <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='fs-6 TextSemiBold link_admin_tool'>
-                                        <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>   
+                                    <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='link_admin_tool'>
+                                        <span class='toolAdminText'>{!!  $GLOBALS['langCourseCategoryActions'] !!}</span>   
                                     </a>
                                 </li>
                             </ul>

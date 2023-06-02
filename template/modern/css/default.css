@@ -430,11 +430,27 @@ input:-webkit-autofill:active {
 }
 
 .left-form{ 
- 
-  background-image: url(../img/patternpad.png); 
+
+  /* background-image: url(../images/patternpad.png);  */
   
-  /* min-height:calc(100vh - 147px - 188.55px - 32px - 96px - 60px - 40px - 60px) !important; */
+  border:solid 1px #e8e8e8; 
+  background: linear-gradient(170deg, rgba(0,62,135,0.2) 0%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0;
+  animation: typing;
+  animation-duration: 1s;
+  animation-timing-function: steps(30, end);
+  animation-fill-mode: forwards;
 }
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+
+
+
 
 /* dates checkboxes inside form-wrapper */
 .form-wrapper.form-edit .input-group-addon input[type=checkbox]{ 
@@ -442,11 +458,15 @@ input:-webkit-autofill:active {
 }
 
 .form-wrapper.form-edit { 
-  border:0px; 
+  /* border:0px; 
   padding-left: 0px;
-  padding-right: 0px;
+  padding-right: 0px; */
+  border:solid 1px #e8e8e8; 
+  padding: 15px 20px 25px 20px;
+
   background-color: white;
 }
+
 
 /* @media(max-width:767px){ .form-wrapper.form-edit{overflow-y: auto;} } */
 
@@ -907,6 +927,7 @@ label:has(input[type="checkbox"]:disabled){
   .opencourses_btn:hover {
     background-color: #005ad9;
     color: #ffffff;
+    text-decoration: none;
   }
 
 /* --------------------------------------------- Datepicker-datetimepicker ------------------------------------------------------------------*/
@@ -2729,7 +2750,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .link_admin_tool:hover{
-    opacity: 0.5;
+    opacity: 0.7;
     color:#001146;
   }
 

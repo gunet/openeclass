@@ -5824,3 +5824,13 @@ $langCalculateNewDuration = "Calcul de la nouvelle durée";
 $langChooseDayAgain = "Vous ne pouvez pas choisir des jours différents. Essayer à nouveau.";
 $langMessageInfo = "Informations sur les messages";
 $langMessageContent = "Contenu du message";
+
+
+
+$langCreateCourseLeftForm = "La création d'un cours est l'action la plus importante de l'utilisateur – instructeur sur la plateforme.</br></br>
+Entrez un titre pour votre leçon.</br></br>
+Tapez une courte description du cours.</br></br>
+Sélectionnez la faculté ou le département au sein duquel le cours est offert ou la catégorie de cours à laquelle il appartient.</br></br>
+Choisissez l'un des formats de cours disponibles. </br></br>
+Spécifiez éventuellement la licence de distribution de votre cours.</br></br>
+Spécifiez le type d'accès à votre cours. </br></br>";
