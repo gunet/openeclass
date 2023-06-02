@@ -144,12 +144,6 @@ if ($is_editor) {
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
-    } elseif (isset($_POST['add_blog'])) {
-        add_blog_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
-        Session::flash('message',"$langQuotaSuccess");
-        Session::flash('alert-class', 'alert-success');
-        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_blogcomment'])) {
         add_blogcomment_to_certificate($element, $element_id);
         //Session::Messages("$langQuotaSuccess", 'alert-success');
