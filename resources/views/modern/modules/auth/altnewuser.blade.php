@@ -42,10 +42,8 @@
                         @elseif ($_SESSION['u_prof'] and !$alt_auth_prof_reg)
                             <div class='col-12'><div class='alert alert-danger'>{{ trans('langCannotRegister') }}</div></div>
                         @else
-                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                            <div class='col-12 h-100 left-form'></div>
-                        </div>
-                        <div class='col-lg-6 col-12'>
+                        
+                        <div class='col-lg-6 col-12 ms-auto me-auto'>
                             <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
                                     <fieldset> {{ $auth_instructions }}
