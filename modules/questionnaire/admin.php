@@ -819,6 +819,15 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     } else if($poll->type == 2) {
         $poll_type = $langATTLSSurvey." $langSurvey";
     }
+
+    if ($poll->assign_to_specific == 1) {
+        $assign_to_users_message = "$m[WorkToUser]";
+    } else if ($poll->assign_to_specific == 2) {
+        $assign_to_users_message = "$m[WorkToGroup]";
+    } else {
+        $assign_to_users_message = "$m[WorkToAllUsers]";
+    }
+
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
     $tool_content .= action_bar(array(
@@ -868,7 +877,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     ". format_locale_date(strtotime($poll->end_date)) ."
                 </div>
             </div>
-
+            
+            <div class='row p-2 margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong class='control-label-notes'>$m[WorkAssignTo]:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    ". $assign_to_users_message ."
+                </div>                                        
+            </div>                                            
+            
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langResults:</strong>
