@@ -100,7 +100,7 @@
                                 <div class='form-group mt-4'>
                                     <label for='am_form' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                     <div class='row'>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                                         </div>
                                     </div>
@@ -109,8 +109,8 @@
                                 <div class='form-group mt-4'>
                                     <label for='phone_form' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
                                     <div class='row'>
-                                        <div class='col-sm-6'>
-                                            <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
+                                        <div class='col-sm-12'>
+                                            <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{ $phone_form }}'>
                                         </div>
                                     </div>
                                 </div>

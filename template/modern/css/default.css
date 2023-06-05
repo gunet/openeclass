@@ -46,9 +46,31 @@
 
 .user-language-menu{ background: #ffffff; width:200px; }
 
-@media(min-width:768px) and (max-width:991px){.user-language-menuOn{ margin-right: 200px !important;}}
+/* @media(min-width:768px) and (max-width:991px){.user-language-menuOn{ margin-right: 200px !important;}} */
 
 .user-language-menu .list-group-item:hover{ background-color: #005ad9; color:white; }
+
+@media(max-width:991px){
+  .inputMobileSearch, .submitMobileSearch{
+    height:30px;
+    background-color: transparent;
+    color: #ffffff;
+    border: solid 0.2px #e8e8e8;
+
+  }
+  .inputMobileSearch::placeholder{
+    text-align: center;
+    color: #ffffff;
+  }
+  .inputMobileSearch:focus,.inputMobileSearch:hover,.inputMobileSearch:active{
+    outline: none;
+  }
+  .submitMobileSearch:focus,.submitMobileSearch:hover,.submitMobileSearch:active{
+    outline: none;
+    background-color: #ffffff;
+    color:#000000;
+  }
+}
 
 
 /********************************************* FOOTER ****************************************************************************************/
@@ -1102,6 +1124,7 @@ label:has(input[type="checkbox"]:disabled){
   .jumbotron.jumbotron-login{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg);}
   @media(min-width:992px){
     .jumbotron.jumbotron-login { height:650px; padding-top: 107px; }
+    .jumbotron.jumbotron-login.reBuiltJumbotron {height:780px !important;}
   }
 
   .login-form-Homepage{ border-top-right-radius: 15px; border-bottom-right-radius: 15px; background:#F5F5F5; }
@@ -1207,12 +1230,16 @@ label:has(input[type="checkbox"]:disabled){
       background-color: #003e87;
     } 
     .UserLoginIcon2{ 
-      width: 70px; 
-      height: 70px; 
-      margin-left:0px;
+      width: 30px; 
+      height: 30px; 
+      
     }
     .loginText{
-      font-size: 15px;
+      font-size: 14px;
+    }
+    .toolHomePage{
+      background-color: transparent;
+      color: #ffffff;
     }
   }
   

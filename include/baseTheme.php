@@ -891,10 +891,10 @@ function lang_selections_Mobile() {
         $langDropdown = "user-language-menuOn";
     }
     $lang_select = "
-      <a class='btn btn-transparent text-white d-flex justify-content-center align-items-center' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+      <a class='btn btn-transparent text-white d-flex justify-content-center align-items-center me-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <i class='fa fa-globe'></i>
       </a>
-      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-lg-0 me-md-5 me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
+      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
