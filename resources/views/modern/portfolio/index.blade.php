@@ -15,47 +15,48 @@
         <div class="col-12 px-0">
             <div class='card panelCard BorderSolid px-lg-4 py-lg-3 border-0'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-
-                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langSummaryProfile') }}</span>
-                
-                
-                    <div class="collapse-details-button" data-bs-toggle="collapse" data-bs-target=".user-details-collapse" aria-expanded="false" onclick="switch_user_details_toggle()" >
-                        <span class="user-details-collapse-less float-end"><span class='hidden-xs TextMedium text-uppercase small-text lightBlueText'>{{ trans('langMyProfile') }}</span> <i class="fas fa-chevron-up lightBlueText"></i></span>
-                    </div>
-
+                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langSummaryProfile') }}</div>
                 </div>
                 <div class='card-body'>
-                    <div class="container-fluid collapse user-details-collapse show p-0 mt-2">
-                        <div class="row px-2">
-                            <div class='col-xl-2 col-lg-2 col-md-6 col-12 d-flex justify-content-lg-start justify-content-center'>
-                                <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                    <div class='row'>
+                        <div class='col-md-2 col-12'>
+                            <img class="user-detals-photo m-auto d-block" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                            <p class="text-center blackBlueText mt-3"> {{ $_SESSION['uname'] }} </p>
+                        </div>
+                        <div class='col-md-6 col-12 ps-lg-2 ps-md-5'>
+                            <h6 class='text-md-start text-center blackBlueText TextBold mb-0'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h6>
+                            <p class='text-md-start text-center small-text TextMedium blackBlueText mb-4'>
+                                @if(($session->status == USER_TEACHER))
+                                    {{ trans('langMetaTeacher') }}
+                                @elseif(($session->status == USER_STUDENT))
+                                    {{ trans('langCStudent') }}
+                                @else
+                                    {{ trans('langAdministrator')}}
+                                @endif
+                            </p>
+                            <p class='text-md-start text-center blackBlueText TextRegular mb-5'>
+                                {{ trans('langProfileLastVisit') }}&nbsp:&nbsp{{ format_locale_date(strtotime($lastVisit->when)) }}
+                            </p>
+                            <div class='d-flex justify-content-md-start justify-content-center mt-3'>
+                                <a class='btn submitAdminBtn' href='{{ $urlAppend }}main/profile/display_profile.php'>{{ trans('langMyProfile') }}</a>
                             </div>
-                            <div class='col-xl-3 col-lg-3 col-md-6 col-12'>
-                                <div class="mt-3">
-                                    <h6 class='text-xl-start text-center blackBlueText TextSemiBold'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h6>
-                                </div>
-                                <p class='small-text text-xl-start text-center TextMedium blackBlueText mb-3'>
-                                    @if(($session->status == USER_TEACHER))
-                                        {{ trans('langMetaTeacher') }}
-                                    @elseif(($session->status == USER_STUDENT))
-                                        {{ trans('langCStudent') }}
-                                    @else
-                                        {{ trans('langAdministrator')}}
-                                    @endif
-                                </p>
-                                <p class="small-text text-xl-start text-center text-secondary TextMedium mt-3"> {{ $_SESSION['uname'] }} </p>
-                            </div>
-                            <div class='col-xl-3 col-lg-4 col-md-6 col-12'>
-                                <p class='TextMedium text-center mt-3'>{{ trans('langSumCoursesEnrolled') }}&nbsp;&nbsp;{{ $student_courses_count }}</p>
-                                <p class='TextMedium text-center'>{{ trans('langSumCoursesSupport') }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $teacher_courses_count }}</p>
-                            </div>
-                            <div class='col-xl-4 col-lg-3 col-md-6 col-12 d-xl-flex justify-content-xl-center'>
-                                <p class='small-text TextSemiBold text-center text-secondary mt-3 mb-0 pe-1 '>{{ trans('langProfileLastVisit') }}:</p>
-                                <p class='blackBlueText text-center small-text TextSemiBold mt-xl-3 mt-1'>{{ format_locale_date(strtotime($lastVisit->when)) }}</p>
-                            </div>
-                            <div class='col-12 d-flex justify-content-md-end justify-content-center pe-0 mt-lg-0 mt-3'>
-                                <a class='btn submitAdminBtn small-text' href='{{ $urlAppend }}main/profile/display_profile.php'>{{ trans('langMyProfile') }}</a>
-                            </div>
+                            
+                        </div>
+                        <div class='col-md-4 col-12'>
+                            <ol class="list-group list-group-numbered mt-md-0 mt-4">
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold blackBlueText">{{ trans('langSumCoursesEnrolled') }}</div>
+                                    </div>
+                                    <span class="badge bgTheme rounded-pill">{{ $student_courses_count }}</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold blackBlueText">{{ trans('langSumCoursesSupport') }}</div>
+                                    </div>
+                                    <span class="badge bgTheme rounded-pill">{{ $teacher_courses_count }}</span>
+                                </li>
+                            </ol>
                         </div>
                     </div>
                 </div>

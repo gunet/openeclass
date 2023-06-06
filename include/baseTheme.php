@@ -308,6 +308,13 @@ function view($view_file, $view_data = array()) {
 
                 .breadcrumb-item::before{margin-top:0px;}
 
+                .cal-day-today.cal-day-holiday .number-day-cal {
+                    background-color: $theme_options_styles[leftNavBgColor] !important;
+                    padding: 1px 6px 1px 6px;
+                    border-radius: 2% !important;
+                    color: #ffffff;
+                }
+
                 .submitAdminBtn {
                     border: solid thin;
                     border-color: $theme_options_styles[leftNavBgColor];

@@ -318,104 +318,122 @@ function cpf_validate_required_edituser() {
  * @return string
  */
 function render_profile_fields_content($context) {
-    global $uid, $langProfileNotAvailable;
+    global $uid, $langProfileNotAvailable, $langNoInfoAvailable;
 
     $return_str = '';
 
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
 
-    foreach ($result as $cat) {
-        $args = array();
+    if(count($result) > 0){
 
-        $ref_user_type = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $context['user_id'])->status;
+        $return_str .= "<div class='col-12 mt-4'>
+                            <div class='row row-cols-1 row-cols-md-2 g-4'>";
 
-        if ($ref_user_type == USER_TEACHER) {
-            $user_type = '(user_type = ?d OR user_type = ?d)';
-            $args[] = 1;
-            $args[] = 10;
-        } elseif ($ref_user_type == USER_STUDENT) {
-            $user_type = '(user_type = ?d OR user_type = ?d)';
-            $args[]= 5;
-            $args[] = 10;
-        }
+                                foreach ($result as $cat) {
+                    $return_str .= "<div class='col'>
+                                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>";
+                                            $args = array();
 
-        if ($context['user_id'] == $uid) { //viewing own profile
-            $args[] = $cat->id;
-            $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
-                                                WHERE $user_type AND categoryid = ?d
-                                                ORDER BY sortorder DESC", $args);
-        } else { //viewing other user's profile
-            if ($_SESSION['status'] == USER_STUDENT) {
-                $visibility = '(visibility = ?d OR visibility = ?d)';
-                $args[]= 5;
-                $args[] = 10;
-            } elseif ($_SESSION['status'] == USER_TEACHER) {
-                $visibility = '(visibility = ?d OR visibility = ?d)';
-                $args[] = 1;
-                $args[] = 10;
-            }
-            $args[] = $cat->id;
-            $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
-                                                WHERE $user_type AND $visibility AND categoryid = ?d
-                                                ORDER BY sortorder DESC", $args);
-        }
+                                            $ref_user_type = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $context['user_id'])->status;
 
-        if (count($res) > 0) { //category start
-            $return_str .= "<div class='col-md-6 col-12 mt-3'>
-                            <div class='panel panel-admin border-0 bg-white rounded-0 px-0'>
-                                     <div class='panel-heading rounded-0 bg-white ps-md-0 pe-md-1 px-0'>
-                                        <div class='panel-heading bg-body ps-0 pe-0'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='text-uppercase Help-text-panel-heading'>".$cat->name."</span>
-                                            </div>
+                                            if ($ref_user_type == USER_TEACHER) {
+                                                $user_type = '(user_type = ?d OR user_type = ?d)';
+                                                $args[] = 1;
+                                                $args[] = 10;
+                                            } elseif ($ref_user_type == USER_STUDENT) {
+                                                $user_type = '(user_type = ?d OR user_type = ?d)';
+                                                $args[]= 5;
+                                                $args[] = 10;
+                                            }
+
+                                            if ($context['user_id'] == $uid) { //viewing own profile
+                                                $args[] = $cat->id;
+                                                $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
+                                                                                    WHERE $user_type AND categoryid = ?d
+                                                                                    ORDER BY sortorder DESC", $args);
+                                            } else { //viewing other user's profile
+                                                if ($_SESSION['status'] == USER_STUDENT) {
+                                                    $visibility = '(visibility = ?d OR visibility = ?d)';
+                                                    $args[]= 5;
+                                                    $args[] = 10;
+                                                } elseif ($_SESSION['status'] == USER_TEACHER) {
+                                                    $visibility = '(visibility = ?d OR visibility = ?d)';
+                                                    $args[] = 1;
+                                                    $args[] = 10;
+                                                }
+                                                $args[] = $cat->id;
+                                                $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
+                                                                                    WHERE $user_type AND $visibility AND categoryid = ?d
+                                                                                    ORDER BY sortorder DESC", $args);
+                                            }
+
+                                            $return_str .= "<div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>".$cat->name."</div>
+                                                            </div>
+
+                                                            <div class='card-body'>";
+
+                                                                if (count($res) > 0) { //category start
+                                                                    
+                                                                    foreach ($res as $f) { //get user data for each field
+
+                                                                        $return_str .= "
+                                                                        <div class='profile-pers-info-data mb-3'>";
+
+                                                                            $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
+                                                                                                                    WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
+
+                                                                            $return_str .= "
+                                                                                                <p class='card-title fw-bold mb-0 fs-6'>".$f->name."</p>
+                                                                                            ";
+
+                                                                                                if (!$fdata_res || $fdata_res->data == '') {
+                                                                                                    $return_str .= " <p class='tag-value not_visible card-text'> $langProfileNotAvailable </p>";
+                                                                                                } else {
+                                                                                                    $return_str .= "";
+                                                                                                    switch ($f->datatype) {
+                                                                                                        case CPF_TEXTBOX:
+                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".q($fdata_res->data)."</p>";
+                                                                                                            break;
+                                                                                                        case CPF_TEXTAREA:
+                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".standard_text_escape($fdata_res->data)."</p>";
+                                                                                                            break;
+                                                                                                        case CPF_DATE:
+                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".q($fdata_res->data)."</p>";
+                                                                                                            break;
+                                                                                                        case CPF_MENU:
+                                                                                                            $options = unserialize($f->data);
+                                                                                                            $options = array_combine(range(1, count($options)), array_values($options));
+                                                                                                            $options[0] = "";
+                                                                                                            ksort($options);
+                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".q($options[$fdata_res->data])."</p>";
+                                                                                                            break;
+                                                                                                        case CPF_LINK:
+                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></p>";
+                                                                                                            break;
+                                                                                                    }
+                                                                                                }
+                                                                            $return_str .= "
+
+                                                                        </div>";
+
+                                                                    }
+                                                                            
+                                                                }else{
+                                                                    $return_str .= "<p class='card-text'>$langNoInfoAvailable</p>";
+                                                                }
+
+                                            $return_str .= "</div>
                                         </div>
-                                    </div>";
-        }
+                                    </div>";//end panel-col
 
-        foreach ($res as $f) { //get user data for each field
-            $return_str .= "<div class='panel-body rounded-0 ps-md-0 pt-0 px-0'><div class='profile-pers-info-data'>";
+                                }
 
-            $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
-                                                       WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
-
-            $return_str .= "<div style='line-height:26px;'>
-                            <span style='font-weight: bold; color: #888;'>".$f->name." : </span>
-                        ";
-
-            if (!$fdata_res || $fdata_res->data == '') {
-                $return_str .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
-            } else {
-                $return_str .= "";
-                switch ($f->datatype) {
-                    case CPF_TEXTBOX:
-                        $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
-                        break;
-                    case CPF_TEXTAREA:
-                        $return_str .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
-                        break;
-                    case CPF_DATE:
-                        $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
-                        break;
-                    case CPF_MENU:
-                        $options = unserialize($f->data);
-                        $options = array_combine(range(1, count($options)), array_values($options));
-                        $options[0] = "";
-                        ksort($options);
-                        $return_str .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
-                        break;
-                    case CPF_LINK:
-                        $return_str .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
-                        break;
-                }
-            }
-            $return_str .= "</div></div></div>";
-        }
-
-        if (count($res) > 0) { //category end
-            $return_str .= "</div></div>";
-        }
-
+            //category end col-row
+            $return_str .= "</div>
+                        </div>";
     }
+
     return $return_str;
 }
 

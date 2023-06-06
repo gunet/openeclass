@@ -38,6 +38,13 @@
   width: 100%;
   height:5px;
 }
+.cal-day-today.cal-day-holiday .number-day-cal {
+  background-color: #005ad9;
+  padding: 1px 6px 1px 6px;
+  border-radius: 2% !important;
+  color: #ffffff;
+}
+
 /************************************rgba(255, 255, 255, 0.5)**********************************************/
 /***************** this is mypersonal-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/

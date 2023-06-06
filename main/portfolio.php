@@ -226,7 +226,7 @@ $data['user_messages'] = $user_messages;
 $cources = getUserCoursesPic($uid);
 $data['cources'] = $cources;
 
-$items_per_page = 6;
+$items_per_page = 4;
 $data['items_per_page'] = $items_per_page;
 
 $cource_pages = ceil(count($cources)/$items_per_page);
