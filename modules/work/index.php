@@ -2966,7 +2966,7 @@ function show_edit_assignment($id) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
-                                    AND `group`.id = assignment_to_specific.group_id                                    
+                                    AND `group`.id = assignment_to_specific.group_id
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {

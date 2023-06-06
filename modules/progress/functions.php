@@ -837,7 +837,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         if ($unit_id) {
             redirect(localhostUrl().$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
         } else {
-            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;${element}_id=$element_id");
+            redirect_to_home_page("modules/progress/index.php?course=$course_code&amp;{$element}_id=$element_id");
         }
     } else { // otherwise editing is not allowed
         $data = Database::get()->querySingle("SELECT threshold, operator FROM {$element}_criterion
@@ -1779,7 +1779,7 @@ function display_available_polls($element, $element_id, $unit_id = 0) {
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='${urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
+            $tool_content .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";
         }
@@ -2061,7 +2061,7 @@ function display_settings($element, $element_id, $unit_id = 0) {
                                         <strong>$langProgressBasicInfo</strong>
                                     </div>
                                     <div class='col-sm-5 text-right'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;${element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn btn-primary btn-sm'>"
                                                 . "<span class='fa fa-pencil'></span> &nbsp;&nbsp;$langEditChange
                                         </a>
                                     </div>
