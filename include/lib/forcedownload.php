@@ -77,7 +77,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
     } else {
         $filenameattr = '';
     }
-    header("Content-type: $content_type$charset");
+    header("Content-Type: $content_type$charset");
     if (isset($disposition)) {
         header("Content-Disposition: $disposition$filenameattr");
     }
@@ -370,7 +370,13 @@ function text_charset($filename) {
     $f = fopen($filename, 'r');
     $contents = fread($f, 2048);
     fclose($f);
-    return mb_detect_encoding($contents, 'ASCII,UTF-8,ISO-8859-7,ISO-8859-1');
+    $contents1 = substr($contents, 0, strlen($contents) - 1);
+    foreach(['UTF-8', 'ISO-8859-7', 'ISO-8859-1'] as $enc) {
+        if (mb_check_encoding($contents, $enc) or mb_check_encoding($contents1, $enc)) {
+            return $enc;
+        }
+    }
+    return 'UTF-8';
 }
 
 function public_path_to_disk_path($path_components, $path = '') {
