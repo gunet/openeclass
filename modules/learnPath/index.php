@@ -634,7 +634,7 @@ foreach ($result as $list) { // while ... learning path list
         }
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);
-        $tool_content .= "<td>$lpTotalTime</td>";
+        $tool_content .= "<td class='text-center'>$lpTotalTime</td>";
         $tool_content .= "<td class='text-end' width='120'>" . disp_progress_bar($lpProgress, 1) . "</td>";
     }
 

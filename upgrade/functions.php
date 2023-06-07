@@ -2653,6 +2653,17 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('agenda', 'end')) {
         Database::get()->query("ALTER TABLE `agenda` ADD `end` DATETIME NOT NULL");
     }
+
+    // learningPath
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'attempt')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `attempt` int(11) NOT NULL DEFAULT 1");
+    }
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'started')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `started` datetime DEFAULT NULL");
+    }
+    if (!DBHelper::fieldExists('lp_user_module_progress', 'accessed')) {
+        Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL");
+    }
 }
 
 

@@ -483,37 +483,31 @@
 
                         <div class="panel panel-admin p-0 bg-white borderBoxPanelNoShadow">
                             {!! $user_personal_calendar !!}
-                            <div class='panel-footer'>
-                                <div class='col-12'>
-                                    <div class='row rowMedium'>
-                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                            <div class='d-inline-flex align-items-top'>
-                                                <span class='event event-important mt-1'></span>
-                                                <span class='small-text'>{{ trans('langAgendaDueDay') }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                            <div class='d-inline-flex align-items-top'>
-                                                <span class='event event-info mt-1'></span>
-                                                <span class='small-text'>{{ trans('langAgendaCourseEvent') }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                            <div class='d-inline-flex align-items-top'>
-                                                <span class='event event-success mt-1'></span>
-                                                <span class='small-text'>{{ trans('langAgendaSystemEvent') }}</span>
-                                            </div>
-                                        </div>
-                                        <div class='col-xl-12 col-lg-6 col-md-3 col-12 event-legend'>
-                                            <div class='d-inline-flex align-items-top'>
-                                                <span class='event event-special mt-1'></span>
-                                                <span class='small-text'>{{ trans('langAgendaPersonalEvent') }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap p-3'>
+                        
+                                <div class='d-flex align-items-center px-2 py-1'>
+                                    <span class='event event-important'></span>
+                                    <span class='small-text'>{{ trans('langAgendaDueDay') }}</span>
                                 </div>
+                        
+                        
+                                <div class='d-flex align-items-center px-2 py-1'>
+                                    <span class='event event-info'></span>
+                                    <span class='small-text'>{{ trans('langAgendaCourseEvent') }}</span>
+                                </div>
+                        
+                            
+                                <div class='d-flex align-items-center px-2 py-1'>
+                                    <span class='event event-success'></span>
+                                    <span class='small-text'>{{ trans('langAgendaSystemEvent') }}</span>
+                                </div>
+                            
+                                <div class='d-flex align-items-center px-2 py-1'>
+                                    <span class='event event-special'></span>
+                                    <span class='small-text'>{{ trans('langAgendaPersonalEvent') }}</span>
+                                </div>
+ 
+                                
                             </div>
                         </div>
 

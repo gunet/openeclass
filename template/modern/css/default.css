@@ -1048,7 +1048,10 @@ label:has(input[type="checkbox"]:disabled){
   
   .user-details-collapse-less{ display: none; cursor: pointer; float:right; }
   
-  .user-detals-photo { min-width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8; }
+  .user-detals-photo { width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8; }
+  @media(min-width:768px) and (max-width:991px){
+    .user-detals-photo { max-width: 120px; }
+  }
   
   .btn_left_rigth{ height:30px; width:30px; border-radius:50%; border:solid 1px blue; }
 
@@ -1076,6 +1079,13 @@ label:has(input[type="checkbox"]:disabled){
     .BorderSolidDes{border: solid 1px #e8e8e8; }
   }
 
+
+  @media(max-width:767px){
+    #portfolio_lessons_wrapper .all_courses{
+      width: 100%;
+    }
+  }
+  
   
 
 /* -------------------------------------------- Announcements -------------------------------------------------------------------------------*/

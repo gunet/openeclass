@@ -51,33 +51,33 @@
         }
 
     </script>
-    <div class='panel-footer p-3'>
-        <div class='row'>
-            <div class='col-xl-6 col-md-3 col-12 event-legend'>
-                <div class='d-inline-flex align-items-center'>
+    <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap p-3'>
+       
+            
+                <div class='d-flex align-items-center px-2 py-1'>
                     <div class='event event-important'></div>
                     <div class="agenda-comment"> {{ trans('langAgendaDueDay') }}</div>
                 </div>
-            </div>
-            <div class='col-xl-6 col-md-3 col-12 event-legend'>
-                <div class='d-inline-flex align-items-center'>
+            
+          
+                <div class='d-flex align-items-center px-2 py-1'>
                     <span class='event event-info'></span>
                     <span class="agenda-comment">{{ trans('langAgendaCourseEvent') }}</span>
                 </div>
-            </div>
-            <div class='col-xl-6 col-md-3 col-12 event-legend'>
-                <div class='d-inline-flex align-items-center'>
+            
+           
+                <div class='d-flex align-items-center px-2 py-1'>
                     <span class='event event-success'></span>
                     <span class="agenda-comment">{{ trans('langAgendaSystemEvent') }}</span>
                 </div>
-            </div>
-            <div class='col-xl-6 col-md-3 col-12 event-legend'>
-                <div class='d-inline-flex align-items-center'>
+           
+          
+                <div class='d-flex align-items-center px-2 py-1'>
                     <span class='event event-special'></span>
                     <span class="agenda-comment">{{ trans('langAgendaPersonalEvent') }}</span>
                 </div>
-            </div>
-        </div>
+           
+        
     </div>
 </div>
 

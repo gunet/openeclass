@@ -130,7 +130,7 @@ jQuery(document).ready(function() {
            }
        }
   });
- $('div.all_courses').html('<div class=\"d-flex justify-content-md-start justify-content-center flex-wrap\"><a class=\"btn submitAdminBtn mb-3 me-2\" href=\"{$urlAppend}modules/auth/courses.php\">$langRegCourses</a><a id=\"btn_create_course\" class=\"btn submitAdminBtn btn_create_course\" href=\"{$urlAppend}modules/create_course/create_course.php\">$langCourseCreate</a></div>');
+ $('div.all_courses').html('<div class=\"d-flex justify-content-md-start justify-content-center flex-wrap\"><a class=\"btn submitAdminBtn mb-3 ms-md-0 mx-2\" href=\"{$urlAppend}modules/auth/courses.php\">$langRegCourses</a><a id=\"btn_create_course\" class=\"btn submitAdminBtn btn_create_course\" href=\"{$urlAppend}modules/create_course/create_course.php\">$langCourseCreate</a></div>');
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();

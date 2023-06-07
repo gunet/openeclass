@@ -2731,7 +2731,7 @@ function profile_image($user_id, $size, $class=null) {
     // makes $class argument optional
 
     $class_attr = ($class == null)? '': (" class='" . q($class) . "'");
-    $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:{$size}px'":'';
+    $size_width = ($size != IMAGESIZE_SMALL || $size != IMAGESIZE_LARGE)? "style='width:{$size}px; height:{$size}px;'":'';
     $size = ($size == IMAGESIZE_SMALL or $size == IMAGESIZE_LARGE)? $size: IMAGESIZE_LARGE;
     $imageurl = $username = '';
 

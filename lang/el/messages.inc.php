@@ -1013,7 +1013,7 @@ $langEditAgent = "Επεξεργασία Agent";
  * **************************************************************** */
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2015<br>&nbsp;<br>
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2023<br>&nbsp;<br>
 Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών $langOfCourses και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
@@ -4843,7 +4843,7 @@ $langShowToAll = "όλους τους χρήστες";
 $langSureToDelEvent = "Θέλετε σίγουρα να διαγραφεί το γεγονός;";
 $langSureToDelEventAll = "Θέλετε σίγουρα να διαγραφούν όλα τα γεγονότα;";
 $langUntil = "μέχρι";
-$langWeek = "Eβδομάδα";
+$langWeek = "Εβδομάδα";
 $langsWeek = "εβδομάδα";
 $langWeeks = "εβδομάδες";
 
