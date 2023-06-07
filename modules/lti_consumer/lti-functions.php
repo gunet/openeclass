@@ -326,7 +326,7 @@ function edit_lti_app($session_id) {
                     }
                     $tool_content .= "<div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-center align-items-center'>
-                            <input class='btn submitAdminBtn' type='submit' name='update_lti_app' value='$langSubmi'>
+                            <input class='btn submitAdminBtn' type='submit' name='update_lti_app' value='$langSubmit'>
                         </div>
                     </div>
                     </fieldset>
