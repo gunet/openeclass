@@ -1,18 +1,17 @@
 <footer id="bgr-cheat-footer" class="site-footer mt-auto">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4 col-xl-3 col-xxl-2">
+            <div class="col-lg-4 col-xl-3 col-xxl-2 @if(!get_config('activate_privacy_policy_text')) d-flex justify-content-start align-items-center @endif">
                 <ul class="ul_tools_site_footer">
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
-                    <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">{{ trans('langContact') }}</a></li>
-                   {{-- <li><a class="a_tools_site_footer" href="{{$urlAppend}}info/faq.php">{{ trans('langFaq') }}</a></li> --}} 
-                   @if (get_config('activate_privacy_policy_text'))
+                    <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">{{ trans('langContact') }}</a></li> 
+                    @if (get_config('activate_privacy_policy_text'))
                         <li><a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php">{{ trans('langPrivacyPolicy') }}</a></li>
                     @endif
                    
                 </ul>
             </div>
-            <div class="col-lg-4 col-xl-4 col-xxl-4">
+            <div class="col-lg-4 col-xl-4 col-xxl-4 @if(!get_config('activate_privacy_policy_text')) d-flex justify-content-start align-items-center @endif">
                 <ul class="ul_tools_site_footer">
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/manual.php">{{ trans('langManuals') }}</a></li>
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php">{{ trans('langUsageTerms') }}</a></li>
