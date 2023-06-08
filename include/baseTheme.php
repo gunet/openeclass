@@ -617,6 +617,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 e.preventDefault();
                 $.get($(this).attr(\"href\"), function(data) {
                     bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
                         message: data,
                         buttons: {
                             ok: {
