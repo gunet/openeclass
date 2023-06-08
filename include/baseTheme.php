@@ -234,6 +234,8 @@ function view($view_file, $view_data = array()) {
                 e.preventDefault();
                 $.get($(this).attr(\"href\"), function(data) {
                     bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
                         message: data,
                         buttons: {
                             ok: {
