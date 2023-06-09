@@ -1,10 +1,9 @@
 <?php
-
 /* ========================================================================
- * Open eClass 3.10
+ * Open eClass 3.14
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2020  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,9 +17,8 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ========================================================================
-
   ============================================================================
-  @Description: Main script for the work tool
+  @brief: Assignments
   ============================================================================
  */
 
@@ -83,11 +81,28 @@ if ($autojudge->isConfigured()) {
 // main program
 //-------------------------------------------
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if ($is_editor) {
+        // info about assignments assigned to users and groups
+        if (isset($_GET['ass_info_assigned_to'])) {
+            echo "<ul>";
+            $q = Database::get()->queryArray("SELECT user_id, group_id FROM assignment_to_specific WHERE assignment_id = ?d", $_GET['ass_id']);
+            foreach ($q as $user_data) {
+                if ($user_data->user_id == 0) { // assigned to group
+                    $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
+                    echo "<li>$group_name</li>";
+                } else { // assigned to user
+                    echo "<li>" . uid_to_name($user_data->user_id) . "</li>";
+                }
+            }
+            echo "</ul>";
+            exit;
+        }
+    }
     if (isset($_POST['sid'])) {
         $sid = $_POST['sid'];
         $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
     } elseif (($_POST['assign_type']) or ($_POST['assign_g_type'] == 2)) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+        $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     } else {
         $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                 FROM user, course_user
@@ -149,9 +164,35 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
+                  class : 'form-control input-sm',
+                  placeholder : '$langSearch...'
+                });
+            
+            $(document).on('click', '.assigned_to', function(e) {
+                  e.preventDefault();
+                  var ass_id = $(this).data('ass_id');
+                  url = '$urlAppend' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;                  
+                  $.ajax({
+                    url: url,
+                    success: function(data) {
+                        var dialog = bootbox.dialog({
+                            message: data,
+                            title : '$m[WorkAssignTo]',
+                            onEscape: true,
+                            backdrop: true,
+                            buttons: {
+                                success: {
+                                    label: '$langClose',
+                                    className: 'btn-success',
+                                }
+                            }
                         });
+                        dialog.init(function() {
+                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                        });
+                    }
+                  });
+              });
         });
         </script>";
 
@@ -5281,8 +5322,8 @@ function show_non_submitted($id) {
 function show_student_assignments() {
     global $tool_content, $head_content, $m, $uid, $course_id, $urlAppend, $langGroupWorkDeadline_of_Submission,
         $langHasExpiredS, $langDaysLeft, $langNoAssign, $course_code, $langNoDeadline,
-        $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio,
-        $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt;
+        $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio, $langAssignemtTypeTurnitinInfo,
+        $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt, $langAssignmentTypeTurnitin;
 
 
     $gids = user_group_info($uid, $course_id);
@@ -5371,7 +5412,7 @@ function show_student_assignments() {
         $sort_id = 0;
         foreach ($result as $row) {
             $sort_id++;
-            $exclamation_icon = '';
+            $exclamation_icon = $turnitin_message = '';
             $class = '';
             $not_started = false;
 
@@ -5391,6 +5432,10 @@ function show_student_assignments() {
                 }
             }
 
+            if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+            }
+
             $title_temp = q($row->title);
             if ($row->deadline) {
                 $deadline = format_locale_date(strtotime($row->deadline));
@@ -5407,7 +5452,8 @@ function show_student_assignments() {
                 $link = "$title_temp";
             } else {
                 $class_not_started = '';
-                $link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>$exclamation_icon";
+                $link = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'$class>$title_temp</a>$turnitin_message$exclamation_icon
+                <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>";
             }
 
             $tool_content .= "<tr class='$class_not_started'>
@@ -5445,7 +5491,7 @@ function show_student_assignments() {
             } else {
                 $tool_content .= "<i class='fa fa-square-o'></i><br>";
             }
-            $tool_content .= "</td><td width='30' align='center'>";
+            $tool_content .= "</td><td class='text-center'>";
             foreach ($submission as $sub) {
                 $grade = submission_grade($sub->id);
                 $tool_content .= '<div>' . ($grade? $grade: '-') . '</div>';
@@ -5460,7 +5506,6 @@ function show_student_assignments() {
                     $tool_content .= '<td>&nbsp;</td>';
                 }
             }
-
             $tool_content .= "</tr>";
         }
         $tool_content .= "</tbody></table></div></div></div>";
@@ -5477,8 +5522,8 @@ function show_assignments() {
         $langNewAssign, $course_code, $course_id, $langWorksDelConfirm,
         $langDaysLeft, $langHasExpiredS, $langWarnForSubmissions, $langNoDeadline,
         $langDelSure, $langGradeScales, $langTitle, $langGradeRubrics, $langWillStartAt,
-        $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission,
-        $langActivate, $langDeactivate, $urlAppend;
+        $langPassCode, $langIPUnlock, $langGroupWorkDeadline_of_Submission, $langAssignemtTypeTurnitinInfo,
+        $langActivate, $langDeactivate, $urlAppend, $langAssignmentTypeTurnitin;
 
     // ordering assignments by deadline, without deadline, expired.
     // query uses pseudo limit in ordering results
@@ -5552,7 +5597,7 @@ function show_assignments() {
         foreach ($result as $key => $row) {
             $sort_id++;
             $not_started = false;
-            $exclamation_icon = '';
+            $exclamation_icon = $turnitin_message = '';
             if ($row->password_lock or $row->ip_lock) {
                 $lock_description = "<ul>";
                 if ($row->password_lock) {
@@ -5564,11 +5609,14 @@ function show_assignments() {
                 $lock_description .= "</ul>";
                 $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
             }
+            if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+            }
 
             if ($row->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<a class='assigned_to' data-ass_id='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
             } else if ($row->assign_to_specific == 2) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<a class='assigned_to' data-ass_id='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
             } else {
                 $assign_to_users_message = '';
             }
@@ -5597,10 +5645,10 @@ function show_assignments() {
             if ($not_started) {
                 $deadline = '';
             }
-
             $tool_content .= "<tr class='".((!$row->active or $not_started)? "not_visible":"")."'>";
             $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
+                                $turnitin_message
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                                 $assign_to_users_message
                             <td class='text-center'>$num_submitted</td>
