@@ -78,10 +78,37 @@ $head_content .= "<script type='text/javascript'>
                    }
                }
             });
+            
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
+                  class : 'form-control input-sm',
+                  placeholder : '$langSearch...'
+            });
+            
+            $(document).on('click', '.assigned_to', function(e) {
+                  e.preventDefault();
+                  var pid = $(this).data('pid');
+                  url = '$urlAppend' + 'modules/questionnaire/index.php?poll_info_assigned_to=true&pid=' + pid;                  
+                  $.ajax({
+                    url: url,
+                    success: function(data) {
+                        var dialog = bootbox.dialog({
+                            message: data,
+                            title : '$m[WorkAssignTo]',
+                            onEscape: true,
+                            backdrop: true,
+                            buttons: {
+                                success: {
+                                    label: '$langClose',
+                                    className: 'btn-success',
+                                }
+                            }
                         });
+                        dialog.init(function() {
+                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                        });
+                    }
+                  });
+            });
         });
         </script>";
 
@@ -93,6 +120,23 @@ if (isset($_GET['verification_code'])) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 if ($is_editor) {
+
+    // info about polls assigned to users and groups
+    if (isset($_GET['poll_info_assigned_to'])) {
+        echo "<ul>";
+        $q = Database::get()->queryArray("SELECT user_id, group_id FROM poll_to_specific WHERE poll_id = ?d", $_GET['pid']);
+        foreach ($q as $user_data) {
+            if (is_null($user_data->user_id)) { // assigned to group
+                $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
+                echo "<li>$group_name</li>";
+            } else { // assigned to user
+                echo "<li>" . uid_to_name($user_data->user_id) . "</li>";
+            }
+        }
+        echo "</ul>";
+        exit;
+    }
+
     if (isset($_GET['pid'])) {
         $pid = $_GET['pid'];
         $p = Database::get()->querySingle("SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
@@ -351,9 +395,9 @@ function printPolls() {
                         $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'></span>";
                     }
                     if ($thepoll->assign_to_specific == 1) {
-                        $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
                     } else if ($thepoll->assign_to_specific == 2) {
-                        $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                        $assign_to_users_message = "<a class='assigned_to' data-pid='$thepoll->pid'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
                     } else {
                         $assign_to_users_message = '';
                     }
