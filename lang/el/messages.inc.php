@@ -4464,7 +4464,7 @@ $langValue = 'Τιμή';
 $langNewGradeScale = "Προσθήκη βαθμολογικής κλίμακας";
 $langWorkSubType = "Τύπος Υποβολής";
 $langWorkOnlineText = "Online Κείμενο";
-$langZipDownload = "Κατέβασμα των εργασιών σε αρχείο .zip";
+$langZipDownload = "Κατέβασμα των εργασιών";
 $langDelWarn2 = "Έχει αποσταλεί μία εργασία " . $langsOfStudent . ". Το αρχείο αυτό θα διαγραφεί!";
 $langDelTitle = "Προσοχή!";
 $langDelMany1 = "Έχουν αποσταλεί";
@@ -4562,6 +4562,7 @@ $langGradedAt = 'βαθμολογήθηκε στις';
 $langAssignmentType = "Τύπος Εργασίας";
 $langAssignmentTypeEclass = "Eclass";
 $langAssignmentTypeTurnitin = "TurnItIn";
+$langAssignemtTypeTurnitinInfo = "Οι υποβολές των εργασιών θα σταλούν για έλεγχο λογοκλοπής μέσω του συστήματος Turnitin";
 $langGradeReviews = "Αξιολόγηση από ομότιμους";
 $langReviewsPerUser = "Αξιολογήσεις ανά χρήστη";
 $langAllowableReviewValues = "Επιτρεπτές τιμές: 3-5";
@@ -4707,6 +4708,7 @@ $langsUnit = "ενότητα";
 $langInvalidCourseUnitPrerequisites = "Η ολοκλήρωση της ενότητας δεν είναι ενεργοποιημένη.";
 $langUnitNotCompleted = "Οι δραστηριότητες της προηγούμενης ενότητας δεν έχουν ολοκληρωθεί";
 $langUnitNotStarted = "Η ενότητα δεν έχει ξεκινήσει";
+$langResourceBelongsToUnitPrereq = "Η δραστηριότητα συμμετέχει στην ολοκλήρωση της ενότητας";
 
 /* * ********************************************************************
   mail_verify.php
