@@ -92,9 +92,35 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm ms-0 mb-3',
-                          placeholder : '$langSearch...'
+                  class : 'form-control input-sm ms-0 mb-3',
+                  placeholder : '$langSearch...'
+            });
+            
+            $(document).on('click', '.assigned_to', function(e) {
+                  e.preventDefault();
+                  var eid = $(this).data('eid');
+                  url = '$urlAppend' + 'modules/exercise/index.php?ex_info_assigned_to=true&eid=' + eid;                  
+                  $.ajax({
+                    url: url,
+                    success: function(data) {
+                        var dialog = bootbox.dialog({
+                            message: data,
+                            title : '$m[WorkAssignTo]',
+                            onEscape: true,
+                            backdrop: true,
+                            buttons: {
+                                success: {
+                                    label: '$langClose',
+                                    className: 'btn-success',
+                                }
+                            }
                         });
+                        dialog.init(function() {
+                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                        });
+                    }
+                  });
+              });
         });
         </script>";
 
@@ -106,6 +132,22 @@ if ($is_editor) {
         $exerciseId = $_GET['exerciseId'];
     }
 
+    // info about exercises assigned to users and groups
+    if (isset($_GET['ex_info_assigned_to'])) {
+        echo "<ul>";
+        $q = Database::get()->queryArray("SELECT user_id, group_id FROM exercise_to_specific WHERE exercise_id = ?d", $_GET['eid']);
+        foreach ($q as $user_data) {
+            if (is_null($user_data->user_id)) { // assigned to group
+                $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
+                echo "<li>$group_name</li>";
+            } else { // assigned to user
+                echo "<li>" . uid_to_name($user_data->user_id) . "</li>";
+            }
+        }
+        echo "</ul>";
+        exit;
+    }
+
     if (!empty($_GET['choice'])) {
         // construction of Exercise
         $objExerciseTmp = new Exercise();
@@ -115,11 +157,11 @@ if ($is_editor) {
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->delete();
                         Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                        Session::flash('message',$langPurgeExerciseSuccess); 
+                        Session::flash('message',$langPurgeExerciseSuccess);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
-                        Session::flash('message',$langResourceBelongsToCert); 
+                        Session::flash('message',$langResourceBelongsToCert);
                         Session::flash('alert-class', 'alert-warning');
                     }
                     break;
@@ -127,7 +169,7 @@ if ($is_editor) {
                     if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
                         $objExerciseTmp->purge();
                         $objExerciseTmp->save();
-                        Session::flash('message',$langPurgeExerciseResultsSuccess); 
+                        Session::flash('message',$langPurgeExerciseResultsSuccess);
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
@@ -149,7 +191,7 @@ if ($is_editor) {
                         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
                         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     } else {
-                        Session::flash('message',$langResourceBelongsToCert); 
+                        Session::flash('message',$langResourceBelongsToCert);
                         Session::flash('alert-class', 'alert-warning');
                     }
                     break;
@@ -167,19 +209,19 @@ if ($is_editor) {
                     break;
                 case 'clone':  // make exercise limited
                     $objExerciseTmp->duplicate();
-                    Session::flash('message',$langCopySuccess); 
+                    Session::flash('message',$langCopySuccess);
                     Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;
                 case 'distribution': //distribute answers
                     $objExerciseTmp->distribution($_GET['correction_output']);
-                    Session::flash('message',$langDistributionSuccess); 
+                    Session::flash('message',$langDistributionSuccess);
                     Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;
                 case 'cancelDistribution': //canceling distributed answers
                     $objExerciseTmp->cancelDistribution();
-                    Session::flash('message',$langCancelDistributionSuccess); 
+                    Session::flash('message',$langCancelDistributionSuccess);
                     Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;
@@ -324,15 +366,15 @@ if (!$nbrExercises) {
         // prof only
         if ($is_editor) {
             if (!empty($row->description)) {
-                $descr = "<br/>$row->description";
+                $descr = "<br>$row->description";
             } else {
                 $descr = '';
             }
 
             if ($row->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
             } else if ($row->assign_to_specific == 2) {
-                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
             } else {
                 $assign_to_users_message = '';
             }
