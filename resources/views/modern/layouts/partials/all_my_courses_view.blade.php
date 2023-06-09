@@ -83,11 +83,11 @@
                                             @endif
                                         </div>
                                         <p class="card-text">
-                                            <p class='TextSemiBold @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langCode') }}</p>
+                                            <p class='card-title fw-bold mb-0 fs-6 @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langCode') }}</p>
                                             <p class="text-secondary @if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->public_code) }}</p>
                                         </p>
                                         <p class="card-text">
-                                            <p class='TextSemiBold @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}</p>
+                                            <p class='card-title fw-bold mb-0 fs-6 @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}</p>
                                             <p class="text-secondary @if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->professor) }}</p>
                                         </p>
                                         

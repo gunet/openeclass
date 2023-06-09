@@ -111,9 +111,9 @@
 
                   <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
                       <div class='col-12 h-100 left-form'>
-                          <p class='TextSemiBold normalColorBlueText fst-italic text-wrap p-5 text-center'>
+                          {{--<p class='TextSemiBold normalColorBlueText fst-italic text-wrap p-5 text-center'>
                               {!! trans('langCreateCourseLeftForm') !!}
-                          </p>
+                          </p>--}}
                       </div>
                   </div>
                   <div class='col-lg-6 col-12'>

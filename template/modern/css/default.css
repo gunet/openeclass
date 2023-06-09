@@ -289,7 +289,11 @@ textarea {
 }
 
 .Shadow-cols { 
-  box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 8%); 
+   box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 8%);
+}
+
+.border-cols-default { 
+  border: 1px solid rgba(0,0,0,.125);
 }
 
 .legendViewContent{
@@ -310,6 +314,10 @@ textarea {
 
 .h-10px{
   height: 10xp;
+}
+
+.basicFontSize {
+  font-size: 15px;
 }
 
 
@@ -3011,6 +3019,9 @@ label:has(input[type="checkbox"]:disabled){
   border: none;
 }
 .mycourses-pagination .page-item-next .page-link:hover,.mentors-pagination .page-item-previous .page-link:hover{
+  background-color: #e8e8e8 !important;
+}
+.mycourses-pagination .page-item-previous .page-link:hover,.mentors-pagination .page-item-previous .page-link:hover{
   background-color: #e8e8e8 !important;
 }
 

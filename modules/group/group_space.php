@@ -170,50 +170,54 @@ if (isset($_GET['group_as'])) {
     }
 } else {
     $student_to_student_allow = get_config('dropbox_allow_student_to_student');
-    $tool_content .= action_bar(array(
-                array('title' => $langModify,
-                      'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
-                      'level' => 'primary-label',
-                      'icon' => 'fa-edit',
-                      'button-class' => 'btn-success',
-                      'show' => $is_editor),
-                array('title' => $langForums,
-                      'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
-                      'icon' => 'fa-comments',
-                      'level' => 'primary',
-                       'show' => $has_forum and $forum_id <> 0),
-                array('title' => $langGroupDocumentsLink,
-                      'url' => "document.php?course=$course_code&amp;group_id=$group_id",
-                      'icon' => 'fa-folder-open',
-                      'level' => 'primary',
-                      'show' => $documents),
-                array('title' => $langWiki,
-                      'url' => "../wiki/index.php?course=$course_code&amp;gid=$group_id",
-                      'icon' => 'fa-wikipedia-w',
-                      'level' => 'primary',
-                      'show' => $wiki),
-                array('title' => $langGroupAssignments,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
-                      'icon' => 'fa-globe',
-                      'level' => 'primary',
-                      'show' => visible_module(MODULE_ID_ASSIGN)),
-                array('title' => $langBack,
-                      'url' => "index.php?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary'),
-                array('title' => $langEmailGroup,
-                      'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
-                      'icon' => 'fa-envelope',
-                      'show' => $is_editor or $is_tutor or $student_to_student_allow),
-                array('title' => $langAddManyUsers,
-                      'url' => "muladduser.php?course=$course_code&amp;group_id=$group_id",
-                      'icon' => 'fa-plus-circle',
-                      'show' => $is_editor),
-                array('title' => $langDumpUser,
-                      'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id",
-                      'icon' => 'fa-file-archive-o',
-                      'show' => $is_editor)
-                ));
+
+    $tool_content .= "<div class='d-block d-lg-none'>";
+        $tool_content .= action_bar(array(
+                    array('title' => $langModify,
+                        'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
+                        'level' => 'primary-label',
+                        'icon' => 'fa-edit',
+                        'button-class' => 'btn-success',
+                        'show' => $is_editor),
+                    array('title' => $langForums,
+                        'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
+                        'icon' => 'fa-comments',
+                        'level' => 'primary',
+                        'show' => $has_forum and $forum_id <> 0),
+                    array('title' => $langGroupDocumentsLink,
+                        'url' => "document.php?course=$course_code&amp;group_id=$group_id",
+                        'icon' => 'fa-folder-open',
+                        'level' => 'primary',
+                        'show' => $documents),
+                    array('title' => $langWiki,
+                        'url' => "../wiki/index.php?course=$course_code&amp;gid=$group_id",
+                        'icon' => 'fa-wikipedia-w',
+                        'level' => 'primary',
+                        'show' => $wiki),
+                    array('title' => $langGroupAssignments,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
+                        'icon' => 'fa-globe',
+                        'level' => 'primary',
+                        'show' => visible_module(MODULE_ID_ASSIGN)),
+                    array('title' => $langBack,
+                        'url' => "index.php?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary'),
+                    array('title' => $langEmailGroup,
+                        'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
+                        'icon' => 'fa-envelope',
+                        'show' => $is_editor or $is_tutor or $student_to_student_allow),
+                    array('title' => $langAddManyUsers,
+                        'url' => "muladduser.php?course=$course_code&amp;group_id=$group_id",
+                        'icon' => 'fa-plus-circle',
+                        'show' => $is_editor),
+                    array('title' => $langDumpUser,
+                        'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id",
+                        'icon' => 'fa-file-archive-o',
+                        'show' => $is_editor)
+                    ));
+
+    $tool_content .= "</div>";
 
     $tutors = array();
     $members = array();
@@ -234,50 +238,139 @@ if (isset($_GET['group_as'])) {
     if ($tutors) {
         $tool_content_tutor = implode(', ', $tutors);
     } else {
-        $tool_content_tutor = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
+        $tool_content_tutor = $langNoInfoAvailable;
     }
 
     $group_description = trim($group_description);
     if (empty($group_description)) {
-        $tool_content_description = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
+        $tool_content_description = $langNoInfoAvailable;
     } else {
         $tool_content_description = q($group_description);
     }
 
     $tool_content .= "
-    <div class='col-sm-12'>
-        <div class='card panelCard'>
-            <div class='card-header bg-light'>
-                <div class='normalBlueText TextSemiBold fs-6'>$langGroupInfo</div>
+        <div class='col-12'>
+            <div class='row row-cols-1 row-cols-lg-2 g-4'>
+                <div class='col-xl-7 col-lg-6 col-12'>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langGroupInfo</div>
+                        </div>
+                        <div class='card-body'>
+                        
+                                <p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>
+                                <p class='small-text'>$tool_content_tutor</p>
+                            
+                                <p class='card-title fw-bold mb-0 fs-6'>$langDescription</p>
+                                <p class='small-text'>$tool_content_description</p>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class='col-xl-5 col-lg-6 d-none d-lg-block'>
+                    <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langTools</div>
+                        </div>
+                        <div class='card-body'>
+                            <ul class='ps-3'>";
+                                if($is_editor){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='group_edit.php?course=$course_code&group_id=$group_id&from=group'>
+                                                            <span class='fa fa-edit pt-1 pe-1'></span>$langModify
+                                                        </a>
+                                                      </li>";
+                                }
+
+                                if($has_forum and $forum_id <> 0){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='../forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>
+                                                            <span class='fa fa-comments pt-1 pe-1'></span>$langForums
+                                                        </a>
+                                                      </li>";
+                                }
+
+                                if($documents){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='document.php?course=$course_code&amp;group_id=$group_id'>
+                                                            <span class='fa fa-folder-open pt-1 pe-1'></span>$langGroupDocumentsLink
+                                                        </a>
+                                                      </li>";
+                                }
+
+                                if($wiki){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='../wiki/index.php?course=$course_code&amp;gid=$group_id'>
+                                                            <span class='fa fa-wikipedia-w pt-1 pe-1'></span>$langWiki
+                                                        </a>
+                                                      </li>";
+                                }
+
+                                if(visible_module(MODULE_ID_ASSIGN)){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1'>
+                                                            <span class='fa fa-globe pt-1 pe-1'></span>$langGroupAssignments
+                                                        </a>
+                                                    </li>";
+                                }
+
+
+                                if($is_editor or $is_tutor or $student_to_student_allow){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id'>
+                                                            <span class='fa fa-envelope pt-1 pe-1'></span>$langEmailGroup
+                                                        </a>
+                                                    </li>";
+                                }
+
+                                if($is_editor){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='muladduser.php?course=$course_code&amp;group_id=$group_id'>
+                                                            <span class='fa fa-plus-circle pt-1 pe-1'></span>$langAddManyUsers
+                                                        </a>
+                                                    </li>";
+                                }
+
+                                if($is_editor){
+                                    $tool_content .= "<li class='mb-2'>
+                                                        <a class='d-flex justify-content-start align-items-start' href='dumpgroup.php?course=$course_code&amp;group_id=$group_id'>
+                                                            <span class='fa fa-file-archive-o pt-1 pe-1'></span>$langDumpUser
+                                                        </a>
+                                                    </li>";
+                                }
+
+
+
+
+
+
+
+          $tool_content .= "</ul>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class='card-body'>
-               
-                    <p class='normalBlueText TextSemiBold blackBlueText fs-6 mb-1'>$langGroupTutor:</p>
-                    <p class='small-text'>$tool_content_tutor</p>
-                
-                
-                    <p class='normalBlueText TextSemiBold blackBlueText fs-6 mb-1'>$langDescription</p>
-                    <p class='small-text'>$tool_content_description</p>
-                
-            </div>
-        </div>
-    </div>";
+        </div>";
 
     if ($is_editor or $public_users_list) {
         // members
         if (count($members) > 0) {
             $tool_content .= "
-                        <div class='col-sm-12 mt-4 borderBoxPanelNoShadow p-3' style='overflow-y:auto; border-radius:15px;'>
-                          <p class='text-start normalBlueText TextBold fs-6'>$langGroupMembersNum $langGroup</p>
+                        <div class='col-12 mt-4'>
+                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langGroupMembersNum $langGroup</div>
+                            </div>
+                            <div class='card-body'>
                           <ul class='list-group list-group-flush'>
                               <li class='list-group-item'>
                                   <div class='row'>";
             if ($is_editor or $is_tutor) {
-                $tool_content .= "<div class='col-4 TextSemiBold normalBlueText'>$langSurnameName</div>
-                                      <div class='col-4 TextSemiBold normalBlueText'>$langAm</div>
-                                      <div class='col-4 TextSemiBold normalBlueText'>$langEmail</div>";
+                $tool_content .= "<div class='col-4 card-title fw-bold mb-0 fs-6'>$langSurnameName</div>
+                                      <div class='col-4 card-title fw-bold mb-0 fs-6'>$langAm</div>
+                                      <div class='col-4 card-title fw-bold mb-0 fs-6'>$langEmail</div>";
             } else {
-                $tool_content .= "<div class='col-12 TextSemiBold normalBlueText'>$langSurnameName</div>";
+                $tool_content .= "<div class='col-12 card-title fw-bold mb-0 fs-6'>$langSurnameName</div>";
             }
             $tool_content .= "</div></li>";
 
@@ -308,7 +401,7 @@ if (isset($_GET['group_as'])) {
                                       </div>";
                 }
             }
-            $tool_content .= "</ul></div>";
+            $tool_content .= "</ul></div></div></div>";
         } else {
             $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
         }

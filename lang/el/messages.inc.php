@@ -1569,6 +1569,10 @@ $langUsersNotAdded = 'Δεν προστέθηκε κανένας χρήστης.
 $langUsersInOtherGroups = 'Οι παρακάτω χρήστες βρέθηκαν σε άλλες ομάδες του μαθήματος και δεν επιτρέπεται η εγγραφή τους σε αυτήν';
 $langUsersOverMaximum = 'Ο τελικός αριθμός (%d) υπερβαίνει το μέγιστο πλήθος μελών της ομάδας (%d).';
 $langUsersAddedToGroup = 'Οι χρήστες προστέθηκαν στην ομάδα.';
+$langGroupsManagment = "Διαχείριση ομάδων";
+$langSearchByCategory = "Αναζήτηση μέσω : ";
+$langAllGroups = "Όλες οι ομάδες";
+$langAllGroupsWithoutCategory = "Ομάδες που δεν ανήκουν σε κατηγορία";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του $langsOfCourse μέσα από τη 'Διαχείριση $langOfCourse'";
