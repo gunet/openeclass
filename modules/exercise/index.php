@@ -92,9 +92,35 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
+                      class : 'form-control input-sm',
+                      placeholder : '$langSearch...'
+            });
+            
+            $(document).on('click', '.assigned_to', function(e) {
+                  e.preventDefault();
+                  var eid = $(this).data('eid');
+                  url = '$urlAppend' + 'modules/exercise/index.php?ex_info_assigned_to=true&eid=' + eid;                  
+                  $.ajax({
+                    url: url,
+                    success: function(data) {
+                        var dialog = bootbox.dialog({
+                            message: data,
+                            title : '$m[WorkAssignTo]',
+                            onEscape: true,
+                            backdrop: true,
+                            buttons: {
+                                success: {
+                                    label: '$langClose',
+                                    className: 'btn-success',
+                                }
+                            }
                         });
+                        dialog.init(function() {
+                            typeof MathJax !== 'undefined' && MathJax.typeset();
+                        });
+                    }
+                  });
+              });
         });
         </script>";
 
@@ -104,6 +130,22 @@ if ($is_editor) {
 
     if (isset($_GET['exerciseId'])) {
         $exerciseId = $_GET['exerciseId'];
+    }
+
+    // info about exercises assigned to users and groups
+    if (isset($_GET['ex_info_assigned_to'])) {
+        echo "<ul>";
+        $q = Database::get()->queryArray("SELECT user_id, group_id FROM exercise_to_specific WHERE exercise_id = ?d", $_GET['eid']);
+        foreach ($q as $user_data) {
+            if (is_null($user_data->user_id)) { // assigned to group
+                $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
+                echo "<li>$group_name</li>";
+            } else { // assigned to user
+                echo "<li>" . uid_to_name($user_data->user_id) . "</li>";
+            }
+        }
+        echo "</ul>";
+        exit;
     }
 
     if (!empty($_GET['choice'])) {
@@ -315,15 +357,15 @@ if (!$nbrExercises) {
         // prof only
         if ($is_editor) {
             if (!empty($row->description)) {
-                $descr = "<br/>$row->description";
+                $descr = "<br>$row->description";
             } else {
                 $descr = '';
             }
 
             if ($row->assign_to_specific == 1) {
-                $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small></a>";
             } else if ($row->assign_to_specific == 2) {
-                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+                $assign_to_users_message = "<a class='assigned_to' data-eid='$row->id'><small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small></a>";
             } else {
                 $assign_to_users_message = '';
             }
