@@ -34,11 +34,11 @@ const RESOURCE_LINK_TYPE_POLL = "poll";
 
 /**
  * @brief new lti app (display form)
- * @param bool $is_template
  * @param $course_code
+ * @param bool $is_template
  * @param string $lti_url_default
  */
-function new_lti_app($is_template, $course_code, $lti_url_default = '') {
+function new_lti_app($course_code, $is_template = false, $lti_url_default = '') {
     global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
@@ -170,8 +170,8 @@ function new_lti_app($is_template, $course_code, $lti_url_default = '') {
  * @param string $type
  * @brief add / update lti app settings
  */
-function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $course_id = null,
-                            $is_template = false, $update = false, $session_id = null, $type = null)  {
+function add_update_lti_app($title, $desc, $url, $key, $secret, $launchcontainer, $status, $lti_courses, $type, $course_id = null,
+                            $is_template = false, $update = false, $session_id = null)  {
     if (in_array(0, $lti_courses)) {
         $all_courses = 1; // lti app is assigned to all courses
     } else {
@@ -213,7 +213,7 @@ function edit_lti_app($session_id) {
     global $tool_content, $langSubmit, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
@@ -324,6 +324,7 @@ function edit_lti_app($session_id) {
                     } else {
                         $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
                     }
+
                     $tool_content .= "<div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-center align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='update_lti_app' value='$langSubmit'>
@@ -345,9 +346,9 @@ function edit_lti_app($session_id) {
  */
 function lti_app_details() {
     global $course_id, $tool_content, $is_editor, $course_code, $head_content,
-        $langConfirmDelete, $langUnitDescr, $langNote,
+        $langConfirmDelete, $langUnitDescr,
         $langTitle,$langActivate, $langDeactivate, $langLTIAppActions,
-        $langEditChange, $langDelete, $langNoLTIApps, $m;
+        $langEditChange, $langDelete, $langNoLTIApps;
 
     load_js('trunk8');
 
@@ -758,7 +759,7 @@ function getLTILinksForTools() {
         }
         return $result;
     } else {
-        return false;
+        return [];
     }
 }
 

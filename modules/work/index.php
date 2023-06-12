@@ -212,7 +212,6 @@ if (isset($_GET['get']) or isset($_GET['getcomment'])) {
         $get = $_GET['get'];
     }
     if (!send_file(intval($get), $file_type)) {
-       // Session::Messages($langFileNotFound, 'alert-danger');
         Session::flash('message',$langFileNotFound);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -227,7 +226,6 @@ if (isset($_GET['chk'])) { // plagiarism check
         $secret = work_secret($file_details->assignment_id);
         $true_file_path = $workPath . "/" . $file_details->file_path;
     } else {
-       // Session::Messages($langFileNotFound, 'alert-danger');
         Session::flash('message',$langFileNotFound);
         Session::flash('alert-class', 'alert-danger');
     }
@@ -242,7 +240,6 @@ if ($is_editor) {
         // Allow unlimited time for creating the archive
         set_time_limit(0);
         if (!download_assignments($as_id)) {
-           // Session::Messages($langNoAssignmentsExist, 'alert-danger');
             Session::flash('message',$langNoAssignmentsExist);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$as_id);
@@ -4784,11 +4781,11 @@ function assignment_details($id, $row, $x =false) {
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
                 </div>
             </div>
-            <div class='row margin-bottom-fat'>
-                <div class='col-sm-3'>
+            <div class='row p-2 margin-bottom-fat'>
+                <div class='col-sm-4'>
                     <strong>$m[WorkAssignTo]:</strong>
                 </div>
-                <div class='col-sm-9'>
+                <div class='col-sm-8'>
                     $assign_to_users_message
                 </div>
             </div>            
@@ -5508,12 +5505,12 @@ function show_student_assignments() {
                         $lock_description .= "<li>$langIPUnlock</li>";
                     }
                     $lock_description .= "</ul>";
-                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description' data-bs-original-title='$lock_description'></span>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$lock_description' data-bs-original-title='$lock_description'></span>";
                 }
             }
 
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             $title_temp = q($row->title);
@@ -5683,10 +5680,10 @@ function show_assignments() {
                     $lock_description .= "<li>$langIPUnlock</li>";
                 }
                 $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-title='$lock_description' data-bs-original-title='$lock_description'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$lock_description' data-bs-original-title='$lock_description'></span>";
             }
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge rounded bg-success text-white float-end' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             if ($row->assign_to_specific == 1) {

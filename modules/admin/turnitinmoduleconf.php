@@ -94,7 +94,6 @@ if (isset($_GET['add_template'])) {
         $_POST['lti_launchcontainer'], $_POST['status'], $_POST['lti_courses'], LTI_TYPE, true, LTI_TYPE,
         true, getDirectReference($_GET['id']));
     // Display result message
-    //Session::Messages($langTIIAppAddSuccessful, 'alert-success');
     Session::flash('message',$langTIIAppAddSuccessful);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/turnitinmoduleconf.php");
