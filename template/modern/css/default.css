@@ -258,6 +258,10 @@ img {
   font-style: normal; 
 }
 
+.tmpGreyColor{
+  color:#9d9d9c; 
+}
+
 .pen-hierarchy{
   margin-left:-5px;
 }
@@ -2935,6 +2939,12 @@ label:has(input[type="checkbox"]:disabled){
 
 .smallRadius{
   border-radius: 5px;
+}
+
+.searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
+  outline: none !important;
+  box-shadow: none; 
+  background-color: #e8e8e8;
 }
 
 /* ------------------------------------------------------- MY COURSES ----------------------------------------------------------------------------*/

@@ -337,6 +337,10 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[leftNavBgColor];
                 }
 
+                .table-default tr.title1{
+                    background-color: $theme_options_styles[leftNavBgColor] !important;
+                }
+
                 .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
                 .admin-list-group .list-group-item:hover{
                     background:$theme_options_styles[leftNavBgColor];

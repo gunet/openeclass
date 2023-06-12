@@ -60,6 +60,10 @@
                                             </a>
                                        @endif
                                     @endif
+
+                                    <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                        <span class='fa fa-question-circle'></span>
+                                    </a>
                                   
                                 </div>
                             @else
@@ -100,6 +104,10 @@
                                             </a>
                                        @endif
                                     @endif
+
+                                    <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                        <span class='fa fa-question-circle'></span>
+                                    </a>
                                 </div>
                             @else
                                 <div class='col-12'>

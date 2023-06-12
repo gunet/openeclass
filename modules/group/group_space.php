@@ -403,7 +403,7 @@ if (isset($_GET['group_as'])) {
             }
             $tool_content .= "</ul></div></div></div>";
         } else {
-            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
+            $tool_content .= "<div class='col-sm-12 mt-4'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
         }
     }
 }

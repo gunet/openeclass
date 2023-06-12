@@ -184,7 +184,7 @@ $head_content .= "<script type='text/javascript'>
                             buttons: {
                                 success: {
                                     label: '$langClose',
-                                    className: 'btn-success',
+                                    className: 'cancelAdminBtn',
                                 }
                             }
                         });
