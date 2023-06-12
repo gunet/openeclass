@@ -3059,7 +3059,7 @@ function show_edit_assignment($id) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                    FROM assignment_to_specific, `group`
                                     WHERE course_id = ?d
-                                    AND `group`.id = assignment_to_specific.group_id                                    
+                                    AND `group`.id = assignment_to_specific.group_id
                                     AND assignment_to_specific.assignment_id = ?d", $course_id, $id);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -3076,12 +3076,14 @@ function show_edit_assignment($id) {
         } else {
             $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                    FROM assignment_to_specific, user
-                                   WHERE user.id = assignment_to_specific.user_id AND assignment_to_specific.assignment_id = ?d", $id);
+                                   WHERE user.id = assignment_to_specific.user_id AND assignment_to_specific.assignment_id = ?d
+                                   ORDER BY surname, givenname, am", $id);
             $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
-                                    AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
-                                    AND user.id", $course_id);
+                                      AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
+                                      AND user.id
+                                    ORDER BY user.surname, user.givenname, user.am", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
             }
@@ -4788,7 +4790,7 @@ function assignment_details($id, $row, $x =false) {
                 <div class='col-sm-8'>
                     $assign_to_users_message
                 </div>
-            </div>            
+            </div>
             ";
         $tags_list = $moduleTag->showTags();
         if ($tags_list) {
