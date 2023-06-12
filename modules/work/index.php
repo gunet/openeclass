@@ -167,11 +167,11 @@ $head_content .= "<script type='text/javascript'>
                   class : 'form-control input-sm',
                   placeholder : '$langSearch...'
                 });
-            
+
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
                   var ass_id = $(this).data('ass_id');
-                  url = '$urlAppend' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;                  
+                  url = '$urlAppend' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;
                   $.ajax({
                     url: url,
                     success: function(data) {
@@ -3024,12 +3024,14 @@ function show_edit_assignment($id) {
         } else {
             $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                    FROM assignment_to_specific, user
-                                   WHERE user.id = assignment_to_specific.user_id AND assignment_to_specific.assignment_id = ?d", $id);
+                                   WHERE user.id = assignment_to_specific.user_id AND assignment_to_specific.assignment_id = ?d
+                                   ORDER BY surname, givenname, am", $id);
             $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                                     FROM user, course_user
                                     WHERE user.id = course_user.user_id
-                                    AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
-                                    AND user.id", $course_id);
+                                      AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
+                                      AND user.id
+                                    ORDER BY user.surname, user.givenname, user.am", $course_id);
             foreach ($assignees as $assignee_row) {
                 $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
             }
@@ -4706,7 +4708,7 @@ function assignment_details($id, $row, $x =false) {
                 <div class='col-sm-9'>
                     $assign_to_users_message
                 </div>
-            </div>            
+            </div>
             ";
         $tags_list = $moduleTag->showTags();
         if ($tags_list) {
