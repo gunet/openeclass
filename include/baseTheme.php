@@ -337,6 +337,13 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[leftNavBgColor];
                 }
 
+                .searchGroupBtn:hover{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                }
+                .searchGroupBtn:hover span{
+                    color:#ffffff;
+                }
+
                 .table-default tr.title1{
                     background-color: $theme_options_styles[leftNavBgColor] !important;
                 }

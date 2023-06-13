@@ -2256,6 +2256,9 @@ $langGroupInfiniteUsers = "0 = απεριόριστος αριθμός χρησ�
 $langSingleGroupRegInfo = "Μπορείτε να εγγραφείτε σε μία μόνο ομάδα χρηστών (εφόσον δεν είναι πλήρης και επιτρέπεται η εγγραφή σε αυτήν)";
 $langCategoryGroupRegInfo = "Μπορείτε να εγγραφείτε στις γενικές ομάδες και σε μία ομάδα ανά κατηγορία (εφόσον δεν είναι πλήρεις και επιτρέπεται η εγγραφή σε αυτές)";
 $langMultipleGroupRegInfo = "Μπορείτε να εγγραφείτε σε πολλές ομάδες χρηστών (εφόσον δεν είναι πλήρεις και επιτρέπεται η εγγραφή σε αυτές)";
+$langNoGroupAvailable = "Δεν υπάρχουν διαθέσιμες ομάδες.";
+$langSearchGroupByName = "Αναζήτηση ομάδων μέσω ονόματος:";
+$langSearchGroupByCategory = "Αναζήτηση ομάδων μέσω κατηγορίας:";
 
 // Group Properties
 $langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπεται να εγγραφούν";

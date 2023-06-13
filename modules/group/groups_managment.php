@@ -43,44 +43,120 @@ $pageName = $langGroupsManagment;
 
 load_js('select2');
 
+$head_content .= "
+<script>
+    $(function () {
+        $('#group-name').select2({
+                
+            minimumInputLength: 2,
+            tags: true,
+            tokenSeparators: [','],
+            width: '100%',
+            selectOnClose: true,
+            createSearchChoice: function(term, data) {
+              if ($(data).filter(function() {
+                return this.text.localeCompare(term) === 0;
+              }).length === 0) {
+                return {
+                  id: term,
+                  text: term
+                };
+              }
+            },
+            ajax: {
+                url: 'searchGroup.php?course=$course_id',
+                dataType: 'json',
+                data: function(term, page) {
+                    return {
+                        q: term
+                    };
+                },
+                processResults: function(data, page) {
+                    return {results: data};
+                }
+            }
+        });
+
+    });
+</script>";
+
 $tool_content = '';
 $selectedCategory = '';
+$selectedCategory2 = '';
 $selectedCategory3 = '';
 
+$tool_content .= action_bar(array(
+    array(  'title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'),
+    ));
 
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 
 // Display all available groups
-$groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND category_id = ?d ORDER BY name", $course_id, 0);
-$num_of_groups = count($groupSelect); 
+
+$num_of_groups = 0; 
+
+//Search groups by names
+if(isset($_POST['submitGroupNames'])){
+    $idsGroups = array();
+    if(isset($_POST['groupNames']) and $_POST['groupNames']){
+        foreach($_POST['groupNames'] as $n){
+            $res = Database::get()->querySingle("SELECT id FROM `group` WHERE name = ?s AND course_id = ?d",$n,$course_id);
+            if($res){
+                $idsGroups[] = $res->id;
+            }
+        }
+        if(count($idsGroups) > 0){
+            $values = implode(',', $idsGroups);
+            $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE (id) IN ($values) AND course_id = ?d ORDER BY name", $course_id);
+            $num_of_groups = count($groupSelect); 
+        }else{
+            $num_of_groups = 0;
+        }
+    }else{
+        $num_of_groups = 0;
+    }
+}
 
 // Search groups by catecory
 if(isset($_POST['searchGroupByCategory'])){
-    if($_POST['searchGroupByCategory'] == 0){
+    if($_POST['searchGroupByCategory'] == -1){
+        $selectedCategory2 = 'selected';
+        $num_of_groups = 0; 
+    }elseif($_POST['searchGroupByCategory'] == 0){
         $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND category_id = ?d ORDER BY name", $course_id,0);
         $selectedCategory3 = 'selected';
+        $num_of_groups = count($groupSelect); 
     }else{
         $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND category_id = ?d ORDER BY name", $course_id,$_POST['searchGroupByCategory']);
         $selectedCategory = $_POST['searchGroupByCategory'];
+        $num_of_groups = count($groupSelect); 
     }
-    $num_of_groups = count($groupSelect); 
-    
+     
 }
-$tool_content .= "<div class='row'>
-                    <div class='col-xl-7 col-md-6 col-2'>";
-                        $tool_content .= action_bar(array(
-                        array(  'title' => $langBack,
-                                    'url' => "index.php?course=$course_code",
-                                    'icon' => 'fa-reply',
-                                    'level' => 'primary-label'),
-                        ));
+
+
+$tool_content .= "<div class='row mb-4'>
+                    <div class='col-md-6 col-12'>";
+                       $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+                                            <p class='mb-1'>$langSearchGroupByName</p>
+                                            <div class='col-12 d-flex justify-content-start'>
+                                                <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-30px'><span class='fa fa-search fs-6'></span></button>
+                                                <select id='group-name' class='form-select' name='groupNames[]' multiple></select>
+                                                
+                                            </div>
+                                         </form>";
 $tool_content .= "  </div>
-                    <div class='col-xl-5 col-md-6 col-10'>";
+                    <div class='col-md-6 col-12 mt-md-0 mt-3'>";
                         $tool_content .= "
                         <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+                            <p class='mb-1'>$langSearchGroupByCategory</p>
                             <div class='col-12'>
-                                <select class='form-select rounded-2 py-0 mt-0' name='searchGroupByCategory' onchange='this.form.submit()'>
+                                <select class='form-select py-0 mt-0' name='searchGroupByCategory' onchange='this.form.submit()'>
+                                    <option value='-1' $selectedCategory2>--</option>
                                     <option value='0' $selectedCategory3>$langAllGroupsWithoutCategory</option>";
                                     $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
                                     foreach ($resultcategories as $myrow) {
@@ -440,7 +516,7 @@ $tool_content .= "<div class='col-12'>
                                 ";
 
                             }else{
-                                $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGroupInCategory</div></div>";
+                                $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGroupAvailable</div></div>";
                             }
 
 $tool_content .= "      

@@ -235,11 +235,11 @@ if (isset($_GET['group_as'])) {
         }
     }
 
-    if ($tutors) {
-        $tool_content_tutor = implode(', ', $tutors);
-    } else {
-        $tool_content_tutor = $langNoInfoAvailable;
-    }
+    // if ($tutors) {
+    //     $tool_content_tutor = implode(', ', $tutors);
+    // } else {
+    //     $tool_content_tutor = $langNoInfoAvailable;
+    // }
 
     $group_description = trim($group_description);
     if (empty($group_description)) {
@@ -258,8 +258,17 @@ if (isset($_GET['group_as'])) {
                         </div>
                         <div class='card-body'>
                         
-                                <p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>
-                                <p class='small-text'>$tool_content_tutor</p>
+                                <p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>";
+                                if($tutors){
+                                    $tool_content .= "<ul>";
+                                    foreach($tutors as $t){
+                                        $tool_content .= "<li class='mt-2'>$t</li>";
+                                    }
+                                    $tool_content .= "</ul>";
+                                }else{
+                                    $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
+                                }
+               $tool_content .= "
                             
                                 <p class='card-title fw-bold mb-0 fs-6'>$langDescription</p>
                                 <p class='small-text'>$tool_content_description</p>

@@ -3,14 +3,14 @@
     min-height:30px !important;
     border-radius: 35px !important;
     border: 0px !important;
-    margin-top:5px;
+    margin-top:0px;
     background-color: #e8e8e8;
     color: #001146;
     font-size: 14px;
     font-family: 'Manrope' , sans-serif; font-weight: 600;
 }
 
-.select2-selection--multiple:before { content: ""; position: absolute; right: 15px; top: 53%; border-top: 5px solid #005ad9;
+.select2-selection--multiple:before { content: ""; position: absolute; right: 15px; top: 45%; border-top: 5px solid #005ad9;
     border-left: 5px solid transparent; border-right: 5px solid transparent; background: transparent;
 }
 

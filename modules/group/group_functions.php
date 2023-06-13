@@ -239,13 +239,13 @@ function showgroupsofcategory($catid) {
             }
         } else {
             if ($user_group_description && $student_desc) {
-                $tool_content .= "<small><a href = 'javascript:void(0);' data-bs-toggle = 'modal' data-bs-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
+                $tool_content .= "<small><a href='javascript:void(0);' data-bs-toggle='modal' data-bs-html='true' data-bs-content='".q($user_group_description)."' data-bs-target='#userFeedbacks'><span class='fa fa-comments'></span > $langCommentsUser</a></small>";
             }
         }
         $tool_content .= "</td>";
-        $tool_content .= "<td class='text-center' width='250'>";
+        $tool_content .= "<td class='text-start' width='250'>";
         foreach ($tutors as $t) {
-            $tool_content .= display_user($t->user_id) . "<br>";
+            $tool_content .= display_user($t->user_id) . "<div class='mb-2'></div>";
         }
         $tool_content .= "</td>";
 

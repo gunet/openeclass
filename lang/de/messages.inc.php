@@ -5223,6 +5223,9 @@ $langGroupsManagment = "Manage groups";
 $langSearchByCategory = "Search through : ";
 $langAllGroups = "All groups";
 $langAllGroupsWithoutCategory = "Groups that do not belong to a category";
+$langNoGroupAvailable = "There are no groups available.";
+$langSearchGroupByName = "Search groups by name:";
+$langSearchGroupByCategory = "Search groups by category:";
 
 $langOneWayExercise = "One question per page sequentially with no navigation";
 $langConfirmModifyAttemptTitle = "Confirmation of user attempt status modification";

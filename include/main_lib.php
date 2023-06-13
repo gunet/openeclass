@@ -3615,9 +3615,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             //replace button-class with myclass;
             $button_class = $option['button-class'];
             if($oldButton == 'btn-danger'){
-                $new_button = str_replace($oldButton,'deleteAdminBtn d-flex justify-content-center align-items-center me-2',$button_class);
+                $new_button = str_replace($oldButton,'deleteAdminBtn d-flex justify-content-center align-items-center me-2 mb-2',$button_class);
             }else{
-                $new_button = str_replace($oldButton,'submitAdminBtn d-flex justify-content-center align-items-center me-2',$button_class);
+                $new_button = str_replace($oldButton,'submitAdminBtn d-flex justify-content-center align-items-center me-2 mb-2',$button_class);
             }
 
             $button_class = $new_button;
@@ -3710,7 +3710,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         return "<div class='col-12 mb-4'>
                     <div class='col-12 action_bar d-flex justify-content-start'>
                         <div class='margin-top-thin margin-bottom-fat hidden-print'>
-                            <div class='btn-group btn-group-sm' style='flex-wrap: wrap;'>
+                            <div class='btn-group btn-group-sm flex-wrap'>
                             $out
                             $action_button
                             </div>
