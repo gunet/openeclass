@@ -13,12 +13,12 @@
             <div class="col-12 bgEclass col_maincontent_active_HomepageStart HomepageStartMobile">
 
                 <div class="row">
-                    <div class="jumbotron jumbotron-login @if(($warning and $PositionFormLogin == 1) or ($warning and $PositionFormLogin == 0) and !get_config('dont_display_login_form')) reBuiltJumbotron @endif">
+                    <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif @if(($warning and $PositionFormLogin == 1) or ($warning and $PositionFormLogin == 0) and !get_config('dont_display_login_form')) reBuiltJumbotron @endif">
                         @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                             @if($PositionFormLogin == 0)
                             <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-flex justify-content-end align-items-center bg-transparent px-lg-4 px-1 py-lg-0 py-4'>
                             @else
-                            <div class='col-xxl-4 col-lg-5 col-md-6 col-12 d-lg-flex justify-content-lg-center align-items-lg-center ms-auto me-auto mt-lg-5 pt-3 pb-3'>
+                            <div class='col-xxl-4 col-lg-5 col-md-6 col-12 d-lg-flex justify-content-lg-center align-items-lg-center ms-auto me-auto pt-3 pb-3'>
                             @endif
                                 <div class='card-body cardLogin Borders' style='z-index:2;'>
                                     <div class='card-header bg-transparent border-0'>
@@ -69,7 +69,7 @@
                         <div class='SectionMenu ms-auto me-auto bg-transparent @if(!get_config("homepage_title") and !get_config("homepage_intro")) pt-3 @endif'>
                             
                             @if(get_config('homepage_title') or get_config('homepage_intro'))
-                                <div class='col-12 d-flex justify-content-center homepage_intro-margin @if($warning) mt-3 @endif mb-3'>
+                                <div class="col-12 d-flex justify-content-center homepage_intro-margin @if($PositionFormLogin == 1 and !$warning and !get_config('dont_display_login_form')) rebuiltHomepageIntro @endif @if($warning) mt-3 @endif mb-3">
                                     <div class="panel panel-default homepageIntroPanel w-100 border-0 shadow-none">
                                         <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif p-5">
                                             @if(get_config('homepage_title'))
@@ -913,11 +913,6 @@
 
 <script>
 
-    $('.ContentEclass').removeClass('container');
-    $('.ContentEclass').addClass('container-fluid');
-    $('.ContentEclass.container-fluid').css('padding-left','0px');
-    $('.ContentEclass.container-fluid').css('padding-right','0px');
-    
     $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
     function unhoverHome(obj) {
         if(!current_url.includes('/main/portfolio.php')){

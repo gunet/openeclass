@@ -1146,7 +1146,13 @@ label:has(input[type="checkbox"]:disabled){
   .jumbotron.jumbotron-login{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg);}
   @media(min-width:992px){
     .jumbotron.jumbotron-login { height:650px; padding-top: 107px; }
-    .jumbotron.jumbotron-login.reBuiltJumbotron {height:780px !important;}
+    .reBuiltJumbotron {height:797px !important;}
+    .rebuiltCenterJumpotron{
+      padding-top: 147px !important;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 
   .login-form-Homepage{ border-top-right-radius: 15px; border-bottom-right-radius: 15px; background:#F5F5F5; }
@@ -1180,6 +1186,7 @@ label:has(input[type="checkbox"]:disabled){
   @media(min-width:992px){
     .homepageIntroPanel{min-height: 118px;}
     .homepage_intro-margin{margin-top:-70px; min-height: 118px;}
+    .rebuiltHomepageIntro{margin-top: 16px !important;}
   }
 
   .opencourse_triangle{

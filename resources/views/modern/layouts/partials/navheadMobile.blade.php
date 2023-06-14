@@ -1,4 +1,4 @@
-<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass pt-0 pb-0">
+<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass fixed-top pt-0 pb-0">
 
         <div class='col-12 d-flex justify-content-between align-items-center'>
 

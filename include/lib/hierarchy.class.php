@@ -1227,8 +1227,8 @@ jContent;
         $ret = "<div class='col-12'>";
         $ret .= "<div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
-        $ret .= "<div class='form-group mt-4'>";
-        $ret .= "<label class='col-sm-6 control-label-notes'>$langSelectFac:</label>";
+        $ret .= "<div class='form-group'>";
+        $ret .= "<label class='col-sm-12 control-label-notes'>$langSelectFac:</label>";
         $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'", $options);
         $ret .= "</div></form></div></div>";
         return $ret;

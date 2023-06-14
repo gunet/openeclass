@@ -327,7 +327,7 @@ function getUserMessages() {
                                     <div class='item-wholeline text-start'>
                                         <div class='text-title TextSemiBold'><span>$langFrom:</span>".display_user($message->author_id, false, false)."</div>
                                         
-                                        <a class='TextSemiBold fs-6 mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        <a class='TextSemiBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         
                                         <div class='blackBlueText TextBold'>$course_title</div>
                                         <div class='blackBlueText TextRegular'>$message_date</div>

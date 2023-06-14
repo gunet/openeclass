@@ -85,6 +85,16 @@
   box-shadow: 0 0 3px #ccc ;
 }
 
+@media(max-width:991px){
+  .col_maincontent_active, .col_maincontent_active_Homepage,  
+  .col_maincontent_active_unit, .col_maincontent_coursePage, .details-mobile{ 
+      padding-top: 56px !important;
+  }
+  .HomepageStartMobile{
+    padding-top: 56px;
+  }
+}
+
 .col_sidebar_active{ 
   transition: 0.4s;  
   border-top-left-radius: 15px;  

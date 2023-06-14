@@ -10,7 +10,7 @@
 
 <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
 
-<div class="container-fluid details-section">
+<div class="container-fluid details-section details-mobile">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
         <div class="col-12 px-0">
             <div class='card panelCard BorderSolid px-lg-4 py-lg-3 border-0'>

@@ -281,8 +281,6 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; border:0px; }";
         if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
             $PositionFormLogin = 1;
-        }else{
-            $PositionFormLogin = 0;
         }
 
         if (isset($theme_options_styles['fluidContainerWidth'])){
