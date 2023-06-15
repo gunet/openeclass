@@ -19,7 +19,7 @@
         </form>
     @endif
 
-    <div class="panel-group accordion mt-4" id="sidebar-accordion">
+    <div class="panel-group accordion mt-4 mb-4" id="sidebar-accordion">
         <div class="panel">
             @foreach ($toolArr as $key => $tool_group)
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">

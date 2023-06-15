@@ -62,17 +62,17 @@ $tool_content .= "
                 <div class='row'>
                     <div class='col-md-6 col-12'>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item px-0'><strong>$langUsageUsers</strong><span class='badge rounded bg-success text-white float-end'>".count_course_users($course_id)."</span></li>
-                            <li class='list-group-item li-indented px-0'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></li>
-                            <li class='list-group-item li-indented px-0'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></li>
+                            <li class='list-group-item px-0'><strong>$langUsageUsers</strong><span class='badge rounded bgTheme text-white float-end'>".count_course_users($course_id)."</span></li>
+                            <li class='list-group-item li-indented px-0'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge rounded bgEclass normalColorBlueText float-end'>".count_course_users($course_id,USER_TEACHER)."</span></li>
+                            <li class='list-group-item li-indented px-0'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge rounded bgEclass normalColorBlueText float-end'>".count_course_users($course_id,USER_STUDENT)."</span></li>
                         </ul>
                     </div>
                     <div class='col-md-6 col-12 mt-md-0 mt-3'>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item px-0'><strong>$langGroups</strong><span class='badge rounded bg-success text-white float-end'>".count_course_groups($course_id)."</span></li>
-                            <li class='list-group-item px-0'><strong>$langTotalVisits</strong><span class='badge rounded bg-success text-white float-end'>".course_visits($course_id)."</span></li>
-                            <li class='list-group-item px-0'><strong>$langTotalHits</strong><span class='badge rounded bg-success text-white float-end'>".$hits['hits']."</span></li>
-                            <li class='list-group-item px-0'><strong>$langTotalDuration</strong><span class='badge rounded bg-success text-white float-end'>".$hits['duration']."</span></li>
+                            <li class='list-group-item px-0'><strong>$langGroups</strong><span class='badge rounded bgTheme text-white float-end'>".count_course_groups($course_id)."</span></li>
+                            <li class='list-group-item px-0'><strong>$langTotalVisits</strong><span class='badge rounded bgTheme text-white float-end'>".course_visits($course_id)."</span></li>
+                            <li class='list-group-item px-0'><strong>$langTotalHits</strong><span class='badge rounded bgTheme text-white float-end'>".$hits['hits']."</span></li>
+                            <li class='list-group-item px-0'><strong>$langTotalDuration</strong><span class='badge rounded bgTheme text-white float-end'>".$hits['duration']."</span></li>
                         </ul>
                     </div>
                 </div>

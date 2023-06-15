@@ -55,20 +55,20 @@
                     @endif
 
 
-                    <div class='col-sm-12'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading'>
-                                <div class='panel-title text-start'>
-                                    <span>
+                    <div class='col-12'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
                                     {{ $request->title }}
                                     @if ($request->type_id)
-                                        <small> -> {{ $type->name }}</small>
+                                        <small>&nbsp->&nbsp{{ $type->name }}</small>
                                     @endif
-                                    </span>
                                 </div>
                             </div>
+                            
 
-                            <div class='panel-body'>
+                            <div class='card-body'>
 
                                 <div class='row'>
                                     <div class='d-inline-flex align-items-center'>
@@ -110,10 +110,10 @@
                                 @if ($field_data)
                                     @foreach ($field_data as $field)
                                         <div class='row'>
-                                            <div class='col-12 col-sm-2 text-end'>
+                                            <div class='col-12 col-2 text-end'>
                                                 <b>{{ getSerializedMessage($field->name) }}:</b>
                                             </div>
-                                            <div class='col-12 col-sm-10'>
+                                            <div class='col-12 col-10'>
                                                 @if (is_null($field->data) or $field->data === '')
                                                     <span class='not_visible'> - </span>
                                                 @else
@@ -137,16 +137,14 @@
 
                             </div>
 
-                            <div class='panel-footer'>
-                                <div class='announcement-date text-center info-date'>
-                                    {{ format_locale_date(strtotime($request->open_date)) }}
-                                </div>
+                            <div class='card-footer small-text bg-white border-0'>
+                                {{ format_locale_date(strtotime($request->open_date)) }}
                             </div>
                         </div>
                     </div>
 
                     @if ($can_modify or $can_assign_to_self)
-                        <div class='col-sm-12 mt-3'>
+                        <div class='col-12 mt-3'>
                             <form role='form' method='post' action='{{ $targetUrl }}'>
                                 <p>
                                 {!! generate_csrf_token_form_field() !!}
@@ -166,7 +164,7 @@
                     @endif
 
                     @if ($can_comment)
-                        <div class='col-sm-12'>
+                        <div class='col-12 mt-3'>
                             <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='{{ $targetUrl }}' enctype='multipart/form-data'>
                                     <fieldset>
@@ -206,15 +204,8 @@
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-center align-items-center'>
-                                                
-                                                   
-                                                        <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
-                                                   
-                                                  
-                                                        <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
-                                                   
-                                                
-                                                
+                                                <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
+                                                <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
                                             </div>
                                         </div>
                                         {!! generate_csrf_token_form_field() !!}
@@ -225,51 +216,52 @@
                     @endif
 
                     @if ($comments)
-                        @foreach ($comments as $comment)
-                            <div class='col-sm-12 mt-3'>
-                                <div class='panel panel-default'>
-                                    <div class='panel-body'>
-                                        
-                                        <div class='d-inline-flex align-items-center'>
-                                            <b class='control-label-notes pe-2'>{{ trans('langFrom') }}:</b>
-                                            {!! display_user($comment->user_id) !!}
-                                        </div><br>
-                                        
-                                        
-                                        <div class='d-inline-flex align-items-center'>
-                                            <b class='control-label-notes pe-2'>{{ trans('langDate') }}:</b>
-                                            {{ format_locale_date(strtotime($comment->ts)) }}
-                                        </div><br>
-                                        
-                                        @if ($comment->old_state != $comment->new_state)
-                                            
-                                            <div class='d-inline-flex align-items-center'>
-                                                <b class='control-label-notes pe-2'>{{ trans('langChangeState') }}:</b>
-                                                {{ $states[$comment->new_state] }}
-                                                <span>({{ trans('langFrom') }}:</span> {{ $states[$comment->old_state] }})
-                                            </div><br>
-                                            
-                                        @endif
-                                        @if ($comment->real_filename)
-                                            
-                                            <div class='d-inline-flex align-items-center'>
-                                                <b class='control-label-notes pe-2'>{{ trans('langAttachedFile') }}:</b>
-                                                <a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a>
-                                            </div><br>
-                                            
-                                        @endif
-                                        @if ($comment->comment)
-                                            
-                                            <div class='d-inline-flex align-items-center'>
-                                                <b class='control-label-notes pe-2'>{{ trans('langComment') }}:</b>
-                                                {!! standard_text_escape($comment->comment) !!}
+                        <div class='col-12 mt-5'>
+                            @if(count($comments) == 1)
+                                <div class="row row-cols-1 g-4">
+                            @else
+                                <div class="row row-cols-1 row-cols-md-2 g-4">
+                            @endif
+                                    @foreach ($comments as $comment)
+                                        <div class="col">
+                                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                                <div class='panel-body'>
+                                                    
+                                                    
+                                                    <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langFrom') }}</p>
+                                                    <p class='card-text'>{!! display_user($comment->user_id) !!}</p>
+                                                    
+                                                    <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langDate') }}</p>
+                                                    <p class='card-text'>{{ format_locale_date(strtotime($comment->ts)) }}</p>
+                                                    
+                                                    @if ($comment->old_state != $comment->new_state)
+
+                                                        <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langChangeState') }}</p>
+                                                        <p class='card-text'>
+                                                            {{ $states[$comment->new_state] }}
+                                                            <span>({{ trans('langFrom') }}:</span> {{ $states[$comment->old_state] }})
+                                                        </p>
+                                                        
+                                                    @endif
+                                                    @if ($comment->real_filename)
+
+                                                        <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langAttachedFile') }}</p>
+                                                        <p class='card-text'><a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a></p>
+                                                        
+                                                    @endif
+                                                    @if ($comment->comment)
+
+                                                        <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langComment') }}</p>
+                                                        {!! standard_text_escape($comment->comment) !!}
+                                                        
+                                                    @endif
+                                                </div>
                                             </div>
-                                            
-                                        @endif
-                                    </div>
+                                        </div>
+                                    @endforeach
                                 </div>
-                            </div>
-                        @endforeach
+                        </div>
+
                     @endif
 
 
@@ -277,6 +269,8 @@
                     @if ($can_modify)
                         @include('modules.request.modals')
                     @endif
+
+                    
                 </div>
             </div>
         </div>
