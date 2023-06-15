@@ -41,14 +41,16 @@
 
 .col_maincontent_active{ 
   transition: 0.4s;  
-  min-height: calc(100vh - 147px - 188.56px - 32px); 
+  /* min-height: calc(100vh - 147px - 188.56px - 32px);  */
+  min-height: calc(100vh - 147px - 70px - 32px); 
   background-color: white; 
   border-radius: 15px; 
 }
 
 .col_maincontent_active_Homepage{ 
   transition: 0.4s;  
-  min-height: calc(100vh - 147px - 188.56px - 32px);
+  /* min-height: calc(100vh - 147px - 188.56px - 32px); */
+  min-height: calc(100vh - 147px - 70px - 32px);
   background-color: white;  
   border-radius:15px;
  }
@@ -61,7 +63,8 @@
 @media(min-width:992px){
   /* +147px is the padding 147px of jumbotron */
   .col_maincontent_active_HomepageStart{
-    min-height: calc(100vh - 147px + 147px - 390px - 300px - 188.55px);
+    /* min-height: calc(100vh - 147px + 147px - 390px - 300px - 188.55px); */
+    min-height: calc(100vh - 147px + 147px - 390px - 300px - 70px);
     border-radius:0px;
   }
 }

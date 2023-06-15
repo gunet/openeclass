@@ -6,7 +6,7 @@
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
             <div class="col-12 mt-3">
-                <div class='pb-3 ps-3 pe-0 legendViewContent text-center'>
+                <div class='pb-3 ps-3 pe-0 text-center'>
                     <span class='courseInfoText TextExtraBold blackBlueText'>{{ trans('langMyCourses') }}</span>
                 </div>
             </div>

@@ -11,16 +11,13 @@
                 
                 <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
-                    <div class='col-12 mt-3 shadow p-3 pb-3 bg-body rounded bg-primary'>
-                        <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
-                            <span class="control-label-notes">
-                                <i class="fas fa-tools orangeText" aria-hidden="true"></i> 
-                                Copyright
-                            </span>
+                    <div class="col-12">
+                        <div class='text-center'>
+                            <span class='courseInfoText TextExtraBold blackBlueText'>Copyright</span>
                         </div>
+                    
+                        <p class='mt-5'>{!! trans('langCopyrightNotice') !!}</p>
                     </div>
-
-                    <p class='mt-5'>{!! trans('langCopyrightNotice') !!}</p>
                 </div>
             </div>
         </div>

@@ -41,8 +41,15 @@
             @if(!$course_code)
             </div>
             @endif
+            
         @endif
 
     </div>
 
+
 </div>
+
+
+@if(count($breadcrumbs) > 0)
+<div class='col-12'><div class='legendViewContent w-100 mt-3'></div></div>
+@endif

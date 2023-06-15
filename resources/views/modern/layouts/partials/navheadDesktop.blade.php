@@ -366,7 +366,8 @@
     }else{
         $('#link-register'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/register_1.svg");
     }
-    if(current_url.includes('/modules/auth/opencourses.php')){
+    if(current_url.includes('/modules/auth/opencourses.php')
+        || current_url.includes('/modules/auth/listfaculte.php')){
         $('#link-lessons'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_2.svg");
     }else{
         $('#link-lesson'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_1.svg");
@@ -406,7 +407,8 @@
         $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_2.svg");
     }
     function unhoverLessons(obj) {
-        if(!current_url.includes('/modules/auth/opencourses.php')){
+        if(!current_url.includes('/modules/auth/opencourses.php')
+            && !current_url.includes('/modules/auth/listfaculte.php')){
             $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/lessons_1.svg");
         }
     }

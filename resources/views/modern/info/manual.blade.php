@@ -16,10 +16,6 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class='col-12 mt-3 mb-3'>
-                        <div class='text-md-start text-center ms-md-2 text-secondary'>{{trans('langEclass')}} - {{trans('langManuals')}}</div>
-                    </div>
-
                     <div class='col-12 mt-3'>
                         <div class='list-group'>
                             <li class='list-group-item list-header control-label-notes'>{{ $general_tutorials['title'] }}</li>

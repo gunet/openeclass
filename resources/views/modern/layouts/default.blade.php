@@ -115,7 +115,7 @@
 
 <body>
 
-    <div class="ContentEclass d-flex flex-column min-vh-100 {{ $container }}">
+    <div class="ContentEclass d-flex flex-column min-vh-100 container-fluid px-0">
 
     
 
@@ -129,8 +129,9 @@
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 
-
-        @yield('content')
+        <div class='basic-content {{ $container }}'>
+            @yield('content')
+        </div>
 
 
         <!-- Desktop navbar -->

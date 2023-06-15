@@ -913,6 +913,8 @@
 
 <script>
 
+    $('.basic-content').removeClass('container');
+
     $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
     function unhoverHome(obj) {
         if(!current_url.includes('/main/portfolio.php')){

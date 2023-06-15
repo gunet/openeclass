@@ -15,11 +15,6 @@
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    <div class='col-12 mt-3 mb-3'>
-                        <div class='text-md-start text-center ms-md-2 text-secondary'>{{trans('langEclass')}} - {{trans('langInfo')}}</div>
-                    </div>
-
                     
                     <div class='col-lg-4 col-12 d-flex justify-content-center align-items-center mb-lg-0 mb-5'>
                         <img class='contactImage' src="{{ $urlAppend }}template/modern/img/indexlogo.png">

@@ -16,8 +16,8 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class='col-12 mt-3'>
-                        @if (count($faqs) != 0){!! $action_bar !!} @endif
+                    <div class='col-12'>
+                        @if (count($faqs) > 0){!! $action_bar !!} @endif
                     </div>
 
                     <div class='col-12'>
@@ -33,19 +33,21 @@
                                     <ul class="list-group list-group-flush">
                                         @foreach ($faqs as $key => $faq)
                                         
-                                                <li class="list-group-item border-0 Shadow-cols p-3">
+                                                <li class="list-group-item border-0 Shadow-cols p-3 mb-4">
                                                     <a class='d-flex align-items-start TextSemiBold normalBlueText' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                         <span class='pe-2'>{{ $key+1 }}.</span>
                                                         <span>{!! $faq->title !!}</span>
                                                         
                                                     </a>
+
+                                                    <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse border-0 bg-light rounded-0' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
+                                                        <div class='panel-body px-5'>
+                                                            {!! $faq->body !!}
+                                                        </div>
+                                                    </div>
                                                 </li>
                                                
-                                                <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse border-0 bg-light rounded-0' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
-                                                    <div class='panel-body ps-5 pe-5 bg-light rounded-0 Shadow-cols'>
-                                                        {!! $faq->body !!}
-                                                    </div>
-                                                </div>
+                                                
                                         @endforeach
                                     </ul>
 

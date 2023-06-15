@@ -496,7 +496,7 @@ function view($view_file, $view_data = array()) {
                 
 
                 .Help-text-panel-heading, .normalColorBlueText {
-                    color:  $theme_options_styles[linkColor] !important;
+                    color:  $theme_options_styles[leftNavBgColor] !important;
                 }
                 
 

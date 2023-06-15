@@ -881,7 +881,7 @@ function user_duration_per_course($u) {
                 <div class='margin-bottom-fat margin-top-fat mb-3'>
                   <div class='col-12'>
                     <ul class='list-group'>
-                      <li class='list-group-item disabled bg-primary'>
+                      <li class='list-group-item disabled bgTheme'>
                         <div class='row'>
                           <div class='col-sm-12'><strong class='text-white'>$langDurationVisitsPerCourse</strong></div>
                         </div>
@@ -947,7 +947,7 @@ function user_last_logins($u) {
         $tool_content .= "<div class='margin-bottom-fat margin-top-fat mb-3'>
                   <div class='col-12'>
                     <ul class='list-group'>
-                      <li class='list-group-item disabled bg-secondary'>
+                      <li class='list-group-item disabled bgTheme'>
                         <div class='row'>
                           <div class='col-sm-12'><b class='text-white'>$langLastVisits</b></div>
                         </div>";
