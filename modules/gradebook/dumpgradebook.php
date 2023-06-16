@@ -111,8 +111,8 @@ if ($t == 1) { // download gradebook activities results
     $data[] = $data_header;
     // user grades
     $range = get_gradebook_range($gid);
-    $sql_users = Database::get()->queryArray("SELECT uid, givenname, surname, username, am, email 
-                                            FROM gradebook_users 
+    $sql_users = Database::get()->queryArray("SELECT uid, givenname, surname, username, am, email
+                                            FROM gradebook_users
                                             JOIN user
                                             ON user.id = gradebook_users.uid
                                             WHERE gradebook_id = ?d
@@ -128,7 +128,7 @@ if ($t == 1) { // download gradebook activities results
                                      $item->email);
 
         $sql_grades = Database::get()->queryArray("SELECT gradebook_activity_id, grade FROM gradebook_book
-                                        JOIN gradebook_activities 
+                                        JOIN gradebook_activities
                                             ON gradebook_activity_id = gradebook_activities.id
                                             AND gradebook_id = ?d
                                             AND uid = ?d", $gid, $item->uid);
@@ -157,9 +157,9 @@ if ($t == 1) { // download gradebook activities results
 
     $data[] = [ $activity_title ];
     $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade ];
-    $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid, grade 
+    $entries = Database::get()->queryArray("SELECT surname, givenname, username, am, email, gradebook_users.uid, grade
                     FROM gradebook_users
-                    LEFT JOIN gradebook_book 
+                    LEFT JOIN gradebook_book
                         ON gradebook_book.uid = gradebook_users.uid
                         AND gradebook_activity_id = ?d
                     JOIN user
@@ -196,5 +196,5 @@ $sheet->fromArray($data, NULL);
 // file output
 $writer = new Xlsx($spreadsheet);
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename=$filename");
+set_content_disposition('attachment', $filename);
 $writer->save("php://output");

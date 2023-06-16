@@ -6226,7 +6226,7 @@ function download_assignments($id) {
         }
         if ($zip->close()) {
             header("Content-Type: application/zip");
-            header("Content-Disposition: attachment; filename=$filename");
+            set_content_disposition('attachment', $filename);
             header("Content-Length: " . filesize($filepath));
             stop_output_buffering();
             readfile($filepath);

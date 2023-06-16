@@ -57,14 +57,14 @@ $data[] = [ $exercise_details ];
 $data[] = [];
 $data[] = [ $langSurname, $langName, $langAm, $langGroup, $langStart, $langExerciseDuration, $langTotalScore ];
 
-$result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname, am 
-                                                    FROM `exercise_user_record` 
+$result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname, am
+                                                    FROM `exercise_user_record`
                                                     JOIN user ON uid = id
                                                     WHERE eid = ?d
-                                                    AND attempt_status != " . ATTEMPT_CANCELED . ")                                                  
-                                                UNION 
-                                                    (SELECT 0 as uid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am 
-                                                    FROM `exercise_user_record` WHERE eid = ?d 
+                                                    AND attempt_status != " . ATTEMPT_CANCELED . ")
+                                                UNION
+                                                    (SELECT 0 as uid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am
+                                                    FROM `exercise_user_record` WHERE eid = ?d
                                                     AND attempt_status != " . ATTEMPT_CANCELED . "
                                                     AND uid = 0)
                                                 ORDER BY surname, givenname"
@@ -80,7 +80,7 @@ foreach ($result as $row) {
     $result2 = Database::get()->queryArray("SELECT record_start_date,
         record_end_date, TIME_TO_SEC(TIMEDIFF(record_end_date, record_start_date)) AS time_duration,
         total_score, total_weighting, eurid, attempt_status
-        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d  
+        FROM `exercise_user_record` WHERE uid = ?d AND eid = ?d
         ORDER BY record_start_date DESC", $sid, $exerciseId);
 
     foreach ($result2 as $row2) {
@@ -117,6 +117,6 @@ $sheet->fromArray($data, NULL);
 // file output
 $writer = new Xlsx($spreadsheet);
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename=$filename");
+set_content_disposition('attachment', $filename);
 $writer->save("php://output");
 exit;

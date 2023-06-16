@@ -87,7 +87,7 @@ if (isset($_GET['export'])) {
         }
         $zipFile->close();
         header("Content-Type: application/x-zip");
-        header("Content-Disposition: attachment; filename=$filename");
+        set_content_disposition('attachment', $filename);
         stop_output_buffering();
         @readfile($filename);
         @unlink($filename);

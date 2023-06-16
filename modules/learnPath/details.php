@@ -180,7 +180,7 @@ if (isset($_GET['xls'])) {
     // file output
     $writer = new Xlsx($spreadsheet);
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename=$filename");
+    set_content_disposition('attachment', $filename);
     $writer->save("php://output");
     exit;
 

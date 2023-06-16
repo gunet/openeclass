@@ -307,7 +307,7 @@ if (isset($_GET['xls'])) {
     // file output
     $writer = new Xlsx($spreadsheet);
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename=$filename");
+    set_content_disposition('attachment', $filename);
     $writer->save("php://output");
     exit;
 
@@ -325,7 +325,7 @@ if (isset($_GET['xls'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
           </style>
