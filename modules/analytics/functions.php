@@ -81,7 +81,7 @@ function display_learning_analytics() {
                         </div>
                         <div class='res-table-wrapper'>
                             $results
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -108,9 +108,9 @@ function display_general_lists($analytics_id) {
         $upper_threshold = $analytics_element->upper_threshold;
         $lower_threshold = $analytics_element->lower_threshold;
 
-        $users = Database::get()->queryArray("SELECT u.id, u.givenname as givenname, u.surname as surname, cu.user_id as userid 
-                FROM course_user AS cu INNER JOIN user as u on cu.user_id=u.id 
-                WHERE course_id = ?d 
+        $users = Database::get()->queryArray("SELECT u.id, u.givenname as givenname, u.surname as surname, cu.user_id as userid
+                FROM course_user AS cu INNER JOIN user as u on cu.user_id=u.id
+                WHERE course_id = ?d
                 AND u.status = " . USER_STUDENT ."", $course_id);
 
         $critical = array();
@@ -187,16 +187,16 @@ function display_general_lists($analytics_id) {
                                         </strong>
                                     </div>
                                 </div>
-                            </div>                        
+                            </div>
                             <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
                                 <h4 class='text-success'>$message_advanced</h4>
                                 <div class='res-table-wrapper'>
                                     $good_results
-                                </div>                                                        
+                                </div>
                                 <h4 class='text-danger'>$message_critical</h4>
                                 <div class='res-table-wrapper'>
                                     $bad_results
-                                </div>                            
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -248,10 +248,10 @@ function display_analytics_elements($analytics_id) {
                             $langAnalyticsGradeLimits
                         </div>
                         <div class='col-sm-4'>
-                            $langAnalyticsThresholds 
+                            $langAnalyticsThresholds
                         </div>
                         <div class='col-sm-2'>
-                            $langAnalyticsWeight 
+                            $langAnalyticsWeight
                         </div>
                         <div class='col-sm-1 text-center'>
                             <i class='fa fa-cogs'></i>
@@ -311,7 +311,7 @@ function display_analytics_elements($analytics_id) {
                     </div>
                     <div class='res-table-wrapper'>
                         $results
-                    </div>  
+                    </div>
                 </div>
             </div>
         </div>
@@ -389,10 +389,10 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage,
     $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langAnalyticsDetails, $langMessage;
 
-    $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname, 
-                                u.surname AS surname, cu.user_id AS userid 
-                                FROM course_user AS cu INNER JOIN user AS u on cu.user_id=u.id 
-                                WHERE course_id = ?d 
+    $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname,
+                                u.surname AS surname, cu.user_id AS userid
+                                FROM course_user AS cu INNER JOIN user AS u on cu.user_id=u.id
+                                WHERE course_id = ?d
                                 AND cu.status = " . USER_STUDENT . "", $course_id);
 
     if (count($sql_data) == 0) {
@@ -414,7 +414,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         </div>
                         <div class='col-sm-5'>
                             <h5>$langPercentage</h5>
-                        </div>                        
+                        </div>
                         <div class='col-sm-3' >
                             <h5>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
@@ -451,7 +451,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             <div class='col-sm-2'>"
                  . $values['text-success'] . "&nbsp;<i class='fa fa-arrow-up' data-toggle='tooltip' data-placement='top' title='$langAnalyticsAdvancedLevel'></i>&nbsp;&nbsp;"
                  . $values['text-warning'] . "&nbsp;<i class='fa fa-minus' data-toggle='tooltip' data-placement='top' title='$langAnalyticsMiddleLevel'></i>&nbsp;&nbsp;"
-                 . $values['text-danger'] . "&nbsp;<i class='fa fa-arrow-down' data-toggle='tooltip' data-placement='top' title='$langAnalyticsCriticalLevel'></i>                
+                 . $values['text-danger'] . "&nbsp;<i class='fa fa-arrow-down' data-toggle='tooltip' data-placement='top' title='$langAnalyticsCriticalLevel'></i>
             </div>
             <div class='col-sm-3'>" . action_bar(
                 array(
@@ -479,9 +479,9 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     }
 
     $tool_content .= "
-         <div class='row'>                        
+         <div class='row'>
             <div class='panel panel-default'>
-                <div class='panel-heading'>             
+                <div class='panel-heading'>
                     $analytics_title->title
                 </div>
                 <div class='panel-body'>
@@ -528,7 +528,7 @@ function dump_analytics($peruserarray, $title) {
     // file output
     $writer = new Xlsx($spreadsheet);
     header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-    header("Content-Disposition: attachment;filename=$filename");
+    set_content_disposition('attachment', $filename);
     $writer->save("php://output");
     exit;
 
@@ -562,7 +562,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
             <h5>
                 <div class='row res-table-header'>
                     <div class='col-sm-5'>
-                        $langType 
+                        $langType
                     </div>
                     <div class='col-sm-3'>
                         $langPercentage
@@ -577,7 +577,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         </div>
     <div class='res-table-wrapper'>";
 
-    $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
+    $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value
                                             FROM analytics_element
                                             WHERE analytics_id = ?d", $analytics_id);
 
@@ -590,7 +590,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
         $max_value = $element_data->max_value;
         $min_value = $element_data->min_value;
 
-        $elements_data = Database::get()->queryArray("SELECT value, updated 
+        $elements_data = Database::get()->queryArray("SELECT value, updated
                                                         FROM user_analytics
                                                         WHERE user_id = ?d
                                                         AND analytics_element_id = ?d
@@ -719,8 +719,8 @@ function compute_general_analytics_foruser($userid, $analytics_id, $start, $end)
     $results = array();
 
     //Get all available elements
-    $sql_elements = Database::get()->queryArray("SELECT id, upper_threshold, lower_threshold, weight, min_value, max_value 
-                                        FROM analytics_element 
+    $sql_elements = Database::get()->queryArray("SELECT id, upper_threshold, lower_threshold, weight, min_value, max_value
+                                        FROM analytics_element
                                         WHERE analytics_id = ?d", $analytics_id);
 
     foreach ($sql_elements as $sql_element) {
@@ -731,7 +731,7 @@ function compute_general_analytics_foruser($userid, $analytics_id, $start, $end)
         $element_min_value = $sql_element->min_value;
         $element_weight = $sql_element->weight;
 
-        $element_result = Database::get()->querySingle("SELECT sum(value) as total 
+        $element_result = Database::get()->querySingle("SELECT sum(value) as total
                                                             FROM user_analytics
                                                             WHERE updated >= ?t
                                                             AND updated <= ?t
@@ -953,7 +953,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
                 <input class='form-control' type='number' name='max_value' value='$max_value'>
             </div>
         </div>
-        <div class='form-group'>   
+        <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'  style='text-align:left'>$langAnalyticsWeight:</label>
             <div class='col-sm-2'>
                 <input class='form-control' type='number' placeholder='' name='weight' value='$weight'>
@@ -1003,7 +1003,7 @@ function get_available_resources($type, $analytics_element_id) {
             case ANALYTICS_EXERCISEGRADE:
                 $result = Database::get()->queryArray("SELECT id, title FROM exercise WHERE course_id = ?d
                                             AND active = 1
-                                            AND id NOT IN 
+                                            AND id NOT IN
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND id != ?d
                                                 AND module_id = " . ANALYTICS_EXERCISEGRADE . ")
@@ -1012,7 +1012,7 @@ function get_available_resources($type, $analytics_element_id) {
             case ANALYTICS_ASSIGNMENTGRADE:
                 $result = Database::get()->queryArray("SELECT id, title FROM assignment WHERE course_id = ?d
                                             AND active = 1
-                                               AND id NOT IN 
+                                               AND id NOT IN
                                                (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                    AND id != ?d
                                                    AND module_id = " . ANALYTICS_ASSIGNMENTGRADE . ")
@@ -1021,7 +1021,7 @@ function get_available_resources($type, $analytics_element_id) {
             case ANALYTICS_ASSIGNMENTDL:
                 $result = Database::get()->queryArray("SELECT id, title FROM assignment WHERE course_id = ?d
                                             AND active = 1
-                                               AND id NOT IN 
+                                               AND id NOT IN
                                                (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                    AND id != ?d
                                                    AND module_id = " . ANALYTICS_ASSIGNMENTDL . ")
@@ -1029,7 +1029,7 @@ function get_available_resources($type, $analytics_element_id) {
                 break;
             case ANALYTICS_LPPERCENTAGE:
                 $result = Database::get()->queryArray("SELECT learnPath_id as id, name as title FROM lp_learnPath WHERE course_id = ?d
-                                            AND learnPath_id NOT IN 
+                                            AND learnPath_id NOT IN
                                                (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                    AND id != ?d
                                                    AND module_id = " . ANALYTICS_LPPERCENTAGE . ")
@@ -1038,7 +1038,7 @@ function get_available_resources($type, $analytics_element_id) {
             case ANALYTICS_FILEVIEW:
                 $result = Database::get()->queryArray("SELECT id,  (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) as title FROM document WHERE course_id = ?d
                                             AND visible = 1
-                                            AND id NOT IN 
+                                            AND id NOT IN
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND id != ?d
                                                 AND module_id = " . MODULE_ID_DOCS . ")
@@ -1106,7 +1106,7 @@ function get_available_resources($type, $analytics_element_id) {
                 $resource_type_id = ANALYTICS_EXERCISEGRADE;
                 $result = Database::get()->queryArray("SELECT id, title FROM exercise WHERE course_id = ?d
                                             AND active = 1
-                                            AND id NOT IN 
+                                            AND id NOT IN
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND module_id = ?d)
                                             ORDER BY title", $course_id, $analytics_id, $resource_type_id);
@@ -1115,7 +1115,7 @@ function get_available_resources($type, $analytics_element_id) {
                 $resource_type_id = ANALYTICS_ASSIGNMENTGRADE;
                 $result = Database::get()->queryArray("SELECT id, title FROM assignment WHERE course_id = ?d
                                             AND active = 1
-                                            AND id NOT IN 
+                                            AND id NOT IN
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND module_id = ?d)
                                             ORDER BY title", $course_id, $analytics_id, $resource_type_id);
@@ -1124,7 +1124,7 @@ function get_available_resources($type, $analytics_element_id) {
                 $resource_type_id = ANALYTICS_ASSIGNMENTDL;
                 $result = Database::get()->queryArray("SELECT id, title FROM assignment WHERE course_id = ?d
                                             AND active = 1
-                                            AND id NOT IN 
+                                            AND id NOT IN
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND module_id = ?d)
                                             ORDER BY title", $course_id, $analytics_id, $resource_type_id);
@@ -1132,7 +1132,7 @@ function get_available_resources($type, $analytics_element_id) {
             case 'lp-percentage':
                 $resource_type_id = ANALYTICS_LPPERCENTAGE;
                 $result = Database::get()->queryArray("SELECT learnPath_id as id, name as title FROM lp_learnPath WHERE course_id = ?d
-                                        AND learnPath_id NOT IN 
+                                        AND learnPath_id NOT IN
                                             (SELECT resource FROM analytics_element WHERE analytics_id=?d
                                                 AND module_id = ?d)
                                             ORDER BY name", $course_id, $analytics_id, $resource_type_id);
@@ -1198,7 +1198,7 @@ function get_period_types_array () {
 function insert_analytics($title, $description, $active, $periodType, $start_date, $end_date, $created) {
     global $course_id;
 
-    $new_id = Database::get()->query("INSERT INTO analytics SET 
+    $new_id = Database::get()->query("INSERT INTO analytics SET
                                         courseID = ?d,
                                         title = ?s,
                                         description = ?s,
@@ -1214,7 +1214,7 @@ function insert_analytics($title, $description, $active, $periodType, $start_dat
 function update_analytics($analytics_id, $title, $description, $active, $periodType, $start_date, $end_date) {
     global $course_id;
 
-    Database::get()->query("UPDATE analytics SET 
+    Database::get()->query("UPDATE analytics SET
                                         title = ?s,
                                         description = ?s,
                                         active = ?d,
@@ -1252,7 +1252,7 @@ function delete_user_analytics($analytics_element_id) {
 function switch_activation($analytics_id, $active) {
     global $course_id;
 
-    Database::get()->query("UPDATE analytics SET 
+    Database::get()->query("UPDATE analytics SET
                                 active = ?d
                             WHERE id = ?d AND courseID = ?d", $active, $analytics_id, $course_id);
 
@@ -1310,7 +1310,7 @@ function get_resource_info($resource, $module_id) {
 function insert_analytics_element($analytics_id, $resource, $module_id, $min_value, $max_value, $lower_threshold, $upper_threshold, $weight) {
     global $course_id;
 
-    $new_id = Database::get()->query("INSERT INTO analytics_element SET 
+    $new_id = Database::get()->query("INSERT INTO analytics_element SET
                                         analytics_id = ?d,
                                         resource = ?d,
                                         module_id = ?d,
@@ -1339,7 +1339,7 @@ function insert_analytics_element($analytics_id, $resource, $module_id, $min_val
 function update_analytics_element($analytics_id, $analytics_element_id, $resource, $module_id, $min_value, $max_value, $lower_threshold, $upper_threshold, $weight) {
     global $course_id;
 
-    Database::get()->query("UPDATE analytics_element SET 
+    Database::get()->query("UPDATE analytics_element SET
                                         analytics_id = ?d,
                                         resource = ?d,
                                         module_id = ?d,

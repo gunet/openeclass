@@ -56,9 +56,9 @@ if (isset($_GET['u'])) { //  stats per user
         $xls_grp_legend = "$langGroup: $grp_name";
     }
 
-    $user_actions = Database::get()->queryArray("SELECT 
-                            SUM(ABS(actions_daily.duration)) AS duration, 
-                              module_id 
+    $user_actions = Database::get()->queryArray("SELECT
+                            SUM(ABS(actions_daily.duration)) AS duration,
+                              module_id
                             FROM actions_daily
                             WHERE course_id = ?d
                               AND user_id = ?d
@@ -104,7 +104,7 @@ if (isset($_GET['u'])) { //  stats per user
         // file output
         $writer = new Xlsx($spreadsheet);
         header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        header("Content-Disposition: attachment;filename=$filename");
+        set_content_disposition('attachment', $filename);
         $writer->save("php://output");
         exit;
 
@@ -417,8 +417,8 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
         $terms[] = $group;
     } else {
         $from = " (SELECT id, surname, givenname, username, email, status, am
-                      FROM user 
-                      UNION 
+                      FROM user
+                      UNION
                           (SELECT 0 AS id,
                             '' AS surname,
                             'Anonymous' AS givenname,

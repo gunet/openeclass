@@ -4498,3 +4498,13 @@ function get_platform_logo($size='normal') {
 
     return $logo;
 }
+
+
+/**
+ * @brief Set the content disposition header for file display / download, with
+ *        appropriate encoding
+ */
+function set_content_disposition($disposition, $filename) {
+    $filename = strtr($filename, '"\'', '__');
+    header("Content-Disposition: $disposition; filename*=UTF-8''" . rawurlencode($filename));
+}

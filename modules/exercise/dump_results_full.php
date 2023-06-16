@@ -73,19 +73,19 @@ foreach ($item as $data) { // check for random questions with criteria
         $number = key($random_criteria);
         $c = $random_criteria[$number];
         if ($random_criteria['criteria'] == 'difficulty') {
-            $result = Database::get()->queryArray("SELECT id FROM `exercise_question` 
+            $result = Database::get()->queryArray("SELECT id FROM `exercise_question`
                             WHERE difficulty = ?d AND course_id = ?d", $c, $course_id);
             foreach ($result as $d1) {
                 $possible_qids[] = $d1->id;
             }
         } else if ($random_criteria['criteria'] == 'category') {
-            $result = Database::get()->queryArray("SELECT id FROM `exercise_question` 
+            $result = Database::get()->queryArray("SELECT id FROM `exercise_question`
                             WHERE category = ?d AND course_id = ?d", $c, $course_id);
             foreach ($result as $d2) {
                 $possible_qids[] = $d2->id;
             }
         } else if ($random_criteria['criteria'] == 'difficultycategory') {
-            $result = Database::get()->queryArray("SELECT id FROM `exercise_question` 
+            $result = Database::get()->queryArray("SELECT id FROM `exercise_question`
                             WHERE difficulty = ?d AND category = ?d AND course_id = ?d", $c[0], $c[1], $course_id);
             foreach ($result as $d2) {
                 $possible_qids[] = $d2->id;
@@ -119,12 +119,12 @@ $out[] = $headers;
 $q = Database::get()->queryArray("(SELECT uid, eurid, surname, givenname, am
                                             FROM exercise_user_record
                                             JOIN user ON uid = id
-                                            WHERE eid = ?d 
-                                            AND attempt_status != " . ATTEMPT_CANCELED . " 
-                                            ) 
+                                            WHERE eid = ?d
+                                            AND attempt_status != " . ATTEMPT_CANCELED . "
+                                            )
                                         UNION
                                             (SELECT 0 as uid, eurid, '$langAnonymous' AS surname, '$langUser' AS givenname, '' as am
-                                                FROM `exercise_user_record` WHERE eid = ?d 
+                                                FROM `exercise_user_record` WHERE eid = ?d
                                                 AND attempt_status != " . ATTEMPT_CANCELED . "
                                                 AND uid = 0)
                                             ORDER BY surname, givenname"
@@ -134,8 +134,8 @@ foreach ($q as $d) { // for each attempt
     $eurid = $d->eurid; // exercise user record id
     $qids_answered = []; // answered questions;
     // get user questions
-    $s = Database::get()->queryArray("SELECT DISTINCT question_id, uid 
-                FROM exercise_answer_record, exercise_user_record 
+    $s = Database::get()->queryArray("SELECT DISTINCT question_id, uid
+                FROM exercise_answer_record, exercise_user_record
                  WHERE exercise_answer_record.eurid = exercise_user_record.eurid
                 AND exercise_user_record.eid = ?d
                 AND exercise_user_record.eurid = ?d", $exerciseId, $eurid);
@@ -200,7 +200,7 @@ $sheet->fromArray($out, NULL);
 // file output
 $writer = new Xlsx($spreadsheet);
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment;filename=$filename");
+set_content_disposition('attachment', $filename);
 $writer->save("php://output");
 exit;
 
@@ -215,7 +215,7 @@ function details($qid, $eurid) {
 
     $content = '';
     if ($qid) {
-        $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record 
+        $sql2 = Database::get()->queryArray("SELECT question_id, SUM(weight) AS weight FROM exercise_answer_record
                                 WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
         foreach ($sql2 as $user_question) {
             $content = question_answer_details($eurid, $user_question->question_id); // question answer
@@ -245,8 +245,8 @@ function question_answer_details($eurid, $qid) {
             switch ($data->type) {
                 case UNIQUE_ANSWER:
                 case TRUE_FALSE:
-                    $a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
-                                        WHERE question_id = ?d 
+                    $a = Database::get()->querySingle("SELECT answer FROM exercise_answer
+                                        WHERE question_id = ?d
                                         AND r_position = ?d",
                                     $data->question_id, $data->answer_id);
                     if ($a) {
@@ -256,8 +256,8 @@ function question_answer_details($eurid, $qid) {
                     }
                 break;
                 case MULTIPLE_ANSWER:
-                    $a = Database::get()->querySingle("SELECT answer FROM exercise_answer 
-                                        WHERE question_id = ?d 
+                    $a = Database::get()->querySingle("SELECT answer FROM exercise_answer
+                                        WHERE question_id = ?d
                                         AND r_position = ?d",
                                     $data->question_id, $data->answer_id);
                     if ($a) {
@@ -318,7 +318,7 @@ function user_question_score($qid, $eurid) {
 
     $content = '';
     if ($qid) {
-        $uq = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record 
+        $uq = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record
                                 WHERE eurid = ?d AND question_id = ?d", $eurid, $qid);
         $content = $uq->weight; // /question weight
     }
