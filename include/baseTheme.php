@@ -946,19 +946,24 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-    <a class="dropdown-toggle text-white TextSemiBold text-capitalize small-text" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-       '. $Selected_Language .' 
-   </a>
-    <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';
-    foreach ($session->active_ui_languages as $code) {
-        $class = ($code == $session->language)? ' class="active"': '';
-        $lang_select .=
-            "<li role='presentation'$class>
-                <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    <div class='d-inline-flex align-items-center'><span class='fa fa-globe' aria-hidden='true'></span><span class='TextMedium ps-1'>" .
-                    q($native_language_names_init[$code]) . "</span></div></a></li>";
-    }
-    $lang_select .= "</ul>";
+                        <a class="dropdown-toggle text-white TextSemiBold text-capitalize small-text" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            '. $Selected_Language .' 
+                        </a>
+                        <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';
+                        foreach ($session->active_ui_languages as $code) {
+                            $class = ($code == $session->language)? ' class="active"': '';
+                            $lang_select .=
+                                "<li role='presentation'$class>
+                                    <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                                        <div class='d-inline-flex align-items-center'>
+                                            <span class='fa fa-globe' aria-hidden='true'></span>
+                                            <span class='TextMedium ps-1'>" .q($native_language_names_init[$code]) . "</span>
+                                        </div>
+                                    </a>
+                                </li>";
+                        }
+        $lang_select .= "</ul>
+                    </div>";
     return $lang_select;
 }
 

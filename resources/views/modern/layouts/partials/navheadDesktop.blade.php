@@ -1,99 +1,66 @@
 <nav id="bgr-cheat-header" class="navbar navbar-eclass">
 
-    <div class="container-fluid h-100">
+    <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
-        <div class='row w-100 h-100'> 
+        <div class='d-flex justify-content-start align-items-center h-100'>
+            <div class='d-flex justify-content-start align-items-end flex-wrap'>
+                <a class='IconBtn ms-lg-4 me-xl-5 me-lg-4' href="{{ $urlAppend }}">
+                    <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
+                </a>
+                @if(!get_config('hide_login_link'))
+                    <a id="link-home" class="eclass-nav-link ms-xl-3 me-3 d-flex justify-content-center align-items-end" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
+                        <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/home_1.svg">
+                        <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langHome') }}</p>
+                    </a>
+                @endif
+                @if (!isset($_SESSION['uid']))
+                    <a id="link-register" class="eclass-nav-link ms-xl-3 me-3 d-flex justify-content-center align-items-end @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
+                        <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/register_1.svg">
+                        <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langRegistration') }}</p>
+                    </a>
+                @endif
+                <a id="link-lessons" class="eclass-nav-link ms-xl-3 me-3 d-flex justify-content-center align-items-end" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
+                    <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
+                    <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langCourses') }}</p>
+                </a>
+                @if (!isset($_SESSION['uid']))
+                    <a id="link-faq" class="eclass-nav-link ms-xl-3 d-flex justify-content-center align-items-end" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
+                        <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/faq_1.svg">
+                        <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langFaq') }}</p>
+                    </a>
+                @endif
+            </div>
+        </div>
 
-            <div class="col-lg-9 d-flex justify-content-start">
-                <div class="row w-100">
-                    <div class='col-xxl-2 col-lg-3 d-flex justify-content-center align-items-center'>
-                        <a href="{{ $urlAppend }}">
-                            <img class="eclass-nav-icon" src="{{ $logo_img }}"/>
-                        </a>
-                    </div>
-                    <div class="col-xxl-10 col-lg-9 d-flex justify-content-start align-items-end ps-lg-3 ps-xl-5">
-                        <div class='d-none d-xl-block w-100'>
-                            @if(!get_config('hide_login_link'))
-                                <a id="link-home" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
-                                    <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/home_1.svg">
-                                    <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langHome') }}</p>
-                                </a>
-                            @endif
-                            @if (!isset($_SESSION['uid']))
-                                <a id="link-register" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
-                                    <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/register_1.svg">
-                                    <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langRegistration') }}</p>
-                                </a>
-                            @endif
-                            <a id="link-lessons" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
-                                <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
-                                <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langCourses') }}</p>
-                            </a>
-                            @if (!isset($_SESSION['uid']))
-                                <a id="link-faq" class="eclass-nav-link m-auto d-block me-3 d-inline-flex justify-content-center align-items-top" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
-                                    <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/faq_1.svg">
-                                    <p class='small-text text-white text-uppercase mt-xl-1 mt-lg-1 mb-0'>{{ trans('langFaq') }}</p>
-                                </a>
-                            @endif
-                        </div>
+        <div class='d-flex align-items-end flex-column h-100 pe-4'>
+            <div class="align-top d-flex">
+               
+                    @if(get_config('enable_search'))
+                        <form class="d-flex justify-content-end d-inline-flex @if(!isset($_SESSION['uid'])) me-2 @else me-0 @endif" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
+                            <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent p-0" type="submit" name="quickSearch">
+                                    <img class='search-icon' src="{{$urlAppend}}template/modern/img/search.svg"/>
+                            </button>
+                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn text-white" name="search_terms" aria-describedby="basic-inputSearch"/>
+                        </form> 
+                    @endif
 
-                        <div class='d-none d-lg-block d-xl-none'>
-                            <div class='row w-100'>
-                                <div class='col-lg-6 d-flex justify-content-start'>
-                                    <a id="link-home" class="eclass-nav-link @if (!isset($_SESSION['uid'])) ms-5 @endif mb-2 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}" onclick="clickHome(this)" onmouseover="hoverHome(this);" onmouseout="unhoverHome(this);"> 
-                                        <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/home_1.svg">
-                                        <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langHome') }}</p>
-                                    </a>
-                                </div>
-                                @if (!isset($_SESSION['uid']))
-                                    <div class='col-lg-6 d-flex justify-content-start'>
-                                        <a id="link-register" class="eclass-nav-link mb-2 d-inline-flex justify-content-center align-items-top @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php" onmouseover="hoverRegister(this);" onmouseout="unhoverRegister(this);">
-                                            <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/register_1.svg">
-                                            <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langRegistration') }}</p>
-                                        </a>
-                                    </div>
-                                @endif
-                                <div class='col-lg-6 d-flex justify-content-start'>
-                                    <a id="link-lessons" class="eclass-nav-link @if (!isset($_SESSION['uid'])) ms-5 @endif mb-2 d-inline-flex justify-content-center align-items-top" href="{{ $urlServer }}modules/auth/listfaculte.php" onmouseover="hoverLessons(this);" onmouseout="unhoverLessons(this);">
-                                        <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
-                                        <p class='small-text text-white text-uppercase mb-0 mt-xl-1 mt-lg-1'>{{ trans('langCourses') }}</p>
-                                    </a>
-                                </div>
-                                @if (!isset($_SESSION['uid']))
-                                <div class='col-lg-6 d-flex justify-content-start'>
-                                    <a id="link-faq" class="eclass-nav-link mb-2 d-inline-flex justify-content-center align-items-top" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
-                                        <img class='HeaderIcon me-1' src="{{ $urlAppend }}template/modern/img/faq_1.svg">
-                                        <p class='small-text text-white text-uppercase mt-xl-1 mt-lg-1 mb-0'>{{ trans('langFaq') }}</p>
-                                    </a>
-                                </div>
-                                @endif
-                            </div>
-                        </div>
-                        
-                       
-                    </div>
-                </div>
+                  {!! lang_selections_Desktop() !!}
+               
             </div>
             
+            
+             <div class="align-bottom flex-grow-1 d-flex justify-content-center align-items-end">
+                <p class='my-2'>
+                    @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
+                        <a class='d-flex align-items-center text-uppercase TextSemiBold userLoginMobile small-text' href="{{$urlAppend}}main/login_form.php">
+                            <img class="UserLoginIcon2" src="{{ $urlAppend }}template/modern/img/user_login_2.svg"> 
+                            <span class='ms-2 ms-lg-0 loginText'>{{ trans('langUserLogin') }}</span>
+                        </a>
+                    @endif
 
-            <div class="col-lg-3 ps-0  @if(!get_config('enable_search') and isset($_SESSION['uid'])) d-flex justify-content-end align-items-end @endif">
-
-                <div class='row mt-0'>
-                    <form class="d-flex justify-content-end d-inline-flex ps-0  @if(isset($_SESSION['uid'])) pe-0 @endif" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
-                        @if(get_config('enable_search'))
-                            <button id="btn-search" class="rounded-0 inputSearch d-flex justify-content-center align-items-center btn btn-transparent p-0" type="submit" name="quickSearch">
-                                 <img class='search-icon' src="{{$urlAppend}}template/modern/img/search.svg">
-                            </button>
-                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn text-white  @if(!isset($_SESSION['uid'])) me-3 @endif" name="search_terms" aria-describedby="basic-inputSearch">
-                        @endif
-                        {!! lang_selections_Desktop() !!}
-                    </form>
-                </div>
-
-                @if (isset($_SESSION['uid']))
-                    <div class="row @if(get_config('enable_search')) mt-5 @endif @if(!get_config('enable_search') and isset($_SESSION['uid'])) mb-2 @endif pe-0">
-                        <div class='col-12 d-flex justify-content-end p-0 mt-xl-3 mt-lg-2 themeId'>
-                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    @if(isset($_SESSION['uid']))
+                        <div class='d-flex justify-content-end p-0 themeId'>
+                            <div class="btn-group mb-2" role="group" aria-label="Button group with nested dropdown">
                                 @if ((isset($is_admin) and $is_admin) or
                                     (isset($is_power_user) and $is_power_user) or
                                     (isset($is_usermanage_user) and ($is_usermanage_user)) or
@@ -349,11 +316,35 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endif
+                    @endif
+                </p>
             </div>
+           
+            
+            
         </div>
     </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </nav>
 
 <script>

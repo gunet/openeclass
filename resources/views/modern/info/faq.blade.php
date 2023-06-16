@@ -34,7 +34,7 @@
                                         @foreach ($faqs as $key => $faq)
                                         
                                                 <li class="list-group-item border-0 Shadow-cols p-3 mb-4">
-                                                    <a class='d-flex align-items-start TextSemiBold normalBlueText' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
+                                                    <a class='d-flex align-items-start control-label-notes' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                         <span class='pe-2'>{{ $key+1 }}.</span>
                                                         <span>{!! $faq->title !!}</span>
                                                         

@@ -16,7 +16,7 @@
                     <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif @if(($warning and $PositionFormLogin == 1) or ($warning and $PositionFormLogin == 0) and !get_config('dont_display_login_form')) reBuiltJumbotron @endif">
                         @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                             @if($PositionFormLogin == 0)
-                            <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-flex justify-content-end align-items-center bg-transparent px-lg-4 px-1 py-lg-0 py-4'>
+                            <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-flex justify-content-end align-items-center bg-transparent ps-lg-4 pe-xl-3 pe-lg-0 px-1 py-lg-0 py-4'>
                             @else
                             <div class='col-xxl-4 col-lg-5 col-md-6 col-12 d-lg-flex justify-content-lg-center align-items-lg-center ms-auto me-auto pt-3 pb-3'>
                             @endif
@@ -50,17 +50,7 @@
                                 </div>
                             </div>
                         @else
-                        
-                        <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 contentLoginMobile d-lg-flex justify-content-lg-end align-items-lg-end d-flex justify-content-center align-items-center bg-transparent px-4 py-lg-0 py-4'>
-                            <div class='card-body d-none d-lg-block p-0' style='z-index:2;'>
-                                <div class='card-header bg-transparent border-0 d-flex justify-content-lg-end justify-content-center p-0'>
-                                    <a class='d-flex align-items-center text-uppercase TextSemiBold userLoginMobile small-text' href="{{$urlAppend}}main/login_form.php">
-                                        <img class="UserLoginIcon2" src="{{ $urlAppend }}template/modern/img/user_login_2.svg"> 
-                                        <span class='ms-2 ms-lg-0 loginText'>{{ trans('langUserLogin') }}</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+                            <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 contentLoginMobile d-lg-flex justify-content-lg-end align-items-lg-end d-flex justify-content-center align-items-center bg-transparent px-4 py-lg-0 py-4'></div>
                         @endif
                     </div>
                     
