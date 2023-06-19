@@ -479,7 +479,7 @@ if ($is_editor) {
                 ));
 
     $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
-    $num_of_groups = count($groupSelect);   
+    $num_of_groups = count($groupSelect);
     $cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
     $num_of_cat = count($cat);
     $q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
@@ -635,24 +635,24 @@ if ($is_editor) {
                                                             }else{
                                                                 $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                             }
-                                                                
-                                                                        
+
+
                                             $tool_content .= "<p class='card-title fw-bold mb-0 fs-6 mt-3'>$langDescription</p>";
                                                                 if(!empty($group_description)){
                                                                     $tool_content .= "<p class='small-text'>$group_description</p>";
                                                                 }else{
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                                 }
-                                                                
+
                                                                 if ($user_group_description && $student_desc) {
                                                                     $tool_content .= "<small><a href = 'javascirpt:void(0);' data-bs-toggle = 'modal' data-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
                                                                 }
                                         $tool_content .= "</div>
                                                             <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-white pb-3'>";
-                                                            if ($max_members == 0) {
-                                                                $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp; -- </span>";
-                                                            } else {
+                                                            if ($max_members > 0) {
                                                                 $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
+                                                            } else {
+                                                                $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count</span>";
                                                             }
                                         $tool_content .= "</div>
                                                     </div>
@@ -683,7 +683,7 @@ if ($is_editor) {
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
-                                                        
+
                                                             if($i>=1 && $i<=5){
                                                                 if($i==1){
                                                                     $tool_content .="
@@ -702,26 +702,26 @@ if ($is_editor) {
                                                                     }
                                                                 }
                                                             }
-                    
+
                                                             if($i>=6 && $i<=$pagesPag-1){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages d-none'>
                                                                                     <a id='Keypage$i' class='page-link' href='#'>$i</a>
                                                                                 </li>";
-                    
+
                                                                 if($i==$pagesPag-1){
                                                                     $tool_content .="<li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
                                                                                         <a>...</a>
                                                                                     </li>";
                                                                 }
                                                             }
-                    
+
                                                             if($i==$pagesPag){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                                     <a id='Keypage$i' class='page-link' href='#'>$i</a>
                                                                                 </li>";
                                                             }
                                                         }
-                                                    
+
                                                     }else{
                                                         for($i=1; $i<=$pagesPag; $i++){
                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
@@ -729,7 +729,7 @@ if ($is_editor) {
                                                                             </li>";
                                                         }
                                                     }
-                    
+
                                     $tool_content .="<li class='page-item page-item-next'>
                                                         <a class='page-link bg-white' href='#'><span class='fa fa-chevron-right'></span></a>
                                                     </li>
@@ -818,7 +818,7 @@ if ($is_editor) {
         //                     icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
         //         } elseif ($is_member) {
         //             $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
-        //         } 
+        //         }
         //     }
         //     $tool_content .= "</td>";
         //     $tool_content .= "<td class='text-center'>";
@@ -893,7 +893,7 @@ if ($is_editor) {
                                         $tool_content .= "</div>
                                                         <div class='card-body rounded-0'>
                                                                 <p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>";
-                                                                
+
                                                                 if(count($tutors) > 0){
                                                                     foreach ($tutors as $t) {
                                                                         $tool_content .= display_user($t->user_id) . "<br>";
@@ -914,9 +914,9 @@ if ($is_editor) {
                                                                                 icon('fa-times text-danger', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
                                                                     } elseif ($is_member) {
                                                                         $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
-                                                                    } 
+                                                                    }
                                                                 }
-                                                            
+
                                         $tool_content .= "</div>
                                                         <div class='card-footer d-flex bg-white border-0 justify-content-between align-items-center'>";
                                                                 $group_id_indirect = getIndirectReference($group_id);
@@ -971,7 +971,7 @@ if ($is_editor) {
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
-                                                        
+
                                                             if($i>=1 && $i<=5){
                                                                 if($i==1){
                                                                     $tool_content .="
@@ -990,26 +990,26 @@ if ($is_editor) {
                                                                     }
                                                                 }
                                                             }
-                    
+
                                                             if($i>=6 && $i<=$pagesPag-1){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages d-none'>
                                                                                     <a id='Keypage$i' class='page-link' href='#'>$i</a>
                                                                                 </li>";
-                    
+
                                                                 if($i==$pagesPag-1){
                                                                     $tool_content .="<li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
                                                                                         <a>...</a>
                                                                                     </li>";
                                                                 }
                                                             }
-                    
+
                                                             if($i==$pagesPag){
                                                                 $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
                                                                                     <a id='Keypage$i' class='page-link' href='#'>$i</a>
                                                                                 </li>";
                                                             }
                                                         }
-                                                    
+
                                                     }else{
                                                         for($i=1; $i<=$pagesPag; $i++){
                                                             $tool_content .="<li id='KeypageCenter$i' class='page-item page-item-pages'>
@@ -1017,7 +1017,7 @@ if ($is_editor) {
                                                                             </li>";
                                                         }
                                                     }
-                    
+
                                     $tool_content .="<li class='page-item page-item-next'>
                                                         <a class='page-link bg-white' href='#'><span class='fa fa-chevron-right'></span></a>
                                                     </li>

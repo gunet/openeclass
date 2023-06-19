@@ -268,13 +268,18 @@ if (isset($_GET['group_as'])) {
                                 }else{
                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                 }
-               $tool_content .= "
-                            
+               $tool_content .= "                            
                                 <p class='card-title fw-bold mb-0 fs-6'>$langDescription</p>
                                 <p class='small-text'>$tool_content_description</p>
-                            
-                        </div>
-                    </div>
+                                <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-white pb-3'>";
+                            if ($max_members > 0) {
+                                $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
+                            } else {
+                                $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count</span>";
+                            }
+                        $tool_content .= "</div></div>";
+
+                    $tool_content .= "</div>
                 </div>
                 <div class='col-xl-5 col-lg-6 d-none d-lg-block'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
@@ -343,16 +348,10 @@ if (isset($_GET['group_as'])) {
                                 if($is_editor){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='dumpgroup.php?course=$course_code&amp;group_id=$group_id'>
-                                                            <span class='fa fa-file-archive-o pt-1 pe-1'></span>$langDumpUser
+                                                            <span class='fa fa-file-archive-o pt-1 pe-1'></span>$langDumpExcel
                                                         </a>
                                                     </li>";
                                 }
-
-
-
-
-
-
 
           $tool_content .= "</ul>
                         </div>
@@ -368,7 +367,7 @@ if (isset($_GET['group_as'])) {
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langGroupMembersNum $langGroup</div>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langGroupMembersInfo</div>
                             </div>
                             <div class='card-body'>
                           <ul class='list-group list-group-flush'>

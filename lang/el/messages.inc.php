@@ -1992,6 +1992,7 @@ $langQuestionView = "Προβολή";
 $langWarnAboutAnsweredQuestion = "Προσοχή! Η ερώτηση έχει ήδη απαντηθεί! Η διαγραφή της θα αλλάξει τα αποτελέσματα της άσκησης.";
 $langQuestionPreview = 'Προεπισκόπιση ερώτησης';
 $langDumpPDF = 'Εξαγωγή σε PDF';
+$langDumpExcel = "Εξαγωγή σε Excel";
 $langQuestionUsedInExercises = 'Ασκήσεις όπου χρησιμοποιείται';
 
 // statement_admin.php
@@ -2304,6 +2305,7 @@ $langPropModify = "Αλλαγή ρυθμίσεων";
 $langGroupAccess = "Πρόσβαση";
 $langGroupFilledGroups = "Οι ομάδες χρηστών έχουν συμπληρωθεί από " . $langsOfStudentss . " που βρίσκονται στον κατάλογο «Χρήστες».";
 $langGroupInfo = "Στοιχεία Ομάδας";
+$langGroupMembersInfo = "Μέλη Ομάδας";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
@@ -4754,7 +4756,6 @@ $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = "Εμφάνιση ορισμών στις σελίδες του $langsOfCourse";
 $langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
-$langGlossaryToCsv = "Εξαγωγή σε μορφή csv";
 $langGlossaryOverLimit = "Το πλήθος όρων του γλωσσαρίου υπερβαίνει το όριο (%s), ως εκ τούτου οι ορισμοί των όρων δεν θα εμφανίζονται στις σελίδες του $langsOfCourse.";
 $langNoGlossary = "Δεν υπάρχει γλωσσάριο";
 
