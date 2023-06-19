@@ -57,20 +57,30 @@
                     </div>
                     @endif
 
-                    @if (isset($buildRoots))
-                        {!! $buildRoots !!}
-                    @endif
-
-
-                    <div class='col-12 mt-4'>
-                        <ul class='list-group smallRadius'>
-                            <li class='list-group-item bg-light'>{!! trans('langFaculty') !!}: <strong class='normalBlueText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
-                            {!! $childHTML !!}
-                        </ul>
+                    <div class='col-12'>
+                        <div class="card h-100">
+                            <div class="card-body">
+                                @if (isset($buildRoots))
+                                    {!! $buildRoots !!}
+                                @endif
+                                <div class='form-wrapper form-edit rounded border-0'>
+                                    <p class='control-label-notes mb-2'>{!! trans('langFaculty') !!}:</p>
+                                    <ul>
+                                        <li class='px-0 border-0'> 
+                                            <strong class='normalBlueText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
+                                        </li>
+                                    </ul>
+                                    <div class='col-12'>
+                                        {!! $childHTML !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
+
                     @if (count($courses) > 0)
-                        <div class='col-12'>
+                        <div class='col-12 mt-2'>
                             <div class='table-responsive'>
                                 <table class='table-default' id="myopencourses_table">
                                     <thead>

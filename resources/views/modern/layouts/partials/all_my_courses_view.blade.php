@@ -27,14 +27,10 @@
             </div>
             @endif
 
-            <div class='col-12 mt-4 d-flex justify-content-start'>
-                <a class='btn submitAdminBtn' href="{{ $urlAppend }}modules/auth/courses.php">
-                    <span class='fa fa-check'></span>&nbsp{{ trans('langRegCourses') }}
-                </a>
-            </div>
+            {!! $action_bar !!}
 
             @if($myCourses)
-                <div class='col-12 mt-3'>
+                <div class='col-12'>
                     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                         @php
                             $pagesPag = 0;
@@ -48,7 +44,7 @@
                         @foreach($myCourses as $course)
                             @php $temp_pages++; @endphp
                             <div class="col cardCourse{{ $pagesPag }}">
-                                <div class="card h-100 card{{ $pagesPag }}">
+                                <div class="card h-100 card{{ $pagesPag }} Borders">
                                     @php 
                                         $courseImage = ''; 
                                         if(!empty($course->course_image)){

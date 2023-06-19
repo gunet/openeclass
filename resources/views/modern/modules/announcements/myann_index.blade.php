@@ -32,8 +32,10 @@
                         </div>
                         @endif
                     
+                        {!! $action_bar !!}
+
                         <div class='col-12'>
-                            <div class='table-responsive'>
+                            <div class='table-responsive mt-0'>
                                 <table id='ann_table_my_ann' class='announcements_table'>
                                     <thead>
                                     <tr class='notes_thead'>

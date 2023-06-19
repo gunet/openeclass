@@ -11,11 +11,12 @@
         <script src="{%URL_PATH%}js/bootstrap.bundle.min.js"></script>
         
         <!-- Latest compiled and minified CSS -->
-        <link rel="stylesheet" href="{%template_base%}CSS/bootstrap-custom.css">
+        <link rel="stylesheet" href="{%template_base%}css/bootstrap.min.css">
         
         <!-- Font Awesome - A font of icons -->
-        <link href="{%template_base%}CSS/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+        <link href="{%template_base%}css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
         <style>
+            .navbar-inverse {background-color: #000000;}
             .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
             .navbar-inverse .navbar-nav > li > a.inactive, .navbar-inverse .navbar-nav > li > a.inactive:hover, .navbar-inverse .navbar-nav > li > a.inactive:focus {color: #9d9d9d; cursor: default;}
             .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }
@@ -65,47 +66,51 @@
     <body style="background:whitesmoke;">
         <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin: 0px;">
             <div class="container" style="margin-bottom: 0px;">
-                  <a class="navbar-brand pull-left" href="#" style="padding-top:3px;"><img class="img-responsive" style='height:30px;' src="{%logo_img_small%}" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
-                
-                  <!-- BEGIN chapter_select -->
-                  <div class=" pull-left">
-                    <div class='form-group'>
-                            <select class='form-control' name='section' onChange="change_section();" style='width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>
-                                <!-- BEGIN chapter_select_options -->
-                                <option value='{%chapter_id%}'{%chapter_selected%}>{%chapter_title%}</option>
-                                <!-- END chapter_select_options -->
-                            </select>
+                <div class="col-12 d-flex justify-content-between align-items-center">
+                    <a class="navbar-brand pull-left" href="#" style="padding-top:3px;"><img class="img-responsive" style='height:30px;' src="{%logo_img_small%}" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
+                    
+                    <!-- BEGIN chapter_select -->
+                    <div class=" pull-left">
+                        <div class='form-group'>
+                                <select class='form-select' name='section' onChange="change_section();" style='width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>
+                                    <!-- BEGIN chapter_select_options -->
+                                    <option value='{%chapter_id%}'{%chapter_selected%}>{%chapter_title%}</option>
+                                    <!-- END chapter_select_options -->
+                                </select>
+                        </div>
                     </div>
-                  </div>
-                  <!-- END chapter_select -->
-                  <ul class="list-inline  pull-right" >
-                    <!-- BEGIN back_link_active -->
-                    <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
-                    <!-- END back_link_active -->
-                    <!-- BEGIN back_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-left'></i></a></li>
-                    <!-- END back_link_inactive -->              
-                    <!-- BEGIN next_link_active -->
-                    <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
-                    <!-- END next_link_active -->
-                    <!-- BEGIN next_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right' ></i></a></li>
-                    <!-- END next_link_inactive -->
-                    <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen'></i> {%langBack%}</a></li>
-                  </ul>
-                <!--/.nav-collapse -->
+                    <!-- END chapter_select -->
+                    <ul class="d-flex list-inline  pull-right mb-0" >
+                        <!-- BEGIN back_link_active -->
+                        <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
+                        <!-- END back_link_active -->
+                        <!-- BEGIN back_link_inactive -->
+                        <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-left'></i></a></li>
+                        <!-- END back_link_inactive -->              
+                        <!-- BEGIN next_link_active -->
+                        <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
+                        <!-- END next_link_active -->
+                        <!-- BEGIN next_link_inactive -->
+                        <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right' ></i></a></li>
+                        <!-- END next_link_inactive -->
+                        <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen text-warning'></i> {%langBack%}</a></li>
+                    </ul>
+                    <!--/.nav-collapse -->
+                </div>
             </div>
         </nav>        
-        <div class="container" style="padding:15px; background-color: #f0f0f0; margin: 0px;">
+        <div class="container-fluid" style="padding:15px; background-color: #f0f0f0; margin: 0px;">
             <div class='row'>
-                <div class='col-xs-12 col-md-8 col-md-offset-2'>
-                <ol class="breadcrumb">
-                  <li><a href="{%course_home_link%}">{%course_title_short%}</a></li>
-                  <li><a href="{%course_ebook_link%}">{%course_ebook%}</a></li>
-                  <li class="active">{%ebook_title_short%}</li>
-                </ol>
+                <div class='col-lg-8 col-12 ms-auto me-auto'>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{%course_home_link%}">{%course_title_short%}</a></li>
+                            <li class="breadcrumb-item"><a href="{%course_ebook_link%}">{%course_ebook%}</a></li>
+                            <li class="breadcrumb-item active">{%ebook_title_short%}</li>
+                        </ol>
+                    </nav>
                     <div id="book-container" style="border: 1px solid #ccc; border-radius: 2px; padding: 20px; background-color: white;">
-                    {%ebook_body%}
+                        {%ebook_body%}
                     </div>
                 </div>
             </div>

@@ -71,37 +71,29 @@
     @stack('head_styles')
 
 </head>
-<body class='h-100'>
-    <div class="container h-100">
-        <div class="row h-100" id="Frame">
-            {{-- <div id="background-cheat" class="col-xs-10 col-xs-push-2" style="height: 100%;"></div> --}}
-            <div id="main-content" class="col-10 h-100 overflow-scroll">
-                <div class="row row-main">
-                    <div class="col-md-12 add-gutter">
-                        @if ($messages)
-                            <div class='row'>
-                                <div class='col-12'>{!! $messages !!}</div>
-                            </div>
-                        @endif
-                        @yield('content')
-                    </div>
-                </div>
-            </div>
-            <div id="leftnav" class="col-2 sidebar embeded bg-light">
-                <div class="panel-group mt-1" id="sidebar-accordion">
+<body class='p-5'>
+    <div class="container">
+        <div class="row rowMedium" id="Frame">
+            <div id="leftnav" class="col-2 sidebar embeded bg-white pt-5">
+                <div class="panel-group accordion mt-1" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
-                        <div id="collapse{{ $key }}" class="panel-collapse list-group collapse{{ $tool_group[0]['class'] }}">
-                            @foreach ($tool_group[1] as $key2 => $tool)
-                            <a href="{{ $tool_group[2][$key2] }}" class="list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
-                                <span class="fa {{ $tool_group[3][$key2] }} fa-fw"></span>
-                                <span>{!! $tool !!}</span>
-                            </a>
-                            @endforeach
-                        </div>
+                            <div id="collapse{{ $key }}" class="panel-collapse bgTheme list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
+                                @foreach ($tool_group[1] as $key2 => $tool)
+                                    <a href="{{ $tool_group[2][$key2] }}" class="leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
+                                        <span class="toolSidebarTxt">{!! $tool !!}</span>
+                                    </a>
+                                @endforeach
+                            </div>
                         @endforeach
                     </div>
                 </div>
+            </div>
+            <div id="main-content" class="col-10 px-0">
+                @if ($messages)
+                    {!! $messages !!}
+                @endif
+                @yield('content')
             </div>
         </div>
     </div>
