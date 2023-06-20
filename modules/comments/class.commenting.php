@@ -92,7 +92,7 @@ Class Commenting {
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h5 id='comments_title' class='text-uppercase TextSemiBold blackBlueText'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
+            $comments_title = "<h5 id='comments_title' class='badge bgTheme fs-6 rounded-pill'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>
@@ -140,15 +140,17 @@ Class Commenting {
                 }
                 $out .= "<div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
-                            <div class='media panel panel-default'>
-                                <div class='panel-heading bg-white border-0'>
-                                    <a class='media-left p-0' href='#'>
-                                        ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."
-                                        <small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
-                                    </a>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div>
+                                        <a class='media-left p-0' href='#'>
+                                            ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."
+                                            <small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
+                                        </a>
+                                    </div>
                                     ".$post_actions."
                                 </div>
-                                <div class='media-body bubble panel-body overflow-auto'>
+                                <div class='card-body'>
                                     <p class='blackBlueText TextSemiBold'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
                                     "<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                                 </div>

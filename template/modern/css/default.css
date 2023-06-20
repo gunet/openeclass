@@ -166,8 +166,6 @@ body{
   background-color: #e8e8e8;
 }
 
-/* span, p {font-size: 25px;} */
-
 a{ 
   text-decoration: none; 
   font-size: 15px; 
@@ -654,6 +652,8 @@ label:has(input[type="checkbox"]:disabled){
 
 .alert-danger { border: 1px solid rgb(244,17,14); background-color: #ffffff; color: rgb(244, 17, 14); border-radius: 5px; font-weight: 500; font-style: normal; }
 
+
+
 /* -------------------------------- testimonials-OWL_CAROUSEL ------------------------------------------------------------------------------ */
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -798,19 +798,6 @@ label:has(input[type="checkbox"]:disabled){
   
   .not_visible td:last-child{ 
     opacity:1; 
-  }
-
-
-  /* ---------------------------------------------Default -----------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-
-
-  .accordion-button:focus { 
-    box-shadow: none; 
-    border-color: rgba(0,0,0,.125); 
   }
 
   
@@ -1039,10 +1026,6 @@ label:has(input[type="checkbox"]:disabled){
   .types-cols{ 
     margin-left:-10px; 
   }
-  
-  .back_col_registerCourse{ 
-    margin-top:-30px; 
-  }
 
 
 /* --------------------------------------------- Portfolio ----------------------------------------------------------------------------------*/
@@ -1144,14 +1127,21 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
-  
-  .content-truncate-announcement{ 
-    color:black; 
-    font-weight: 500; 
-  }
 
   .pagination-glossary{ 
     overflow-y: auto; 
+  }
+
+  .pagination-glossary .page-item:active,.pagination-glossary .page-item:focus,.pagination-glossary .page-item:hover
+  .pagination-glossary .page-link:active,.pagination-glossary .page-link:focus,.pagination-glossary .page-link:hover{
+    outline: none !important;
+    box-shadow: none; 
+  }
+
+  .pagination-glossary .page-item.active .page-link{
+    background-color: #003e87;
+    border-color: #003e87;
+    color:#ffffff !important;
   }
 
 /* -------------------------------------------- Home Page -----------------------------------------------------------------------------------*/
@@ -1588,17 +1578,6 @@ label:has(input[type="checkbox"]:disabled){
     display: block;
     border: solid 1px #e8e8e8;
     border-radius: 50%;
-  }
-
-/* -------------------------------------------- Forum ---------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-  
-  .profile-name{ 
-    font-size: 18px; 
-    line-height: 3; 
   }
   
 /* ---------------------------------------- BootBox MenuPopover Modals ----------------------------------------------------------------------*/
@@ -2475,13 +2454,6 @@ label:has(input[type="checkbox"]:disabled){
   #adetails1_wrapper{ 
     overflow:auto; 
   }
-
-  /* @media(min-width:992px){
-     .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
-       overflow:hidden !important;
-     }
-
-  } */
  
   #questions_filter{
     padding-right: 10px;
@@ -2794,14 +2766,9 @@ label:has(input[type="checkbox"]:disabled){
       background-color: white;
     }
 
-    /************** of canvas settings *******************/
-    /* .offcanvas.offcanvas-start{
-      height: calc(100vh - 56px - 54px);
-      margin-top: 56px;
-    } */
     .modal-backdrop.fade.show{background-color: transparent ;}
+
     .offcanvas-header{display: none;}
-    /*****************************************************/
 
   }
 
@@ -2928,16 +2895,6 @@ label:has(input[type="checkbox"]:disabled){
   color: #bdbdbd;
 }
 
-/* ------------------------------------------------------- FAQS ----------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
-
-.panelFaq{
-  border:0px;
-}
-
 /* ------------------------------------------------------- GROUPS ----------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2968,10 +2925,6 @@ label:has(input[type="checkbox"]:disabled){
   border-bottom-left-radius: 15px !important;
   border-bottom-right-radius: 15px !important;
 }
-
-/* .smallRadius{
-  border-radius: 15px;
-} */
 
 .searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
   outline: none !important;
@@ -3117,8 +3070,6 @@ label:has(input[type="checkbox"]:disabled){
 
     .user-icon { width: 30px; height: 30px; border-radius: 50%; }
 
-    .col_maincontent_active_unit{  -moz-box-shadow:none;  -webkit-box-shadow:none; box-shadow:none; }
-
     .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc;  box-shadow: 0 0 3px #ccc; border-radius: 25px; padding:25px; }
 
     .breadcrumb-item a{ max-width:300px; flex-wrap: wrap; }
@@ -3147,8 +3098,6 @@ label:has(input[type="checkbox"]:disabled){
     .hidden-xs{ display:none; }
 
     .user-icon {  width: 30px;  height: 30px;  border-radius: 50%; }
-
-    .col_maincontent_active_unit{  -moz-box-shadow:none; -webkit-box-shadow:none;  box-shadow:none; }
 
     .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc;  box-shadow: 0 0 3px #ccc;  border-radius: 25px; padding:25px; }
 
@@ -3180,8 +3129,6 @@ label:has(input[type="checkbox"]:disabled){
     .hidden-xs{ display:none; }
 
     .user-icon { width: 30px; height: 30px; border-radius: 50%; }
-
-    .col_maincontent_active_unit{ -moz-box-shadow:none; -webkit-box-shadow:none; box-shadow:none; }
 
     .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; border-radius: 25px; padding:25px; }
 
@@ -3217,8 +3164,6 @@ label:has(input[type="checkbox"]:disabled){
 
     .user-icon { width: 30px;  height: 30px; border-radius: 50%; }
 
-    .col_maincontent_active_unit{ -moz-box-shadow:none; -webkit-box-shadow:none; box-shadow:none; }
-
     .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; border-radius: 25px; padding:25px; }
 
     .navrbar_menu_btn{ margin-left:0px; }
@@ -3233,8 +3178,6 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
   @media (min-width: 768px) and (max-width: 991px){
-
-    .col_maincontent_active_unit{ -moz-box-shadow:none;  -webkit-box-shadow:none; box-shadow:none; }
 
     .course-units{ -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc; box-shadow: 0 0 3px #ccc; border-radius: 25px;  padding:25px; }
 
@@ -3252,8 +3195,6 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   @media(min-width: 992px) and (max-width: 1023px){
-
-    .col_maincontent_active_unit{ transition: 0.4s; height:auto; background-color: white;  border-radius:15px; -moz-box-shadow: 0 0 3px #ccc; -webkit-box-shadow: 0 0 3px #ccc;  box-shadow: 0 0 3px #ccc; }
     
     .course-units{ -moz-box-shadow: none;  -webkit-box-shadow: none; box-shadow: none; border-radius: 25px; padding:25px; }
 

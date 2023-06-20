@@ -69,28 +69,8 @@
   }
 }
 
-.col_maincontent_active_unit{ 
-  transition: 0.4s;  
-  height:auto; 
-  background-color: white;  
-  border-radius:15px; 
-  -moz-box-shadow: 0 0 3px #ccc; 
-  -webkit-box-shadow: 0 0 3px #ccc; 
-  box-shadow: 0 0 3px #ccc; 
-}
-
-.col_maincontent_coursePage{ 
-  height:auto; 
-  background-color: white;  
-  border-radius:15px; 
-  -moz-box-shadow: 0 0 3px #ccc; 
-  -webkit-box-shadow: 0 0 3px #ccc; 
-  box-shadow: 0 0 3px #ccc ;
-}
-
 @media(max-width:991px){
-  .col_maincontent_active, .col_maincontent_active_Homepage,  
-  .col_maincontent_active_unit, .col_maincontent_coursePage, .details-mobile{ 
+  .col_maincontent_active, .col_maincontent_active_Homepage, .details-mobile{ 
       padding-top: 56px !important;
   }
   .HomepageStartMobile{
@@ -106,7 +86,7 @@
 }
 
 .ContentLeftNav{
- width:100%;
+  width:100%;
   background: #003e85;
   border-radius: 15px;
 }
@@ -222,7 +202,7 @@
 
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
-/************************************** THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON **************************************/
+/************************************** THIS IS Α SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON ************************************/
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
 .switch-sidebar { position: relative; display: inline-block; height: 30px;  width:140px; }

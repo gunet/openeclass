@@ -695,7 +695,7 @@ if ($action == "showPost") {
 
         
         $tool_content .= "
-                    <div class='col-xl-7 col-12 ms-xl-auto me-xl-auto'>
+                    <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
 
@@ -750,7 +750,7 @@ if ($action == "showPost") {
 
         if ($comments_enabled) {
             $tool_content .= "
-                    <div class='col-xl-7 col-12 ms-xl-auto me-xl-auto'>";
+                    <div class='col-12'>";
                         if ($post->getCommenting() == 1) {
                             commenting_add_js(); //add js files needed for comments
                             $comm = new Commenting('blogpost', $post->getId());
@@ -848,7 +848,7 @@ if ($action == "showBlog") {
                                    
                                        
                                      
-                                        <a class='text-uppercase normalColorBlueText TextBold fs-6' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                        <a class='TextBold fs-6' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                        
                                        
                                         <div>

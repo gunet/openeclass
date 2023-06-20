@@ -44,18 +44,17 @@ if (get_config('personal_blog_commenting')) {
                 $response[3] = "
                  <div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                     <div class='col-12'>
-                        <div class='panel panel-default p-1'>
-                            <div class='panel-heading'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 <a class='media-left' href='#'>
                                     ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                                 </a>
                                 ".$post_actions."
                             </div>
-                            <div class='media-body bubble panel-body overflow-auto'>
-                                <button class='btn btn-success btn-sm mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</button>'.
-                                    "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
-                                    
-                                    <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                            <div class='card-body'>
+                                <span class='badge bgTheme'>".format_locale_date(strtotime($comment->getTime())).'</span>'.
+                                "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
+                                <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                             </div>
                         </div>
                     </div>

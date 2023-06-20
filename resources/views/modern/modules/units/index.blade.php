@@ -127,9 +127,25 @@
                         )) !!}
 
                     @endif
+                    
+                    <div class='col-12'>
+                        <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
+                            <input type='hidden' name='course' value='{{ $course_code }}'>
+                            <div class='form-group'>
+                                <label class='control-label-notes' for='id'><span class='fa fa-search'></span>&nbsp{{ trans('langCourseUnits') }}</label>
+                                <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
+                                    @foreach ($units as $unit)
+                                        <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                            {{ ellipsize($unit->title, 50) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </form>
+                    </div>
 
                     @if(Session::has('message'))
-                        <div class='col-12'>
+                        <div class='col-12 mt-4'>
                             <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -144,11 +160,12 @@
                         </div>
                     @endif
 
+                    {{--
                     @if ($previousLink or $nextLink)
 
-                        <div class='col-12 mt-3'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class="card-body d-flex justify-content-between align-items-center p-3">              
+                        <div class='col-12'>
+                            <div class='card panelCard px-lg-0 py-lg-0 border-0'>
+                                <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders">              
                                     @if ($previousLink)
                                         <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                             <span class='fa fa-arrow-left space-after-icon'></span>
@@ -166,50 +183,50 @@
                         </div>
 
                     @endif
+                    --}}
 
 
-                    <div class='col-12 mt-3'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading bgTheme'>
-                                <div class='panel-title'>{{ $pageName }}
-                                    @if($course_start_week or $course_finish_week)
-                                    <span class='orangeText'>
-                                        <small>{{ $course_start_week }}
-                                        {{ $course_finish_week }}</small>
-                                    </span>
-                                    @endif
-                                </div>
+                    <div class='col-12 mt-4'>
+                        <div class="card panelCard px-lg-4 py-lg-3">
+                            <div class='card-header border-0 bg-white d-xl-flex justify-content-xl-between align-items-xl-center'>
+                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ $pageName }}</div>
+                                @if($course_start_week or $course_finish_week)
+                                    <div class='normalColorBlueText TextSemiBold'>
+                                        <small>{{ $course_start_week }}&nbsp{{ $course_finish_week }}</small>
+                                    </div>
+                                @endif
                             </div>
-                            <div class='panel-body'>
+                            <div class="card-body">
                                 <div>
                                     {!! $comments !!}
                                 </div>
-                                @if ($tags_list)
-                                    <div class='mt-3'>
-                                        <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
-                                    </div>
-                                @endif
-
                                 <div class='unit-resources mt-3'>
                                     {!! $tool_content_units !!}
                                 </div>
                             </div>
+                            @if ($tags_list)
+                                <div class='card-footer small-text bg-white border-0'>
+                                    <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
+                                </div>
+                            @endif
                         </div>
                     </div>
 
 
                     @if ($is_editor and $q->flipped_flag == 2)
-                        <div class='col-12 mt-3'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading bgTheme'>
-                                    <div class='d-inline-flex align-items-top'>
-                                        {{ trans('langActivities')}}
-                                        <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                            <span class="fa fa-pencil ms-2 text-white" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
-                                        </a>
+                        <div class='col-12 mt-4'>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                        <div class='d-inline-flex align-items-top'>
+                                            {{ trans('langActivities')}}
+                                            <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
+                                                <span class="fa fa-pencil ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     <table class='table table-bordered'>
                                         <tbody>
                                         @if ($q_in_home)
@@ -684,7 +701,8 @@
 
 
 
-                    <div class='col-12 mt-3'>
+                    {{--
+                    <div class='col-12 mt-4'>
                         <div class='panel panel-default'>
                             <div class='panel-heading bgTheme'>{{ trans('langCourseUnits') }}</div>
                             <div class='panel-body'>
@@ -706,6 +724,7 @@
                             </div>
                         </div>
                     </div>
+                    --}}
 
 
                 </div>

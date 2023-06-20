@@ -346,6 +346,12 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[leftNavBgColor] !important;
                 }
 
+                .pagination-glossary .page-item.active .page-link{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                    border-color: $theme_options_styles[leftNavBgColor];
+                    color:#ffffff !important;
+                }
+
                 .offcanvas-header,.offcanvas-body,#background-cheat-leftnav, #bgr-cheat-footer, #collapseTools, .panel-admin>.panel-heading, .descCoursePanel, #cal-header,
                 .admin-list-group .list-group-item:hover{
                     background:$theme_options_styles[leftNavBgColor];
