@@ -564,10 +564,11 @@ function show_resource($info) {
  */
 function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     global $can_upload, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code;
+           $id, $course_code, $langResourceBelongsToUnitPrereq;
 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
+    $res_prereq_icon = '';
     if (!$file) {
         $download_hidden_link = '';
         if (!$can_upload) {
@@ -577,6 +578,12 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
         $image = 'fa-times';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
+        if ($can_upload) {
+            if (resource_belongs_to_unit_completion($_GET['id'], $file->id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
+        }
+
         $status = $file->visible;
         if (!$can_upload and (!resource_access($file->visible, $file->public))) {
             return '';
@@ -609,7 +616,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td class='text-left'>$download_hidden_link$link$comment</td>" .
+          <td class='text-left'>$download_hidden_link $link $res_prereq_icon $comment</td>" .
             actions('doc', $resource_id, $status) .
             "</tr>";
 }
@@ -659,9 +666,10 @@ function show_description($title, $comments, $id, $res_id, $visibility, $act_nam
 function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
 {
 
-    global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code;
+    global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code, $langResourceBelongsToUnitPrereq;
 
     $title = q($title);
+    $res_prereq_icon = '';
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
     if (!$lp) { // check if lp was deleted
         if (!$is_editor) {
@@ -672,6 +680,11 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
             $link = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        if ($is_editor) {
+            if (resource_belongs_to_unit_completion($_GET['id'], $lp_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
+        }
         $status = $lp->visible;
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
         $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
@@ -687,15 +700,12 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$link</a>$comment_box</td>" .
+          <td>$link</a> $res_prereq_icon $comment_box</td>" .
             actions('lp', $resource_id, $status) . "</tr>";
 }
 
 /**
  * @brief display resource video
- * @global type $is_editor
- * @global type $course_id
- * @global string $tool_content
  * @param type $table
  * @param type $title
  * @param type $comments
@@ -705,9 +715,9 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
  * @return string
  */
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility, $act_name) {
-    global $is_editor, $course_id, $tool_content, $urlServer, $course_code, $id;
+    global $is_editor, $course_id, $tool_content, $urlServer, $course_code, $id, $langResourceBelongsToUnitPrereq;
 
-
+    $res_prereq_icon = '';
     $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
     if ($row) {
         $row->title = $title;
@@ -724,6 +734,12 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
             $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
         }
         $imagelink = "fa-film";
+        if ($is_editor) {
+            if (resource_belongs_to_unit_completion($_GET['id'], $video_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
+        }
+
     } else { // resource was deleted
         if (!$is_editor) {
             return;
@@ -743,7 +759,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td> $videolink $comment_box</td>" . actions('video', $resource_id, $visibility) . "
+          <td> $videolink $res_prereq_icon $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
 }
 
@@ -825,10 +841,11 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
  */
 function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_name) {
 
-    global $id, $urlServer, $is_editor, $uid, $m,
+    global $id, $urlServer, $is_editor, $uid, $m, $langResourceBelongsToUnitPrereq,
             $langWasDeleted, $course_id, $course_code, $langPassCode;
 
     $title = q($title);
+    $res_prereq_icon = '';
     if ($is_editor) {
         $work = Database::get()->querySingle("SELECT * FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
     } else {
@@ -862,6 +879,9 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
             } else if ($work->assign_to_specific == 2) {
                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
             }
+            if (resource_belongs_to_unit_completion($_GET['id'], $work_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
         }
 
         if ($work->password_lock) {
@@ -889,8 +909,8 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$exlink $comment_box $assign_to_users_message</td>" .
-            actions('lp', $resource_id, $visibility) . '
+          <td>$exlink $res_prereq_icon $comment_box $assign_to_users_message</td>" .
+            actions('work', $resource_id, $visibility) . '
         </tr>';
 }
 
@@ -905,7 +925,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
  */
 function show_exercise($title, $comments, $resource_id, $exercise_id, $visibility, $act_name) {
     global $id, $urlServer, $is_editor, $langWasDeleted, $course_id, $course_code, $langPassCode, $uid,
-        $langAttemptActive, $langAttemptPausedS, $m;
+        $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq;
 
     $title = q($title);
 
@@ -942,7 +962,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$is_editor and (!resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        $link_class = $exclamation_icon = '';
+        $link_class = $exclamation_icon = $res_prereq_icon = '';
         if ($exercise->password_lock) {
             enable_password_bootbox();
             $link_class = 'password_protected';
@@ -955,6 +975,9 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToUser]</small>";
             } else if ($exercise->assign_to_specific == 2) {
                 $assign_to_users_message = "<small class='help-block'>$m[WorkAssignTo]: $m[WorkToGroup]</small>";
+            }
+            if (resource_belongs_to_unit_completion($_GET['id'], $exercise_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
             }
         }
 
@@ -1006,18 +1029,12 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$exlink $comment_box</td>" . actions('lp', $resource_id, $visibility) . "
+          <td>$exlink $res_prereq_icon $comment_box </td>" . actions('exercise', $resource_id, $visibility) . "
         </tr>";
 }
 
 /**
  * @brief display resource forum
- * @global type $id
- * @global type $urlServer
- * @global type $is_editor
- * @global type $course_id
- * @global type $course_code
- * @global type $langWasDeleted
  * @param type $type
  * @param type $title
  * @param type $comments
@@ -1027,9 +1044,10 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
  * @return string
  */
 function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility, $act_name) {
-    global $id, $urlServer, $is_editor, $course_code, $langWasDeleted;
+    global $id, $urlServer, $is_editor, $course_code, $langWasDeleted, $langResourceBelongsToUnitPrereq;
 
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
+    $res_prereq_icon = '';
     $title = q($title);
     if ($type == 'forum') {
         $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum&amp;forum=$ft_id&amp;unit=$id'>";
@@ -1045,6 +1063,11 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
                 $forumlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
             }
         } else {
+            if ($is_editor) {
+                if (resource_belongs_to_unit_completion($_GET['id'], $ft_id)) {
+                    $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+                }
+            }
             $forum_id = $r->forum_id;
             $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=forum_topic&amp;topic=$ft_id&amp;forum=$forum_id&amp;unit=$id'>";
             $forumlink = $link . "$title</a>";
@@ -1062,8 +1085,8 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$forumlink $comment_box</td>" .
-            actions('forum', $resource_id, $visibility) . '
+          <td>$forumlink $res_prereq_icon $comment_box</td>" .
+            actions('topic', $resource_id, $visibility) . '
         </tr>';
 }
 
@@ -1079,8 +1102,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_name) {
 
-    global $course_id, $course_code, $is_editor, $urlServer, $id, $langWasDeleted;
+    global $course_id, $course_code, $is_editor, $urlServer, $id, $langWasDeleted, $langResourceBelongsToUnitPrereq;
 
+    $res_prereq_icon = '';
     $class_vis = ($visibility == 0 ) ? ' class="not_visible"' : ' ';
     $title = q($title);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $poll_id);
@@ -1092,6 +1116,11 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        if ($is_editor) {
+            if (resource_belongs_to_unit_completion($_GET['id'], $poll_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
+        }
         $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=questionnaire&amp;pid=$poll_id&amp;UseCase=1&amp;unit_id=$id'>";
         $polllink = $link . $title . '</a>';
         $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
@@ -1106,7 +1135,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$polllink $comment_box</td>" .
+          <td>$polllink $res_prereq_icon $comment_box</td>" .
             actions('poll', $resource_id, $visibility) . '
         </tr>';
 
@@ -1114,14 +1143,6 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
 }
 /**
  * @brief display resource wiki
- * @global type $id
- * @global type $mysqlMainDb
- * @global type $urlServer
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $langInactiveModule
- * @global type $course_id
- * @global type $course_code
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1130,11 +1151,11 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
  * @return string
  */
 function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_name) {
-    global $id, $urlServer, $is_editor,
-    $langWasDeleted, $langInactiveModule, $course_id, $course_code;
+    global $id, $urlServer, $is_editor, $langResourceBelongsToUnitPrereq,
+            $langWasDeleted, $langInactiveModule, $course_id, $course_code;
 
     $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility
-
+    $res_prereq_icon = '';
     if (!$module_visible and ! $is_editor) {
         return '';
     }
@@ -1151,6 +1172,11 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
             $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        if ($is_editor) {
+            if (resource_belongs_to_unit_completion($_GET['id'], $wiki_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
+        }
         $link = "<a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$wiki_id&amp;action=show&amp;unit=$id'>";
         $wikilink = $link . "$title</a>";
         if (!$module_visible) {
@@ -1168,16 +1194,13 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$wikilink $comment_box</td>" .
+          <td>$wikilink $res_prereq_icon $comment_box</td>" .
             actions('wiki', $resource_id, $visibility) . '
         </tr>';
 }
 
 /**
  * @brief display resource link
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_id
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1288,9 +1311,10 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
  * @return string
  */
 function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $act_name) {
-    global $id, $urlServer, $is_editor, $langWasDeleted, $course_code;
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_code, $langResourceBelongsToUnitPrereq;
 
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
+    $res_prereq_icon = '';
     $title = q($title);
     $r = Database::get()->querySingle("SELECT * FROM ebook WHERE id = ?d", $ebook_id);
     if (!$r) { // check if it was deleted
@@ -1301,6 +1325,11 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
+        if ($is_editor) {
+            if (resource_belongs_to_unit_completion($_GET['id'], $ebook_id)) {
+                $res_prereq_icon = icon('fa-star', $langResourceBelongsToUnitPrereq);
+            }
+        }
         $link = "<a href='{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/unit=$id'>";
         $exlink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-book') . "";
@@ -1316,13 +1345,12 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$exlink $comment_box</td>" . actions('ebook', $resource_id, $visibility) . "
+          <td>$exlink $res_prereq_icon $comment_box</td>" . actions('ebook', $resource_id, $visibility) . "
         </tr>";
 }
 
 /**
  * @brief display ebook section
- * @global type $course_id
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1385,12 +1413,6 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
 
 /**
  * @brief display resource ebook subsection
- * @global type $id
- * @global type $urlServer
- * @global type $is_editor
- * @global type $langWasDeleted
- * @global type $course_code
- * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
  * @param type $resource_id
@@ -1401,11 +1423,10 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
  * @return string
  */
 function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $display_id, $visibility, $deleted, $act_name) {
-    global $id, $urlServer, $is_editor,
-    $langWasDeleted, $course_code, $langInactiveModule;
+
+    global $id, $urlServer, $is_editor, $langWasDeleted, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_EBOOK); // checks module visibility
-
     if (!$module_visible and ! $is_editor) {
         return '';
     }
@@ -1471,7 +1492,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         }
         $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $chatlink = $link . "$title</a>";
-        $imagelink = $link . "</a>" .icon('fa-exchange') . "";
+        $imagelink = $link . "</a>" .icon('fa-commenting') . "";
     }
 
     if (!empty($comments)) {
@@ -1511,7 +1532,6 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
             $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
-        //$link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=chat&amp;conference_id=$chat_id&amp;unit=$id'>";
         $link = "<a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id'>";
         $bloglink = $link . "$title</a>";
         $imagelink = $link . "</a>" .icon('fa-columns') . "";
@@ -1644,8 +1664,15 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEditChange, $langDelete,
     $langAddToCourseHome, $langConfirmDelete, $course_code,
-    $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed, $langNeverBrowsed;
+    $langViewHide, $langViewShow, $langReorder, $langAlreadyBrowsed,
+    $langNeverBrowsed, $langAddToUnitCompletion;
 
+    $res_types_units_completion = ['exercise', 'work', 'lp', 'doc', 'topic', 'video', 'ebook', 'poll', 'wiki'];
+    if (in_array($res_type, $res_types_units_completion)) {
+        $res_type_to_unit_compl = true;
+    } else {
+        $res_type_to_unit_compl = false;
+    }
     if (!$is_editor) {
         if (prereq_unit_has_completion_enabled($_GET['id'])) {
             $activity_result = unit_resource_completion($_GET['id'], $resource_id);
@@ -1659,8 +1686,8 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                                 <span class='fa fa-hourglass-2 text-center' data-toggle='tooltip' data-placement='top' title='$langNeverBrowsed'></span>
                                 </td>";
                     break;
-                case 2:
-                    $content = '';
+                default:
+                    $content = "<td class='style='padding: 10px 0; width: 85px;'>&nbsp;</td>";
                     break;
             }
             return $content;
@@ -1698,6 +1725,10 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
+                array('title' => $langAddToUnitCompletion,
+                       'url' => "manage.php?course=$course_code&amp;manage=1&amp;unit_id=$_GET[id]&amp;badge=1&add=true&amp;act=$res_type&amp;unit_res_id=$resource_id",
+                       'icon' => 'fa-star',
+                       'show' => prereq_unit_has_completion_enabled($_GET['id']) && $res_type_to_unit_compl),
                 array('title' => $langDelete,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;del=$resource_id",
                       'icon' => 'fa-times',
@@ -1763,7 +1794,7 @@ function localhostUrl() {
  * @param int $unit_id
  * @param int $prereq_unit_id
  */
-function insert_prerequisite_unit ($unit_id, $prereq_unit_id) {
+function insert_prerequisite_unit($unit_id, $prereq_unit_id) {
 
     global $is_editor,
            $course_id, $course_code,
@@ -1836,26 +1867,42 @@ function unit_resource_completion($unit_id, $unit_resource_id) {
 
     global $uid, $course_id;
 
-    $sql_res = Database::get()->querySingle("SELECT res_id FROM unit_resources WHERE unit_id = ?d AND id = ?d", $unit_id, $unit_resource_id);
-    if ($sql_res) {
-        $res_id = $sql_res->res_id;
-        $sql = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $unit_id);
+    $badge_id = Database::get()->querySingle("SELECT id FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $unit_id)->id;
+    $res_id = Database::get()->querySingle("SELECT res_id FROM unit_resources WHERE id = ?d", $unit_resource_id)->res_id;
+    $q = Database::get()->querySingle("SELECT * FROM badge_criterion WHERE badge = ?d AND resource = ?d", $badge_id, $res_id);
+    if ($q) {
+        // complete user resources
+        $sql = Database::get()->querySingle("SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion
+                                                    ON user_badge_criterion.badge_criterion = badge_criterion.id
+                                                        AND badge_criterion.badge = ?d
+                                                        AND badge_criterion.resource = ?d
+                                                        AND user = ?d", $badge_id, $res_id, $uid);
         if ($sql) {
-            $badge_id = $sql->id;
-            $q = Database::get()->querySingle("SELECT completed FROM user_badge JOIN badge_criterion
-                                                        ON user_badge.badge = badge_criterion.badge
-                                                        AND user = ?d
-                                                        AND user_badge.badge = ?d
-                                                        AND resource = ?d", $uid, $badge_id, $res_id);
-            if ($q) {
-                if ($q->completed) {
-                    return 1; // activity has been completed
-                } else {
-                    return 0; // activity has not been completed
-                }
-            } else {
-                return 2; // there is no activity
-            }
+            return 1; // activity has been completed
+        } else {
+            return 0; // activity has not been completed
         }
+    } else {
+        return 2; // there is no activity
+    }
+}
+
+
+/**
+ * @brief checks if a unit resource belongs to unit prerequisites
+ * @param $unit_id
+ * @param $unit_resource_id
+ * @return boolean
+ */
+function resource_belongs_to_unit_completion($unit_id, $unit_resource_id) {
+
+    $q = Database::get()->querySingle("SELECT * FROM badge_criterion JOIN badge
+                    ON badge.id = badge_criterion.badge
+                    WHERE unit_id = ?d
+                        AND resource = ?d", $unit_id, $unit_resource_id);
+    if ($q) {
+        return true;
+    } else {
+        return false;
     }
 }

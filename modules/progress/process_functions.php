@@ -1024,31 +1024,6 @@ function resource_usage($element, $element_resource_id) {
 
 /**
  * @brief get resource details given a certificate resource
- * @global type $course_id
- * @global type $langCategoryExcercise
- * @global type $langCategoryEssay
- * @global type $langLearningPath
- * @global type $langDocument
- * @global type $langVideo
- * @global type $langsetvideo
- * @global type $langEBook
- * @global type $langMetaQuestionnaire
- * @global type $langBlog
- * @global type $langNumOfBlogs
- * @global type $langNumOfForums
- * @global type $langForums
- * @global type $langWikiPages
- * @global type $langWiki
- * @global type $langComments
- * @global type $langCommentsBlog
- * @global type $langCommentsCourse
- * @global type $langPersoValue
- * @global type $langCourseSocialBookmarks
- * @global type $langForumRating
- * @global type $langAllActivities
- * @global type $langCourseParticipation
- * @global type $langCourseHoursParticipation
- * @global type $langGradebook
  * @param type $element
  * @param type $resource_id
  * @return type

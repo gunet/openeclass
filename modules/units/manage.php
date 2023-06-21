@@ -56,6 +56,11 @@ $localhostUrl = localhostUrl();
 
 if ($is_editor) {
     if (isset($_GET['course']) and isset($_GET['unit_id'])) {
+        if (isset($_GET['unit_res_id'])) {
+            $unit_resource_id = $_GET['unit_res_id'];
+        } else {
+            $unit_resource_id = 0;
+        }
         $unit_id = $_GET['unit_id'];
         $course_code = $_GET['course'];
         $currentUnit = Database::get()->querySingle("SELECT * FROM course_units 
@@ -200,7 +205,7 @@ if ($is_editor) {
             }
             redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
         } elseif ( isset($_GET['add']) and isset($_GET['act']) ) {
-            insert_activity($element, $element_id, $_GET['act'], $unit_id);
+            insert_activity($element, $element_id, $_GET['act'], $unit_id, $unit_resource_id);
             $display = FALSE;
         } elseif (isset($_GET['act_mod'])) { // modify certificate / badge activity
             display_modification_activity($element, $element_id, $_GET['act_mod'], $unit_id);

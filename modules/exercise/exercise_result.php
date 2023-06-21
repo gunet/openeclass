@@ -114,8 +114,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) and strtolower($_SERVER['HTTP_X_RE
         } else {
             update_gradebook_book($data->uid, $data->eid, $data->total_score / $data->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE);
         }
-        triggerGame($course_id, $uid, $data->eid);
-        triggerExerciseAnalytics($course_id, $uid, $data->eid);
+        triggerGame($course_id, $data->uid, $data->eid);
+        triggerExerciseAnalytics($course_id, $data->uid, $data->eid);
         exit();
     }
 }
