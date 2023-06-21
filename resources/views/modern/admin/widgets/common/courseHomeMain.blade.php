@@ -4,7 +4,7 @@
             {{ trans('langCourseHomeMainContent') }}
         </div>
     </div>
-    <div class="panel-body Borders" id="course_home_widget_main" data-widget-area-id="5">
+    <div class="panel-body BordersBottom" id="course_home_widget_main" data-widget-area-id="5">
         @foreach ($course_home_main_area_widgets as $key => $course_home_main_area_widget)
         <div class="panel{{!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget ? ' panel-success widget' : ' panel-default'}} mt-3" data-widget-id="{{ $course_home_main_area_widget->id }}" data-widget-widget-area-id="{{ $key }}">
             <div class="panel-heading {{!isset($courseWidgets) || isset($courseWidgets) && $course_home_main_area_widget->is_course_admin_widget ? ' ' : ' rounded-2'}}">

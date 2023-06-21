@@ -53,6 +53,10 @@
     min-width:500px !important;
   }
 }
+
+.myPersonalCalendar{
+  background-color: #ffffff;
+}
 .personal-calendar-header{
   padding:7px;
   border-top-left-radius: 5px;
@@ -66,7 +70,7 @@
   border-radius: 5px !important;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head{
-  background: #e8e8e8;
+  background: #ffffff;
   padding-top: 5px;
   padding-bottom: 5px;
   border-bottom:0px;

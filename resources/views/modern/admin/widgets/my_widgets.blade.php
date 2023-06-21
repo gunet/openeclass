@@ -17,6 +17,8 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                    {!! $action_bar !!}
+
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -48,10 +50,10 @@
                                                 </a>
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                                                <div class="panel-body text-muted">
+                                                <div class="panel-body text-muted NoBorders">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
-                                                <div class="panel-footer">
+                                                <div class="panel-footer bg-white BordersBottom">
                                                     <div class="d-flex justify-content-end">
                                                         <form class='mt-0 mb-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>

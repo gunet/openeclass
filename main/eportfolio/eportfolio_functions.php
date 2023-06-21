@@ -59,9 +59,9 @@ function render_eportfolio_fields_content($uid) {
     
             $cat_return_string['panels'] .= '
             <div class="col-lg-6 col-12">
-            <div class="card h-100" id="IndexPortfolio'.$c->id.'">
-                                                <div class="card-header bgTheme">
-                                                    <p class="card-title text-white mb-0 TextMedium fs-6">'.$c->name.'</p>
+            <div class="card panelCard px-lg-4 py-lg-3 h-100" id="IndexPortfolio'.$c->id.'">
+                                                <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
+                                                    <div class="text-uppercase normalColorBlueText TextBold fs-6">'.$c->name.'</div>
                                                 </div>
                                                  <div class="card-body">
                                                      
@@ -153,7 +153,7 @@ function render_eportfolio_fields_form() {
 
     $return_string = array();
     $return_string['panels'] = "";
-    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-8px;'>
+    $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-23px;'>
     <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-white flex-column align-items-stretch p-3 sticky-top Borders basicBorderSolid' style='z-index:2;'>
         <nav class='nav nav-pills flex-column'>";
 
@@ -170,11 +170,11 @@ function render_eportfolio_fields_form() {
             
             $return_string['panels'] .= '
            
-            <div class="panel panel-admin mt-3" id="EditPortfolio'.$c->id.'">
+            <div class="panel panel-admin mb-4" id="EditPortfolio'.$c->id.'">
                                        <div class="panel-heading">
                                            <div class="panel-title">'.$c->name.'</div>
                                        </div>
-                                       <div class="panel-body">
+                                       <div class="panel-body NoBorderTop">
                                            <fieldset>';
             if ($j == 0) {
                 $active = " class='active'";

@@ -422,6 +422,15 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[linkColor] !important;
                 }
 
+                .legendViewContent2{
+                    border-bottom:solid 1px $theme_options_styles[linkColor];
+                }
+                @media(max-width:991px){
+                .legendViewContent2{
+                    border-bottom:solid 1px #e8e8e8;
+                }
+                }
+
                 .btn_left_rigth{
                     border:solid 1px $theme_options_styles[leftNavBgColor];
                 }

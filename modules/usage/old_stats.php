@@ -188,7 +188,7 @@ $tool_content .= action_bar(array(
             ),false);
 
 /****   C3 plot   ****/
-$tool_content .= "<div class='col-12 plotscontainer mt-3'>";
+$tool_content .= "<div class='col-12 plotscontainer mt-4'>";
 $tool_content .= "<div id='userlogins_container' class='col-lg-12'>";
 $tool_content .= plot_placeholder("old_stats", $langOldStats);
 $tool_content .= "</div></div>";

@@ -4,7 +4,7 @@
             {{ trans('langPortfolioMainContent') }}
         </div>
     </div>
-    <div class="panel-body Borders" id="portfolio_widget_main" data-widget-area-id="3">
+    <div class="panel-body BordersBottom" id="portfolio_widget_main" data-widget-area-id="3">
         @foreach ($portfolio_main_area_widgets as $key => $portfolio_main_area_widget)
             <div class="panel{{!isset($myWidgets) || isset($myWidgets) && $portfolio_main_area_widget->is_user_widget ? ' panel-success widget' : ' panel-default opacity-help pe-none'}} mb-2" data-widget-id="{{ $portfolio_main_area_widget->id }}" data-widget-widget-area-id="{{ $key }}">
                 <div class="panel-heading Borders">

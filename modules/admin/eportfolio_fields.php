@@ -487,12 +487,12 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= action_button($dyntools)."</div></caption>";
 
             $tool_content .= "<thead><tr class='notes_thead'>
-                <td class='TextBold text-white'>$langName</td>
-                <td class='TextBold text-white'>$langCPFShortName</td>
-                <td class='TextBold text-white'>$langDescription</td>
-                <td class='TextBold text-white'>$langCPFFieldDatatype</td>
-                <td class='TextBold text-white'>$langCPFFieldRequired</td>
-                <td class='TextBold text-white'>" . icon('fa-gears') . "</td>
+                <td class='bgTheme TextBold text-white'>$langName</td>
+                <td class='bgTheme TextBold text-white'>$langCPFShortName</td>
+                <td class='bgTheme TextBold text-white'>$langDescription</td>
+                <td class='bgTheme TextBold text-white'>$langCPFFieldDatatype</td>
+                <td class='bgTheme TextBold text-white'>$langCPFFieldRequired</td>
+                <td class='bgTheme TextBold text-white'>" . icon('fa-gears') . "</td>
 		        </tr></thead>";
 
             $q = Database::get()->queryArray("SELECT * FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $res->id);

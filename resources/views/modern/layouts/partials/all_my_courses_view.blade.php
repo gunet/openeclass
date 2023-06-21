@@ -5,11 +5,7 @@
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-            <div class="col-12 mt-3">
-                <div class='pb-3 ps-3 pe-0 text-center'>
-                    <span class='courseInfoText TextExtraBold blackBlueText'>{{ trans('langMyCourses') }}</span>
-                </div>
-            </div>
+            {!! $action_bar !!}
            
             @if(Session::has('message'))
             <div class='col-12 all-alerts'>
@@ -26,8 +22,6 @@
                 </div>
             </div>
             @endif
-
-            {!! $action_bar !!}
 
             @if($myCourses)
                 <div class='col-12'>

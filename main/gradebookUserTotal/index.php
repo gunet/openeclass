@@ -43,6 +43,15 @@ $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                       AND course_module.visible <> 0
                       AND course_user.user_id = ?d
                       AND user.id = ?d', $uid, $uid);
+
+
+$tool_content .= action_bar(array(
+array('title' => $langBack,
+    'url' => $urlServer,
+    'icon' => 'fa-reply',
+    'level' => 'primary-label')));
+
+    
 if (count($courses) > 0) {
     $grade_content .= "<div class ='table-responsive'>
             <table class='table-default'><tr class='list-header'><th>$langCourse</th><th>$langGradebookGrade</th></tr>";

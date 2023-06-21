@@ -322,6 +322,15 @@ textarea {
   border-bottom:solid 1px #e8e8e8;
 }
 
+.legendViewContent2{
+  border-bottom:solid 1px #ffffff;
+}
+@media(max-width:991px){
+  .legendViewContent2{
+    border-bottom:solid 1px #e8e8e8;
+  }
+}
+
 .basicBorderSolid{ 
   border:solid 1px #e8e8e8;
 }
@@ -2314,6 +2323,8 @@ label:has(input[type="checkbox"]:disabled){
   .BordersTop{ 
     border-top-left-radius:15px; 
     border-top-right-radius:15px; 
+    border-bottom-left-radius:0px; 
+    border-bottom-right-radius:0px; 
   }
 
   .BordersTopInput{ 
@@ -2324,6 +2335,8 @@ label:has(input[type="checkbox"]:disabled){
   .BordersBottom{ 
     border-bottom-left-radius:15px; 
     border-bottom-right-radius:15px; 
+    border-top-left-radius:0px; 
+    border-top-right-radius:0px; 
   }
 
   .BordersBottomInput{ 
@@ -2458,6 +2471,8 @@ label:has(input[type="checkbox"]:disabled){
   #questions_filter{
     padding-right: 10px;
   }
+
+  
 
 
 /* -------------------------------------------- LABELS -----------------------------------------------------------------------------------*/
@@ -3271,5 +3286,7 @@ label:has(input[type="checkbox"]:disabled){
     #bgr-cheat-header {border-bottom-left-radius:0px; border-bottom-right-radius:0px;}
 
     .bgTransparent {background-color: transparent;}
+
+    .borderLg {border-radius: 15px;}
 
 }

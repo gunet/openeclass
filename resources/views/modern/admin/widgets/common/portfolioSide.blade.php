@@ -4,7 +4,7 @@
             {{ trans('langPortfolioSidebarContent') }}
         </div>
     </div>
-    <div class="panel-body Borders" id="portfolio_widget_sidebar" data-widget-area-id="4">
+    <div class="panel-body BordersBottom" id="portfolio_widget_sidebar" data-widget-area-id="4">
         @php $countWidgets = 0; @endphp
         @foreach ($portfolio_sidebar_widgets as $key => $portfolio_sidebar_widget)
         <div class="panel panel-success widget @if($countWidgets < (count($portfolio_sidebar_widgets) -1)) mb-3 @endif" data-widget-id="{{ $portfolio_sidebar_widget->id }}" data-widget-widget-area-id="{{ $key }}">

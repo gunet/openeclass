@@ -871,14 +871,14 @@ function user_duration_per_course($u) {
 
     $totalDuration = format_time_duration(0 + $totalDuration, 240);
 
-    $tool_content .= "<div class='text-center mb-3'>
+    $tool_content .= "<div class='text-center mb-4'>
                         <span class='panel-title'>"  . uid_to_name($_SESSION['uid']) . "</span>
                         <div style='margin-bottom: 10px;'><strong>$langTotalDuration:</strong> " . $totalDuration . "</div>
                         <div>$langInfoUserDuration</div>
                     </div>";
 
     $tool_content .= "
-                <div class='margin-bottom-fat margin-top-fat mb-3'>
+                <div class='margin-bottom-fat margin-top-fat mb-4'>
                   <div class='col-12'>
                     <ul class='list-group'>
                       <li class='list-group-item disabled bgTheme'>

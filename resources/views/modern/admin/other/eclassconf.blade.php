@@ -212,7 +212,7 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='two'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='two'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langUpgReg') }}</span>
@@ -405,7 +405,7 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='three'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='three'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langEclassThemes') }}</span>
@@ -441,7 +441,7 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='four'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='four'>
                                        
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
@@ -577,7 +577,7 @@
 
 
                                     @if(!$install)
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='five'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='five'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langEmailSettings') }}</span>
@@ -679,7 +679,7 @@
                                     </div>
                                     @endif
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='six'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='six'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseSettings') }}</span>
@@ -732,7 +732,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='seven'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='seven'>
 
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
@@ -769,7 +769,7 @@
 
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='eight'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='eight'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOtherOptions') }}</span>
@@ -912,7 +912,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='nine'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='nine'>
 
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
@@ -979,7 +979,7 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='ten'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='ten'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langDefaultQuota') }}</span>
@@ -1016,7 +1016,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='eleven'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='eleven'>
 
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
@@ -1045,7 +1045,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='twelve'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='twelve'>
 
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
@@ -1098,7 +1098,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='thirteen'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='thirteen'>
 
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
@@ -1149,7 +1149,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-3 px-lg-4 py-lg-3 bg-white' id='fourteen'>
+                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='fourteen'>
                                         <div class='panel-heading bg-body'>
                                             <div class='col-12 Help-panel-heading'>
                                                 <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPrivacyPolicy') }}</span>

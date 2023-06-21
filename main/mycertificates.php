@@ -32,6 +32,11 @@ if (is_module_disable(MODULE_ID_PROGRESS)) {
 
 $toolName = $langMyCertificates;
 $content = false;
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => $urlServer,
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 $table_content = '';
 $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                 FROM course, course_user, user, course_module

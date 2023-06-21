@@ -4,7 +4,7 @@
                             {{ trans('langHomePageSidebarContent') }}
                         </div>
                     </div>
-                    <div class="panel-body Borders" id="home_widget_sidebar" data-widget-area-id="2">
+                    <div class="panel-body BordersBottom" id="home_widget_sidebar" data-widget-area-id="2">
                         @foreach ($home_sidebar_widgets as $key => $home_sidebar_widget)
                         <div class="panel panel-success widget mt-3" data-widget-id="{{ $home_sidebar_widget->widget_id }}" data-widget-widget-area-id="{{ $key }}">
                             <div class="panel-heading">                   

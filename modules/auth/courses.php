@@ -125,7 +125,7 @@ if (isset($_POST['submit'])) {
         if (count($roots) > 1) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
         }
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-3'>";
+        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>";
         $tool_content .= "<ul class='list-group smallRadius'>
                                   <li class='list-group-item'><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
@@ -139,7 +139,7 @@ if (isset($_POST['submit'])) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
         } else if ($childCount <= 0) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning text-center'>- $langNoCourses -</div></div>\n";
+            $tool_content .= "<div class='col-12 mt-4'><div class='alert alert-warning text-center'>- $langNoCourses -</div></div>\n";
         }
     } // end of else (department exists)
 }
@@ -217,7 +217,7 @@ function expanded_faculte($facid, $uid) {
         $myCourses[$course->course_id] = $course;
     }, intval($uid));
 
-    $retString .= "<div class='table-responsive'><table class='table-default'>";
+    $retString .= "<div class='table-responsive mt-4'><table class='table-default'>";
     $retString .= "<tr class='list-header'>";
     $retString .= "<th width='50' align='center'>$langRegistration</th>";
     $retString .= "<th>$langCourseCode</th>";

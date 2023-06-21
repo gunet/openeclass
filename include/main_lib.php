@@ -3557,7 +3557,7 @@ function form_buttons($btnArray) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo;
+    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo, $course_code, $toolName, $pageName;
 
     $out_primary = $out_secondary = array();
     $i=0;
@@ -3589,7 +3589,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $href = " href='$url'";
         }
         if (!isset($option['button-class'])) {
-            $button_class = 'submitAdminBtn d-flex justify-content-center align-items-center me-2';
+            $button_class = 'submitAdminBtn d-flex justify-content-center align-items-center me-2 mb-2';
         } else {
             $oldButton = '';
 
@@ -3707,17 +3707,34 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     //                         </div>";
     // }
     if ($out && $i!=0) {
-        return "<div class='col-12 mb-4'>
-                    <div class='col-12 action_bar d-flex justify-content-start'>
-                        <div class='margin-top-thin margin-bottom-fat hidden-print'>
-                            <div class='btn-group btn-group-sm flex-wrap'>
-                            $out
-                            $action_button
+        if(isset($course_code) and $course_code){
+            return "<div class='col-12 mb-4'>
+                        <div class='col-12 action_bar d-flex justify-content-start'>
+                            <div class='margin-top-thin margin-bottom-fat hidden-print'>
+                                <div class='btn-group btn-group-sm flex-wrap'>
+                                    $out
+                                    $action_button
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    $pageTitleActive
-                </div>";
+                        $pageTitleActive
+                    </div>";
+        }else{
+            $titleHeader = (!empty($pageName) ? $pageName : $toolName);
+            return "<div class='col-12 d-lg-flex justify-content-lg-between align-items-lg-start my-4'>
+                        <div class='col-lg-5 col-12 courseInfoText TextExtraBold blackBlueText fs-4 px-0'>$titleHeader</div>
+                        <div class='col-lg-7 col-12 action_bar d-flex justify-content-lg-end justify-content-start align-items-start px-0 mt-lg-0 mt-4'>
+                            <div class='margin-top-thin margin-bottom-fat hidden-print'>
+                                <div class='btn-group btn-group-sm flex-wrap'>
+                                    $out
+                                    $action_button
+                                </div>
+                            </div>
+                        </div>
+                        $pageTitleActive
+                    </div>";
+        }
+        
     } else {
         return '';
     }

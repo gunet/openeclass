@@ -215,25 +215,25 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $pageName = q($note->title);
     $tool_content .= "
     <div class='col-12'>
-        <div class='card'>
-            <div class='card-body'> 
-                <div class='col-12 d-flex justify-content-between align-items-center bg-white ps-0'>
-                    <h5 class='card-title normalBlueText'>".q($note->title)."</h5>
-                    <div>
-                    ".
-                            action_button(array(
-                                array('title' => $langEditChange,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?modify=".getIndirectReference($note->id),
-                                    'icon' => 'fa-edit'),
-                                array('title' => $langDelete,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
-                                    'confirm' => $langSureToDelNote,
-                                    'class' => 'delete',
-                                    'icon' => 'fa-times')
-                            ))
-                    ."
-                    </div>
+        <div class='card panelCard px-lg-4 py-lg-3'>
+            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($note->title)."</div>
+                <div>
+                ".
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => "$_SERVER[SCRIPT_NAME]?modify=".getIndirectReference($note->id),
+                                'icon' => 'fa-edit'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
+                                'confirm' => $langSureToDelNote,
+                                'class' => 'delete',
+                                'icon' => 'fa-times')
+                        ))
+                ."
                 </div>
+            </div>
+            <div class='card-body'> 
                 <div class='col-12'>$note->content</div>
             </div>
             <div class='card-footer bg-white border-0'>
@@ -267,7 +267,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
 
     $tool_content .= "            
             <div class='table-responsive'>
-                <table class='table-default'>";
+                <table id='tableNotes' class='table-default'>";
     if ($noteNumber > 0) {
         $tool_content .= "<tr class='list-header'>";
         $tool_content .= "<th class='text-start ps-2'>$langCategoryNotes</th>";

@@ -16,7 +16,9 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    <div class='col-12 mt-3'>
+                    {!! $action_bar !!}
+
+                    <div class='col-12 mb-4'>
                         <div class='list-group'>
                             <li class='list-group-item list-header control-label-notes'>{{ $general_tutorials['title'] }}</li>
                             @foreach ($general_tutorials['links'] as $gt)
@@ -25,7 +27,7 @@
                         </div>
                     </div>
 
-                    <div class='col-12 mt-3'>
+                    <div class='col-12 mb-4'>
                         <div class='list-group'>
                             <li class='list-group-item list-header control-label-notes'>{{ $teacher_tutorials['title'] }}</li>
                             @foreach ($teacher_tutorials['links'] as $tt)
@@ -34,7 +36,7 @@
                         </div>
                     </div>
 
-                    <div class='col-12 mt-3'>
+                    <div class='col-12 mb-4'>
                         <div class='list-group'>
                             <li class='list-group-item list-header control-label-notes'>{{ $student_tutorials['title'] }}</li>
                             @foreach ($student_tutorials['links'] as $st)

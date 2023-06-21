@@ -82,9 +82,9 @@ if ($userdata) {
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
-                            <div class='card mt-3'>
-                                <div class='card-header d-flex justify-content-between aling-items-center'>
-                                    <span class='normalBlueText TextSemiBold fs-6 mt-1'>$langPageLink</span>
+                            <div class='card card panelCard px-lg-4 py-lg-3 mt-4'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langPageLink</div>
                                     <button class='btn submitAdminBtn' id='copy-btn' data-bs-toggle='tooltip' data-bs-placement='bottom' data-clipboard-target='#page-link'>
                                         <span class='fa fa-clipboard'></span>&nbsp;&nbsp;&nbsp;$langCopy
                                     </button>
@@ -211,7 +211,7 @@ if ($userdata) {
 
     
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
-        $social_share = "<div class='float-end mt-3 shadow-sm p-3 rounded bg-light'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
+        $social_share = "<div class='float-end mt-4 shadow-sm p-3 rounded bg-white rounded-pill'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {
         $social_share = '';
     }

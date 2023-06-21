@@ -15,11 +15,13 @@
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    <div class='col-12'>
-                        @if (count($faqs) > 0){!! $action_bar !!} @endif
-                    </div>
-
+                    
+                    @if (count($faqs) > 0)
+                        <div class='col-12'>
+                            {!! $action_bar !!}
+                        </div> 
+                    @endif
+                   
                     <div class='col-12'>
                         <div class='panel'>
                             <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>

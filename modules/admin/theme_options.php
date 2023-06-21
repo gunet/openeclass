@@ -357,9 +357,9 @@ if (isset($_POST['optionsSave'])) {
     }
     initialize_settings();
     $activate_class = isset($preview_theme) ? '' : ' hidden';
-    $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class me-1' id='theme_enable'>$langActivate</a>";
+    $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class me-2 mb-2' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
-    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class me-1' id='theme_preview'>$langSee</a>";
+    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class me-2 mb-2' id='theme_preview'>$langSee</a>";
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline mt-0' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
@@ -428,13 +428,10 @@ if (isset($_POST['optionsSave'])) {
     }
     @$tool_content .= "
     <div class='col-sm-12 mb-4'>
-    <div class='form-wrapper form-edit rounded'>
-        <div class='d-flex justify-content-center'>
-            
-                <strong class='control-label-notes'>$langActiveTheme:</strong>
-          
-                ".$themes_arr[$active_theme]."
-            
+    <div class='form-wrapper form-edit Borders p-lg-5 p-3'>
+        <div class='d-flex justify-content-start'>
+            <strong class='control-label-notes'>$langActiveTheme:</strong>
+            ".$themes_arr[$active_theme]."
         </div>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
             <div class='form-group mt-4'>
@@ -446,7 +443,7 @@ if (isset($_POST['optionsSave'])) {
             ". generate_csrf_token_form_field() ."
         </form>
         <div class='form-group mt-4 margin-bottom-fat'>
-            <div class='col-12 d-inline-flex'>
+            <div class='col-12 d-flex flex-wrap'>
                 $activate_btn
                 $preview_btn
                 $delete_btn
@@ -458,15 +455,15 @@ $tool_content .= "
 
   <!-- Nav tabs -->
   <ul class='nav nav-tabs' role='tablist'>
-    <li role='presentation' class='nav-item'><a class='nav-link active' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
+    <li role='presentation' class='nav-item' style='border:solid 1px #ffffff;'><a class='nav-link active normalColorBlueText TextSemiBold' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
+    <li role='presentation' class='nav-item' style='border:solid 1px #ffffff;'><a class='nav-link normalColorBlueText TextSemiBold' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
   </ul>
 
   <!-- Tab panes -->
   <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
-        <div class='form-wrapper form-edit rounded'>
+        <div class='form-wrapper form-edit rounded-2 p-lg-5 p-3'>
             <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-4'>$langLayoutConfig</legend>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langLayout:</label>

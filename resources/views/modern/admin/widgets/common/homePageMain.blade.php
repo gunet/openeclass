@@ -4,7 +4,7 @@
                             {{ trans('langHomePageMainContent') }}
                         </div>
                     </div>
-                    <div class="panel-body Borders" id="home_widget_main" data-widget-area-id="1">
+                    <div class="panel-body BordersBottom" id="home_widget_main" data-widget-area-id="1">
                         @foreach ($home_main_area_widgets as $key => $home_main_area_widget)
                         <div class="panel panel-success widget mt-3" data-widget-id="{{ $home_main_area_widget->id }}" data-widget-widget-area-id="{{ $key }}">
                             <div class="panel-heading">                   

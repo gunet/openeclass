@@ -38,7 +38,7 @@
                     @if ($announcements)
                     <div class='col-sm-12'>
                         <div class='table-responsive'>
-                            <table class='announcements_table'>
+                            <table id='adminAnnouncementsTable' class='announcements_table'>
                                 <tr class='notes_thead'>
                                     <th style='width: 70%;'>{{ trans('langAnnouncement') }}</th>
                                     <th>{{ trans('langDate') }}</th>

@@ -51,5 +51,5 @@
 
 
 @if(count($breadcrumbs) > 0)
-<div class='col-12'><div class='legendViewContent w-100 mt-3'></div></div>
+<div class='col-12'><div class='w-100 mt-3 @if(!$course_code) legendViewContent2 @else  legendViewContent @endif'></div></div>
 @endif

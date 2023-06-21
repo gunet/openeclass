@@ -334,6 +334,13 @@ $view_data['myWidgets'] = 1;
 
 $view_data['menuTypeID'] = 1;
 $pageName = $langMyWidgets;
+
+$view_data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+          'url' => $urlServer,
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'button-class' => 'btn-secondary')), false);
 view('admin.widgets.my_widgets', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {

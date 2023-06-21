@@ -41,6 +41,8 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                    {!! $action_bar !!}
+
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -58,7 +60,7 @@
                     @endif
 
                     <div class='col-12'>
-                        <div class="card h-100">
+                        <div class="card h-100 Borders">
                             <div class="card-body">
                                 @if (isset($buildRoots))
                                     {!! $buildRoots !!}

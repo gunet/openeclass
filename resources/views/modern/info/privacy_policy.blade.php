@@ -14,9 +14,11 @@
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+                    {!! $action_bar !!}
                     
                     <div class='col-12'>
-                        {!! $policy !!}
+                        <div class='bg-white Borders p-lg-5 p-3'>{!! $policy !!}</div>
                     </div>
                    
                 </div>

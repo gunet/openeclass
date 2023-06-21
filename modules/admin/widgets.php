@@ -345,6 +345,14 @@ $view_data = recursiveWidgetIterator('Widgets', $view_data);
 $view_data['menuTypeID'] = 3;
 $pageName = $langWidgets;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+$view_data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+          'url' => $urlServer,
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'button-class' => 'btn-secondary')), false);
+
 view('admin.widgets.index', $view_data);
 
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {

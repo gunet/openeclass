@@ -38,8 +38,8 @@
                         <div class='col-12'>
                             <table class="table-default extapp-table">
                                 <thead class='list-header'>
-                                    <td class='text-white TextSemiBold'>{{ trans('langExtAppName') }}</td>
-                                    <td class='text-white TextSemiBold'>{{ trans('langDescription') }}</td>
+                                    <td class='bgTheme text-white TextSemiBold'>{{ trans('langExtAppName') }}</td>
+                                    <td class='bgTheme text-white TextSemiBold'>{{ trans('langDescription') }}</td>
                                 </thead>
                                 @foreach (ExtAppManager::getApps() as $app)
                                     <tr>

@@ -651,7 +651,7 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 1) {
-            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end bg-light'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
+            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end bg-white rounded-pill'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
         } else {
             $social_share = '';
         }

@@ -20,6 +20,8 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                    {!! $action_bar !!}
+
                     @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
                             <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -60,7 +62,6 @@
                                                     {{ trans('langAdministrator')}}
                                                 @endif
                                             </p>
-                                            <div class='col-xl-8 col-md-10 col-12 ms-auto me-auto ps-2'>{!! $action_bar !!}</div>
                                             <p class='text-center'>
                                                 {{ trans('langExplain') }}
                                             </p>

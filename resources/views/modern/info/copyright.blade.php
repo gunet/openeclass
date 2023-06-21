@@ -16,7 +16,7 @@
                             <span class='courseInfoText TextExtraBold blackBlueText'>Copyright</span>
                         </div>
                     
-                        <p class='mt-5'>{!! trans('langCopyrightNotice') !!}</p>
+                        <div class='mt-5 Borders bg-white p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
                     </div>
                 </div>
             </div>
