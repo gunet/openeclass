@@ -54,7 +54,7 @@ function display_certificates() {
 
         $tool_content .= "
 
-                <div class='col-12 mt-3'>
+                <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             
@@ -161,7 +161,7 @@ function display_badges() {
         $sql_cer = Database::get()->queryArray("SELECT id, title, description, active, icon FROM badge WHERE course_id = ?d AND active = 1 AND bundle >= 0 ", $course_id);
     }
         $tool_content .= "
-                <div class='col-12 mt-3'>
+                <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             

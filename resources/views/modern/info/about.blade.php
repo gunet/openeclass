@@ -10,7 +10,7 @@
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
                 
-                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -19,6 +19,7 @@
                     {!! $action_bar !!}
                     
                     <div class='col-12'>
+                        
                         <div class="card panelCard px-lg-4 py-lg-3">
                             <div class='card-body'>
                                 <div class='row'>
@@ -56,26 +57,37 @@
                                                 <div class='p-1'><strong class='control-label-notes'>{{ trans('langSupportUser') }}:</strong> {{ $admin_name }}</div>--}}
                                     </div>
                                 </div>
-                                <div class='row mt-5'>
-                                    <div class='col-md-6 col-12'>
+                            </div>
+                        </div>
+                       
+
+                        <div class='row mt-4'>
+                            <div class='col-md-6 col-12'>
+                                <div class="card panelCard px-lg-4 py-lg-3">
+                                    <div class='card-body'>
                                         <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item'><strong class='lightBlueText text-uppercase'>{{ trans('langCourses') }}</strong><span class='badge bgTheme text-white float-end'>{{ $course_inactive }}</span></li>
-                                            <li class='list-group-item'>{{ trans('langOpenCoursesShort') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $course_open }}</span></li>
-                                            <li class='list-group-item'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $course_registration }}</span></li>
-                                            <li class='list-group-item'>{{ trans('langClosedCourses') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $course_closed }}</span></li>
+                                            <li class='list-group-item px-0'><strong class='lightBlueText text-uppercase'>{{ trans('langCourses') }}</strong><span class='badge bgTheme text-white float-end'>{{ $course_inactive }}</span></li>
+                                            <li class='list-group-item px-0'>{{ trans('langOpenCoursesShort') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $course_open }}</span></li>
+                                            <li class='list-group-item px-0'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $course_registration }}</span></li>
+                                            <li class='list-group-item px-0'>{{ trans('langClosedCourses') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $course_closed }}</span></li>
                                         </ul>
                                     </div>
-                                    <div class='col-md-6 col-12 mt-md-0 mt-3'>
+                                </div>
+                            </div>
+                            <div class='col-md-6 col-12 mt-md-0 mt-4'>
+                                <div class="card panelCard px-lg-4 py-lg-3">
+                                    <div class='card-body'>
                                         <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item'><strong class='lightBlueText text-uppercase'>{{ trans('langUsers') }}</strong><span class='badge bgTheme text-white float-end'>{{ $count_total }}</span></li>
-                                            <li class='list-group-item'>{{ trans('langTeachers') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $count_status[USER_TEACHER] }}</span></li>
-                                            <li class='list-group-item'>{{ trans('langStudents') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $count_status[USER_STUDENT] }}</span></li>
-                                            <li class='list-group-item'>{{ trans('langGuest') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $count_status[USER_GUEST] }}</span> </li>
+                                            <li class='list-group-item px-0'><strong class='lightBlueText text-uppercase'>{{ trans('langUsers') }}</strong><span class='badge bgTheme text-white float-end'>{{ $count_total }}</span></li>
+                                            <li class='list-group-item px-0'>{{ trans('langTeachers') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $count_status[USER_TEACHER] }}</span></li>
+                                            <li class='list-group-item px-0'>{{ trans('langStudents') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $count_status[USER_STUDENT] }}</span></li>
+                                            <li class='list-group-item px-0'>{{ trans('langGuest') }}<span class='badge bgEclass normalColorBlueText float-end'>{{ $count_status[USER_GUEST] }}</span> </li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                            
                     </div>
                     
                 </div>

@@ -8,7 +8,7 @@
     <style>#btn_create_course{display:none;}</style>
 @endif
 
-<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
+<div class="p-xl-5 py-lg-3 pb-0 pt-0">
 
 <div class="container-fluid details-section details-mobile">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
@@ -75,7 +75,7 @@
 <div class="container-fluid details-section">
     <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-0">
         <div class='col-xl-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
-            <div class='card panelCard BorderSolid border-0 px-lg-4 py-lg-3'>
+            <div class='card panelCard BorderSolid panelCardNoBorder px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                     <span class="text-uppercase normalColorBlueText TextBold fs-6">{{ trans('langMyCoursesSide') }}</span>
                     

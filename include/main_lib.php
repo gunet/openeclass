@@ -3589,7 +3589,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $href = " href='$url'";
         }
         if (!isset($option['button-class'])) {
-            $button_class = 'submitAdminBtn d-flex justify-content-center align-items-center me-2 mb-2';
+            $button_class = 'submitAdminBtn';
         } else {
             $oldButton = '';
 
@@ -3615,9 +3615,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             //replace button-class with myclass;
             $button_class = $option['button-class'];
             if($oldButton == 'btn-danger'){
-                $new_button = str_replace($oldButton,'deleteAdminBtn d-flex justify-content-center align-items-center me-2 mb-2',$button_class);
+                $new_button = str_replace($oldButton,'deleteAdminBtn',$button_class);
             }else{
-                $new_button = str_replace($oldButton,'submitAdminBtn d-flex justify-content-center align-items-center me-2 mb-2',$button_class);
+                $new_button = str_replace($oldButton,'submitAdminBtn',$button_class);
             }
 
             $button_class = $new_button;
@@ -3690,8 +3690,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
-        $action_button .= "<button data-bs-display='static' type='button' id='toolDropdown' class='btn submitAdminBtn dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "<ul class='dropdown-menu dropdown-menu-md-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
+        $action_button .= "<button  type='button' id='toolDropdown' class='btn submitAdminBtn dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
+        $action_button .= "<ul class='dropdown-menu dropdown-menu-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
                      ".implode('', $out_secondary)."
                   </ul>";
     }
@@ -3710,8 +3710,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         if(isset($course_code) and $course_code){
             return "<div class='col-12 mb-4'>
                         <div class='col-12 action_bar d-flex justify-content-start'>
-                            <div class='margin-top-thin margin-bottom-fat hidden-print'>
-                                <div class='btn-group btn-group-sm flex-wrap'>
+                            <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
+                                <div class='ButtonsContent d-flex justify-content-lg-start justify-content-end align-items-center flex-wrap'>
                                     $out
                                     $action_button
                                 </div>
@@ -3721,11 +3721,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                     </div>";
         }else{
             $titleHeader = (!empty($pageName) ? $pageName : $toolName);
-            return "<div class='col-12 d-lg-flex justify-content-lg-between align-items-lg-start my-4'>
-                        <div class='col-lg-5 col-12 courseInfoText TextExtraBold blackBlueText fs-4 px-0'>$titleHeader</div>
-                        <div class='col-lg-7 col-12 action_bar d-flex justify-content-lg-end justify-content-start align-items-start px-0 mt-lg-0 mt-4'>
-                            <div class='margin-top-thin margin-bottom-fat hidden-print'>
-                                <div class='btn-group btn-group-sm flex-wrap'>
+            return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-4'>
+                        <div class='col-lg-5 col-md-6 col-12 courseInfoText TextExtraBold blackBlueText text-md-start text-center fs-4 px-0'>$titleHeader</div>
+                        <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
+                            <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
+                                <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>
                                     $out
                                     $action_button
                                 </div>

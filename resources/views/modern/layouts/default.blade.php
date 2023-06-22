@@ -120,7 +120,7 @@
 
 <body>
 
-    <div class="ContentEclass d-flex flex-column min-vh-100 container-fluid px-0">
+    <div class="ContentEclass d-flex flex-column min-vh-100 px-0">
 
     
 

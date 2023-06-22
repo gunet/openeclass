@@ -315,6 +315,10 @@ function view($view_file, $view_data = array()) {
                     color: #ffffff;
                 }
 
+                .UserMenuBtn:hover{
+                    background-color: $theme_options_styles[linkColor];
+                }
+
                 .submitAdminBtn {
                     border: solid thin;
                     border-color: $theme_options_styles[leftNavBgColor];

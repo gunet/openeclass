@@ -35,7 +35,7 @@
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
 
-                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 

@@ -41,7 +41,7 @@ if ($is_editor) {
     $tool_content .= "<div class='col-12 clearfix'>
         <div class='action_bar mt-2 rounded'>
             <div class='col-sm-12 clearfix'>
-                <div class='margin-top-thin margin-bottom-fat float-end'>
+                <div class='margin-top-thin margin-bottom-fat'>
                     <div class='btn-group'>";
 
     // Dropdown select for Creating H5P Content

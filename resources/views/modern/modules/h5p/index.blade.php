@@ -20,7 +20,7 @@
    }
 </style>
 
-<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
+<div class="p-xl-5 py-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
 
@@ -72,7 +72,7 @@
 
                         
                         <div class='col-12'>
-                            <div class='margin-top-thin margin-bottom-fat float-end'>
+                            <div class='margin-top-thin margin-bottom-fat'>
                                 {{-- Dropdown select for Creating H5P Content --}}
                                 @if ($h5pcontenttypes)
                                     <div class='btn-group'>

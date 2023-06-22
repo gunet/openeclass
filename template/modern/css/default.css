@@ -82,6 +82,10 @@
   }
 }
 
+.UserMenuBtn:hover{
+  background-color: #005ad7;
+}
+
 
 /********************************************* FOOTER ****************************************************************************************/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1010,9 +1014,18 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .table_register_to_course tbody tr{ 
-    overflow: hidden; 
     height: 54px; 
     white-space: nowrap; 
+  }
+  @media(max-width:1199px){
+    .table_register_to_course tbody tr{
+      overflow:auto !important;
+    }
+  }
+  @media(min-width:1200px){
+      .table_register_to_course tbody tr{
+        overflow:hidden !important;
+      }
   }
   
   .info_reg_course{ 
@@ -1088,6 +1101,7 @@ label:has(input[type="checkbox"]:disabled){
     .Courses-Content{
       /* min-height: calc(100vh - 147px - 261px - 188.55px - 32px); */
       min-height: calc(100vh - 147px - 276px - 70px - 48px);
+      border: 1px solid rgba(0,0,0,.125)
     }
   }
 
@@ -1492,6 +1506,7 @@ label:has(input[type="checkbox"]:disabled){
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
   }
 
   .submitAdminBtn:hover {
@@ -1516,6 +1531,7 @@ label:has(input[type="checkbox"]:disabled){
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
   }
 
   .deleteAdminBtn:hover {
@@ -1535,6 +1551,7 @@ label:has(input[type="checkbox"]:disabled){
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
   }
 
   .successAdminBtn:hover {
@@ -1555,6 +1572,7 @@ label:has(input[type="checkbox"]:disabled){
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: #ffffff;
   }
 
   .cancelAdminBtn:hover {
@@ -1569,6 +1587,17 @@ label:has(input[type="checkbox"]:disabled){
   .submitAdminBtn .fa, .cancelAdminBtn .fs, .deleteAdminBtn .fa{
     height:12px; 
     width:12px;
+  }
+
+  .action_bar .ButtonsContent .btn{
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  /* .action_bar .ButtonsContent .btn:first-child{
+    margin-left:0px;
+  } */
+  .action_bar .ButtonsContent .btn:last-child{
+    margin-right:0px;
   }
 
 /* -------------------------------------------- Public Profile ------------------------------------------------------------------------------*/
@@ -2430,6 +2459,16 @@ label:has(input[type="checkbox"]:disabled){
     border-radius: 0.5em;
     border: solid 1px #e8e8e8;
   }
+  @media(max-width:1199px){
+    .table-default, .announcements_table{
+      overflow:auto !important;
+    }
+  }
+  @media(min-width:1200px){
+    .table-default, .announcements_table{
+        overflow:hidden !important;
+      }
+  }
 
   .list-header{ background:#003e85; }
 
@@ -2931,6 +2970,7 @@ label:has(input[type="checkbox"]:disabled){
 
 .panelCard{
   border-radius: 15px !important;
+  border: 1px solid rgba(0,0,0,.125) !important;
 }
 .panelCard .card-header{
   border-top-left-radius: 15px !important;
@@ -2957,6 +2997,10 @@ label:has(input[type="checkbox"]:disabled){
 }
 .searchGroupBtn:hover span{
   color:#ffffff;
+}
+
+.panelCardNoBorder{
+  border: 0px !important;
 }
 
 /* ------------------------------------------------------- MY COURSES ----------------------------------------------------------------------------*/
@@ -3288,5 +3332,4 @@ label:has(input[type="checkbox"]:disabled){
     .bgTransparent {background-color: transparent;}
 
     .borderLg {border-radius: 15px;}
-
 }

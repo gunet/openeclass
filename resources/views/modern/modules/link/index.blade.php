@@ -3,7 +3,7 @@
 @section('content')
 
 
-<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
+<div class="p-xl-5 py-lg-3 pb-0 pt-0">
 
     <div class="container-fluid main-container">
 
@@ -56,7 +56,7 @@
                   
 
                     <div class='col-sm-12'>
-                        <div class='table-responsive'>
+                        <div class='table-responsive mb-4'>
                             <table class='table-default nocategory-links'>
                             @if (count($general_category->links) > 0)
                                 <tr class='list-header'>
@@ -80,7 +80,7 @@
                            
                     @if ($social_bookmarks_enabled == 1)
                         <div class='col-sm-12'>
-                            <div class='table-responsive'>
+                            <div class='table-responsive mb-4'>
                                 <table class='table-default nocategory-links'>
                                 @if (count($social_category->links) > 0)
                                     <tr class='list-header'>
@@ -116,7 +116,7 @@
                     @endif
 
                     <div class='col-sm-12'>
-                        <div class='table-responsive'>
+                        <div class='table-responsive mb-4'>
                             <table class='table-default category-links'>
                             <tr class='list-header'>
                                     <th>{{ trans('langCategorisedLinks').'   ' }}

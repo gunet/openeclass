@@ -46,6 +46,9 @@
   background-color: white; 
   border-radius: 15px; 
 }
+@media(min-width:992px){
+  .col_maincontent_active{  border: 1px solid rgba(0,0,0,.125); }
+}
 
 .col_maincontent_active_Homepage{ 
   transition: 0.4s;  

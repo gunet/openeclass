@@ -31,7 +31,7 @@
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
 
-                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -71,7 +71,7 @@
                             @if(!$change_ok)
                                 
                                 <div class='col-xl-6 col-lg-8 col-md-8 col-12 ms-auto me-auto'>
-                                    <div class='form-wrapper form-edit rounded shadow-sm p-3'>
+                                    <div class='form-wrapper form-edit Borders shadow-sm p-3'>
 
                                         <form class="form-horizontal" role="form" method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                                             <input type='hidden' name='u' value='{{ $userUID }}'>
@@ -167,7 +167,7 @@
                             </div>
 
                             <div class='col-lg-6 col-12 ms-auto me-auto mt-3'>
-                                <div class='form-wrapper form-edit rounded shadow-sm p-3'>
+                                <div class='form-wrapper form-edit Borders shadow-sm p-3'>
                                     <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
                                         <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{!! trans('langUserData') !!}</h4></div></div>
                                         <div class='form-group'>

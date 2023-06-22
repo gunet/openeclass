@@ -23,12 +23,12 @@
                     <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/lessons_1.svg">
                     <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langCourses') }}</p>
                 </a>
-                @if (!isset($_SESSION['uid']))
-                    <a id="link-faq" class="eclass-nav-link ms-xl-3 d-flex justify-content-center align-items-end" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
-                        <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/faq_1.svg">
-                        <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langFaq') }}</p>
-                    </a>
-                @endif
+                
+                <a id="link-faq" class="eclass-nav-link ms-xl-3 d-flex justify-content-center align-items-end" href="{{$urlAppend}}info/faq.php" onmouseover="hoverQuestions(this);" onmouseout="unhoverQuestions(this);">
+                    <img class='HeaderIcon me-1 hidden-lg' src="{{ $urlAppend }}template/modern/img/faq_1.svg">
+                    <p class='small-text text-white text-uppercase mb-lg-0 mb-xl-1'>{{ trans('langFaq') }}</p>
+                </a>
+                
             </div>
         </div>
 
@@ -65,14 +65,14 @@
                                     (isset($is_power_user) and $is_power_user) or
                                     (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                     (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                    <a id="AdminToolBtn" type="button" class="btn submitAdminBtn d-flex justify-content-center align-items-center" aria-haspopup="true"
+                                    <a id="AdminToolBtn" type="button" class="btn btn-sm UserMenuBtn border-white h-30px d-flex justify-content-center align-items-center" aria-haspopup="true"
                                             aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="left"
                                             title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench text-white"></i>
                                     </a>
                                 @endif
 
                                 <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn submitAdminBtn dropdown-toggle user-menu-btn text-white text-capitalize" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-sm UserMenuBtn h-30px border-white dropdown-toggle user-menu-btn d-flex justify-content-center align-items-center text-white text-capitalize" data-bs-toggle="dropdown" aria-expanded="false">
                                            <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                             {{ $_SESSION['uname'] }}
                                     </button>

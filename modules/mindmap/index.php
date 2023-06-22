@@ -95,7 +95,7 @@ $head_content .= '
 $tool_content .= "
 <div id='layout' class='mt-3'>
 	<div id='jsmiin-nav-horizontal'>
-		<div class='btn-group btn-group-justified' role='group' style=''>
+		<div class='btn-group btn-group-justified mb-4' role='group' style=''>
 			<div class='btn-group' role='group'>
 				<button type='button' class='btn submitAdminBtn dropdown-toggle me-2 rounded-pill' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='hidden-xs p-0'>$langOpenMind</span> <span class='caret'></span> </button>
 				<ul class='dropdown-menu m-0 p-0 dropdown_menu_user shadow-lg bg-body border-0'>

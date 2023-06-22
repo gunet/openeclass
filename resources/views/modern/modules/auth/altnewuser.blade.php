@@ -10,7 +10,7 @@
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
                     
-                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -44,7 +44,7 @@
                         @else
                         
                         <div class='col-lg-6 col-12 ms-auto me-auto'>
-                            <div class='form-wrapper form-edit rounded'>
+                            <div class='form-wrapper form-edit Borders'>
                                 <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
                                     <fieldset> {{ $auth_instructions }}
                                             <div class='form-group'>

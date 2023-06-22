@@ -11,7 +11,7 @@
 
             <div class="col-12 justify-content-center col_maincontent_active_Homepage">
                     
-                <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -20,7 +20,7 @@
                         {!! $action_bar !!}
 
                         @if(Session::has('message'))
-                        <div class='col-12 all-alerts'>
+                        <div class='col-12 all-alerts mb-4'>
                             <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
@@ -37,14 +37,14 @@
 
                         @if ($user_registration)
                              @if ($registration_info)
-                                <div class='col-12 mt-3'>
+                                <div class='col-12 mb-4'>
                                     <div class='alert alert-info'>{!! $registration_info !!}</div>
                                 </div>
                             @endif
                         @endif
 
                         @if ($user_registration)
-                            <div class='col-12 mt-3'>
+                            <div class='col-12'>
                                 <div class="row row-cols-1 row-cols-md-2 g-4">
                                     @if (!$registration_info)
                                         <!-- student registration -->
@@ -162,7 +162,7 @@
                                 </div>
                             </div>
                         @else
-                            <div class='col-12 mt-3'>
+                            <div class='col-12'>
                                 <div class='alert alert-info'>{{ trans('langCannotRegister') }}</div>
                             </div>
                         @endif
