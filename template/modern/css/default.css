@@ -170,6 +170,10 @@ body{
   background-color: #e8e8e8;
 }
 
+/* @media(max-width:991px){
+  .basic-section{ margin-top: 56px; }
+} */
+
 a{ 
   text-decoration: none; 
   font-size: 15px; 
@@ -1100,7 +1104,15 @@ label:has(input[type="checkbox"]:disabled){
   @media(min-width:992px){
     .Courses-Content{
       /* min-height: calc(100vh - 147px - 261px - 188.55px - 32px); */
-      min-height: calc(100vh - 147px - 276px - 70px - 48px);
+      /* min-height: calc(100vh - 147px - 278px - 70px - 96px - 16px); */
+      border: 1px solid rgba(0,0,0,.125)
+    }
+    .basic-section-mobile{
+      min-height: calc(100vh - 147px - 70px);
+    }
+  }
+  @media(max-width:991px){
+    .Courses-Content{
       border: 1px solid rgba(0,0,0,.125)
     }
   }
@@ -1174,7 +1186,7 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
   @media(min-width:992px){
-    .container-login { margin-top: -147px; }
+    .container-Homepage { margin-top: -147px; }
   }
   
   .jumbotron.jumbotron-login{ background-repeat: no-repeat; background-size: cover; background-image: url(../images/books.jpeg);}
@@ -2774,7 +2786,7 @@ label:has(input[type="checkbox"]:disabled){
       padding: 0;
     }
 
-    .rowMedium{ 
+    .rowMedium, .rowMargin{ 
       margin: auto; 
     }
 

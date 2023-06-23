@@ -13,15 +13,13 @@
 
 @section('content')
 
-<div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
+<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
 
-    <div class="container-fluid main-container">
+        <div class="row rowMargin">
 
-        <div class="row rowMedium">
+            <div class="col-12 col_maincontent_active_Homepage">
 
-            <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-
-                <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -227,7 +225,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 </div>
 
 @endsection

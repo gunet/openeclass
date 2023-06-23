@@ -52,19 +52,19 @@
 
 @section('content')
 
-    <div class="pb-lg-3 pt-lg-3 pb-0 pt-0">
+    <div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
 
-        <div class="container-fluid main-container">
+            <div class="row rowMargin">
 
-            <div class="row rowMedium">
+                <div class="col-12 col_maincontent_active_Homepage">
 
-                <div class="col-12 justify-content-center col_maincontent_active_Homepage">
-
-                    <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
+                    <div class="row">
 
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                         @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+
+                        {!! isset($action_bar) ?  $action_bar : '' !!}
 
                         @if(Session::has('message'))
                             <div class='col-12 all-alerts'>
@@ -82,9 +82,7 @@
                             </div>
                         @endif
 
-                        {!! isset($action_bar) ?  $action_bar : '' !!}
-
-                        <div class="overflow-auto">
+                        <div class="col-12 overflow-auto">
                             <table id='course_results_table' class='table-default display'>
                                 <thead>
                                     <tr class='list-header'>
@@ -99,7 +97,7 @@
                             </table>
                         </div>
                         @if (isset($_GET['formsearchfaculte']) and $_GET['formsearchfaculte'] and is_numeric(getDirectReference($_GET['formsearchfaculte'])))
-                            <div class='col-12 mt-3'>
+                            <div class='col-12 mt-4'>
                                 <form action='multieditcourse.php' method='post'>
                                     <!--redirect all request vars towards action-->
                                     @foreach ($_REQUEST as $key => $value)
@@ -114,7 +112,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        
     </div>
 
 @endsection

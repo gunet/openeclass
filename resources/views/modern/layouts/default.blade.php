@@ -121,9 +121,6 @@
 <body>
 
     <div class="ContentEclass d-flex flex-column min-vh-100 px-0">
-
-    
-
         <!-- Desktop navbar -->
         <div class="d-none d-lg-block">
             @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
@@ -134,10 +131,9 @@
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 
-        <div class='basic-content {{ $container }}'>
+        <div class="basic-content {{ $container }} @if($container == 'container-fluid') px-xl-0 px-lg-3 @endif px-0">
             @yield('content')
         </div>
-
 
         <!-- Desktop navbar -->
         <div class="d-none d-lg-block">

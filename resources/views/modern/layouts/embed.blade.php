@@ -73,7 +73,7 @@
 </head>
 <body class='p-5'>
     <div class="container">
-        <div class="row rowMedium" id="Frame">
+        <div class="row rowMargin" id="Frame">
             <div id="leftnav" class="col-2 sidebar embeded bg-white pt-5">
                 <div class="panel-group accordion mt-1" id="sidebar-accordion">
                     <div class="panel">

@@ -1,7 +1,7 @@
 
-    <div class="col-xl-12 col-lg-12 col-md-12 col-12 col-12 col_maincontent_active_Homepage">
+    <div class="col-12 col_maincontent_active_Homepage">
 
-        <div class="row p-xl-5 px-lg-0 py-lg-3 p-md-5 ps-1 pe-1 pt-5 pb-5">
+        <div class="row">
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -140,7 +140,7 @@
                     <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
                     <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
                     
-                    <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-white solidPanel mt-5'>
+                    <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-white solidPanel mt-4'>
                         <nav aria-label='Page navigation example w-100'>
                             <ul class='pagination mycourses-pagination w-100 mb-0'>
                                 <li class='page-item page-item-previous'>

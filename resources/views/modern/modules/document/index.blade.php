@@ -4,11 +4,9 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
-<div class="p-xl-5 py-lg-3 pb-0 pt-0">
+<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
 
-    <div class="container-fluid main-container">
-
-        <div class="row rowMedium">
+        <div class="row rowMargin">
 
             @if($course_code)
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3">
@@ -19,12 +17,12 @@
             @endif
 
             @if($course_code)
-            <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active">
+            <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active p-lg-5">
             @else
             <div class="col-12 col_maincontent_active_Homepage">
             @endif
 
-                <div class="row p-xl-5 @if(isset($course_code) and $course_code) p-lg-5 @else px-lg-0 py-lg-3 @endif p-md-5 ps-1 pe-1 pt-5 pb-5">
+                <div class="row">
 
                     @if(!$is_in_tinymce)
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -260,7 +258,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 </div>
 
 

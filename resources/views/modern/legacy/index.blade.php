@@ -2,27 +2,23 @@
 
 @section('content')
   
-<div class="@if(isset($course_code) and $course_code) p-xl-5 py-lg-3 @else pb-lg-3 pt-lg-3 @endif pb-0 pt-0">
+<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
+    <div class="row rowMargin">
 
-    <div class="container-fluid main-container">
-
-        <div class="row rowMedium">
-
-            @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))
+        @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))
             <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
-            @endif
+        @endif
 
-            @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))
-            <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active">
-            @else
+        @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))
+            <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active p-lg-5">
+        @else
             <div class="col-12 col_maincontent_active_Homepage">
-            @endif
-
-                <div class="row p-xl-5 @if(isset($course_code) and $course_code) p-lg-5 @else px-lg-0 py-lg-3 @endif p-md-5 ps-1 pe-1 pt-5 pb-5">
+        @endif
+                <div class="row">
                 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -38,9 +34,9 @@
                     @endif
                     
 
-                   @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-    
+
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -57,20 +53,10 @@
                     </div>
                     @endif
                     
-                   
-                    <div class='col-sm-12'>{!! $tool_content !!}</div>
-                    
+                    <div class='col-12'>{!! $tool_content !!}</div>
                 </div>    
-                       
-                  
-            </div>
-
-
         </div>
     </div>
-
-
-
 </div>
 
 @endsection

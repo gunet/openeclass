@@ -8,10 +8,10 @@
     <style>#btn_create_course{display:none;}</style>
 @endif
 
-<div class="p-xl-5 py-lg-3 pb-0 pt-0">
+<div class="col-12 basic-section basic-section-mobile p-xl-5 px-lg-3 py-lg-5">
 
-<div class="container-fluid details-section details-mobile">
-    <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-3">
+
+    <div class="row rowMargin">
         <div class="col-12 px-0">
             <div class='card panelCard BorderSolid px-lg-4 py-lg-3 border-0'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
@@ -63,18 +63,11 @@
             </div>
         </div>
     </div>
-</div>
 
 
-
-
-
-
-
-
-<div class="container-fluid details-section">
-    <div class="row rowMedium px-lg-0 px-3 py-lg-0 py-0">
-        <div class='col-xl-8 col-12 Courses-Content pe-lg-0 mt-lg-3 px-0'>
+    
+    <div class="row rowMargin">
+        <div class='col-xl-8 col-12 Courses-Content pe-lg-0 mt-lg-3 mt-4 px-0'>
             <div class='card panelCard BorderSolid panelCardNoBorder px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                     <span class="text-uppercase normalColorBlueText TextBold fs-6">{{ trans('langMyCoursesSide') }}</span>
@@ -100,7 +93,7 @@
                 </div>
                 <div class='card-body'>
                     <div class='container-fluid p-0'>
-                        <div class='row rowMedium px-lg-2'>
+                        <div class='row rowMargin px-lg-2'>
                             @if(Session::has('message'))
                                 <div class='col-12 mt-3 px-0'>
                                     <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -121,7 +114,7 @@
                             </div>
 
                             <div id="cources-pics" class="col-12 px-lg-1 px-0" style="display:none;">
-                                <div class="row rowMedium cources-pics-page px-lg-2" id="cources-pics-page-1">
+                                <div class="row rowMargin cources-pics-page px-lg-2" id="cources-pics-page-1">
                                     @php $i=0; @endphp
                                     @foreach($cources as $cource)
                                     <div class="col-md-6 col-12 @if($i==0 or $i==2) ps-lg-1 ps-md-0 pe-md-2 @else pe-lg-1 ps-md-2 pe-md-0 @endif ps-0 pe-0 portfolioCourseColBar d-flex justify-content-center align-items-strech">
@@ -166,11 +159,11 @@
 
             </div>
         </div>
-        <div class='col-xl-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-2 ps-xl-3 px-lg-0 px-0 pb-lg-0 pb-3'>
+        <div class='col-xl-4 col-12 ColumnCalendarAnnounceMessagePortfolio mt-lg-3 mt-3 ps-xl-3 px-lg-0 px-0 pb-lg-0 pb-3'>
             @include('portfolio.portfolio-calendar')
-            <div class='card panelCard border-0 BorderSolid mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
+            <div class='card panelCard border-0 BorderSolid mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                 <div class='card-header bg-white border-0 text-start'>
-                     <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoAnnouncements') }}</span>
+                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoAnnouncements') }}</span>
                 </div>
                 <div class='card-body'>
                     @if(empty($user_announcements))
@@ -186,9 +179,9 @@
                 </div>
             </div>
 
-            <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
+            <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                 <div class='card-header bg-white border-0 text-start'>
-                   
+                
                     <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoMessages') }}</span>
                     
                 </div>
@@ -207,9 +200,9 @@
             </div>
 
             @if($portfolio_page_sidebar_widgets)
-                <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-3 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
+                <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                     <div class='card-header bg-white border-0 text-start'>
-                       
+                    
                             <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyWidgets') }}</span>
                         
                     </div>
@@ -221,7 +214,7 @@
 
         </div>
     </div>
-</div>
+    
 
 </div>
 

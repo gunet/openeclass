@@ -1,6 +1,8 @@
 
 .ContentEclass{ min-width:100%; padding-left: 0px; padding-right: 0px; }
 
+.basic-content {min-width:100% ; }
+
 .site-footer {border-top-left-radius:0px; border-top-right-radius:0px;}
 
 @media(min-width:992px){
@@ -9,6 +11,7 @@
     /* .eclass-nav-icon{margin-left:30px; margin-right:30px;} */
     
     .fa-question::before{width:30px; height:28px;}
+
 }
 
 @media(max-width:991px){
