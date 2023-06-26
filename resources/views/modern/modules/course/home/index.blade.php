@@ -107,7 +107,7 @@
 
 @section('content')
 
-<div class="<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">">
+<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
 
         <div class="row rowMargin">
 
@@ -154,7 +154,7 @@
 
                     <div class='col-12'>
                         <div class='card panelCard BorderSolid px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-white d-md-flex justify-content-md-between align-items-md-center'>
 
 
                                         <div>
@@ -169,7 +169,7 @@
                                             @endif
                                         </div>
 
-                                        <div>
+                                        <div class='mt-md-0 mt-3'>
                                             {!! $email_notify_icon !!}
                                             <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end mt-2'>
                                                 <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>

@@ -94,35 +94,37 @@
 
     @stack('head_scripts')
 
+    @if(!isset($course_code) && !$course_code)
+        <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/outsideFromCourse.css"/>
+        <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/outsideFromCourse.css?donotcache">
+    @endif
+
 </head>
 
 <body>
 
-    <div class="d-flex flex-column min-vh-100 {{ $container }}">
-
-    
-
+    <div class="ContentEclass d-flex flex-column min-vh-100 px-0">
         <!-- Desktop navbar -->
-        <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+        <div class="d-none d-lg-block">
             @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
         </div>
 
         <!-- Mobile navbar -->
-        <div class="d-lg-none">
+        <div class="d-block d-lg-none">
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 
-
-        @yield('content')
-
+        <div class="basic-content {{ $container }} @if($container == 'container-fluid') px-xl-0 px-lg-3 @endif px-0">
+            @yield('content')
+        </div>
 
         <!-- Desktop navbar -->
-        <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block">
+        <div class="d-none d-lg-block">
             @include('layouts.partials.footerDesktop')
         </div>
 
         <!-- Mobile navbar -->
-        <div class="d-lg-none">
+        <div class="d-block d-lg-none">
             @include('layouts.partials.footerMobile')
         </div>
     </div>
