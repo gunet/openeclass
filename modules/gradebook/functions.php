@@ -665,7 +665,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         if(weightleft($gradebook_id, 0) != 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</div>";
         }
-        $tool_content .= "<div style='padding: 15px;'>" . display_user($uid, false, false) . "</div>";
+        $tool_content .= "<div class='badge bgEclass  p-2'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
         $tool_content .= "<tr class='list-header'><th>$langTitle</th>
                               <th>$langGradebookActivityDate2</th>

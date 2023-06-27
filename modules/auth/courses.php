@@ -126,8 +126,8 @@ if (isset($_POST['submit'])) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
         }
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>";
-        $tool_content .= "<ul class='list-group smallRadius'>
-                                  <li class='list-group-item'><a name='top'></a>$langFaculty: " .
+        $tool_content .= "<ul class='list-group smallRadius Borders'>
+                                  <li class='list-group-item p-3 '><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
                                   </li>";
         list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');

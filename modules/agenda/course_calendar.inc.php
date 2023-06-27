@@ -583,7 +583,7 @@ require_once 'include/lib/references.class.php';
                 $barMonth = date("m", $d);
                 $barYear = date("Y", $d);
                 $eventlist .= "<tr>";
-                $eventlist .= "<td colspan='2' class='monthLabel list-header'>";
+                $eventlist .= "<td colspan='2' class='monthLabel bgTheme'>";
                 $eventlist .= "<div class='text-center text-white'><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
                 $eventlist .= "</td>";
                 $eventlist .= "</tr>";

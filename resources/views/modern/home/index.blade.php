@@ -7,19 +7,39 @@
 
 
 <div class="col-12 container-Homepage bgEclass col_maincontent_active_HomepageStart HomepageStartMobile">
+
+        @if($warning)
+            <input id='showWarningModal' type='hidden' value='1'>
+            <div class="modal fade bg-light" id="WarningModal" aria-hidden="true" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content shadow-sm border-0">
+                        <div class="modal-header bgOrange">
+                            <h5 class="modal-title text-white">{{ trans('langError') }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body bgEclass">
+                            {!! $warning !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @else
+            <input id='showWarningModal' type='hidden' value='0'>
+        @endif
+       
     
-        <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif @if(($warning and $PositionFormLogin == 1) or ($warning and $PositionFormLogin == 0) and !get_config('dont_display_login_form')) reBuiltJumbotron @endif">
+        <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif">
             @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                 @if($PositionFormLogin == 0)
-                <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-flex justify-content-end align-items-center bg-transparent ps-lg-4 pe-xl-3 pe-lg-0 px-5 py-lg-0 py-4'>
+                <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-flex justify-content-end align-items-center bg-transparent ps-lg-4 pe-xl-3 pe-lg-3 px-5 py-lg-0 py-4'>
                 @else
                 <div class='col-xxl-4 col-lg-5 col-md-6 col-12 d-lg-flex justify-content-lg-center align-items-lg-center ms-auto me-auto pt-3 pb-3'>
                 @endif
                     <div class='card-body cardLogin Borders' style='z-index:2;'>
                         <div class='card-header bg-transparent border-0'>
-                            @if($warning)
+                            {{--@if($warning)
                                 {!! $warning !!}
-                            @endif
+                            @endif--}}
                             <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg"> 
                             <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ trans('langUserLogin') }}</p>
                         </div>
@@ -48,13 +68,15 @@
                 <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 contentLoginMobile d-lg-flex justify-content-lg-end align-items-lg-end d-flex justify-content-center align-items-center bg-transparent px-4 py-lg-0 py-4'></div>
             @endif
         </div>
+
         
+
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
-        <div class='d-none d-lg-block'>
+        <div class='d-none d-lg-block px-3'>
             <div class='SectionMenu ms-auto me-auto bg-transparent @if(!get_config("homepage_title") and !get_config("homepage_intro")) pt-3 @endif pb-3'>
                 
                 @if(get_config('homepage_title') or get_config('homepage_intro'))
-                    <div class="col-12 d-flex justify-content-center homepage_intro-margin @if($PositionFormLogin == 1 and !$warning and !get_config('dont_display_login_form')) rebuiltHomepageIntro @endif @if($warning) mt-3 @endif mb-3">
+                    <div class="col-12 d-flex justify-content-center homepage_intro-margin @if($PositionFormLogin == 1 and !$warning and !get_config('dont_display_login_form')) rebuiltHomepageIntro @endif mb-3">
                         <div class="panel panel-default homepageIntroPanel w-100 border-0 shadow-none">
                             <div class="panel-body blackBlueText bg-body @if(get_config('homepage_title')) NoBorderTop @else Borders @endif p-5">
                                 @if(get_config('homepage_title'))
@@ -447,6 +469,8 @@
             </div>
         </div>
         @endif
+
+
 
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
         <div class='d-block d-lg-none bgEclass pb-3 pt-0 ps-3 pe-3'>
@@ -894,6 +918,8 @@
 </div>
 @endif
 
+
+
 <script>
 
     $('.basic-content').removeClass('container');
@@ -938,7 +964,12 @@
         ]
 	});
 
-    
+
+    if($('#showWarningModal').val() == 1){
+        var myModal = new bootstrap.Modal(document.getElementById('WarningModal'));
+        myModal.show();
+    }
+   
 
 </script>
 

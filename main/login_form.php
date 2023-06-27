@@ -81,12 +81,12 @@ foreach ($q as $l) {
 $columns = 12 / count($authLink);
 $pageName = $langUserLogin;
 
-// $tool_content .= action_bar(array(
-//     array('title' => $langBack,
-//           'url' => "$urlServer",
-//           'icon' => 'fa-reply',
-//           'level' => 'primary-label',
-//           'button-class' => 'btn-primary')), false);
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+          'url' => "$urlServer",
+          'icon' => 'fa-reply',
+          'level' => 'primary-label',
+          'button-class' => 'btn-primary')), false);
 
 $tool_content .= "<div class='login-page mt-3'>";
 $marginForm = '';
@@ -94,11 +94,12 @@ if($columns == 12){
   $columns = 1 ;
   $marginForm = 'col-xl-6 col-lg-8 col-md-8 col-12 ms-auto me-auto';
 }else{
-  $columns = 2 ;
+  $columns = 3 ;
   $marginForm = 'col';
 }
 
-$tool_content .= "<div class='row row-cols-1 row-cols-lg-$columns g-4'>";
+$tool_content .= "<div class='row row-cols-1 row-cols-lg-$columns g-4'>
+                    ";
 foreach ($authLink as $authInfo) {
     $tool_content .= "
    
@@ -113,7 +114,23 @@ foreach ($authLink as $authInfo) {
           <div class='card-body d-flex justify-content-center align-items-start flex-wrap'>" .
               $authInfo[1];
               if (Session::has('login_error') and $authInfo[0]) {
-                  $tool_content .= "<div class='col-12'><div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div></div>";
+                  $tool_content .= "<div class='col-12'>
+                                      
+                                      <input id='showWarningModal2' type='hidden' value='1'>
+                                      <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                          <div class='modal-dialog modal-dialog-centered'>
+                                              <div class='modal-content border-0'>
+                                                  <div class='modal-header bgOrange'>
+                                                      <h5 class='modal-title text-white'>$langError</h5>
+                                                      <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                  </div>
+                                                  <div class='modal-body bg-white'>
+                                                    ".Session::get('login_error')."
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                    </div>";
               }
     $tool_content .= "
           </div>
@@ -122,5 +139,16 @@ foreach ($authLink as $authInfo) {
 
 }
 $tool_content .= "</div></div>";
+
+$head_content .= "
+<script type='text/javascript'>
+  $(document).ready(function() {
+    if($('#showWarningModal2').val() == 1){
+      var myModal = new bootstrap.Modal(document.getElementById('WarningModal2'));
+      myModal.show();
+    }
+  });
+</script>
+";
 
 draw($tool_content, 0, null, $head_content);

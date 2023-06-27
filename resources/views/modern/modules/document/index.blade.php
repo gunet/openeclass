@@ -87,8 +87,8 @@
 
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
                             <div class='panel smallRadius'>
-                                <div class='panel-body docPanel smallRadius'>
-                                    <div class='row'>
+                                <div class='panel-body docPanel smallRadius @if(isset($course_code) and $course_code) bg-light @else bg-white @endif border-cols-default'>
+                                    <div class='row rowMargin'>
                                         <div class='col-9 d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
