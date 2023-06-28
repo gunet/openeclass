@@ -87,6 +87,10 @@ if ($learnPathName) {
 
     if (!isset($_GET['pdf'])) {
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langDumpPDF,
                 'url' => "details.php?course=$course_code&path_id=$path_id&pdf=true",
                 'icon' => 'fa-file-pdf-o',
@@ -94,11 +98,8 @@ if ($learnPathName) {
             array('title' => $langDumpUser,
                 'url' => "details.php?course=$course_code&path_id=$path_id&xls=true",
                 'icon' => 'fa-download',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
                 'level' => 'primary-label')
+            
         ));
     }
 

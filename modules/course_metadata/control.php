@@ -173,7 +173,7 @@ $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')),false);
+            'level' => 'primary')),false);
 $tool_content .= "
     <div class='oc-metedata-list'>
         <div class='col-12'>

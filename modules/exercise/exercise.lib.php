@@ -295,6 +295,11 @@ function display_exercise($exercise_id) {
     $totalWeighting = $exercise->selectTotalWeighting();
 
     $tool_content .= action_bar([
+        ['title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        ],
         ['title' => $langExerciseExecute,
             'url' => "exercise_submit.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-play-circle',
@@ -307,12 +312,8 @@ function display_exercise($exercise_id) {
             'icon' => 'fa-cogs',
             'level' => 'primary-label',
             'button-class' => 'btn-success'
-        ],
-        ['title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
         ]
+        
     ]);
 
 

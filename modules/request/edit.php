@@ -209,7 +209,7 @@ if (isset($_GET['id'])) {
         [ 'title' => $langBack,
           'url' => $data['backUrl'],
           'icon' => 'fa-reply',
-          'level' => 'primary-label' ]], false);
+          'level' => 'primary' ]], false);
 
     $data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $request->description);
 

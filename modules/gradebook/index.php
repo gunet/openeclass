@@ -360,7 +360,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif(isset($_GET['editSettings'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
@@ -369,7 +369,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['gradebookBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
@@ -383,7 +383,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
@@ -392,7 +392,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['imp'])) {
         $actID = intval($_GET['imp']);
@@ -403,7 +403,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID),
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
         ));
 
     } elseif (isset($_GET['ins'])) {
@@ -411,6 +411,10 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName =  get_gradebook_activity_title($gradebook_id, $actID) . " (" . $langGradebookBook .")";
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
             array('title' => $langImportGrades,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;imp=$actID",
                   'level' => 'primary-label',
@@ -420,11 +424,8 @@ if ($is_editor) {
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=3&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;activity_id=$actID",
                   'level' => 'primary-label',
                   'button-class' => 'btn btn-success',
-                  'icon' => 'fa-file-excel-o'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'),
+                  'icon' => 'fa-file-excel-o')
+            
         ));
 
     } elseif (isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
@@ -442,21 +443,22 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
+                  'icon' => 'fa fa-reply ',
+                  'level' => 'primary'),
             array('title' => $langGradebookBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'button-class' => 'btn-success')
+            
             ));
 
     } elseif (isset($_GET['new'])) {
@@ -466,7 +468,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } elseif (isset($_GET['gradebook_id']) && $is_editor) {
         $pageName = get_gradebook_title($gradebook_id);
     }  elseif ( !isset($_GET['gradebook_id'])) {

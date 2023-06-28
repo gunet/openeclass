@@ -313,7 +313,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         array('title' => $langBack,
             'url' => $exerciseId ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code",
             'icon' => 'fa-reply',
-            'level' => 'primary-label'
+            'level' => 'primary'
         )
     ));
 
@@ -665,6 +665,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     }
     $moduleTag = new ModuleElement($exerciseId);
     $tool_content .= action_bar([
+        [ 'title' => $langBack,
+          'url' => "index.php?course=$course_code",
+          'icon' => 'fa-reply',
+          'level' => 'primary' ],
         [ 'title' => $langExerciseExecute,
           'url' => "exercise_submit.php?course=$course_code&amp;exerciseId=$exerciseId",
           'icon' => 'fa-play-circle',
@@ -674,11 +678,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
           'icon' => 'fa-edit',
           'level' => 'primary-label',
-          'button-class' => 'btn btn-success' ],
-        [ 'title' => $langBack,
-          'url' => "index.php?course=$course_code",
-          'icon' => 'fa-reply',
-          'level' => 'primary-label' ],
+          'button-class' => 'btn btn-success' ]
+        
     ]);
 
     $exerciseDescription = trim($exerciseDescription);

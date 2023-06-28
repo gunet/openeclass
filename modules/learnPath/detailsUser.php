@@ -88,6 +88,10 @@ $data[] = [ $langLearnPath, $langAttempts, $langAttemptStarted, $langAttemptAcce
 
 if (!isset($_GET['pdf'])) {
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langDumpPDF,
             'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_GET[uInfo]&amp;pdf=true",
             'icon' => 'fa-file-pdf-o',
@@ -95,11 +99,8 @@ if (!isset($_GET['pdf'])) {
         array('title' => $langDumpUser,
             'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_GET[uInfo]&amp;xls=true",
             'icon' => 'fa-download',
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-            'icon' => 'fa-reply',
             'level' => 'primary-label')
+        
     ));
 }
 

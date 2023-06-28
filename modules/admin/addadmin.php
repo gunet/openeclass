@@ -159,7 +159,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
      [ 'title' => $langBack,
        'url' => "index.php",
        'icon' => 'fa-reply',
-       'level' => 'primary-label' ],
+       'level' => 'primary' ],
    ]);
 
 
@@ -167,15 +167,16 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
     $toolName = $langAdmins;
     $data['showFormAdmin'] = false;
     $data['action_bar'] = action_bar([
+        [ 'title' => $langBack,
+          'url' => "index.php",
+          'icon' => 'fa-reply',
+          'level' => 'primary' ],
         [ 'title' => $langAdd,
           'url' => 'addadmin.php?add=admin',
           'icon' => 'fa-plus-circle',
           'button-class' => 'btn-success',
-          'level' => 'primary-label' ],
-        [ 'title' => $langBack,
-          'url' => "index.php",
-          'icon' => 'fa-reply',
-          'level' => 'primary-label' ],
+          'level' => 'primary-label' ]
+        
     ]);
 }
 

@@ -287,7 +287,7 @@ function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
                     array('title' => trans('langBack'),
                           'url' => $backPath,
                           'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
+                          'level' => 'primary')));
     view('modules.document.quota', $data);
 }
 

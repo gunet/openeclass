@@ -34,7 +34,7 @@ $tool_content = action_bar(array(
         'title' => $langBack,
         'url' => "adminannouncements.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')),false);
+        'level' => 'primary')),false);
 
 if(isset($ann_id)){
     $announcement = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE `id`=?d", $ann_id);

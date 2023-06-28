@@ -200,7 +200,7 @@ if ($is_editor) {
                             array('title' => $langBack,
                                 'url' => "index.php?course=$course_code",
                                 'icon' => 'fa-reply',
-                                'level' => 'primary-label'
+                                'level' => 'primary'
                             )
                         ));
                         // display error message
@@ -259,7 +259,7 @@ if ($is_editor) {
                         array('title' => $langBack,
                             'url' => "index.php?course=$course_code",
                             'icon' => 'fa-reply',
-                            'level' => 'primary-label'
+                            'level' => 'primary'
                         )
                     ));
                     $dialogBox .= "

@@ -221,7 +221,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
         array('title' => $langBack,
               'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
               'icon' => 'fa-reply',
-              'level' => 'primary-label',)
+              'level' => 'primary',)
     ));
 
     $form .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>

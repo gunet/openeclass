@@ -115,7 +115,7 @@ if(!$data['new'] and !$data['modify']){
                 'title' => $langBack,
                 'url' => $_SERVER['SCRIPT_NAME'],
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             ]
         ],false); 
 }

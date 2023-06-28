@@ -57,7 +57,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "extapp.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')),false);
+        'level' => 'primary')),false);
 
 $data['connectorOptions'] = array_map(function($connectorClass) {
     $connector = new $connectorClass();

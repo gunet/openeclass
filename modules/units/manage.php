@@ -100,6 +100,11 @@ if ($is_editor) {
     }
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => $previousUrl,
+            'icon' => 'fa fa-reply ',
+            'level' => 'primary',
+        ),
         array('title'   =>  $langUnitCompletionActivate,
             'url'   =>  "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;newuc=1",
             'icon'  =>  'fa fa-navicon',
@@ -111,12 +116,8 @@ if ($is_editor) {
             'icon'  =>  'fa fa-navicon',
             'level' =>  'primary-label',
             'show'  =>  !$show_completion_button,
-        ),
-        array('title' => $langBack,
-            'url' => $previousUrl,
-            'icon' => 'fa fa-reply ',
-            'level' => 'primary-label',
-            )
+        )
+        
     ));
     //Top Menu End
 

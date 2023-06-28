@@ -138,7 +138,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                          array('title' => $langBack,
                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
                                'icon' => 'fa-reply',
-                               'level' => 'primary-label',
+                               'level' => 'primary',
                                'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
     ));
     if ($action == "settings") {
@@ -312,7 +312,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label',
+                  'level' => 'primary',
                   'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
     ),false);
 }
@@ -667,7 +667,7 @@ if ($action == "showPost") {
             array('title' => $langBack,
                     'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
     ));
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {

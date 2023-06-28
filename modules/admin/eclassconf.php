@@ -290,7 +290,7 @@ else {
                             'title' => $langBack,
                             'url' => "index.php",
                             'icon' => 'fa-reply',
-                            'level' => 'primary-label'
+                            'level' => 'primary'
                         ]
                     ]);
     $data['registration_info_textarea'] = rich_text_editor('registration_info', 4, 80, get_config('registration_info', ''));

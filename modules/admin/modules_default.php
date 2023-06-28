@@ -52,7 +52,7 @@ if (isset($_POST['submit'])) {
             [ 'title' => $langBack,
               'url' => $urlAppend . 'modules/admin/modules.php',
               'icon' => 'fa-reply',
-              'level' => 'primary-label' ]
+              'level' => 'primary' ]
         ], false);
     $data['menuTypeID'] = 3;
     view('admin.other.modules_default', $data);

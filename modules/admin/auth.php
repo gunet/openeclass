@@ -123,7 +123,7 @@ $action_bar = action_bar(array(
                 array('title' => $langBack,
                     'url' => "$_SERVER[PHP_SELF]",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
                 ),false);
 
 $data['auth_ids'] = $auth_ids;

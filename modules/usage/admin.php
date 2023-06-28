@@ -23,6 +23,10 @@
 /**** Summary info    ****/
 
 $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "../admin/",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary'),
                 array('title' => $langSystemActions,
                     'url' => "../usage/displaylog.php?from_other=TRUE",
                     'icon' => 'fa-bar-chart',
@@ -46,11 +50,8 @@ $tool_content .= action_bar(array(
                 array('title' => $langDetails,
                     'url' => "analytical_course_stats.php",
                     'icon' => 'fa-bar-chart',
-                    'level' => 'primary-label'),
-                array('title' => $langBack,
-                    'url' => "../admin/",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary')
+                    'level' => 'primary-label')
+                
             ),false);
 
 $tool_content .= "

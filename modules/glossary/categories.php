@@ -61,7 +61,7 @@ if ($is_editor) {
                 array('title' => $langBack,
                       'url' => "$cat_url",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
     } else {
         $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,

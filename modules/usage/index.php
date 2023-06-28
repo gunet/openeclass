@@ -134,23 +134,25 @@ if (isset($_GET['per_course_dur'])) {
         $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
         $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
         $tool_content .= action_bar(array(
-            array('title' => $langPersonalStats,
-                'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$uid_stats",
-                'level' => 'primary-label'),
             array('title' => $langBack,
                 'url' => '../admin/listusers.php',
                 'icon' => 'fa-reply',
+                'level' => 'primary'),
+            array('title' => $langPersonalStats,
+                'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$uid_stats",
                 'level' => 'primary-label')
+            
         ),false);
     } else {
         $tool_content .= action_bar(array(
-            array('title' => $langPersonalStats,
-                'url' => "../usage/index.php?t=u",
-                'level' => 'primary-label'),
             array('title' => $langBack,
                 'url' => "../../main/portfolio.php",
                 'icon' => 'fa-reply',
+                'level' => 'primary'),
+            array('title' => $langPersonalStats,
+                'url' => "../usage/index.php?t=u",
                 'level' => 'primary-label')
+            
         ),false);
     }
     $tool_content .= user_duration_per_course($uid_stats);

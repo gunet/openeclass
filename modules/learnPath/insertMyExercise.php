@@ -70,7 +70,7 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
+                'level' => 'primary'))) ;
 
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
 foreach ($resultex as $listex) {

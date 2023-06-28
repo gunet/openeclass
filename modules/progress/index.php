@@ -75,7 +75,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['act_mod'])) { // modify certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
@@ -84,7 +84,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif(isset($_GET['add'])) { // add certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
@@ -93,7 +93,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['newcert'])) { // new certificate activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
@@ -102,7 +102,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } elseif (isset($_GET['newbadge'])) { // new badge activity
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langProgress);
         $pageName = $langNewBadge;
@@ -110,7 +110,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } elseif (isset($_GET['u'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true", "name" => $langUsers);
@@ -119,7 +119,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } elseif (isset($_GET['progressall'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
@@ -127,20 +127,21 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "{$urlServer}courses/$course_code/index.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
             array('title' => $langCourseCompletion,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcc=1",
                   'icon' => 'fa-navicon',
                   'level' => 'primary-label',
-                  'show' => !is_course_completion_enabled()),
-            array('title' => $langBack,
-                  'url' => "{$urlServer}courses/$course_code/index.php",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'show' => !is_course_completion_enabled())
+            ));
     }
     $tool_content .= "</div>";
     //end of the top menu
@@ -376,15 +377,16 @@ if ($is_editor) {
     }
 } elseif (isset($_GET['u'])) { // student view
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary'),
 	        array('title' => $langPrint,
 	              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&$param_name=$element_id&u=".$_GET['u']."&p=1",
 	              'icon' => 'fa-print',
 	              'level' => 'primary-label',
-	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate"),
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')
+	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
+                
                     ));
 }
 

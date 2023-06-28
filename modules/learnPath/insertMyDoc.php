@@ -60,7 +60,7 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
+                'level' => 'primary'))) ;
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 // 1)  We select first the modules that must not be displayed because

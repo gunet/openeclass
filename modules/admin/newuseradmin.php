@@ -246,7 +246,7 @@ if (isset($_GET['id'])) {
         array('title' => $langBack,
               'url' => 'index.php',
               'icon' => 'fa-reply',
-              'level' => 'primary-label'),
+              'level' => 'primary'),
         array('title' => $langBackRequests,
               'url' => "listreq.php$reqtype",
               'icon' => 'fa-reply',
@@ -270,7 +270,7 @@ if (isset($_GET['id'])) {
         array('title' => $langBack,
               'class' => 'back_btn',
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 }
 
 $lang = false;

@@ -59,14 +59,14 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "../course_tools/index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } else {
         if (isset($_GET['id'])) {
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "../course_tools/index.php?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
         } else {
             $tool_content .= action_bar(array(
                 array('title' => $langNewLTITool,

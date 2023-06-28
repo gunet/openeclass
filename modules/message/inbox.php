@@ -54,6 +54,11 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "inbox.php".$urlstr,
+                                  'icon' => 'fa-reply',
+                                  'button-class' => 'back_index btn-secondary',
+                                  'level' => 'primary'),
                             array('title' => $langReply,
                                   'icon' => 'fa-edit',
                                   'button-class' => 'btn-reply btn-secondary',
@@ -61,11 +66,6 @@ if (isset($_GET['mid'])) {
                             array('title' => $langForward,
                                   'icon' => 'fa-forward',
                                   'button-class' => 'btn-forward btn-secondary',
-                                  'level' => 'primary-label'),
-                            array('title' => $langBack,
-                                  'url' => "inbox.php".$urlstr,
-                                  'icon' => 'fa-reply',
-                                  'button-class' => 'back_index btn-secondary',
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
                                   'url' => 'javascript:void(0)',

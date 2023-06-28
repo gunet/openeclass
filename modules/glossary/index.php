@@ -107,7 +107,7 @@ if ($is_editor) {
                 array('title' => $langBack,
                       'url' => "$base_url",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
     } else {
         $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,
@@ -271,7 +271,7 @@ if ($is_editor) {
                 array('title' => $langBack,
                       'url' => "$base_url",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')
+                      'level' => 'primary')
                 )
             );
         $category_id = 'none';

@@ -38,7 +38,7 @@ $data['action_bar'] = action_bar(array(
                   'url' => "#",
                   'class' => 'back_btn',
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label'
+                  'level' => 'primary'
                  )));
 
 $from_user = false;

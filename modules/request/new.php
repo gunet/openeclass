@@ -201,7 +201,7 @@ $data['action_bar'] = action_bar(
             [ 'title' => $langBack,
               'url' => $backUrl,
               'icon' => 'fa-reply',
-              'level' => 'primary-label' ]
+              'level' => 'primary' ]
         ], false);
 
 $data['descriptionEditor'] = rich_text_editor('requestDescription', 4, 20, $requestDescription);

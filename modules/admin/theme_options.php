@@ -401,15 +401,16 @@ if (isset($_POST['optionsSave'])) {
 
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "{$urlAppend}modules/admin/index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langImport,
             'url' => "#",
             'icon' => 'fa-upload',
             'class' => 'uploadTheme',
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "{$urlAppend}modules/admin/index.php",
-            'icon' => 'fa-reply',
             'level' => 'primary-label')
+        
         ),false);
     if (isset($preview_theme)) {
         $tool_content .= "

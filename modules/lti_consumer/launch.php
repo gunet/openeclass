@@ -86,7 +86,7 @@ $tool_content .= action_bar(array(
         'title' => $langBack,
         'url' => $urlServer . "courses/" . $course_code,
         'icon' => 'fa-reply',
-        'level' => 'primary-label'
+        'level' => 'primary'
     )
 ));
 

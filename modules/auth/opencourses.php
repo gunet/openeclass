@@ -74,7 +74,7 @@ $data['action_bar'] = action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-default')
                             ),false);
 if (count($data['tree']->buildRootsArray()) > 1) {

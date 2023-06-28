@@ -42,6 +42,10 @@ if (isset($_GET['id'])) {
     $meetingid = get_tc_meeting_id($_GET['id']);
     if (!isset($_GET['pdf'])) {
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php?course = $course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => "$langExport",
                 'url' => "dumptcuserduration.php?course=$course_code&amp;meeting_id=$meetingid",
                 'icon' => 'fa-file-archive-o',
@@ -53,11 +57,8 @@ if (isset($_GET['id'])) {
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
-                'show' => $is_editor),
-            array('title' => $langBack,
-                'url' => "index.php?course = $course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
+                'show' => $is_editor)
+            
         ));
     }
 } else {
@@ -70,16 +71,17 @@ if (isset($_GET['id'])) {
             $url = "tcuserduration.php?pdf=true";
         }
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php?course = $course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langDumpPDF,
                 'url' => "$url",
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
-                'show' => $is_editor),
-            array('title' => $langBack,
-                'url' => "index.php?course = $course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')
+                'show' => $is_editor)
+            
         ));
     }
 }

@@ -226,7 +226,7 @@ if (isset($_GET['delete'])) {
                 'title' => $langBack,
                 'url' => 'autoenroll.php',
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             ]
         ]);
 
@@ -234,6 +234,10 @@ if (isset($_GET['delete'])) {
 } else {
 
     $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+              'url' => 'index.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary'),
         array('title' => "$langAutoEnrollNew ($langStudents)",
               'url' => 'autoenroll.php?add=' . USER_STUDENT,
               'icon' => 'fa-plus-circle',
@@ -243,11 +247,8 @@ if (isset($_GET['delete'])) {
               'url' => 'autoenroll.php?add=' . USER_TEACHER,
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'),
-        array('title' => $langBack,
-              'url' => 'index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'button-class' => 'btn-success')
+        ));
 
     $data['rules'] = false;
     $i = 0;

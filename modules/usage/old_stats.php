@@ -184,7 +184,7 @@ $tool_content .= action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php?course=$course_code",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
             ),false);
 
 /****   C3 plot   ****/

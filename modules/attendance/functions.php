@@ -223,6 +223,10 @@ function display_attendance_activities($attendance_id) {
     $attendance_id_ind = getIndirectReference($attendance_id);
     $tool_content .= action_bar(
             array(
+                array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
                 array('title' => $langAdd,
                       'level' => 'primary-label',
                       'options' => array(
@@ -247,10 +251,7 @@ function display_attendance_activities($attendance_id) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
                       'level' => 'primary-label',
                       'icon' => 'fa-users'),
-                array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'),
+                
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
                       'icon' => 'fa-cog'),
@@ -1226,7 +1227,7 @@ function student_view_attendance($attendance_id) {
         array(  'title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'),
+                'level' => 'primary'),
     ));
     if (!$checkForRecords) {
         $tool_content .="

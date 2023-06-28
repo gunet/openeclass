@@ -114,7 +114,7 @@ $navigation[] = ['url' => "index.php?course=$course_code&amp;id=$id", 'name' => 
 
 $tool_content .= action_bar([
     [ 'title' => $langBack,
-      'level' => 'primary-label',
+      'level' => 'primary',
       'url' => "index.php?course=$course_code&amp;id=$id",
       'icon' => 'fa-reply']]);
 

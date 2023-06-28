@@ -152,7 +152,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'icon' => 'fa-reply',
             'url' => $_SERVER['SCRIPT_NAME']
         )
@@ -204,7 +204,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'icon' => 'fa-reply',
             'url' => $_SERVER['SCRIPT_NAME']
         )

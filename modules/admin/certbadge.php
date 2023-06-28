@@ -28,6 +28,10 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 
 $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => 'index.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary'),
         array('title' => "$langAddNewCertTemplate",
               'url' => "$_SERVER[SCRIPT_NAME]?action=add_cert",
               'icon' => 'fa-plus-circle',
@@ -37,11 +41,8 @@ $tool_content .= action_bar(array(
               'url' => "$_SERVER[SCRIPT_NAME]?action=add_badge",
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'),
-        array('title' => $langBack,
-              'url' => 'index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'button-class' => 'btn-success')
+        ));
 
 if (isset($_GET['del_badge'])) { // delete badge icon
     $sql_badge_icon = Database::get()->querySingle("SELECT id, filename FROM badge_icon WHERE id = ?d", $_GET['del_badge']);

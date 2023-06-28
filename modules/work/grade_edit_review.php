@@ -144,7 +144,7 @@ function show_form($id, $sid, $assign) {
 					'title' => $langBack,
 					'url' => "$back_link",
 					'icon' => "fa-reply",
-					'level' => 'primary-label'
+					'level' => 'primary'
 					)
 			));
 

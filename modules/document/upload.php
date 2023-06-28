@@ -115,7 +115,7 @@ if ($can_upload) {
         array('title' => $langBack,
             'url' => $backUrl,
             'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'level' => 'primary')));
     
       
     if($menuTypeID == 3 or $menuTypeID == 1){

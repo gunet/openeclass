@@ -224,34 +224,36 @@ if (!isset($_GET['pdf'])) {
     if (isset($_REQUEST['unit'])) {
         $tool_content .= action_bar([
             [
+                'title' => $langBack,
+                'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
+                'icon' => 'fa fa-reply',
+                'level' => 'primary'
+            ],
+            [
                 'title' => $langDumpPDF,
                 'url' => "../units/view.php?course=$course_code&res_type=exercise_results&eurId=$eurid&unit=$_REQUEST[unit]&pdf=true",
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
-            ],
-            [
-                'title' => $langBack,
-                'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
-                'icon' => 'fa fa-reply',
-                'level' => 'primary-label'
             ]
+            
         ]);
     } else {
         $tool_content .= action_bar([
+            [
+                'title' => $langBack,
+                'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
+                'icon' => 'fa fa-reply',
+                'level' => 'primary'
+            ],
             [
                 'title' => $langDumpPDF,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&eurId=$eurid&pdf=true",
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
-            ],
-            [
-                'title' => $langBack,
-                'url' => "results.php?course=$course_code&exerciseId=" . getIndirectReference($exercise_user_record->eid) . "'",
-                'icon' => 'fa fa-reply',
-                'level' => 'primary-label'
             ]
+            
         ]);
     }
 }

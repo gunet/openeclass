@@ -84,7 +84,7 @@ if (isset($_POST['toReorder'])) {
         array('title' => $langBack,
               'url' => 'activity.php',
               'icon' => 'fa-reply',
-              'level' => 'primary-label'))) . "
+              'level' => 'primary'))) . "
               <div class='row'>
               <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
                 <div class='col-12 h-100 left-form'></div>
@@ -194,15 +194,16 @@ $(function() {
 </script>";
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => 'index.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary'),
         array('title' => $langAdd,
               'url' => 'activity.php?add=true',
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'),
-        array('title' => $langBack,
-              'url' => 'index.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'button-class' => 'btn-success')
+        ));
 
     $headings = Database::get()->queryArray('SELECT * FROM activity_heading ORDER BY `order`');
     if (count($headings)) {

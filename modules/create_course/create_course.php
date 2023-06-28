@@ -91,7 +91,7 @@ if (!isset($_POST['create_course'])) {
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-default')
                             ),false);
 

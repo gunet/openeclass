@@ -97,17 +97,17 @@ $showScore = $displayScore == 1
 if ($is_editor) {
     $tool_content .= action_bar([
         [
+            'title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary'
+        ],
+        [
             'title' => $langCheckGrades,
             'icon' => 'fa-bar-chart',
             'class' => 'check-grades',
             'level' => 'primary-label',
             'button-class' => 'btn-success'
-        ],
-        [
-            'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary-label'
         ],
         [
             'title' => "$langResults ($langDumpUser)",
@@ -128,7 +128,7 @@ if ($is_editor) {
             'title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa fa-reply',
-            'level' => 'primary-label'
+            'level' => 'primary'
         ]
     ]);
 }

@@ -341,7 +341,7 @@ switch ($action) {
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
                               'icon' => 'fa-reply',
-                              'level' => 'primary-label',
+                              'level' => 'primary',
                               'show' => isset($_GET['action'])),
                         array('title' => $langWikiCreateWiki,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;action=rqEdit",

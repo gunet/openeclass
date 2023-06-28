@@ -35,7 +35,7 @@ if (!isset($_POST['doit'])) {
             array('title' => $langBack,
                 'url' => "profile/display_profile.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
         $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langAdminNo</div></div>";
         draw($tool_content, 1);
         exit;
@@ -76,7 +76,7 @@ if (!isset($_POST['doit'])) {
                 array('title' => $langBack,
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+                    'level' => 'primary')));
             $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langNotice:</br>$langExplain</div></div>";
         }
     }  //endif is admin

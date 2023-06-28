@@ -37,7 +37,7 @@ $data['action_bar'] = action_bar(
                                             'title' => $langBack,
                                             'url' => $urlServer,
                                             'icon' => 'fa-reply',
-                                            'level' => 'primary-label',
+                                            'level' => 'primary',
                                             'button-class' => 'btn-secondary'
                                         ]
                                     ], false);

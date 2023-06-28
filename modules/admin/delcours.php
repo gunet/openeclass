@@ -89,7 +89,7 @@ if (isset($_GET['c']) && !isset($_GET['delete'])) {
                         'title' => $langBack,
                         'url' => "listcours.php",
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label'
+                        'level' => 'primary'
                     ]
                 ]);
 } else {
@@ -98,7 +98,7 @@ if (isset($_GET['c']) && !isset($_GET['delete'])) {
                         'title' => $langBack,
                         'url' => "index.php",
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label'
+                        'level' => 'primary'
                     ]
                 ]);
 }

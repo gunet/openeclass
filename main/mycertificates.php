@@ -36,7 +36,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => $urlServer,
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary')));
 $table_content = '';
 $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
                 FROM course, course_user, user, course_module

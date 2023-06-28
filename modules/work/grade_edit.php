@@ -161,7 +161,7 @@ function show_edit_form($id, $sid, $assign) {
                             'title' => $langBack,
                             'url' => "index.php?course=$course_code&id=$sub->assignment_id",
                             'icon' => "fa-reply",
-                            'level' => 'primary-label'
+                            'level' => 'primary'
                         )));
                     $ass = Database::get()->queryArray("SELECT * FROM assignment_grading_review WHERE user_submit_id =?d ", $sid);
                     //$tool_content .= "<input type='' name='gra' value='$sub->id' />";
@@ -399,7 +399,7 @@ function show_edit_form($id, $sid, $assign) {
 						'title' => $langBack,
 						'url' => "index.php?course=$course_code&id=$sub->assignment_id",
 						'icon' => "fa-reply",
-						'level' => 'primary-label'
+						'level' => 'primary'
 					)
 				))."
             <div class='col-12'>

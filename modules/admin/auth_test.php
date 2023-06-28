@@ -150,7 +150,7 @@ $data['action_bar'] = action_bar(array(
         array(
             'title' => $langBack,
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'url' => 'auth.php'
         )));
 

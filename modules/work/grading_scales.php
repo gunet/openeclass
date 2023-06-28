@@ -138,7 +138,7 @@ if (isset($_GET['scale_id'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'icon' => 'fa-reply',
             'url' => "grading_scales.php?course=$course_code"
         ),
@@ -220,18 +220,19 @@ if (isset($_GET['scale_id'])) {
 } else {
     $tool_content .= action_bar(array(
         array(
+            'title' => $langBack,
+            'level' => 'primary',
+            'icon' => 'fa-reply',
+            'url' => "index.php?course=$course_code"
+        ),
+        array(
             'title' => $langNewGradeScale,
             'level' => 'primary-label',
             'icon' => 'fa-plus-circle',
             'url' => "grading_scales.php?course=$course_code&amp;scale_id=0",
             'button-class' => 'btn-success'
-        ),
-        array(
-            'title' => $langBack,
-            'level' => 'primary-label',
-            'icon' => 'fa-reply',
-            'url' => "index.php?course=$course_code"
-        ),
+        )
+        
     ),false);
 
     $grading_scales = Database::get()->queryArray("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);

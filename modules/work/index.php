@@ -2042,7 +2042,7 @@ function new_assignment() {
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
             'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
@@ -3119,7 +3119,7 @@ function show_edit_assignment($id) {
     $comments = trim($row->comments);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary-label',
+              'level' => 'primary',
               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
               'icon' => 'fa-reply')));
 
@@ -3959,7 +3959,7 @@ function show_student_assignment($id) {
                'title' => $langBack,
                'icon' => 'fa-reply',
                'url' => "$back_url",
-               'level' => "primary-label"
+               'level' => "primary"
            )
         ));
 
@@ -4387,7 +4387,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 array(
                     'title' => $langBack,
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label',
+                    'level' => 'primary',
                     'url' => "index.php?course=$course_code&id=$id",
                     'show' => $is_editor
                 )

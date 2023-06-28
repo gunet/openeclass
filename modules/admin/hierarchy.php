@@ -68,21 +68,22 @@ if (!in_array($language, $session->active_ui_languages)) {
 // link to add a new node
 if (!isset($_REQUEST['action'])) {
     $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langAdd,
                 'url' => "$_SERVER[SCRIPT_NAME]?action=add",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
-                'button-class' => 'btn-success'),
-        array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'button-class' => 'btn-success')
+        ));
 } else {
     $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
 }
 
 // Display all available nodes

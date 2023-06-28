@@ -83,7 +83,7 @@ $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
                 'url' => "{$urlServer}modules/admin/edituser.php?u=" . urlencode(($_REQUEST['userid'])),
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')
+                'level' => 'primary')
                 ));
 
 if (isset($_POST['changePass'])) {

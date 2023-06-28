@@ -124,6 +124,11 @@ if (!$conference_activity) {
         $wash_link = "messageList.php?course=$course_code&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
     }
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+                'url' => $back_link,
+                'icon' => 'fa-reply',
+                'level' => 'primary'
+        ),
         array('title' => $langSave,
             'url' => $save_link,
             'icon' => 'fa-plus-circle',
@@ -132,15 +137,10 @@ if (!$conference_activity) {
             'link-attrs' => "target='messageList'",
             'show' => $is_editor
         ),
-        array('title' => $langBack,
-            'url' => $back_link,
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        ),
         array('title' => $langWash,
             'url' => $wash_link,
             'icon' => 'fa-trash',
-            'level' => 'primary',
+            'level' => 'primary-label',
             'link-attrs' => "target='messageList'",
             'show' => $is_editor
         )
@@ -204,6 +204,11 @@ if (!$conference_activity) {
     }
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        ),
         array('title' => $langCreateAgent,
             'url' => "chat.php?conference_id=" . $conference_id . "&create_agent=1",
             'icon' => 'fa-plus-circle',
@@ -240,12 +245,8 @@ if (!$conference_activity) {
             'url' => '#',
             'level' => 'primary-label',
             'button-class' => 'btn-default studentLearningAnalytics',
-            'show' => !$is_editor && $laSessionId && $laSessionToken),
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        )
+            'show' => !$is_editor && $laSessionId && $laSessionToken)
+        
     ));
 
     if ($is_editor && isset($_GET['create_agent']) && $agent_id) {

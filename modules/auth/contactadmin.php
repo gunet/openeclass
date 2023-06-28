@@ -93,7 +93,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
             array('title' => $langBack,
                 'url' => '$urlAppend',
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')
+                'level' => 'primary')
         ),false);
         $tool_content .= "
         <div class='form-wrapper'>

@@ -38,7 +38,7 @@ function process_actions() {
                 array('title' => $langBack,
                       'url' => "{$urlAppend}modules/units/index.php?course=$course_code&amp;id=$id",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
             $tool_content .= edit_res($res_id);
             draw($tool_content, 2, null, $head_content);
             exit;

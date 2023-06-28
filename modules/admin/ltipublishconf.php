@@ -126,7 +126,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => 'extapp.php',
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary')));
 
 $boolean_field = "";
 $tool_content .= "

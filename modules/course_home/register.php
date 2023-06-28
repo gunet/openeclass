@@ -149,7 +149,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
           'url' => $urlServer . 'main/portfolio.php',
           'icon' => 'fa-reply',
-          'level' => 'primary-label',
+          'level' => 'primary',
           'button-class' => 'btn-default')),false) . "
 <div class='row'><div class='panel'><div class='panel-body'>
     <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>" .

@@ -85,7 +85,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
           'url' => "$urlServer",
           'icon' => 'fa-reply',
-          'level' => 'primary-label',
+          'level' => 'primary',
           'button-class' => 'btn-primary')), false);
 
 $tool_content .= "<div class='login-page mt-3'>";

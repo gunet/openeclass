@@ -81,7 +81,7 @@ if ($is_editor) {
             array('title' => $langBack,
                 'url' => "index.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
 
         $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
@@ -245,7 +245,7 @@ if ($is_editor) {
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'level' => 'primary')));
 
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);

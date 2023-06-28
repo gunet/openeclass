@@ -49,7 +49,7 @@ $tool_content .= action_bar(array(
 array('title' => $langBack,
     'url' => $urlServer,
     'icon' => 'fa-reply',
-    'level' => 'primary-label')));
+    'level' => 'primary')));
 
     
 if (count($courses) > 0) {

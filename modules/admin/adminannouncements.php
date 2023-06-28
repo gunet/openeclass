@@ -207,7 +207,7 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     array('title' => $langBack,
                         'url' => $_SERVER['SCRIPT_NAME'],
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label')
+                        'level' => 'primary')
                     ));
 
     if (isset($_GET['modify'])) {
@@ -265,7 +265,7 @@ elseif (isset($_GET['ann_id'])) {
                 'title' => $langBack,
                 'url' => $_SERVER['SCRIPT_NAME'],
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             ]
         ]);
         $view = 'admin.other.announcements.show';

@@ -189,7 +189,7 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => $pathBack . "?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')),false) . "
+                'level' => 'primary')),false) . "
     <div class='panel panel-default'>
         <div class='panel-heading bgTheme'>
             <div class='panel-title'>$langLearningObjectData</div>

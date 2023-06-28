@@ -119,7 +119,7 @@ if (isset($_POST['submit'])) {
                 array('title' => $langBack,
                     'url' => "viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+                    'level' => 'primary')));
 
     $myrow = Database::get()->querySingle("SELECT p.id, p.post_text, p.post_time, p.topic_filepath, p.topic_filename, t.title
                         FROM forum_post p, forum_topic t

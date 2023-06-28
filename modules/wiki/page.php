@@ -551,7 +551,7 @@ if ($action == "edit" || $action == "diff" || $action == "history" || $action ==
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'icon' => 'fa-reply',
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=" . $wiki->getWikiId() . "&amp;action=show&amp;title=". rawurlencode($wiki_title)
         )

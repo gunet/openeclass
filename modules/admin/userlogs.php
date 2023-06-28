@@ -122,7 +122,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "listusers.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')),false);
+        'level' => 'primary')),false);
 $log = new Log();
 
 // display logs

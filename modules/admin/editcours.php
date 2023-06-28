@@ -60,7 +60,7 @@ $data['action_bar'] = action_bar([
                     'title' => $langBack,
                     'url' => "searchcours.php",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label'
+                    'level' => 'primary'
                 ]
             ]);
 

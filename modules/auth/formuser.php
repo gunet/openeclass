@@ -345,7 +345,7 @@ if ($all_set) {
                     array('title' => $langBack,
                         'url' => "{$urlAppend}modules/auth/registration.php",
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label')), false);
+                        'level' => 'primary')), false);
 
     $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langUserData</div></div>";
     $tool_content .= "

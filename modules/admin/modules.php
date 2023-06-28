@@ -47,14 +47,15 @@ if (isset($_POST['submit'])) {
     }
     $data['action_bar'] = action_bar(
                         [
-                            [ 'title' => $langDefaultModules,
-                              'url' => $urlAppend . 'modules/admin/modules_default.php',
-                              'icon' => 'fa-check-square-o',
-                              'level' => 'primary-label' ],
                             [ 'title' => $langBack,
                               'url' => $urlAppend . 'modules/admin/index.php',
                               'icon' => 'fa-reply',
+                              'level' => 'primary' ],
+                            [ 'title' => $langDefaultModules,
+                              'url' => $urlAppend . 'modules/admin/modules_default.php',
+                              'icon' => 'fa-check-square-o',
                               'level' => 'primary-label' ]
+                            
                         ], false);
 
     $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);

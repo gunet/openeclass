@@ -78,7 +78,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } else {
         $tool_content .= action_bar(array(

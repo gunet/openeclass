@@ -268,14 +268,15 @@ if (!empty($message)) {
 }
 $back_url = isset($_GET['from']) && $_GET['from'] == 'group' ? "group_space.php?course=$course_code&group_id=$group_id" : "index.php?course=$course_code";
 $tool_content .= action_bar(array(
+    array('title' => $langBack,
+            'level' => 'primary',
+            'icon' => 'fa-reply',
+            'url' => $back_url),
       array('title' => $langAdminUsers,
             'url' => "../user/index.php?course=$course_code",
             'icon' => 'fa-users',
-            'level' => 'primary-label'),
-      array('title' => $langBack,
-            'level' => 'primary-label',
-            'icon' => 'fa-reply',
-            'url' => $back_url)));
+            'level' => 'primary-label')
+      ));
 
 $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>

@@ -46,16 +46,17 @@ $head_content .= "<script type='text/javascript'>
 $data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");
 
 $data['action_bar'] = action_bar(array(
-                                array('title' => $langFaqExpandAll,
-                                      'url' => "#",
-                                      'class' => 'expand',
-                                      'icon' => 'fa-plus-circle',
-                                      'level' => 'primary-label'),
+                                
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
-                                      'button-class' => 'btn-primary')
+                                      'level' => 'primary',
+                                      'button-class' => 'btn-primary'),
+                                  array('title' => $langFaqExpandAll,
+                                      'url' => "#",
+                                      'class' => 'expand',
+                                      'icon' => 'fa-plus-circle',
+                                      'level' => 'primary-label')
                             ),false);
 
 $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0;

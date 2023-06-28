@@ -51,6 +51,10 @@ $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                 ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
 $data['action_bar']  = action_bar([
+    [ 'title' => $langBack,
+      'icon' => 'fa-reply',
+      'level' => 'primary',
+      'url' => 'portfolio.php' ],
     [ 'title' => $langRegCourses,
       'url' => $urlAppend . 'modules/auth/courses.php',
       'icon' => 'fa-check',
@@ -61,11 +65,8 @@ $data['action_bar']  = action_bar([
       'show' => $_SESSION['status'] == USER_TEACHER,
       'icon' => 'fa-plus-circle',
       'level' => 'primary-label',
-      'button-class' => 'btn-success' ],
-    [ 'title' => $langBack,
-      'icon' => 'fa-reply',
-      'level' => 'primary-label',
-      'url' => 'portfolio.php' ],
+      'button-class' => 'btn-success' ]
+    
 ], false);
 
 $data['myCourses'] = $myCourses;

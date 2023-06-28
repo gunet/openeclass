@@ -127,6 +127,10 @@ if ($u) {
         // Display Actions Toolbar
         $ind_u = intval($u);
         $data['action_bar'] = action_bar(array(
+            array('title' => $langBack,
+                'url' => "listusers.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",
                 'icon' => 'fa-share-alt',
@@ -140,16 +144,13 @@ if ($u) {
             array('title' => $langEditAuth,
                 'url' => "$_SERVER[SCRIPT_NAME]?u=$u&amp;edit=auth",
                 'icon' => 'fa-key',
-                'level' => 'primary'),
+                'level' => 'primary-label'),
             array('title' => $langDelUser,
                 'url' => "deluser.php?u=$u",
                 'icon' => 'fa-times',
-                'level' => 'primary',
-                'show' => $u > 1),
-            array('title' => $langBack,
-                'url' => "listusers.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')
+                'level' => 'primary-label',
+                'show' => $u > 1)
+            
         ));
 
 

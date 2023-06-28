@@ -87,7 +87,7 @@ if (isset($_GET['an_id'])) {
         ['title' => $langBack,
             'url' => $_SERVER['SCRIPT_NAME'],
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'button-class' => 'btn-secondary']
     ],false);
 
@@ -110,7 +110,7 @@ if (isset($_GET['an_id'])) {
         ['title' => $langBack,
             'url' => $urlServer,
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'button-class' => 'btn-secondary']
     ],false);
 

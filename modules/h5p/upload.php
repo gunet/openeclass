@@ -28,7 +28,7 @@ $tool_content .= action_bar([[
     'title' => $langBack,
     'url' => $backUrl,
     'icon' => 'fa-reply',
-    'level' => 'primary-label'
+    'level' => 'primary'
 ]], false);
 
 $can_upload = TRUE;

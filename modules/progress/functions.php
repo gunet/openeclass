@@ -369,6 +369,11 @@ function display_activities($element, $id, $unit_id = 0) {
 
     $tool_content .= action_bar(
             array(
+                array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary',
+                    'show'  =>  $unit_id ? false : true),
                 array('title' => $langUsers,
                     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
                     'icon' => 'fa-users',
@@ -378,12 +383,8 @@ function display_activities($element, $id, $unit_id = 0) {
                     'url' => "dumpcertificateresults.php?$link_id&amp;enc=UTF-8",
                     'icon' => 'fa-file-excel-o',
                     'level' => 'primary-label',
-                    'show'  =>  $unit_id ? false : true),
-                array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label',
                     'show'  =>  $unit_id ? false : true)
+                
             ),
             false
         );

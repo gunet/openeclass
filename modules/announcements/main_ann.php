@@ -36,7 +36,7 @@ $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-secondary')
                             ),false);
 if ($numOfAnnouncements > 0) {

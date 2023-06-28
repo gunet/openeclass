@@ -65,7 +65,7 @@ if (isset($_GET['add_template'])) {
         array('title' => $langBack,
             'url' => "limesurveymoduleconf.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'level' => 'primary')));
 
     new_lti_app(null, true, null); // TODO: can we have a default lime url?
 
@@ -108,22 +108,23 @@ if (isset($_GET['add_template'])) {
             array('title' => $langBack,
                 'url' => "limesurveymoduleconf.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
 
         edit_lti_app(getDirectReference($_GET['edit_template']));
 
     } else { //display available TII templates
 
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "extapp.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langNewLimesurveyTool,
                 'url' => "limesurveymoduleconf.php?add_template",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
-                'button-class' => 'btn-success'),
-            array('title' => $langBack,
-                'url' => "extapp.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'button-class' => 'btn-success')
+            ));
 
         $q = Database::get()->queryArray("SELECT * FROM lti_apps WHERE is_template = true AND type = 'limesurvey' AND course_id is null ORDER BY title ASC");
         if (count($q) > 0) {

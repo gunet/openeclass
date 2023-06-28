@@ -82,7 +82,7 @@ if ($appName) {
         array('title' => $langBack,
               'url' => 'extapp.php',
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 
     $view = "admin.other.extapps.config";
 } else {
@@ -90,7 +90,7 @@ if ($appName) {
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'level' => 'primary')));
 
     $view = "admin.other.extapps.index";
 }

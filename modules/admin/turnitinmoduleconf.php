@@ -65,7 +65,7 @@ if (isset($_GET['add_template'])) {
         array('title' => $langBack,
             'url' => "turnitinmoduleconf.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'level' => 'primary')));
 
     new_lti_app(null, true, "https://api.turnitin.com/api/lti/1p0/assignment");
 
@@ -107,22 +107,23 @@ if (isset($_GET['add_template'])) {
             array('title' => $langBack,
                 'url' => "turnitinmoduleconf.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
 
         edit_lti_app(getDirectReference($_GET['edit_template']));
 
     } else { //display available TII templates
 
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "extapp.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langNewTIITool,
                 'url' => "turnitinmoduleconf.php?add_template",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary-label',
-                'button-class' => 'btn-success'),
-            array('title' => $langBack,
-                'url' => "extapp.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'button-class' => 'btn-success')
+            ));
 
         $q = Database::get()->queryArray("SELECT * FROM lti_apps WHERE is_template = true AND type = 'turnitin' AND course_id is null ORDER BY title ASC");
         if (count($q) > 0) {

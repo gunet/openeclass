@@ -350,7 +350,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif(isset($_GET['editSettings'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -359,20 +359,21 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['attendanceBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langAttendanceActiveUsers;
         $tool_content .= action_bar(array(
-            array('title' => $langRefreshList,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1",
-                  'icon' => 'fa-users',
-                  'level' => 'primary-label'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply',
+                  'level' => 'primary'),
+            array('title' => $langRefreshList,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1",
+                  'icon' => 'fa-users',
                   'level' => 'primary-label')
+            
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -381,7 +382,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -390,7 +391,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp']) or isset($_GET['addActivityTc'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -409,21 +410,22 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary')
             ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
-            array('title' => $langGradebookBook,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                  'icon' => 'fa fa-reply',
-                  'level' => 'primary-label'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')
+                  'level' => 'primary',
+                  'button-class' => 'btn-success'),
+            array('title' => $langGradebookBook,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
+                  'icon' => 'fa fa-reply',
+                  'level' => 'primary-label')
+            
             ));
 
     } elseif (isset($_GET['new'])) {
@@ -433,7 +435,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } elseif (isset($_GET['attendance_id']) && $is_editor) {
         $pageName = get_attendance_title($attendance_id);
     }  elseif (!isset($_GET['attendance_id'])) {

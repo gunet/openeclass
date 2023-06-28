@@ -38,15 +38,16 @@ $zipfile = $urlAppend . str_replace("$webDir/", '', $zipfile);
 
 $data['action_bar'] =
     action_bar([
+        [ 'title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary' ],
         [ 'title' => $langDownloadIt,
             'url' => $zipfile,
             'icon' => 'fa-download',
             'button-class' => 'btn-success',
-            'level' => 'primary-label' ],
-        [ 'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
             'level' => 'primary-label' ]
+        
     ], false);
 
 

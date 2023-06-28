@@ -57,7 +57,7 @@ $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => $backURL,
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
 
 $fc_type = $act_name ="";
 

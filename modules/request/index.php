@@ -213,7 +213,7 @@ if (isset($_GET['id'])) {
             [ 'title' => $langBack,
               'url' => $backUrl,
               'icon' => 'fa-reply',
-              'level' => 'primary-label' ]
+              'level' => 'primary' ]
         ], false);
     $data['state'] = $stateLabels[$request->state];
     $data['can_modify'] = $can_modify;

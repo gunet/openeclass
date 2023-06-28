@@ -76,7 +76,7 @@ $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "auth.php",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
                 ));
 
 $data['menuTypeID'] = 3;

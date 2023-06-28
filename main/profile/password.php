@@ -87,7 +87,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
           'url' => 'display_profile.php',
           'icon' => 'fa-reply',
-          'level' => 'primary-label')));
+          'level' => 'primary')));
 
 if (!isset($_POST['changePass'])) {
     $data['old_pass_error'] = Session::getError('old_pass');

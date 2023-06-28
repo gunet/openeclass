@@ -71,6 +71,10 @@ $head_content .= "<script type='text/javascript'>
 
 if (!isset($_GET['pdf'])) {
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langDumpPDF,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pdf=true",
             'icon' => 'fa-file-pdf-o',
@@ -78,11 +82,8 @@ if (!isset($_GET['pdf'])) {
         array('title' => $langDumpUser,
             'url' => "dumpuserlearnpathdetailsanalysis.php?course=$course_code",
             'icon' => 'fa-download',
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')),
+            'level' => 'primary-label')
+        ),
         false);
 }
 

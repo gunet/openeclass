@@ -45,6 +45,10 @@ if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
 
 if (!isset($_GET['pdf'])) {
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langDumpPDF,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;pdf=true;",
             'icon' => 'fa-file-pdf-o',
@@ -52,11 +56,8 @@ if (!isset($_GET['pdf'])) {
         array('title' => $langDumpUser,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;xls=true;",
             'icon' => 'fa-download',
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]",
-            'icon' => 'fa-reply',
             'level' => 'primary-label')
+        
     ), false);
 }
 

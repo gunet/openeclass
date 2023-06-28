@@ -116,6 +116,10 @@ if (isDepartmentAdmin()) {
 // Display Actions Toolbar
 $data['action_bar'] =
         action_bar(array(
+            array('title' => $langBack,
+                'url' => "$basetoolurl",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $linkreg,
                 'url' => "newuseradmin.php$linkget",
                 'icon' => 'fa-plus-circle',
@@ -128,11 +132,8 @@ $data['action_bar'] =
             array('title' => $langReqHaveBlocked,
                 'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
                 'icon' => 'fa-ban',
-                'level' => 'primary'),
-            array('title' => $langBack,
-                'url' => "$basetoolurl",
-                'icon' => 'fa-reply',
                 'level' => 'primary')
+            
                 ));
 
 // -----------------------------------

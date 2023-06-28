@@ -170,7 +170,7 @@ if ($submit) {
             array('title' => $langBack,
                   'url' => "../admin/index.php",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label'),
+                  'level' => 'primary'),
             array('title' => $langBackRequests,
                   'url' => "../admin/listreq.php",
                   'icon' => 'fa-reply',

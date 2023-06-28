@@ -82,7 +82,7 @@ $data['action_bar'] = action_bar([
     ['title' => $langBack,
         'url' => $urlAppend,
         'icon' => 'fa-reply',
-        'level' => 'primary-label',
+        'level' => 'primary',
         'button-class' => 'btn-secondary']
 ],false);
 
@@ -145,7 +145,7 @@ if(isset($_GET['more']) and $_GET['more'] == 'yes'){
         ['title' => $langBack,
             'url' => $_SERVER['SCRIPT_NAME'],
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'button-class' => 'btn-secondary']
     ],false);
    $all_announcements = getUserAnnouncements($lesson_ids, 'more', 'to_ajax', $_GET['sSearch']);

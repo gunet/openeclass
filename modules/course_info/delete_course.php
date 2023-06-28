@@ -62,7 +62,7 @@ if (isset($_POST['delete'])) {
         array('title' => $langBack,
               'url' => "index.php?course=" . q($course_code),
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
     
     $data['form_url'] = "$_SERVER[SCRIPT_NAME]?course=$course_code";
 }

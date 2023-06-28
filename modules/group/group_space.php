@@ -173,6 +173,10 @@ if (isset($_GET['group_as'])) {
 
     $tool_content .= "<div class='d-block d-lg-none'>";
         $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => "index.php?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary'),
                     array('title' => $langModify,
                         'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
                         'level' => 'primary-label',
@@ -199,10 +203,6 @@ if (isset($_GET['group_as'])) {
                         'icon' => 'fa-globe',
                         'level' => 'primary',
                         'show' => visible_module(MODULE_ID_ASSIGN)),
-                    array('title' => $langBack,
-                        'url' => "index.php?course=$course_code",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary'),
                     array('title' => $langEmailGroup,
                         'url' => "../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id",
                         'icon' => 'fa-envelope',

@@ -270,7 +270,7 @@ if (isset($_GET['showPost'])) { //show comments case
                   array('title' => $langBack,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label')
+                        'level' => 'primary')
         ),false);
         $tool_content .= generate_single_post_html($post);
     } else {
@@ -283,7 +283,7 @@ if (isset($_GET['showPost'])) { //show comments case
                              array('title' => $langBack,
                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                                    'icon' => 'fa-reply',
-                                   'level' => 'primary-label')
+                                   'level' => 'primary')
                           ),false);
 
         $post = Database::get()->querySingle("SELECT content, extvideo FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);

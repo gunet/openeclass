@@ -87,7 +87,7 @@ $data['backButton'] = action_bar(array(
     array('title' => $langBack,
           'url' => $backUrl,
           'icon' => 'fa-reply',
-          'level' => 'primary-label',
+          'level' => 'primary',
           'class' => 'back_btn')));
 
 if ($editPath) {

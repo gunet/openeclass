@@ -153,7 +153,7 @@ if(!isset($_POST['final_submit'])){
                     'title' => $langBack,
                     'url' => $urlServer.'modules/create_course/flipped_classroom.php',
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label',
+                    'level' => 'primary',
                     'button-class' => 'btn-default'
                 )
             ), false);
@@ -301,7 +301,7 @@ if(!isset($_POST['final_submit'])){
             array('title' => $langBack,
                 'url' => "{$urlServer}modules/units/?course=$course_code&id=$unit_id",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')),false);
+                'level' => 'primary')),false);
 
 
         $unit_title = Database::get()->querySingle("SELECT title FROM course_units WHERE id =?d",$unit_id);

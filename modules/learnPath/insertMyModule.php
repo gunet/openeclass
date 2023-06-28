@@ -73,7 +73,7 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
+                'level' => 'primary'))) ;
 
 if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
     // select all 'addable' modules of this course for this learning path

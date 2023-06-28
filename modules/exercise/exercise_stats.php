@@ -42,7 +42,7 @@ $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langE
 $tool_content .= action_bar(array(
     array(
         'title' => $langBack,
-        'level' => 'primary-label',
+        'level' => 'primary',
         'icon' => 'fa-reply',
         'url' => "index.php?course=$course_code"
     ),

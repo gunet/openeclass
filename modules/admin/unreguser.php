@@ -42,17 +42,17 @@ if (isset($doti)) {
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 } else {
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
               'url' => "edituser.php?u=$u",
               'icon' => 'fa-reply',
-              'level' => 'primary-label'),
+              'level' => 'primary'),
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 }
 
 if (isDepartmentAdmin()) {

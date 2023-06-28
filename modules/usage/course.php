@@ -32,6 +32,10 @@ $head_content .=
 
 
 $tool_content .= action_bar(array(
+    array('title' => $langBack,
+            'url' => "{$urlServer}courses/{$course_code}",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
     array('title' => $langUsersLog,
         'url' => "displaylog.php?course=$course_code",
         'icon' => 'fa-user',
@@ -43,11 +47,7 @@ $tool_content .= action_bar(array(
     array('title' => $langStatsReports,
         'url' => "userduration.php?course=$course_code",
         'icon' => 'fa-vcard-o',
-        'level' => 'primary-label'),
-    array('title' => $langBack,
-        'url' => "{$urlServer}courses/{$course_code}",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label'),
+        'level' => 'primary-label')
 ),false);
 
 /**** Summary info    ****/

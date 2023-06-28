@@ -229,7 +229,7 @@ if (isset($_GET['an_id'])) {
             [ 'title' => $langBack,
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
               'icon' => 'fa-reply',
-              'level' => 'primary-label' ]
+              'level' => 'primary' ]
         ], false);
 
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);

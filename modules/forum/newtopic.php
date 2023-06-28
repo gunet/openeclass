@@ -86,7 +86,7 @@ if (!isset($_POST['submit'])) {
         array('title' => $langBack,
             'url' => $forumUrl,
             'icon' => 'fa-reply',
-            'level' => 'primary-label'
+            'level' => 'primary'
              )
     );
 

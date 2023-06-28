@@ -52,14 +52,15 @@ $toolName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $data['action_bar'] = action_bar(array(
-    array('title' => $langAllCourses,
-        'url' => "listcours.php",
-        'icon' => 'fa-search',
-        'level' => 'primary-label'),
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary'),
+    array('title' => $langAllCourses,
+        'url' => "listcours.php",
+        'icon' => 'fa-search',
+        'level' => 'primary-label')
+    ));
 
 
 $data['reg_flag_data'][1] = $langAfter;

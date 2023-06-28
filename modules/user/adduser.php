@@ -103,7 +103,7 @@ if (isset($_GET['add'])) {
             array('title' => $langBack,
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label'
+                  'level' => 'primary'
                  )));
 
     $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskUser</div></div>

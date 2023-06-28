@@ -184,7 +184,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
         array('title' => $langBack,
             'url' => $link_back,
             'icon' => 'fa-reply',
-            'level' => 'primary-label'
+            'level' => 'primary'
         )
     ));
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);

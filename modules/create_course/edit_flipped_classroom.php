@@ -148,7 +148,7 @@ if (!isset($_POST['next'])) {
             'title' => $langBack,
             'url' => $urlServer."courses/$course_code/",
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'button-class' => 'btn-secondary'
         )
     ), false);
@@ -158,7 +158,7 @@ if (!isset($_POST['next'])) {
             'title' => $langBack,
             'url' => $urlServer."modules/create_course/edit_flipped_classroom.php?course=$course_code&fromFlipped=1",
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'button-class' => 'btn-secondary'
         )
     ), false);

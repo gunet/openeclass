@@ -187,15 +187,16 @@ if (isset($_POST['submit'])) {
     }
 
     $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+              'icon' => 'fa-reply',
+              'level' => 'primary',
+              'url' => 'auth.php'),
         array('title' => $langConnTest,
               'url' => "auth_test.php?auth=$auth",
               'icon' => 'fa-plug',
               'level' => 'primary-label',
-              'show' => $auth != 1 && get_auth_settings($auth)),
-        array('title' => $langBack,
-              'icon' => 'fa-reply',
-              'level' => 'primary-label',
-              'url' => 'auth.php')));
+              'show' => $auth != 1 && get_auth_settings($auth))
+        ));
 
     $pageName = get_auth_info($auth);
     $data['auth_data'] = $auth_data = get_auth_settings($auth);

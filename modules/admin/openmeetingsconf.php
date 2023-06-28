@@ -65,7 +65,7 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                             array('title' => $langBack,
                                   'url' => "$_SERVER[SCRIPT_NAME]",
                                   'icon' => 'fa-reply',
-                                  'level' => 'primary-label')));
+                                  'level' => 'primary')));
     
     
     if (isset($_GET['add_server'])) {
@@ -175,15 +175,16 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
 } else {
     //display available OpenMeetings servers
     $data['action_bar'] = action_bar(array(
+                array('title' => $langBack,
+                    'url' => "extapp.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary'),
                 array('title' => $langAddServer,
                     'url' => "$_SERVER[SCRIPT_NAME]?add_server",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'),
-                array('title' => $langBack,
-                    'url' => "extapp.php",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+                    'button-class' => 'btn-success')
+                ));
 
     $data['om_servers'] = Database::get()->queryArray("SELECT * FROM tc_servers WHERE `type` = 'om' ORDER BY weight");
     $view = 'admin.other.extapps.openmeetings.index';

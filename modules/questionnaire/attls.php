@@ -149,7 +149,7 @@ $tool_content .= action_bar(array(
                 'title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             )
         ))."
 $export_box

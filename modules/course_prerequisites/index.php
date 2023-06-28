@@ -80,7 +80,7 @@ function new_prereq() {
         array('title' => $langBack,
             'url' => "{$urlServer}modules/course_prerequisites/index.php?course=" . $course_code,
             'icon' => 'fa-reply',
-            'level' => 'primary-label')
+            'level' => 'primary')
     ));
 
     load_js('select2');
@@ -203,15 +203,16 @@ function show_prereqs() {
            $langNewCoursePrerequisite, $langBack;
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "{$urlServer}courses/$course_code/index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langNewCoursePrerequisite,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
             'button-class' => 'btn-success',
             'icon' => 'fa-plus-circle',
-            'level' => 'primary-label'),
-        array('title' => $langBack,
-            'url' => "{$urlServer}courses/$course_code/index.php",
-            'icon' => 'fa-reply',
             'level' => 'primary-label')
+        
     ));
 
     $result = Database::get()->queryArray("SELECT c.*

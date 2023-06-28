@@ -27,7 +27,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => "{$urlAppend}index.php?logout=yes",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')
+        'level' => 'primary')
 ),false);
 
 $auth_transition = new Transition($uid);

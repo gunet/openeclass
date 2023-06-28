@@ -14,6 +14,12 @@
 
                 @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                @if(isset($action_bar))
+                    {!! $action_bar !!}
+                @else
+                    <div class='mt-4'></div>
+                @endif
+
                 @if(Session::has('message'))
                 <div class='col-12 all-alerts'>
                     <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -29,9 +35,6 @@
                     </div>
                 </div>
                 @endif
-
-
-                {!! isset($action_bar) ?  $action_bar : '' !!}
 
                 @if (isset($c))
                 <!--Display course information and link to edit-->

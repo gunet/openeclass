@@ -126,7 +126,7 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
         $tool_content .=
             "<div class='row'>
                 <div class='col-sm-9'>

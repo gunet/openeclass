@@ -77,6 +77,12 @@ $pageName = $langAdminCreateFaq;
 $data['action_bar'] = action_bar(
     [
         [
+            'title' => $langBack,
+            'url' => $_SERVER['SCRIPT_NAME'],
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        ],
+        [
             'title' => $langFaqAdd,
             'url' => $_SERVER['SCRIPT_NAME'].'?faq=new',
             'icon' => 'fa-plus-circle',
@@ -90,13 +96,8 @@ $data['action_bar'] = action_bar(
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'show' => !isset($_GET['faq'])
-        ],
-        [
-            'title' => $langBack,
-            'url' => $_SERVER['SCRIPT_NAME'],
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
         ]
+        
     ],false);
 
 $data['faqs'] = Database::get()->queryArray("SELECT * FROM faq ORDER BY `order` ASC");

@@ -346,7 +346,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'level' => 'primary-label',
+              'level' => 'primary',
               'url' => $link_back,
               'icon' => 'fa-reply')));
     $tool_content .= "
@@ -581,7 +581,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'url' => "admin.php?course=$course_code&amp;pid=$pid",
             'icon' => 'fa-reply'
         )
@@ -831,15 +831,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'level' => 'primary',
+              'url' => "index.php?course=$course_code",
+              'icon' => 'fa-reply'),
         array('title' => $langSee,
             'level' => 'primary-label',
             'button-class' => 'btn-danger',
             'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid",
-            'icon' => 'fa-play-circle'),
-        array('title' => $langBack,
-              'level' => 'primary-label',
-              'url' => "index.php?course=$course_code",
-              'icon' => 'fa-reply')
+            'icon' => 'fa-play-circle')
+        
         ));
 
     $tool_content .= "

@@ -39,12 +39,14 @@ if (!get_config('enable_search')) {
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-secondary')
                             ),false);
     $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
     draw($tool_content, $menuTypeId, null, $head_content);
     exit();
+}else{
+    $tool_content .= "<div class='mt-4'></div>";
 }
 
 // exit if no POST data

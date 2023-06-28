@@ -60,7 +60,7 @@ if (isset($_GET['delete'])) {
             'title' => $langBack,
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code",
-            'level' => 'primary-label'
+            'level' => 'primary'
         )
     ))."
     <div class='col-12'><div class='form-wrapper form-edit rounded'>

@@ -1328,6 +1328,11 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
     }
     $diskQuotaDocument = $diskQuotaDocument * 1024 / 1024;
     $data['actionBar'] = action_bar(array(
+        array('title' => $langBack,
+              'url' => "group_space.php?course=$course_code&group_id=$group_id",
+              'icon' => 'fa-reply',
+              'level' => 'primary',
+              'show' => $subsystem == GROUP),
         array('title' => $langDownloadFile,
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
               'icon' => 'fa-upload',
@@ -1350,12 +1355,8 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'show' => !defined('MY_DOCUMENTS') && !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
         array('title' => $langQuotaBar,
               'url' => "{$base_url}showQuota=true",
-              'icon' => 'fa-pie-chart'),
-        array('title' => $langBack,
-              'url' => "group_space.php?course=$course_code&group_id=$group_id",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label',
-              'show' => $subsystem == GROUP)
+              'icon' => 'fa-pie-chart')
+        
         ), false);
 } else {
     $data['actionBar'] = $data['dialogBox'] = '';

@@ -107,7 +107,7 @@ if (!isset($_GET['showQuota'])) {
                             array('title' => $langBack,
                                   'url' => "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : ""),
                                   'icon' => 'fa-reply',
-                                  'level' => 'primary-label')
+                                  'level' => 'primary')
                         ));
     } else {
         if ($course_id != 0) {

@@ -58,7 +58,7 @@ if (isset($_GET['delete'])) {
                         array('title' => $langBack,
                               'url' => "edit.php?course=$course_code&amp;id=$info->id",
                               'icon' => 'fa-reply',
-                             'level' => 'primary-label')
+                             'level' => 'primary')
                         ));
         // Form #1 - edit title
         $tool_content .= "
@@ -272,7 +272,7 @@ if (isset($_GET['delete'])) {
                         array('title' => $langBack,
                               'url' => "index.php?course=$course_code",
                               'icon' => 'fa-reply',
-                             'level' => 'primary-label')
+                             'level' => 'primary')
                         ));
         $tool_content .= "
         <div class='col-sm-12 mb-3'>

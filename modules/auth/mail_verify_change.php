@@ -107,7 +107,7 @@ if (!empty($_POST['submit'])) {
                     array(
                         'title' => $langBack,
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label',
+                        'level' => 'primary',
                         'url' => $urlAppend))) .
                 "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
         }

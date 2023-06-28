@@ -280,7 +280,7 @@ if (isset($_GET['rubric_id'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'icon' => 'fa-reply',
             'url' => "rubrics.php?course=$course_code"
         ),
@@ -439,18 +439,19 @@ if (isset($_GET['rubric_id'])) {
 } else {
     $tool_content .= action_bar(array(
         array(
+            'title' => $langBack,
+            'level' => 'primary',
+            'icon' => 'fa-reply',
+            'url' => (isset($_GET['preview'])?"rubrics":"index").".php?course=$course_code"
+        ),
+        array(
             'title' => $langNewGradeRubric,
             'level' => 'primary-label',
             'icon' => 'fa-plus-circle',
             'url' => "rubrics.php?course=$course_code&amp;rubric_id=0",
             'button-class' => 'btn-success'
-        ),
-        array(
-            'title' => $langBack,
-            'level' => 'primary-label',
-            'icon' => 'fa-reply',
-            'url' => (isset($_GET['preview'])?"rubrics":"index").".php?course=$course_code"
-        ),
+        )
+        
     ),false);
     
     $rubrics = Database::get()->queryArray("SELECT * FROM rubric WHERE course_id = ?d", $course_id);

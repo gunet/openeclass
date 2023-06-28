@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
             array('title' => $langBack,
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label'
+                  'level' => 'primary'
                  )));
 
     view('modules.course_tools.external_link_store', $data);

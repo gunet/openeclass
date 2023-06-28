@@ -61,7 +61,7 @@ $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "index.php",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label'))); 
+                      'level' => 'primary'))); 
 
 
 // display use explication text

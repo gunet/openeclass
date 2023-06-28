@@ -127,7 +127,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
                     'title' => $langBack,
                     'url' => "bbbmoduleconf.php",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label'
+                    'level' => 'primary'
                 ]
             ]);
     $data['enabled_recordings'] = true;
@@ -180,15 +180,16 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
 
     //display available BBB servers
     $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+            'url' => "extapp.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langAddServer,
             'url' => "bbbmoduleconf.php?add_server",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'),
-        array('title' => $langBack,
-            'url' => "extapp.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+            'button-class' => 'btn-success')
+        ));
 
     $data['bbb_servers'] = Database::get()->queryArray("SELECT * FROM tc_servers");
     $view = 'admin.other.extapps.bbb.index';

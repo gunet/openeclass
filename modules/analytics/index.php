@@ -84,7 +84,7 @@ if (isset($_POST['insert_analytics'])) {
             array('title' => $langBack,
                     'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                     'icon' => 'fa fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
             ));
 
         edit_analytics_settings ($analytics_id);
@@ -93,7 +93,7 @@ if (isset($_POST['insert_analytics'])) {
             array('title' => $langBack,
                     'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
             ));
 
         edit_analytics_settings ();
@@ -136,7 +136,7 @@ if (isset($_POST['insert_analytics'])) {
         array('title' => $langBack,
                 'url' =>"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=showElements",
                 'icon' => 'fa fa-reply',
-                'level' => 'primary-label')
+                'level' => 'primary')
         ));
 
     if (isset($_REQUEST['analytics_element_id'])) {
@@ -268,7 +268,7 @@ if (isset($_POST['insert_analytics'])) {
                     array('title' => $langBack,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
                         'icon' => 'fa-reply',
-                        'level' => 'primary-label')
+                        'level' => 'primary')
                 )
             );
 
@@ -297,6 +297,10 @@ if (isset($_POST['insert_analytics'])) {
 
             $tool_content .= action_bar(
                 array(
+                    array('title' => $langBack,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary'),
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=courseStatistics",
                         'icon' => 'fa-bar-chart',
@@ -304,11 +308,8 @@ if (isset($_POST['insert_analytics'])) {
                     array('title' => $langExport,
                         'url' => '?course='.$course_code.'&amp;analytics_id='.$analytics_id.'&amp;mode=perUser&amp;period='.$period.'&amp;orderby='.$orderby.'&amp;reverse='.$reverse_op.'&amp;download=true',
                         'icon' => 'fa-envelope',
-                        'level' => 'primary-label'),
-                    array('title' => $langBack,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                        'icon' => 'fa-reply',
                         'level' => 'primary-label')
+                    
                 )
             );
             display_analytics_peruser($analytics_id, $dates[$period]['start'], $dates[$period]['end'], $previous, $next, $orderby, $reverse, $period, $download);
@@ -316,14 +317,15 @@ if (isset($_POST['insert_analytics'])) {
     } else if ( $mode == 'courseStatistics') {
         $tool_content .= action_bar(
             array(
-                array('title' => $langAnalyticsViewPerUserGeneral,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
-                    'icon' => 'fa-users',
-                    'level' => 'primary-label'),
                 array('title' => $langBack,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa-reply',
+                    'level' => 'primary'),
+                array('title' => $langAnalyticsViewPerUserGeneral,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser",
+                    'icon' => 'fa-users',
                     'level' => 'primary-label')
+                
             )
         );
         display_analytics_information($analytics_id);
@@ -334,7 +336,7 @@ if (isset($_POST['insert_analytics'])) {
                 array('title' => $langBack,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
             )
         );
         display_analytics_elements($analytics_id);
@@ -347,7 +349,7 @@ if (isset($_POST['insert_analytics'])) {
             array('title' => $langBack,
                 'url' => "{$urlServer}courses/$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'),
+                'level' => 'primary'),
         )
     );
 

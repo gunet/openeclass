@@ -74,7 +74,7 @@ if (isset($_POST['submitCat'])) {
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
-            'level' => 'primary-label',
+            'level' => 'primary',
             'icon' => 'fa-reply',
             'url' => "question_categories.php?course=$course_code"
         )
@@ -121,18 +121,19 @@ if (isset($_POST['submitCat'])) {
 
     $tool_content .= action_bar(array(
         array(
+            'title' => $langBack,
+            'level' => 'primary',
+            'icon' => 'fa-reply',
+            'url' => "index.php?course=$course_code"
+        ),
+        array(
             'title' => $langNewCat,
             'level' => 'primary-label',
             'icon' => 'fa-plus-circle',
             'url' => "question_categories.php?course=$course_code&newCat=yes",
             'button-class' => 'btn-success'
-        ),
-        array(
-            'title' => $langBack,
-            'level' => 'primary-label',
-            'icon' => 'fa-reply',
-            'url' => "index.php?course=$course_code"
-        ),
+        )
+       
     ));
 
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);

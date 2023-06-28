@@ -41,7 +41,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         array('title' => $langBack,
               'url' => "eportfolio_fields.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
     $tool_content .= "
     <div class='row'>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
@@ -91,7 +91,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         array('title' => $langBack,
               'url' => "eportfolio_fields.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
     $tool_content .= "
     <div class='row'>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
@@ -122,7 +122,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             array('title' => $langBack,
                   'url' => "eportfolio_fields.php",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
 
     $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink );
 
@@ -155,7 +155,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         array('title' => $langBack,
               'url' => "eportfolio_fields.php?add_field=" . getIndirectReference($catid),
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 
     $yes_no = array(0 => $langNo, 1 => $langYes);
 
@@ -307,7 +307,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         array('title' => $langBack,
               'url' => "eportfolio_fields.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 
     $fieldid = intval(getDirectReference($_GET['edit_field']));
     $result = Database::get()->querySingle("SELECT * FROM eportfolio_fields WHERE id = ?d", $fieldid);
@@ -432,15 +432,16 @@ if (isset($_GET['add_cat'])) { //add a new category form
     load_js('sortable');
 
     $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary'),
         array('title' => $langCategoryAdd,
               'url' => "eportfolio_fields.php?add_cat",
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
               'button-class' => 'btn-success'),
-        array('title' => $langBack,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+        ));
 
     $result = Database::get()->queryArray("SELECT * FROM eportfolio_fields_category ORDER BY sortorder DESC");
     if (count($result) == 0) {

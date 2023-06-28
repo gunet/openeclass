@@ -40,7 +40,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary')));
 
 $allowables = [];
 if (isDepartmentAdmin()) {

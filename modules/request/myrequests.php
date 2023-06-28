@@ -34,7 +34,7 @@ $data['action_bar'] = action_bar([
     [ 'title' => $langBack,
       'url' => $backUrl,
       'icon' => 'fa-reply',
-      'level' => 'primary-label' ]], false);
+      'level' => 'primary' ]], false);
 
 $data['listUrl'] = $urlAppend . 'modules/request/mylist.php';
 

@@ -131,6 +131,12 @@ if (isset($_REQUEST['unit_id'])) {
 }
 
 $tool_content .= action_bar(array(
+                    array(
+                        'title' => $langBack,
+                        'url' => $back_link,
+                        'icon' => 'fa-reply',
+                        'level' => 'primary'
+                    ),
                     array('title' => $langPollPercentResults,
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid",
                           'icon' => 'fa-download',
@@ -140,13 +146,8 @@ $tool_content .= action_bar(array(
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
-                          'show' => $is_editor),
-                    array(
-                         'title' => $langBack,
-                         'url' => $back_link,
-                         'icon' => 'fa-reply',
-                         'level' => 'primary-label'
-                        )
+                          'show' => $is_editor)
+                    
                 ));
 $tool_content .= "<div class='col-12'>
 <div class='card panelCard px-lg-4 py-lg-3'>

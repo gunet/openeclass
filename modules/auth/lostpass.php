@@ -66,7 +66,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-secondary')
                             ),false);
 
@@ -86,7 +86,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary-label',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-secondary')
                             ),false);
     }
@@ -157,7 +157,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
           'url' => $urlServer,
           'icon' => 'fa-reply',
-          'level' => 'primary-label',
+          'level' => 'primary',
           'button-class' => 'btn-secondary')), false);
 
 $data['menuTypeID'] = 0;

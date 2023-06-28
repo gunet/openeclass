@@ -155,7 +155,7 @@ if ($is_editor) {
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')));
+                'level' => 'primary')));
     } elseif (isset($_GET['add']) or isset($_GET['choice'])) {
         if (isset($_GET['add'])) {
             $pageName = $langNewBBBSession;
@@ -166,14 +166,14 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
     } else {
         if (isset($_GET['id'])) {
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
+                      'level' => 'primary')));
         } else {
             /* find enabled tc servers */
             $servers = [];

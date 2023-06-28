@@ -110,7 +110,7 @@ $tool_content = action_bar(array(
             'title' => $langBack,
             'url' => $urlAppend."courses/".$course_code,
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
         )
     ),false)."
         <div class='col-12'>

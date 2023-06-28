@@ -92,13 +92,13 @@ if (isset($_GET['c'])) {
      array('title' => $langBack,
            'url' => "editcours.php?c=".q($_GET['c']),
            'icon' => 'fa-reply',
-           'level' => 'primary-label')));
+           'level' => 'primary')));
 } else {
     $data['action_bar'] = action_bar(array(
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 }
 
 if (isDepartmentAdmin()) {

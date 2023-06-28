@@ -98,7 +98,7 @@ if (isset($_GET['from_other'])) {
         array('title' => $langBack,
             'url' => "../admin/index.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')
+            'level' => 'primary')
         ),false);
 } else {
     $toolName = $langUsersLog;
@@ -107,7 +107,7 @@ if (isset($_GET['from_other'])) {
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')
+            'level' => 'primary')
     ),false);
 }
 $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';

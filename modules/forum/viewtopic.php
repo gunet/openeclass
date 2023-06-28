@@ -286,15 +286,16 @@ if ($topic_locked == 1) {
     }
     $tool_content .=
             action_bar(array(
+                array('title' => $langBack,
+                    'url' => $back_url,
+                    'icon' => 'fa-reply',
+                    'level' => 'primary'),
                 array('title' => $langReply,
                     'url' => "$reply_url",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'),
-                array('title' => $langBack,
-                    'url' => $back_url,
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'button-class' => 'btn-success')
+                
                 ));
     // forum posts view selection
     $selected_view_0 = $selected_view_1 = $selected_view_2 = 0;

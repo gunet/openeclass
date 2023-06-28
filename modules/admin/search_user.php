@@ -90,6 +90,10 @@ if (isDepartmentAdmin()) {
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langAllUsers,
                 'url' => "listusers.php?search=yes",
                 'icon' => 'fa-search',
@@ -102,10 +106,7 @@ $data['action_bar'] = action_bar(array(
                 'url' => "listusers.php?search=wexpire",
                 'icon' => 'fa-search',
                 'level' => 'primary-label'),
-            array('title' => $langBack,
-                'url' => "index.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
+            ));
 
 //Preparing form data
 $data['usertype_data'] = array(

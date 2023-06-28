@@ -39,7 +39,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "{$urlServer}main/portfolio.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')),false);
+        'level' => 'primary')),false);
 
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;

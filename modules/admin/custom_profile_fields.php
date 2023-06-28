@@ -199,7 +199,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         array('title' => $langBack,
               'url' => "custom_profile_fields.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 
     $data['catid'] = '';
     $data['cat_name'] = '';
@@ -217,7 +217,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
             array('title' => $langBack,
                   'url' => "custom_profile_fields.php",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
 
     $data['field_types'] = [
         CPF_TEXTBOX => $langCPFText,
@@ -241,7 +241,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         array('title' => $langBack,
               'url' => "custom_profile_fields.php?add_field=" . getIndirectReference($data['catid']),
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 
     $data['yes_no'] = array(0 => $langNo, 1 => $langYes);
     $data['visibility'] = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
@@ -259,7 +259,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
         array('title' => $langBack,
               'url' => "custom_profile_fields.php",
               'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'level' => 'primary')));
 
     $data['fieldid'] = intval(getDirectReference($_GET['edit_field']));
     
@@ -308,15 +308,16 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
                         }
                       </style>";
     $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary'),
         array('title' => $langCategoryAdd,
               'url' => "custom_profile_fields.php?add_cat",
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'),
-        array('title' => $langBack,
-              'url' => "index.php",
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+              'button-class' => 'btn-success')
+        ));
 
     $data['field_types'] = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langLink);
     $data['yes_no'] = array(0 => $langNo, 1 => $langYes);

@@ -351,7 +351,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
         array('title' => $langBack,
               'url' => "index.php?course=$course_code",
               'icon' => 'fa-reply',
-              'level' => 'primary-label'))) . "
+              'level' => 'primary'))) . "
 
                 <div class='col-12'>
                     <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
@@ -1317,15 +1317,16 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
         $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => $backUrl,
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
             array('title' => $langEnter,
                   'url' => $urlAppend . "courses/$new_course_code/",
                   'icon' => 'fa-arrow-right',
                   'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            array('title' => $langBack,
-                  'url' => $backUrl,
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')), false);
+                  'button-class' => 'btn-success')
+            ), false);
 
     }
 }

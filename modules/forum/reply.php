@@ -191,7 +191,7 @@ if (isset($_POST['submit'])) {
                 array('title' => $langBack,
                     'url' => "$back_url",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
                 ));
 
     if (isset($_GET['parent_post'])) {

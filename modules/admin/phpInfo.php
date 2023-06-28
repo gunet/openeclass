@@ -35,7 +35,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary')));
 
 $head_content .= '<style type="text/css">
 a{

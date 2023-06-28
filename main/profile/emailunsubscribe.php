@@ -91,7 +91,7 @@ if (isset($_POST['submit'])) {
                 'title' => $langBack,
                 'url' => 'display_profile.php',
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             ]
         ]);
 

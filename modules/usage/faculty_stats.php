@@ -31,7 +31,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => "index.php?t=a",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary')));
 
 if (isset($_GET['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_GET['user_date_start']);

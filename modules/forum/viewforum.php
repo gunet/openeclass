@@ -81,15 +81,16 @@ if ($can_post) {
     }
     $tool_content .=
             action_bar(array(
+                array('title' => $langBack,
+                    'url' => "javascript:history.go(-1)",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary'),
                 array('title' => $langNewTopic,
                     'url' => $newtopicUrl,
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'),
-                array('title' => $langBack,
-                    'url' => "javascript:history.go(-1)",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'button-class' => 'btn-success')
+                
                 ));
 }
 

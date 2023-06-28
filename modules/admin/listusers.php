@@ -496,6 +496,10 @@ $toolName = $langListUsersActions;
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
+            array('title' => $langBack,
+                'url' => "search_user.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary'),
             array('title' => $langAllUsers,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-search',
@@ -504,11 +508,8 @@ $data['action_bar'] = action_bar(array(
                 'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
                 'icon' => 'fa-search',
                 'level' => 'primary-label',
-                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive')),
-            array('title' => $langBack,
-                'url' => "search_user.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary')
+                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive'))
+           
                 ));
 
 $data['menuTypeID'] = 3;

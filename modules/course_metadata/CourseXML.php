@@ -81,7 +81,7 @@ class CourseXMLElement extends SimpleXMLElement {
         array('title' => $langBack,
             'url' => "../course_info/index.php",
             'icon' => 'fa-reply',
-            'level' => 'primary-label')),false);
+            'level' => 'primary')),false);
         $out .= "<div class='right smaller mb-3'>$langRequiredFields</div>";
         $out .= "
                 <form class='form-horizontal form-wrapper' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>

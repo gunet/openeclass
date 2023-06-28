@@ -179,7 +179,7 @@ function printPollForm() {
                 'title' => $langBack,
                 'url' => "$back_link",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             )
         ));
 

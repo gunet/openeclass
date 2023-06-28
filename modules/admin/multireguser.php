@@ -140,7 +140,7 @@ if (isset($_POST['submit'])) {
                 array('title' => $langBack,
                     'url' => "index.php",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')
+                    'level' => 'primary')
                 ), false);
 
     $data['eclass_method_unique'] = TRUE;

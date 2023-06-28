@@ -64,7 +64,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
     'url' => $courseHome,
     'icon' => 'fa-reply',
-    'level' => 'primary-label')), false);
+    'level' => 'primary')), false);
 
 $tool_content .= "
 <form method='post' action='activity_edit.php?course=$course_code'>

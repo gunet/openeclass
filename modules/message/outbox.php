@@ -55,7 +55,7 @@ if (isset($_GET['mid'])) {
                                   'url' => "outbox.php".$urlstr,
                                   'icon' => 'fa-reply',
                                   'button-class' => 'back_index btn-secondary',
-                                  'level' => 'primary-label'),
+                                  'level' => 'primary'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',

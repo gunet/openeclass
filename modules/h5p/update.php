@@ -32,7 +32,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => $backUrl,
         'icon' => 'fa-reply',
-        'level' => 'primary-label')
+        'level' => 'primary')
 ), false);
 
 $toolName = $langMaj;

@@ -18,7 +18,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => "../../admin/auth.php",
         'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'level' => 'primary')));
 
 
 

@@ -32,7 +32,7 @@ $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "../usage/index.php?t=a",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label')));
+                    'level' => 'primary')));
 
 $data['monthly_data'] = $monthly_data = get_monthly_archives();
 

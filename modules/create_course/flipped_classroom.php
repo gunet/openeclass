@@ -141,7 +141,7 @@ if (!isset($_POST['next'])) {
             'title' => $langBack,
             'url' => $urlServer.'modules/create_course/create_course.php',
             'icon' => 'fa-reply',
-            'level' => 'primary-label',
+            'level' => 'primary',
             'button-class' => 'btn-secondary'
         )
     ), false);

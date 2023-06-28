@@ -15,15 +15,16 @@ $pageName = $langPlatformGenStats;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsage);
 
 $tool_content .= action_bar(array(
+    array('title' => $langBack,
+            'url' => "{$urlServer}modules/usage/index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary'),
         array('title' => $langOldStats,
             'url' => "old_stats.php",
             'icon' => 'fa-bar-chart',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'),
-        array('title' => $langBack,
-            'url' => "{$urlServer}modules/usage/index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')
+            'button-class' => 'btn-success')
+        
     ),false);
 
 require_once 'modules/usage/form.php';

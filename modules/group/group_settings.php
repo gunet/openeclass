@@ -36,7 +36,7 @@ $tool_content .= action_bar(array(
     array(  'title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'),
+                'level' => 'primary'),
     ));
 
 $multi_reg = setting_get(SETTING_GROUP_MULTIPLE_REGISTRATION, $course_id);

@@ -99,7 +99,7 @@ $data['action_bar'] = action_bar([
     [ 'title' => $langBack,
       'url' => "index.php?course=$course_code",
       'icon' => 'fa-reply',
-      'level' => 'primary-label' ]
+      'level' => 'primary' ]
 ]);
 
 $data['antitle_error'] = ($antitle_error ? " has-error" : "");

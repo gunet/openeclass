@@ -648,7 +648,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         array(  'title' => $langBack,
                 'url' => "$back_link",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'),
+                'level' => 'primary'),
     ));
     if (!$checkForRecords) {
         $tool_content .="<div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div>";
@@ -747,6 +747,10 @@ function display_gradebook($gradebook) {
 
     $tool_content .= action_bar(
         array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
             array('title' => $langAdd,
                   'level' => 'primary-label',
                   'options' => array(
@@ -786,11 +790,8 @@ function display_gradebook($gradebook) {
                   'icon' => 'fa-file-excel-o'),
             array('title' => "$langExport ($langcsvenc2)",
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;enc=UTF-8",
-                  'icon' => 'fa-file-excel-o'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'),
+                  'icon' => 'fa-file-excel-o')
+            
             ),
             true
         );

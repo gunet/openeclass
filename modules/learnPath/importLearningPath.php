@@ -1055,7 +1055,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             array('title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label')),false) ;
+                'level' => 'primary')),false) ;
 } else { // if method == 'post'
     // don't display the form if user already sent it
     /* --------------------------------------
@@ -1070,7 +1070,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         array('title' => $langBack,
                             'url' => "index.php?course=$course_code",
                             'icon' => 'fa-reply',
-                            'level' => 'primary-label'
+                            'level' => 'primary'
                         )
                     ),false);
             $tool_content .= "</div>

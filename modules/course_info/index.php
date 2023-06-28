@@ -220,6 +220,10 @@ if (isset($_POST['submit'])) {
     warnCourseInvalidDepartment();
 
     $data['action_bar'] = action_bar([
+        ['title' => $langBack,
+            'url' => "{$urlServer}courses/$course_code/index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'],
         ['title' => $langCourseDescription,
             'url' => "../course_description/index.php?course=$course_code&" . generate_csrf_token_link_parameter(),
             'icon' => 'fa-info-circle',
@@ -227,10 +231,6 @@ if (isset($_POST['submit'])) {
         ['title' => $langBackupCourse,
             'url' => "archive_course.php?course=$course_code&" . generate_csrf_token_link_parameter(),
             'icon' => 'fa-archive',
-            'level' => 'primary-label'],
-        ['title' => $langBack,
-            'url' => "{$urlServer}courses/$course_code/index.php",
-            'icon' => 'fa-reply',
             'level' => 'primary-label'],
         ['title' => $langCloneCourse,
             'url' => "clone_course.php?course=$course_code",
