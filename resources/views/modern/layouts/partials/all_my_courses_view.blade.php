@@ -204,7 +204,7 @@
 
                 </div>
             @else
-                <div class='col-12 mt-3'>
+                <div class='col-12'>
                     <div class='alert alert-warning'>{{ trans('langNoCourses') }}</div>
                 </div> 
             @endif

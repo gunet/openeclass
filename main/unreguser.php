@@ -47,7 +47,7 @@ if (!isset($_POST['doit'])) {
         if (!$q) {
             $tool_content .= "
             <div class='col-12'>
-            <div class='form-wrapper form-edit rounded'>
+            <div class='form-wrapper form-edit rounded mt-4'>
                 <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
 
                   <div class='form-group'>

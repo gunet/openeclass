@@ -18,7 +18,11 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
-                    {!! $action_bar !!}
+                    @if(isset($action_bar) and $action_bar)
+                        {!! $action_bar !!}
+                    @else
+                        <div class='mt-4'></div>
+                    @endif
 
                     @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
