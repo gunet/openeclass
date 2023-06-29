@@ -228,9 +228,11 @@
                                 <div class="card-body">
                                     <p class='card-text'>{{ trans('langExplain') }}</p>
                                 </div>
-                                <div class='card-footer bg-white border-0'>
-                                    {!! $action_bar_unreg !!}
+                                @if($action_bar_unreg == 1)
+                                <div class='card-footer bg-white border-0 d-flex justify-content-start'>
+                                    <a class='btn deleteAdminBtn' href='{{ $urlAppend }}main/unreguser.php'>{{ trans('langUnregUser')}}</a>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     @endif

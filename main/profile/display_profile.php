@@ -117,14 +117,17 @@ if ($data['userdata']) {
                 //     'show' => get_config('eportfolio_enable')
                 //)));
 
-        $data['action_bar_unreg'] =
-            action_bar(array(
-                array('title' => $langUnregUser,
-                    'url' => "../unreguser.php",
-                    'icon' => 'fa-trash-o',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-danger')
-                ));
+        // $data['action_bar_unreg'] =
+        //     action_bar(array(
+        //         array('title' => $langUnregUser,
+        //             'url' => "../unreguser.php",
+        //             'icon' => 'fa-trash-o',
+        //             'level' => 'primary-label',
+        //             'button-class' => 'btn-danger')
+        //         ));
+
+        $data['action_bar_unreg'] = 1;
+        
     } else {
         if (get_config('dropbox_allow_personal_messages')) {
             $data['action_bar'] =
