@@ -3,7 +3,7 @@
 
     <div class='d-inline-flex align-items-top overflow-auto'>
         <!-- this is toggle-button in breadcrumb -->
-        @if($course_code and !$is_in_tinymce and $currentCourseName)
+        @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']))
             <nav class="me-2">
                 <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn submitAdminBtn btn-sm menu_btn_button">
                     <i class="fas fa-align-left"></i>
@@ -51,5 +51,7 @@
 
 
 @if(count($breadcrumbs) > 0)
-<div class='col-12'><div class='w-100 mt-3 @if(!$course_code) legendViewContent2 @else  legendViewContent @endif'></div></div>
+    <div class='col-12'>
+        <div class="w-100 mt-3 @if(isset($_GET['fromFlipped'])) mb-3 @endif @if(!$course_code or isset($_GET['fromFlipped'])) legendViewContent2 @else legendViewContent @endif"></div>
+    </div>
 @endif

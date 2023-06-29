@@ -83,7 +83,7 @@
                                             'button-class' => 'btn-secondary',
                                             'url' => $url,
                                             'icon' => 'fa-reply',
-                                            'level' => 'primary-label')), false) 
+                                            'level' => 'primary')), false) 
                                 !!}
 
                         <div class='col-12'>

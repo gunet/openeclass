@@ -26,7 +26,7 @@ $data['action_bar'] = action_bar([
     [ 'title' => trans('langBack'),
       'url' => $urlAppend,
       'icon' => 'fa-reply',
-      'level' => 'primary-label',
+      'level' => 'primary',
       'button-class' => 'btn-secondary' ]
   ], false);
 

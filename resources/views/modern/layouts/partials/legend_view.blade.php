@@ -8,7 +8,7 @@
 @endphp
 
 
-@if($course_code)
+@if($course_code and !isset($_GET['fromFlipped']))
     <div class='d-none d-md-block mt-4'>
         <div class='col-12 pb-3 ps-3 pe-0'>
             @if($is_editor)
@@ -127,7 +127,7 @@
 
 
 
-@if($course_code)
+@if($course_code and !isset($_GET['fromFlipped']))
     <div class='d-block d-md-none mt-3'>
         <div class='col-12 ps-0 pe-0 pt-0 pb-3'>
             @if($is_editor)

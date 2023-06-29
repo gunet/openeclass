@@ -66,7 +66,7 @@ $data['action_bar'] = action_bar(array(
             array('title' => trans('langBack'),
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                  'level' => 'primary')));
 
 $data['text_area_comments'] = rich_text_editor('editComments', 4, 20, $comments);
 
