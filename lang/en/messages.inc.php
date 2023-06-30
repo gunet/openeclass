@@ -5652,7 +5652,9 @@ $langCalculateNewDuration = "Calculation of new duration";
 $langChooseDayAgain = "You cannot choose different days. Try again.";
 $langMessageInfo = "Message informations";
 $langMessageContent = "Message content";
-
+$langAPITokenLongDesc = "Information for calls currently supported by the API can be found
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
+$langAPITokenCreated = "Token created. Please copy it for use in your application.";
 
 
 
