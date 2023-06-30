@@ -6043,7 +6043,6 @@ $langAnalyticsViewPerUserGeneral = 'Προβολή ανά χρήστη';
 $langAnalyticsPageNotAvailableForUsers = 'Η σελίδα δεν είναι διαθέσιμη για χρήστες';
 $langAnalyticsNoAnalytics = 'Δεν έχουν οριστεί δραστηριότητες.';
 $langAnalyticsConfirm = 'Επιβεβαίωση';
-$langAnalyticsDetails = 'Λεπτομέρειες';
 $langAnalyticsAdvancedLevel = 'Προχωρημένο Επίπεδο';
 $langAnalyticsMiddleLevel = 'Μέσο επίπεδο';
 $langAnalyticsCriticalLevel = 'Κρίσιμο Επίπεδο';

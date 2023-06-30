@@ -102,7 +102,7 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 
     // navigate
   //  Session::Messages($langGlossaryUpdated, "alert-success");
-    Session::flash('message',$langGlossaryUpdated); 
+    Session::flash('message',$langGlossaryUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
@@ -110,7 +110,7 @@ if (isset($_POST['edit_submit']) && isset($_POST['id'])) { // edit
 // handle submitted data
 if (isset($_POST['add_submit'])) { // add
     $uploaded = false;
-    // $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i"); 
+    // $videodate = date_format(date_create_from_format( 'd-m-Y H:i', $_POST['videodate']), "Y-m-d H:i");
     $date = date_create($_POST['videodate']);
     $videodate = date_format($date, "Y-m-d H:i");
     if (isset($_POST['URL'])) { // add videolink
@@ -141,8 +141,7 @@ if (isset($_POST['add_submit'])) { // add
         } else if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) { // upload local file
             $file_name = $_FILES['userFile']['name'];
             if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
-               // Session::Messages($langNoSpace, "alert-danger");
-                Session::flash('message',$langNoSpace); 
+                Session::flash('message',$langNoSpace);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("modules/video/index.php?course=" . $course_code);
             } else {
@@ -152,7 +151,7 @@ if (isset($_POST['add_submit'])) { // add
 
         if (!isWhitelistAllowed($file_name)) {
            // Session::Messages($langUploadedFileNotAllowed, "alert-danger");
-            Session::flash('message',$langUploadedFileNotAllowed); 
+            Session::flash('message',$langUploadedFileNotAllowed);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
@@ -169,7 +168,7 @@ if (isset($_POST['add_submit'])) { // add
 
         if (!$iscopy) {
           //  Session::Messages($langFileNot, "alert-danger");
-            Session::flash('message',$langFileNot); 
+            Session::flash('message',$langFileNot);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/video/index.php?course=" . $course_code);
         }
@@ -203,8 +202,7 @@ if (isset($_POST['add_submit'])) { // add
     }
 
     // navigate
-  //  Session::Messages($successAlert, "alert-success");
-    Session::flash('message',$successAlert); 
+    Session::flash('message',$successAlert);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
@@ -215,8 +213,7 @@ if (isset($_POST['add_submit_delos'])) {
         list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
         storeDelosResources($jsonPublicObj, $jsonPrivateObj, $checkAuth);
     }
-   // Session::Messages($langLinksAdded, "alert-success");
-    Session::flash('message',$langLinksAdded); 
+    Session::flash('message',$langLinksAdded);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/video/index.php?course=" . $course_code);
 }
@@ -234,38 +231,6 @@ $data['resultcategories'] = Database::get()->queryArray("SELECT * FROM video_cat
 // js and view
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-$head_content .= <<<hContent
-<script type="text/javascript">
-$(function() {
-        $('#videodate').datetimepicker({
-            format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right',
-            language: '".$language."',
-            autoclose: true
-        });
-});
-function checkrequired(which, entry) {
-    var pass=true;
-    if (document.images) {
-        for (i = 0; i < which.length; i++) {
-            var tempobj = which.elements[i];
-            if (tempobj.name == entry) {
-                if (tempobj.type == "text" && tempobj.value == '') {
-                    pass=false;
-                    break;
-                }
-            }
-        }
-    }
-    if (!pass) {
-        alert('" . $langEmptyVideoTitle . "');
-        return false;
-    } else {
-        return true;
-    }
-}
-</script>
-hContent;
-
 
 if ($form_input === 'opendelos') {
     list($jsonPublicObj, $jsonPrivateObj, $checkAuth) = requestDelosJSON();
@@ -278,4 +243,3 @@ if ($form_input === 'opendelos') {
 } else {
     view('modules.video.edit', $data);
 }
-

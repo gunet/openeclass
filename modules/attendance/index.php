@@ -58,7 +58,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 
 //Datepicker
 load_js('tools.js');
-load_js('jquery');
 load_js('datatables');
 
 @$head_content .= "
@@ -373,7 +372,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1",
                   'icon' => 'fa-users',
                   'level' => 'primary-label')
-            
+
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -425,7 +424,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
-            
+
             ));
 
     } elseif (isset($_GET['new'])) {

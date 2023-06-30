@@ -45,7 +45,6 @@ require_once 'CourseCompletionEvent.php';
 $toolName = $langProgress;
 
 load_js('tools.js');
-load_js('jquery');
 
 $display = TRUE;
 if (isset($_REQUEST['certificate_id'])) {
@@ -386,7 +385,7 @@ if ($is_editor) {
 	              'icon' => 'fa-print',
 	              'level' => 'primary-label',
 	              'show' => has_certificate_completed($_GET['u'], $element, $element_id) and $element == "certificate")
-                
+
                     ));
 }
 

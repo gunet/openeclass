@@ -104,8 +104,30 @@
     </script>
 @endpush
 
-
 @section('content')
+
+<style>
+    #progress_circle {
+        display: flex;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: conic-gradient(red var(--progress), gray 0deg);
+        font-size: 0;
+    }
+    #progress_circle::after {
+        content: attr(data-progress) '%';
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        margin: 10px;
+        border-radius: 50%;
+        background: white;
+        font-size: 2rem;
+        text-align: center;
+    }
+</style>
 
 <div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
 
@@ -383,10 +405,10 @@
                                 <div class='card-body' id='boxlistSort'>
                                     {!! $cunits_content !!}
                                 </div>
-                                
+
                             </div>
                         @endif
-                    
+
 
                         @if($course_info->view_type == 'activity')
                             @if($is_editor)
@@ -484,30 +506,30 @@
                         <div class="panel panel-admin p-0 bg-white borderBoxPanelNoShadow">
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap p-3'>
-                        
+
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-important'></span>
                                     <span class='small-text'>{{ trans('langAgendaDueDay') }}</span>
                                 </div>
-                        
-                        
+
+
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-info'></span>
                                     <span class='small-text'>{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
-                        
-                            
+
+
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-success'></span>
                                     <span class='small-text'>{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
-                            
+
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-special'></span>
                                     <span class='small-text'>{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
- 
-                                
+
+
                             </div>
                         </div>
 
@@ -531,40 +553,40 @@
                             </div>
                         @endif
 
-                        @if(isset($course_completion_id) and $course_completion_id > 0)
-                            <div class="card panelCard px-lg-4 py-lg-3 mt-4">
-                                <div class='card-header border-0 bg-white'>
-
+                        @if ($uid)
+                            @if(isset($course_completion_id) and $course_completion_id > 0)
+                                <div class="card panelCard px-lg-4 py-lg-3 mt-4">
+                                    <div class='card-header border-0 bg-white'>
                                         <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langCourseCompletion') }}</span>
-
-                                </div>
-                                <div class='card-body'>
-                                    <div class='text-center'>
-                                        <div class='col-sm-12'>
-                                            <div class="center-block d-inline-block">
-                                                <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
-                                            @if ($percentage == '100%')
-                                                <i class='fa fa-check-circle fa-5x state_success'></i>
-                                            @else
-                                                {{--<div class='course_completion_panel_percentage'>
-                                                    {{ $percentage }}
-                                                </div>--}}
-                                                <div role="progressbar" aria-valuenow=" {{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage }}"></div>
-                                            @endif
-                                            </a>
+                                    </div>
+                                    <div class='card-body'>
+                                        <div class='text-center'>
+                                            <div class='col-sm-12'>
+                                                @if ($is_editor)
+                                                    <i class='fa fa-trophy fa-2x'></i><h5><a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>{{ trans('langHasBeenCompleted') }} {{ $certified_users}}/{{ $studentUsers }} {{ trans('langUsersS') }}</a></h5>
+                                                @else
+                                                    <div class="center-block d-inline-block">
+                                                        <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
+                                                    @if ($percentage == '100')
+                                                        <i class='fa fa-check-circle fa-5x state_success'></i>
+                                                    @else
+                                                        <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
+                                                    @endif
+                                                    </a>
+                                                    </div>
+                                                    <div style='text-align: right;'><a style='text-decoration:none;' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&u={{ $uid }}'>{{ trans('langDetail') }} ...</a></div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         @endif
 
                         @if (isset($level) && !empty($level))
                             <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
                                 <div class='card-header border-0 bg-white'>
-
-                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langOpenCourseShort') }}</span>
-
+                                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langOpenCourseShort') }}</span>
                                 </div>
                                 <div class='card-body'>
                                     {!! $opencourses_level !!}
@@ -596,7 +618,7 @@
             </div><!-- end col-10 maincontent active-->
 
         </div>
-    
+
 </div>
 
 

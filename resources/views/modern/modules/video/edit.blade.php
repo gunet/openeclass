@@ -7,20 +7,52 @@
 
 @extends('layouts.default')
 
+@push('head_scripts')
+    <script type="text/javascript">
+        $(function() {
+            $('#videodate').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-right',
+                language: '{{ $language }}',
+                autoclose: true
+            });
+        });
+        function checkrequired(which, entry) {
+            var pass=true;
+            if (document.images) {
+                for (i = 0; i < which.length; i++) {
+                    var tempobj = which.elements[i];
+                    if (tempobj.name == entry) {
+                        if (tempobj.type == "text" && tempobj.value == '') {
+                            pass=false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!pass) {
+                alert('{{ trans('langEmptyVideoTitle') }}');
+                return false;
+            } else {
+                return true;
+            }
+        }
+    </script>
+@endpush
+
 @section('content')
 
 <div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
 
         <div class="row rowMargin">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3"> 
+            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-3">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active p-lg-5">
-                    
+
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -47,7 +79,7 @@
                             )
                         )
                     !!}
-                    
+
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
@@ -64,13 +96,13 @@
                     </div>
                     @endif
 
-                    
-                    
-                        
-                        
+
+
+
+
                         <div class='col-12'>
                             <div class='form-wrapper form-edit rounded'>
-                                
+
                                 <form class='form-horizontal'
                                     role='form'
                                     method='POST'
@@ -78,7 +110,7 @@
                                     enctype='{{ $form_enctype }}'
                                     onsubmit="return checkrequired(this, 'title');">
                                     <fieldset>
-                                       
+
                                         <div class='form-group'>
                                             @if (isset($pendingCloudUpload))
                                                 <label for='fileCloudName' class='col-sm-12 control-labe-notes'>{{ trans('langCloudFile') }}</label>
@@ -110,7 +142,7 @@
                                             @endif
                                         </div>
 
-                                        
+
 
                                         <div class='form-group mt-4'>
                                             <label for='Title' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
@@ -123,7 +155,7 @@
                                             </div>
                                         </div>
 
-                                      
+
 
 
                                         <div class='form-group mt-4'>
@@ -133,7 +165,7 @@
                                             </div>
                                         </div>
 
-                                     
+
 
                                         <div class='row'>
                                             <div class='col-md-6 col-12'>
@@ -198,14 +230,14 @@
                                             </div>
                                         </div>
 
-                                     
+
 
 
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-center align-items-center'>
-                                                
+
                                                     @if ($form_input === 'file')
-                                                       
+
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
@@ -216,7 +248,7 @@
                                                                 )
                                                             ))
                                                             !!}
-                                                       
+
                                                         {!! form_buttons(array(
                                                                 array(
                                                                     'class' => 'cancelAdminBtn ms-1',
@@ -224,9 +256,9 @@
                                                                 )
                                                             ))
                                                             !!}
-                                                        
+
                                                     @elseif ($form_input === 'url')
-                                                        
+
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
@@ -237,7 +269,7 @@
                                                                 )
                                                             ))
                                                             !!}
-                                                        
+
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
@@ -246,9 +278,9 @@
                                                                 )
                                                             ))
                                                         !!}
-                                                        
+
                                                     @elseif (isset($_GET['id']) && isset($_GET['table_edit']))
-                                                       
+
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
@@ -259,7 +291,7 @@
                                                                 )
                                                             ))
                                                             !!}
-                                                       
+
                                                             {!!
                                                             form_buttons(array(
                                                                 array(
@@ -268,16 +300,16 @@
                                                                 )
                                                             ))
                                                             !!}
-                                                       
+
                                                         <input type='hidden' name='id' value='{{ $edititem->id }}'>
                                                         <input type='hidden' name='table' value='{{ $table_edit }}'>
                                                     @endif
-                                                
+
                                             </div>
                                         </div>
                                     </fieldset>
                                     @if ($form_input === 'file')
-                                    
+
                                         <div class='form-group mt-3'>
                                             <div class='col-sm-offset-2 col-sm-10'>
                                                 <div class='smaller right'>{{ trans('langMaxFileSize') }} {{ ini_get('upload_max_filesize') }}</div>
@@ -287,11 +319,11 @@
                                 </form>
                             </div>
                         </div>
-                   
+
                 </div>
             </div>
 
         </div>
-    
+
 </div>
 @endsection

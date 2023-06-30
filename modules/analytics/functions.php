@@ -93,7 +93,7 @@ function display_learning_analytics() {
  * @param $analytics_id
  */
 function display_general_lists($analytics_id) {
-    global $course_id, $course_code, $tool_content, $langAnalyticsDetails,
+    global $course_id, $course_code, $tool_content, $langDetail,
            $langMessage, $langAnalyticsAdvancedLevel, $langAnalyticsCriticalLevel;
 
     $analytics_elements = Database::get()->queryArray("SELECT * FROM analytics_element WHERE analytics_id= ?d", $analytics_id);
@@ -132,7 +132,7 @@ function display_general_lists($analytics_id) {
                     <div class='col-sm-7'>".
                 action_bar(
                     array(
-                        array('title' => $langAnalyticsDetails,
+                        array('title' => $langDetail,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
                                 'icon' => 'fa-user-o',
                                 'level' => 'primary-label'
@@ -156,7 +156,7 @@ function display_general_lists($analytics_id) {
                         <div class='col-sm-7'>".
                         action_bar(
                             array(
-                                array('title' => $langAnalyticsDetails,
+                                array('title' => $langDetail,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
                                         'icon' => 'fa-user-o',
                                         'level' => 'primary-label'
@@ -389,8 +389,9 @@ function display_analytics_information($analytics_id) {
  * @param $download
  */
 function display_analytics_peruser($analytics_id, $startdate, $enddate, $previous, $next, $orderby, $reverse, $period, $download) {
+
     global $tool_content, $course_id, $course_code, $langAnalyticsNoUsersToDisplay, $langSurnameName, $langPercentage, $langAnalyticsStatus,
-    $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langAnalyticsDetails, $langMessage;
+    $langAnalyticsAdvancedLevel, $langAnalyticsMiddleLevel, $langAnalyticsCriticalLevel, $langDetail, $langMessage;
 
     $sql_data = Database::get()->queryArray("SELECT u.givenname AS givenname, 
                                 u.surname AS surname, cu.user_id AS userid 
@@ -457,21 +458,6 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
             $values = compute_general_analytics_foruser($userid, $analytics_id, $startdate, $enddate);
             $percentage = $values['percentage'];
 
-                    /*if ($orderby == 'percentage'){
-                        $peruserarray[(string)$percentage + (string)$userid] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-                    }  else {
-                        $peruserarray[$surname] = array('givenname' => $givenname, 'surname' => $surname, 'userid' => $userid, 'percentage'=>$percentage, 'values' =>$values);
-                    } */
-                //}
-                /*
-                if($reverse == 'false') {
-                    ksort($peruserarray);
-                } else {
-                    krsort($peruserarray);
-                }
-                */
-                //foreach ($peruserarray as $peruser) {
-
             $results .="<tr>
                             <td>
                                 <div>". display_user($userid). "</div>
@@ -489,7 +475,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                             </td>
                             <td>" . action_bar(
                                 array(
-                                    array('title' => $langAnalyticsDetails,
+                                    array('title' => $langDetail,
                                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
                                             'icon' => 'fa-user-o',
                                             'level' => 'primary-label'

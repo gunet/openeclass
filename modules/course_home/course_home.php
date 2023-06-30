@@ -393,12 +393,16 @@ switch ($visible) {
 }
 
 
-$data['percentage'] = '';
+
 if ($uid) {
     $data['course_completion_id'] = $course_completion_id = is_course_completion_active(); // is course completion active?
     if ($course_completion_id) {
         if ($is_editor) {
-            $certified_users = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
+            $data['studentUsers'] = Database::get()->querySingle("SELECT COUNT(*) AS studentUsers FROM course_user
+                                        WHERE status = " .USER_STUDENT . "
+                                            AND editor = 0
+                                            AND course_id = ?d", $course_id)->studentUsers;
+            $data['certified_users'] = Database::get()->querySingle("SELECT COUNT(*) AS t FROM user_badge
                                                               JOIN course_user ON user_badge.user=course_user.user_id
                                                                     AND status = " .USER_STUDENT . "
                                                                     AND editor = 0
@@ -407,7 +411,6 @@ if ($uid) {
                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
-            // $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
             $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);
         }
     }

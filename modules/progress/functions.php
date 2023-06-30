@@ -384,7 +384,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     'icon' => 'fa-file-excel-o',
                     'level' => 'primary-label',
                     'show'  =>  $unit_id ? false : true)
-                
+
             ),
             false
         );
@@ -2382,22 +2382,38 @@ function certificate_settings($element, $element_id = 0) {
 
 /**
  * @brief student view certificates / badges / course completion
- * @global type $uid
- * @global type $course_id
- * @global type $urlServer
- * @global type $tool_content
- * @global type $langNoCertBadge
- * @global type $langBadges
- * @global type $course_code
- * @global type $langPrintVers
- * @global type $langCertificates
  */
 function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
-            $langBadges, $course_code, $langCertificates, $langPrintVers, $langCourseCompletion;
+            $langBadges, $course_code, $langCertificates, $langPrintVers,
+           $langCourseCompletion, $head_content, $langDetail;
 
     require_once 'Game.php';
+
+    $head_content .= "<style>
+        #progress_circle {
+          display: flex;
+          width: 100px;
+          height: 100px;
+          margin: 5px;
+          border-radius: 50%;
+          background: conic-gradient(red var(--progress), gray 0deg);
+          font-size: 0;
+        }
+        #progress_circle::after {
+          content: attr(data-progress) '%';
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          width: 100%;
+          margin: 10px;
+          border-radius: 50%;
+          background: white;
+          font-size: 2rem;
+          text-align: center;
+        }
+    </style>";
 
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
@@ -2527,35 +2543,32 @@ function student_view_progress() {
                 }
 
                 $tool_content .= "<div class='res-table-wrapper'>";
-
                 $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
                 $tool_content .= "<div class='col-12 certificate_panel border border-secondary-4 m-auto d-block bg-light shadow-lg p-3'>
-                        <h4 class='certificate_panel_title text-center'>$certificate->title</h4><br>
+                        <h4>$certificate->title</h4>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
                             <div class='col-sm-12 certificate_panel_issuer text-center text-secondary'>$certificate->issuer</div>
-                        </div>
-                        <div class='col-12 certificate_panel_viewdetails text-center'>";
+                        </div>";
                 if ($certificate->completed == 1) {
+                    $tool_content .= "</a>";
+                    $tool_content .= "<div class='col-12 certificate_panel_viewdetails text-center'>";
                     $tool_content .= "&nbsp;&nbsp;<a href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user&amp;p=1'>$langPrintVers</a>";
-                }
-                $tool_content .= "</div>";
-                if ($certificate->completed == 1) {
+                    $tool_content .= "</div>";
                     $tool_content .= "<div class='col-12 certificate_panel_state text-center'>
                         <i class='fa fa-check-circle fa-inverse state_success'></i>
                     </div>
                     <div class='col-sm-12 d-flex justify-content-center ertificate_panel_badge mt-3'>
                         <img src='" . $urlServer . "template/modern/img/game/badge.png' width='100' height='100'>
                     </div>";
+                    $tool_content .= "</div>";
                 } else {
-                    $tool_content .= "<div class='certificate_panel_percentage'> "
-                            . round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) .
-                            "%</div>";
+                    $score = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
+                    $tool_content .= "<div id='progress_circle' data-progress='$score' style='--progress: ".$score."deg; margin-left: 100px; margin-top: 10px;'>$score%</div>";
+                    $tool_content .= "</div></a>";
                 }
-                $tool_content .= "</div></a>";
                 $tool_content .= "</div>";
-
                 $tool_content .= "</div>";
             }
             $tool_content .= "</div></div></div>";
@@ -2673,7 +2686,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
     $element_title = get_cert_title($element, $element_id);
     $resource_data = array();
-
+    $bundle = Database::get()->querySingle("SELECT bundle FROM $element WHERE id = ?d", $element_id)->bundle;
     // certificate
     if ($element == 'certificate') {
         $cert_public_link = '';
@@ -2724,11 +2737,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
                     <div class='text-uppercase normalColorBlueText TextBold fs-6'>$element_title</div>
                     </div>
                     <div class='card-body'>
-
                         <div class='row'>
                             <div class='col-sm-12'>
                                 <div class='row p-2'>
-                                <div class='col-md-6 col-12'>
+                                    <div class='col-md-6 col-12'>
                                         <div class='pn-info-title-sct control-label-notes'>$langTotalPercentCompleteness:</div></div>";
                                         $tool_content .= "<div class='col-md-6 col-12'>";
                                         if ($user_data) {
@@ -2736,24 +2748,31 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                         } else {
                                             $tool_content .= "<div class='pn-info-text-sct text-md-end'>0%</div>";
                                         }
-                                $tool_content .="</div></div>";
+                            $tool_content .="</div></div>";
+                            $cert_desc = get_cert_desc($element, $element_id);
+                            if (!empty($cert_desc)) {
                                 $tool_content .= "
-                                <div class='row p-2'>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-title-sct control-label-notes'>$langDescription:</div>
-                                    </div>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-text-sct text-md-end'>" . get_cert_desc($element, $element_id) . "</div>
-                                    </div>
-                                </div>
-                                <div class='row p-2'>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-title-sct control-label-notes'>$langpublisher:</div>
-                                    </div>
-                                    <div class='col-md-6 col-12'>
-                                        <div class='pn-info-text-sct text-md-end'>" . get_cert_issuer($element, $element_id) . "</div>
-                                    </div>
-                                </div>
+                                    <div class='row p-2'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langDescription:</div>
+                                        </div>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='pn-info-text-sct text-md-end'>" . $cert_desc . "</div>
+                                        </div>
+                                    </div>";
+                                }
+                                if ($bundle != -1) { // don't display issuer it if's course completion
+                                    $tool_content .= "
+                                    <div class='row p-2'>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='pn-info-title-sct control-label-notes'>$langpublisher:</div>
+                                        </div>
+                                        <div class='col-md-6 col-12'>
+                                            <div class='pn-info-text-sct text-md-end'>" . get_cert_issuer($element, $element_id) . "</div>
+                                        </div>
+                                    </div>";
+                                }
+                                $tool_content .= "
                                 <div class='row p-2'>
                                     $cert_public_link
                                 </div>
@@ -2764,21 +2783,21 @@ function display_user_progress_details($element, $element_id, $user_id) {
             </div>";
 
 	$tool_content .= "
-            <div class='col-12 mt-3'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langAttendanceActivity</div>
-                    </div>
-                    <div class='card-body'>
-                        <div class='res-table-wrapper'>
-                            <div class='row p-2 res-table-header'>
-                                <div class='col-md-9 col-12 control-label-notes'>
-                                    $langTitle:
-                                </div>
-                                <div class='col-md-3 col-12 text-md-center'>
-                                    $langInstallEnd
-                                </div>
-                            </div>";
+        <div class='col-12 mt-3'>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langAttendanceActivity</div>
+                </div>
+                <div class='card-body'>
+                    <div class='res-table-wrapper'>
+                        <div class='row p-2 res-table-header'>
+                            <div class='col-md-9 col-12 control-label-notes'>
+                                $langTitle:
+                            </div>
+                            <div class='col-md-3 col-12 text-md-center'>
+                                $langInstallEnd
+                            </div>
+                        </div>";
 
 	foreach ($sql as $user_criterion) {
         if ($element == 'badge') {
