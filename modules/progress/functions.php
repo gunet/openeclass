@@ -2351,22 +2351,38 @@ function certificate_settings($element, $element_id = 0) {
 
 /**
  * @brief student view certificates / badges / course completion
- * @global type $uid
- * @global type $course_id
- * @global type $urlServer
- * @global type $tool_content
- * @global type $langNoCertBadge
- * @global type $langBadges
- * @global type $course_code
- * @global type $langPrintVers
- * @global type $langCertificates
  */
 function student_view_progress() {
 
     global $uid, $course_id, $urlServer, $tool_content, $langNoCertBadge,
-            $langBadges, $course_code, $langCertificates, $langPrintVers, $langCourseCompletion;
+            $langBadges, $course_code, $langCertificates, $langPrintVers,
+           $langCourseCompletion, $head_content, $langDetail;
 
     require_once 'Game.php';
+
+    $head_content .= "<style>
+        #progress_circle {
+          display: flex;
+          width: 100px;
+          height: 100px;
+          margin: 5px;
+          border-radius: 50%;
+          background: conic-gradient(red var(--progress), gray 0deg);
+          font-size: 0;
+        }
+        #progress_circle::after {
+          content: attr(data-progress) '%';
+          display: flex;
+          justify-content: center;
+          flex-direction: column;
+          width: 100%;
+          margin: 10px;
+          border-radius: 50%;
+          background: white;
+          font-size: 2rem;
+          text-align: center;
+        }
+    </style>";
 
     // check for completeness in order to refresh user data
     Game::checkCompleteness($uid, $course_id);
@@ -2505,33 +2521,30 @@ function student_view_progress() {
                 }
 
                 $tool_content .= "<div class='res-table-wrapper'>";
-
                 $tool_content .= "<div class='col-xs-12 col-sm-6 col-xl-4'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
-                $tool_content .= "<div class='certificate_panel'>
-                        <h4 class='certificate_panel_title'>$certificate->title</h4>
+                $tool_content .= "<div class='certificate_panel' style='padding-top: 10px;'>
+                        <h4>$certificate->title</h4>
                         <div class='certificate_panel_date'>$dateAssigned</div>
-                        <div class='certificate_panel_issuer'>$certificate->issuer</div>
-                        <div class='certificate_panel_viewdetails'>";
+                        <div class='certificate_panel_issuer'>$certificate->issuer</div>";
                 if ($certificate->completed == 1) {
+                    $tool_content .= "</a>";
+                    $tool_content .= "<div class='certificate_panel_viewdetails'>";
                     $tool_content .= "&nbsp;&nbsp;<a href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user&amp;p=1'>$langPrintVers</a>";
-                }
-                $tool_content .= "</div>";
-                if ($certificate->completed == 1) {
+                    $tool_content .= "</div>";
                     $tool_content .= "<div class='certificate_panel_state'>
                         <i class='fa fa-check-circle fa-inverse state_success'></i>
                     </div>
                     <div class='certificate_panel_badge'>
                         <img src='" . $urlServer . "template/default/img/game/badge.png'>
                     </div>";
+                    $tool_content .= "</div>";
                 } else {
-                    $tool_content .= "<div class='certificate_panel_percentage'> "
-                            . round($certificate->completed_criteria / $certificate->total_criteria * 100, 0) .
-                            "%</div>";
+                    $score = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
+                    $tool_content .= "<div id='progress_circle' data-progress='$score' style='--progress: ".$score."deg; margin-left: 100px; margin-top: 10px;'>$score%</div>";
+                    $tool_content .= "</div></a>";
                 }
-                $tool_content .= "</div></a>";
                 $tool_content .= "</div>";
-
                 $tool_content .= "</div>";
             }
             $tool_content .= "</div></div></div></div>";
@@ -2643,13 +2656,13 @@ function display_users_progress($element, $element_id) {
  */
 function display_user_progress_details($element, $element_id, $user_id) {
 
-    global $tool_content, $langNoUserActivity, $langAttendanceActivity, $langpublisher,
+    global $tool_content, $langNoUserActivity, $langAttendanceActList, $langpublisher,
            $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription,
            $langCertAddress;
 
     $element_title = get_cert_title($element, $element_id);
     $resource_data = array();
-
+    $bundle = Database::get()->querySingle("SELECT bundle FROM $element WHERE id = ?d", $element_id)->bundle;
     // certificate
     if ($element == 'certificate') {
         $cert_public_link = '';
@@ -2719,10 +2732,16 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                     aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
                                             </p>
                                         </div>";
-                                $tool_content .= "<div class='pn-info-title-sct'>$langDescription</div>
-                                <div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>
-                                <div class='pn-info-title-sct'>$langpublisher</div>
-                                <div class='pn-info-text-sct'>" . get_cert_issuer($element, $element_id) . "</div>
+                                $cert_desc = get_cert_desc($element, $element_id);
+                                if (!empty($cert_desc)) {
+                                    $tool_content .= "<div class='pn-info-title-sct'>$langDescription</div>";
+                                    $tool_content .= "<div class='pn-info-text-sct'>" . get_cert_desc($element, $element_id) . "</div>";
+                                }
+                                if ($bundle != -1) { // don't display issuer it if's course completion
+                                    $tool_content .= "<div class='pn-info-title-sct'>$langpublisher</div>
+                                                    <div class='pn-info-text-sct'>" . get_cert_issuer($element, $element_id) . "</div>";
+                                }
+                            $tool_content .= "
                                 $cert_public_link
                             </div>
                         </div>
@@ -2740,7 +2759,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                         <div class='inner-heading'>
                             <div class='row'>
                                 <div class='col-sm-10'>
-                                    <strong>$langAttendanceActivity</strong>
+                                    <strong>$langAttendanceActList</strong>
                                 </div>
                             </div>
                         </div>

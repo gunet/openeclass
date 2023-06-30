@@ -82,6 +82,30 @@ load_js('bootstrap-calendar');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('sortable/Sortable.min.js');
 
+$head_content .= "<style>
+    #progress_circle {
+      display: flex;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: conic-gradient(red var(--progress), gray 0deg);
+      font-size: 0;
+    }
+    #progress_circle::after {
+      content: attr(data-progress) '%';
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      width: 100%;
+      margin: 10px;
+      border-radius: 50%;
+      background: white;
+      font-size: 2rem;
+      text-align: center;
+    }
+</style>";
+
+
 ModalBoxHelper::loadModalBox();
 $head_content .= "<style>
     #collapseDescription {
@@ -539,7 +563,7 @@ if ($uid) {
                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
-            $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+            $percentage = get_cert_percentage_completion('badge', $course_completion_id);
         }
     }
 }
@@ -1039,8 +1063,8 @@ $tool_content .= "
 
 // display course completion status (if defined)
 if (isset($course_completion_id) and $course_completion_id > 0) {
-        $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
-            <div class='content-title'>$langCourseCompletion</div>
+    $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
+        <div class='content-title'>$langCourseCompletion</div>
             <div class='panel'>
                 <div class='panel-body'>
                     <div class='text-center'>
@@ -1050,12 +1074,13 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                         } else {
                             $tool_content .= "<div class='center-block' style='display:inline-block;'>
                                 <a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>";
-                            if ($percentage == '100%') {
+                            if ($percentage == '100') {
                                 $tool_content .= "<span class='fa fa-check-circle fa-5x state_success'></span>";
                             } else {
-                                $tool_content .= "<div class='course_completion_panel_percentage'>$percentage</div>";
+                                $tool_content .= "<div id='progress_circle' data-progress='$percentage' style='--progress: ".$percentage."deg;'>$percentage%</div>";
                             }
                             $tool_content .= "</a></div>";
+                            $tool_content .= "<div style='text-align: right;'><a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langDetail ...</a></div>";
                         }
                             $tool_content .= "
                         </div>
