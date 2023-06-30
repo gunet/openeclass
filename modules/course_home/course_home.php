@@ -704,7 +704,7 @@ if ($total_cunits > 0) {
             } else {
                 $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis fs-6 TextSemiBold' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
-            $cunits_content .= "<small><span class='help-block'>";
+            $cunits_content .= "<small><span class='help-block $class_vis'>";
             if (!(is_null($cu->start_week))) {
                 $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
             }
@@ -715,7 +715,7 @@ if ($total_cunits > 0) {
             $cunits_content .= "</div>";
 
             $cunits_content .= "</div>
-                <div class='item-body'>";
+                <div class='item-body $class_vis'>";
             $cunits_content .= ($cu->comments == ' ')? '': standard_text_escape($cu->comments);
             $cunits_content .= "</div>";
 
