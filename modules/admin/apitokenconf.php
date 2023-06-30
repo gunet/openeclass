@@ -26,17 +26,18 @@ $duration_time = 365*24*60*60; // one year (in seconds)
 
 $toolName = $langCreateAPIToken;
 $tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => 'extapp.php',
+        'icon' => 'fa-reply',
+        'level' => 'primary'),
     array('title' => $langAdd,
         'url' => 'apitokenconf.php?add',
         'icon' => 'fa-plus',
         'level' => 'primary-label',
-        'button-class' => 'btn-success'),
-    array('title' => $langBack,
-        'url' => 'extapp.php',
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+        'button-class' => 'btn-success')
+    ));
 
-$tool_content .= "<div class='alert alert-info'>" . $app->getLongDescription() . "</div>";
+$tool_content .= "<div class='alert alert-info text-center'>" . $app->getLongDescription() . "</div>";
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);
@@ -104,11 +105,11 @@ if (isset($_POST['submit'])) {
 $q = Database::get()->queryArray("SELECT id, token, name, comments, ip, expired, enabled FROM api_token");
 
 if (count($q) > 0) {
-    $tool_content .= "<div class='table-responsive'>";
+    $tool_content .= "<div class='table-responsive mb-3'>";
     $tool_content .= "<table class='table-default'>
                 <thead>
-                    <tr>
-                        <th class='text-left'>$langExtAppName</th>
+                    <tr class='list-header'>
+                        <th class='text-start'>$langExtAppName</th>
                         <th class='text-center'>Remote IP</th>
                         <th class='text-center'>" . icon('fa-gears') . "</th>
                     </tr>
@@ -131,7 +132,7 @@ if (count($q) > 0) {
         $tool_content .= "<tr class='$class'>";
         $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?edit=$data->id'>$data->name</a> $icon $expired_message<div class='help-block'>$data->comments</div></td>";
         $tool_content .= "<td>$data->ip</td>";
-        $tool_content .= "<td class='option-btn-cell'>" .
+        $tool_content .= "<td class='option-btn-cell text-center'>" .
             action_button(array(
                 array('title' => $langEditChange,
                     'url' => "$_SERVER[SCRIPT_NAME]?edit=$data->id",
@@ -153,41 +154,41 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $data = Database::get()->querySingle("SELECT * FROM api_token WHERE id = ?d", $_GET['edit']);
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $data->expired);
         $tool_content .= "
-        <div class='row extapp'><div class='col-xs-12'>
-          <div class='form-wrapper'>
+        <div class='row extapp'><div class='col-12'>
+          <div class='form-wrapper form-edit rounded-3'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?edit=$_GET[edit]' method='post'>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='$langExtAppName' class='col-sm-2 control-label'>$langExtAppName</label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='name' value='$data->name'></div>";
+        $tool_content .= "<label for='$langExtAppName' class='col-12 control-label-notes'>$langExtAppName</label>";
+        $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='name' value='$data->name'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='$langIpAddress' class='col-sm-2 control-label'>$langIpAddress</label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='remote_url' value='$data->ip'></div>";
+        $tool_content .= "<div class='form-group mt-4'>";
+        $tool_content .= "<label for='$langIpAddress' class='col-12 control-label-notes'>$langIpAddress</label>";
+        $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='remote_url' value='$data->ip'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='$langComments' class='col-sm-2 control-label'>$langComments</label>";
-        $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='comments'>$data->comments</textarea></div>";
+        $tool_content .= "<div class='form-group mt-4'>";
+        $tool_content .= "<label for='$langComments' class='col-12 control-label-notes'>$langComments</label>";
+        $tool_content .= "<div class='col-12'><textarea class='form-control' rows='3' cols='40' name='comments'>$data->comments</textarea></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='input-append date form-group'>
-                                    <label class='col-sm-2 control-label'>$langExpirationDate:</label>
-                                    <div class='col-sm-10'>
+        $tool_content .= "<div class='input-append date form-group mt-4'>
+                                    <label class='col-12 control-label-notes'>$langExpirationDate:</label>
+                                    <div class='col-12'>
                                         <div class='input-group'>
-                                            <input class='form-control' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                            <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
+                                            <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+                                            <span class='input-group-text input-group-addon h-30px bgEclass border-0 BordersRightInput'><i class='fa fa-calendar'></i></span>
                                         </div>
                                     </div>
                                 </div>";
         $checked = $data->enabled == 1 ? "checked" : "";
-        $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+        $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
         $tool_content .= "<label><input type='checkbox' name='enabled' value='1' $checked>$langCΕnabled</label>";
         $tool_content .= "</div></div></div>";
         $tool_content .= "
-                    <div class='form-group'>
-                      <div class='col-sm-offset-2 col-sm-10'>
-                        <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>";
-        $tool_content .= "&nbsp;<button class='btn btn-success' type='submit' name='submit' value='create_token'>$langCreateAPIToken</button>";
-        $tool_content .= "&nbsp;
-                    <a href='$_SERVER[SCRIPT_NAME]' class='btn btn-default'>$langCancel</a>
+                    <div class='form-group mt-4'>
+                      <div class='col-12 d-flex justify-content-center'>
+                        <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>";
+        $tool_content .= "<button class='btn submitAdminBtn ms-2' type='submit' name='submit' value='create_token'>$langCreateAPIToken</button>";
+        $tool_content .= "
+                    <a href='$_SERVER[SCRIPT_NAME]' class='btn cancelAdminBtn ms-2'>$langCancel</a>
                   </div>
                 </div>" .
             generate_csrf_token_form_field() . "
@@ -198,35 +199,35 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + $duration_time));
         $boolean_field = "";
         $tool_content .= "
-        <div class='row extapp'><div class='col-xs-12'>
-          <div class='form-wrapper'>
+        <div class='row extapp'><div class='col-12'>
+          <div class='form-wrapper form-edit rounded-3'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
         foreach ($app->getParams() as $param) {
             if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
-                $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+                $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
                 $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' checked>" . $param->display() . "</label>";
                 $boolean_field .= "</div></div></div>";
             } elseif ($param->getType() == ExtParam::TYPE_STRING) {
-                $tool_content .= "<div class='form-group'>";
-                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-                $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+                $tool_content .= "<div class='form-group mt-4'>";
+                $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
+                $tool_content .= "<div class='col-12'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
                 $tool_content .= "</div>";
             } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
-                $tool_content .= "<div class='form-group'>";
-                $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-                $tool_content .= "<div class='col-sm-10'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
+                $tool_content .= "<div class='form-group mt-4'>";
+                $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>" . $param->display() . "</label>";
+                $tool_content .= "<div class='col-12'><textarea class='form-control' rows='3' cols='40' name='" . $param->name() . "'>" .
                     q($param->value()) . "</textarea></div>";
                 $tool_content .= "</div>";
             }
         }
 
-        $tool_content .= "<div class='input-append date form-group'>
-                    <label class='col-sm-2 control-label'>$langExpirationDate:</label>
-                    <div class='col-sm-10'>
+        $tool_content .= "<div class='input-append date form-group mt-4'>
+                    <label class='col-12 control-label-notes'>$langExpirationDate:</label>
+                    <div class='col-12'>
                         <div class='input-group'>
-                            <input class='form-control' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                            <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
+                            <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+                            <span class='input-group-text input-group-addon h-30px bgEclass border-0 BordersRightInput'><i class='fa fa-calendar'></i></span>
                         </div>
                     </div>
                 </div>";
@@ -234,11 +235,11 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $tool_content .= $boolean_field;
 
         $tool_content .= "
-                <div class='form-group'>
-                  <div class='col-sm-offset-2 col-sm-10'>
-                    <button class='btn btn-primary' type='submit' name='submit'>$langSubmit</button>";
+                <div class='form-group mt-4'>
+                  <div class='col-12 d-flex justify-content-center'>
+                    <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>";
         $tool_content .= "&nbsp;
-                    <a href='$_SERVER[SCRIPT_NAME]' class='btn btn-default'>$langCancel</a>
+                    <a href='$_SERVER[SCRIPT_NAME]' class='btn cancelAdminBtn ms-2'>$langCancel</a>
                   </div>
                 </div>" .
             generate_csrf_token_form_field() . "

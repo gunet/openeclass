@@ -2664,6 +2664,33 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('lp_user_module_progress', 'accessed')) {
         Database::get()->query("ALTER TABLE lp_user_module_progress ADD `accessed` datetime DEFAULT NULL");
     }
+
+
+    // api token
+    if (!DBHelper::tableExists('api_token')) {
+        Database::get()->querySingle("CREATE TABLE `api_token` (
+            `id` smallint NOT NULL AUTO_INCREMENT,
+            `token` text CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `comments` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+            `ip` varchar(45) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+            `enabled` tinyint NOT NULL,
+            `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`id`)) $tbl_options");
+    }
+
+    // api token specific fields
+    if (!DBHelper::fieldExists('api_token', 'created')) {
+        Database::get()->query("ALTER TABLE `api_token` ADD `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
+    }
+    if (!DBHelper::fieldExists('api_token', 'updated')) {
+        Database::get()->query("ALTER TABLE `api_token` ADD `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
+    }
+    if (!DBHelper::fieldExists('api_token', 'expired')) {
+        Database::get()->query("ALTER TABLE `api_token` ADD `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
+    }
 }
 
 
