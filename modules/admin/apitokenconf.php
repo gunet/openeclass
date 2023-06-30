@@ -105,7 +105,7 @@ if (isset($_POST['submit'])) {
 $q = Database::get()->queryArray("SELECT id, token, name, comments, ip, expired, enabled FROM api_token");
 
 if (count($q) > 0) {
-    $tool_content .= "<div class='table-responsive mb-3'>";
+    $tool_content .= "<div class='table-responsive mt-4 mb-4'>";
     $tool_content .= "<table class='table-default'>
                 <thead>
                     <tr class='list-header'>
@@ -131,7 +131,7 @@ if (count($q) > 0) {
         }
         $tool_content .= "<tr class='$class'>";
         $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?edit=$data->id'>$data->name</a> $icon $expired_message<div class='help-block'>$data->comments</div></td>";
-        $tool_content .= "<td>$data->ip</td>";
+        $tool_content .= "<td class='text-center'>$data->ip</td>";
         $tool_content .= "<td class='option-btn-cell text-center'>" .
             action_button(array(
                 array('title' => $langEditChange,
