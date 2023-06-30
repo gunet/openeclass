@@ -63,8 +63,8 @@
                                             <div class="extapp-dscr-wrapper">
                                                 {!! $app->getShortDescription() !!}
                                             </div>
-                                            <div class="extapp-controls">
-                                                <div class="btn-group btn-group-sm">
+                                            <div class="extapp-controls mt-2">
+                                                <div class="btn-group btn-group-sm gap-2">
                                                     @if ($app->isConfigured())
                                                         @if (showSecondFactorChallenge() != "")
                                                             <button onclick="var totp=prompt('Type 2FA:','');this.setAttribute('data-app', this.getAttribute('data-app')+','+escape(totp));"  type="button" class="btn{!! $app->isEnabled() ? ' submitAdminBtn' : ' deleteAdminBtn' !!} extapp-status" data-app="{{ getIndirectReference($app->getName()) }}">
