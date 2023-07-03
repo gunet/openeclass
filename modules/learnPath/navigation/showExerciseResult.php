@@ -43,7 +43,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . "\n<html>\n"
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
- . "<script type='text/javascript' src='{$urlAppend}js/jquery3-6-0.min.js'></script>
+ . "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
     <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
     <link href='{$urlAppend}template/$theme/css/lp.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/css/default.css' rel='stylesheet'>\n"

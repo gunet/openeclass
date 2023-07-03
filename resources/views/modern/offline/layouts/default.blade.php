@@ -48,7 +48,7 @@
 
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{{$urlAppend}}js/jquery3-6-0.min.js"></script>
+    <script type="text/javascript" src="{{$urlAppend}}js/jquery-3.6.0.min.js"></script>
 
     <!-- Bootstrap v5 js -->
     <script type="text/javascript" src="{{$urlAppend}}js/bootstrap.bundle.min.js"></script>
@@ -128,6 +128,6 @@
             @include('layouts.partials.footerMobile')
         </div>
     </div>
-   
+
  </body>
 </html>
