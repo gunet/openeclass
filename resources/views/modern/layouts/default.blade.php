@@ -22,8 +22,10 @@
     <!-- Font Awesome - A font of icons -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
-     <!-- Font Manrope -->
-    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet">
+    <!-- Font Manrope -->
+   {{-- <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"> --}}
+    <!-- Font Poppins -->
+    <link href="{{ $urlAppend }}template/modern/css/font-poppins/css/Poppins.css" rel="stylesheet">
 
     <!-- fullcalendar v3.10.2-->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>

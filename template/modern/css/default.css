@@ -161,12 +161,13 @@
 html{ height:100%; }
 
 body{ 
-  font-family: 'Manrope','Fontawesome', sans-serif; 
+  font-family: 'Poppins','Fontawesome', sans-serif; 
   font-weight: 400;
   font-style: normal;
-  font-size: 15px; 
-  line-height: 1.42857143; 
-  color: #001146;
+  font-size: 14px; 
+  letter-spacing: 0px;
+  line-height: 1.6;
+  color: #2B3944;
   background-color: #e8e8e8;
 }
 
@@ -176,10 +177,12 @@ body{
 
 a{ 
   text-decoration: none; 
-  font-size: 15px; 
-  color:#005ad9; 
+  font-size: 14px; 
+  color:#2546F0; 
   font-weight: 400;
   font-style: normal;
+  letter-spacing: 0px;
+  line-height: 16px;
 }
 
 a:hover{
@@ -192,7 +195,7 @@ a:hover{
   text-decoration: none;
 }
 
-@media(max-width:1023px){ a{ font-size: 15px; } }
+@media(max-width:1023px){ a{ font-size: 14px; } }
 
 .msmall-text { font-size: 14px; }
 
@@ -238,7 +241,7 @@ table p, .panel p {
   margin-bottom: 10px;
 }
 
-@media (max-width:1023px){ body{ font-size:15px; } select{ overflow-y:auto !important; } }
+@media (max-width:1023px){ body{ font-size:14px; } select{ overflow-y:auto !important; } }
 
 .h-30px{ 
   height:30px; 
@@ -267,7 +270,7 @@ img {
 }
 
 .info-date{ 
-  color:#001146; 
+  color:#2B3944; 
   font-weight: 600; 
   font-style: normal; 
 }
@@ -277,10 +280,10 @@ img {
 }
 
 .help-block{ 
-  color:#9d9d9c; 
+  color:#2B3944; 
   font-size: 12px; 
-  font-family: 'Manrope','FontAwesome' , sans-serif; 
-  font-weight: 600; 
+  font-family: 'Poppins','FontAwesome' , sans-serif; 
+  font-weight: 400; 
   font-style: normal; 
 }
 
@@ -383,18 +386,18 @@ textarea {
 /* this is d-inline-flex between inputs-radio and texts */
 .radio label{ 
   display:inline-flex; justify-content: center; align-items:center ; 
-  color:#9d9d9c; font-size: 14px; 
-  font-weight: 600; font-style: normal;
+  color:#2B3944; font-size: 14px; 
+  font-weight: 400; font-style: normal;
   position: relative;
   transition: 0.5s;
 } 
 
 /* this is inputs-radio for course status */
 .radio label .fa {
-  font-size: 17px;
+  font-size: 14px;
   position: absolute;
   top: 59%;
-  left: 5%;
+  left: 0%;
   transform: translate(-160%, -50%); 
 }
 
@@ -409,12 +412,12 @@ textarea {
 .radio:has(input[type='radio']:checked) .help-block{
   font-size: 12px;
   font-weight: 600; font-style: normal;
-  color:#001146;
+  color:#2B3944;
 }
 
-.radio:has(input[type='radio']:disabled) .help-block{
+/* .radio:has(input[type='radio']:disabled) .help-block{
   opacity:0.4;
-}
+} */
 
 /*****************************************************************************************************************/
 /*****************************************************************************************************************/
@@ -425,34 +428,39 @@ input[type="radio"]{
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
-  min-width: 30px;
-  min-height: 30px;
+  min-width: 24px;
+  min-height: 24px;
   border-radius: 50px;
   outline: none;
-  box-shadow: inset 0 0 0 2px #e8e8e8;
-  border: 6px solid #e8e8e8;
-  background-color: #e8e8e8;
+  border: solid 1px #9BA9C1;
+  background-color: #ffffff;
+  letter-spacing: 0px;
+  line-height: 16px;
+  color: #2B3944;
 }
 input[type="radio"]:checked { 
-  background-color: #005ad9;
+  border: solid 6px #0073E6;
 }
 .input-StatusCourse:checked{
   box-shadow: inset 0 0 0 0px #e8e8e8;
   border: 0px solid #e8e8e8;
-  background-color: #005ad9;
+  background-color: #0073E6;
 }
 .radio:has(.input-StatusCourse:checked) .fa{
   color: #ffffff;
 }
 
 label:has(input[type="radio"]:disabled){
-  opacity:0.4;
+  opacity:1;
+  font-size: 14px;
+  font-weight: 500; font-style: normal;
+  color: #687DA3;
 }
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
-  font-weight: 600; font-style: normal;
-  color:#001146;
+  font-weight: 400; font-style: normal;
+  color:#2B3944;
 }
 
 
@@ -462,8 +470,8 @@ label:has(input[type="radio"]:disabled){
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{ 
   display:inline-flex; justify-content: top; align-items:top; 
-  color:#9d9d9c; font-size: 14px; 
-  font-weight: 600; font-style: normal;
+  color:#2B3944; font-size: 14px; 
+  font-weight: 400; font-style: normal;
 } 
 
 .checkbox label p{ margin-top:0px; } 
@@ -471,15 +479,16 @@ label:has(input[type="radio"]:disabled){
 /* this is space between input-checkbox and texts */
 input[type="checkbox"]{
   margin: 0 5px 0 0px;
-  accent-color: #003e87;
+  accent-color: #0073E6;
   min-width:20px;
   height:20px;
+  border-radius:4px;
 
 }
 .form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
   font-size: 14px;
-  font-weight: 600; font-style: normal;
-  color:#001146;
+  font-weight: 400; font-style: normal;
+  color:#2B3944;
 }
 
 /*****************************************************************************************************************/
@@ -487,8 +496,8 @@ input[type="checkbox"]{
 
 input::placeholder , .form-select, .form-control{ 
   font-size: 14px; 
-  background-color: transparent; 
-  color:#001146; 
+  background-color: #ffffff; 
+  color:#687DA3; 
 }
 
 input:-webkit-autofill,
@@ -533,7 +542,7 @@ input:-webkit-autofill:active {
   border:solid 1px #e8e8e8; 
   padding: 15px 20px 25px 20px;
 
-  background-color: white;
+  background-color: #ffffff;
 }
 
 
@@ -551,14 +560,14 @@ input:-webkit-autofill:active {
 .panel input[type=text], 
 .panel input[type=password], 
 .panel input[type=number]{
-  height:30px;
-  border-radius: 35px;
+  height:40px;
+  border-radius: 4px;
   margin-top: 5px;
-  border: 0px;
-  background-color: #e8e8e8;
-  color: #001146;
+  border-color: #687DA3;
+  background-color: #ffffff;
+  color: #687DA3;
   font-size: 14px;
-  font-weight: 600; font-style: normal;
+  font-weight: 400; font-style: normal;
 }
 .form-wrapper textarea, .forms-panels-admin textarea{
    min-height:106px;
@@ -586,41 +595,45 @@ input:-webkit-autofill:active {
 .form-wrapper input[type="color"]:focus, .forms-panels-admin input[type="color"]:focus, .table-default input[type="color"]:focus, .panel input[type="color"]:focus,
 .form-wrapper .form-control:focus, .forms-panels-admin .form-control:focus, .table-default .form-control:focus, .panel .form-control:focus,
 .uneditable-input:focus {   
-  border-color: white;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
+  border-color: #0073E6;
+  box-shadow: none !important;
+  /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6); */
   outline: 0 none;
-  background-color: #e8e8e8;
-  color:#001146;
-  font-weight: 600; font-style: normal;
+  background-color: #ffffff;
+  color:#687DA3;
+  font-weight: 400; font-style: normal;
 }
 .form-wrapper textarea:focus, .panel textarea:focus, .table-default textarea:focus{
   background-color: #ffffff !important;
 }
 
 .form-wrapper .form-control:disabled, .table-default .form-control:disabled, .panel .form-control:disabled{
-  opacity: 0.4;
+  /* opacity: 0.4;
   border-bottom: solid 2px #f9f8fa;
   border-image: none;
   border-image-slice: 0;
-  background-color: #DCDCDC;
+  background-color: #DCDCDC; */
+  border-color: #687DA3;
+  background-color: #E8EDF8;
+
 }
 
 
 /* select in form-wrapper */
 select.form-select {
-  background-color: #e8e8e8;
-  border-radius: 35px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  border-color:#687DA3;
   font-size: 14px;
-  font-family: 'Manrope' , sans-serif; font-weight: 600; font-style: normal;
-  height:30px;
-  border:0px;
-  color:#001146;
-  padding-top: 4px;
+  font-family: 'Poppins' , sans-serif; font-weight: 400; font-style: normal;
+  height:40px;
+  color:#687DA3;
+  padding-top: 8px;
   margin-top: 5px;
-  background-image:
-    linear-gradient(45deg, transparent 50%, #005ad9 50%),
-    linear-gradient(135deg, #005ad9 50%, transparent 50%),
-    linear-gradient(to right, #e8e8e8, #e8e8e8);
+  /* background-image:
+    linear-gradient(45deg, transparent 50%, #9BA9C1 50%),
+    linear-gradient(135deg, #9BA9C1 50%, transparent 50%),
+    linear-gradient(to right, #ffffff, #ffffff);
   background-position:
     calc(100% - 20px) calc(1em + 0px),
     calc(100% - 15px) calc(1em + 0px),
@@ -629,16 +642,16 @@ select.form-select {
     5px 5px,
     5px 5px,
     2.5em 2.5em;
-  background-repeat: no-repeat;
+  background-repeat: no-repeat; */
 }
 
 select.form-select:focus {
-  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.075) inset, 0 0 8px rgb(255, 255, 255);
+  box-shadow: none !important;
   outline: none;
-  background-color: #e8e8e8;
+  background-color: #ffffff;
 }
 
-select.form-select option{color: #9d9d9c; font-weight: 600; font-style: normal;}
+select.form-select option{color: #9BA9C1; font-weight: 400; font-style: normal;}
 
 .form-wrapper .form-select:disabled, .table-default .form-select:disabled, .panel .form-select:disabled{
   opacity: 0.4;
@@ -665,7 +678,7 @@ label:has(input[type="checkbox"]:disabled){
 /* .alert-info { border: 1px solid #3D80D0; background-color: #ffffff; color: #3D80D0; border-radius: 5px; font-weight: 500; font-style: normal; } */
 .alert-info { border: 1px solid #003e85; background-color: #ffffff; color: #003e85; border-radius: 5px; font-weight: 500; font-style: normal; }
 
-.alert-warning { border: 1px solid #FFA023; background-color: #ffffff; color: #FFA023; border-radius: 5px; font-weight: 500; font-style: normal; }
+.alert-warning { border: 1px solid #F57600; background-color: #ffffff; color: #F57600; border-radius: 5px; font-weight: 500; font-style: normal; }
 
 .alert-danger { border: 1px solid rgb(244,17,14); background-color: #ffffff; color: rgb(244, 17, 14); border-radius: 5px; font-weight: 500; font-style: normal; }
 
@@ -940,11 +953,11 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .mydropdowns .confirmAction .fa-times{ 
-    color: #ffa023; 
+    color: #F57600; 
   }
 
   .mydropdowns .confirmAction:hover{ 
-    background-color: #ffa023; 
+    background-color: #F57600; 
     cursor: pointer; 
     color:white; 
   }
@@ -954,7 +967,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .mydropdowns .delete_all_in .list-group-item:hover{ 
-    background-color: #ffa023; 
+    background-color: #F57600; 
     color:white; 
   }
 
@@ -1038,7 +1051,7 @@ label:has(input[type="checkbox"]:disabled){
   }
   
   .info_reg_course:hover{ 
-    color: orange; 
+    color: #F57600; 
   }
   
   .list_grouping{ 
@@ -1489,65 +1502,68 @@ label:has(input[type="checkbox"]:disabled){
   .notes_thead{ background:#003e85;  }
 
   .control-label-notes{ 
-    font-size:15px; 
-    color:#001146; 
-    font-weight: 800; 
+    font-size:14px; 
+    color:#2B3944; 
+    font-weight: 600; 
     font-style: normal; 
+    line-height: 16px;
   }
 
   /* first choice of inputs forms */
   .form-wrapper.form-edit .control-label-notes{ 
-    font-weight: 800; 
+    font-weight: 600; 
     font-style: normal; 
-    font-size: 16px; 
-    color:#001146; 
-    text-transform:capitalize;
+    font-size: 14px; 
+    color:#2B3944; 
+    line-height: 16px;
   } 
-  
-  @media (max-width:1023px){ .control-label-notes{ font-size: 16px; } }
 
   .submitAdminBtn {
     border: solid thin;
-    border-color: #005ad9;
-    color: #005ad9;
-    font-size: 12px;
-    text-transform: uppercase;
-    height:30px;
+    border-color: #2546F0;
+    color: #2546F0;
+    font-size: 14px;
+    height:40px;
+    min-width: 40px;
     font-weight: 600; font-style: normal;
-    border-radius: 5px !important;
+    border-radius: 4px !important;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
+    letter-spacing: 0px;
+    line-height: 16px;
   }
 
   .submitAdminBtn:hover {
-    background-color: #005ad9;
+    background-color: #2546F0;
     color: #ffffff;
   }
 
   .submitAdminBtn.active{
-    background-color: #005ad9;
+    background-color: #2546F0;
     color: #ffffff;
   }
 
   .deleteAdminBtn {
     border: solid thin;
-    border-color: #ffa023;
-    color: #ffa023;
-    font-size: 12px;
-    text-transform: uppercase;
-    height:30px;
+    border-color: #F57600;
+    color: #F57600;
+    font-size: 14px;
+    height:40px;
+    min-width: 40px;
     font-weight: 600; font-style: normal;
-    border-radius: 5px !important;
+    border-radius: 4px !important;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
+    letter-spacing: 0px;
+    line-height: 16px;
   }
 
   .deleteAdminBtn:hover {
-    background-color: #ffa023;
+    background-color: #F57600;
     color: #ffffff;
   }
 
@@ -1555,15 +1571,17 @@ label:has(input[type="checkbox"]:disabled){
     border: solid thin;
     border-color: #22b473	;
     color: #22b473	;
-    font-size: 12px;
-    text-transform: uppercase;
-    height:30px;
+    font-size: 14px;
+    height:40px;
+    min-width: 40px;
     font-weight: 600; font-style: normal;
     border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
+    letter-spacing: 0px;
+    line-height: 16px;
   }
 
   .successAdminBtn:hover {
@@ -1575,30 +1593,33 @@ label:has(input[type="checkbox"]:disabled){
   .cancelAdminBtn {
     border: solid thin;
     font-size: 12px;
-    border-color: #001146;
-    color: #001146;
-    text-transform: uppercase;
-    height:30px;
+    border-color: #2B3944;
+    color: #2B3944;
+    font-size: 14px;
+    height:40px;
+    min-width: 40px;
     font-weight: 600; font-style: normal;
     border-radius: 5px !important;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #ffffff;
+    letter-spacing: 0px;
+    line-height: 16px;
   }
 
   .cancelAdminBtn:hover {
-    background-color: #001146;
+    background-color: #2B3944;
     color: #ffffff;
   }
 
   .submitAdminBtn span, .cancelAdminBtn span, .deleteAdminBtn span{ 
-    font-size: 12px; 
+    font-size: 14px; 
   }
 
   .submitAdminBtn .fa, .cancelAdminBtn .fs, .deleteAdminBtn .fa{
-    height:12px; 
-    width:12px;
+    height:14px; 
+    width:14px;
   }
 
   .action_bar .ButtonsContent .btn{
@@ -1611,6 +1632,14 @@ label:has(input[type="checkbox"]:disabled){
   .action_bar .ButtonsContent .btn:last-child{
     margin-right:0px;
   }
+
+  /* .form-wrapper.form-edit .submitAdminBtn,
+  .form-wrapper.form-edit .cancelAdminBtn,
+  .form-wrapper.form-edit .deleteAdminBtn,
+  .form-wrapper.form-edit .successAdminBtn{
+    height: 40px;
+    min-width: 40px;
+  } */
 
 /* -------------------------------------------- Public Profile ------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1645,9 +1674,9 @@ label:has(input[type="checkbox"]:disabled){
   .bootbox-confirm .modal-footer .btn-primary{
     background: white !important;
     border: solid thin;
-    border-color: #ffa023;
-    color: #ffa023;
-    font-size: 12px;
+    border-color: #F57600;
+    color: #F57600;
+    font-size: 14px;
     text-transform: uppercase;
     height:30px;
     font-weight: 600; font-style: normal;
@@ -1659,7 +1688,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .bootbox-confirm .modal-footer .btn-primary:hover{
-    background: #ffa023 !important;
+    background: #F57600 !important;
     color: #ffffff;
   }
 
@@ -1696,18 +1725,21 @@ label:has(input[type="checkbox"]:disabled){
 
   .menu-popover .list-group-item{ 
     border: solid thin;
-    border-color: #005ad9;
-    color: #005ad9;
+    border-color: #0073E6;
+    color: #0073E6;
     font-size: 12px;
     text-transform: uppercase;
     min-height:30px;
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 4px;
     display: inline-block;
     margin: 0 auto;
     width:100%;
     margin-bottom: 10px;
     word-wrap: break-word;
+    letter-spacing: 0px;
+    line-height: 16px;
+    text-align: center;
   }
 
   .menu-popover .list-group-item.disabled{ 
@@ -1715,35 +1747,37 @@ label:has(input[type="checkbox"]:disabled){
   }
   
   .menu-popover .list-group-item:hover{ 
-    background-color: #005ad9;
+    background-color: #0073E6;
     color: #ffffff;
    }
 
   .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
     background:#ffffff;
     border: solid thin;
-    border-color: #ffa023;
-    color: #ffa023;
-    font-size: 12px;
-    text-transform: uppercase;
-    font-family: 'Manrope' , sans-serif; 
+    border-color: #F57600;
+    color: #F57600;
+    font-size: 14px;
+    font-family: 'Poppins' , sans-serif; 
     font-weight: 600; font-style: normal;
-    border-radius: 35px;
+    border-radius: 4px;
     min-height:30px;
     display: inline-block;
     margin: 0 auto;
     width:100%;
     margin-bottom: 10px;
+    letter-spacing: 0px;
+    line-height: 16px;
     text-align: center;
+
   }
   
   .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times,
   .menu-popover .delete.confirmAction .fa-trash, .menu-popover .delete.delete_btn .fa-trash{ 
-    color: #ffa023; 
+    color: #F57600; 
   }
 
   .menu-popover .delete.confirmAction:hover , .menu-popover .delete.delete_btn:hover{ 
-    background: #ffa023; 
+    background: #F57600; 
     color:#ffffff;
   }
 
@@ -2556,7 +2590,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
   .label.label-warning{  
-    color: orange;
+    color: #F57600;
     width:188px;
     padding-left: 15px;
     padding-right: 15px;
@@ -2571,7 +2605,7 @@ label:has(input[type="checkbox"]:disabled){
   
   
   .visibleFile{ 
-    color:orange; 
+    color:#F57600; 
     font-size:21px; 
   }
 
@@ -2906,7 +2940,7 @@ label:has(input[type="checkbox"]:disabled){
 }
 
 .orangeText{ 
-  color: #ffa023; 
+  color: #F57600; 
 }
 
 .greyText { 
@@ -2914,15 +2948,15 @@ label:has(input[type="checkbox"]:disabled){
 }
 
 .bgOrange {
-   background-color: #ffa023;
+   background-color: #F57600;
 }
 
 .blackBlueText { 
-  color:#001146; 
+  color:#2B3944; 
 }
 
 .bgBlackBlue { 
-  background-color: #001146;
+  background-color: #2B3944;
 }
 
 .normalBlueText { 
@@ -2959,6 +2993,48 @@ label:has(input[type="checkbox"]:disabled){
 
 .textgreyColor { 
   color: #bdbdbd;
+}
+
+.Neutral-900-bg{
+  background-color: #2B3944;
+}
+.Neutral-900-cl{
+  color: #2B3944;
+}
+
+.Neutral-800-bg{
+  background-color: #4F6893;
+}
+.Neutral-800-cl{
+  color: #4F6893;
+}
+
+.Neutral-700-bg{
+  background-color: #687DA3;
+}
+.Neutral-700-cl{
+  color: #687DA3;
+}
+
+.Neutral-600-bg{
+  background-color: #9BA9C1;
+}
+.Neutral-600-cl{
+  color: #9BA9C1;
+}
+
+.Neutral-500-bg{
+  background-color: #B4BED1;
+}
+.Neutral-500-cl{
+  color: #B4BED1;
+}
+
+.Neutral-400-bg{
+  background-color: #CDD4E0;
+}
+.Neutral-400-cl{
+  color: #CDD4E0;
 }
 
 /* ------------------------------------------------------- GROUPS ----------------------------------------------------------------------------*/
@@ -3344,4 +3420,8 @@ label:has(input[type="checkbox"]:disabled){
     .bgTransparent {background-color: transparent;}
 
     .borderLg {border-radius: 15px;}
+
+    #menu-btn {height:30px; min-width:30px !important;}
+
+    .h30px{height:30px;}
 }

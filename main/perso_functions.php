@@ -91,7 +91,7 @@ function getUserLessonInfo($uid) {
             $lesson_content .= "<tr class='$visclass'>
 			  <td class='border-top-0 border-start-0 border-end-0 ps-0'>
 			  <div>
-                    <a class='TextSemiBold fs-6' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
+                    <a class='TextSemiBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                         &nbsp<span class='TextSemiBold text-md-end text-start'> <span class='blackBlueText'>(" . q($data->public_code) . ")</span></span>
                     </a>
 
@@ -149,7 +149,7 @@ function getUserLessonInfo($uid) {
 
                     </div>
               </div>
-			  <div><small class='small-text textgreyColor TextSemiBold'>" . q($data->professor) . "</small></div></td>";
+			  <div><small class='small-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small></div></td>";
             $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top pe-0'><div class='col-12'><div class='d-inline-flex'>";
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             if ($data->status == USER_STUDENT) {
@@ -272,7 +272,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                 <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                     
                                 <div class='blackBlueText TextBold'>$course_title</div>
-                                <div class='blackBlueText TextRegular'>$ann_date</div>
+                                <div class='small-text Neutral-900-cl TextRegular'>$ann_date</div>
                             </div>
                         </li>";
                 } else {
@@ -284,7 +284,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                             <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             
                             <div class='blackBlueText TextBold'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
-                            <div class='blackBlueText TextRegular'>$ann_date</div>
+                            <div class='small-text Neutral-900-cl TextRegular'>$ann_date</div>
                         </div>
                     </li>";
                 }
@@ -330,7 +330,7 @@ function getUserMessages() {
                                         <a class='TextSemiBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         
                                         <div class='blackBlueText TextBold'>$course_title</div>
-                                        <div class='blackBlueText TextRegular'>$message_date</div>
+                                        <div class='small-text Neutral-900-cl TextRegular'>$message_date</div>
                                     </div>
                                 </li>";
         }

@@ -2,11 +2,13 @@
 
 @section('content')
 
+{{--
 @if($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
     <style>#btn_create_course{display:block;}</style>
 @else
     <style>#btn_create_course{display:none;}</style>
 @endif
+--}}
 
 <div class="col-12 basic-section basic-section-mobile p-xl-5 px-lg-3 py-lg-5">
 
@@ -46,13 +48,13 @@
                             <ol class="list-group list-group-numbered mt-md-0 mt-4">
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
-                                        <div class="fw-bold blackBlueText">{{ trans('langSumCoursesEnrolled') }}</div>
+                                        <div class="TextRegular blackBlueText">{{ trans('langSumCoursesEnrolled') }}</div>
                                     </div>
                                     <span class="badge bgTheme rounded-pill">{{ $student_courses_count }}</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-start">
                                     <div class="ms-2 me-auto">
-                                        <div class="fw-bold blackBlueText">{{ trans('langSumCoursesSupport') }}</div>
+                                        <div class="TextRegular blackBlueText">{{ trans('langSumCoursesSupport') }}</div>
                                     </div>
                                     <span class="badge bgTheme rounded-pill">{{ $teacher_courses_count }}</span>
                                 </li>
@@ -130,10 +132,10 @@
                                                 </picture>
                                             </figure>
                                             <div class="lesson-title">
-                                                <a class='TextSemiBold fs-6' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
+                                                <a class='TextSemiBold' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
                                                 <span class="TextSemiBold blackBlueText lesson-id">({{ $cource->public_code }})</span>
                                             </div>
-                                            <div class="small-text textgreyColor TextSemiBold mt-0">{{ $cource->professor }}</div>
+                                            <div class="small-text Neutral-900-cl TextRegular mt-0">{{ $cource->professor }}</div>
                                         </div>
 
                                     </div>

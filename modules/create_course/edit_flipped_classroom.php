@@ -453,7 +453,7 @@ if (!isset($_POST['next'])) {
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">        
                 <div class='card border-0'>
                     <div class='card-header bg-white border-0 text-center'>
-                        <div class='TextSemiBold fs-6 text-uppercase normalBlueText p-2'>
+                        <div class='TextSemiBold text-uppercase normalBlueText p-2'>
                             $langActSelect
                         </div>
                     </div>

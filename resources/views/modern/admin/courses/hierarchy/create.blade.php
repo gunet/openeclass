@@ -124,7 +124,7 @@
                                             <label for="nodeopen"><span class='fa fa-unlock fa-fw'></label>
                                             {{ trans('langNodePublic') }}
                                         </label>
-                                        <div class='help-block ps-4 ms-3'>{{ trans('langNodePublic2') }}</div>
+                                        <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langNodePublic2') }}</div>
                                     </div> 
                                    
 
@@ -137,7 +137,7 @@
                                             </label>
                                             {{ trans('langNodeSubscribed') }}
                                         </label>
-                                        <div class='help-block ps-4 ms-3'>{{ trans('langNodeSubscribed2') }}</div>
+                                        <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langNodeSubscribed2') }}</div>
                                     </div>
                                     
 
@@ -147,7 +147,7 @@
                                             <label><span class='fa fa-lock fa-fw'></span></label>
                                             {{ trans('langNodeHidden') }}
                                         </label>
-                                         <div class='help-block ps-4 ms-3'>{{ trans('langNodeHidden2') }}</div>
+                                         <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langNodeHidden2') }}</div>
                                     </div>
                                    
                                 </div>

@@ -16,8 +16,8 @@
                     <div class='col-10 ps-0 pe-0'>
                         @if($toolName)
                             <div class='col-12 mb-2'>
-                                <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span>
-                                <span class='courseInfoText TextExtraBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
+                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span>
+                                <span class='courseInfoText TextBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
                                 <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
                             </div>
                             <div class='col-12 d-inline-flex'>
@@ -68,8 +68,8 @@
                             </div>
                         @else
                             <div class='col-12'>
-                                <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span>
-                                <span class='courseInfoText TextExtraBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
+                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span>
+                                <span class='courseInfoText TextBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
                                 <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span> 
                             </div>
                         @endif
@@ -83,8 +83,8 @@
                     <div class='col-12 ps-0'>
                         @if($toolName)
                             <div class='col-12 mb-2'>
-                                <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span> 
-                                <span class='courseInfoText TextExtraBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br>
+                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span> 
+                                <span class='courseInfoText TextBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br>
                                 <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
                             </div>
                             <div class='col-12 d-inline-flex'>
@@ -111,8 +111,8 @@
                             </div>
                         @else
                             <div class='col-12'>
-                                <span class='courseInfoText TextExtraBold blackBlueText me-1'>{{$currentCourseName}}</span>
-                                <span class='courseInfoText TextExtraBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br> 
+                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span>
+                                <span class='courseInfoText TextBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br> 
                                 <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
                             </div>
                         @endif

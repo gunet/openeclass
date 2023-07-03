@@ -237,7 +237,7 @@
                                         <label for="courseopen">{!! $icon_course_open !!}</label>
                                         {{ trans('langOpenCourse') }}
                                       </label>
-                                      <div class='help-block ps-4 ms-3'>{{ trans('langPublic') }}</div>
+                                      <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langPublic') }}</div>
                                     </div>
 
                                     <div class='radio mb-3'>
@@ -246,7 +246,7 @@
                                         <label for="coursewithregistration">{!! $icon_course_registration !!}</label>
                                         {{ trans('langRegCourse') }}
                                       </label>
-                                      <div class='help-block ps-4 ms-3'>{{ trans('langPrivOpen') }}</div>
+                                      <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langPrivOpen') }}</div>
                                     </div>
 
                                     <div class='radio mb-3'>
@@ -255,7 +255,7 @@
                                         <label for="courseclose">{!! $icon_course_closed !!}</label>
                                         {{ trans('langClosedCourse') }}
                                       </label>
-                                      <div class='help-block ps-4 ms-3'>{{ trans('langClosedCourseShort') }}</div>
+                                      <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langClosedCourseShort') }}</div>
                                     </div>
 
                                     <div class='radio'>
@@ -264,7 +264,7 @@
                                           <label for="courseinactive">{!! $icon_course_inactive !!}</label>
                                           {{ trans('langInactiveCourse') }}
                                       </label>
-                                      <div class='help-block ps-4 ms-3'>{{ trans('langCourseInactive') }}</div>
+                                      <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langCourseInactive') }}</div>
                                     </div>
 
                               </div>

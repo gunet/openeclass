@@ -1,6 +1,6 @@
 
 <div class="dropdown dropstart">
-    <button class="btn btn-sm submitAdminBtn rounded dropdown-toggle float-end" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+    <button class="btn btn-sm submitAdminBtn h30px rounded dropdown-toggle float-end" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
         <span data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{trans('langModifyInfo')}}"><i class="fas fa-tasks"></i></span>
     </button>
     <ul class="p-0 m-0 dropdown-menu manage-course-ul shadow-lg border border-secondary" aria-labelledby="dropdownManageCourse">

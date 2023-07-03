@@ -585,7 +585,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a class=' fs-6 TextSemiBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a class='TextSemiBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
             $cunits_content .= "<br><small><span class='help-block'>";
             if (!(is_null($cu->start_week))) {
@@ -702,7 +702,7 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis fs-6 TextSemiBold' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis TextSemiBold' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
             $cunits_content .= "<small><span class='help-block $class_vis'>";
             if (!(is_null($cu->start_week))) {

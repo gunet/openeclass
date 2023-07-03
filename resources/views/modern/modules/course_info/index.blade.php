@@ -273,7 +273,7 @@
                                                     <label for="courseopen">{!! course_access_icon(COURSE_OPEN) !!}</label>
                                                     {{ trans('langOpenCourse') }}
                                                 </label>
-                                                <div class='help-block ps-4 ms-3'>{{ trans('langPublic') }}</div>
+                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langPublic') }}</div>
                                             </div>
 
 
@@ -283,7 +283,7 @@
                                                     <label for="coursewithregistration">{!! course_access_icon(COURSE_REGISTRATION) !!}</label>
                                                     {{ trans('langTypeRegistration') }}
                                                 </label>
-                                                <div class='help-block ps-4 ms-3'>{{ trans('langPrivOpen') }}</div>
+                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langPrivOpen') }}</div>
                                             </div>
 
 
@@ -293,7 +293,7 @@
                                                     <label for="courseclose">{!! course_access_icon(COURSE_CLOSED) !!}</label>
                                                     {{ trans('langClosedCourse') }}
                                                 </label>
-                                                <div class='help-block ps-4 ms-3'>{{ trans('langClosedCourseShort') }}</div>
+                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langClosedCourseShort') }}</div>
                                             </div>
 
 
@@ -303,7 +303,7 @@
                                                     <label for="courseinactive">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
                                                     {!! trans('langInactiveCourse') !!}
                                                 </label>
-                                                <div class='help-block ps-4 ms-3'>{{ trans('langCourseInactive') }}</div>
+                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langCourseInactive') }}</div>
                                             </div>
 
                                         </div>

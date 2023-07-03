@@ -243,7 +243,7 @@ if ($can_upload) {
                 <div class='checkbox'>
                     <label>
                         <input type='checkbox' name='uncompress' value='1'>
-                        <strong>$langUncompress</strong>
+                        <div class='TextRegular Neutral-900-cl'>$langUncompress</div>
                     </label>
                 </div>
               </div>
@@ -252,12 +252,12 @@ if ($can_upload) {
 
     if ($can_upload_replacement) {
         $tool_content .= "
-      <div class='form-group mt-4'>
+      <div class='form-group mt-3'>
         <div class='col-sm-offset-2 col-sm-10'>
             <div class='checkbox'>
                 <label>
                     <input type='checkbox' name='replace' value='1'>
-                    <strong>$langReplaceSameName</strong>
+                    <div class='TextRegular Neutral-900-cl'>$langReplaceSameName</div>
                 </label>
             </div>
         </div>
@@ -266,7 +266,7 @@ if ($can_upload) {
 
     $tool_content .= "
     <div class='row mt-4'>
-        <div class='infotext col-12 margin-bottom-fat text-secondary fw-bold'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+        <div class='infotext col-12 margin-bottom-fat TextSemiBold Neutral-900-cl'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
 
 
