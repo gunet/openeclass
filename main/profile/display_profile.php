@@ -239,7 +239,9 @@ if ($userdata) {
                             </div>
                         </div>";
                         // custom profile fields
-                        $tool_content .= render_profile_fields_content(array('user_id' => $id));
+                        if ($userdata->status != USER_GUEST) {
+                            $tool_content .= render_profile_fields_content(array('user_id' => $id));
+                        }
                     $tool_content .= "</div>
                 </div>
             </div>

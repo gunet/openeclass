@@ -45,10 +45,13 @@ if (isset($toolContent_ErrorExists)) {
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         redirect_to_home_page("main/login_form.php?next=" . urlencode($next));
+    } elseif ($_SESSION['status'] == USER_GUEST) {
+        redirect_to_home_page();
     } else {
         redirect_to_home_page("main/portfolio.php");
     }
 }
+
 
 require_once 'template/template.inc.php';
 require_once 'tools.php';

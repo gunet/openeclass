@@ -22,10 +22,10 @@
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'h5p';
+$guest_allowed = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'classes/H5PFactory.php';
-
 
 $toolName = $langH5p;
 
