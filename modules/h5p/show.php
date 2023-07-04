@@ -20,7 +20,7 @@
  */
 
 $require_current_course = true;
-
+$guest_allowed = true;
 require_once '../../include/baseTheme.php';
 
 $unit = isset($_GET['unit'])? intval($_GET['unit']): null;

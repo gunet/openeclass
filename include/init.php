@@ -282,7 +282,6 @@ if (!isset($guest_allowed) || $guest_allowed != true) {
         $toolContent_ErrorExists = $langCheckGuest;
     }
 }
-
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded)) {
     // don't redirect to mail verification on logout
     if (!isset($_GET['logout'])) {

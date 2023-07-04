@@ -71,29 +71,29 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col">
                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                         <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langPersInfo') }}</div>
                                     </div>
                                     <div class="card-body">
-                                       
+
                                         @if (!empty($userdata->email) and allow_access($userdata->email_public))
                                             <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langEmail') }}</p>
                                             <p class='card-text'>{!! mailto($userdata->email) !!}</p>
                                         @endif
-                                        
-                                    
+
+
                                         @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
                                             <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langPhone') }}</p>
                                             <p class='card-text'>{{ q($userdata->phone) }}</p>
                                         @endif
 
-                                        
+
                                         <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langStatus') }}</p>
                                         <p class='card-text'>{{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}</p>
-                                       
+
 
                                         @if (!empty($userdata->am) and allow_access($userdata->am_public))
                                             <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langAm') }}</p>
@@ -111,8 +111,8 @@
                                             @endforeach
                                         @endif
 
-                                        
-                                        
+
+
                                         <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langFaculty') }}</p>
                                         <p class='card-text'>
                                             @foreach ($user->getDepartmentIds($id) as $i=>$dep)
@@ -122,22 +122,24 @@
                                                 @endif
                                             @endforeach
                                         </p>
-                                        
-                                        
+
+
                                         <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langProfileMemberSince') }}</p>
                                         <p class='card-text'>{{ format_locale_date(strtotime($userdata->registered_at)) }}</p>
 
                                         <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langAboutMe') }}</p>
                                         <p class='card-text m-0 p-0'>{!! $userdata->description !!}</p>
-                                       
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {!! render_profile_fields_content(array('user_id' => $id)) !!}
-                    
+                    @if ($userdata->status != USER_GUEST)
+                        {!! render_profile_fields_content(array('user_id' => $id)) !!}
+                    @endif
+
                     @if(count($cert_completed) > 0 or count($badge_completed) > 0)
 
                         @if (count($cert_completed) > 0)
