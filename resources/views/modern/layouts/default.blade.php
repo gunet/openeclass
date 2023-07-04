@@ -21,11 +21,12 @@
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
-    <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+   
+    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet">
+
+    
     <!-- Font Manrope -->
-   {{-- <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"> --}}
-    <!-- Font Poppins -->
-    <link href="{{ $urlAppend }}template/modern/css/font-poppins/css/Poppins.css" rel="stylesheet">
+    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet">
 
     <!-- fullcalendar v3.10.2-->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
@@ -43,11 +44,13 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default2.css"/>
 
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache">
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache">
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache">
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default2.css?donotcache">
 
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)
@@ -131,6 +134,7 @@
         <!-- Mobile navbar -->
         <div class="d-block d-lg-none">
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
+            @include('layouts.partials.off-canvas-mobile-header')
         </div>
 
         <div class="basic-content {{ $container }} @if($container == 'container-fluid') px-xl-0 px-lg-3 @endif px-0">

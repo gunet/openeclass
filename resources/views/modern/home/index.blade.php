@@ -29,51 +29,60 @@
        
     
         <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif">
-            @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
-                @if($PositionFormLogin == 0)
-                <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 d-flex justify-content-end align-items-center bg-transparent ps-lg-4 pe-xl-3 pe-lg-3 px-5 py-lg-0 py-4'>
-                @else
-                <div class='col-xxl-4 col-lg-5 col-md-6 col-12 d-lg-flex justify-content-lg-center align-items-lg-center ms-auto me-auto pt-3 pb-3'>
-                @endif
-                    <div class='card-body cardLogin Borders' style='z-index:2;'>
-                        <div class='card-header bg-transparent border-0'>
-                            {{--@if($warning)
-                                {!! $warning !!}
-                            @endif--}}
-                            <img class="UserLoginIcon m-auto d-block" src="{{ $urlAppend }}template/modern/img/user_login.svg"> 
-                            <p class="fs-5 TextBold mb-0 text-center blackBlueText text-capitalize">{{ trans('langUserLogin') }}</p>
-                        </div>
-                        <form class='mt-0' action="{{ $urlAppend }}" method="post">
-                            <div class="login-form-spacing mt-3">
-                                <div class='col-xxl-9 col-xl-10 col-lg-10 col-md-8 col-10 ms-auto me-auto'>
-                                    <input id='username_id' class="rounded-pill login-input w-100 TextSemiBold" placeholder="{{ trans('langUsername') }}" type="text" id="uname" name="uname" autocomplete="on">
+            <div class='container-fluid'>
+                <div class='col-12 p-lg-5 p-3'>
+                    <div class='row rowMargin'>
+                        <div class='col-lg-6 col-12'>
+                            <h1>{{ trans('langEclass') }}</h1>
+                            <p>{{ trans('langEclassInfo')}}</p>
+                            @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
+                                <div class='card cardLogin border-0 p-3'>
+                                    <div class='card-header bg-transparent border-0'>
+                                        <h2>{{ trans('langUserLogin') }}</h2>
+                                    </div>
+                                    <div class='card-body'>
+                                        <form class='mt-0' action="{{ $urlAppend }}" method="post">
+                                            <div>
+                                                <label for='username_id' class='form-label'>{{ trans('langUsername') }}</label>
+                                                <input id='username_id' class="login-input w-100" placeholder="" type="text" id="uname" name="uname" autocomplete="on">
+                                                <label for='password_id' class='form-label mt-4'>{{ trans('langPassword') }}&nbsp(password)</label>
+                                                <input id='password_id' class="login-input w-100" placeholder="" type="password" id="pass" name="pass" autocomplete="on">
+                                                <input class="btn w-100 login-form-submit Primary-500-bg text-white mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class='card-footer border-0 bg-transparent'>
+                                        <div class='col-12 text-start'>
+                                            <a class="text-decoration-underline" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
+                                        </div>
+                                        <div class='col-12 text-start mt-3'>
+                                            <a class="vsmall-text TextBold lightBlueText" href="{{$urlAppend}}main/login_form.php">{{ trans('langMoreLogin') }}</a>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class='col-xxl-9 col-xl-10 col-lg-10 col-md-8 col-10 ms-auto me-auto'>
-                                    <input id='password_id' class="rounded-pill login-input w-100 mt-2 TextSemiBold" placeholder="{{ trans('langPassword') }}" type="password" id="pass" name="pass" autocomplete="on">
-                                </div>
-                                <div class='col-xxl-9 col-xl-10 col-lg-10 col-md-8 col-10 ms-auto me-auto'>
-                                    <input class="rounded-pill btn w-100 login-form-submit TextBold mt-md-4 mb-md-0 mt-4 mb-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
-                                </div>
+                            @endif
+                            <div class='col-12 d-flex justify-content-start align-items-center'>
+                                <a class='pe-3' href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
+                                    <img style='height:100px; width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
+                                </a>
+                                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>
+                                    <img style='height:100px; width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
+                                </a>
                             </div>
-                        </form>
-                        <div class='col-12 text-center mt-3'>
-                            <a class="orangeText btnlostpass" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                         </div>
-                        <div class='col-12 text-center mt-2 mb-1'>
-                            <a class="vsmall-text TextSemiBold text-uppercase lightBlueText" href="{{$urlAppend}}main/login_form.php">{{ trans('langMoreLogin') }}</a>
+                        <div class='col-lg-6 col-12 d-none d-lg-block'>
+                            <img src='{{ $urlAppend }}template/modern/img/jumbotron-eclass-4.0.png'>
                         </div>
                     </div>
                 </div>
-            @else
-                <div class='col-xxl-3 offset-xxl-9 col-xl-4 offset-xl-8 col-lg-4 offset-lg-8 col-md-8 offset-md-2 col-12 contentLoginMobile d-lg-flex justify-content-lg-end align-items-lg-end d-flex justify-content-center align-items-center bg-transparent px-4 py-lg-0 py-4'></div>
-            @endif
+            </div>
         </div>
 
         
 
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
-        <div class='d-none d-lg-block px-3'>
-            <div class='SectionMenu ms-auto me-auto bg-transparent @if(!get_config("homepage_title") and !get_config("homepage_intro")) pt-3 @endif pb-3'>
+        <div class='d-none d-lg-block px-4 bg-white'>
+            <div class='SectionMenu ms-auto me-auto bg-transparent pt-4 pb-3'>
                 
                 @if(get_config('homepage_title') or get_config('homepage_intro'))
                     <div class="col-12 d-flex justify-content-center homepage_intro-margin @if($PositionFormLogin == 1 and !$warning and !get_config('dont_display_login_form')) rebuiltHomepageIntro @endif mb-3">

@@ -252,8 +252,8 @@ function view($view_file, $view_data = array()) {
     }
 
     // Add Theme Options styles
-    $logo_img = $themeimg.'/eclass-new-logo.png';
-    $logo_img_small = $themeimg.'/logo_eclass_small.png';
+    $logo_img = $themeimg.'/eclass-new-logo.svg';
+    $logo_img_small = $themeimg.'/logo-eclass-small.svg';
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     $styles_str = '';
@@ -711,11 +711,13 @@ function view($view_file, $view_data = array()) {
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css'/>
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css'/>
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css'/>
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default2.css'/>
         
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?donotcache'>
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/sidebar.css?donotcache'>
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/new_calendar.css?donotcache'>
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/default.css?donotcache'>
+            <link rel='stylesheet' href='{$urlAppend}template/modern/css/default2.css?donotcache'>
         ";
 
     }
@@ -929,10 +931,10 @@ function lang_selections_Mobile() {
         $langDropdown = "user-language-menuOn";
     }
     $lang_select = "
-      <a class='btn btn-transparent text-white d-flex justify-content-center align-items-center me-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+      <a class='btn btn-transparent d-flex justify-content-center align-items-center me-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <i class='fa fa-globe'></i>
       </a>
-      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown user-language-menu me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
+      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown contextual-menu me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
@@ -966,23 +968,23 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="dropdown-toggle text-white TextSemiBold text-capitalize small-text" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            '. $Selected_Language .' 
+                        <a class="form-value d-flex justify-content-end align-items-center" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            '. $Selected_Language .'
+                            <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>
-                        <ul class="m-0 p-0 border-0 dropdown-menu dropdown-menu-end user-language-menu me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">';
-                        foreach ($session->active_ui_languages as $code) {
-                            $class = ($code == $session->language)? ' class="active"': '';
-                            $lang_select .=
-                                "<li role='presentation'$class>
-                                    <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                                        <div class='d-inline-flex align-items-center'>
-                                            <span class='fa fa-globe' aria-hidden='true'></span>
-                                            <span class='TextMedium ps-1'>" .q($native_language_names_init[$code]) . "</span>
-                                        </div>
-                                    </a>
-                                </li>";
-                        }
-        $lang_select .= "</ul>
+                        <div class="m-0 border-0 dropdown-menu dropdown-menu-end contextual-menu shadow-default p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">
+                            <ul class="list-group list-group-flush">';
+                            foreach ($session->active_ui_languages as $code) {
+                                $class = ($code == $session->language)? ' class="active"': '';
+                                $lang_select .=
+                                    "<li role='presentation'$class>
+                                        <a class='list-group-item py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                                            " .q($native_language_names_init[$code]) . "
+                                        </a>
+                                    </li>";
+                            }
+            $lang_select .= "</ul>
+                        </div>
                     </div>";
     return $lang_select;
 }

@@ -5,7 +5,7 @@
 
 .leftMenuToolCourse{ background: transparent; }
 
-.toolSidebarTxt{ font-size: 13px; color: #ffffff; font-family: 'Poppins' ,'Fontawesome', sans-serif; font-weight: 500; font-style: normal;}
+.toolSidebarTxt{ font-size: 13px; color: #ffffff; font-family: 'Manrope', sans-serif; font-weight: 500; font-style: normal;}
 
 .posTool { margin-top:3px; }
 
@@ -17,7 +17,7 @@
 
 .leftMenuToolCourse.active:hover{ background-color:  #ccc; border: 0; }
 
-#background-cheat-leftnav,#bgr-cheat-header{background:#003e85;}
+#background-cheat-leftnav{background:#003e85;}
 #leftnav{background:transparent;}
 #bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
 #leftnav .panel a.list-group-item:hover{background: #005ad7;}
@@ -53,7 +53,8 @@
 .col_maincontent_active_Homepage{ 
   transition: 0.4s;  
   /* min-height: calc(100vh - 147px - 188.56px - 32px); */
-  min-height: calc(100vh - 147px - 70px - 96px);
+  /* min-height: calc(100vh - 147px - 70px - 96px); */
+  min-height: calc(100vh - 80px - 70px - 96px);
   background-color: transparent;  
   border-radius:15px;
  }
@@ -70,7 +71,8 @@
   /* +147px is the padding 147px of jumbotron */
   .col_maincontent_active_HomepageStart{
     /* min-height: calc(100vh - 147px + 147px - 390px - 300px - 188.55px); */
-    min-height: calc(100vh - 147px + 147px - 390px - 300px - 70px);
+    /* min-height: calc(100vh - 147px + 147px - 390px - 300px - 70px); */
+    min-height: calc(100vh - 80px + 147px - 390px - 300px - 70px);
     border-radius:0px;
   }
 }
@@ -116,11 +118,11 @@
 
 .breadcrumb li{ white-space:nowrap; }
 
-@media(max-width:991px){
+/* @media(max-width:991px){
   .offcanvas-start.d-lg-none.show{
     background-color: #003F87 !important;
   }
-}
+} */
 
 @media(max-width: 425px){ 
 
