@@ -4,8 +4,6 @@
 
 <link href="{{ $urlAppend }}template/modern/css/homepage.css" rel="stylesheet" type="text/css">
 
-
-
 <div class="col-12 container-Homepage bgEclass col_maincontent_active_HomepageStart HomepageStartMobile">
 
         @if($warning)
@@ -31,7 +29,7 @@
         <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif">
             <div class='container-fluid'>
                 <div class='col-12 p-lg-5 p-3'>
-                    <div class='row rowMargin'>
+                    <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                         <div class='col-lg-6 col-12'>
                             <h1>{{ trans('langEclass') }}</h1>
                             <p>{{ trans('langEclassInfo')}}</p>
@@ -71,7 +69,106 @@
                             </div>
                         </div>
                         <div class='col-lg-6 col-12 d-none d-lg-block'>
-                            <img src='{{ $urlAppend }}template/modern/img/jumbotron-eclass-4.0.png'>
+                            <img class='jumbotron-image-default' src='{{ $urlAppend }}template/modern/img/jumbotron-eclass-4.0.png'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='container-fluid bg-white'>
+            <div class='col-12 p-lg-5 p-3 bg-white'>
+                <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
+                    <div class='col-lg-6 col-12'>
+                        <div class='card border-0'>
+                            <div class='card-header border-bottom-card-header bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                                <div class='d-flex justify-content-start align-items-center'>
+                                    <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
+                                    <a href='{{ $urlServer }}rss.php'><i class="fa-solid fa-rss"></i></a>
+                                </div>
+                                <div class='d-flex justify-content-end align-items-center'>
+                                    <a class='TextRegular text-decoration-underline msmall-text Primary-500-cl text-lowercase' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
+                                </div>
+                            </div>
+                            <div class='card-body px-0 py-0'>
+                                @php $counterAn = 0; @endphp
+                                @if(count($announcements) > 0)
+                                    <ul class='list-group list-group-flush'>
+                                        @foreach ($announcements as $announcement)
+                                            @if($counterAn < 6)
+                                                <li class='li-unstyled border-bottom-list-group px-0 py-3'>
+                                                    <a class='list-group-item border-0 px-0 py-0 TextSemiBold msmall-text Primary-500-cl' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                        {{$announcement->title}}
+                                                    </a>
+                                                    <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
+                                                </li>
+                                            @endif
+                                            @php $counterAn++; @endphp
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <ul class='list-group list-group-flush'>
+                                        <li class='li-unstyled border-bottom-list-group px-0 py-3'>
+                                            <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ trans('langNoInfoAvailable') }}</div>
+                                        </li>
+                                    </ul>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-lg-6 col-12'>
+                        <div class='card border-0'>
+                            <div class='card-header border-bottom-card-header bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                                <div class='d-flex justify-content-start align-items-center'>
+                                    <h3 class='pe-2'>{{ trans('langViewStatics') }}</h3>
+                                </div>
+                            </div>
+                            <div class='card-body px-0 py-3'>
+                                <div class='col-12'>
+                                    <div class='row rowMargin row-cols-1 row-cols-md-3 g-5'>
+                                        <div class='col'>
+                                            <div class='card border-card drop-shadow h-100'>
+                                                <div class='card-body d-flex justify-content-center align-items-center'>
+                                                    <div class='d-flex justify-content-center align-items-center'>
+                                                        <img src='{{ $urlAppend }}template/modern/images/Icons_book-open.svg'>
+                                                        @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
+                                                        <h1 class='mb-0 ms-2'>{{ $course_inactive }}</h1>
+                                                    </div>
+                                                </div>
+                                                <div class='card-footer d-flex justify-content-center align-items-center pt-0 bg-white border-0'>
+                                                    <p class='Neutral-900-cl mb-3'>{{ trans('langCourses') }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col'>
+                                            <div class='card border-card drop-shadow h-100'>
+                                                <div class='card-body d-flex justify-content-center align-items-center'>
+                                                    <div class='d-flex justify-content-center align-items-center'>
+                                                        <img src='{{ $urlAppend }}template/modern/images/Icons_user.svg'>
+                                                        <h1 class='mb-0 ms-2'>10K+</h1>
+                                                    </div>
+                                                </div>
+                                                <div class='card-footer d-flex justify-content-center align-items-center pt-0 bg-white border-0'>
+                                                    <p class='Neutral-900-cl mb-3 text-center'>{{trans('langUserLogins')}}/</br>{{trans('langWeek')}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class='col'>
+                                            <div class='card border-card drop-shadow h-100'>
+                                                <div class='card-body d-flex justify-content-center align-items-center'>
+                                                    <div class='d-flex justify-content-center align-items-center'>
+                                                        <img src='{{ $urlAppend }}template/modern/images/Icons_user.svg'>
+                                                        <h1 class='mb-0 ms-2'>{{ getOnlineUsers() }}</h1>
+                                                    </div>
+                                                </div>
+                                                <div class='card-footer d-flex justify-content-center align-items-center pt-0 bg-white border-0'>
+                                                    <p class='Neutral-900-cl mb-3 text-center'>{{trans('langOnlineUsers')}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -79,7 +176,7 @@
         </div>
 
         
-
+                                                    
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
         <div class='d-none d-lg-block px-4 bg-white'>
             <div class='SectionMenu ms-auto me-auto bg-transparent pt-4 pb-3'>
@@ -413,46 +510,6 @@
                     </div>
                 @endif
 
-                @if ($announcements)
-                    <div class="col-12 mb-3">
-                        <div class='panel panel-admin panel-announcements border-0 shadow-none'>
-                            <div class='panel-body rounded-Home px-5 py-4'>
-                                <div class="news">
-                                    <div class='d-flex'>
-                                        
-                                            <img class='announcement-image me-2' src="{{$urlAppend}}template/modern/img/announcement.svg">
-                                        
-                                            <h4 class="block-title w-100 TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
-                                                <a href='{{ $urlServer }}rss.php'>
-                                                    <span class='fa fa-rss-square'></span>
-                                                </a>
-                                            </h4>
-                                        
-                                    </div>
-                                    <div class="row news-list m-auto">
-                                        @php $counterAn = 0; @endphp
-                                        @foreach ($announcements as $announcement)
-                                            @if($counterAn < 6)
-                                            <div class="col-12 news-list-item ps-2">
-                                                <div class="col-12">
-                                                    <a href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                                        <span class='TextSemiBold lightBlueText fs-6'>{{$announcement->title}}</span>
-                                                    </a>
-                                                </div>
-                                                <div class="date">
-                                                    <small class='textgreyColor TextSemiBold'>{{ format_locale_date(strtotime($announcement->date)) }}</small>
-                                                </div>
-                                            </div>
-                                            @endif
-                                        @php $counterAn++; @endphp
-                                        @endforeach
-                                    </div>
-                                    <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlAppend }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
 
                 @if($texts)
                     @foreach($texts as $text)
@@ -482,7 +539,7 @@
 
 
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
-        <div class='d-block d-lg-none bgEclass pb-3 pt-0 ps-3 pe-3'>
+        <div class='d-block d-lg-none bg-white pb-3 pt-0 ps-3 pe-3'>
             @if(get_config('homepage_title') or get_config('homepage_intro'))
                 <div class='col-12 mt-3'>
                     <div class="panel panel-default homepageIntroPanel w-100 border-0 shadow-none">
@@ -805,108 +862,34 @@
                     </div>
                 @endif
 
-            @if ($announcements)
-                <div class='col-12 mt-3'>
-                    
-                            <div class='panel panel-admin border-0 shadow-none'>
+            
+
+                @if($texts)
+                    @foreach($texts as $text)
+                        <div class="col-12 mt-3">
+                            <div class='panel panel-admin shadow-none'>
                                 <div class='panel-body'>
                                     <div class="news">
-                                        <div class='d-flex'>
-                                            
-                                                <img class='announcement-image me-2' src="{{$urlAppend}}template/modern/img/announcement.svg">
-                                            
-                                                <h4 class="block-title w-100 TextExtraBold text-uppercase pb-0 mt-2">{{ trans('langAnnouncements') }}
-                                                    <a href='{{ $urlServer }}rss.php'>
-                                                        <span class='fa fa-rss-square'></span>
-                                                    </a>
-                                                </h4>
-                                            
+                                        <div class='row'>
+                                            <div class='col-lg-12'>
+                                                <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{!! $text->title !!}</h4>
+                                            </div>
                                         </div>
-                                        <div class="row news-list m-auto">
-                                            @php $counterAn = 0; @endphp
-                                            @foreach ($announcements as $announcement)
-                                                @if($counterAn < 6)
-                                                <div class="col-12 news-list-item ps-2">
-                                                    <div class="col-12">
-                                                        <a href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                                            <span class='TextSemiBold lightBlueText fs-6'>{{$announcement->title}}</span>
-                                                        </a>
-                                                    </div>
-                                                    <div class="date">
-                                                        <small class='textgreyColor TextSemiBold'>{{ format_locale_date(strtotime($announcement->date)) }}</small>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                            @php $counterAn++; @endphp
-                                            @endforeach
-                                        </div>
-                                        <div class="more-link"><a class="all_announcements mt-3 float-end" href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }} <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span></a></div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                </div>
-            @endif
+                                        
+                                        {!! $text->body !!}
 
-            @if($texts)
-                @foreach($texts as $text)
-                    <div class="col-12 mt-3">
-                        <div class='panel panel-admin shadow-none'>
-                            <div class='panel-body'>
-                                <div class="news">
-                                    <div class='row'>
-                                        <div class='col-lg-12'>
-                                            <h4 class="block-title TextExtraBold text-uppercase pb-0 mt-2">{!! $text->title !!}</h4>
-                                        </div>
                                     </div>
-                                    
-                                    {!! $text->body !!}
-
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            @endif
+                    @endforeach
+                @endif
 
         </div>
         @endif
     
 </div>
         
-    
-
-
-
-
-<div class="col-12 statistics mt-0 @if(get_config('dont_display_testimonials')) mb-0 @endif">
-    
-        <div class="statistics-wrapper">
-            <h2 class="TextExtraBold text-center pt-lg-0 pt-4">
-                {{trans('langViewStatics')}}
-            </h2>
-            <div class="row row_pad_courses">
-                <div class="col-sm-4 text-center">
-                        <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_1.svg">
-                        @php $course_inactive = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count; @endphp
-                        <div class="num TextBold">{{ $course_inactive }}</div>
-                        <div class="num-text text-lowercase TextLight">{{trans('langsCourses')}}</div>
-                </div>
-                <div class="col-sm-4 text-center">
-                        
-                        <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_2.svg">
-                        <div class="num TextBold">10<span class='num-plus TextRegular'>K+</span></div>
-                        <div class="num-text text-lowercase TextLight">{{trans('langUserLogins')}}/{{trans('langWeek')}}</div>
-                </div>
-                <div class="col-sm-4 text-center">
-                        <img class="statistics-icon m-auto d-block" src="{{ $urlAppend }}template/modern/img/statistics_3.svg">
-                        <div class="num TextBold">{{ getOnlineUsers() }}</div>
-                        <div class="num-text text-lowercase TextLight">{{trans('langOnlineUsers')}}</div>
-                </div>
-            </div>
-        </div>
-   
-</div>
 
 @if(!get_config('dont_display_testimonials'))
 <div class="d-flex justify-content-center">
@@ -929,16 +912,10 @@
 
 
 
+
 <script>
 
     $('.basic-content').removeClass('container');
-
-    $('#link-home'+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
-    function unhoverHome(obj) {
-        if(!current_url.includes('/main/portfolio.php')){
-            $('#'+obj.id+'>'+'img').attr("src","{{ $urlAppend }}template/modern/img/home_2.svg");
-        }
-    }
    
     $('.testimonials').slick({
 		autoplay:true,

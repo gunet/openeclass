@@ -3643,14 +3643,16 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $dataAttrs = 'data-bs-display="static" data-bs-toggle="dropdown" data-bs-placement="bottom" aria-haspopup="true" aria-expanded="false"';
             $form_begin = '<div class="btn-group" role="group">';
             $form_end = '</div>';
-            $subMenu = '<ul class="dropdown-menu dropdown-menu-end mydropdownsSecond shadow-lg m-0 p-0">';
-            foreach ($option['options'] as $subOption) {
-               $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
-               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' pe-2 pt-1"></span>' : '';
-               $subMenu .= q($subOption['title']) . '</div></a></li>';
+            $subMenu = '<div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu">
+                            <ul class="list-group list-group-flush">';
+                foreach ($option['options'] as $subOption) {
+                $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
+                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' pe-2"></span>' : '';
+                $subMenu .= q($subOption['title']) . '</div></a></li>';
 
-            }
-            $subMenu .= '</ul>';
+                }
+                $subMenu .= '</ul>
+                        </div>';
         }
         $iconTag = '';
         if ($level == 'primary-label') {
@@ -3675,9 +3677,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item border border-top-0 border-bottom-secondary TextMedium'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item d-flex justify-content-start align-items-start py-3'" . $href .
                 " $link_attrs>" .
-                "<div class='d-inline-flex align-items-start'><span class='fa $option[icon] pe-2 pt-1'></span> $title</div></a>$form_end</li>");
+                "<span class='fa $option[icon] pe-2'></span> $title</a>$form_end</li>");
         }
         $i++;
     }
@@ -3691,9 +3693,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-cogs";
     if (count($out_secondary)) {
         $action_button .= "<button  type='button' id='toolDropdown' class='btn submitAdminBtn dropdown-toggle' data-bs-toggle='dropdown' aria-expanded='false'><span class='fa $secondary_icon'></span><span class='hidden-xs text-dark'>$secondary_title</span> <span class='caret'></span><span class='hidden'></span></button>";
-        $action_button .= "<ul class='dropdown-menu dropdown-menu-end p-0 m-0 mydropdowns shadow-lg' role='menu' aria-labelledby='toolDropdown'>
-                     ".implode('', $out_secondary)."
-                  </ul>";
+        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='toolDropdown'>
+                                <ul class='list-group list-group-flush'>
+                                    ".implode('', $out_secondary)."
+                                </ul>
+                            </div>";
     }
     $pageTitleActive = "";
     // if(!empty($page_title) and $pageName != $langVideo){

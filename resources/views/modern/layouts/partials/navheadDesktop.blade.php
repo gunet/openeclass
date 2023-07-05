@@ -8,20 +8,20 @@
                     <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
                 </a>
                 @if(!get_config('hide_login_link'))
-                    <a class="eclass-nav-link ms-xl-3 me-3 d-flex justify-content-center align-items-center" href="{{ $urlServer }}"> 
+                    <a id="link-home" class="menu-item ms-xl-3 me-3 d-flex justify-content-center align-items-center @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}"> 
                         {{ trans('langHome') }}
                     </a>
                 @endif
                 @if (!isset($_SESSION['uid']))
-                    <a class="eclass-nav-link ms-xl-3 me-3 d-flex justify-content-center align-items-center @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
+                    <a id="link-register" class="menu-item ms-xl-3 me-3 d-flex justify-content-center align-items-center @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
                         {{ trans('langRegistration') }}
                     </a>
                 @endif
-                <a class="eclass-nav-link ms-xl-3 me-3 d-flex justify-content-center align-items-center" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                <a id="link-lessons" class="menu-item ms-xl-3 me-3 d-flex justify-content-center align-items-center" href="{{ $urlServer }}modules/auth/listfaculte.php">
                     {{ trans('langCourses') }}
                 </a>
                 
-                <a class="eclass-nav-link ms-xl-3 d-flex justify-content-center align-items-center" href="{{$urlAppend}}info/faq.php">
+                <a id="link-faq" class="menu-item ms-xl-3 d-flex justify-content-center align-items-center" href="{{$urlAppend}}info/faq.php">
                     {{ trans('langFaq') }}
                 </a>
                 
@@ -76,7 +76,7 @@
                                             {{ $_SESSION['uname'] }}
                                             <i class="fa-solid fa-chevron-down ps-2"></i>
                                     </button>
-                                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu shadow-default border-0" aria-labelledby="btnGroupDrop1">
+                                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu" aria-labelledby="btnGroupDrop1">
                                         <ul class="list-group list-group-flush">
 
                                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
@@ -212,3 +212,65 @@
 </nav>
 
 
+
+
+
+
+<script>
+    let current_url = document.URL;
+
+    localStorage.setItem("menu-item", "homepage");
+
+    if(current_url.includes('/modules/auth/registration.php')
+       || current_url.includes('/modules/auth/formuser.php')
+       || current_url.includes('/modules/auth/newuser.php')
+       || current_url.includes('/modules/auth/altnewuser.php')){
+        localStorage.setItem("menu-item", "register");
+    }
+    if(current_url.includes('/modules/auth/opencourses.php')
+        || current_url.includes('/modules/auth/listfaculte.php')){
+        localStorage.setItem("menu-item", "lessons");
+    }
+    if(current_url.includes('/main/portfolio.php')){
+        localStorage.setItem("menu-item", "homepage");
+    }
+    if(current_url.includes('/info/faq.php')){
+        localStorage.setItem("menu-item", "faq");
+    }
+    if(!current_url.includes('/modules/auth/registration.php')
+       && !current_url.includes('/modules/auth/formuser.php')
+       && !current_url.includes('/modules/auth/newuser.php')
+       && !current_url.includes('/modules/auth/altnewuser.php')
+       && !current_url.includes('/modules/auth/opencourses.php')
+       && !current_url.includes('/modules/auth/listfaculte.php')
+       && !current_url.includes('/main/portfolio.php')
+       && !current_url.includes('/info/faq.php')){
+            localStorage.setItem("menu-item", "none");
+    }
+
+
+
+    if(localStorage.getItem("menu-item") == "homepage"){
+        $('#link-home').addClass('active');
+    }
+    if(localStorage.getItem("menu-item") == "register"){
+        $('#link-register').addClass('active');
+    }
+    if(localStorage.getItem("menu-item") == "lessons"){
+        $('#link-lessons').addClass('active');
+    }
+    if(localStorage.getItem("menu-item") == "faq"){
+        $('#link-faq').addClass('active');
+    }
+
+    // if(localStorage.getItem("menu-item") == "register"){
+    //     $('#link-register').addClass('active');
+    // }
+
+    // $('.menu-item').on('click',function(){
+    //     if(localStorage.getItem("menu-item") == "register"){
+
+    //     }
+    // });
+
+</script>

@@ -5,7 +5,7 @@
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp
 
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
-        <p class="text-center text-light mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
+        <p class="text-center form-value mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
 
          <!-- THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center mb-5'>
@@ -24,25 +24,28 @@
             @foreach ($toolArr as $key => $tool_group)
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                     <div class="panel-sidebar-heading ps-lg-3 pe-lg-3">
-                        <div class="panel-title h3">
-                            <div class='d-flex justify-content-between align-items-end bgTheme'>
-                                <span class='text-wrap tool-sidebar-text ps-0 text-uppercase'>{{ $tool_group[0]['text'] }}</span>
-                                <span class="fa fa-chevron-up tool-sidebar"></span>
+                        <div class="panel-title h3 bg-transparent">
+                            <div class='d-flex justify-content-between align-items-end'>
+                                {{ $tool_group[0]['text'] }}
+                                <span class="fa fa-chevron-up"></span>
                             </div>
                         </div>
                         <div class='lineSidebar'></div>
                     </div>
                 </a>
                 <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }} rounded-0 Collapse{{ $key }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
-                    @foreach ($tool_group[1] as $key2 => $tool)
-                        <a href="{!! $tool_group[2][$key2] !!}" class='leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}} rounded-0 border-0' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                            <div class='d-flex justify-content-start align-items-start'>
-                                <span class="{{ $tool_group[3][$key2] }} text-white pe-2"></span>
-                                <span class='toolSidebarTxt'>{!! $tool !!}</span>
-                            </div>
-
-                        </a>
-                    @endforeach
+                    <div class="m-0 p-0 contextual-sidebar w-auto border-0">
+                        <ul class="list-group list-group-flush">
+                            @foreach ($tool_group[1] as $key2 => $tool)
+                                <li>
+                                    <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item d-flex justify-content-start align-items-start py-2 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }} style='font-size:13px;'>
+                                        <i class="{{ $tool_group[3][$key2] }} pe-2"></i>
+                                        {!! $tool !!}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
                 </div>
                 <div class='p-3'></div>
             @endforeach

@@ -5629,3 +5629,6 @@ Seleccione la Facultad o Departamento dentro de la cual se ofrece el curso o la 
 Elija uno de los formatos de curso disponibles. </br></br>
 Opcionalmente, especifique la licencia de distribución de su curso.</br></br>
 Especifica el tipo de acceso a tu curso. </br></br>";
+
+
+$langEclassInfo = "La plataforma Open eClass 4.0 es un completo Sistema Electrónico de Gestión de Cursos. Sigue la filosofía del software de código abierto y soporta el servicio de Aprendizaje a Distancia Asíncrono sin limitaciones y compromisos.";

@@ -5620,3 +5620,6 @@ Seleziona la Facoltà o il Dipartimento in cui è offerto il corso o la categori
 Scegli uno dei formati di corso disponibili. </br></br>
 Facoltativamente, specifica la licenza di distribuzione del tuo corso.</br></br>
 Specifica il tipo di accesso al tuo corso. </br></br>";
+
+
+$langEclassInfo = "La piattaforma Open eClass 4.0 è un sistema elettronico completo di gestione dei corsi. Segue la filosofia del software open source e supporta il servizio di Didattica Asincrona a Distanza senza limitazioni e impegni.";

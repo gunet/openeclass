@@ -5548,3 +5548,7 @@ Wählen Sie eines der verfügbaren Kursformate. </br></br>
 Geben Sie optional die Vertriebslizenz Ihres Kurses an.</br></br>
 Geben Sie die Art des Zugangs zu Ihrem Kurs an. </br></br>";
 
+
+
+
+$langEclassInfo = "Die Open eClass 4.0-Plattform ist ein vollständiges elektronisches Kursverwaltungssystem. Es folgt der Philosophie der Open-Source-Software und unterstützt den asynchronen Fernunterrichtsdienst ohne Einschränkungen und Verpflichtungen.";

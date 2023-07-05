@@ -236,6 +236,8 @@ a:hover{
 
 .msmall-text { 
     font-size: 14px; 
+    line-height: 16px;
+    letter-spacing: 0px;
 }
 
 .small-text { 
@@ -280,11 +282,46 @@ a:hover{
     box-shadow: 1.0px 2.0px 6.0px 0px rgba(43, 57, 68, 0.04);
 }
 
+/*------------------------------- TEMP CLASSES -----------------------------*/
+
+.basic-size{
+  height:40px;
+  width:40px;
+}
+
+.drop-shadow{
+  filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+}
+
+.border-card{
+  border: solid 1px #E8EDF8;
+}
+
+.border-bottom-card-header{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #B3D1FF;
+}
+
+.border-bottom-list-group{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #EFF6FF;
+}
+
+.li-unstyled{
+  list-style:none !important;
+}
+
 /*------------------------------- CONTEXTUAL MENUS -------------------------*/
 
 .contextual-menu{
-    width:250px;
+    width:270px;
     list-style-type:none;
+    border: solid 1px #EFF6FF;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
 }
 
 .contextual-menu li{
@@ -307,6 +344,17 @@ a:hover{
 .contextual-menu .list-group-item:hover{
   background-color: #EFF6FF;
   color:#0073E6;
+  text-decoration: none;
+  cursor:  url(../images/pointer.png), auto;
+}
+
+body .form-action-button-mydropdowns{ 
+  display: none; 
+}
+
+
+.contextual-menu .form-action-button-mydropdowns{ 
+  display: block; 
 }
 
 /*------------------------------- HEADER ----------------------------------*/
@@ -324,12 +372,22 @@ a:hover{
     height:42.4px; 
 }
 
-.eclass-nav-link{
+.menu-item{
     font-weight: 600;
     font-size: 15px;
     letter-spacing: 0px;
     line-height: 16px;
     color: #2B3944;
+}
+.menu-item:hover{
+  color: #0073E6;
+}
+
+.menu-item.active{
+  background-color: #EFF6FF;
+  color: #0073E6;
+  padding: 10px;
+  border-radius: 4px;
 }
 
 .input-group-search { 
@@ -403,7 +461,7 @@ a:hover{
   }
   @media(max-width:991px){
     .cardLogin{
-        width: 320px;
+        width: auto;
     }
   }
 
@@ -689,6 +747,92 @@ a:hover{
   .news-list .news-list-item .date { 
     color: #001146; 
   }
+
+
+/* ------------------------------------- Portfolio -------------------------------------*/
+
+
+@media(min-width:426px) and (max-width:767px){
+  .lesson {min-height: 314px;}
+}
+@media(min-width:768px) and (max-width:991px){
+  .lesson {min-height: 320px;}
+}
+@media(min-width:992px) and (max-width:1199px){
+  .lesson {min-height: 280px;}
+}
+@media(min-width:1200px) and (max-width:1399px){
+  .lesson {min-height: 290px;}
+}
+@media(min-width:1400px){
+  .lesson {min-height: 300px;}
+}
+
+@media(max-width:991px){
+  .lesson-image img{ width:100%; height:208px; }
+}
+@media(min-width:992px){
+  .lesson-image img{ width:100%; height:200px; object-fit: cover;}
+}
+
+.lesson-image:hover{ opacity:0.5; }
+
+.user-details-collapse-more{ cursor: pointer; }
+
+.user-details-collapse-less{ display: none; cursor: pointer; float:right; }
+
+.user-detals-photo { width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8; }
+@media(min-width:768px) and (max-width:991px){
+  .user-detals-photo { max-width: 120px; }
+}
+
+.btn_left_rigth{ height:30px; width:30px; border-radius:50%; border:solid 1px blue; }
+
+.cources-paging-arrow.arrow-left{ color:blue; margin-left:8px; margin-top:6px; }
+
+.cources-paging-arrow.arrow-right{ padding-left:10px; color:blue; margin-top:6px; }
+
+.Courses-Content { border-radius: 15px; background-color: #ffffff; }
+@media(min-width:992px){
+  .Courses-Content{
+    border: solid 1px #E8EDF8;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  }
+  .basic-section-mobile{
+    min-height: calc(100vh - 147px - 70px);
+  }
+}
+@media(max-width:991px){
+  .Courses-Content{
+    border: solid 1px #E8EDF8;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  }
+}
+
+.event-important, .event-info, .event-success, .event-special{ float:left; }
+
+.agenda-comment{ font-size:13px; }
+
+.viewAllCourseBtn {height:15px; width:30px; margin-top:2px;}
+
+@media(max-width:991px){
+  .BorderSolid{
+    border: solid 1px #E8EDF8;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  }
+}
+@media(min-width:992px){
+  .BorderSolidDes{
+    border: solid 1px #E8EDF8;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  }
+}
+
+@media(max-width:767px){
+  #portfolio_lessons_wrapper .all_courses{
+    width: 100%;
+  }
+}
 
 
 

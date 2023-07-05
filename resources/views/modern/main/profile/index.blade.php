@@ -54,7 +54,7 @@
                                             <div id='profile-avatar'>
                                                 {!! $profile_img !!}
                                             </div>
-                                            <h5 class='text-center blackBlueText TextSemiBold mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h5>
+                                            <h3 class='text-center mt-3'> {{ $userdata->surname }} {{ $userdata->givenname }} </h3>
                                             <p class='text-center'>
                                                 @if(($userdata->status == USER_TEACHER))
                                                     {{ trans('langMetaTeacher') }}

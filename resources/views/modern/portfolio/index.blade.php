@@ -26,7 +26,7 @@
                             <p class="text-center blackBlueText mt-3"> {{ $_SESSION['uname'] }} </p>
                         </div>
                         <div class='col-md-6 col-12 ps-lg-2 ps-md-5'>
-                            <h6 class='text-md-start text-center blackBlueText TextBold mb-0'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h6>
+                            <h3 class='text-md-start text-center mb-0'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h3>
                             <p class='text-md-start text-center small-text TextMedium blackBlueText mb-4'>
                                 @if(($session->status == USER_TEACHER))
                                     {{ trans('langMetaTeacher') }}

@@ -5,6 +5,15 @@
 
 .site-footer {border-top-left-radius:0px; border-top-right-radius:0px;}
 
+.container-fluid{min-width: 100% !important;}
+
+.menu-item.active2{
+    background-color: #EFF6FF;
+    color: #0073E6;
+    padding: 10px;
+    border-radius: 4px;
+}
+
 @media(min-width:992px){
     /* #bgr-cheat-header {border-bottom-left-radius:85px; border-bottom-right-radius:0px;} */
     

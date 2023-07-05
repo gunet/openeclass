@@ -84,7 +84,7 @@ function getUserLessonInfo($uid) {
                 $fav_status = 0;
                 $fav_message = '';
             } else {
-                $favorite_icon = 'fa-bookmark-o';
+                $favorite_icon = 'fa-regular fa-bookmark';
                 $fav_status = 1;
                 $fav_message = $langFavorite;
             }

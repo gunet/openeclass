@@ -503,7 +503,7 @@
 
                     <div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="panel panel-admin p-0 bg-white borderBoxPanelNoShadow">
+                        <div class="panel panel-admin p-0 bg-white drop-shadow border-card borderBoxPanelNoShadow">
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap p-3'>
 

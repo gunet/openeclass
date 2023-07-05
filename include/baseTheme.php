@@ -252,10 +252,19 @@ function view($view_file, $view_data = array()) {
     }
 
     // Add Theme Options styles
-    $logo_img = $themeimg.'/eclass-new-logo.svg';
-    $logo_img_small = $themeimg.'/logo-eclass-small.svg';
+    
+    
+    
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+    if ($theme_id and $theme_id!=0) {
+        $logo_img = $themeimg.'/eclass-logo-theme.svg';
+        $logo_img_small = $themeimg.'/logo-eclass-small-theme.svg';
+    }else{
+        $logo_img = $themeimg.'/eclass-new-logo.svg';
+        $logo_img_small = $themeimg.'/logo-eclass-small.svg';
+    }
+
     $styles_str = '';
     $leftsideImg = '';
     $PositionFormLogin = 0;
@@ -303,6 +312,16 @@ function view($view_file, $view_data = array()) {
             $rgba_no_alpha = 'rgba(' . implode(',', $rgba_no_alpha) . ')';
 
             $styles_str .= " 
+
+               .menu-item,.form-value{ color: #ffffff; }
+               .jumbotron-login{
+                    background-repeat: no-repeat;
+                    background-size: cover;
+               }
+               .jumbotron-image-default{display: none;}
+
+
+
                 .left-form{ 
                     background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
                 }
@@ -394,7 +413,7 @@ function view($view_file, $view_data = array()) {
                     color: #ffffff !important;
                 }
 
-                #bgr-cheat-header, .ContentLeftNav{
+                #bgr-cheat-header, .ContentLeftNav, .contextual-sidebar .list-group-item{
                     background:$rgba_no_alpha;
                 }
 
@@ -932,15 +951,15 @@ function lang_selections_Mobile() {
     }
     $lang_select = "
       <a class='btn btn-transparent d-flex justify-content-center align-items-center me-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <i class='fa fa-globe'></i>
+          <i class='fa-solid fa-globe'></i>
       </a>
-      <ul class='m-0 p-0 border-0 dropdown-menu dropdown-menu-end $langDropdown contextual-menu me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
+      <ul class='m-0 p-0 dropdown-menu dropdown-menu-end $langDropdown contextual-menu me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
             "<li role='presentation'$class>
                 <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    <div class='d-inline-flex align-items-center'><span class='fa fa-language' aria-hidden='true'></span><span class='TextMedium ps-1'>" .
+                    <div class='d-inline-flex align-items-center'><span class='fa-solid fa-language' aria-hidden='true'></span><span class='TextMedium ps-1'>" .
                     q($native_language_names_init[$code]) . "</span></div></a></li>";
     }
     $lang_select .= "</ul>";
@@ -972,13 +991,14 @@ function lang_selections_Desktop() {
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>
-                        <div class="m-0 border-0 dropdown-menu dropdown-menu-end contextual-menu shadow-default p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">
+                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">
                             <ul class="list-group list-group-flush">';
                             foreach ($session->active_ui_languages as $code) {
                                 $class = ($code == $session->language)? ' class="active"': '';
                                 $lang_select .=
                                     "<li role='presentation'$class>
                                         <a class='list-group-item py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                                            <i class='fa-solid fa-earth-europe'></i>
                                             " .q($native_language_names_init[$code]) . "
                                         </a>
                                     </li>";

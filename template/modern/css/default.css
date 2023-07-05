@@ -94,7 +94,8 @@ body{
   letter-spacing: 0px;
   line-height: 1.6;
   color: #2B3944; */
-  background-color: #e8e8e8;
+  /* background-color: #e8e8e8; */
+  background-color: #FAFBFC;
 }
 
 /* @media(max-width:991px){
@@ -208,7 +209,7 @@ textarea {
 }
 
 .legendViewContent2{
-  border-bottom:solid 1px #ffffff;
+  border-bottom:solid 1px #B3D1FF;
 }
 @media(max-width:991px){
   .legendViewContent2{
@@ -704,24 +705,6 @@ label:has(input[type="checkbox"]:disabled){
     opacity:1; 
   }
 
-  
-  /* --------------------------------------------- ManageCourse-Partials --------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-  
-  .manage-course-ul{ 
-    width:280px; 
-  }
-
-  .manage-course-ul .manage-course-li a:hover{ 
-    background: #005ad9; 
-  }
-
-  .manage-course-ul .manage-course-li a:hover span{ 
-    color: #ffffff;
-  }
 
   /* --------------------------------------------- CourseHome -------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -815,7 +798,7 @@ label:has(input[type="checkbox"]:disabled){
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  .mydropdowns{ 
+  /* .mydropdowns{ 
     background-color: #fafafa; 
     width:315px; 
     font-size:14px; 
@@ -858,10 +841,10 @@ label:has(input[type="checkbox"]:disabled){
   .mydropdownsSecond .list-group-item:hover{ 
     background-color: #1d4e89; 
     color:white; 
-  }
+  } */
 
   /* after close modal , display none from body and block inside mydropdowns for form-action-button-mydropdowns */
-  body .form-action-button-mydropdowns{ 
+  /* body .form-action-button-mydropdowns{ 
     display: none; 
   }
 
@@ -873,7 +856,7 @@ label:has(input[type="checkbox"]:disabled){
     background-color: #005ad9;
     color: #ffffff;
     text-decoration: none;
-  }
+  } */
 
 /* --------------------------------------------- Datepicker-datetimepicker ------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -941,88 +924,7 @@ label:has(input[type="checkbox"]:disabled){
   }
 
 
-/* --------------------------------------------- Portfolio ----------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  @media(min-width:426px) and (max-width:767px){
-    .lesson {min-height: 314px;}
-  }
-  @media(min-width:768px) and (max-width:991px){
-    .lesson {min-height: 320px;}
-  }
-  @media(min-width:992px) and (max-width:1199px){
-    .lesson {min-height: 280px;}
-  }
-  @media(min-width:1200px) and (max-width:1399px){
-    .lesson {min-height: 290px;}
-  }
-  @media(min-width:1400px){
-    .lesson {min-height: 300px;}
-  }
-
-  @media(max-width:991px){
-    .lesson-image img{ width:100%; height:208px; }
-  }
-  @media(min-width:992px){
-    .lesson-image img{ width:100%; height:200px; object-fit: cover;}
-  }
-
-  .lesson-image:hover{ opacity:0.5; }
-
-  .user-details-collapse-more{ cursor: pointer; }
-  
-  .user-details-collapse-less{ display: none; cursor: pointer; float:right; }
-  
-  .user-detals-photo { width: 120px; height: 120px; border-radius: 50%; border:solid 2px #e8e8e8; }
-  @media(min-width:768px) and (max-width:991px){
-    .user-detals-photo { max-width: 120px; }
-  }
-  
-  .btn_left_rigth{ height:30px; width:30px; border-radius:50%; border:solid 1px blue; }
-
-  .cources-paging-arrow.arrow-left{ color:blue; margin-left:8px; margin-top:6px; }
-
-  .cources-paging-arrow.arrow-right{ padding-left:10px; color:blue; margin-top:6px; }
-
-  .Courses-Content { border-radius: 15px; background-color: white; }
-  @media(min-width:992px){
-    .Courses-Content{
-      /* min-height: calc(100vh - 147px - 261px - 188.55px - 32px); */
-      /* min-height: calc(100vh - 147px - 278px - 70px - 96px - 16px); */
-      border: 1px solid rgba(0,0,0,.125)
-    }
-    .basic-section-mobile{
-      min-height: calc(100vh - 147px - 70px);
-    }
-  }
-  @media(max-width:991px){
-    .Courses-Content{
-      border: 1px solid rgba(0,0,0,.125)
-    }
-  }
-
-  .event-important, .event-info, .event-success, .event-special{ float:left; }
-
-  .agenda-comment{ font-size:13px; }
-
-  .viewAllCourseBtn {height:15px; width:30px; margin-top:2px;}
-
-  @media(max-width:991px){
-    .BorderSolid{border: solid 1px #e8e8e8 !important; }
-  }
-  @media(min-width:992px){
-    .BorderSolidDes{border: solid 1px #e8e8e8; }
-  }
-
-
-  @media(max-width:767px){
-    #portfolio_lessons_wrapper .all_courses{
-      width: 100%;
-    }
-  }
   
   
 
@@ -2508,7 +2410,10 @@ label:has(input[type="checkbox"]:disabled){
 
 .panelCard{
   border-radius: 15px !important;
-  border: 1px solid rgba(0,0,0,.125) !important;
+  /* border: 1px solid rgba(0,0,0,.125) !important; */
+  border: solid 1px #E8EDF8 !important;
+  filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)) !important;
+
 }
 .panelCard .card-header{
   border-top-left-radius: 15px !important;
@@ -2539,6 +2444,7 @@ label:has(input[type="checkbox"]:disabled){
 
 .panelCardNoBorder{
   border: 0px !important;
+  filter: none !important;
 }
 
 /* ------------------------------------------------------- MY COURSES ----------------------------------------------------------------------------*/
