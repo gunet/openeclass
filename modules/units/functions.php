@@ -7,6 +7,7 @@
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/group/group_functions.php';
+require_once 'include/lib/learnPathLib.inc.php';
 
 /**
  * @brief  Process resource actions
@@ -666,10 +667,11 @@ function show_description($title, $comments, $id, $res_id, $visibility, $act_nam
 function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
 {
 
-    global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code, $langResourceBelongsToUnitPrereq;
+    global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code, $langDetails,
+           $langResourceBelongsToUnitPrereq, $uid, $langTotalPercentCompleteness, $langTotalTimeSpent;
 
     $title = q($title);
-    $res_prereq_icon = '';
+    $comment_box = $res_prereq_icon = $lp_results = $lp_results_button = '';
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
     if (!$lp) { // check if lp was deleted
         if (!$is_editor) {
@@ -687,20 +689,31 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         }
         $status = $lp->visible;
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
-        $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title";
+        $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
+        if (!$is_editor) { // display learning path results in student
+            list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($lp_id, $uid);
+            $lp_results = "<span data-toggle='tooltip' data-placement='top' title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
+                        &nbsp; &nbsp;
+                       <span data-toggle='tooltip' data-placement='top' title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
+            $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langDetails'>
+                <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
+                <span class='fa fa-line-chart' style='font-size:15px;'></span>
+                </a>
+            </span>";
+            //<a href='../learnPath/learningPath.php?course=" . $course_code . "&amp;path_id=" . $lp_id . "'>
+        }
         $imagelink = icon('fa-ellipsis-h');
     }
 
     if (!empty($comments)) {
         $comment_box = "<br>$comments";
-    } else {
-        $comment_box = '';
     }
+
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$link</a> $res_prereq_icon $comment_box</td>" .
+          <td>$link $res_prereq_icon $comment_box <span class='pull-right'>$lp_results_button $lp_results</span></td>" .
             actions('lp', $resource_id, $status) . "</tr>";
 }
 
@@ -928,7 +941,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         $langAttemptActive, $langAttemptPausedS, $m, $langResourceBelongsToUnitPrereq;
 
     $title = q($title);
-
+    $res_prereq_icon = '';
     if ($is_editor) {
         $exercise = Database::get()->querySingle("SELECT * FROM exercise WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
     } else {
@@ -962,7 +975,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$is_editor and (!resource_access($exercise->active, $exercise->public))) {
             return '';
         }
-        $link_class = $exclamation_icon = $res_prereq_icon = '';
+        $link_class = $exclamation_icon = '';
         if ($exercise->password_lock) {
             enable_password_bootbox();
             $link_class = 'password_protected';

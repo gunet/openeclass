@@ -72,7 +72,7 @@ if (!add_units_navigation(TRUE)) {
 }
 
 
-// permissions (only for the viewmode, there is nothing to edit here )
+// permissions (only for the view-mode, there is nothing to edit here )
 if ($is_editor) {
         // if the fct return true it means that user is a course manager and than view mode is set to COURSE_ADMIN
         header("Location: ./learningPathAdmin.php?course=$course_code&path_id=" . $_SESSION['path_id']);
@@ -84,14 +84,14 @@ if ($is_editor) {
             exit();
         }
 
-        // check for blocked learning path        
+        // check for blocked learning path
 	$lps = Database::get()->querySingle("SELECT `learnPath_id`, `rank` FROM lp_learnPath 
                             WHERE learnPath_id = ?d AND course_id = $course_id ORDER BY `rank`", $_SESSION['path_id']);
         $lpaths = Database::get()->queryArray("SELECT `learnPath_id`, `lock` FROM lp_learnPath WHERE course_id = ?d AND `rank` < ?d", $course_id, $lps->rank);
         foreach ($lpaths as $lp) {
                 if ($lp->lock == 'CLOSE') {
-                    $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);                    
-                    if ($prog != 0) {                                                    
+                    $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);
+                    if ($prog != 0) {
                         header("Location: ./index.php?course=$course_code");
                     }
                 }
@@ -136,9 +136,15 @@ $sql = "SELECT
 
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
+if (isset($_GET['unit'])) {
+    $back_url = "index.php?course=$course_code&id=$_GET[unit]";
+} else {
+    $back_url = "index.php?course=$course_code";
+}
+
 $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "index.php?course=$course_code",
+                'url' => "$back_url",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
@@ -153,7 +159,7 @@ if (count($fetchedList) == 0) {
 
 $extendedList = array();
 $modar = array();
-foreach ($fetchedList as $module) {        
+foreach ($fetchedList as $module) {
     $modar['learnPath_module_id'] = $module->learnPath_module_id;
     $modar['parent'] = $module->parent;
     $modar['lock'] = $module->lock;
@@ -162,7 +168,7 @@ foreach ($fetchedList as $module) {
     if (empty($module->name) and $module->contentType == 'LINK') {
         $modar['name'] = $module->path;
     } else {
-        $modar['name'] = $module->name;    
+        $modar['name'] = $module->name;
     }
     $modar['lesson_status'] = $module->lesson_status;
     $modar['raw'] = $module->raw;
@@ -202,9 +208,7 @@ $tool_content .= "<table class='table-default'>";
 $tool_content .= "<tr><th width='70'>$langTitle:</th>";
 $tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
-    $tool_content .= "<tr>
-      <th width='90'>$langDescription:</th>
-      ";
+    $tool_content .= "<tr><th width='90'>$langDescription:</th>";
     $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 }
 $tool_content .= "</table></div>";
@@ -212,15 +216,14 @@ $tool_content .= "</table></div>";
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningPathStructure . "</b></div></th>\n";
-
+$tool_content .= "<tr class='list-header'><th colspan='" . ($maxDeep + 2) . "'><div class='align-left'>&nbsp;&nbsp;<strong>" . $langLearningPathStructure . "</strong></div></th>";
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '<th><b>' . $langProgress . '</b></th>' . "\n";
+    $tool_content .= "<th class='text-center'><strong>$langProgress</strong></th>";
 }
 
-$tool_content .= "</tr>\n";
+$tool_content .= "</tr>";
 
 // ------------------ module table list display -----------------------------------
 if (!isset($globalProg)) {
@@ -256,14 +259,9 @@ foreach ($flatElementList as $module) {
     for ($i = 0; $i < $module['children']; $i++) {
         $spacingString .= "<td width='5'>&nbsp;</td>";
     }
-
     $colspan = ($maxDeep - $module['children'] + 1)+1;
-//    if ($module['contentType'] == CTLABEL_) {
-//        $colspan++;
-//    }
-
     $tool_content .= "<tr>" . $spacingString . "
-      <td colspan=\"" . $colspan . "\" align='left'>";
+      <td class='text-left' colspan='" . $colspan . "'>";
 
     //-- if chapter head
     if ($module['contentType'] == CTLABEL_) {
@@ -284,23 +282,25 @@ foreach ($flatElementList as $module) {
         }
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= '<span style="vertical-align: middle;">' .
-                icon($moduleImg, $contentType_alt) . '</span>&nbsp;' .
-                '<a href="viewer.php?course=' . $course_code . '&amp;path_id=' . (int) $_SESSION['path_id'] . '&amp;module_id=' . $module['module_id'] . '">' . htmlspecialchars($module['name']) . '</a>';
+        $tool_content .= "<span style='vertical-align: middle;'>" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;";
+        if (isset($_GET['unit'])) {
+            $tool_content .= "<a href='../units/view.php?course=$course_code&amp;res_type=lp&amp;unit=$_GET[unit]&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
+        } else {
+            $tool_content .= "<a href='viewer.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
+        }
+
         // a module ALLOW access to the following modules if
         // document module : credit == CREDIT || lesson_status == 'completed'
         // exercise module : credit == CREDIT || lesson_status == 'passed'
         // scorm module : credit == CREDIT || lesson_status == 'passed'|'completed'
 
-        if (($module['lock'] == 'CLOSE') 
-            and ($module['credit'] != 'CREDIT' 
+        if (($module['lock'] == 'CLOSE')
+            and ($module['credit'] != 'CREDIT'
             or ($module['lesson_status'] != 'COMPLETED' and $module['lesson_status'] != 'PASSED')))
             {
                     $is_blocked = true; // following modules will be unlinked
             }
-    }
-    //-- user is blocked by previous module, don't display link
-    else {
+    } else { //-- user is blocked by previous module, don't display link
         if ($module['contentType'] == CTEXERCISE_) {
             $moduleImg = 'fa-pencil-square-o';
         } else if ($module['contentType'] == CTLINK_) {
@@ -313,8 +313,7 @@ foreach ($flatElementList as $module) {
             $moduleImg = choose_image(basename($module['path']));
         }
 
-        $tool_content .= '<span style="vertical-align: middle;">' . icon($moduleImg, $contentType_alt) . '</span> ' .
-            htmlspecialchars($module['name']);
+        $tool_content .= "<span style='vertical-align: middle;'>" . icon($moduleImg, $contentType_alt) . "</span>" . q($module['name']);
     }
     $tool_content .= "</td>";
 
@@ -329,32 +328,26 @@ foreach ($flatElementList as $module) {
 //            $first_blocked = true;
 //        }
         // display the progress value for current module
-        $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n";
+        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($progress, 1) . "</td>";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
         $tool_content .= '<td>&nbsp;</td>' . "\n";
     }
-
     if ($progress > 0) {
         $globalProg = $globalProg + $progress;
     }
-
     if ($module['contentType'] != CTLABEL_) {
         $moduleNb++; // increment number of modules used to compute global progression except if the module is a title
     }
-
     $tool_content .= "</tr>";
 }
 
 
 if ($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= '<tr class="odd">' . "\n"
-            . '<th colspan="' . ($maxDeep + 2) . '" align="right"><div align="right">' . $langGlobalProgress . '</div></th>' . "\n"
-            . '<th align="right" width="120"><div align="right">'
-            . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
-            . '</div></th>' . "\n"
-            . '</tr>' . "";
+    $tool_content .= "<tr><th colspan='" . ($maxDeep + 2) . "' class='text-right'>$langGlobalProgress</th> 
+                          <th class='text-right'>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</th> 
+                      </tr>";
 }
 $tool_content .= "</table></div>";
 draw($tool_content, 2);

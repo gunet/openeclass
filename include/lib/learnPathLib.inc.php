@@ -1332,13 +1332,12 @@ function disp_button($url, $text, $confirmMessage = '') {
  * @author Thanos Kyritsis <atkyritsis@upnet.gr>
  * @author Piraux S�astien <pir@cerdecam.be>
  *
- * @param integer $progress progression in pourcent
- * @param integer $factor will be multiply by 100 to have the full size of the bar
+ * @param integer $progress progression in percent
+ * @param integer $factor will be multiplied by 100 to have the full size of the bar
  * (i.e. 1 will give a 100 pixel wide bar)
  */
 
 function disp_progress_bar($progress, $factor) {
-    global $themeimg, $langProgress;
 
     $maxSize = $factor * 100; //pixels
     $barwidth = $factor * $progress;
