@@ -77,7 +77,7 @@ $head_content .= "
                 var qid = $(this).data('qid'),
                     nbr = $(this).data('nbr'),
                     editUrl = $(this).data('editurl'),
-                    url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?question=' + qid;
+                    url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?course=" . js_escape($course_code) . "&question=' + qid;
                 $.ajax({
                     url: url,
                     success: function(data) {
