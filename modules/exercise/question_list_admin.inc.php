@@ -356,7 +356,7 @@ $head_content .= "
             nbr = $(this).data('nbr'),
             editUrl = $(this).data('editurl'),
             deleteUrl = $(this).data('deleteurl'),
-            url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?question=' + qid;
+            url = '" . js_escape($urlAppend) . "' + 'modules/exercise/question_preview.php?course=" . js_escape($course_code) . "&question=' + qid;
         $.ajax({
             url: url,
             success: function(data) {
