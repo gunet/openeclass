@@ -283,7 +283,7 @@ if ($is_editor) {
 }
 
 if ($show_completion_button) {
-    $tool_content .= "<div class='col-sm-12'><div class='text-center alert alert-warning'>$langInvalidCourseUnitPrerequisites</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='text-center alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInvalidCourseUnitPrerequisites</span></div></div>";
 }
 
 if (isset($display) and $display == TRUE) {

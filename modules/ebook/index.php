@@ -106,7 +106,7 @@ if ($is_editor) {
                                      subsystem = " . EBOOK . " AND
                                      subsystem_id = ?d AND
                                      course_id = ?d", $id, $course_id);
-                $tool_content .= "<div class='alert alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
+                $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . q(sprintf($langEBookDeleted, $title)) . "</span></div>";
             } else {
                 //Session::Messages($langResourceBelongsToCert, "alert-warning");
                 Session::flash('message',$langResourceBelongsToCert); 
@@ -199,7 +199,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       ORDER BY `order`", $course_id);
 
 if (!$q && !isset($_GET['create'])) {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoEBook</span></div></div>";
 } else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'><thead>

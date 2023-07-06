@@ -61,7 +61,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     $pathToArchive = $_POST['pathToArchive'];
     validateUploadedFile(basename($pathToArchive), 3);
     if (get_file_extension($pathToArchive) !== 'zip') {
-        $tool_content .= "<div class='alert alert-danger'>" . $langErrorFileMustBeZip . "</div>";
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . $langErrorFileMustBeZip . "</span></div>";
     } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <p class='text-center text-uppercase bg-warning text-white mt-3 mb-0'>" . $langFileUnzipping . "</p>
@@ -88,7 +88,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $base = getDirectReference($_POST['restoreThis']);
     if (!file_exists($base . '/config_vars')) {
-        $tool_content .= "<div class='alert alert-warning'>$langInvalidArchive</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInvalidArchive</span></div>";
         draw($tool_content, 3);
         exit;
     }
@@ -139,7 +139,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // -------------------------------------
     enableCheckFileSize();
     $tool_content .= "
-    <div class='col-12'><div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div></div>
+    <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><label>$langFirstMethod</label> $langRequest1</span></div></div>
     <div class='col-12'>
     <div class='form-wrapper form-edit rounded'>
             <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
@@ -157,8 +157,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             </form></div>
         </div> 
         
-        <div class='col-12 mt-3'><div class='alert alert-info'>
-        <label>$langSecondMethod</label> $langRequest2</div></div>      
+        <div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+        <label>$langSecondMethod</label> $langRequest2</span></div></div>      
         <div class='col-12'>
         <div class='form-wrapper form-edit rounded'>
           <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>

@@ -44,7 +44,7 @@ function display_user_grades($gradebook_id) {
                             WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id
                             AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $userID, $gradebook_id)->count;
         if(!$checkForRecords) {
-            $tool_content .="<div class='alert alert-success'>$langGradebookNewUser</div>";
+            $tool_content .="<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langGradebookNewUser</span></div>";
         }
 
         //get all the activities
@@ -58,7 +58,7 @@ function display_user_grades($gradebook_id) {
             $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
             $tool_content .= "</tr>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</span></div>\n";
         }
 
         if ($result) {
@@ -125,7 +125,7 @@ function display_user_grades($gradebook_id) {
         }
         $tool_content .= "<span class='help-block'><small>" . $langGradebookUpToDegree . $gradebook_range . "</small></span>";
     } else {
-        $tool_content .= "<div class='alert alert-success'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</span></div>";
     }
 }
 
@@ -611,7 +611,7 @@ function display_all_users_grades($gradebook_id) {
         }
         $tool_content .= "</tbody></table></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editUsers=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editUsers=1'>$langHere</a>.</span></div>";
     }
 }
 
@@ -651,7 +651,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                 'level' => 'primary'),
     ));
     if (!$checkForRecords) {
-        $tool_content .="<div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div>";
+        $tool_content .="<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookTotalGradeNoInput</span></div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM gradebook_activities
@@ -663,7 +663,7 @@ function student_view_gradebook($gradebook_id, $uid) {
             $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
         }
         if(weightleft($gradebook_id, 0) != 0) {
-            $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookAlertToChange</span></div>";
         }
         $tool_content .= "<div class='badge bgEclass  p-2'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
@@ -799,7 +799,7 @@ function display_gradebook($gradebook) {
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
                                         FROM gradebook_users WHERE gradebook_id=?d ", $gradebook->id)->count;
     if ($participantsNumber == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;editUsers=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;editUsers=1'>$langHere</a>.</span></div>";
     }
     $weightMessage = "";
     //get all the available activities
@@ -807,16 +807,16 @@ function display_gradebook($gradebook) {
     $activityNumber = count($result);
 
     if (!$result or $activityNumber == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1</a></div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookNoActMessage1</span></div>";
     } else {
         foreach ($result as $details) {
             if ($details->weight == 0 or (empty($details->weight))) { // check if there are activities with 0% weight
-                $weightMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert3</div>";
+                $weightMessage = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookGradeAlert3</span></div>";
             }
         }
         //check if there is spare weight
         if(weightleft($gradebook->id, 0)) {
-            $weightMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook->id, 0) . "%)</div>";
+            $weightMessage = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookGradeAlert (" . weightleft($gradebook->id, 0) . "%)</span></div>";
         }
         $tool_content .= $weightMessage;
         $tool_content .= "
@@ -947,7 +947,7 @@ function display_gradebooks() {
                 . "AND gradebook.id = gradebook_users.gradebook_id AND gradebook_users.uid = ?d", $course_id, $uid);
     }
     if (count($result) == 0) { // no gradebooks
-        $tool_content .= "<div class='alert alert-warning'>$langNoGradeBooks</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradeBooks</span></div>";
     } else {
 
         $tool_content .= "<div class='col-sm-12'>";
@@ -1034,7 +1034,7 @@ function display_available_exercises($gradebook_id) {
         }
         $tool_content .= "</table></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessageExe4</span></div>";
     }
 }
 
@@ -1086,7 +1086,7 @@ function display_available_assignments($gradebook_id) {
         } // end of while
         $tool_content .= "</table></div></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessageAss4</span></div>";
     }
 }
 
@@ -1121,7 +1121,7 @@ function display_available_lps($gradebook_id) {
         } // end of while
         $tool_content .= "</table></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageLp4</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessageLp4</span></div>";
     }
 }
 
@@ -1142,8 +1142,8 @@ function register_user_grades($gradebook_id, $actID) {
     $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" .(!empty($result->title) ? q($result->title) : $langGradebookNoTitle) . " <br>
-                        <small>$langGradebookActivityWeight: $result->weight%</small></div>";
+    $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" .(!empty($result->title) ? q($result->title) : $langGradebookNoTitle) . " <br>
+                        <small>$langGradebookActivityWeight: $result->weight%</small></span></div>";
     //display users
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id AS recID, gradebook_users.uid as userID, user.surname AS surname,
                                                             user.givenname AS name, user.am AS am, DATE(course_user.reg_date) AS reg_date
@@ -1637,7 +1637,7 @@ function insert_grades($gradebook_id, $actID) {
     }
 
 
-    $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
+    $message = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langGradebookEdit</span></div>";
     $tool_content .= $message . "<br/>";
 }
 

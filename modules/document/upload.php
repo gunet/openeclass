@@ -300,7 +300,7 @@ if ($can_upload) {
       $tool_content .= "</div>";
     }
 } else {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNotAllowed</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotAllowed</span></div></div>";
 }
 
 draw($tool_content, $menuTypeID, null, $head_content);

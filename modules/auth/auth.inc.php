@@ -682,7 +682,7 @@ function process_login() {
                             $auth_allow = login($myrow, $posted_uname, $pass);
                         }
                     } else {
-                        $warning .= "<div class='alert alert-warning'>$langInvalidAuth</div>";
+                        $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInvalidAuth</span></div>";
                     }
                 }
             }
@@ -703,12 +703,12 @@ function process_login() {
                         Session::flash('login_error', $invalidIdMessage);
                         redirect_to_home_page('main/login_form.php');
                     } else {
-                        $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
+                        $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$invalidIdMessage</span></div>";
                     }
                     break;
-                case 3: $warning .= "<div class='alert alert-warning'>$langAccountInactive1 " .
+                case 3: $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAccountInactive1 " .
                             "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
-                            token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></div>";
+                            token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></span></div>";
                     break;
                 case 4:
                     if (isset($_GET['login_page'])) {
@@ -719,17 +719,17 @@ function process_login() {
                             redirect_to_home_page('main/login_form.php');
                         }
                     } else {
-                        $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
+                        $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$invalidIdMessage</span></div>";
                         increaseLoginFailure();
                     }
                     break;
-                case 5: $warning .= "<div class='alert alert-warning'>$langNoCookies</div>";
+                case 5: $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCookies</span></div>";
                     break;
-                case 6: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></div>";
+                case 6: $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></span></div>";
                     break;
-                case 7: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></div>";
+                case 7: $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></span></div>";
                     break;
-                case 8: $warning .= "<div class='alert alert-warning'>$langTooManyFails</div>";
+                case 8: $warning .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langTooManyFails</span></div>";
                     break;
                 default:
                     break;
@@ -991,28 +991,28 @@ function hybridauth_login() {
                 session_regenerate_id();
                 break;
             case 2:
-                $warning .= "<p class='alert alert-warning'>$langInvalidId</p>";
+                $warning .= "<p class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInvalidId</span></p>";
                 break;
             case 3:
-                $warning .= "<p class='alert alert-warning'>$langAccountInactive1 " .
+                $warning .= "<p class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAccountInactive1 " .
                     "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
-                    token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></p>";
+                    token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></span></p>";
                 break;
             case 4:
-                $warning .= "<p class='alert alert-warning'>$langInvalidId</p>";
+                $warning .= "<p class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInvalidId</span></p>";
                 increaseLoginFailure();
                 break;
             case 5:
-                $warning .= "<p class='alert alert-warning'>$langNoCookies</p>";
+                $warning .= "<p class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCookies</span></p>";
                 break;
             case 6:
-                $warning .= "<p class='alert alert-info'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
+                $warning .= "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></span></p>";
                 break;
             case 7:
-                $warning .= "<p class='alert alert-info'>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></p>";
+                $warning .= "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></span></p>";
                 break;
             case 8:
-                $warning .= "<p class='alert alert-danger''>$langTooManyFails</p>";
+                $warning .= "<p class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langTooManyFails</span></p>";
                 break;
         }
     } else {

@@ -162,7 +162,7 @@ function mkdir_or_error($dirname) {
         if ($command_line) {
             echo "$langErrorCreatingDirectory $dirname\n";
         } else {
-            echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $dirname</div>";
+            echo "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langErrorCreatingDirectory $dirname</span></div>";
         }
     }
 }
@@ -174,7 +174,7 @@ function touch_or_error($filename) {
         if ($command_line) {
             echo "$langErrorCreatingDirectory $filename\n";
         } else {
-            echo "<div class='alert alert-danger'>$langErrorCreatingDirectory $filename</div>";
+            echo "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langErrorCreatingDirectory $filename</span></div>";
         }
     }
 }

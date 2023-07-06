@@ -133,7 +133,7 @@
                             <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion">
                                 <div class="panel-heading">
                                     <div class="panel-title h3">
-                                        <span class="fa fa-chevron-right"></span>
+                                        <span class="fa-solid fa-chevron-right"></span>
                                         <span>{{ $tool_group[0]['text'] }}</span>
                                     </div>
                                 </div>

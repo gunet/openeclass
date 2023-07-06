@@ -45,15 +45,30 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            @php 
+                                $alert_type = '';
+                                if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                }else{
+                                    $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                }
+                            @endphp
+                            
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                {!! $alert_type !!}<span>
                                 @foreach($messageArray as $message)
                                     {!! $message !!}
-                                @endforeach
+                                @endforeach</span>
                             @else
-                                {!! Session::get('message') !!}
+                                {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
@@ -103,7 +118,7 @@
                                                 </tr>
                                             @endforeach
                                         @else
-                                            <tr><td colspan='6'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></td></tr>
+                                            <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
                                         @endif
                                         <tr class="list-header">
                                             <th class='ps-3' colspan="6">{{ trans('langOpenDelosPrivateVideos') }}</th>
@@ -113,8 +128,8 @@
                                                 $authUrl = (isCASUser()) ? getDelosURL() . getDelosRLoginCASAPI() : getDelosURL() . getDelosRLoginAPI();
                                                 $authUrl .= "?token=" . getDelosSignedToken();
                                             ?>
-                                            <tr><td colspan='6'><div class='alert alert-warning' role='alert'>
-                                                {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a>
+                                            <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                                                {{ trans('langOpenDelosRequireAuth') }}&nbsp;<a href='{{ $authUrl }}' title='{{ trans('langOpenDelosAuth') }}'>{{ trans('langOpenDelosRequireAuthHere') }}</a></span>
                                             </div></td></tr>
                                         @else
                                             @if ($jsonPrivateObj !== null && property_exists($jsonPrivateObj, "resources") && count($jsonPrivateObj->resources) > 0)
@@ -143,10 +158,10 @@
                                                     </tr>
                                                 @endforeach
                                             @else
-                                                <tr><td colspan='6'><div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div></td></tr>
+                                                <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></td></tr>
                                             @endif
                                         @endif
-                                        <tr><td colspan='6'><div class='alert alert-warning' role='alert'>{{ trans('langOpenDelosPrivateNote') }}</div></td></tr>
+                                        <tr><td colspan='6'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langOpenDelosPrivateNote') }}</span></div></td></tr>
                                         <tr>
                                             <th colspan="4">
                                                 <div class='form-group'>
@@ -174,7 +189,7 @@
                     </div>
 
                     <div class='col-sm-12'>
-                        <div class='alert alert-warning' role='alert'>{!! trans('langOpenDelosReplaceInfo') !!}</div>
+                        <div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{!! trans('langOpenDelosReplaceInfo') !!}</span></div>
                     </div>
                 </div>
             </div>

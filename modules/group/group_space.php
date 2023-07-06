@@ -166,7 +166,7 @@ if (isset($_GET['group_as'])) {
         }
         $tool_content .= '</table></div></div></div>';
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     }
 } else {
     $student_to_student_allow = get_config('dropbox_allow_student_to_student');
@@ -411,7 +411,7 @@ if (isset($_GET['group_as'])) {
             }
             $tool_content .= "</ul></div></div></div>";
         } else {
-            $tool_content .= "<div class='col-sm-12 mt-4'><div class='alert alert-warning'>$langGroupNoneMasc</div></div>";
+            $tool_content .= "<div class='col-sm-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGroupNoneMasc</span></div></div>";
         }
     }
 }

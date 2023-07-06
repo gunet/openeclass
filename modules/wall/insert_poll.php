@@ -33,7 +33,7 @@ function list_polls($id = NULL) {
             'active' => $row->active);
     }
     if (count($pollinfo) == 0) {
-        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langPollNone</div></div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPollNone</span></div></div>";
     } else {
         $exist_poll = array();
 

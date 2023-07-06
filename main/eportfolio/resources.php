@@ -29,7 +29,7 @@ require_once 'modules/group/group_functions.php';
 require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
+    $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
     if ($session->status == 0) {
         draw($tool_content, 0);
     } else {
@@ -73,12 +73,12 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
         }
 
-        $tool_content .= "<div class='col-12'><div class='alert alert-info '>
+        $tool_content .= "<div class='col-12'><div class='alert alert-info '><i class='fa-solid fa-circle-info fa-lg'></i><span>
                             <a href='#' class='close text-danger' data-bs-dismiss='alert' aria-label='close'>&times;</a>
-                            $langePortfolioCollectionUserInfo
+                            $langePortfolioCollectionUserInfo</span>
                           </div></div>";
 
         if ($userdata->eportfolio_enable == 1) {
@@ -163,7 +163,7 @@ if ($userdata) {
                             Session::flash('alert-class', 'alert-success');
                             $tool_content .= "
                                               <div class='col-12'>
-                                                  <div class='alert alert-success alert-dismissible fade show' role='alert'>$langePortfolioResourceAdded</div>
+                                                  <div class='alert alert-success alert-dismissible fade show' role='alert'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langePortfolioResourceAdded</span></div>
                                                   <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                                               </div>";
                             redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
@@ -305,7 +305,7 @@ if ($userdata) {
         }
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='col-sm-12'><div class='alert alert-danger'>$langUserePortfolioDisabled</div></div>";
+            $tool_content = "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {
@@ -420,7 +420,7 @@ if ($userdata) {
 
     //hide tabs when there are no resources
     if (!$blog_posts && !$submissions && !$docs) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioNoResInCollection</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioNoResInCollection</span></div></div>";
     } else {
 
         $active_class = ' class="nav-item"';

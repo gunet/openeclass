@@ -103,7 +103,7 @@ if (isset($_REQUEST['u'])) {
                           <div class='col-sm-12'>" . q($status_names[$target['status']]) . "</div></div>";
             if ($info['status'] == USER_TEACHER and $target['status'] != USER_TEACHER) {
                 $target = false;
-                $data['target_field'] .= "<div class='alert alert-warning'>$langUserMergeForbidden</div>";
+                $data['target_field'] .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUserMergeForbidden</span></div>";
             } else {
                 if ($_POST['submit'] == $langUserMerge) {
                     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();

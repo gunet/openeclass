@@ -143,7 +143,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
         }
     }
     if ($first) {
-        $tool_content .= "<div class='alert alert-warning text-center'>$langBBBNoParticipation</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBNoParticipation</span></div>";
     }
     $tool_content .= "</table>";
 } else {
@@ -196,7 +196,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
         }
         $tool_content .= "</table>";
     } else {
-        $tool_content .= "<div class='col-sm-12 alert alert-warning text-center'>$langBBBNoParticipation</div>";
+        $tool_content .= "<div class='col-sm-12 alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBNoParticipation</span></div>";
     }
 }
 

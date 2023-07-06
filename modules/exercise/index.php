@@ -259,13 +259,13 @@ if ($is_editor) {
     $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
             . "JOIN exercise b ON a.eid = b.id WHERE a.attempt_status = ?d AND b.course_id = ?d GROUP BY eid, title", ATTEMPT_PENDING, $course_id);
     if (count($pending_exercises) > 0) {
-        $tool_content .= "<div class='alert alert-info'>$langPendingExercise:";
+        $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langPendingExercise:";
         $tool_content .= "<ul style='margin-top: 10px;'>";
         foreach ($pending_exercises as $row) {
             $tool_content .= "<li>" . q($row->title) . " (<a href='results.php?course=$course_code&exerciseId=".getIndirectReference($row->eid)."&status=2'>$langViewShow</a>)</li>";
         }
         $tool_content .= "</ul>";
-        $tool_content .= "</div>";
+        $tool_content .= "</span></div>";
     }
     $tool_content .= action_bar(array(
         array('title' => $langNewEx,
@@ -291,7 +291,7 @@ if ($is_editor) {
 }
 
 if (!$nbrExercises) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoExercises</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoExercises</span></div></div>";
     //For Correction Script
     $cf_result_data = 0;
 } else {

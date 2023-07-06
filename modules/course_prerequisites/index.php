@@ -106,7 +106,7 @@ hContent;
 
     $tool_content .= "
         <div class='col-12'>
-            <div class='alert alert-info'><label>$langNote</label> $langNewCoursePrerequisiteHelp2</div>
+            <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><label>$langNote</label> $langNewCoursePrerequisiteHelp2</span></div>
         </div>
     
         <div class='col-12'>
@@ -252,6 +252,6 @@ function show_prereqs() {
 
         $tool_content .= '</table></div></div></div>';
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoCoursePrerequisites</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCoursePrerequisites</span></div></div>";
     }
 }

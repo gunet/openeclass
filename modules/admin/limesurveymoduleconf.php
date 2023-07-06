@@ -157,7 +157,7 @@ if (isset($_GET['add_template'])) {
             $tool_content .= "</table></div>";
 
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAvailableLimesurveyTemplates</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAvailableLimesurveyTemplates</span></div></div>";
         }
     }
 }

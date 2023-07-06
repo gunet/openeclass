@@ -154,8 +154,10 @@ if (isset($_GET['store']) && $is_editor) {
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/bootstrap.min.css">
+    <link href="<?php echo $urlServer;?>template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet">
 
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default.css">
+    <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default2.css">
 </head>
 <body class='bgEclass bodyChat pb-3'>
 <?php
@@ -178,13 +180,18 @@ if (isset($_GET['store']) && $is_editor) {
             if (trim($str_1[1]) == "systemMsgClear" || trim($str_1[1]) == "systemMsgSave") {
                 if (trim($str_1[1]) == "systemMsgClear"){
                     $class = 'alert-success';
+                    $alert_type_icon = 'fa-circle-check fa-lg';
                 } else {
                     $class = 'alert-info';
+                    $alert_type_icon = 'fa-circle-info fa-lg';
                 }
                 echo "
                             <div class='col-12 mt-3 mb-3 ps-3 pe-3'>
                                 <div class='alert $class text-center'>
-                                    $str_1[0]
+                                    <i class='fa-solid $alert_type_icon'></i>
+                                    <span>
+                                        $str_1[0]
+                                    </span>
                                 </div>
                             </div>\n";
             } else {

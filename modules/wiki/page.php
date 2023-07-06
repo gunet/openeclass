@@ -571,9 +571,9 @@ switch ($action) {
             $newEditorStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
 
             $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                              ". sprintf($langWikiDifferencePattern, $oldTime, $oldEditorStr, $newTime, $newEditorStr) ."
-                             </div></div>
+                             </span></div></div>
                              <strong>$langWikiDifferenceKeys</strong>";
 
             $tool_content .= '<div class="diff">' . "\n";
@@ -647,7 +647,7 @@ switch ($action) {
         $tool_content .= '<div class="wikiTitle">';
         $tool_content .= '<h5>' . $langWikiEditLock . '</h5>';
         $tool_content .= '</div>';
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langWikiLockInfo</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langWikiLockInfo</span></div></div>";
 
         if (isset($content) && $content != '') {
             //proceed to edit for, in order to save the content later
@@ -926,7 +926,7 @@ switch ($action) {
             }
             $tool_content .= '</ul>';
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoResult</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoResult</span></div></div>";
         }
         break;
     }

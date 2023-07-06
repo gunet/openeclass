@@ -65,7 +65,7 @@ $tool_content .= action_bar(array(
 
 
 // display use explication text
-$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langUseOfPool</div></div>";
+$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUseOfPool</span></div></div>";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) ) ? (string) $_REQUEST['cmd'] : '';
@@ -272,7 +272,7 @@ if (!$num_results == 0) {
 }
 
 if ($atleastOne == false) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div></div>";
 }
 
 draw($tool_content, 2, null, $head_content, $body_action);

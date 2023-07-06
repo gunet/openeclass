@@ -39,7 +39,7 @@ if (get_config('personal_blog_commenting')) {
                 $post_actions .= '<span class="fa fa-edit pe-2 float-end text-warning" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
                 $post_actions .='</div>';
                 $response[0] = 'OK';
-                $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
+                $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsSaveSuccess."</span></div>";
                 $response[2] = $comment->getId();
                 $response[3] = "
                  <div class='row mb-4 comment' id='comment-".$comment->getId()."'>
@@ -62,11 +62,11 @@ if (get_config('personal_blog_commenting')) {
                 ";
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsSaveFail."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsNewNoPerm."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsNewNoPerm."</span></div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'delete') {
@@ -88,18 +88,18 @@ if (get_config('personal_blog_commenting')) {
             if ($permEdit) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
-                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>";
+                    $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsDelSuccess."</span></div>";
                 } else {
                     $response[0] = 'ERROR';
-                    $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
+                    $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsDelFail."</span></div>";
                 }
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsDelNoPerm."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsDelNoPerm."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsLoadFail."</span></div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'editLoad') {
@@ -125,11 +125,11 @@ if (get_config('personal_blog_commenting')) {
                 $response[2] .= '<input class="btn submitAdminBtn" type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsEditNoPerm."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsEditNoPerm."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsLoadFail."</span></div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'editSave') {
@@ -151,19 +151,19 @@ if (get_config('personal_blog_commenting')) {
             if ($permEdit) {
                 if ($comment->edit($_POST['commentText'])) {
                     $response[0] = 'OK';
-                    $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
+                    $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsSaveSuccess."</span></div>";
                     $response[2] = '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 } else {
                     $response[0] = 'ERROR';
-                    $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
+                    $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsSaveFail."</span></div>";
                 }
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsEditNoPerm."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsEditNoPerm."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsLoadFail."</span></div>";
         }
         echo json_encode($response);
     }

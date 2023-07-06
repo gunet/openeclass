@@ -715,7 +715,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     <div class='col-12 mb-3'>
         <div class='panel panel-default'>
             <div class='panel-heading collapsed bgTheme' data-bs-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
-                <span class='fa fa-chevron-right fa-fw' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "
+                <span class='fa-solid fa-chevron-right' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "
             </div>
             <div class='panel-body collapse' id='exerciseInfoPanel'>
                 <div class='row p-2'>

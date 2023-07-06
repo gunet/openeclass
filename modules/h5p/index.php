@@ -182,7 +182,7 @@ if ($content) {
     }
     $tool_content .= "</tbody></table></div></div>";
 } else {
-    $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'>$langH5pNoContent</div></div>";
+    $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langH5pNoContent</span></div></div>";
 }
 
 // utilize bootstrap-select for Add/Create dropdown button

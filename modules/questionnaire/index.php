@@ -354,7 +354,7 @@ function printPolls() {
         ++$poll_check;
     }
     if (!$poll_check) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langPollNone . "</div></div><br>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langPollNone . "</span></div></div><br>";
     } else {
         // Print active polls
         $tool_content .= "<div class='col-sm-12'>

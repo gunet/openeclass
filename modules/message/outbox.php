@@ -186,7 +186,7 @@ if (isset($_GET['mid'])) {
                  datatype: "json",
                  data: string,
                  success: function(){
-                    $("#out_del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
+                    $("#out_del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
                     $(".alert-success").delay(3000).fadeOut(1500);
                     $("#out_msg_area").remove();
                  }});
@@ -306,7 +306,7 @@ if (isset($_GET['mid'])) {
                                             page_number--;
                                         }
                                     }
-                                    $('#out_del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteSuccess)."</p>');
+                                    $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteSuccess)."</span></p>');
                                     $('.alert-success').delay(3000).fadeOut(1500);
                                     $('#out_msg_area').remove();
                                     oTable2.fnPageChange(page_number);
@@ -334,7 +334,7 @@ if (isset($_GET['mid'])) {
                                     page_number--;
                                   }
                                 }     
-                                $('#out_del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteAllSuccess)."</p>');
+                                $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                 $('.alert-success').delay(3000).fadeOut(1500);
                                 oTable2.fnPageChange(page_number);
                               }

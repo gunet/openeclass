@@ -31,7 +31,7 @@ require_once 'modules/lti/classes/LtiEnrolHelper.php';
 // check if LTI Provider is enabled (global config) and available for the current course
 $ltipublishapp = ExtAppManager::getApp('ltipublish');
 if (!$ltipublishapp->isEnabledForCurrentCourse()) {
-    $tool_content .= "<div class='alert alert-danger'>Tool is not enabled for course</div>";
+    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>Tool is not enabled for course</span></div>";
     draw($tool_content, 2);
     exit;
 }

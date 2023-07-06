@@ -138,7 +138,7 @@
                             </div>
                         </div>
                     @else
-                        <div class='alert alert-warning'>{{ trans('langNoDocuments') }}</div>
+                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoDocuments') }}</span></div>
                     @endif
                 </div>
             </div>

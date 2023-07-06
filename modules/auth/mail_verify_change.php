@@ -43,7 +43,7 @@ if (isset($_GET['from_profile'])) {
 $uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) ? $_SESSION['uid'] : NULL;
 
 if (empty($uid)) {
-    $tool_content .= "<div class='alert alert-danger'>$langMailVerificationError2</div> ";
+    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langMailVerificationError2</span></div> ";
     draw($tool_content, 0);
     exit;
 }
@@ -99,7 +99,7 @@ if (!empty($_POST['submit'])) {
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
         if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainMailMessage, $MailMessage)) {
-            $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
+            $mail_ver_error = sprintf("<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</span></div>");
             $tool_content .= $mail_ver_error;
         } else {
             $tool_content .=
@@ -109,22 +109,22 @@ if (!empty($_POST['submit'])) {
                         'icon' => 'fa-reply',
                         'level' => 'primary',
                         'url' => $urlAppend))) .
-                "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
+                "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langMailVerificationSuccess4</span></div> ";
         }
     }
     // email wrong or empty
     else {
-        $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langMailVerificationWrong</span></div> ";
     }
 } else {
     if (get_config('alt_auth_stud_reg') == 2) {
         if (get_config('email_required')) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langMailVerificationReq</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langMailVerificationReq</span></div></div>";
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langEmailInfo <br><br> $langEmailNotice</span></div></div>";
         }
     } else if (isset($_SESSION['mail_verification_required'])) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langMailVerificationReq</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langMailVerificationReq</span></div></div>";
     }
 }
 

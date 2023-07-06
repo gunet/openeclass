@@ -315,6 +315,74 @@ a:hover{
   list-style:none !important;
 }
 
+/*------------------------------- ALERTS ------------------------------------*/
+
+.alert-warning, .alert-info, .alert-danger, .alert-success{ 
+  margin-top:14px; 
+}
+
+.alert .fa-solid{
+  display:table-cell;
+  padding-right: 10px;
+}
+
+.alert div, .alert span, .alert p{
+  display:table-cell;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 16px;
+  letter-spacing: 0px;
+  font-size: 14px;
+  margin-bottom: 0px;
+}
+
+.alert-dismissible .btn-close {
+  box-sizing: none;
+  height: 8px;
+  width:8px;
+  color: #ffffff;
+  background: transparent url(../images/Icons_xmark.svg) center/1em auto no-repeat;
+  border: 0;
+  border-radius: 0.25rem;
+  opacity: 1;
+}
+
+.alert-dismissible .btn-close:focus, .alert-dismissible .btn-close:hover, .alert-dismissible .btn-close:active{
+  outline:0 ;
+    box-shadow: none ;
+}
+
+
+.alert-success { 
+  border: 0px; 
+  background-color: #1E7E0E; 
+  color: #ffffff; 
+  border-radius: 4px; 
+}
+
+.alert-info { 
+  background-color: #0073E6; 
+  color: #ffffff; 
+  border-radius: 4px; 
+  border: 0px;
+}
+
+.alert-warning { 
+  background-color: #F57600; 
+  color: #ffffff; 
+  border-radius: 4px; 
+  border: 0px;
+}
+
+.alert-danger { 
+  background-color: #C44601; 
+  color: #ffffff; 
+  border-radius: 4px; 
+  border: 0px;
+}
+
+
+
 /*------------------------------- CONTEXTUAL MENUS -------------------------*/
 
 .contextual-menu{

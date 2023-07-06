@@ -76,7 +76,7 @@ if (!add_units_navigation(TRUE)) {
 $navigation[] = array('url' => $forumUrl, 'name' => $forum_name);
 
 if (!does_exists($forum_id, "forum")) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langErrorPost</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langErrorPost</span></div></div>";
     draw($tool_content, 2);
     exit;
 }

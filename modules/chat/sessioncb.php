@@ -37,7 +37,7 @@ $actionBar .= action_bar(array(
     )
 ));
 
-$tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-danger'>" . $langColmoocRegisterStudentFailed . "</div></div>";
+$tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . $langColmoocRegisterStudentFailed . "</span></div></div>";
 
 if (isset($_GET['activity_id']) && isset($_GET['session_status']) && isset($_GET['partner_colstudent_id'])) {
 
@@ -49,7 +49,7 @@ if (isset($_GET['activity_id']) && isset($_GET['session_status']) && isset($_GET
             Database::get()->query("UPDATE colmooc_user_session SET session_status = ?d, session_status_updated = ?t WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], gmdate('Y-m-d H:i:s'), $partnerUserSession->user_id, $_GET['activity_id']);
             // pair log
             Database::get()->query("INSERT INTO colmooc_pair_log (activity_id, moderator_id, partner_id, session_status, created) VALUES (?d, ?d, ?d, ?d, ?t)", $_GET['activity_id'], $uid, $partnerUserSession->user_id, $_GET['session_status'], gmdate('Y-m-d H:i:s'));
-            $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-info'>" . $langColmoocRegisterStudentSuccess . "</div></div>";
+            $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langColmoocRegisterStudentSuccess . "</span></div></div>";
         }
     }
 } else if (isset($_GET['activity_id']) && isset($_GET['session_status']) && !isset($_GET['partner_colstudent_id'])) {
@@ -57,10 +57,10 @@ if (isset($_GET['activity_id']) && isset($_GET['session_status']) && isset($_GET
     $colmoocUserSession = Database::get()->querySingle("SELECT * FROM colmooc_user_session WHERE user_id = ?d AND activity_id = ?d", $uid, $_GET['activity_id']);
     if ($colmoocUserSession && $colmoocUserSession->session_id && $colmoocUserSession->session_token) {
         Database::get()->query("UPDATE colmooc_user_session SET session_status = ?d, session_status_updated = ?t WHERE user_id = ?d AND activity_id = ?d", $_GET['session_status'], gmdate('Y-m-d H:i:s'), $uid, $_GET['activity_id']);
-        $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-info'>" . $langColmoocRegisterStudentSuccess . "</div></div>";
+        $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langColmoocRegisterStudentSuccess . "</span></div></div>";
         if (intval($_GET['session_status']) == 0) {
             // αποτυχημένη εύρεση συνεργάτη, προσπάθησε ξανά
-            $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-danger'>" . $langColmoocRegisterStudentNoPartner . "</div></div>";
+            $tool_content = $actionBar . "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . $langColmoocRegisterStudentNoPartner . "</span></div></div>";
         }
     }
 }

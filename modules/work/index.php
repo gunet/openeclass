@@ -3980,7 +3980,7 @@ function show_student_assignment($id) {
             $tool_content .= "<p>$langUserOnly</p>";
             $submit_ok = FALSE;
         } elseif ($GLOBALS['status'] == USER_GUEST) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$m[noguest]</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$m[noguest]</span></div></div>";
             $submit_ok = FALSE;
         } else {
             foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
@@ -4255,11 +4255,11 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>";
             } else {
                 $group_link = $urlAppend . 'modules/group/';
-                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$m[this_is_group_assignment] <br />" .
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$m[this_is_group_assignment] <br />" .
                         sprintf(count($user_group_info) ?
                                         $m['group_assignment_publish'] :
                                         $m['group_assignment_no_groups'], $group_link) .
-                        "</div></div>\n";
+                        "</span></div></div>\n";
             }
         } else {
             $groups_with_no_submissions = groups_with_no_submissions($id);
@@ -4296,7 +4296,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
     $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
-    "<div class='col-12 mt-3'><div class='alert alert-info'>" . icon('fa-info-circle') . " $notice</div></div>": '';
+    "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . icon('fa-info-circle') . " $notice</span></div></div>": '';
     if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
@@ -4830,7 +4830,7 @@ function assignment_details($id, $row, $x =false) {
     </div></div>";
     $cdate = date('Y-m-d H:i:s');
     if ($row->deadline < $cdate && $row->late_submission && !$is_editor) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langWarnAboutDeadLine</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langWarnAboutDeadLine</span></div></div>";
     }
 }
 
@@ -5295,7 +5295,7 @@ function show_assignment($id, $display_graph_results = false) {
                 }
             }
     } else { // no submissions
-        $tool_content .= "<div class='col-12 mt-3 bg-transparent'><p class='sub_title1 text-center TextBold text-uppercase mb-0 pt-2'>$langSubmissions:</p><div class='alert alert-warning'>$langNoSubmissions</div></div>";
+        $tool_content .= "<div class='col-12 mt-3 bg-transparent'><p class='sub_title1 text-center TextBold text-uppercase mb-0 pt-2'>$langSubmissions:</p><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoSubmissions</span></div></div>";
     }
 }
 
@@ -5356,7 +5356,7 @@ function show_non_submitted($id) {
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkGroupNoSubmission]:</p>
-                      <div class='col-sm-12'><div class='alert alert-warning'>$m[NoneWorkGroupNoSubmission]</div></div>";
+                      <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$m[NoneWorkGroupNoSubmission]</span></div></div>";
         }
 
     } else {
@@ -5393,7 +5393,7 @@ function show_non_submitted($id) {
         } else {
             $tool_content .= "
                       <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
-                      <div class='col-sm-12'><div class='alert alert-warning'>$m[NoneWorkUserNoSubmission]</div></div>";
+                      <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$m[NoneWorkUserNoSubmission]</span></div></div>";
         }
     }
 }
@@ -5589,7 +5589,7 @@ function show_student_assignments() {
         }
         $tool_content .= "</tbody></table></div></div>";
     } else {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     }
 }
 
@@ -5763,7 +5763,7 @@ function show_assignments() {
         }
         $tool_content .= '</tbody></table></div></div>';
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     }
 }
 

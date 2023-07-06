@@ -68,7 +68,7 @@ $forum_name = $myrow->name;
 $forum_id = $myrow->id;
 
 if (isset($_GET['empty'])) { // if we come from newtopic.php
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langEmptyNewTopic</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEmptyNewTopic</span></div></div>";
 }
 
 $pageName = $forum_name;
@@ -266,9 +266,9 @@ if ($is_editor and isset($_GET['topiclock'])) {
     Database::get()->query("UPDATE forum_topic SET locked = !locked WHERE id = ?d", $topic_id);
     $locked = Database::get()->querySingle("SELECT locked FROM forum_topic WHERE id = ?d", $topic_id)->locked;
     if ($locked == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langUnlockedTopic</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUnlockedTopic</span></div></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langLockedTopic</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langLockedTopic</span></div></div>";
     }
 
 }
@@ -407,6 +407,6 @@ if (count($result) > 0) { // topics found
     } // end of while
     $tool_content .= "</table></div>";
 } else {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoTopics</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoTopics</span></div></div>";
 }
 draw($tool_content, 2, null, $head_content);

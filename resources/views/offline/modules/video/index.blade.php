@@ -53,7 +53,7 @@
             </div>
         @endif
     @else
-        <div class='alert alert-warning' role='alert'>{{ trans('langNoVideo') }}</div>
+        <div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div>
     @endif
     
 @endsection

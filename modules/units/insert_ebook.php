@@ -29,7 +29,7 @@ function list_ebooks() {
 
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE course_id = ?d ORDER BY `order`", $course_id);
     if (count($result) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoEBook</span></div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id'>" .

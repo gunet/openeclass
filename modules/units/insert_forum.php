@@ -30,7 +30,7 @@ function list_forums() {
     $foruminfo = Database::get()->queryArray("SELECT * FROM forum WHERE course_id = ?d
                                                     AND cat_id IN (SELECT id FROM forum_category WHERE cat_order >= 0)", $course_id);
     if (!$foruminfo) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoForums</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoForums</span></div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .

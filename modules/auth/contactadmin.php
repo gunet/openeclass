@@ -84,9 +84,9 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
 
         $plainEmailBody = html2text($emailbody);
         if (!send_mail_multipart("$lastname $firstname", $email, '', $to, $emailsubject, $plainEmailBody, $emailbody)) {
-            $tool_content .= "<div class='alert alert-danger'>$langEmailNotSend " . q($to) . "!</div><br />";
+            $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langEmailNotSend " . q($to) . "!</span></div><br />";
         } else {
-            $tool_content .= "<div class='alert alert-success'>$emailsuccess</div><br />";
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$emailsuccess</span></div><br />";
         }
     } else {
         $tool_content .= action_bar(array(

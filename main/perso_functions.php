@@ -164,11 +164,11 @@ function getUserLessonInfo($uid) {
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses
         $lesson_content .= "<div class='col-12 d-flex justify-content-start'><a class='btn submitAdminBtn mb-1' href='{$urlServer}modules/auth/courses.php'>$langRegCourses</a></div>";
-        $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNotEnrolledToLessons!</div></div>";
+        $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToLessons!</span></div></div>";
         if ($session->status == USER_TEACHER) {
-            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langWelcomeSelect $langWelcomeProfPerso</div></div>";
+            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeProfPerso</span></div></div>";
         } else {
-            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langWelcomeSelect $langWelcomeStudPerso</div></div>";
+            $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeStudPerso</span></div></div>";
         }
     }
     return $lesson_content;

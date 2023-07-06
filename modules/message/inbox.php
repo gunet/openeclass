@@ -519,7 +519,7 @@ if (isset($_GET['mid'])) {
                                   datatype: "json",
                                   data: string,
                                   success: function(){
-                                     $("#del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
+                                     $("#del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
                                      $(".alert-success").delay(3000).fadeOut(1500);
                                      $("#msg_area").remove();
                                   }});                             
@@ -636,7 +636,7 @@ if (isset($_GET['mid'])) {
                                      page_number--;
                                  }
                              }
-                             $('#del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteSuccess)."</p>');
+                             $('#del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteSuccess)."</span></p>');
                              $('.alert-success').delay(3000).fadeOut(1500);
                              $('#msg_area').remove();
                              oTable.fnPageChange(page_number);
@@ -669,7 +669,7 @@ if (isset($_GET['mid'])) {
                                              page_number--;
                                          }
                                      }
-                                     $('#del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteAllSuccess)."</p>');
+                                     $('#del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                      $('.alert-success').delay(3000).fadeOut(1500);
                                      oTable.fnPageChange(page_number);
                                  }

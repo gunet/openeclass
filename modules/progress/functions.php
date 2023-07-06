@@ -918,7 +918,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
     }
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoAssign</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1006,7 +1006,7 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
             'visibility' => $row->active);
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoExercises</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoExercises</span></div></div>";
     } else {
         $action = $unit_id ? "manage.php?course=$course_code&manage=1&unit_id=$unit_id" : "index.php?course=$course_code";
 
@@ -1121,7 +1121,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
     }
 
     if (count($fileinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoDocuments</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoDocuments</span></div></div>";
     } else {
         if (!empty($path)) {
             $dirname = Database::get()->querySingle("SELECT filename FROM document WHERE $group_sql AND path = ?s", $path);
@@ -1231,7 +1231,7 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
                                         AND module = " . MODULE_ID_BLOG, $element_id);
 
     if (count($res) > 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langResourceAlreadyAdded</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1283,7 +1283,7 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                                 ORDER BY title", $course_id, $element_id);
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBlogEmpty</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1321,7 +1321,7 @@ function display_available_coursecomments($element, $element_id, $unit_id = 0) {
 // TODO: implement for unit completion as well
     global $tool_content;
 
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>....Προς υλοποίηση....</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>....Προς υλοποίηση....</span></div></div>";
 
     return $tool_content;
 }
@@ -1346,7 +1346,7 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
                                             AND module = " . MODULE_ID_FORUM . "", $element_id);
 
     if (count($res) > 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
     } else {
 
         if ($unit_id) {
@@ -1428,7 +1428,7 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
     }
 
     if (count($topicinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoForumTopic</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoForumTopic</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1516,7 +1516,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0, $unit_re
     }
 
     if (count($lpinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLearningPath</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1686,7 +1686,7 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                 . "</form>";
     }
     if (!$video_found) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoVideo</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoVideo</span></div></div>";
     }
 }
 
@@ -1732,7 +1732,7 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
     }
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoEBook</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoEBook</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1859,7 +1859,7 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
             'description' => $row->description);
     }
     if (count($pollinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langPollNone</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPollNone</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1906,7 +1906,7 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
                                             AND module = " . MODULE_ID_WIKI . "", $element_id);
 
     if (count($result) > 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -1958,7 +1958,7 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
                                             AND activity_type = '" . CourseParticipationEvent::ACTIVITY . "'", $element_id);
 
     if (count($result) > 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -2015,7 +2015,7 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
                                     ORDER BY title", $course_id, $element_id);
 
     if (count($result) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoGradeBooks</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradeBooks</span></div></div>";
     } else {
 
         if ($unit_id) {
@@ -2074,7 +2074,7 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
                                             AND module = " . MODULE_ID_PROGRESS, $element_id);
 
     if (count($res) > 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langResourceAlreadyAdded</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceAlreadyAdded</span></div></div>";
     } else {
         if ($unit_id) {
             $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
@@ -2575,7 +2575,7 @@ function student_view_progress() {
         }
 
     if (!$found) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langNoCertBadge</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoCertBadge</span></div></div>";
     }
 }
 
@@ -2635,7 +2635,7 @@ function display_users_progress($element, $element_id) {
                                             AND course_id = ?d", $course_id)->total;
 
     if (count($sql) > 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langUsersCertResults $certified_users / $all_users $langUsersS.</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUsersCertResults $certified_users / $all_users $langUsersS.</span></div></div>";
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
                         <tr class='list-header'>
@@ -2667,7 +2667,7 @@ function display_users_progress($element, $element_id) {
         }
         $tool_content .= "</tbody></table></div></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langNoCertificateUsers</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langNoCertificateUsers</span></div></div>";
     }
 }
 
@@ -2727,7 +2727,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
     }
 	$user_data = Database::get()->querySingle($sql3, $element_id, $user_id);
     if (count($sql) == 0) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoUserActivity</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoUserActivity</span></div></div>";
     }
 
 	$tool_content .= "

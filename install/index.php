@@ -218,24 +218,24 @@ if (isset($_POST['install4'])) {
         Debug::setLevel(Debug::ALWAYS);
         Database::core();
         if (!check_engine()) {
-            $tool_content .= "<div class='alert alert-warning'>$langInnoDBMissing</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInnoDBMissing</span></div>";
             unset($_POST['install4']);
             $_POST['install3'] = true;
         } else {
             $GLOBALS['mysqlMainDb'] = $dbNameForm;
             try {
                 Database::get();
-                $tool_content .= "<div class='alert alert-info'>" .
+                $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" .
                     sprintf($langDatabaseExists, '<b>' . q($dbNameForm) . '</b>') .
-                    "</div>";
+                    "</span></div>";
             } catch (Exception $e) {
                 // no problem, database doesn't exist
             }
         }
     } catch (Exception $e) {
-        $tool_content .= "<div class='alert alert-danger'><p>" .
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span><p>" .
             $langErrorConnectDatabase . '</p><p><i>' .
-            q($e->getMessage()) . "</i></p><p>$langCheckDatabaseSettings</p></div>";
+            q($e->getMessage()) . "</i></p><p>$langCheckDatabaseSettings</p></span></div>";
         unset($_POST['install4']);
         $_POST['install3'] = true;
     }
@@ -248,7 +248,7 @@ if (isset($_POST['install2'])) {
     $_SESSION['step'] = 2;
     $gpl_link = '../info/license/gpl_print.txt';
     $tool_content .= "
-       <div class='alert alert-info'>$langInfoLicence</div>
+       <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoLicence</span></div>
        <form class='form-horizontal form-wrapper shadow-lg p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group step2-form'>
@@ -280,7 +280,7 @@ elseif (isset($_POST['install3'])) {
     $langStep = sprintf($langStep1, 3, 7);
     $_SESSION['step'] = 3;
     $tool_content .= "
-       <div class='alert alert-info'>$langWillWrite $langDBSettingIntro</div>
+       <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWillWrite $langDBSettingIntro</span></div>
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
@@ -463,7 +463,7 @@ elseif (isset($_POST['install6'])) {
     </script>
     ";
     $tool_content .= "
-       <div class='alert alert-info'>$langReviewSettings</div>
+       <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langReviewSettings</span></div>
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>" .
            display_entry(q($dbHostForm), $langdbhost) .
@@ -549,7 +549,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         chdir('..');
         // message
         $tool_content .= "
-        <div class='alert alert-success'>$langInstallSuccess</div>
+        <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langInstallSuccess</span></div>
 
         <br />
         <div>$langProtect</div>
@@ -597,8 +597,8 @@ elseif (isset($_POST['install1'])) {
     mkdir_try('storage');
     mkdir_try('storage/views');
     if ($configErrorExists) {
-        $tool_content .= "<div class='alert alert-danger'>" . implode('', $errorContent) . "</div>" .
-            "<div class='alert alert-warning'>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</div>";
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . implode('', $errorContent) . "</span></div>" .
+            "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</span></div>";
         draw($tool_content);
         exit();
     }

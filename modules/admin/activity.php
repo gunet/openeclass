@@ -257,7 +257,7 @@ $(function() {
 
     } else {
         $tool_content .= "
-        <div class='col-12'><div class='alert alert-warning text-center mt-3'>$langNoActivityHeadings</div></div>";
+        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoActivityHeadings</span></div></div>";
     }
 }
 

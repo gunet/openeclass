@@ -74,7 +74,7 @@ if (!isset($_REQUEST['action'])) {
 if (!isset($_GET['action'])) {
     $categories = Database::get()->queryArray("SELECT * FROM category ORDER BY ordering, id");
     if (count($categories) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langNoResult . "</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langNoResult . "</span></div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr class='list-header'><th class='ps-3'>$langAllCourseCategories</th><th class='text-center'>".icon('fa-gears', $langActions)."</th></tr>";

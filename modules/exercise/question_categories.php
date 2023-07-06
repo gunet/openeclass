@@ -173,7 +173,7 @@ if (isset($_POST['submitCat'])) {
                 </table>
             </div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoQuestionCats</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoQuestionCats</span></div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

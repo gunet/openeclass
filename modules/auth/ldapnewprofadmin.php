@@ -69,7 +69,7 @@ if ($submit) {
     // check if user name exists
     $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $pu);
     if ($username_check) {
-        $tool_content .= "<div class='alert alert-danger'>$langUserFree</div><br><br><p align='float-end'>
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserFree</span></div><br><br><p align='float-end'>
         <a href='../admin/listreq.php'>$langBackRequests</a></p>";
         draw($tool_content, 3);
         exit();
@@ -152,15 +152,15 @@ if ($submit) {
 
     if (!send_mail_multipart('', '', '', $pe, $mailsubject, $plainemailbody, $emailbody)) {
         $tool_content .= "
-	    <div class='alert alert-danger'>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></div>
+	    <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langMailErrorMessage &nbsp; <a href=\"mailto:$emailhelpdesk\">$emailhelpdesk</a></span></div>
 	    ";
         draw($tool_content, 3);
         exit();
     }
 
     // user message
-    $tool_content .= "<div class='alert alert-success'>$profsuccess<br><br>
-                     <a href='../admin/listreq.php'>$langBackRequests</a></div>";
+    $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$profsuccess<br><br>
+                     <a href='../admin/listreq.php'>$langBackRequests</a></span></div>";
 } else {
     // if not submit then display the form
     if (isset($_GET['id'])) { // if we come from prof request

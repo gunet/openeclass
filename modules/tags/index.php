@@ -83,7 +83,7 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
     if ($tag_elements) {
         $tool_content .= "</div></div></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langTagNotFound</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langTagNotFound</span></div></div>";
     }
 }
 

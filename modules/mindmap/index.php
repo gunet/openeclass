@@ -42,7 +42,7 @@ $toolName = $langMindmap;
 
 // guest user not allowed
 if (check_guest()) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoGuest</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoGuest</span></div></div>";
     draw($tool_content, 2, 'mindmap');
 }
 

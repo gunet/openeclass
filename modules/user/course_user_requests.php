@@ -55,10 +55,10 @@ if (isset($_POST['rejected_req_id'])) { // do reject course user request
     $message = $mailHeader.$mailMain;
     $plainMessage = html2text($message);
     if (!send_mail_multipart($from_name, $from_address, '', $to_address, $subject, $plainMessage, $message)) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$GLOBALS[langErrorSendingMessage]</span></div></div>";
     }
     Database::get()->query("UPDATE course_user_request SET status = 0 WHERE id = ?d", $_POST['rejected_req_id']);
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langRequestReject</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langRequestReject</span></div></div>";
 }
 
 
@@ -99,7 +99,7 @@ if (isset($_GET['rid'])) {
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/user/course_user_requests.php?course=' . $course_code);
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langCourseUserRegError</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langCourseUserRegError</span></div></div>";
         }
     } else {
         $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>";
@@ -157,7 +157,7 @@ if (isset($_GET['rid'])) {
         }
         $tool_content .= "</table></div></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langUserNoRequests</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUserNoRequests</span></div></div>";
     }
 }
 

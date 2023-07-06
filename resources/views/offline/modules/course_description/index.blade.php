@@ -14,7 +14,7 @@
                 </div>
         @endforeach
     @else
-        <div class='alert alert-warning'>{{ trans('langThisCourseDescriptionIsEmpty') }}</div>
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langThisCourseDescriptionIsEmpty') }}</span></div>
     @endif
 
 @endsection

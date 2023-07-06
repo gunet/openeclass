@@ -429,7 +429,7 @@ function submitPoll() {
                             VALUES (?d, ?d, ?d, ?s, ?t)", $user_record_id, $pqid, $aid, $answer_text, $CreationDate);
         }
         $end_message = Database::get()->querySingle("SELECT end_message FROM poll WHERE pid = ?d", $pid)->end_message;
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>".$langPollSubmitted."</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langPollSubmitted."</span></div></div>";
         if (!empty($end_message)) {
             $tool_content .=  $end_message;
         }

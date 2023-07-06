@@ -46,7 +46,7 @@ require_once 'unitresourceindexer.class.php';
 $pageName = $langSearch;
 
 if (!get_config('enable_search')) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langSearchDisabled</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSearchDisabled</span></div></div>";
     draw($tool_content, 2);
     exit;
 }
@@ -581,12 +581,12 @@ if (empty($search_terms)) {
         }
     }
     $tool_content .= "
-        <div class='alert alert-info'>$langDoSearch:&nbsp;<label> '" . q($search_terms) . "'</label><br><small>$results_count $langResults2</small></div>
+        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langDoSearch:&nbsp;<label> '" . q($search_terms) . "'</label><br><small>$results_count $langResults2</small></span></div>
     ";
     $tool_content .= $search_results;
     // else ... no results found
     if ($found == false) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoResult</span></div>";
     }
 } // end of search
 draw($tool_content, 2);

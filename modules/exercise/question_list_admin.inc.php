@@ -619,5 +619,5 @@ $tool_content .= "
 </div>
 ";
 if ($nbrQuestions == 0) {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoQuestion</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoQuestion</span></div></div>";
 }

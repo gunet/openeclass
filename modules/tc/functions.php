@@ -219,7 +219,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <fieldset>";
 
         if ($tc_type == 'googlemeet') { // google meet
-            $tool_content .= "<div class='alert alert-info'>$langGoToGoogleMeetLink</div>";
+            $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToGoogleMeetLink</span></div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank'>$langGoToGoogleMeetLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
@@ -231,7 +231,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
-            $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
+            $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://zoom.us/' target='_blank'>$langGoToZoomLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
@@ -243,7 +243,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'webex') { // webex
-            $tool_content .= "<div class='alert alert-info'>$langGoToWebexLink</div>";
+            $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
             $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://webex.com/' target='_blank'>$langGoToWebexLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
@@ -880,10 +880,10 @@ function tc_session_details() {
     $options = [];
     if (!is_enabled_tc_server($course_id)) { // check availability
         if ($is_editor) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langBBBNotServerAvailableTeacher</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langBBBNotServerAvailableTeacher</span></div></div>";
 
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langBBBNotServerAvailableStudent</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langBBBNotServerAvailableStudent</span></div></div>";
         }
     }
 
@@ -1105,10 +1105,10 @@ function tc_session_details() {
         }
 
         if (!$is_editor and !$headingsSent) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoBBBSesssions</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoBBBSesssions</span></div></div>";
         }
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoBBBSesssions</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoBBBSesssions</span></div></div>";
     }
 }
 
@@ -1622,13 +1622,13 @@ function publish_video_recordings($course_id, $id)
         switch($finalMsg)
         {
             case 0:
-                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBBBImportRecordingsNo</div></div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBImportRecordingsNo</span></div></div>";
                 break;
             case 1:
-                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBBBImportRecordingsNoNew</div></div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBImportRecordingsNoNew</span></div></div>";
                 break;
             case 2:
-                $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langBBBImportRecordingsOK</div></div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langBBBImportRecordingsOK</span></div></div>";
                 break;
         }
     }

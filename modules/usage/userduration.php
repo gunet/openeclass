@@ -253,7 +253,7 @@ if (isset($_GET['u'])) { //  stats per user
                 
             ), false);
             $tool_content .= selection_course_modules();
-            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'>" . which_module($module) . "</div></div>";
+            $tool_content .= "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . which_module($module) . "</span></div></div>";
         } else {
             $tool_content .= "<h3>" . which_module($module) . "</h3>";
         }
@@ -476,7 +476,7 @@ function selection_course_modules() {
         $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
     }
 
-    $content = "<div class='alert alert-info'>$langInfoUserDuration $langInfoUserDuration2</div>";
+    $content = "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoUserDuration $langInfoUserDuration2</span></div>";
     $content .= "
         <div class='col-12'>
             <div class='form-wrapper form-edit rounded'>

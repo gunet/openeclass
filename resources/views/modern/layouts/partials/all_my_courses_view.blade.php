@@ -9,18 +9,33 @@
            
             @if(Session::has('message'))
             <div class='col-12 all-alerts'>
-                <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                    @if(is_array(Session::get('message')))
-                        @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                        @foreach($messageArray as $message)
-                            {!! $message !!}
-                        @endforeach
-                    @else
-                        {!! Session::get('message') !!}
-                    @endif
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
+                        <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            @php 
+                                $alert_type = '';
+                                if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                }else{
+                                    $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                }
+                            @endphp
+                            
+                            @if(is_array(Session::get('message')))
+                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                {!! $alert_type !!}<span>
+                                @foreach($messageArray as $message)
+                                    {!! $message !!}
+                                @endforeach</span>
+                            @else
+                                {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
+                            @endif
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
             @endif
 
             @if($myCourses)
@@ -144,7 +159,7 @@
                         <nav aria-label='Page navigation example w-100'>
                             <ul class='pagination mycourses-pagination w-100 mb-0'>
                                 <li class='page-item page-item-previous'>
-                                    <a class='page-link bg-white' href='#'><span class='fa fa-chevron-left'></span></a>
+                                    <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                                 </li>
                                 @if($pagesPag >=12 )
                                     @for($i=1; $i<=$pagesPag; $i++)
@@ -195,7 +210,7 @@
                                 @endif
 
                                 <li class='page-item page-item-next'>
-                                    <a class='page-link bg-white' href='#'><span class='fa fa-chevron-right'></span></a>
+                                    <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                                 </li>
                             </ul>
                         </nav>
@@ -205,7 +220,7 @@
                 </div>
             @else
                 <div class='col-12'>
-                    <div class='alert alert-warning'>{{ trans('langNoCourses') }}</div>
+                    <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses') }}</span></div>
                 </div> 
             @endif
 

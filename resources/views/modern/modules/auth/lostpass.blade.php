@@ -40,15 +40,30 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            @php 
+                                $alert_type = '';
+                                if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                }else{
+                                    $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                }
+                            @endphp
+                            
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                {!! $alert_type !!}<span>
                                 @foreach($messageArray as $message)
                                     {!! $message !!}
-                                @endforeach
+                                @endforeach</span>
                             @else
-                                {!! Session::get('message') !!}
+                                {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
@@ -59,12 +74,13 @@
                         @if(isset($is_valid))
                             @if(isset($user_pass_updated))
                                 <div class='col-12'>
-                                    <div class="alert alert-success"><p>{!! trans('langAccountResetSuccess1') !!}</p></div>
+                                    <div class="alert alert-success"><i class='fa-solid fa-circle-check fa-lg'></i><span><p>{!! trans('langAccountResetSuccess1') !!}</p></span></div>
                                 </div>
                             @elseif(isset($user_pass_notupdate))
                                 <div class='col-12'>
                                     <div class='alert alert-warning'>
-                                        {!! implode("\n", $error_messages) !!}
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                                        {!! implode("\n", $error_messages) !!}</span>
                                     </div>
                                 </div>
                             @endif
@@ -99,7 +115,7 @@
                             @endif
                         @else
                             <div class='col-12'>
-                                <div class='alert alert-danger'>{!! trans('langAccountResetInvalidLink') !!}</div>
+                                <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>{!! trans('langAccountResetInvalidLink') !!}</span></div>
                             </div>
                         @endif
 
@@ -108,13 +124,13 @@
                             @if(!password_is_editable($res_first_attempt->password))
 
                                 <div class='col-12'>
-                                    <div class='alert alert-danger'>
+                                    <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>
                                         <p><strong>{!! trans('langPassCannotChange1') !!}</strong></p>
                                         <p>
                                             {!! trans('langPassCannotChange2') !!} {!! get_auth_info($auth) !!}
                                             {!! trans('langPassCannotChange3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>
                                             {!! trans('langPassCannotChange4') !!}
-                                        </p>
+                                        </p></span>
                                     </div>
                                 </div>
 
@@ -123,18 +139,18 @@
                                 @if(!$mail_sent)
 
                                         <div class='col-12'>
-                                            <div class='alert alert-danger'>
+                                            <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>
                                                 <p><strong>{!! trans('langAccountEmailError1') !!}</strong></p>
                                                 <p>{!! trans('langAccountEmailError2') !!} {{ $email }}.</p>
-                                                <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>.</p>
+                                                <p>{!! trans('langAccountEmailError3') !!} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>.</p></span>
                                             </div>
                                         </div>
 
                                 @elseif(!isset($auth))
 
                                         <div class='col-12'>
-                                            <div class='alert alert-success'>
-                                                {!! trans('lang_pass_email_ok') !!} <strong>{!! q($email) !!}</strong>
+                                            <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>
+                                                {!! trans('lang_pass_email_ok') !!} <strong>{!! q($email) !!}</strong></span>
                                             </div>
                                         </div>
 
@@ -144,17 +160,17 @@
                             @if(isset($res_second_attempt) && $res_second_attempt)
 
                                     <div class='col-12'>
-                                        <div class='alert alert-danger'>
-                                            <p>{!! trans('langLostPassPending') !!}</p>
+                                        <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>
+                                            <p>{!! trans('langLostPassPending') !!}</p></span>
                                         </div>
                                     </div>
 
                             @else
 
                                     <div class='col-12'>
-                                        <div class='alert alert-danger'>
+                                        <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>
                                             <p><strong>{{ trans('langAccountNotFound1') }} ({{ "$userName / $email" }})</strong></p>
-                                            <p>{{ trans('langAccountNotFound2') }} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>, {{ trans('langAccountNotFound3') }}</p>
+                                            <p>{{ trans('langAccountNotFound2') }} <a href='mailto:{{ $emailhelpdesk }}'>{{ $emailhelpdesk }}</a>, {{ trans('langAccountNotFound3') }}</p></span>
                                         </div>
                                     </div>
 

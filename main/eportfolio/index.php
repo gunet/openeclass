@@ -29,7 +29,7 @@ require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'modules/sharing/sharing.php';
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
+    $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
     if ($session->status == 0) {
         draw($tool_content, 0);
     } else {
@@ -78,7 +78,7 @@ if ($userdata) {
         }
         
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
         } elseif ($userdata->eportfolio_enable == 1) {
             load_js('clipboard.js');
             $clipboard_link = "
@@ -136,7 +136,7 @@ if ($userdata) {
                                     ));    
     } else {
         if ($userdata->eportfolio_enable == 0) {
-            $tool_content = "<div class='col-12'><div class='alert alert-danger'>$langUserePortfolioDisabled</div></div>";
+            $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
             if ($session->status == 0) {
                 draw($tool_content, 0);
             } else {

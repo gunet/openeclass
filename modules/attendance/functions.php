@@ -42,7 +42,7 @@ function display_attendances() {
     if (count($result) == 0) { // no attendances
         $tool_content .= "
             <div class='col-12'>
-                <div class='alert alert-warning'>$langNoAttendances</div></div>";
+                <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAttendances</span></div></div>";
     } else {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
@@ -107,7 +107,7 @@ function register_user_presences($attendance_id, $actID) {
     $act_type = $result->auto; // type of activity
     $tool_content .= "
     <div class='col-12'>
-        <div class='alert alert-info'>" . q($result->title) . "</div></div>";
+        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . q($result->title) . "</span></div></div>";
 
     if (isset($_POST['bookUsersToAct'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) {
@@ -268,7 +268,7 @@ function display_attendance_activities($attendance_id) {
     if ($participantsNumber == 0) {
         $tool_content .= "
         <div class='col-12'>
-            <div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</div></div>";
+            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</span></div></div>";
     }
     //get all the available activities
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
@@ -333,7 +333,7 @@ function display_attendance_activities($attendance_id) {
     } else {
         $tool_content .= "
         <div class='col-12'>
-            <div class='alert alert-warning'>$langAttendanceNoActMessage1 $langAttendanceNoActMessage3</div></div>";
+            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessage1 $langAttendanceNoActMessage3</span></div></div>";
     }
 }
 
@@ -368,7 +368,7 @@ function attendance_display_available_exercises($attendance_id) {
     } else {
         $tool_content .= "
         <div class='col-12'>
-        <div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div></div>";
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessageExe4</span></div></div>";
     }
 }
 
@@ -417,7 +417,7 @@ function attendance_display_available_assignments($attendance_id) {
     } else {
         $tool_content .= "
         <div class='col-12'>
-        <div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div></div>";
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessageAss4</span></div></div>";
     }
 }
 
@@ -454,7 +454,7 @@ function attendance_display_available_tc($attendance_id) {
     } else {
         $tool_content .= "
         <div class='col-12'>
-        <div class='alert alert-warning'>$langAttendanceNoActMessageTc</div></div>";
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessageTc</span></div></div>";
     }
 }
 
@@ -821,7 +821,7 @@ function display_user_presences($attendance_id) {
                             WHERE attendance_book.attendance_activity_id = attendance_activities.id
                             AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
         if(!$checkForRecords) {
-            $tool_content .="<div class='col-sm-12'><div class='alert alert-success'>$langAttendanceNewBookRecord</div></div>";
+            $tool_content .="<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langAttendanceNewBookRecord</span></div></div>";
         }
 
         //get all the activities
@@ -837,7 +837,7 @@ function display_user_presences($attendance_id) {
         } else {
             $tool_content .= "
             <div class='col-12'>
-            <div class='alert alert-warning'>$langAttendanceNoActMessage1</div></div>";
+            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceNoActMessage1</span></div></div>";
         }
 
         if ($result) {
@@ -971,7 +971,7 @@ function display_all_users_presences($attendance_id) {
         $tool_content .= "</tbody></table>";
     } else {
         $tool_content .= "
-        <div class='col-12'><div class='alert alert-warning'>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</div></div>";
+        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoStudentsInAttendance <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editUsers=1'>$langHere</a>.</span></div></div>";
     }
 }
 
@@ -1231,7 +1231,7 @@ function student_view_attendance($attendance_id) {
     ));
     if (!$checkForRecords) {
         $tool_content .="
-        <div class='col-12'><div class='alert alert-warning'>$langAttendanceStudentFailure</div></div>";
+        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAttendanceStudentFailure</span></div></div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d ORDER BY `DATE` DESC", $attendance_id);
@@ -1241,7 +1241,7 @@ function student_view_attendance($attendance_id) {
         if ($checkForRecords) {
             $range = Database::get()->querySingle("SELECT `limit` FROM attendance WHERE id = ?d", $attendance_id)->limit;
             $tool_content .= "
-            <div class='col-12'><div class='alert alert-info'>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div></div>";
+            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . userAttendTotal($attendance_id, $uid) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </span></div></div>";
         }
 
         $tool_content .= " <div class='col-12'>

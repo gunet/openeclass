@@ -61,32 +61,32 @@ if (isset($_POST['submit'])) {
     }
 
     if (count($not_found)) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langUsersNotExist<br>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langUsersNotExist<br>";
         foreach ($not_found as $uname) {
             $tool_content .= q($uname) . '<br>';
         }
-        $tool_content .= '</div></div>';
+        $tool_content .= '</span></div></div>';
     }
 
     if (count($ok)) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-success'>$langUsersRegistered<br>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUsersRegistered<br>";
         foreach ($ok as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</div></div>';
+        $tool_content .= '</span></div></div>';
     }
 
     if (count($existing)) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langUsersAlreadyRegistered<br>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUsersAlreadyRegistered<br>";
         foreach ($existing as $userid) {
             $tool_content .= display_user($userid) . '<br>';
         }
-        $tool_content .= '</div></div>';
+        $tool_content .= '</span></div></div>';
     }
 }
 
 
-$tool_content .= "<div class='col-12'><div class='alert alert-info'>$langAskManyUsers</div></div>
+$tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langAskManyUsers</span></div></div>
         
 <div class='col-12'>
 <div class='form-wrapper form-edit rounded'>

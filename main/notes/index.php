@@ -327,7 +327,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             $no_content = false;
         }
         if ($no_content) {
-            $tool_content .= "<div class='col-sm-12'><p class='alert alert-warning text-center'>$langNoNote</p></div>\n";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoNote</span></div></div>\n";
         }
     }
 }

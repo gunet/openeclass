@@ -61,7 +61,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $post_actions .='</div>';
 
                 $response[0] = 'OK';
-                $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
+                $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsSaveSuccess."</span></div>";
                 $response[2] = $comment->getId();
                 $response[3] = "
                 <div class='row mb-4 comment' id='comment-".$comment->getId()."'>
@@ -88,11 +88,11 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 triggerAnalytics($course_id, $uid, $commentTypeAnalytics);
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsSaveFail."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsNewNoPerm."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsNewNoPerm."</span></div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'delete') {
@@ -101,20 +101,20 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
             if ($comment->permEdit($is_editor, $uid)) {
                 if ($comment->delete()) {
                     $response[0] = 'OK';
-                    $response[1] = "<div class='alert alert-success'>".$langCommentsDelSuccess."</div>";
+                    $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsDelSuccess."</span></div>";
                     triggerGame($course_id, $uid, CommentEvent::DELCOMMENT, $commentEventActivity, $comment->getRid());
                     triggerAnalytics($course_id, $uid, $commentTypeAnalytics);
                 } else {
                     $response[0] = 'ERROR';
-                    $response[1] = "<div class='alert alert-warning'>".$langCommentsDelFail."</div>";
+                    $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsDelFail."</span></div>";
                 }
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsDelNoPerm."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsDelNoPerm."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsLoadFail."</span></div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'editLoad') {
@@ -127,11 +127,11 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $response[2] .= '<input class="btn submitAdminBtn" type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsEditNoPerm."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsEditNoPerm."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsLoadFail."</span></div>";
         }
         echo json_encode($response);
     } else if ($_POST['action'] == 'editSave') {
@@ -140,19 +140,19 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
             if ($comment->permEdit($is_editor, $uid)) {
                 if ($comment->edit($_POST['commentText'])) {
                     $response[0] = 'OK';
-                    $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
+                    $response[1] = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".$langCommentsSaveSuccess."</span></div>";
                     $response[2] = '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
                 } else {
                     $response[0] = 'ERROR';
-                    $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
+                    $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsSaveFail."</span></div>";
                 }
             } else {
                 $response[0] = 'ERROR';
-                $response[1] = "<div class='alert alert-warning'>".$langCommentsEditNoPerm."</div>";
+                $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsEditNoPerm."</span></div>";
             }
         } else {
             $response[0] = 'ERROR';
-            $response[1] = "<div class='alert alert-warning'>".$langCommentsLoadFail."</div>";
+            $response[1] = "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>".$langCommentsLoadFail."</span></div>";
         }
         echo json_encode($response);
     }

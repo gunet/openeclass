@@ -73,14 +73,14 @@ $head_content .= '<script type="text/javascript">
 if ($course_id != 0) {
     if ($status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
         $tool_content .= "<div class='col-12 mt-3'>
-        <div class='alert alert-warning'>$langNoUserEmailNotification
-            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div></div>";
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</span></div></div>";
     }
 } else {
     if (!get_mail_ver_status($uid)) {
         $tool_content .= "<div class='col-12 mt-3'>
-        <div class='alert alert-warning'>$langNoUserEmailNotification
-            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div></div>";
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</span></div></div>";
     }
 }
 
@@ -170,12 +170,12 @@ if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'])
                 }
             }
             $tool_content .= "<div class='col-12 mt-3'>
-            <div class='alert alert-success'>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</div></div>";
+            <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>".sprintf($langDropboxFreeSpaceSuccess, format_file_size($space_released))."</span></div></div>";
         } else { //provide option to free some space
             $tool_content .= "<div class='col-12 mt-3'>
-            <div class='alert alert-danger text-center'>                                
+            <div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>                                
                                 <a onclick=\"return confirm('".sprintf($langDropboxFreeSpaceConfirm, $space_to_free)."');\" href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=TRUE&amp;free=TRUE'>".sprintf($langDropboxFreeSpace, $space_to_free)."</a>                                
-                              </div></div>";
+                              </span></div></div>";
         }
     }
 
@@ -199,7 +199,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         if (!$personal_msgs_allowed) {
             $tool_content .= "
                 <div class='col-12'>
-                    <div class='alert alert-warning'>$langGeneralError</div></div>";
+                    <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGeneralError</span></div></div>";
             draw($tool_content, 1, null, $head_content);
             exit;
         }

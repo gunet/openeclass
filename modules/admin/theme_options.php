@@ -417,7 +417,7 @@ if (isset($_POST['optionsSave'])) {
                 <div class='alert alert-warning d-flex justify-content-between align-items-center'>
                     
                         <div>
-                            $langPreviewState &nbsp;".$themes_arr[$preview_theme].".
+                        <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPreviewState &nbsp;".$themes_arr[$preview_theme].".</span>
                         </div>
                         <div class='d-lg-flex'>
                             <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a> 

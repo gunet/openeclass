@@ -148,7 +148,8 @@ function display_message($message) {
                         </div>                        
                         <div class='panel-body'>
                             <div class='alert alert-warning'>
-                                $message
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                                $message</span>
                             </div>
                         </div>                        
                     </div>

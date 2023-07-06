@@ -447,9 +447,9 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
                 $form_next_link = "{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId";
                 $form_cancel_link = "{$urlServer}modules/exercise/index.php?course=$course_code";
             }
-            $tool_content .= "<div class='alert alert-warning text-center'>" .
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" .
                 ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) .
-                ' ' . $langExerciseAttemptContinue . "</div>
+                ' ' . $langExerciseAttemptContinue . "</span></div>
             <div class='text-center'>
                 <form action='$form_next_link' method='post'>
                     <input class='btn submitAdminBtn' id='submit' type='submit' name='acceptAttempt' value='$langContinue'>
@@ -619,9 +619,9 @@ if (isset($timeleft)) { // time remaining
     if ($timeleft <= 1) {
         $timeleft = 1;
     }
-    $tool_content .= "<div class='alert alert-warning bg-warning' style='border-radius:15px;'>";
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>";
     $tool_content .= "<div class='col-sm-12'><h4 class='text-center text-dark mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
-    $tool_content .= "</div>";
+    $tool_content .= "</span></div>";
 }
 
 if (!empty($exerciseDescription)) { // description
@@ -753,7 +753,7 @@ if ($questionList) {
         showQuestion($question, $questionNumber, $exerciseResult);
     }
 } else {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoQuestion</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoQuestion</span></div></div>";
     if (isset($_REQUEST['unit'])) {
         $backlink = "index.php?course=$course_code&amp;id=$_REQUEST[unit]";
     } else {

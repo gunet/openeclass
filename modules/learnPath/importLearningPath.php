@@ -1037,18 +1037,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       status messages
       -------------------------------------- */
     foreach ($okMsgs as $msg) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</div></div>';
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . icon('fa-check', $langSuccessOk) . ' ' . $msg . '</span></div></div>';
     }
 
     foreach ($errorMsgs as $msg) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>" . icon('fa-times', $langError) . ' ' . $msg . '</div></div>';
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . icon('fa-times', $langError) . ' ' . $msg . '</span></div></div>';
     }
 
     // installation completed or not message
     if (!$errorFound) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>" . $langInstalled . "</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langInstalled . "</span></div></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langNotInstalled . "</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langNotInstalled . "</span></div></div>";
     }
 
     $tool_content .=  action_bar(array(
@@ -1127,9 +1127,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $tool_content .= "
             
                 <div class='col-md-9 col-12 offset-md-3 mt-4'>
-                    <div class='alert alert-info'>
+                    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                         <p>$langNote:</p>
-                        <p>$langScormIntroTextForDummies</p>
+                        <p>$langScormIntroTextForDummies</p></span>
                     </div>
                 </div>
             ";

@@ -131,7 +131,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                     if (isset($_SESSION['mail_verification_required'])) {
                         unset($_SESSION['mail_verification_required']);
                     }
-                    $tool_content = "<div class='alert alert-info'>$langMailVerifySuccess2 </div>
+                    $tool_content = "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langMailVerifySuccess2 </span></div>
                     <p>$user_msg<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a>
                         $langBackPage</p>";
                     draw($tool_content, 0);
@@ -143,21 +143,21 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                     if (isset($_SESSION['mail_verification_required'])) {
                         unset($_SESSION['mail_verification_required']);
                     }
-                    $tool_content = "<div class='alert alert-info'>$langMailVerifySuccess2 </div>
+                    $tool_content = "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langMailVerifySuccess2 </span></div>
                     <p>$user_msg<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a>
                         $langBackPage</p>";
                     draw($tool_content, 0);
                     exit;
                 }
 
-                $tool_content = "<div class='alert alert-success'>$langMailVerifySuccess </div>
+                $tool_content = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langMailVerifySuccess </span></div>
                     <p>$user_msg<br /><br />$langClick <a href='$urlServer' class='mainpage'>$langHere</a>
                     $langBackPage</p>";
             }
             // code and id given but they are wrong!
             else {
                 $user_error_msg = $langMailVerifyCodeError;
-                $tool_content = "<div class='alert alert-danger'>$user_error_msg </div>
+                $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$user_error_msg </span></div>
                     <p>$langClick <a href='$urlServer' class='mainpage'>$langHere</a>
                     $langBackPage</p>";
             }
@@ -167,7 +167,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
         } else {
             $user_error_msg = $langMailVerifyNoAccount;
         }
-        $tool_content = "<div class='alert alert-danger'>$user_error_msg </div>
+        $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$user_error_msg </span></div>
                             <p>$langClick <a href='$urlServer' class='mainpage'>$langHere</a>
                             $langBackPage</p>";
     }
@@ -175,7 +175,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
 // no code given and no id given
 else {
     $user_error_msg = $langMailVerifyNoCode;
-    $tool_content = "<div class='alert alert-danger'>$user_error_msg </div>
+    $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$user_error_msg </span></div>
         <p>$langClick <a href='$urlServer' class='mainpage'>$langHere</a>
         $langBackPage</p>";
 }

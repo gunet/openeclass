@@ -46,7 +46,7 @@ if (!file_exists($groupPath)) {
 $pageName = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
-    $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'>$langGroupWorkIntro</div></div>";
+    $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGroupWorkIntro</span></div></div>";
     show_assignments();
     draw($tool_content, 2);
 } elseif (isset($_POST['assign'])) {
@@ -191,11 +191,11 @@ function submit_work($uid, $group_id, $id, $file) {
                                 submission_ip, file_path, file_name, comments, group_id, grade_comments)
                                 VALUES (?d, ?d, NOW(), '$_SERVER[REMOTE_ADDR]', ?s, ?s, ?s, ?d, ''", $uid, $id, $destination, $original_filename, $_POST['comments'], $group_id);
 
-        $tool_content .="<div class='alert alert-success'>$langUploadSuccess
+        $tool_content .="<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUploadSuccess
 			<br>$m[the_file] \"$original_filename\" $m[was_submitted]<br>
-			<a href='index.php?course=$course_code'>$langBack</a></div><br>";
+			<a href='index.php?course=$course_code'>$langBack</a></span></div><br>";
     } else {
-        $tool_content .="<div class='col-sm-12'><div class='alert alert-danger'>$langUploadError<br>
-		<a href='index.php?course=$course_code'>$langBack</a></div></div><br>";
+        $tool_content .="<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadError<br>
+		<a href='index.php?course=$course_code'>$langBack</a></span></div></div><br>";
     }
 }

@@ -309,7 +309,7 @@ if ($total_categories > 0) {
 
     }
 } else {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoForums</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoForums</span></div></div>";
 }
 add_units_navigation(true);
 if ($is_editor) {

@@ -242,7 +242,7 @@
 @endphp
 
     @if (count($posts) == 0)
-        <div class="col-12 mt-3"><div class="alert alert-warning">{{ trans('langNoWallPosts') }}</div></div>
+        <div class="col-12 mt-3"><div class="alert alert-warning"><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoWallPosts') }}</span></div></div>
     @else
         {!! generate_infinite_container_html($posts, $posts_per_page, 2) !!}<div class='mb-4'></div>
     @endif

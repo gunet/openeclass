@@ -334,7 +334,7 @@ switch ($action) {
     // list wiki
     case "list": {
             if (!empty($message)) {
-                $tool_content .= "<div class='alert alert-success'>$message</div>";
+                $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$message</span></div>";
             }
             if ($is_editor) {
                 $tool_content .= action_bar(array(
@@ -443,7 +443,7 @@ switch ($action) {
             }
             // wiki list empty
             else {
-                $tool_content .= '<div class="col-sm-12"><div class="alert alert-warning">' . $langWikiNoWiki . '</div></div>';
+                $tool_content .= '<div class="col-sm-12"><div class="alert alert-warning"><i class="fa-solid fa-triangle-exclamation fa-lg"></i><span>' . $langWikiNoWiki . '</span></div></div>';
             }
             break;
         }

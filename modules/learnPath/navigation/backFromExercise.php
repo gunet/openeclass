@@ -39,9 +39,9 @@ require_once '../../../include/init.php';
             <br /><br /><br />
             <?php
             if ($_GET['op'] == 'cancel') {
-                echo "<div class='alert alert-warning'>$langExerciseCancelled</div>";
+                echo "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langExerciseCancelled</span></div>";
             } elseif ($_GET['op'] == 'finish') { // exercise done
-                echo "<div class='alert alert-success'>$langExerciseDone</div>";
+                echo "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langExerciseDone</span></div>";
             }
             ?>
         </div>

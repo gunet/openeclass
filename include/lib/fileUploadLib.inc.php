@@ -452,7 +452,7 @@ function validateUploadedFile($filename, $menuTypeID = 2) {
     global $tool_content, $head_content, $langBack, $langUploadedFileNotAllowed, $langContactAdmin;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<div class='alert alert-danger'>$langUploadedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></span></div><br>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }
@@ -468,7 +468,7 @@ function validateRenamedFile($filename, $menuTypeID = 2) {
     global $tool_content, $head_content, $langBack, $langRenamedFileNotAllowed, $langContactAdmin;
 
     if (!isWhitelistAllowed($filename)) {
-        $tool_content .= "<div class='alert alert-danger'>$langRenamedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></div><br>";
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langRenamedFileNotAllowed <b>" . q($filename) . "</b> $langContactAdmin<br><a href='javascript:history.go(-1)'>$langBack</a></span></div><br>";
         draw($tool_content, $menuTypeID, null, $head_content);
         exit;
     }

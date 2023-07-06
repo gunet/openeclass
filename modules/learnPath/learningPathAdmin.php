@@ -523,7 +523,7 @@ if (count($result) == 0) {
     if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div>";
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoModule</div></div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div></div></div>";
     }
     draw($tool_content, 2, null, $head_content, $body_action);
     exit();

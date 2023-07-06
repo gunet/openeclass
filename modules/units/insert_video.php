@@ -100,6 +100,6 @@ function list_videos() {
         $tool_content .= "</table></div><div class='d-flex justify-content-center mt-3'><input class='btn submitAdminBtn' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
     }
     if (!$video_found) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoVideo</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoVideo</span></div></div>";
     }
 }

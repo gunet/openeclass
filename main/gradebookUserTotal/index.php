@@ -75,12 +75,12 @@ if (count($courses) > 0) {
     $grade_content .= "</table></div>";
     if (!$content) {
         $tool_content .= "<div class='col-12'>
-        <div class='alert alert-warning'>$langNoGradebook</div></div>";
+        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradebook</span></div></div>";
     } else {
         $tool_content .= $grade_content;
     }
 } else {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGradebook</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradebook</span></div></div>";
 }
 
 draw($tool_content, 1, null, $head_content);

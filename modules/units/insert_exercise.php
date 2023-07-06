@@ -38,7 +38,7 @@ function list_exercises() {
             'password_lock' => $row->password_lock];
     }
     if (count($quizinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning text-center'>$langNoExercises</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoExercises</span></div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .

@@ -98,17 +98,31 @@
                         <div class='row rowMargin px-lg-2'>
                             @if(Session::has('message'))
                                 <div class='col-12 mt-3 px-0'>
-                                    <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                    <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                                        @php 
+                                            $alert_type = '';
+                                            if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                                $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                            }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                                $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                            }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                                $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                            }else{
+                                                $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                            }
+                                        @endphp
+                                        
                                         @if(is_array(Session::get('message')))
                                             @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                            {!! $alert_type !!}<span>
                                             @foreach($messageArray as $message)
                                                 {!! $message !!}
-                                            @endforeach
+                                            @endforeach</span>
                                         @else
-                                            {!! Session::get('message') !!}
+                                            {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                         @endif
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    </p>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    </div>
                                 </div>
                             @endif
                             <div id="cources-bars" class="col-12 px-lg-1 px-0">
@@ -176,7 +190,7 @@
                 </div>
                 <div class='card-footer d-flex justify-content-start border-0 bg-white'>
                     <a class='all_announcements ps-0' href="{{$urlAppend}}modules/announcements/myannouncements.php">
-                        {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
+                        {{ trans('langAllAnnouncements') }} <span class='fa-solid fa-chevron-right'></span>
                     </a>
                 </div>
             </div>
@@ -196,7 +210,7 @@
                 </div>
                 <div class='card-footer d-flex justify-content-start border-0 bg-white'>
                     <a class='all_messages ps-0' href="{{$urlAppend}}modules/message/index.php">
-                        {{ trans('langAllMessages') }} <span class='fa fa-chevron-right'></span>
+                        {{ trans('langAllMessages') }} <span class='fa-solid fa-chevron-right'></span>
                     </a>
                 </div>
             </div>

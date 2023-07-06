@@ -216,7 +216,7 @@ function show_wall_posts() {
     //show wall posts
     $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
     if (count($posts) == 0) {
-        $tool_content .= '<div class="col-12 mt-3"><div class="alert alert-warning">'.$langNoWallPosts.'</div></div>';
+        $tool_content .= '<div class="col-12 mt-3"><div class="alert alert-warning"><i class="fa-solid fa-triangle-exclamation fa-lg"></i><span>'.$langNoWallPosts.'</span></div></div>';
     } else {
         $tool_content .= generate_infinite_container_html($posts, $posts_per_page, 2);
 

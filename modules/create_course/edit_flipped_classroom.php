@@ -756,7 +756,7 @@ if (!isset($_POST['next'])) {
                     course_code =?s", $stunum, $lectnum, $lecthours, $homehours, $totalhours, $course_code
         );
 
-        $tool_content .= "<div class='alert alert-success'><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
         $tool_content .= action_bar(array(
             array(
                 'title' => $langEnter,
@@ -1049,7 +1049,7 @@ if (!isset($_POST['next'])) {
             }
         }
 
-        $tool_content .= "<div class='alert alert-success'><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
         $tool_content .= action_bar(array(
             array(
                 'title' => $langEnter,

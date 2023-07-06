@@ -97,7 +97,7 @@ if (!isset($_POST['doit'])) {
             }
           
         } else {
-            $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langCoursError</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langCoursError</span></div></div>";
         }
     }
     $tool_content .= "<br><br><div class='text-end'><a href='../index.php' class=mainpage>$langBack</a></div>";

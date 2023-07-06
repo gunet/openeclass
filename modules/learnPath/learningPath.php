@@ -145,7 +145,7 @@ $tool_content .= action_bar(array(
         ),false);
 
 if (count($fetchedList) == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div>";
     add_units_navigation();
     draw($tool_content, 2);
     exit();

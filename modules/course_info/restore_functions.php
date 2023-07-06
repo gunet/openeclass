@@ -354,7 +354,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
               'level' => 'primary'))) . "
 
                 <div class='col-12'>
-                    <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
+                    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfo1 <br> $langInfo2</span></div>
                 </div>
 
                 <div class='col-12'>
@@ -584,7 +584,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
 
         course_index($new_course_code);
-        $tool_content .= "<div class='col-12'><div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . "</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $GLOBALS['langCopyFiles'] . "</span></div></div>";
 
         require_once 'upgrade/functions.php';
         load_global_messages();
@@ -1448,13 +1448,13 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $data['username']);
         if ($u) {
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $u->id;
-            $tool_content .= "<div class='col-12'><div class='alert alert-info'>" .
+            $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" .
                 sprintf($langRestoreUserExists,
                     '<b>' . q($data['username']) . '</b>',
                     '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>',
                     '<i>' . q(trim($data[$restoreHelper->getField('user', 'givenname')] .
                         ' ' . $data[$restoreHelper->getField('user', 'surname')])) . '</i>') .
-                "</div></div>\n";
+                "</span></div></div>\n";
         } elseif (isset($_POST['create_users'])) {
             $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
@@ -1476,12 +1476,12 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $user = new User();
             $user->refresh($user_id, $departments);
             user_hook($user_id);
-            $tool_content .= "<div class='col-12'><div class='alert alert-info'>" .
+            $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" .
                 sprintf($langRestoreUserNew,
                     '<b>' . q($data['username']) . '</b>',
                     '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .
                         ' ' . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                "</div></div>\n";
+                "</span></div></div>\n";
         }
     }
     return $userid_map;

@@ -48,7 +48,7 @@ echo '<div class="col-xs-12">';
 echo '<h4 class="text-center"> - Login Form - </h4><br>';
 
 if ($username || $password) {
-    echo '<div class="alert alert-warning">Unable to login with given credentials</div>';
+    echo '<div class="alert alert-warning"><i class="fa-solid fa-triangle-exclamation fa-lg"></i><span>Unable to login with given credentials</span></div>';
 }
 
 echo '<form action="credential_auth.php?' . $drive->getDriveDefaultParameter() . '" method="POST">';

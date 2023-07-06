@@ -208,8 +208,8 @@ add_units_navigation(TRUE);
 load_js('tools.js');
 
 if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
-        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoUserEmailNotification
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</span></div>";
 }
 
 if (isset($_GET['an_id'])) {

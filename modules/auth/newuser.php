@@ -146,14 +146,14 @@ if (!empty($provider_name)) {
             // Display the received error,
             // to know more please refer to Exceptions handling section on the userguide
             switch($e->getCode()) {
-                case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
-                case 1 : $warning = "<p class='alert alert-info'>$langProviderError2</p>"; break;
-                case 2 : $warning = "<p class='alert alert-info'>$langProviderError3</p>"; break;
-                case 3 : $warning = "<p class='alert alert-info'>$langProviderError4</p>"; break;
-                case 4 : $warning = "<p class='alert alert-info'>$langProviderError5</p>"; break;
-                case 5 : $warning = "<p class='alert alert-info'>$langProviderError6</p>"; break;
-                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->disconnect(); break;
-                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->disconnect(); break;
+                case 0 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError1</span></p>"; break;
+                case 1 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError2</span></p>"; break;
+                case 2 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError3</span></p>"; break;
+                case 3 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError4</span></p>"; break;
+                case 4 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError5</span></p>"; break;
+                case 5 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError6</span></p>"; break;
+                case 6 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError7</span></p>"; $adapter->disconnect(); break;
+                case 7 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError8</span></p>"; $adapter->disconnect(); break;
             }
         }
     }

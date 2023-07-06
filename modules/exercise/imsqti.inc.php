@@ -66,17 +66,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       -------------------------------------- */
 
       foreach ($okMsgs as $msg) {
-        $tool_content .= "<div class='alert alert-success'>$langImportQTIAnswer&nbsp;" . $msg . "</div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langImportQTIAnswer&nbsp;" . $msg . "</span></div>";
       }
       foreach ($errorMsgs as $msg) {
-        $tool_content .= "<div class='alert alert-warning'>$langError&nbsp;" . $msg . "</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langError&nbsp;" . $msg . "</span></div>";
       }
 
       foreach ($msgs as $msg) {
         if ($msg[0]) {
-            $tool_content .= "<div class='alert alert-success'>$langImportQTIAnswer&nbsp;(" . $msg[1] . ")</div>";
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langImportQTIAnswer&nbsp;(" . $msg[1] . ")</span></div>";
           } else {
-            $tool_content .= "<div class='alert alert-warning'>$langError&nbsp;" . $msg[1] . "</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langError&nbsp;" . $msg[1] . "</span></div>";
           }
       }
       

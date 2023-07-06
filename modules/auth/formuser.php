@@ -43,18 +43,18 @@ $display_captcha = get_config("display_captcha") && function_exists('imagettfbbo
 
 // security check
 if (!$user_registration) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langForbidden</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langForbidden</span></div></div>";
     draw($tool_content, 0);
     exit;
 }
 if ($prof and !$eclass_prof_reg) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langForbidden</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langForbidden</span></div></div>";
     draw($tool_content, 0);
     exit;
 }
 
 if (!$prof and $eclass_stud_reg != 1) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langForbidden</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langForbidden</span></div></div>";
     draw($tool_content, 0);
     exit;
 }
@@ -178,14 +178,14 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
             // Display the received error,
             // to know more please refer to Exceptions handling section on the user guide
             switch($e->getCode()) {
-                case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
-                case 1 : $warning = "<p class='alert alert-info'>$langProviderError2</p>"; break;
-                case 2 : $warning = "<p class='alert alert-info'>$langProviderError3</p>"; break;
-                case 3 : $warning = "<p class='alert alert-info'>$langProviderError4</p>"; break;
-                case 4 : $warning = "<p class='alert alert-info'>$langProviderError5</p>"; break;
-                case 5 : $warning = "<p class='alert alert-info'>$langProviderError6</p>"; break;
-                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->disconnect(); break;
-                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->disconnect(); break;
+                case 0 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError1</span></p>"; break;
+                case 1 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError2</span></p>"; break;
+                case 2 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError3</span></p>"; break;
+                case 3 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError4</span></p>"; break;
+                case 4 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError5</span></p>"; break;
+                case 5 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError6</span></p>"; break;
+                case 6 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError7</span></p>"; $adapter->disconnect(); break;
+                case 7 : $warning = "<p class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langProviderError8</span></p>"; $adapter->disconnect(); break;
             }
         }
     }
@@ -193,11 +193,11 @@ if ($provider_name or (isset($_POST['provider']) and isset($_POST['provider_id']
 
 if (count($registration_errors)) {
         // errors exist (from hybridauth) - show message
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>";
         foreach ($registration_errors as $error) {
             $tool_content .= " $error";
         }
-        $tool_content .= "</div></div>";
+        $tool_content .= "</span></div></div>";
         $provider_name = '';
         $provider_id ='';
         $_GET['auth'] = '';
@@ -205,7 +205,7 @@ if (count($registration_errors)) {
 
 if (isset($_POST['submit'])) {
     foreach ($errors as $message) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$message</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$message</span></div></div>";
     }
 }
 
@@ -275,12 +275,12 @@ if ($all_set) {
 
         $emailAdministrator = get_config('email_sender');
         if (!send_mail_multipart($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $plainMailMessage, $MailMessage)) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</span></div></div>";
         }
 
         // User Message
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$success</div></div>";
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$infoprof<br /><br />$langClick <a href='$urlServer'>$langHere</a> $langBackPage</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$success</span></div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$infoprof<br /><br />$langClick <a href='$urlServer'>$langHere</a> $langBackPage</span></div></div>";
     }
     else {
         // email needs verification -> mail user
@@ -312,15 +312,15 @@ if ($all_set) {
         $plainMailMessage = html2text($MailMessage);
 
         if (!send_mail_multipart($siteName, $emailAdministrator, '', $usermail, $subject, $plainMailMessage, $MailMessage)) {
-            $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>");
+            $mail_ver_error = sprintf("<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langMailVerificationError, $usermail, $urlServer . "modules/auth/registration.php", "<a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</span></div>");
             $tool_content .= $mail_ver_error;
             draw($tool_content, 0);
             exit;
         }
 
         // User Message
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langMailVerificationSuccess $langMailVerificationSuccess2</div></div>
-        <div class='col-sm-12'><div class='alert alert-info'>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langMailVerificationSuccess $langMailVerificationSuccess2</span></div></div>
+        <div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langClick <a href='$urlServer' class='mainpage'>$langHere</a> $langBackPage</span></div></div>";
     }
     draw($tool_content, 0);
     exit();
@@ -347,7 +347,7 @@ if ($all_set) {
                         'icon' => 'fa-reply',
                         'level' => 'primary')), false);
 
-    $tool_content .= "<div class='col-12'><div class='alert alert-info'>$langUserData</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUserData</span></div></div>";
     $tool_content .= "
     <div class='row'>
     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>

@@ -32,15 +32,15 @@ $tool_content .= action_bar(array(
 
 $auth_transition = new Transition($uid);
 if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_BLOCKED) {
-    $tool_content .= "<div class='alert alert-danger'>Η πρόσβαση στην πλατφόρμα έχει αποκλειστεί. 
-                    Μπορείτε να επικοινωνήσετε με τους διαχειριστές της πλατφόρμας στο <strong>" . get_config('email_helpdesk') . "</strong>.</div>";
+    $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>Η πρόσβαση στην πλατφόρμα έχει αποκλειστεί. 
+                    Μπορείτε να επικοινωνήσετε με τους διαχειριστές της πλατφόρμας στο <strong>" . get_config('email_helpdesk') . "</strong>.</span></div>";
 } else if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_PENDING) { // sso exception pending
-    $tool_content .= "<div class='alert alert-warning'>Έχετε ήδη υποβάλλει αίτημα εξαίρεσης το οποίο ακόμα δεν έχει διεκπεραιωθεί. 
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>Έχετε ήδη υποβάλλει αίτημα εξαίρεσης το οποίο ακόμα δεν έχει διεκπεραιωθεί. 
                        Η πρόσβαση στην πλατφόρμα προσωρινά δεν είναι δυνατή. 
-                       Μπορείτε να επικοινωνήσετε με τους διαχειριστές της πλατφόρμας στο <strong>" . get_config('email_helpdesk') . "</strong>.</div>";
+                       Μπορείτε να επικοινωνήσετε με τους διαχειριστές της πλατφόρμας στο <strong>" . get_config('email_helpdesk') . "</strong>.</span></div>";
 } else if (isset($_GET['exception'])) {
     $auth_transition->add_sso_exception($_POST['comments']);
-    $tool_content .= "<div class='alert alert-info'>Το αίτημα εξαίρεσης κατοχυρώθηκε.</div>";
+    $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>Το αίτημα εξαίρεσης κατοχυρώθηκε.</span></div>";
 } else if (isset($_GET['t'])) {
     if ($_GET['t'] == 'true') { // add exception request
         unset($_SESSION['SSO_USER_TRANSITION']);
@@ -51,7 +51,7 @@ if ($auth_transition->get_sso_exception_status() == SSO_TRANSITION_EXCEPTION_BLO
 } else {  // intro message
     $tool_content .= "<div class='row'>
                     <div class='col-sm-12'>
-                        <div class='alert alert-info'>" . INTRO_SSO_MESSAGE . "</div>
+                        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . INTRO_SSO_MESSAGE . "</span></div>
                         <div class='text-justify'>
                             <a href='$_SERVER[SCRIPT_NAME]?t=true' class='btn submitAdminBtn' role='button'>Μετάβαση</a>
                             <a href='$_SERVER[SCRIPT_NAME]?t=false' class='btn deleteAdminBtn' role='button'>Αίτημα εξαίρεσης</a>
@@ -71,7 +71,7 @@ function display_sso_exception_form($uid) {
 
     $firstname = uid_to_name($uid);
     $tool_content .= "
-        <div class='col-12'><div class='alert alert-info'>Παρακαλώ αναφέρατε τους λόγους εξαίρεσης.</div></div>
+        <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>Παρακαλώ αναφέρατε τους λόγους εξαίρεσης.</span></div></div>
         <div class='col-12 mt-3'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?exception=TRUE' method='post'>
             <fieldset>

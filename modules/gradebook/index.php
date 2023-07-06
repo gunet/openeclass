@@ -610,7 +610,7 @@ if ($is_editor) {
     //DISPLAY: list of users and form for each user
     elseif(isset($_GET['gradebookBook']) or isset($_GET['book'])) {
         if (isset($_GET['update']) and $_GET['update']) {
-            $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langAttendanceUsers</span></div>";
         }
         //record booking
         if (isset($_POST['bookUser'])) {
@@ -633,7 +633,7 @@ if ($is_editor) {
                     }
                 }
                 triggerGameGradebook($course_id, $userID, $gradebook_id);
-                $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
+                $message = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langGradebookEdit</span></div>";
             }
         }
         // display user grades

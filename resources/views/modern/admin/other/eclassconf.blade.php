@@ -83,10 +83,13 @@
                         <!--schedule indexing if necessary-->
                         <div class='col-sm-12'>
                             <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>
                                 {{ trans('langIndexingNeeded') }}
                                 <a id='idxpbut' href='../search/idxpopup.php' onclick="return idxpopup('../search/idxpopup.php', 600, 500)">
                                 {{ trans('langHere') }}.
                                 </a>
+                            </span>
                             </div>
                         </div>
                     @endif

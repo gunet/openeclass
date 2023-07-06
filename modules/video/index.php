@@ -90,7 +90,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         $table = select_table($_GET['table']);
         if (!resource_belongs_to_progress_data(MODULE_ID_VIDEO, $_GET['vid'])) {
             Database::get()->query("UPDATE $table SET visible = ?d WHERE id = ?d", $_GET['vis'], $_GET['vid']);
-            $action_message = "<div class='alert alert-success'>$langViMod</div>";
+            $action_message = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langViMod</span></div>";
         } else {
          //   Session::Messages($langResourceBelongsToCert, "alert-warning");
             Session::flash('message',$langResourceBelongsToCert); 
@@ -103,7 +103,7 @@ if ($is_editor && !$is_in_tinymce) { // admin actions
         $new_public_status = isset($_GET['public']) ? 1 : 0;
         $table = select_table($_GET['table']);
         Database::get()->query("UPDATE $table SET public = ?d WHERE id = ?d", $new_public_status, $_GET['vid']);
-        $action_message = "<div class='alert alert-success'>$langViMod</div>";
+        $action_message = "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langViMod</span></div>";
     }
 
     if (isset($_GET['delete'])) {

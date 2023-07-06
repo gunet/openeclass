@@ -83,7 +83,7 @@ function list_docs() {
             'object' => MediaResourceFactory::initFromDocument($row));
     }
     if (count($fileinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoDocuments</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoDocuments</span></div></div>";
     } else {
         if (!empty($path)) {
             $dirname = Database::get()->querySingle("SELECT filename FROM document

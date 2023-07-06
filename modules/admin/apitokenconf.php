@@ -37,7 +37,7 @@ $tool_content .= action_bar(array(
         'button-class' => 'btn-success')
     ));
 
-$tool_content .= "<div class='alert alert-info text-center'>" . $app->getLongDescription() . "</div>";
+$tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $app->getLongDescription() . "</span></div>";
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM api_token WHERE id = ?d", $_GET['delete']);
@@ -146,7 +146,7 @@ if (count($q) > 0) {
     }
     $tool_content .= "</table></div>";
 } else {
-    $tool_content .= "<div class='alert alert-warning text-center'>$langNoApiToken</div>";
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoApiToken</span></div>";
 }
 
 if (isset($_GET['add']) or isset($_GET['edit'])) {

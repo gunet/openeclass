@@ -1007,12 +1007,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             }
             $tool_content .= "</tbody></table></div>";
         } else {
-            $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langPollEmpty</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPollEmpty</span></div></div>";
         }
     } elseif ($poll->type==1) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-info Borders' role='alert'>$colles_desc</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info' role='alert'><i class='fa-solid fa-circle-info fa-lg'></i><span>$colles_desc</span></div></div>";
     } elseif ($poll->type==2) {
-        $tool_content .= "<div class='col-12'><div class='alert alert-info Borders' role='alert'>$rate_scale</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-info' role='alert'><i class='fa-solid fa-circle-info fa-lg'></i><span>$rate_scale</span></div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

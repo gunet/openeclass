@@ -157,7 +157,7 @@ if (isset($_GET['post_id'])) { //needed to find post page for anchors
 
 
 if (!$myrow) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langErrorTopicSelect</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langErrorTopicSelect</span></div></div>";
     draw($tool_content, 2);
     exit();
 }
@@ -240,7 +240,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 			SET topic_time = '$topic_time_fixed'
 			WHERE id = $topic";
     }
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langDeletedMessage</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langDeletedMessage</span></div></div>";
 }
 
 if ($paging and $total > POSTS_PER_PAGE) {
@@ -272,7 +272,7 @@ if (isset($_SESSION['message'])) {
 }
 
 if ($topic_locked == 1) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langErrorTopicLocked</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langErrorTopicLocked</span></div></div>";
 } else {
     if ($unit) {
         $back_url = "../units/index.php?course=$course_code&id=$unit";

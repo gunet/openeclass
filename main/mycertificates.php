@@ -139,12 +139,12 @@ if (count($courses) > 0) {
     }
     $table_content .= "</table></div>";
     if (!$table_content) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoCertBadge</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCertBadge</span></div>";
     } else {
         $tool_content .= $table_content;
     }
 } else {
-    $tool_content .= "<div class='alert alert-warning'>$langNoCertBadge</div>";
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoCertBadge</span></div>";
 }
 
 draw($tool_content, 1);

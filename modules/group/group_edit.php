@@ -110,7 +110,7 @@ if (isset($_POST['modify'])) {
         $student_members = $member_count - count($tutors);
         if ($maxStudent != 0 and $student_members > $maxStudent) {
             $maxStudent = $student_members;
-            $message .= "<div class='col-sm-12'><div class='alert alert-warning'>$langGroupMembersUnchanged</div></div>";
+            $message .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGroupMembersUnchanged</span></div></div>";
         }
         $category_id = intval($_POST['selectcategory']);
         Database::get()->query("UPDATE `group`
@@ -143,7 +143,7 @@ if (isset($_POST['modify'])) {
         // Insert new list of members
         if ($maxStudent < $numberMembers and $maxStudent != 0) {
             // More members than max allowed
-            $message .= "<div class='alert alert-warning'>$langGroupTooManyMembers</div>";
+            $message .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGroupTooManyMembers</span></div>";
         } else {
             // Delete all members of this group
             $cur_member_ids = [];

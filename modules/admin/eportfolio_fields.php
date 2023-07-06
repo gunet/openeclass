@@ -446,7 +446,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $result = Database::get()->queryArray("SELECT * FROM eportfolio_fields_category ORDER BY sortorder DESC");
     if (count($result) == 0) {
         $tool_content .= "
-        <div class='col-12'><div class='alert alert-warning'>$langEPFNoCats</div></div>";
+        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langEPFNoCats</span></div></div>";
     } else {
         $form_data_array = array(); //array used to build the sortorder form
 

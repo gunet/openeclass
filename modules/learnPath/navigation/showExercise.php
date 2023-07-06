@@ -168,7 +168,7 @@ if (!$is_editor) {
         $error = TRUE;
     }
     if ($error == TRUE) {
-        echo "<br/><td class='alert alert-warning'>$message</td>";
+        echo "<br/><td class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$message</span></td>";
         exit();
     }
 }
@@ -450,7 +450,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     }
 
     if (!$nbrAnswers) {
-        echo "<tr><td colspan='2'><div class='alert alert-danger'>$langNoAnswer</div></td></tr>";
+        echo "<tr><td colspan='2'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></td></tr>";
     }
     // destruction of the Answer object
     unset($objAnswerTmp);

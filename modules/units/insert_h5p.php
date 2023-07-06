@@ -17,7 +17,7 @@ function list_h5p() {
             'main_library_id' => $row->main_library_id);
     }
     if (count($h5pinfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langH5pNoContent</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langH5pNoContent</span></div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .

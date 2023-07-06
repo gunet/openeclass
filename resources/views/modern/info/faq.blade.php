@@ -25,7 +25,8 @@
                             <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
                                 @if (count($faqs) == 0)
                                     <div class='alert alert-warning'>
-                                        <div class='text-center'>{{ trans('langFaqNoEntries') }}</div>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                                        {{ trans('langFaqNoEntries') }}</span>
                                     </div>
                                 @else
 

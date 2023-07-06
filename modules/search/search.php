@@ -42,7 +42,7 @@ if (!get_config('enable_search')) {
                                       'level' => 'primary',
                                       'button-class' => 'btn-secondary')
                             ),false);
-    $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";
+    $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langSearchDisabled</span></div>";
     draw($tool_content, $menuTypeId, null, $head_content);
     exit();
 }else{
@@ -118,11 +118,11 @@ $tool_content .= generate_csrf_token_form_field() .
               'button-class' => 'btn-success')));
 
 $tool_content .= "
-    <div class='col-sm-12'><div class='alert alert-info'>$langDoSearch";
+    <div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langDoSearch";
 if (isset($_POST['search_terms'])) {
     $tool_content .= ":&nbsp;<label> '". q($_POST['search_terms']) ."'</label>";
 }
-$tool_content .= "<br><small>" . count($courses) . " $langResults2</small></div></div>
+$tool_content .= "<br><small>" . count($courses) . " $langResults2</small></span></div></div>
     <div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
     <tr class='list-header'>";
 if ($uid > 0) {

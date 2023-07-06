@@ -432,7 +432,7 @@ if ($is_editor) {
 
     // Show DB messages
     if (isset($message)) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$message</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$message</span></div></div>";
     }
 
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
@@ -498,7 +498,7 @@ if ($is_editor) {
                             </script>";
     }
     if ($num_of_groups==0 && $num_of_cat==0) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoGroup</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGroup</span></div></div>";
         }
     elseif ($num_of_groups==0 && $num_of_cat>0) {
             $tool_content .= "
@@ -679,7 +679,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa fa-chevron-left'></span></a>
+                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -731,7 +731,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa fa-chevron-right'></span></a>
+                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -967,7 +967,7 @@ if ($is_editor) {
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa fa-chevron-left'></span></a>
+                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -1019,7 +1019,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa fa-chevron-right'></span></a>
+                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>

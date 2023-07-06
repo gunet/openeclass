@@ -1201,7 +1201,7 @@ function get_available_resources($type, $analytics_element_id) {
 
     if (sizeof($resource)  == 0) {
         $resource_field = "<input type='hidden' name='resource' value='null'>
-                <div class='alert alert-warning'>$langAnalyticsResourceNotAvailable</div>
+                <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langAnalyticsResourceNotAvailable</span></div>
                 <input type='hidden' name='module_id' value='$resource_type_id'>";
         return $resource_field;
     }

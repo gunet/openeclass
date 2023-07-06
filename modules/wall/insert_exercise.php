@@ -33,7 +33,7 @@ function list_exercises($id = NULL) {
             'visibility' => $row->active);
     }
     if (count($quizinfo) == 0) {
-        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'>$langNoExercises</div></div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoExercises</span></div></div>";
     } else {
         $exist_exercise = array();
 

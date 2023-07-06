@@ -437,10 +437,10 @@ function lti_app_details() {
         }
 
         if (!$is_editor and !$headingsSent) {
-            $tool_content .= "<div class='alert alert-warning'>$langNoLTIApps</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLTIApps</span></div>";
         }
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoLTIApps</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLTIApps</span></div>";
     }
 }
 

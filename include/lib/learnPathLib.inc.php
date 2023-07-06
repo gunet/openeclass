@@ -739,7 +739,10 @@ function display_my_exercises($dialogBox, $style) {
         $output .= "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='insertExercise' value='$langAddModulesButton'></div>";
         $output .= "</form>";
     } else {
-        $output .= "<div class='alert alert-warning text-center'>$langNoExercises</div>";
+        $output .= "<div class='alert alert-warning'>
+                        <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                        <span>$langNoExercises</span>
+                    </div>";
     }
     return $output;
 }

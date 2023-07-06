@@ -837,8 +837,8 @@ if(!isset($_POST['final_submit'])){
 
             $_SESSION['courses'][$code] = USER_TEACHER;
 
-            $tool_content .= "<div class='alert alert-success'><b>$langJustCreated:</b> " . q($_SESSION['title']) . "<br>
-                                <span class='smaller'>$langEnterMetadata</span></div>";
+            $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langJustCreated:</b> " . q($_SESSION['title']) . "<br>
+                                <span class='smaller'>$langEnterMetadata</span></span></div>";
             $tool_content .= action_bar(array(
                 array(
                     'title' => $langEnter,
@@ -973,7 +973,7 @@ if(!isset($_POST['final_submit'])){
             }
         }
 
-        $tool_content .= "<div class='alert alert-success'><b>$langUnitJustEdited:</b> " . q($_SESSION['title']) . "<br></div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span><b>$langUnitJustEdited:</b> " . q($_SESSION['title']) . "<br></span></div>";
         $tool_content .= action_bar(array(
             array(
                 'title' => $langEnter,

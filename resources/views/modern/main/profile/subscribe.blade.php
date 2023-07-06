@@ -26,15 +26,17 @@
                     <form action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                         @if(isset($mailNotVerified))
                             <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
                                 {{ trans('langMailNotVerified') }}
                                 <a href = '{{ $urlAppend }}modules/auth/mail_verify_change.php?from_profile=true'>{{ trans('langHere') }}</a>
+                            </span>
                             </div>
                         @endif
                         @if(isset($mail_notification))
-                            <div class='alert alert-info'>{{ trans('langEmailUnsubscribeWarning') }}</div>
+                            <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langEmailUnsubscribeWarning') }}</span></div>
                             <div class='d-flex align-items-start'><input type='checkbox' id='unsub' name='unsub' value='1'> {{ trans('langEmailFromCourses') }}</div>
                         @endif
-                        <div class='alert alert-info'>{!! trans('langInfoUnsubscribe') !!}</div>
+                        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{!! trans('langInfoUnsubscribe') !!}</span></div>
 
                         <div class='col-12 mt-5'>
                             <div class='row'>

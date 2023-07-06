@@ -36,7 +36,7 @@ if (!isset($_POST['doit'])) {
                 'url' => "profile/display_profile.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
-        $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langAdminNo</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langAdminNo</span></div></div>";
         draw($tool_content, 1);
         exit;
     } else {
@@ -77,7 +77,7 @@ if (!isset($_POST['doit'])) {
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary')));
-            $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langNotice:</br>$langExplain</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNotice:</br>$langExplain</span></div></div>";
         }
     }  //endif is admin
 } else {
@@ -101,7 +101,7 @@ if (!isset($_POST['doit'])) {
                 'url' => "../index.php?logout=yes",
                 'icon' => 'fa-sign-out',
                 'level' => 'primary-label')));
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langDelSuccess</br>$langThanks</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langDelSuccess</br>$langThanks</span></div></div>";
     }
 }
 if (isset($_SESSION['uid'])) {

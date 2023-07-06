@@ -99,7 +99,7 @@ $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langTotalTimeSpe
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
 if ($lcnt == 0) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoLearningPath</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div></div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 }

@@ -106,16 +106,16 @@ if (isset($_POST['submit'])) {
     $is_certified = 1;
     $level = CourseXMLElement::NO_LEVEL;
     if ($_POST['course_confirmAPlusLevel'] == 'true') {
-        $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langOpenCoursesWasSet $langOpenCoursesIsAPlusLevel</span></div>";
         $level = CourseXMLElement::A_PLUS_LEVEL;
     } else if ($_POST['course_confirmALevel'] == 'true') {
-        $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsALevel</div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langOpenCoursesWasSet $langOpenCoursesIsALevel</span></div>";
         $level = CourseXMLElement::A_LEVEL;
     } else if ($_POST['course_confirmAMinusLevel'] == 'true') {
-        $tool_content .= "<div class='alert alert-success'>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</div>";
+        $tool_content .= "<div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langOpenCoursesWasSet $langOpenCoursesIsAMinusLevel</span></div>";
         $level = CourseXMLElement::A_MINUS_LEVEL;
     } else {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langOpenCoursesWasNotSet</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langOpenCoursesWasNotSet</span></div></div>";
         $is_certified = 0;
     }
 

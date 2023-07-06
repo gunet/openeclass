@@ -299,7 +299,7 @@ if (isset($_POST['submit'])) {
     }
 
     $tool_content .= "
-    <div class='col-12'><div class='alert alert-info'>$infoText</div></div>
+    <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$infoText</span></div></div>
     <div class='row'>
         <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
             <div class='col-12 h-100 left-form'></div>

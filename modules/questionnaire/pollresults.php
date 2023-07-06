@@ -207,7 +207,7 @@ if ($PollType == POLL_NORMAL) {
     foreach ($questions as $theQuestion) {
         $this_chart_data = array();
         if ($theQuestion->qtype == QTYPE_LABEL) {
-            $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'>$theQuestion->question_text</div></div>";
+            $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$theQuestion->question_text</span></div></div>";
         } else {
             $tool_content .= "
             <div class='col-12 mt-3'>

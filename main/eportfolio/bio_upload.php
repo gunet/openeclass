@@ -33,7 +33,7 @@ $token = token_generate('eportfolio' . $uid);
 $navigation[] = array('url' => "index.php?id=$uid&amp;token=$token", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='col-12'><div class='alert alert-danger'>$langePortfolioDisabled</div></div>";
+    $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div></div>";
     draw($tool_content, 1);
     exit;
 }
@@ -41,14 +41,14 @@ if (!get_config('eportfolio_enable')) {
 $userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
 
 if ($userdata->eportfolio_enable == 0) {
-    $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langePortfolioDisableWarning</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
 }
 
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
     //Session::Messages($langBioDeletedSuccess, 'alert-success');
-    $tool_content .= "<div class='col-12'><div class='alert alert-success'>$langBioDeletedSuccess</div></div>";
+    $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langBioDeletedSuccess</span></div></div>";
     redirect_to_home_page('main/eportfolio/bio_upload.php');
 }
 elseif (isset($_POST['submit'])) {
@@ -63,14 +63,14 @@ elseif (isset($_POST['submit'])) {
                 @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
                 move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
                 //Session::Messages($langUploadBioSuccess, 'alert-success');
-                $tool_content .= "<div class='col-12'><div class='alert alert-success'>$langUploadBioSuccess</div></div>";
+                $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUploadBioSuccess</span></div></div>";
             } else {
                 //Session::Messages(sprintf($langUploadBioFailSize, get_config('bio_quota')), 'alert-danger');
-                $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langUploadBioFailSize ".get_config('bio_quota')."</div></div>";
+                $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailSize ".get_config('bio_quota')."</span></div></div>";
             }
         } else {
             //Session::Messages($langUploadBioFailType, 'alert-danger');
-            $tool_content .= "<div class='col-12'><div class='alert alert-danger'>$langUploadBioFailType</div></div>";
+            $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailType</span></div></div>";
         }
         redirect_to_home_page('main/eportfolio/bio_upload.php');
     } 
@@ -107,7 +107,7 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $bio = '';
 }
 $tool_content .= 
-    "<div class='col-12'><div class='alert alert-info'>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</div></div>
+    "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span></div></div>
         <div class='row'>
             <label for='bio' class='control-label-notes text-uppercase'>$label</label>
             <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>

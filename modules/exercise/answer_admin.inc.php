@@ -441,7 +441,7 @@ if (isset($_GET['modifyAnswers'])) {
 
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
             if (!empty($msgErr)) {
-                $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
+                $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>";
             }
 
             $tool_content .= "
@@ -553,7 +553,7 @@ if (isset($_GET['modifyAnswers'])) {
                  if (!empty($msgErr)) {
                      $tool_content .= "
                                  <table style='border-style: none;' cellpadding='3' align='center' width='400'>
-                                 <tr><td class='alert alert-danger'>$msgErr</td></tr>
+                                 <tr><td class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></td></tr>
                                  </table>";
                  } elseif ($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                      $tool_content .= "<tr><td>$langWeightingForEachBlankandChoose</td></tr>
@@ -586,7 +586,7 @@ if (isset($_GET['modifyAnswers'])) {
         } elseif ($answerType == MATCHING) {
 
          if (!empty($msgErr)) {
-             $tool_content .= "<div class='alert alert-warning'>$msgErr</div>";
+             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$msgErr</span></div>";
          }
 
          $tool_content .= "
@@ -684,7 +684,7 @@ if (isset($_GET['modifyAnswers'])) {
                      <fieldset>";
          // if there is an error message
          if (!empty($msgErr)) {
-             $tool_content .= "<div class='alert alert-danger'>$msgErr</div>";
+             $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msgErr</span></div>";
          }
          $setChecked[1] = (isset($correct) and $correct == 1) ? " checked='checked'" : '';
          $setChecked[2] = (isset($correct) and $correct == 2) ? " checked='checked'" : '';

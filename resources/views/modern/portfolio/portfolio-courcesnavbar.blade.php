@@ -32,12 +32,12 @@
     </div>
     @else
         <div class='col-12'>
-            <div class='alert alert-warning'>{{trans('langNotEnrolledToLessons')}}!</div>
+            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{trans('langNotEnrolledToLessons')}}!</span></div>
         </div>
         @if($_SESSION['status'] == USER_TEACHER)
-            <div class='col-12'><div class='alert alert-info'>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeProfPerso') !!}</div></div>
+            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeProfPerso') !!}</span></div></div>
         @else
-            <div class='col-12'><div class='alert alert-info'>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeStudPerso') !!}</div></div>
+            <div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{trans('langWelcomeSelect')}} {!! trans('langWelcomeStudPerso') !!}</span></div></div>
         @endif
     @endif
    

@@ -19,15 +19,30 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            @php 
+                                $alert_type = '';
+                                if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                }else{
+                                    $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                }
+                            @endphp
+                            
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                {!! $alert_type !!}<span>
                                 @foreach($messageArray as $message)
                                     {!! $message !!}
-                                @endforeach
+                                @endforeach</span>
                             @else
-                                {!! Session::get('message') !!}
+                                {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
@@ -35,24 +50,24 @@
                     
                     @if (!$user_registration or $eclass_stud_reg != 2)
                         <div class='col-sm-12'>
-                            <div class='alert alert-info'>
-                                {{ trans('langStudentCannotRegister') }}
+                            <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                                {{ trans('langStudentCannotRegister') }}</span>
                             </div>
                         </div>
                     @else
                         @if (isset($_POST['submit']))
                             @if ($vmail)
-                                <div class='col-sm-12'><div class='alert alert-info'> {{ trans('langMailVerificationSuccess') }} {{ trans('langMailVerificationSuccess2') }} <br><br><small> {{ trans('langMailVerificationNote') }} </small> <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</div></div>
+                                <div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span> {{ trans('langMailVerificationSuccess') }} {{ trans('langMailVerificationSuccess2') }} <br><br><small> {{ trans('langMailVerificationNote') }} </small> <br><br>{{ trans('langClick') }} <a href='{{ $urlServer }}' class='mainpage'>{{ trans('langHere') }}</a> {{ trans('langBackPage') }}</span></div></div>
                             @else
                                 <div class='col-sm-12'>
-                                    <div class='alert alert-success'>
+                                    <div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>
                                         <p>{{ $user_msg }}</p>
                                         <p>{{ trans('langClick') }} <a href='../../'>{{ trans('langHere') }}</a> {{ trans('langPersonalSettingsMore') }}
                                         <ul>
                                             <li>{{ trans('langPersonalSettingsMore1') }}</li>
                                             <li>{{ trans('langPersonalSettingsMore2') }}</li>
                                         </ul>
-                                        </p>
+                                        </p></span>
                                     </div>
                                 </div>
                             @endif

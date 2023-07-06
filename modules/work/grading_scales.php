@@ -133,7 +133,7 @@ if (isset($_GET['scale_id'])) {
     $pageName = $langNewGradeScale;
     $navigation[] = array("url" => "grading_scales.php?course=$course_code", "name" => $langGradeScales);
     if ($scale_used) {
-        $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'>$langGradeScaleNotEditable</div></div>";
+        $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGradeScaleNotEditable</span></div></div>";
     }
     $tool_content .= action_bar(array(
         array(
@@ -289,7 +289,7 @@ if (isset($_GET['scale_id'])) {
             </div>";
 
     } else {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGradeScales</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradeScales</span></div></div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

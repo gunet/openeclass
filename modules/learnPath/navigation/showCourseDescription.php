@@ -65,7 +65,7 @@ $pageName = $langCourseProgram;
                     echo "</tr></table><br />\n";
                 }
             } else {
-                echo "   <div class='alert alert-warning'>$langThisCourseDescriptionIsEmpty</div>";
+                echo "   <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langThisCourseDescriptionIsEmpty</span></div>";
             }
         ?>
         </div>

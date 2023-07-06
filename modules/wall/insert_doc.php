@@ -72,7 +72,7 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
             $ret_str .= "
                          $('#$div_id').on('ready.jstree', function(e, data) {
                              if(data.instance._cnt == 0) {
-                                 $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
+                                 $('#".$input_id."_div').html('<div class=\"alert alert-warning\"><i class=\"fa-solid fa-triangle-exclamation fa-lg\"></i><span>$langNoDocuments</span></div>');
                              } else {
                                  $('#$div_id').jstree('close_all');
                              }
@@ -81,7 +81,7 @@ function list_docs($id = NULL, $subsystem = NULL, $expanded = false) {
             $ret_str .= "
                          $('#$div_id').on('ready.jstree', function(e, data) {
                              if(data.instance._cnt == 0) {
-                                 $('#".$input_id."_div').html('<div class=\"alert alert-warning\">$langNoDocuments</div>');
+                                 $('#".$input_id."_div').html('<div class=\"alert alert-warning\"><i class=\"fa-solid fa-triangle-exclamation fa-lg\"></i><span>$langNoDocuments</span></div>');
                              }
                          })";
         }                     

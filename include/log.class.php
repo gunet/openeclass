@@ -128,19 +128,19 @@ class Log {
                                 ORDER BY ts DESC");
         if ($num_of_logs > 0) {
             if ($course_id > 0) {
-                $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langCourse: " . q(course_id_to_title($course_id)) . "</div></div>";
+                $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langCourse: " . q(course_id_to_title($course_id)) . "</span></div></div>";
             }
             if ($module_id > 0) {
                 if ($module_id == MODULE_ID_USERS) {
-                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div></div>";
+                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langModule: " . $langAdminUsers . "</span></div></div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
-                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div></div>";
+                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langModule: " . $langExternalLinks . "</span></div></div>";
                 } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
-                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div></div>";
+                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langModule: " . $langAbuseReport . "</span></div></div>";
                 } elseif ($module_id == MODULE_ID_COURSEINFO) {
-                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langConfig</div></div>";
+                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langConfig</span></div></div>";
                 } else {
-                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div></div>";
+                    $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langModule: " . $modules[$module_id]['title'] . "</span></div></div>";
                 }
             }
             $tool_content .= "<div class='col-12'><div class='table-responsive'><table id = 'log_results_table' class='table-default'>";
@@ -201,7 +201,12 @@ class Log {
             $tool_content .= "</tbody>";
             $tool_content .= "</table></div></div>";
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoUsersLog</div></div>";
+            $tool_content .= "<div class='col-sm-12'>
+                                <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>$langNoUsersLog</span>
+                                </div>
+                              </div>";
         }
         return $tool_content;
     }

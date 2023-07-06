@@ -17,7 +17,7 @@ function list_blogs() {
             'content' => $row->content);
     }
     if (count($bloginfo) == 0) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langBlogEmpty</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBlogEmpty</span></div></div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .

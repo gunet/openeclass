@@ -213,7 +213,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $tool_content .= "</div>";
     }
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoAnswer</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
         $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";

@@ -160,15 +160,30 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            @php 
+                                $alert_type = '';
+                                if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                }else{
+                                    $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                }
+                            @endphp
+                            
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                {!! $alert_type !!}<span>
                                 @foreach($messageArray as $message)
                                     {!! $message !!}
-                                @endforeach
+                                @endforeach</span>
                             @else
-                                {!! Session::get('message') !!}
+                                {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
@@ -273,7 +288,7 @@
 
                                             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
                                                 <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                                    <span class='fa fa-chevron-right fa-fw'></span>
+                                                    <span class='fa-solid fa-chevron-right fa-fw'></span>
                                                     <span class='ps-1'>{{ trans('langCourseDescription') }}</span>
                                                 </a>
                                                 @if($is_editor)
@@ -492,7 +507,7 @@
                                 </div>
                                 <div class='card-footer border-0 bg-white'>
                                     <a class='all_announcements' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
-                                        {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
+                                        {{ trans('langAllAnnouncements') }} <span class='fa-solid fa-chevron-right'></span>
                                     </a>
                                 </div>
                             </div>
@@ -547,7 +562,7 @@
                                 </div>
                                 <div class='card-footer border-0 bg-white'>
                                     <a class='all_announcements ps-0' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">
-                                        {{ trans('langAllAnnouncements') }} <span class='fa fa-chevron-right'></span>
+                                        {{ trans('langAllAnnouncements') }} <span class='fa-solid fa-chevron-right'></span>
                                     </a>
                                 </div>
                             </div>

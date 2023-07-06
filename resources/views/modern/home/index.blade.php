@@ -276,7 +276,7 @@
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                                 {{ trans('langNationalOpenCourses') }}
-                                                                <span class='fa fa-chevron-right ms-2'></span>
+                                                                <span class='fa-solid fa-chevron-right ms-2'></span>
                                                             </a>
                                                         </div>
                                                     @endif
@@ -344,7 +344,7 @@
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                                 {{ trans('langNationalOpenCourses') }}
-                                                                <span class='fa fa-chevron-right ms-2'></span>
+                                                                <span class='fa-solid fa-chevron-right ms-2'></span>
                                                             </a>
                                                         </div>
                                                     @endif
@@ -398,7 +398,7 @@
                                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                                 {{ trans('langNationalOpenCourses') }}
-                                                                <span class='fa fa-chevron-right ms-2'></span>
+                                                                <span class='fa-solid fa-chevron-right ms-2'></span>
                                                             </a>
                                                         </div>
                                                     @endif
@@ -455,7 +455,7 @@
                                                 <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                     <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                         {{ trans('langNationalOpenCourses') }}
-                                                        <span class='fa fa-chevron-right ms-2'></span>
+                                                        <span class='fa-solid fa-chevron-right ms-2'></span>
                                                     </a>
                                                 </div>
                                             @endif
@@ -634,7 +634,7 @@
                                                     <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                         <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                             {{ trans('langNationalOpenCourses') }}
-                                                            <span class='fa fa-chevron-right ms-2'></span>
+                                                            <span class='fa-solid fa-chevron-right ms-2'></span>
                                                         </a>
                                                     </div>
                                                 @endif
@@ -697,7 +697,7 @@
                                             <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                 <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                     {{ trans('langNationalOpenCourses') }}
-                                                    <span class='fa fa-chevron-right ms-2'></span>
+                                                    <span class='fa-solid fa-chevron-right ms-2'></span>
                                                 </a>
                                             </div>
                                         @endif
@@ -752,7 +752,7 @@
                                         <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                             <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                 {{ trans('langNationalOpenCourses') }}
-                                                <span class='fa fa-chevron-right ms-2'></span>
+                                                <span class='fa-solid fa-chevron-right ms-2'></span>
                                             </a>
                                         </div>
                                     @endif
@@ -807,7 +807,7 @@
                                             <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
                                                 <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                                     {{ trans('langNationalOpenCourses') }}
-                                                    <span class='fa fa-chevron-right ms-2'></span>
+                                                    <span class='fa-solid fa-chevron-right ms-2'></span>
                                                 </a>
                                             </div>
                                         @endif

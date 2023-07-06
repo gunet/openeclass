@@ -516,7 +516,7 @@ $tool_content .= "<div class='col-12'>
                                 ";
 
                             }else{
-                                $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGroupAvailable</div></div>";
+                                $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGroupAvailable</span></div></div>";
                             }
 
 $tool_content .= "      

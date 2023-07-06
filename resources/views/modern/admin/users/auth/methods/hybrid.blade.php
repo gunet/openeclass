@@ -1,7 +1,7 @@
                 
                 
                 <div class='col-12'>
-                   <div class='alert alert-info'>{{ ucfirst(trans('langAuthenticateVia')) }} {{ $auth_data['auth_name'] }}</div>
+                   <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ ucfirst(trans('langAuthenticateVia')) }} {{ $auth_data['auth_name'] }}</span></div>
                 </div>
 
                 <div class='form-group mt-3'>

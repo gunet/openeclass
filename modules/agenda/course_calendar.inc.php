@@ -557,7 +557,7 @@ require_once 'include/lib/references.class.php';
         if (is_array($events)) {
             return event_list($events, 'DESC');
         } else {
-            return "<div class='alert alert-warning text-center'>$langNoEvents</div>";
+            return "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoEvents</span></div>";
         }
     }
 

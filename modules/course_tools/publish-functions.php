@@ -332,10 +332,10 @@ function lti_provider_details() {
         }
 
         if (!$is_editor and !$headingsSent) {
-            $tool_content .= "<div class='alert alert-warning'>$langNoPUBLTIApps</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoPUBLTIApps</span></div>";
         }
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoPUBLTIApps</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoPUBLTIApps</span></div>";
     }
 }
 

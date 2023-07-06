@@ -275,7 +275,7 @@ if (isset($_GET['rubric_id'])) {
     }
 	
     if ($rubric_used) {
-        $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'>$langRubricNotEditable</div></div>";
+        $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langRubricNotEditable</span></div></div>";
     }
     $tool_content .= action_bar(array(
         array(
@@ -506,7 +506,7 @@ if (isset($_GET['rubric_id'])) {
             </div>";
         }
     } else {
-        $tool_content .= "<div class='col-12'><div class='alert alert-warning'>$langNoGradeRubrics</div></div>";
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradeRubrics</span></div></div>";
     }
     if (isset($_GET['preview'])) { // preview rubric
         $rubric_id = $_GET['preview'];

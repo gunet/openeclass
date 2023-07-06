@@ -96,7 +96,7 @@ $action->record(MODULE_ID_CHAT);
 $toolName = $langChat;
 // guest user not allowed
 if (check_guest()) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>$langNoGuest</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoGuest</span></div></div>";
     draw($tool_content, 2);
 }
 
@@ -258,9 +258,9 @@ if (!$conference_activity) {
         $colmooc_url = $colmoocapp->getParam(ColmoocApp::BASE_URL)->value() . "/colmoocapi/editor/index.php?agent_id=" . $agent_id . '&teacher_id=' . $uid;
         redirect_to_home_page($colmooc_url, true);
     } else if ($is_editor && isset($_GET['create_agent']) && !$agent_id) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'>" . $langColmoocCreateAgentFailed . "</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . $langColmoocCreateAgentFailed . "</span></div></div>";
     } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent']) && isset($_GET['pair_log'])) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langColMoocAgentCreateOrEdit . "</span></div></div>";
         $q = Database::get()->queryArray("select cpl.moderator_id, cpl.partner_id, cpl.session_status, cpl.created
             from colmooc_pair_log cpl
             join conference c on (c.chat_activity_id = cpl.activity_id)
@@ -290,7 +290,7 @@ if (!$conference_activity) {
 
         $tool_content .= "</table></div>";
     } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent']) && !isset($_GET['pair_log'])) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>" . $langColMoocAgentCreateOrEdit . "</div></div>";
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langColMoocAgentCreateOrEdit . "</span></div></div>";
         $q1 = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated 
             from colmooc_user_session cus 
             join conference c on (c.chat_activity_id = cus.activity_id) 
@@ -348,9 +348,9 @@ if (!$conference_activity) {
             } else {
                 $chatindex_url = $urlAppend . "modules/chat/index.php";
             }
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>" . $langColmoocFollowLink1
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langColmoocFollowLink1
                 . ' <a class="studentChat" href="#" title="' . $langChat . '">' . $langChat . '</a> '
-                . $langColmoocFollowLink2 . "</div></div>";
+                . $langColmoocFollowLink2 . "</span></div></div>";
 
             $cus = Database::get()->querySingle("select cus.user_id, cus.session_status, cus.session_status_updated 
                 from colmooc_user_session cus 
@@ -373,7 +373,7 @@ if (!$conference_activity) {
                 $tool_content .= "</table></div>";
             }
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>" . $langColmoocRegisterStudentFailed . "</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langColmoocRegisterStudentFailed . "</span></div></div>";
         }
     }
 }

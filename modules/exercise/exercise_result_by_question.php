@@ -174,7 +174,7 @@ if (count($exercise_question_ids) > 0) {
         if ($is_question) {
             $tool_content .= "<b>" . q_math($questionName) . "</b><br>" . standard_text_escape($questionDescription_temp) . "<br><br>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langQuestionAlreadyDeleted</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langQuestionAlreadyDeleted</span></div>";
         }
         $tool_content .= "</td></tr>";
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {

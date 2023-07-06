@@ -564,7 +564,7 @@ if ($is_editor) {
     //DISPLAY: list of users and form for each user
     elseif(isset($_GET['attendanceBook']) or isset($_GET['book'])) {
         if (isset($_GET['update']) and $_GET['update']) {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langAttendanceUsers</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langAttendanceUsers</span></div></div>";
         }
         //record booking
         if(isset($_POST['bookUser'])) {
@@ -584,7 +584,7 @@ if ($is_editor) {
                         Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $userID, $activity->id, $attend, '');
                     }
                 }
-                $message = "<div class='col-sm-12'><div class='alert alert-success'>$langGradebookEdit</div></div>";
+                $message = "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langGradebookEdit</span></div></div>";
             }
         }
         // display user grades

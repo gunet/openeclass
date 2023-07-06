@@ -20,7 +20,7 @@
 
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
+    {{--<link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">--}}
    
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet">
 

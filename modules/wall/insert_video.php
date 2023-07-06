@@ -118,7 +118,7 @@ function list_videos($id = NULL) {
     }
     if (!$video_found) {
         $ret_string .= "
-        <div class='col-12'><div class='alert alert-warning'>$langNoVideo</div></div>";
+        <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoVideo</span></div></div>";
     }
     return $ret_string;
 }

@@ -386,9 +386,9 @@ class LtiEnrolHelper {
     public static function draw_popup_error(string $msg, string $type = null) {
         global $tool_content;
         if (!empty($type)) {
-            $tool_content .= "<div class='alert alert-danger'>$type: $msg</div>";
+            $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$type: $msg</span></div>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$msg</div>";
+            $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$msg</span></div>";
         }
         draw_popup();
         exit;

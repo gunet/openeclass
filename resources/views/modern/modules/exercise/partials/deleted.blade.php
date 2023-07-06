@@ -6,7 +6,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <div class='alert alert-warning'>{{ trans('langQuestionAlreadyDeleted') }}</div>
+                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langQuestionAlreadyDeleted') }}</span></div>
                     </td>
                 </tr>      
                 <tr class='active'>

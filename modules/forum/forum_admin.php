@@ -245,7 +245,7 @@ elseif (isset($_GET['forumgosave'])) {
                                 AND course_id = ?d"
             , $_POST['forum_name'], purify($_POST['forum_desc']), $cat_id, $forum_id, $course_id);
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUM, $forum_id);
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langForumDataChanged</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langForumDataChanged</span></div></div>";
 }
 
 // Add category to forums
@@ -518,13 +518,13 @@ elseif (isset($_GET['forumgodel'])) {
                     WHERE id = ?d",$num_replies+1,$last_post_id, $current_forum_id);
         }//if user selected the current forum do nothing
 
-       $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'>$langTopicDataChanged</div></div>";
+       $tool_content .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langTopicDataChanged</span></div></div>";
     }
 
 } elseif (isset($_GET['settings'])) {
     if (isset($_POST['submitSettings'])) {
         setting_set(SETTING_FORUM_RATING_ENABLE, $_POST['r_radio'], $course_id);
-        $message = "<div class='col-sm-12'><div class='alert alert-success'>$langRegDone</div></div>";
+        $message = "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langRegDone</span></div></div>";
     }
 
     if (isset($message) && $message) {

@@ -76,7 +76,7 @@ function fatal_error($message) {
         if ($error_message) {
             $message .= "<br>\n$error_message";
         }
-        $tool_content .= "<div class='alert alert-danger'>$message</div>";
+        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$message</span></div>";
         draw($tool_content, 0);
     }
     exit;

@@ -34,7 +34,7 @@ $token = token_generate('eportfolio' . $uid);
 $navigation[] = array('url' => "index.php?id=$uid&amp;token=$token", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
-    $tool_content = "<div class='alert alert-danger'>$langePortfolioDisabled</div>";
+    $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
     draw($tool_content, 1);
     exit;
 }
@@ -42,7 +42,7 @@ if (!get_config('eportfolio_enable')) {
 $userdata = Database::get()->querySingle("SELECT eportfolio_enable FROM user WHERE id = ?d", $uid);
 
 if ($userdata->eportfolio_enable == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
+    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div>";
 }
 
 load_js('tools.js');

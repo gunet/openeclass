@@ -86,9 +86,9 @@ if (isset($_POST['submit'])) {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
         if ($guest_info->password === '') {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langGuestWarnEmptyPassword</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGuestWarnEmptyPassword</span></div></div>";
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'>$langGuestExist</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGuestExist</span></div></div>";
         }
         $submit_label = $langModify;
     } else {

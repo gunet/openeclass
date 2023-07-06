@@ -240,7 +240,7 @@ if (isset($_GET['delete'])) {
     $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
 
     if (!$info) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
+        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoEBook</span></div>";
     } else {
         $pageName = $langModify;
         $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
@@ -399,7 +399,7 @@ if (isset($_GET['delete'])) {
              </form>";
         } else {
             $tool_content .= "
-            <div class='col-12'><div class='alert alert-warning'>$langEBookNoPages</div></div>";
+            <div class='col-12'><div class='alert alert-warning'><span>$langEBookNoPages</span></div></div>";
         }
     }
 }

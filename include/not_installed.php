@@ -47,13 +47,15 @@ function installation_error($eng_msg, $el_msg) {
     $t->set_var('TOOL_CONTENT', "
         <div class='row'>
             <div class='col-md-12'>
-                <div class='alert alert-warning'><p>The <strong>Open eClass</strong> asynchronous elearning platform is not functional.</p>$eng_msg</div>
+                <div class='alert alert-warning'>
+                <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
+                    <p>The <strong>Open eClass</strong> asynchronous elearning platform is not functional.</p>$eng_msg</span></div>
             </div>
         </div>
         <div class='row'>
             <div class='col-md-12'>
-                <div class='alert alert-warning'><p>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</p>                                
-                $el_msg</div>
+                <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span><p>Η πλατφόρμα ασύγχρονης τηλεκπαίδευσης <strong>Open eClass</strong> δεν λειτουργεί.</p>                                
+                $el_msg</span></div>
             </div>
         </div>
     ");

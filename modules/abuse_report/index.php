@@ -143,7 +143,7 @@ $total_reports = Database::get()->querySingle("SELECT COUNT(*) as count FROM abu
 $nbrReports = count($result);
 
 if (!$nbrReports) {
-    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoAbuseReports</div></div>";
+    $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAbuseReports</span></div></div>";
 } else {
     $reports_cats = array('rudeness' => $langRudeness,
                           'spam' => $langSpam,

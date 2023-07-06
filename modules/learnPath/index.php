@@ -150,7 +150,7 @@ if ($is_editor) {
                     Session::flash('alert-class', 'alert-success');
                     redirect_to_home_page('modules/learnPath/index.php?course=' . $course_code);
                 } else {
-                    $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
+                    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceBelongsToCert</span></div>";
                 }
                 break;
             // ACCESSIBILITY COMMAND
@@ -167,7 +167,7 @@ if ($is_editor) {
             case "mkInvisibl" :
                 $visibility = ($_REQUEST['cmd'] == "mkVisibl") ? 1 : 0;
                 if (($_REQUEST['cmd'] == "mkInvisibl") and resource_belongs_to_progress_data(MODULE_ID_LP, $_GET['visibility_path_id'])) {
-                    $tool_content .= "<div class='alert alert-warning'>$langResourceBelongsToCert</div>";
+                    $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langResourceBelongsToCert</span></div>";
                 } else {
                     Database::get()->query("UPDATE `lp_learnPath`
                         SET `visible` = ?d
@@ -206,7 +206,7 @@ if ($is_editor) {
                         // display error message
                         $dialogBox .= "
                         <div class='col-12 mt-3'>
-                           <div class='alert alert-warning'>$langErrorNameAlreadyExists</div>
+                           <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langErrorNameAlreadyExists</span></div>
                         </div>";
                         $style = "caution";
                         $dialogBox .= "
@@ -394,7 +394,7 @@ $l = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `lp_learnPath` 
 if ($l == 0) {
     $tool_content .= "
                       <div class='col-12'>
-                        <div class='alert alert-warning'>$langNoLearningPath</div>
+                        <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoLearningPath</span></div>
                       </div>";
     draw($tool_content, 2, null, $head_content);
     exit();
