@@ -60,6 +60,9 @@ switch ($_REQUEST['res_type']) {
     case 'lp':
         require_once "../learnPath/viewer.php";
         exit;
+    case 'lp_results':
+        require_once "../learnPath/learningPath.php";
+        exit;
     default:
         break;
 }
