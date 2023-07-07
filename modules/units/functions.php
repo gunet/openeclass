@@ -690,17 +690,23 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         $status = $lp->visible;
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
         $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
-        if (!$is_editor) { // display learning path results in student
-            list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($lp_id, $uid);
-            $lp_results = "<span data-toggle='tooltip' data-placement='top' title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
-                        &nbsp; &nbsp;
-                       <span data-toggle='tooltip' data-placement='top' title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
-            $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langDetails'>
-                <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
-                <span class='fa fa-line-chart' style='font-size:15px;'></span>
+        // display learning path results
+        if ($is_editor) {
+            $lp_results_button = "<div style='padding-top: 10px;'><span data-toggle='tooltip' data-placement='top' title='$langDetails'>        
+                <a href=" . $urlAppend . "modules/learnPath/details.php?course=" . $course_code . "&amp;path_id=" . $lp_id . ">
+                <span style='vertical-align: baseline' class='fa fa-line-chart'></span>
                 </a>
-            </span>";
-            //<a href='../learnPath/learningPath.php?course=" . $course_code . "&amp;path_id=" . $lp_id . "'>
+            </span></div>";
+        } else {
+                list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
+                $lp_results = "<span data-toggle='tooltip' data-placement='top' title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
+                            &nbsp; &nbsp;
+                           <span data-toggle='tooltip' data-placement='top' title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
+                $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langDetails'>
+                    <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
+                    <span class='fa fa-line-chart' style='font-size:15px;'></span>
+                    </a>
+                </span>";
         }
         $imagelink = icon('fa-ellipsis-h');
     }
