@@ -142,7 +142,7 @@
                                             <div class='col-sm-12'>
                                                 <div class='input-group'>
                                                     <input class='form-control mt-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $exp_date->format("d-m-Y H:i") }}'>
-                                                    <span class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                                                    <span class='input-group-addon input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                                                 </div>
                                             </div>
                                         </div>

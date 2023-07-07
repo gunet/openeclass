@@ -74,9 +74,9 @@
                                             <nav aria-label="...">
                                                 <ul class="pagination p-0 pagination-glossary" id="myPag">
 
-                                                    <li class="page-item disabled">
+                                                    {{--<li class="page-item disabled">
                                                         <span class="page-link">{{trans('langGlossaryIndex')}}</span>
-                                                    </li>
+                                                    </li>--}}
                                                     @foreach ($prefixes as $key => $letter)
                                                         <li class="page-item {!! (!isset($_GET['prefix']) && !$cat_id && !$key) ||
                                                                 (isset($_GET['prefix']) && $_GET['prefix'] == $letter)? " active" : "" !!}">

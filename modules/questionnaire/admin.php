@@ -372,7 +372,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <div class='input-group'>
                                 <input class='form-control mt-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                                 <span class='help-block'>".Session::getError('PollStart')."</span>
-                                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                                <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                         </div>
                             
                         
@@ -387,7 +387,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <div class='input-group'>
                             <input class='form-control mt-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
                             <span class='help-block'>".Session::getError('PollEnd')."</span>
-                            <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                            <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                         </div>
                     </div>
                 </div>
@@ -477,7 +477,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 </select>
                               </td>
                               <td class='text-center'>
-                                <input class='btn-outline-primary h-30px rounded-pill' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn-outline-primary h-30px rounded-pill mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                <input class='btn-outline-primary h-40px rounded-2' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn-outline-primary h-40px rounded-2 mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
                                 <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
@@ -758,8 +758,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         
                         <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
                         
-                        <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
-                            " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
+                        <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
+                            " . icon('fa-times text-white', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
               }
@@ -770,8 +770,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                        
                             <input class='form-control mt-0' type='text' name='answers[]' value=''>
                      
-                            <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
-                                " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
+                            <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
+                                " . icon('fa-times text-white', $langDelete, '#', ' class="del_btn"') . "
                             </div>
                     </div>
 
@@ -781,8 +781,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                        
                         <input class='form-control mt-0' type='text' name='answers[]' value=''>
                       
-                        <div class='form-control-static input-group-text h-30px border-0 BordersRightInput bgEclass'>
-                            " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
+                        <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
+                            " . icon('fa-times text-white', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
         }

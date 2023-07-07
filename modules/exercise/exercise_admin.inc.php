@@ -541,7 +541,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                                     </select>
                                   </td>
                                   <td class='text-center'>
-                                    <input class='btn btn-sm btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm rounded-pill h-30px mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                    <input class='btn btn-sm btn-outline-primary rounded-2 h-40px' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm rounded-2 h-40px mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                                   </td>
                                   <td width='40%'>
                                     <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>

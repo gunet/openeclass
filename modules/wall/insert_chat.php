@@ -33,7 +33,7 @@ function list_chats($id = NULL) {
             'visible' => $row->status);
     }
     if (count($chatinfo) == 0) {
-        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i>$langNoChatAvailable</span></div></div>";
+        $ret_string .= "<div class='col-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoChatAvailable</span></div></div>";
     } else {
         $exist_chat = array();
 

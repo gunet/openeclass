@@ -14,7 +14,7 @@
                             <span class='courseInfoText TextExtraBold blackBlueText'>Copyright</span>
                         </div>
                     
-                        <div class='border-cols-default mt-5 Borders bg-white p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
+                        <div class='border-card drop-shadow mt-5 Borders bg-white p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
                     </div>
                 </div>
             </div>

@@ -163,12 +163,12 @@ if (!$conference_activity) {
             <div class='input-group'>
               <input class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
-              <span class='input-group-text h-30px border-0 BordersRightInput bgEclass pe-0'>
+              <span class='input-group-text h-40px input-bg-color input-border-color pe-0'>
                 <input class='btn submitAdminBtn' type='submit' value='$langSend'>
               </span>
             </div>
             <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>
-              <iframe class='embed-responsive-item basicBorderSolid Borders overflow-auto' id='iframe' src='$iframe_file' name='messageList'></iframe>
+              <iframe class='embed-responsive-item shadow-default Borders overflow-auto' id='iframe' src='$iframe_file' name='messageList'></iframe>
             </div>       
         </div>   
        </fieldset>

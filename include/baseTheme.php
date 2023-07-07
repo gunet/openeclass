@@ -345,7 +345,7 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[leftNavBgColor];
                     font-size: 12px;
                     text-transform: uppercase;
-                    height:30px;
+                    height:40px;
                     font-family: 'Manrope' , sans-serif; font-weight: 600;
                     border-radius: 35px;
                 }
@@ -358,6 +358,8 @@ function view($view_file, $view_data = array()) {
                 .submitAdminBtn.active{
                     background-color: $theme_options_styles[leftNavBgColor];
                 }
+
+                .cancelAdminBtn, .deleteAdminBtn, .successAdminBtn{ height:40px; }
 
                 .searchGroupBtn:hover{
                     background-color: $theme_options_styles[leftNavBgColor];
@@ -384,6 +386,15 @@ function view($view_file, $view_data = array()) {
                 .tool-sidebar{
                     color:#ffffff;
                 }
+
+                .user-menu-btn{
+                    color:#ffffff;
+                }
+
+                .bgBody{
+                    background-color:transparent;
+                }
+                
 
                 .statistics:before{
                     background: $theme_options_styles[leftNavBgColor];
@@ -730,13 +741,11 @@ function view($view_file, $view_data = array()) {
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css'/>
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css'/>
             <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css'/>
-            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default2.css'/>
         
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?donotcache'>
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/sidebar.css?donotcache'>
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/new_calendar.css?donotcache'>
             <link rel='stylesheet' href='{$urlAppend}template/modern/css/default.css?donotcache'>
-            <link rel='stylesheet' href='{$urlAppend}template/modern/css/default2.css?donotcache'>
         ";
 
     }

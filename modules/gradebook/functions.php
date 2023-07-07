@@ -475,7 +475,7 @@ function user_gradebook_settings() {
                                 <label for='UsersStart' class='col-sm-12 control-label-notes mb-2'>$langRegistrationDate $langFrom2</label>
                                 <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
-                                    <span class='add-on input-group-text BordersRightInput bgEclass h-30px border-0' id='basic-addon1'><i class='fa fa-calendar'></i></span>
+                                    <span class='add-on input-group-text h-40px input-bg-color input-border-color' id='basic-addon1'><i class='fa-solid fa-calendar text-white'></i></span>
                                 </div>
                             </div>
                         </div>
@@ -484,7 +484,7 @@ function user_gradebook_settings() {
                                 <label for='UsersEnd' class='col-sm-12 control-label-notes mb-2'>$langTill</label>
                                 <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
-                                    <span class='add-on input-group-text BordersRightInput bgEclass h-30px border-0'><i class='fa fa-calendar'></i></span>
+                                    <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                                 </div>
                             </div>
                         </div>
@@ -826,7 +826,7 @@ function display_gradebook($gradebook) {
                                         <tr class='list-header'>
                                             <th colspan='7' class='text-center text-white'>$langGradebookActList</th>
                                         </tr>
-                                        <tr class='list-header lightColor'>
+                                        <tr class=''>
                                             <th class='text-dark'>$langTitle</th>
                                             <th class='text-dark'>$langGradebookActivityDate2</th>
                                             <th class='text-dark'>$langType</th><th class='text-dark'>$langGradebookWeight</th>

@@ -463,7 +463,7 @@ $modules = array(
     MODULE_ID_WALL => array('title' => $langWall, 'link' => 'wall', 'image' => 'fa-solid fa-list-ul'),
     MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'fa-solid fa-arrow-down-9-1'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-check'),
-    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-stack-exchange'),
+    MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-brands fa-stack-exchange'),
     MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-trophy'),
     MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-solid fa-map'),
     MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-solid fa-ticket'),

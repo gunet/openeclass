@@ -2504,7 +2504,7 @@ function new_assignment() {
                                 <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple></select>
                               </td>
                               <td class='text-center'>
-                                <input class='btn btn-outline-primary btn-sm rounded-pill'type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='mt-2 btn btn-outline-primary btn-sm h-30px rounded-pill' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                <input class='btn btn-outline-primary btn-sm rounded-pill'type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='mt-2 btn btn-outline-primary btn-sm h-40px rounded-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
                                 <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple></select>

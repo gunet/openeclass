@@ -3657,9 +3657,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $iconTag = '';
         if ($level == 'primary-label') {
             if (isset($option['icon'])) {
-                $iconTag = "<span class='fa $option[icon] space-after-icon TextButton'></span>";
+                $iconTag = "<span class='fa $option[icon] space-after-icon vsmall-text'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs TextBold TextButton'>$title</span>";
+                $title = "<span class='hidden-xs TextBold vsmall-text'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .

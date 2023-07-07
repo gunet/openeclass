@@ -1012,7 +1012,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                                             <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil</label>
                                                                             <div class='input-group'>
                                                                                 <input class='form-control mt-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-                                                                                <span class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                                                                                <span class='input-group-addon input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar fa-lg text-white'></i></span>
                                                                             </div>
                                                                         </div>";
 

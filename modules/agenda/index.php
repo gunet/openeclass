@@ -466,7 +466,7 @@ if ($is_editor) {
                                                                     <div class='col-12 ps-0 pe-0 ms-2'>
                                                                         <div class='input-group'>
                                                                             <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                                                                            <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                                                                            <div class='input-group-addon input-group-text h-40px input-bg-color input-border-color'><span class='add-on'><span class='fa-solid fa-calendar text-white'></span></span></div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -844,7 +844,7 @@ if ($is_editor) {
                                                 <div class='col-12'>
                                                     <div class='input-group'>
                                                         <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                                                        <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                                                        <div class='input-group-addon input-group-text h-40px input-bg-color input-border-color'><span class='add-on'><span class='fa-solid fa-calendar text-white'></span></span></div>
                                                     </div>
                                                 </div>
                                             </div>

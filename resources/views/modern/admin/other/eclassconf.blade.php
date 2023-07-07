@@ -667,7 +667,7 @@
                                                     <div class='col-sm-12'>
                                                             <div class='input-group'>
                                                                 <input type='password' class='form-control mt-0' name='smtp_password' id='formSMTPPassword' value="{!! q(get_var('smtp_password')) !!}">
-                                                                <span id='revealPass' class='input-group-text input-group-addon h-30px bgEclass border-0 BordersRightInput'><span class='fa fa-eye'></span></span>
+                                                                <span id='revealPass' class='input-group-text input-group-addon h-40px input-bg-color input-border-color'><span class='fa-solid fa-eye text-white'></span></span>
                                                             </div>
                                                     </div>
                                                 </div>

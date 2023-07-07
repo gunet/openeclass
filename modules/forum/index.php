@@ -120,7 +120,7 @@ if ($total_categories > 0) {
         }
 
         $tool_content .= "<div class='col-12 mt-3'><caption>";
-        $tool_content .= "<div class='col-12 basicBorderSolid p-3 Borders mb-4'>
+        $tool_content .= "<div class='col-12 shadow-default p-3 Borders mb-4'>
                           <div class='row'>
                           <div class='col-sm-6 text-md-start text-center mt-1'><strong>$langCategory :</strong> $cat_title</div>";
         $tool_content .= "<div class='col-sm-6 text-md-end text-center mt-md-0 mt-3'>";

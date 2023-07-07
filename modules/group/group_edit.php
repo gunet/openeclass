@@ -332,10 +332,10 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                           </td>
                           <td class='text-center'>
                               <div class='form-group'>
-                                  <input class='btn btn-outline-primary btn-sm rounded-pill h-30px' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
+                                  <input class='btn btn-outline-primary btn-sm rounded-2 h-40px' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
                               </div>
                               <div class='form-group'>
-                                  <input class='btn btn-outline-primary btn-sm rounded-pill h-30px mt-2' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
+                                  <input class='btn btn-outline-primary btn-sm rounded-2 h-40px mt-2' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
                               </div>
                           </td>
                           <td class='text-end'>

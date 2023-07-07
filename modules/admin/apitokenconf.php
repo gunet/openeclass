@@ -174,7 +174,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
                                     <div class='col-12'>
                                         <div class='input-group'>
                                             <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                            <span class='input-group-text input-group-addon h-30px bgEclass border-0 BordersRightInput'><i class='fa fa-calendar'></i></span>
+                                            <span class='input-group-text input-group-addon h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar fa-lg text-white'></i></span>
                                         </div>
                                     </div>
                                 </div>";
@@ -227,7 +227,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
                     <div class='col-12'>
                         <div class='input-group'>
                             <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                            <span class='input-group-text input-group-addon h-30px bgEclass border-0 BordersRightInput'><i class='fa fa-calendar'></i></span>
+                            <span class='input-group-text input-group-addon h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar fa-lg text-white'></i></span>
                         </div>
                     </div>
                 </div>";

@@ -18,7 +18,7 @@
                     {!! $action_bar !!}
                     
                     <div class='col-12'>
-                        <div class='border-cols-default bg-white Borders p-lg-5 p-3'>{!! $policy !!}</div>
+                        <div class='border-card drop-shadow bg-white Borders p-lg-5 p-3'>{!! $policy !!}</div>
                     </div>
                    
                 </div>

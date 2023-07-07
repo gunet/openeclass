@@ -210,7 +210,7 @@ foreach ($result as $row) {
         }
         $tool_content .= "</td>
                 </tr>
-                <tr class='list-header lightColor'>
+                <tr class=''>
                   <th class='text-center normalColorBlueText'>" . $langStart . "</th>
                   <th class='text-center normalColorBlueText'>" . $langExerciseDuration . "</th>
                   <th class='text-center normalColorBlueText'>" . $langTotalScore . "</th>

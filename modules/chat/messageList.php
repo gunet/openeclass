@@ -157,7 +157,6 @@ if (isset($_GET['store']) && $is_editor) {
     <link href="<?php echo $urlServer;?>template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet">
 
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default.css">
-    <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default2.css">
 </head>
 <body class='bgEclass bodyChat pb-3'>
 <?php

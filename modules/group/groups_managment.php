@@ -144,7 +144,7 @@ $tool_content .= "<div class='row mb-4'>
                        $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                                             <p class='mb-1'>$langSearchGroupByName</p>
                                             <div class='col-12 d-flex justify-content-start'>
-                                                <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-30px'><span class='fa fa-search fs-6'></span></button>
+                                                <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-40px'><span class='fa fa-search fs-6'></span></button>
                                                 <select id='group-name' class='form-select' name='groupNames[]' multiple></select>
                                                 
                                             </div>

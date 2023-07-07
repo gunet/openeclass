@@ -237,8 +237,8 @@ if (isset($_GET['stats_submit'])) {
         <div class='col-md-9 col-12'>
             <div class='input-group'> 
                 <input class='form-control mt-0' name='user_date_start' id='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
-                <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-xmark text-white'></i></span>
+                <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
             </div>
         </div>
         </div>";
@@ -247,8 +247,8 @@ if (isset($_GET['stats_submit'])) {
             <div class='col-md-9 col-10'>
                 <div class='input-group'> 
                     <input class='form-control mt-0' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
-                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-times'></i></span>
-                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                    <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-xmark text-white'></i></span>
+                    <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                 </div>
             </div>
         </div>";

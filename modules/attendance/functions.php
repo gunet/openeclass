@@ -276,7 +276,7 @@ function display_attendance_activities($attendance_id) {
         $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <tr class='list-header'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
-                        <tr class='list-header lightColor'>
+                        <tr class=''>
                             <th class='text-dark'>$langTitle</th>
                             <th class='text-dark'>$langDate</th>
                             <th class='text-dark'>$langType</th>
@@ -1142,7 +1142,7 @@ function user_attendance_settings($attendance_id) {
                                 <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
 
-                                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                                    <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                                 </div>
 
 
@@ -1154,7 +1154,7 @@ function user_attendance_settings($attendance_id) {
                                 <div class='input-group'>
                                     <input class='form-control mt-0' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
 
-                                    <span class='add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><i class='fa fa-calendar'></i></span>
+                                    <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
                                 </div>
 
 
@@ -1174,8 +1174,8 @@ function user_attendance_settings($attendance_id) {
                                         <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td class='text-center'>
-                                        <input class='btn-outline-primary rounded-pill h-30px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
-                                        <input class='btn-outline-primary rounded-pill h-30px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                        <input class='btn-outline-primary rounded-2 h-40px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
+                                        <input class='btn-outline-primary rounded-2 h-40px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
                                       </td>
                                       <td width='40%'>
                                         <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
