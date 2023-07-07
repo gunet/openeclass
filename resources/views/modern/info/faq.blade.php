@@ -34,7 +34,7 @@
                                     <ul class="list-group list-group-flush">
                                         @foreach ($faqs as $key => $faq)
                                         
-                                                <li class="list-group-item px-0 mb-4 bgBody">
+                                                <li class="list-group-item px-0 mb-4 bg-transparent">
                                                     <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='false' aria-controls='#{{ $faq->id }}'>
                                                         <span class='fa-solid fa-chevron-down'></span>
                                                         {!! $faq->title !!}

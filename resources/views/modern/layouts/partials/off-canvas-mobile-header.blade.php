@@ -24,22 +24,22 @@
                         <ul class="list-group px-4">
                             @if(!get_config('hide_login_link'))
                                 <a id='homeId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlServer }}">
-                                    <i class="fa fa-home pt-1 pe-1"></i>{{ trans('langHome') }}
+                                    <i class="fa fa-home pe-2"></i>{{ trans('langHome') }}
                                 </a>
                             @endif
                             @if (!isset($_SESSION['uid']))
                                 @if(get_config('registration_link')!='hide')
                                     <a id='registrationId' type="button" class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/registration.php">
-                                        <i class="fa fa-pencil pt-1 pe-1"></i>{{ trans('langRegistration') }}
+                                        <i class="fa fa-pencil pe-2"></i>{{ trans('langRegistration') }}
                                     </a>
                                 @endif
                             @endif
                             <a id='coursesId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/listfaculte.php">
-                                <i class="fa fa-book pt-1 pe-1"></i>{{ trans('langCourses') }}
+                                <i class="fa fa-book pe-2"></i>{{ trans('langCourses') }}
                             </a>
                            
                             <a id='faqId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}info/faq.php">
-                                <i class="fa fa-question-circle pt-1 pe-1"></i><span class='ms-0'>{{ trans('langFaq') }}</span>
+                                <i class="fa fa-question-circle pe-2"></i>{{ trans('langFaq') }}
                             </a>
                             
                         </ul>
