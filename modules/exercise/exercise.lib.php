@@ -216,7 +216,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoAnswer</span></div></div>";
     }
     if (in_array($answerType, [TRUE_FALSE, UNIQUE_ANSWER])) {
-        $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:-30px;'><span class='fa fa-times'></span> $langClear</button>";
+        $tool_content .= "<button class='float-end clearSelect btn deleteAdminBtn' style='margin-top:-30px;'><span class='fa-solid fa-xmark'></span> $langClear</button>";
     }
     $tool_content .= "
                 </div>
@@ -451,9 +451,9 @@ function display_exercise($exercise_id) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                             $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
                             if ($answerCorrect) {
-                                $icon_choice = "fa-check-square-o";
+                                $icon_choice = "fa-square-check";
                             } else {
-                                $icon_choice = "fa-square-o";
+                                $icon_choice = "fa-square";
                             }
                             $tool_content .= icon($icon_choice) . "</div>";
                             $tool_content .= "</td><td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>

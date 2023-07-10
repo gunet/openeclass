@@ -34,7 +34,7 @@
                         @foreach ($categories as $myrow)
                             <?php
                                 $description = standard_text_escape($myrow->description);
-                                $folder_icon = icon('fa-folder-open-o', $GLOBALS['langViewShow']);
+                                $folder_icon = icon('fa-folder-open', $GLOBALS['langViewShow']);
                             ?>
                             <tr class='link-subcategory-title'><th class='category-link' colspan='2'>{!! $folder_icon !!}&nbsp;{{ $myrow->name }}
                             @if (!empty($description))

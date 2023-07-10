@@ -121,7 +121,7 @@ foreach ($result as $list) {
 
     //CHECKBOX, NAME, RENAME, COMMENT
     if ($list->contentType == CTEXERCISE_) {
-        $moduleImg = 'fa-pencil-square-o';
+        $moduleImg = 'fa-square-pen';
     } else if ($list->contentType == CTLINK_) {
         $moduleImg = 'fa-link';
     } else if ($list->contentType == CTCOURSE_DESCRIPTION_) {

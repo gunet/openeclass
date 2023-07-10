@@ -1248,7 +1248,7 @@ foreach ($result as $row) {
                 array('title' => $langDelete,
                       'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                       'class' => 'delete',
-                      'icon' => 'fa-times',
+                      'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete . ' ' . q($row->filename))));
         } elseif ($uid or $row->format != '.dir') {
             $info['action_button'] = icon('fa-download', $downloadMessage, $download_url);

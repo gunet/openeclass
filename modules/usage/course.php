@@ -46,7 +46,7 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label'),
     array('title' => $langStatsReports,
         'url' => "userduration.php?course=$course_code",
-        'icon' => 'fa-vcard-o',
+        'icon' => 'fa-address-card',
         'level' => 'primary-label')
 ),false);
 

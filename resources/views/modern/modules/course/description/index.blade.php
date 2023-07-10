@@ -106,7 +106,7 @@
                                                                 'disabled' => $key + 1 >= count($course_descs)),
                                                             array('title' => trans('langDelete'),
                                                                 'url' => "index.php?course=$course_code&amp;del=" . getIndirectReference($course_desc->id),
-                                                                'icon' => 'fa-times',
+                                                                'icon' => 'fa-xmark',
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langConfirmDelete'))                            
                                                         )

@@ -229,7 +229,7 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
         if (get_user_email_notification($uid, $course_id)) {
             $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='float-end ps-2 mt-2'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
         } else {
-            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='float-end ps-2 mt-2'><span class='fa fa-envelope-o fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='float-end ps-2 mt-2'><span class='fa fa-envelope-open fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
         }
     }
 }
@@ -386,7 +386,7 @@ switch ($visible) {
     }
     case COURSE_INACTIVE: {
         $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langCourseInactiveShort'>
-                                <span class='fa fa-times text-danger fa-custom-lock'></span>
+                                <span class='fa-solid fa-xmark text-danger fa-custom-lock'></span>
                              </span><span class='hidden'>.</span>";
         break;
     }
@@ -543,7 +543,7 @@ if ($total_cunits > 0) {
             if (!$is_editor) {
                 if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                     $not_shown = true;
-                    $icon = icon('fa-clock-o', $langUnitNotStarted);
+                    $icon = icon('fa-clock', $langUnitNotStarted);
                 // or has completed units (if any)
                 } else if (!in_array($cu->id, $visible_units_id)) {
                     $not_shown = true;
@@ -662,7 +662,7 @@ if ($total_cunits > 0) {
             if (!$is_editor) {
                 if (!(is_null($cu->start_week)) and (date('Y-m-d') < $cu->start_week)) {
                     $not_shown = true;
-                    $icon = icon('fa-clock-o', $langUnitNotStarted);
+                    $icon = icon('fa-clock', $langUnitNotStarted);
                 // or has completed units (if any)
                 } else if (!in_array($cu->id, $visible_units_id)) {
                     $not_shown = true;

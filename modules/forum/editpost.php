@@ -146,7 +146,7 @@ if (isset($_POST['submit'])) {
                 <label class='col-sm-6 control-label-notes'>$langAttachedFile</label>
                 <div class='col-sm-12'>
                     " .q($myrow->topic_filename) ." (" . format_file_size(filesize($actual_filename)) . ") <a id='filedelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;delete=$myrow->id'>
-                        <span class='fa fa-fw fa-times text-danger' data-original-title='$langDeleteAttachment' title='' data-toggle='tooltip'></span>
+                        <span class='fa-solid fa-xmark fa-fw text-danger' data-original-title='$langDeleteAttachment' title='' data-toggle='tooltip'></span>
                     </a>
                 </div>                        
             </div>";

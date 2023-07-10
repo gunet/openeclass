@@ -1039,7 +1039,7 @@ function tc_session_details() {
                                     'show' => $tc_type == 'bbb'),
                             array(  'title' => $langParticipate,
                                     'url' => "tcuserduration.php?course=$course_code&amp;id=$row->id",
-                                    'icon' => "fa-clock-o",
+                                    'icon' => "fa-clock",
                                     'show' => $tc_type == 'bbb'),
                             array(  'title' => $row->active? $langDeactivate : $langActivate,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_".
@@ -1047,7 +1047,7 @@ function tc_session_details() {
                                     'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
                             array(  'title' => $langDelete,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete)
                             )) .

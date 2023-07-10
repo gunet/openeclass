@@ -485,7 +485,7 @@ function printPolls() {
                           'confirm' => $langConfirmPurgeExercises,
                           'show' => $total_participants > 0 ],
                         [ 'title' => $langDelete,
-                          'icon' => 'fa-times',
+                          'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
                           'confirm' => $langConfirmDelete ],

@@ -42,7 +42,7 @@
                             . "?course=" . $course_code
                             . "&amp;id=" . $result->myrow->id
                             . "&amp;delete=yes&amp;table=" . $result->table,
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'confirm' => $GLOBALS['langConfirmDelete'],
                         'class' => 'delete')))
                 !!}

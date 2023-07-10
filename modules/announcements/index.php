@@ -116,10 +116,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 if (isset($myrow->start_display)) {
                     if (isset($myrow->stop_display) && $myrow->stop_display < $now) {
                         $vis_class = 'not_visible';
-                        $status_icon_list = "<li class='text-danger'  data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAnnouncementWillNotBeVis$myrow->stop_display'><span class='fa fa-clock-o'></span> $langHasExpired</li>";
+                        $status_icon_list = "<li class='text-danger'  data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAnnouncementWillNotBeVis$myrow->stop_display'><span class='fa fa-clock'></span> $langHasExpired</li>";
                     } elseif ($myrow->start_display > $now) {
                         $vis_class = 'not_visible';
-                        $status_icon_list = "<li class='text-success'  data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock-o'></span> $langAdminWaiting</li>";
+                        $status_icon_list = "<li class='text-success'  data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAnnouncementWillBeVis$myrow->start_display'><span class='fa fa-clock'></span> $langAdminWaiting</li>";
                     } else {
                         $status_icon_list = "<li data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAnnouncementIsVis'><span class='fa fa-eye'></span> $langVisible</li>";
                         $vis_class = 'visible';
@@ -170,7 +170,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         'icon-extra' => "data-vis='$visible' data-id='$myrow->id' id='$myrow->id|$visible'"),
                     array('title' => $langDelete,
                         'class' => 'delete',
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'icon-class' => 'delete_btn',
                         'icon-extra' => "data-id='$myrow->id' id='$myrow->id'")
                     )));

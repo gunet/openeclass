@@ -203,17 +203,17 @@ if ($is_editor) {
                   'show' => !empty($tc_server_type) ],
                 [ 'title' => $langActivateParticipation,
                   'url' => "tc_attendance.php?course=$course_code",
-                  'icon' => 'fa-group',
+                  'icon' => 'fa-user-group',
                   'level' => 'primary-label',
                   'link-attrs' => "id=popupattendance1",
                   'show' => is_active_tc_server('bbb', $course_id) ],
                 [ 'title' => $langParticipate,
                   'url' => "tcuserduration.php?course=$course_code",
-                  'icon' => 'fa-clock-o',
+                  'icon' => 'fa-clock',
                   'level' => 'primary-label' ],
                 [ 'title' => $langUserDuration,
                     'url' => "tcuserduration.php?course=$course_code&amp;per_user=true",
-                    'icon' => 'fa-clock-o',
+                    'icon' => 'fa-clock',
                     'level' => 'primary-label' ],
             ]);
         }
@@ -222,7 +222,7 @@ if ($is_editor) {
     $tool_content .= action_bar(array(
                 array('title' => $langParticipate,
                           'url' => "tcuserduration.php?course=$course_code&amp;u=$_SESSION[uid]",
-                          'icon' => 'fa-clock-o',
+                          'icon' => 'fa-clock',
                           'level' => 'primary-label')
                 ));
 }

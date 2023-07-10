@@ -230,7 +230,7 @@ if (!$nbrReports) {
                                  'icon' => 'fa-edit'),
                            array('title' => $langDeleteReportedResource,
                                  'url' => $deleteurl,
-                                 'icon' => 'fa-times',
+                                 'icon' => 'fa-xmark',
                                  'class' => 'delete',
                                  'confirm' => $langConfirmDeleteReportedResource),
                        ));
@@ -256,7 +256,7 @@ if (!$nbrReports) {
                           'icon' => 'fa-edit'),
                     array('title' => $langDeleteReportedResource,
                           'url' => $deleteurl,
-                          'icon' => 'fa-times',
+                          'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'confirm' => $langConfirmDeleteReportedResource),
             ));
@@ -281,7 +281,7 @@ if (!$nbrReports) {
                             'icon' => 'fa-edit'),
                     array('title' => $langDeleteReportedResource,
                             'url' => $deleteurl,
-                            'icon' => 'fa-times',
+                            'icon' => 'fa-xmark',
                             'class' => 'delete',
                             'confirm' => $langConfirmDeleteReportedResource),
             ));

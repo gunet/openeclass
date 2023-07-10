@@ -149,7 +149,7 @@ if (isset($_GET['add_template'])) {
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?delete_template=" . getIndirectReference($lti->id),
-                            'icon' => 'fa-times',
+                            'icon' => 'fa-xmark',
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete))) . "</td>" .
                     "</tr>";

@@ -258,7 +258,7 @@ foreach ($result as $list) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqComment&amp;module_id=$list->module_id",
                       'icon' => 'fa-comment-o'),
                 array('title' => $langDelete,
-                      'icon' => 'fa-times',
+                      'icon' => 'fa-xmark',
                       'class' => 'delete',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
                       'confirm' => "$langConfirmDelete")

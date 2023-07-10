@@ -169,7 +169,7 @@ function showgroupcategoryadmintools($categoryid) {
                       'icon' => 'fa-edit',
                       'url' => "group_category.php?course=$course_code&amp;editcategory=1&amp;id=$categoryid"),
                 array('title' => $langDelete,
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'url' => "index.php?course=$course_code&amp;deletecategory=1&amp;id=$categoryid",
                         'class' => 'delete',
                         'confirm' => $langGroupCatDel)
@@ -229,7 +229,7 @@ function showgroupsofcategory($catid) {
                     $tool_content .= "<br>
                             <span class='small'>$user_group_description</span> &nbsp;" .
                             icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                            icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                            icon('fa-xmark', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
                 } elseif ($is_member) {
                     $tool_content .= "
                             <a href='group_description.php?course=$course_code&amp;group_id=$group_id'>
@@ -279,7 +279,7 @@ function showgroupsofcategory($catid) {
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;$visibility_url",
                     'icon' => $visibility_icom),
                 array('title' => $langDelete,
-                      'icon' => 'fa-times',
+                      'icon' => 'fa-xmark',
                       'class' => 'delete',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group_id",
                       'confirm' => $langGroupDelconfirm)

@@ -46,17 +46,17 @@
                                         'button-class' => 'btn-success'),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
                                         'url' => $insertBaseUrl . 'exercise',
-                                        'icon' => 'fa fa-pencil-square-o',
+                                        'icon' => 'fa fa-square-pen',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_EXERCISE)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
                                         'url' => $insertBaseUrl . 'doc',
-                                        'icon' => 'fa fa-folder-open-o',
+                                        'icon' => 'fa fa-folder-open',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_DOCS)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertText'),
                                         'url' => $insertBaseUrl . 'text',
-                                        'icon' => 'fa fa-file-text-o',
+                                        'icon' => 'fa fa-file-lines',
                                         'level' => 'secondary'),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertLink'),
                                         'url' => $insertBaseUrl . 'link',
@@ -99,7 +99,7 @@
                                         'show' => !is_module_disable(MODULE_ID_QUESTIONNAIRE)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertWiki'),
                                         'url' => $insertBaseUrl . 'wiki',
-                                        'icon' => 'fa fa-wikipedia-w',
+                                        'icon' => 'fa fa-won-sign',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_WIKI)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertChat'),
@@ -242,13 +242,13 @@
                                                     {!! action_button(array(
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
                                                             'url' => $base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-pencil-square-o',
+                                                            'icon' => 'fa fa-square-pen',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_EXERCISE, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
                                                             'url' => $base_url . 'doc&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-folder-open-o',
+                                                            'icon' => 'fa fa-folder-open',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_DOCS, $course_code, $id, $in_home->activity_id)),
 
@@ -296,7 +296,7 @@
 
                                                         array('title' =>trans('langAdd') . ' ' . trans('langInsertWiki'),
                                                             'url' => $base_url . 'wiki&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-wikipedia-w',
+                                                            'icon' => 'fa fa-won-sign',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_WIKI, $course_code, $id, $in_home->activity_id)),
 
@@ -365,7 +365,7 @@
                                                                 'icon' => $vis == 1 ? 'fa-eye-slash' : 'fa-eye'),
                                                             array('title' => trans('langDelete'),
                                                                 'url' => "$_SERVER[REQUEST_URI]&del_act=$in_home->ID&actid=" . $in_home->activity_id,
-                                                                'icon' => 'fa-times',
+                                                                'icon' => 'fa-xmark',
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langUnitActivityDeleteConfirm'))))
                                                     !!}
@@ -393,13 +393,13 @@
                                                     {!! action_button(array(
                                                             array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                                 'url' => $base_url . 'exercise&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-pencil-square-o',
+                                                                'icon' => 'fa fa-square-pen',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '.trans('langInsertDoc'),
                                                                 'url' => $base_url . 'doc&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-folder-open-o',
+                                                                'icon' => 'fa fa-folder-open',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$in_class->activity_id)),
 
@@ -447,7 +447,7 @@
 
                                                             array('title' => trans('langAdd').' '. trans('langInsertWiki'),
                                                                 'url' => $base_url . 'wiki&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-wikipedia-w',
+                                                                'icon' => 'fa fa-won-sign',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$in_class->activity_id)),
 
@@ -523,7 +523,7 @@
 
                                                             array('title' => trans('langDelete'),
                                                                 'url' => "$_SERVER[REQUEST_URI]&del_act=$in_class->ID&actid=".$in_class->activity_id,
-                                                                'icon' => 'fa-times',
+                                                                'icon' => 'fa-xmark',
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langUnitActivityDeleteConfirm'))))
                                                     !!}
@@ -553,13 +553,13 @@
                                                 <td class='text-center'> {!! action_button(array(
                                                     array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                         'url' => $base_url . 'exercise&fc_type=2&act_name='. $act_title,
-                                                        'icon' => 'fa fa-pencil-square-o',
+                                                        'icon' => 'fa fa-square-pen',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_EXERCISE,$course_code,$id,$after_class->activity_id)),
 
                                                     array('title' => trans('langAdd').' '.trans('langInsertDoc'),
                                                         'url' => $base_url . 'doc&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa fa-folder-open-o',
+                                                        'icon' => 'fa fa-folder-open',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_DOCS,$course_code,$id,$after_class->activity_id)),
 
@@ -607,7 +607,7 @@
 
                                                     array('title' => trans('langAdd').' '.trans('langInsertWiki'),
                                                         'url' => $base_url . 'wiki&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa fa-wikipedia-w',
+                                                        'icon' => 'fa fa-won-sign',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$after_class->activity_id)),
 
@@ -681,7 +681,7 @@
 
                                                     array('title' => trans('langDelete'),
                                                         'url' => "$_SERVER[REQUEST_URI]&del_act=$after_class->ID&actid=".$after_class->activity_id,
-                                                        'icon' => 'fa-times',
+                                                        'icon' => 'fa-xmark',
                                                         'class' => 'delete',
                                                         'confirm' => trans('langUnitActivityDeleteConfirm')))) !!}
 

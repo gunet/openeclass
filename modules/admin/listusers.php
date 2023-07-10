@@ -312,11 +312,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($mail_ver_required) {
             switch ($myrow->verified_mail) {
                 case EMAIL_VERIFICATION_REQUIRED:
-                    $icon = 'fa-clock-o';
+                    $icon = 'fa-clock';
                     $tip = $langMailVerificationPendingU;
                     break;
                 case EMAIL_VERIFIED:
-                    $icon = 'fa-check-square-o';
+                    $icon = 'fa-square-check';
                     $tip = $langMailVerificationYesU;
                     break;
                 default:
@@ -385,7 +385,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 ),
                 array(
                     'title' => $langDelete,
-                    'icon' => 'fa-times',
+                    'icon' => 'fa-xmark',
                     'url' => "deluser.php?u=$myrow->id"
                 )
             ));

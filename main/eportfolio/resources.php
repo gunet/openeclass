@@ -385,7 +385,7 @@ if ($userdata) {
                                                                     array(
                                                                             'title' => $langePortfolioRemoveResource,
                                                                             'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                                            'icon' => 'fa-times',
+                                                                            'icon' => 'fa-xmark',
                                                                             'class' => 'delete',
                                                                             'confirm' => $langePortfolioSureToRemoveResource,
                                                                             'show' => ($post->user_id == $uid)
@@ -493,7 +493,7 @@ if ($userdata) {
                                                 array(
                                                     'title' => $langePortfolioRemoveResource,
                                                     'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=blog&amp;er_id=".$post->id,
-                                                    'icon' => 'fa-times',
+                                                    'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langePortfolioSureToRemoveResource,
                                                     'show' => ($post->user_id == $uid)
@@ -573,7 +573,7 @@ if ($userdata) {
                                                 array(
                                                         'title' => $langePortfolioRemoveResource,
                                                         'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=work_submission&amp;er_id=".$submission->id,
-                                                        'icon' => 'fa-times',
+                                                        'icon' => 'fa-xmark',
                                                         'class' => 'delete',
                                                         'confirm' => $langePortfolioSureToRemoveResource,
                                                         'show' => ($submission->user_id == $uid)
@@ -636,7 +636,7 @@ if ($userdata) {
                                                     array(
                                                             'title' => $langePortfolioRemoveResource,
                                                             'url' => "$_SERVER[SCRIPT_NAME]?token=$token&amp;action=remove&amp;type=my_docs&amp;er_id=".$doc->id,
-                                                            'icon' => 'fa-times',
+                                                            'icon' => 'fa-xmark',
                                                             'class' => 'delete',
                                                             'confirm' => $langePortfolioSureToRemoveResource,
                                                             'show' => ($doc->user_id == $uid)

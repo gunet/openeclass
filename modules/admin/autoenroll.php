@@ -176,7 +176,7 @@ if (isset($_GET['delete'])) {
                     $('#nodCnt2').append('<p id=\"nd_' + countnd + '\">'
                                      + '<input type=\"hidden\" name=\"rule_deps[]\" value=\"' + newnodeid + '\">'
                                      + newnodename
-                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-bs-toggle=\"tooltip\" data-original-title=\"" . js_escape($langNodeDel) . "\" data-bs-placement=\"top\" title=\"" . js_escape($langNodeDel) . "\"><\/span><\/a>'
+                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa-solid fa-xmark\" data-bs-toggle=\"tooltip\" data-original-title=\"" . js_escape($langNodeDel) . "\" data-bs-placement=\"top\" title=\"" . js_escape($langNodeDel) . "\"><\/span><\/a>'
                                      + '<\/p>');
 
                     $('#dialog-set-value').val(newnodename);

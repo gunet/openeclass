@@ -106,7 +106,7 @@
                                             array(
                                                 'title' => trans('langDelete'),
                                                 'url' => "results.php?course=$course_code&exerciseId=$exercise->id&purgeAttempID=$attempt->id",
-                                                'icon' => "fa-times",
+                                                'icon' => "fa-xmark",
                                                 'confirm' => trans('langQuestionCatDelConfirrm'),
                                                 'class' => 'delete'
                                             )

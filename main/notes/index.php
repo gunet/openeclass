@@ -228,7 +228,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?delete=".getIndirectReference($note->id),
                                 'confirm' => $langSureToDelNote,
                                 'class' => 'delete',
-                                'icon' => 'fa-times')
+                                'icon' => 'fa-xmark')
                         ))
                 ."
                 </div>
@@ -299,7 +299,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($note->id),
                         'confirm' => $langSureToDelNote,
                         'class' => 'delete',
-                        'icon' => 'fa-times'),
+                        'icon' => 'fa-xmark'),
                     array('title' => $langMove . " " . $langUp,
                         'url' => "$_SERVER[SCRIPT_NAME]?up=" . getIndirectReference($note->id),
                         'level' => 'primary',

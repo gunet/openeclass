@@ -3659,7 +3659,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if (isset($option['icon'])) {
                 $iconTag = "<span class='fa $option[icon] space-after-icon vsmall-text'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs TextBold vsmall-text'>$title</span>";
+                $title = "<span class='hidden-xs TextBold vsmall-text ps-1'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
@@ -3832,11 +3832,16 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "submitAdminBtn";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
+        if(!empty($secondary_title)){
+            $tmp_class_title = "<span class='hidden-xs'>$secondary_title</span>";
+        }else{
+            $tmp_class_title = "";
+        }
         $action_button = "
                 <a tabindex='1' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
                     <span class='fa $secondary_icon'></span>
-                    <span class='hidden-xs'>$secondary_title</span>
-                    <span class='caret'></span>
+                    $tmp_class_title
+                    
                 </a>";
     }
 
@@ -4128,7 +4133,7 @@ function checkPHPVersion($version) {
     if (version_compare(PHP_VERSION, $version) > 0) {
         $tool_content .= "<li>" . icon('fa-check') . " " . PHP_VERSION . "</li>";
     } else {
-        $tool_content .= "<li class='bg-danger'>" . icon('fa-times') . " " . PHP_VERSION . "</li>";
+        $tool_content .= "<li class='bg-danger'>" . icon('fa-xmark') . " " . PHP_VERSION . "</li>";
     }
 
 }
@@ -4148,7 +4153,7 @@ function warnIfExtNotLoaded($extensionName) {
         $tool_content .= '<li>' . icon('fa-check') . ' ' . $extensionName . '</li>';
     } else {
         $tool_content .= "
-                <li class='bg-danger'>" . icon('fa-times') . " $extensionName
+                <li class='bg-danger'>" . icon('fa-xmark') . " $extensionName
                 <b>$langModuleNotInstalled</b>
                 (<a href='http://www.php.net/$extensionName' target=_blank>$langReadHelp $langHere</a>)
                 </li>";

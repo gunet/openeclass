@@ -96,7 +96,7 @@
                                                 {{ $tree->getFullPath(getDirectReference($dep)) }}
                                                 &nbsp;
                                                 <a href='#nodCnt2'>
-                                                    <span class='fa fa-times' data-bs-toggle='tooltip' data-original-title='{{ trans('langNodeDel') }}' data-bs-placement='top' title='{{ trans('langNodeDel') }}'></span>
+                                                    <span class='fa-solid fa-xmark' data-bs-toggle='tooltip' data-original-title='{{ trans('langNodeDel') }}' data-bs-placement='top' title='{{ trans('langNodeDel') }}'></span>
                                                 </a>
                                             </p>
                                         @endforeach

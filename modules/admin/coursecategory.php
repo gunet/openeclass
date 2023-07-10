@@ -95,7 +95,7 @@ if (!isset($_GET['action'])) {
                 ),
                 array(
                     'title' => $langDelete,
-                    'icon' => 'fa-times',
+                    'icon' => 'fa-xmark',
                     'url' => "coursecategory.php?action=delete&amp;id=" . $category->id
                 )));
                 $tool_content .= "</td><tr>";

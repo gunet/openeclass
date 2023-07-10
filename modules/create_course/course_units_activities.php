@@ -354,7 +354,7 @@ if(!isset($_POST['final_submit'])){
 
         $tool_content .= "<div class='form-wrapper'><fieldset>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
-                <div class='card border-0'>
+                <div class='card border-0 mb-3'>
                     <div class='card-header bg-white border-0 text-center'>
                         <div class='TextSemiBold text-uppercase normalBlueText p-2'>
                             $langActSelect
@@ -366,7 +366,7 @@ if(!isset($_POST['final_submit'])){
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
                         <tr class='list-header'>
-                        <td></td>
+                        <td class='bgTheme'></td>
                         <th scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
             $i=1;
 

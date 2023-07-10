@@ -36,7 +36,7 @@
                                                           'url' => "index.php?course=$course_code&amp;urlview=". $urlview ."&amp;down=". getIndirectReference($link->id) . $socialview_param,
                                                           ),
                                                     array('title' => trans('langDelete'),
-                                                          'icon' => 'fa-times',
+                                                          'icon' => 'fa-xmark',
                                                           'class' => 'delete',
                                                           'url' => "index.php?course=$course_code&amp;action=deletelink&amp;id=". getIndirectReference($link->id) ."&amp;urlview=$urlview$socialview_param",
                                                           'confirm' => trans('langLinkDelconfirm'))
@@ -51,7 +51,7 @@
                                                                     'icon' => 'fa-edit',
                                                                     'url' => "index.php?course=". $course_code ."&amp;action=editlink&amp;id=" . getIndirectReference($link->id) . "&amp;urlview=".$urlview.$socialview_param),
                                                             array('title' => trans('langDelete'),
-                                                                    'icon' => 'fa-times',
+                                                                    'icon' => 'fa-xmark',
                                                                     'class' => 'delete',
                                                                     'url' => "index.php?course=". $course_code ."&amp;action=deletelink&amp;id=" . getIndirectReference($link->id) . "&amp;urlview=".$urlview.$socialview_param,
                                                                     'confirm' => trans('langLinkDelconfirm'))

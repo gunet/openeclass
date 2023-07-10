@@ -181,7 +181,7 @@ function commentBox($type, $mode) {
             if ($is_editor) {
                 $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
                 $output .= "&nbsp;&nbsp;&nbsp";
-                $output .= icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
+                $output .= icon('fa-xmark', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
 
             }
         }
@@ -294,11 +294,11 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
 function selectImage($contentType) {
 
-    $imgList[CTDOCUMENT_] = "fa-folder-open-o";
-    $imgList[CTCLARODOC_] = "fa-folder-open-o";
-    $imgList[CTEXERCISE_] = "fa-pencil-square-o";
-    $imgList[CTSCORM_] = "fa-pencil-square-o";
-    $imgList[CTSCORMASSET_] = "fa-pencil-square-o";
+    $imgList[CTDOCUMENT_] = "fa-folder-open";
+    $imgList[CTCLARODOC_] = "fa-folder-open";
+    $imgList[CTEXERCISE_] = "fa-square-pen";
+    $imgList[CTSCORM_] = "fa-square-pen";
+    $imgList[CTSCORMASSET_] = "fa-square-pen";
     $imgList[CTLINK_] = "fa-link";
     $imgList[CTCOURSE_DESCRIPTION_] = "fa-info-circle";
     $imgList[CTMEDIA_] = "fa-film";
@@ -308,7 +308,7 @@ function selectImage($contentType) {
         return $imgList[$contentType];
     }
 
-    return "fa-folder-open-o";
+    return "fa-folder-open";
 }
 
 /*
@@ -435,7 +435,7 @@ function display_path_content() {
             $output .= '<b>' . $module['name'] . '</b>';
         } else { // module
             if ($module['contentType'] == CTEXERCISE_) {
-                $moduleImg = 'fa-pencil-square-o';
+                $moduleImg = 'fa-square-pen';
             } else if ($module['contentType'] == CTLINK_) {
                 $moduleImg = 'fa-link';
             } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {

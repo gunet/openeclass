@@ -145,14 +145,14 @@ if ($total_categories > 0) {
                     array(
                         'title' => $action_notify ? $langStopNotify : $langNotify,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
-                        'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
+                        'icon' => $action_notify ? 'fa-envelope-open' : 'fa-envelope',
                         'level' => 'primary',
                         'btn_class' => $action_notify ? 'submitAdminBtn' : 'submitAdminBtn',
                         'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)),
                     ),
                     array('title' => $langDelete,
                         'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'btn_class' => 'deleteAdminBtn',
                         'level' => 'primary',
@@ -275,12 +275,12 @@ if ($total_categories > 0) {
                                 array(
                                     'title' => $forum_action_notify ? $langStopNotify : $langNotify,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
-                                    'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
+                                    'icon' => $action_notify ? 'fa-envelope-open' : 'fa-envelope',
                                     'show' => $forum_active && !setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)),
                                 array(
                                     'title' => $langDelete,
                                     'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete,
                                     'show' => $is_editor))

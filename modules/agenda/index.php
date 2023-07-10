@@ -392,12 +392,14 @@ if ($is_editor) {
                                         <div class='modal-dialog modal-md'>
                                             <!-- Modal content-->
                                             <div class='modal-content'>
-                                                <div class='modal-header'>
-                                                    <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
-                                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                <div class='modal-header border-0'>
+                                                    <h2 class='mb-0'>$langAddEvent</h2> 
+                                                    <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                                        <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                                    </button>
                                                 </div>
                                                 <div class='modal-body'>
-                                                    <div class='form-wrapper form-edit rounded'>
+                                                    <div class='form-wrapper form-edit border-0 px-0'>
 
 
                                                         <input type='hidden' id = 'id' name='id' value='$id'>
@@ -411,7 +413,7 @@ if ($is_editor) {
                                                             <div class='control-label-notes'>$langStartDate</div>
                                                             <div id='fromNewDate'></div>
 
-                                                            <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
+                                                            <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
                                                             <div class='small-text'>$duration</div>
 
                                                             <div class='control-label-notes mt-2'>$langCalculateNewDuration <small>$langInHour</small></div>
@@ -481,7 +483,7 @@ if ($is_editor) {
 
                                                     </div>
                                                 </div>
-                                                <div class='modal-footer'>
+                                                <div class='modal-footer border-0'>
                                                     <div class='col-md-9 col-12 d-flex justify-content-end align-items-center'>
                                                             ".
                                                             form_buttons(array(
@@ -772,12 +774,14 @@ if ($is_editor) {
 
                             <!-- Modal content-->
                                 <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    <div class='modal-header border-0'>
+                                        <h2 class='mb-0'>$langAddEvent</h2> 
+                                        <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                            <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                        </button>
                                     </div>
                                     <div class='modal-body'>
-                                        <div class='form-wrapper form-edit rounded'>
+                                        <div class='form-wrapper form-edit border-0 px-0'>
 
                                             <input type='hidden' id='id' name='id' value='$id'>
                                             <input type='hidden' name='rep' id='rep' value='$applytogroup'>
@@ -785,7 +789,7 @@ if ($is_editor) {
                                             <div class='form-group'>
                                                 <div class='control-label-notes'>$langStartDate</div>
                                                 <div id='from'></div>
-                                                <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
+                                                <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
                                                 <div class='d-flex justify-content-start align-items-center'>
                                                     <div id='idDuration'></div>
                                                     <input style='height:15px; width:15px;' class='ms-2' type='checkbox' id='OnOffDuration' checked>
@@ -852,7 +856,7 @@ if ($is_editor) {
 
                   $tool_content .= "</div>
                             </div>
-                            <div class='modal-footer'>
+                            <div class='modal-footer border-0'>
                                 <div class='form-group d-flex justify-content-center align-items-center'>
                                     ".
                                     form_buttons(array(

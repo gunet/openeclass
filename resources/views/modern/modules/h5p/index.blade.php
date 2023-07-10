@@ -164,7 +164,7 @@
                                                             'title' => trans('langEditChange'),
                                                             'url' => "create.php?course=$course_code&amp;id=$item->id"
                                                             ],
-                                                            [ 'icon' => 'fa-times',
+                                                            [ 'icon' => 'fa-xmark',
                                                             'title' => trans('langDelete'),
                                                             'url' => "delete.php?course=$course_code&amp;id=$item->id",
                                                             'class' => 'delete',

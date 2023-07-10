@@ -570,7 +570,7 @@ if ($nbrQuestions) {
                         'icon' => 'fa-edit'),
                     array('title' => $langDelete,
                         'url' => $deleteUrl,
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $warning_message,
                         'show' => !isset($fromExercise))
@@ -580,7 +580,7 @@ if ($nbrQuestions) {
                 action_button(array(
                     array('title' => $langDelete,
                         'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$ewq_id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmYourChoice,
                         'show' => !isset($fromExercise))

@@ -77,7 +77,7 @@ if (!isset($_GET['pdf'])) {
             'level' => 'primary'),
         array('title' => $langDumpPDF,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pdf=true",
-            'icon' => 'fa-file-pdf-o',
+            'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
         array('title' => $langDumpUser,
             'url' => "dumpuserlearnpathdetailsanalysis.php?course=$course_code",

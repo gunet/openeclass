@@ -107,12 +107,12 @@ function display_certificates() {
                         'icon' => 'fa-search'),
                     array('title' => $langDeleteCourseActivities,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmDelete),
                     array('title' => $langPurge,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$data->id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmPurgeCert)
                 ))
@@ -207,12 +207,12 @@ function display_badges() {
                         'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
                     array('title' => $langDeleteCourseActivities,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmDelete),
                     array('title' => $langPurge,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmPurgeBadge)
                 ))
@@ -284,12 +284,12 @@ function display_course_completion() {
                         'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
                     array('title' => $langDeleteCourseActivities,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmDelete),
                     array('title' => $langPurge,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langConfirmPurgeCourseCompletion)
                     ))
@@ -381,7 +381,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     'show'  =>  $unit_id ? false : true),
                 array('title' => "$langExport",
                     'url' => "dumpcertificateresults.php?$link_id&amp;enc=UTF-8",
-                    'icon' => 'fa-file-excel-o',
+                    'icon' => 'fa-file-excel',
                     'level' => 'primary-label',
                     'show'  =>  $unit_id ? false : true)
 
@@ -432,7 +432,7 @@ function display_activities($element, $id, $unit_id = 0) {
             'class' => ''),
         array('title' => $langExerciseAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . ExerciseEvent::ACTIVITY,
-            'icon' => 'fa fa-pencil-square-o',
+            'icon' => 'fa fa-square-pen',
             'class' => ''),
         array('title' => $langOfBlog,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . BlogEvent::ACTIVITY,
@@ -471,7 +471,7 @@ function display_activities($element, $id, $unit_id = 0) {
               'class' => ''),*/
         array('title' => $langDocumentAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=document",
-            'icon' => 'fa fa-folder-open-o fa-fw',
+            'icon' => 'fa fa-folder-open fa-fw',
             'class' => ''),
         array('title' => $langMediaAsModuleLabel,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=multimedia",
@@ -487,7 +487,7 @@ function display_activities($element, $id, $unit_id = 0) {
             'class' => ''),
         array('title' => $langWiki,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . WikiEvent::ACTIVITY,
-            'icon' => 'fa fa-wikipedia-w fa-fw',
+            'icon' => 'fa fa-won-sign fa-fw',
             'class' => ''),
         array('title' => $langCourseParticipation,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=participation",
@@ -566,7 +566,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                             'show' => in_array($details->activity_type, criteria_with_operators())
                                                                         ),
                                                                         array('title' => $langDelete,
-                                                                            'icon' => 'fa-times',
+                                                                            'icon' => 'fa-xmark',
                                                                             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                                                                             'confirm' => $langConfirmDelete,
                                                                             'class' => 'delete'))).
@@ -640,7 +640,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                                 'show' => in_array($details->activity_type, criteria_with_operators())
                                                                                             ),
                                                                                             array('title' => $langDelete,
-                                                                                                'icon' => 'fa-times',
+                                                                                                'icon' => 'fa-xmark',
                                                                                                 'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
                                                                                                 'confirm' => $langConfirmDelete,
                                                                                                 'class' => 'delete'))).
@@ -699,7 +699,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                         $delPrereqBtn = action_button(array(
                                         array('title' => $langDelete,
                                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&del_un_prereq=1&unit_id=$unit_id",
-                                            'icon' => 'fa-times',
+                                            'icon' => 'fa-xmark',
                                             'class' => 'delete',
                                             'confirm' => $langConfirmDelete)));
 

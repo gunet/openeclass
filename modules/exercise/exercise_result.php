@@ -232,7 +232,7 @@ if (!isset($_GET['pdf'])) {
             [
                 'title' => $langDumpPDF,
                 'url' => "../units/view.php?course=$course_code&res_type=exercise_results&eurId=$eurid&unit=$_REQUEST[unit]&pdf=true",
-                'icon' => 'fa-file-pdf-o',
+                'icon' => 'fa-file-pdf',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ]
@@ -249,7 +249,7 @@ if (!isset($_GET['pdf'])) {
             [
                 'title' => $langDumpPDF,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&eurId=$eurid&pdf=true",
-                'icon' => 'fa-file-pdf-o',
+                'icon' => 'fa-file-pdf',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ]
@@ -485,11 +485,11 @@ if (count($exercise_question_ids) > 0) {
                             elseif ($choice[$j] !== '') {
                                  // adds the word in red at the end of the string, and strikes it
                                     $answer .= '<span class="text-danger"><s>' . q($choice[$j]) . '</s></span>';
-                                    $icon = "<span class='fa fa-times text-danger'></span>";
+                                    $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
                             } else {
                                 // adds a tabulation if no word has been typed by the student
                                 $answer .= '&nbsp;&nbsp;&nbsp;';
-                                $icon = "<span class='fa fa-times text-danger'></span>";
+                                $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
                             }
                                 // adds the correct word, followed by ] to close the blank
                             $answer .= ' / <span class="text-success"><strong>' .
@@ -557,7 +557,7 @@ if (count($exercise_question_ids) > 0) {
                                     $answer_choice =  "&nbsp;&mdash;";
                                 }
                                 $answer .= $answer_choice;
-                                $icon = "<span class='fa fa-times text-danger'></span>";
+                                $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
                             }
                             // adds the correct word, followed by ] to close the blank
                             $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j]]) . '</strong></span>';
@@ -577,12 +577,12 @@ if (count($exercise_question_ids) > 0) {
                                 $pdf_icon = "✓";
                             } elseif (!$thisChoice) {
                                 $choice[$answerId] = '<del class="text-danger">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</del>';
-                                $icon = "<span class='fa fa-times text-danger'></span>";
+                                $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
                                 $pdf_icon = "✓";
                             } else {
                                 $choice[$answerId] = "<span class='text-danger'><del>" .
                                     q($matching[$choice[$answerId]]) . "</del></span>";
-                                $icon = "<span class='fa fa-times text-danger'></span>";
+                                $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
                                 $pdf_icon = "✓";
                             }
                         } else {
@@ -617,16 +617,16 @@ if (count($exercise_question_ids) > 0) {
                         $tool_content .= "<tr><td width='100' class='text-center'>";
                         $answer_icon  = '';
                         if ($studentChoice) {
-                            $student_choice_icon = "fa fa-fw fa-check-square-o help-block";
+                            $student_choice_icon = "fa fa-fw fa-square-check help-block";
                             $pdf_student_choice_icon = "<input type='checkbox' checked='checked'>";
                             $style = '';
                             if ($answerCorrect) {
                                 $answer_icon = "fa fa-check text-success";
                             } else {
-                                $answer_icon = "fa fa-times text-danger";
+                                $answer_icon = "fa-solid fa-xmark text-danger";
                             }
                         } else {
-                            $student_choice_icon = "fa fa-fw fa-square-o help-block";
+                            $student_choice_icon = "fa fa-fw fa-square help-block";
                             $pdf_student_choice_icon = "<input type='checkbox'>";
                             $style = "visibility: hidden;";
                         }

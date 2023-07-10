@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
                               'level' => 'primary' ],
                             [ 'title' => $langDefaultModules,
                               'url' => $urlAppend . 'modules/admin/modules_default.php',
-                              'icon' => 'fa-check-square-o',
+                              'icon' => 'fa-square-check',
                               'level' => 'primary-label' ]
                             
                         ], false);

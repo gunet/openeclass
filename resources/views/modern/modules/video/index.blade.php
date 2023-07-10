@@ -146,9 +146,9 @@
                                         <?php
                                             $description = standard_text_escape($myrow->description);
                                             if ((isset($_GET['d']) and $_GET['d'] == 1) or ( isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
-                                                $folder_icon = icon('fa-folder-open-o', $GLOBALS['langViewHide']);
+                                                $folder_icon = icon('fa-folder-open', $GLOBALS['langViewHide']);
                                             } else {
-                                                $folder_icon = icon('fa-folder-o', $GLOBALS['langViewShow']);
+                                                $folder_icon = icon('fa-folder', $GLOBALS['langViewShow']);
                                             }
                                         ?>
                                         <tr class='link-subcategory-title'>
@@ -171,7 +171,7 @@
                                                             'icon' => 'fa-edit',
                                                             'url' => $urlAppend . "modules/video/editCategory.php?course=" . $course_code . "&amp;id=" . $myrow->id),
                                                         array('title' => $GLOBALS['langDelete'],
-                                                            'icon' => 'fa-times',
+                                                            'icon' => 'fa-xmark',
                                                             'class' => 'delete',
                                                             'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;id=" . $myrow->id . "&amp;delete=delcat",
                                                             'confirm' => $GLOBALS['langCatDel'])))

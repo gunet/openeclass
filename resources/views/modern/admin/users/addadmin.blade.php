@@ -178,7 +178,7 @@
                                                         'title' => trans('langDelete'),
                                                         'url' => "$_SERVER[SCRIPT_NAME]?delete=" . getIndirectReference($admin->user_id),
                                                         'class' => 'delete',
-                                                        'icon' => 'fa-times'
+                                                        'icon' => 'fa-xmark'
                                                     ]
                                                 ]) !!}
                                         @endif

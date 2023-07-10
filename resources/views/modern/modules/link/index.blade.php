@@ -157,7 +157,7 @@
                                             $newurlview[$key] = '0';
                                         ?>
                                         <tr class='link-subcategory-title'>
-                                            <th class = 'text-start category-link'> {!! icon('fa-folder-open-o', trans('langViewHide')) !!}
+                                            <th class = 'text-start category-link'> {!! icon('fa-folder-open', trans('langViewHide')) !!}
                                                 <a style='padding-left:15px;' href='index.php?course={{ $course_code }}&amp;urlview={{ $newurlview.$tinymce_params.$socialview_param }}' class='open-category'>
                                                     {{ $category->name }}
                                                 </a>
@@ -183,7 +183,7 @@
                                                             'disabled' => $key == count($categories)- 1,
                                                             'url' => "index.php?course=$course_code&amp;urlview=$urlview&amp;cdown=" . getIndirectReference($category->id)),
                                                         array('title' => trans('langDelete'),
-                                                                'icon' => 'fa-times',
+                                                                'icon' => 'fa-xmark',
                                                                 'url' => "index.php?course=$course_code&amp;id=" . getIndirectReference($category->id) . "&amp;urlview=$urlview&amp;action=deletecategory",
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langCatDel'))
@@ -230,7 +230,7 @@
                                                             'disabled' => $key == count($categories)- 1,
                                                             'url' => "index.php?course=$course_code&amp;urlview=$urlview&amp;cdown=" . getIndirectReference($category->id)),
                                                         array('title' => trans('langDelete'),
-                                                                'icon' => 'fa-times',
+                                                                'icon' => 'fa-xmark',
                                                                 'url' => "index.php?course=$course_code&amp;id=" . getIndirectReference($category->id) . "&amp;urlview=$urlview&amp;action=deletecategory",
                                                                 'class' => 'delete',
                                                                 'confirm' => trans('langCatDel'))

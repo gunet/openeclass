@@ -20,23 +20,21 @@
 
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
-    {{--<link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">--}}
-   
-    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet">
+    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
 
     
     <!-- Font Manrope -->
-    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet">
+    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
 
     <!-- fullcalendar v3.10.2-->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
 
     <!-- DataTables 1.10.19 version -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>
 
     <!-- Owl-carousel -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css"/>
 
     <!-- Our css modern if we need it -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
@@ -45,10 +43,10 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
 
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache"/>
 
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)

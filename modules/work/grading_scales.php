@@ -83,7 +83,7 @@ if (isset($_GET['scale_id'])) {
                     '<input type=\'number\' name=\'scale_item_value[' + rowCount +']\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                     '</td>'+
                     '<td class=\'text-center\'>'+
-                    '<a href=\'#\' class=\'removeScale\'><span class=\'fa fa-times\' style=\'color:red\'></span></a>'+
+                    '<a href=\'#\' class=\'removeScale\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                     '</td>'+
                     '</tr>'
                 );
@@ -123,7 +123,7 @@ if (isset($_GET['scale_id'])) {
                         </td>";
             if (!$scale_used) {
                     $scale_rows .= "<td class='text-center'>
-                                    <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
+                                    <a href='#' class='removeScale'><span class='fa-solid fa-xmark' style='color:red'></span></a>
                                 </td>";
             }
             $scale_rows .= "</tr>";
@@ -262,7 +262,7 @@ if (isset($_GET['scale_id'])) {
                                     array(
                                         'title' => $langDelete,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$grading_scale->id",
-                                        'icon' => 'fa-times',
+                                        'icon' => 'fa-xmark',
                                         'show' => !is_scale_used_in_assignment($grading_scale->id, $course_id),
                                         'class' => 'delete',
                                         'confirm' => $langConfirmDelete)

@@ -80,7 +80,7 @@ function display_attendances() {
                                           'icon' => 'fa-copy'),
                                     array('title' => $langDelete,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_at=$a->id",
-                                          'icon' => 'fa-times',
+                                          'icon' => 'fa-xmark',
                                           'class' => 'delete',
                                           'confirm' => $langConfirmDelete))
                                         );
@@ -257,7 +257,7 @@ function display_attendance_activities($attendance_id) {
                       'icon' => 'fa-cog'),
                 array('title' => "$langExport",
                         'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
-                    'icon' => 'fa-file-excel-o')
+                    'icon' => 'fa-file-excel')
             ),
             true
         );
@@ -323,7 +323,7 @@ function display_attendance_activities($attendance_id) {
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;modify=" . getIndirectReference($details->id)
                                     ),
                                 array('title' => $langDelete,
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;attendance_id=$attendance_id&amp;delete=" .getIndirectReference($details->id),
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).
@@ -962,7 +962,7 @@ function display_all_users_presences($attendance_id) {
                             'icon' => 'fa-plus',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $resultUser->userID),
                        array('title' => $langAttendanceDelete,
-                            'icon' => 'fa-times',
+                            'icon' => 'fa-xmark',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;at=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
                             'confirm' => $langConfirmDelete,
                             'class' => 'delete')))."</td>

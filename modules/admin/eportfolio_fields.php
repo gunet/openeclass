@@ -479,7 +479,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 ),
                 array('title' => $langDelete,
                         'url' => "$_SERVER[SCRIPT_NAME]?del_cat=" . getIndirectReference($res->id),
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langEPFConfirmCatDelete
                 )
@@ -516,7 +516,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         ),
                         array('title' => $langDelete,
                               'url' => "$_SERVER[SCRIPT_NAME]?del_field=" . getIndirectReference($f->id),
-                              'icon' => 'fa-times',
+                              'icon' => 'fa-xmark',
                               'class' => 'delete',
                               'confirm' => $langEPFConfirmFieldDelete
                         )

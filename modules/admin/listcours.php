@@ -178,7 +178,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             ),
             array(
                 'title' => $langDelete,
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'url' => "delcours.php?c=$logs->id"
             ),
             array(

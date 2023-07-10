@@ -75,7 +75,7 @@
                                                         ],
                                                         [
                                                             'title' => trans('langDelete'),
-                                                            'icon' => 'fa-times',
+                                                            'icon' => 'fa-xmark',
                                                             'url' => "autoenroll.php?delete=" . getIndirectReference($rule['id']),
                                                             'confirm' => trans('langSureToDelRule'),
                                                             'btn-class' => 'delete_btn btn-default'

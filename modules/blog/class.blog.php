@@ -286,15 +286,15 @@ Class Blog {
                     $out_p = "";
                     foreach ($monthard as $id => $title) {
                         $count_id += 1;
-                        $out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
+                        $out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-line\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
                     }
-                    $out_m .= "<li data-jstree='{\"icon\":\"fa fa-folder-o\"".(($month == $tree_month && $year == $tree_year)? ",\"opened\":true,\"selected\":true" :"")."}'>$m ($count_id)
+                    $out_m .= "<li data-jstree='{\"icon\":\"fa fa-folder-open\"".(($month == $tree_month && $year == $tree_year)? ",\"opened\":true,\"selected\":true" :"")."}'>$m ($count_id)
                                     <ul>
                                         $out_p
                                     </ul>
                                </li>";
                 }
-                $out .= "<li data-jstree='{\"icon\":\"fa fa-folder-o\"".(($year == $tree_year)? ",\"opened\":true" :"")."}'>$year ($count_month)
+                $out .= "<li data-jstree='{\"icon\":\"fa fa-folder-open\"".(($year == $tree_year)? ",\"opened\":true" :"")."}'>$year ($count_month)
                               <ul>
                                 $out_m
                               </ul>

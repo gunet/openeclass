@@ -96,7 +96,7 @@
                                                             'icon' => 'fa-edit'),
                                                         array('title' => trans('langCategoryDel'),
                                                             'url' => "$cat_url&amp;delete=" . getIndirectReference($category->id),
-                                                            'icon' => 'fa-times',
+                                                            'icon' => 'fa-xmark',
                                                             'class' => 'delete',
                                                             'confirm' => trans('langConfirmDelete')
                                                             )

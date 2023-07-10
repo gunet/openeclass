@@ -516,7 +516,7 @@ $tool_content .= action_bar(array(
     array(
         'title' => $langWikiMainPage,
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=show&amp;title=__MainPage__",
-        'icon' => 'fa-wikipedia-w',
+        'icon' => 'fa-won-sign',
         'level' => 'primary-label'
     ),
     array(
@@ -991,7 +991,7 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                                         'title' => $langWikiDeletePage,
                                                         'class' => 'delete',
                                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
-                                                        'icon' => 'fa-times',
+                                                        'icon' => 'fa-xmark',
                                                         'confirm' => $langWikiDeletePageWarning,
                                                         'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
                                                     )

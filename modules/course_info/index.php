@@ -252,7 +252,7 @@ if (isset($_POST['submit'])) {
             'icon' => 'fa-file-text'],
         ['title' => $langDelCourse,
             'url' => "delete_course.php?course=$course_code",
-            'icon' => 'fa-times',
+            'icon' => 'fa-xmark',
             'button-class' => 'btn-danger']
     ]);
 

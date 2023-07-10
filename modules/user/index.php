@@ -155,29 +155,29 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'title' => $langUnregCourse,
               'level' => 'primary',
               'url' => '#',
-              'icon' => 'fa-times',
+              'icon' => 'fa-xmark',
               'btn_class' => 'delete_btn deleteAdminBtn'
             ),
             array(
                 'title' => $langGiveRightTutor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
+                'icon' => $myrow->tutor == '0' ? "fa-square" : "fa-square-check"
             ),
             array(
                 'title' => $langGiveRightEditor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
+                'icon' => $myrow->editor == '0' ? "fa-square" : "fa-square-check"
             ),
             array(
                 'title' => $langGiveRightAdmin,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
-                'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
+                'icon' => $myrow->status != '1' ? "fa-square" : "fa-square-check",
                 'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
             ),
             array(
                 'title' => $langGiveRightReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
-                'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
+                'icon' => $myrow->reviewer != '1' ? "fa-square" : "fa-square-check",
                 'disabled' => $myrow->id == $_SESSION["uid"],
                 'show' => get_config('opencourses_enable') &&
                             (
@@ -347,10 +347,10 @@ $data['action_bar'] = action_bar([
       'icon' => 'fa-users'],
     ['title' => $langDumpUser,
       'url' => "dumpuser.php?course=$course_code",
-      'icon' => 'fa-file-archive-o'],
+      'icon' => 'fa-file-zipper'],
     ['title' => $langDelUsers,
       'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",
-      'icon' => 'fa-times',
+      'icon' => 'fa-xmark',
       'button-class' => 'btn-danger']
 ]);
 

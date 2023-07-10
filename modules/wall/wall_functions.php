@@ -178,7 +178,7 @@ function generate_single_post_html($post) {
                       </script>';
         $post_actions = '<div class="action-btns float-end mt-2">';
         $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
-                          <span class="fa fa-fw fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                          <span class="fa-solid fa-xmark fa-fw text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
         if ($is_editor) { //add link for pin post
             $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
             if ($pinned == 0) {
@@ -303,7 +303,7 @@ function generate_infinite_container_html($posts, $next_page) {
         if (allow_to_edit($id, $uid, $is_editor)) {
             $post_actions = '<div class="action-btns float-end mt-2">';
             $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
-                              <span class="fa fa-fw fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                              <span class="fa fa-fw fa-xmark text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
             if ($is_editor) { //add link for pin post
                 $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
                 if ($pinned == 0) {
@@ -564,7 +564,7 @@ function show_document($title, $resource_id, $doc_id) {
         if (!$is_editor) {
             return '';
         }
-        $image = 'fa-times';
+        $image = 'fa-xmark';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         $file->title = $title;
@@ -607,7 +607,7 @@ function show_video($table, $title, $resource_id, $video_id) {
             return '';
         }
         $videolink = q($title);
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
     }
 
     return "<tr><td width='1'>".icon($imagelink)."</td><td>$videolink</td></tr>";
@@ -630,7 +630,7 @@ function show_link($title, $resource_id, $link_id) {
             return '';
         }
         $linktitle = q($title);
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
         $visibility = 0;
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
@@ -656,13 +656,13 @@ function show_exercise($title, $resource_id, $exercise_id) {
             $link = "<a href='{$urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id'>";
         }
         $exlink = $link.q($title)."</a>";
-        $imagelink = 'fa-pencil-square-o';
+        $imagelink = 'fa-square-pen';
     } else {
         if (!$is_editor) {
             return '';
         }
         $exlink = q($title);
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
         $visibility = 0;
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
@@ -682,7 +682,7 @@ function show_assignment($title, $resource_id, $assignment_id) {
             return '';
         }
         $exlink = q($title);
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
         $visibility = 0;
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
@@ -702,7 +702,7 @@ function show_chat($title, $resource_id, $chat_id) {
             return '';
         }
         $chatlink = q($title);
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
         $visibility = 0;
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
@@ -722,7 +722,7 @@ function show_poll($title, $resource_id, $poll_id) {
             return '';
         }
         $polllink = q($title);
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
         $visibility = 0;
     }
     $class_vis = ($visibility === 0) ? ' class="not_visible"' : ' ';
@@ -750,7 +750,7 @@ function show_forum($type, $title, $resource_id, $ft_id) {
                 return '';
             }
             $forumlink = q($title);
-            $imagelink = "fa-times";
+            $imagelink = "fa-xmark";
             $visibility = 0;
         }
     }

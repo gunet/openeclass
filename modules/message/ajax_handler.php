@@ -135,7 +135,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($msg->is_read == 1) {
             $bold_start = "";
             $bold_end = "";
-            $envelove_icon = "fa-envelope-o";
+            $envelove_icon = "fa-envelope-open";
         } else {
             $bold_start = "<strong>";
             $bold_end = "</strong>";
@@ -162,7 +162,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($mbox_type == 'inbox') {
             $td[$i++] = "<i class='fa $envelove_icon' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$bold_end.$filename;
         } else {
-            $td[$i++] = "<i class='fa fa-envelope-o' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
+            $td[$i++] = "<i class='fa fa-envelope-open' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
         }
 
         if ($course_id == 0) {
@@ -199,7 +199,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //                )
 //            );
         $btn_class = ($mbox_type == 'inbox')? 'delete_in' : 'delete_out';
-        $td[$i++] = "<a href='javascript:void(0)' class='$btn_class' data-id='$msg->id'><span class='fa fa-times text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
+        $td[$i++] = "<a href='javascript:void(0)' class='$btn_class' data-id='$msg->id'><span class='fa-solid fa-xmark text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
 
         if ($course_id == 0) {
             $data['aaData'][] = array(

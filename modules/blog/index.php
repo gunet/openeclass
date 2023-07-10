@@ -717,7 +717,7 @@ if ($action == "showPost") {
                                                     array(
                                                         'title' => $langDelete,
                                                         'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
-                                                        'icon' => 'fa-times',
+                                                        'icon' => 'fa-xmark',
                                                         'class' => 'delete',
                                                         'confirm' => $langSureToDelBlogPost,
                                                         'show' => $allow_to_edit
@@ -862,7 +862,7 @@ if ($action == "showBlog") {
                                                 array(
                                                     'title' => $langDelete,
                                                     'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
-                                                    'icon' => 'fa-times',
+                                                    'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => $langSureToDelBlogPost,
                                                     'show' => $allow_to_edit

@@ -178,7 +178,7 @@ $tool_content .= "
 foreach ($allUsers as $user_id) {
     $ok = in_array($user_id, $okUsers);
     $key = $ok? 'yes': 'no';
-    $participation_icon = icon($ok? 'fa-check-square-o': 'fa-square-o');
+    $participation_icon = icon($ok? 'fa-square-check': 'fa-square');
     if (isset($timestamp[$user_id])) {
         $ts = format_locale_date(strtotime($timestamp[$user_id]), 'short');
         $data_ts = " data-sort='{$timestamp[$user_id]}'";
@@ -197,7 +197,7 @@ foreach ($allUsers as $user_id) {
 }
 
 foreach ($emailUsers as $mail) {
-    $participation_icon = icon('fa-check-square-o');
+    $participation_icon = icon('fa-square-check');
     $ts = format_locale_date(strtotime($timestamp[$email]), 'short');
     $data_ts = " data-sort='{$timestamp[$email]}'";
     $tool_content .= "

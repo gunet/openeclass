@@ -265,7 +265,7 @@ function tools($id, $vis) {
                           'icon' => $vis ? 'fa-eye-slash' : 'fa-eye'),
                     array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
-                          'icon' => 'fa-times',
+                          'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'confirm' => $langEBookDelConfirm)
         ));

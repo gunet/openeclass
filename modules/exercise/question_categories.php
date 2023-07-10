@@ -157,7 +157,7 @@ if (isset($_POST['submitCat'])) {
                 array(
                     'title' => $langDelete,
                     'url' => "question_categories.php?course=$course_code&deleteCat=$q_cat->question_cat_id",
-                    'icon' => 'fa-times',
+                    'icon' => 'fa-xmark',
                     'confirm' => $langQuestionCatDelConfirrm,
                     'class' => 'delete'
                 )

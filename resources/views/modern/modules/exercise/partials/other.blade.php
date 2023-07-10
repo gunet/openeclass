@@ -50,12 +50,12 @@
                                 <tr>
                                     <td>
                                         <div align='center'>
-                                            {!! in_array($key, $question->user_choice) ? icon('fa-check-square-o') : icon('fa-square-o') !!}
+                                            {!! in_array($key, $question->user_choice) ? icon('fa-square-check') : icon('fa-square') !!}
                                         </div>
                                     </td>
                                     <td>
                                         <div align='center'>
-                                            {!! $question->answers->isCorrect($key) ? icon('fa-check-square-o') : icon('fa-square-o') !!}
+                                            {!! $question->answers->isCorrect($key) ? icon('fa-square-check') : icon('fa-square') !!}
                                         </div>
                                     </td>
                                     <td>{!! standard_text_escape($answer) !!}</td>

@@ -664,10 +664,10 @@ function get_unit_resource_icon($type, $res_id) {
             $icon = 'fa-link';
             break;
         case 'exercise':
-            $icon = 'fa-pencil-square-o';
+            $icon = 'fa-square-pen';
             break;
         case 'wiki':
-            $icon = 'fa-wikipedia-w';
+            $icon = 'fa-won-sign';
             break;
         case 'glossary':
             $icon = 'fa-list';

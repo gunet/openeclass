@@ -415,13 +415,13 @@ switch ($action) {
                                           'icon' => $vis_icon),
                                     array('title' => $langWikiRecentChanges,
                                           'url' => "page.php?course=$course_code&amp;wikiId=$entry->id&amp;action=recent",
-                                          'icon' => "fa-clock-o"),
+                                          'icon' => "fa-clock"),
                                     array('title' => $langWikiExport,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport",
                                           'icon' => "fa-download"),
                                     array('title' => $langDelete,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete",
-                                          'icon' => 'fa-times',
+                                          'icon' => 'fa-xmark',
                                           'class' => 'delete',
                                           'confirm' => $langWikiDeleteWiki)
                                 ));

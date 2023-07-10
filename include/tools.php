@@ -281,7 +281,7 @@ function loggedInMenu($rich=true) {
         array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge float-end'>$new_msgs</span></b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/message/index.php");
-    array_push($sideMenuImg, "fa-envelope-o");
+    array_push($sideMenuImg, "fa-envelope-open");
 
     array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
     array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
@@ -383,7 +383,7 @@ function loggedOutMenu() {
     if (get_config('user_registration') and get_config('registration_link') != 'hide') {
         array_push($sideMenuText, $GLOBALS['langRegister']);
         array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
-        array_push($sideMenuImg, "fa-pencil-square-o");
+        array_push($sideMenuImg, "fa-square-pen");
     }
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
@@ -908,7 +908,7 @@ function pickerMenu() {
     if (get_config('enable_common_docs')) {
         array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
         array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php' . $params));
-        array_push($sideMenuImg, 'fa-folder-open-o');
+        array_push($sideMenuImg, 'fa-folder-open');
     }
 
     // link for my documents
@@ -916,7 +916,7 @@ function pickerMenu() {
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
         array_push($sideMenuText, q($GLOBALS['langMyDocs']));
         array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php' . $params));
-        array_push($sideMenuImg, 'fa-folder-open-o');
+        array_push($sideMenuImg, 'fa-folder-open');
     }
 
     // link for group documents
@@ -941,7 +941,7 @@ function pickerMenu() {
                 // display extra menu entry for group documents
                 array_push($sideMenuText, q($GLOBALS['langGroupDocumentsLink'] . "'" . $result->name . "'"));
                 array_push($sideMenuLink, q($urlServer . 'modules/group/document.php' . $params . "&group_id=" . q($result->id)));
-                array_push($sideMenuImg, 'fa-folder-open-o');
+                array_push($sideMenuImg, 'fa-folder-open');
             }
         }
     }

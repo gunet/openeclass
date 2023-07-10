@@ -483,7 +483,7 @@ if (!$nbrExercises) {
                           'confirm' => $langConfirmPurgeExerciseResults),
                     array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
-                          'icon' => 'fa-times',
+                          'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'confirm' => $langConfirmPurgeExercise)
                     ))."</td></tr>";
@@ -529,7 +529,7 @@ if (!$nbrExercises) {
                 $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
             }
             if (has_user_participate_in_exercise($row->id)) {
-                $tool_content .= "&nbsp; <span class='fa fa-check-square-o' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
+                $tool_content .= "&nbsp; <span class='fa fa-square-check' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-title='$langHasParticipated'></span>";
             }
 
             $tool_content .= $row->description . "</td>";

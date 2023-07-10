@@ -311,7 +311,7 @@ function lti_provider_details() {
                             'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
                         array('title' => $langDelete,
                             'url' => "editpublish.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                            'icon' => 'fa-times',
+                            'icon' => 'fa-xmark',
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete)
                     )) .

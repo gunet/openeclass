@@ -195,7 +195,7 @@ if (isset($_GET['group_as'])) {
                         'show' => $documents),
                     array('title' => $langWiki,
                         'url' => "../wiki/index.php?course=$course_code&amp;gid=$group_id",
-                        'icon' => 'fa-wikipedia-w',
+                        'icon' => 'fa-won-sign',
                         'level' => 'primary',
                         'show' => $wiki),
                     array('title' => $langGroupAssignments,
@@ -213,7 +213,7 @@ if (isset($_GET['group_as'])) {
                         'show' => $is_editor),
                     array('title' => $langDumpUser,
                         'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id",
-                        'icon' => 'fa-file-archive-o',
+                        'icon' => 'fa-file-zipper',
                         'show' => $is_editor)
                     ));
 
@@ -291,7 +291,7 @@ if (isset($_GET['group_as'])) {
                                 if($is_editor){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='group_edit.php?course=$course_code&group_id=$group_id&from=group'>
-                                                            <span class='fa fa-edit pt-1 pe-1'></span>$langModify
+                                                            <span class='fa fa-edit pt-0 pe-1'></span>$langModify
                                                         </a>
                                                       </li>";
                                 }
@@ -299,7 +299,7 @@ if (isset($_GET['group_as'])) {
                                 if($has_forum and $forum_id <> 0){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>
-                                                            <span class='fa fa-comments pt-1 pe-1'></span>$langForums
+                                                            <span class='fa fa-comments pt-0 pe-1'></span>$langForums
                                                         </a>
                                                       </li>";
                                 }
@@ -307,7 +307,7 @@ if (isset($_GET['group_as'])) {
                                 if($documents){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='document.php?course=$course_code&amp;group_id=$group_id'>
-                                                            <span class='fa fa-folder-open pt-1 pe-1'></span>$langGroupDocumentsLink
+                                                            <span class='fa fa-folder-open pt-0 pe-1'></span>$langGroupDocumentsLink
                                                         </a>
                                                       </li>";
                                 }
@@ -315,7 +315,7 @@ if (isset($_GET['group_as'])) {
                                 if($wiki){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../wiki/index.php?course=$course_code&amp;gid=$group_id'>
-                                                            <span class='fa fa-wikipedia-w pt-1 pe-1'></span>$langWiki
+                                                            <span class='fa-solid fa-won-sign pt-0 pe-1'></span>$langWiki
                                                         </a>
                                                       </li>";
                                 }
@@ -323,7 +323,7 @@ if (isset($_GET['group_as'])) {
                                 if(visible_module(MODULE_ID_ASSIGN)){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1'>
-                                                            <span class='fa fa-globe pt-1 pe-1'></span>$langGroupAssignments
+                                                            <span class='fa fa-globe pt-0 pe-1'></span>$langGroupAssignments
                                                         </a>
                                                     </li>";
                                 }
@@ -332,7 +332,7 @@ if (isset($_GET['group_as'])) {
                                 if($is_editor or $is_tutor or $student_to_student_allow){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id'>
-                                                            <span class='fa fa-envelope pt-1 pe-1'></span>$langEmailGroup
+                                                            <span class='fa fa-envelope pt-0 pe-1'></span>$langEmailGroup
                                                         </a>
                                                     </li>";
                                 }
@@ -340,7 +340,7 @@ if (isset($_GET['group_as'])) {
                                 if($is_editor){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='muladduser.php?course=$course_code&amp;group_id=$group_id'>
-                                                            <span class='fa fa-plus-circle pt-1 pe-1'></span>$langAddManyUsers
+                                                            <span class='fa fa-plus-circle pt-0 pe-1'></span>$langAddManyUsers
                                                         </a>
                                                     </li>";
                                 }
@@ -348,7 +348,7 @@ if (isset($_GET['group_as'])) {
                                 if($is_editor){
                                     $tool_content .= "<li class='mb-2'>
                                                         <a class='d-flex justify-content-start align-items-start' href='dumpgroup.php?course=$course_code&amp;group_id=$group_id'>
-                                                            <span class='fa fa-file-archive-o pt-1 pe-1'></span>$langDumpExcel
+                                                            <span class='fa-solid fa-file-zipper pt-0 pe-1'></span>$langDumpExcel
                                                         </a>
                                                     </li>";
                                 }

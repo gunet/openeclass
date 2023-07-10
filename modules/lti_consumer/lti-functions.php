@@ -415,7 +415,7 @@ function lti_app_details() {
                                     'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
                             array(  'title' => $langDelete,
                                     'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete)
                             )) .

@@ -270,7 +270,7 @@ foreach ($flatElementList as $module) {
     //-- if user can access module
     elseif (!$is_blocked) {
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = 'fa-pencil-square-o';
+            $moduleImg = 'fa-square-pen';
         } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
@@ -302,7 +302,7 @@ foreach ($flatElementList as $module) {
             }
     } else { //-- user is blocked by previous module, don't display link
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = 'fa-pencil-square-o';
+            $moduleImg = 'fa-square-pen';
         } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {

@@ -603,7 +603,7 @@ function display_all_users_grades($gradebook_id) {
                                 'icon' => 'fa-plus',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=$resultUser->userID"),
                         array('title' => $langGradebookDelete,
-                                'icon' => 'fa-times',
+                                'icon' => 'fa-xmark',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=" . getIndirectReference($gradebook_id) . "&amp;ruid=" . getIndirectReference($resultUser->userID) . "&amp;deleteuser=yes",
                                 'class' => 'delete',
                                 'confirm' => $langConfirmDelete)))
@@ -784,13 +784,13 @@ function display_gradebook($gradebook) {
                   'icon' => 'fa-refresh'),
             array('title' => $langExportGradebook,
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=1&amp;gradebook_id=$gradebook_id",
-                  'icon' => 'fa-file-excel-o'),
+                  'icon' => 'fa-file-excel'),
             array('title' => $langExportGradebookWithUsers,
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
-                  'icon' => 'fa-file-excel-o'),
+                  'icon' => 'fa-file-excel'),
             array('title' => "$langExport ($langcsvenc2)",
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;enc=UTF-8",
-                  'icon' => 'fa-file-excel-o')
+                  'icon' => 'fa-file-excel')
             
             ),
             true
@@ -915,7 +915,7 @@ function display_gradebook($gradebook) {
                                 'url' => "refreshgrades.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;activity=$activity_id",
                                 'show' => (!empty($preview_link))),
                             array('title' => $langDelete,
-                                'icon' => 'fa-times',
+                                'icon' => 'fa-xmark',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;delete=" . $activity_id,
                                 'confirm' => $langConfirmDelete,
                                 'class' => 'delete')
@@ -990,7 +990,7 @@ function display_gradebooks() {
                                           'icon' => 'fa-copy'),
                                     array('title' => $langDelete,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=" . getIndirectReference($g->id),
-                                          'icon' => 'fa-times',
+                                          'icon' => 'fa-xmark',
                                           'class' => 'delete',
                                           'confirm' => $langConfirmDelete))
                                         );

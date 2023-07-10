@@ -205,7 +205,7 @@ if (isset($_GET['stats_submit'])) {
             <td class='text-center'>". action_button(array(
                         array('title' => $langDumpUser,
                             'url' => "dump_faculty_stats.php?c=$data->id&amp;user_date_start=$u_date_start&amp;user_date_end=$u_date_end",
-                            'icon' => 'fa-file-excel-o')),
+                            'icon' => 'fa-file-excel')),
                         array('secondary_icon' => 'fa-download'))  ."
                             </td></tr>";
         }

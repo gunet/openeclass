@@ -37,7 +37,7 @@
                     <div class="input-group input-group-search rounded-0">
                         <span class="input-group-text rounded-0 bg-white border-0" id="basic-inputSearch">
                             <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-white border-0 p-0 rounded-0" type="submit" name="quickSearch">
-                                <i class="fa-solid fa-magnifying-glass Neutral-700-cl"></i>
+                                <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
                         </span>
                         <input id="search_terms" type="text" class="inputSearch inputSearchbtn form-control rounded-0" placeholder='Search...' name="search_terms" aria-describedby="basic-inputSearch"/>

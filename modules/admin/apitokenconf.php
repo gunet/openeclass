@@ -122,11 +122,11 @@ if (count($q) > 0) {
             $class = '';
         } else if ($data->expired < date('Y-m-d H:i:s')) {
             $expired_message = "<span class='text-danger'>($langHasExpiredS)</span>";
-            $icon = "<span class='fa fa-times' title='$langTypeInactive'></span>";
+            $icon = "<span class='fa-solid fa-xmark' title='$langTypeInactive'></span>";
             $class = 'not_visible';
         } else {
             $expired_message = '';
-            $icon = "<span class='fa fa-times' title='$langTypeInactive'></span>";
+            $icon = "<span class='fa-solid fa-xmark' title='$langTypeInactive'></span>";
             $class = 'not_visible';
         }
         $tool_content .= "<tr class='$class'>";
@@ -139,7 +139,7 @@ if (count($q) > 0) {
                     'icon' => 'fa-edit'),
                 array('title' => $langDelete,
                     'url' => "$_SERVER[SCRIPT_NAME]?delete=$data->id",
-                    'icon' => 'fa-times',
+                    'icon' => 'fa-xmark',
                     'class' => 'delete',
                     'confirm' => $langConfirmDelete))) . "</td>";
         $tool_content .= "</tr>";

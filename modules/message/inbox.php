@@ -69,7 +69,7 @@ if (isset($_GET['mid'])) {
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
                                   'url' => 'javascript:void(0)',
-                                  'icon' => 'fa-times',
+                                  'icon' => 'fa-xmark',
                                   'class' => 'delete_in_inner',
                                   'link-attrs' => "data-id='$msg->id'")
                         ));
@@ -369,7 +369,7 @@ if (isset($_GET['mid'])) {
                             </p>
                         </div>
                         <div class='col-sm-2'>
-                            <button class='float-end btn cancelAdminBtn attachment-delete-button'><span class='fa fa-times space-after-icon'></span>$langLessElements</button>
+                            <button class='float-end btn cancelAdminBtn attachment-delete-button'><span class='fa-solid fa-xmark space-after-icon'></span>$langLessElements</button>
                         </div>
                     </div>";
             } elseif ($course_id != 0) {

@@ -79,7 +79,7 @@ if ($is_editor) {
                       'icon' => 'fa-gear'),
                 array('title' => "$langDumpUser",
                       'url' => "dumpglossary.php?course=$course_code",
-                      'icon' => 'fa-file-excel-o'),
+                      'icon' => 'fa-file-excel'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
                       'icon' => 'fa-tasks',

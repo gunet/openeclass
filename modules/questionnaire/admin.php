@@ -759,7 +759,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
                         
                         <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
-                            " . icon('fa-times text-white', $langDelete, '#', ' class="del_btn"') . "
+                            " . icon('fa-xmark text-white', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
               }
@@ -771,7 +771,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <input class='form-control mt-0' type='text' name='answers[]' value=''>
                      
                             <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
-                                " . icon('fa-times text-white', $langDelete, '#', ' class="del_btn"') . "
+                                " . icon('fa-xmark text-white', $langDelete, '#', ' class="del_btn"') . "
                             </div>
                     </div>
 
@@ -782,7 +782,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input class='form-control mt-0' type='text' name='answers[]' value=''>
                       
                         <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
-                            " . icon('fa-times text-white', $langDelete, '#', ' class="del_btn"') . "
+                            " . icon('fa-xmark text-white', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
         }
@@ -893,8 +893,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <strong class='control-label-notes'>$langResults:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    ".(($poll->anonymized) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langPollAnonymize <br>
-                    ".(($poll->show_results) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langPollShowResults
+                    ".(($poll->anonymized) ? icon('fa-square-check') : icon('fa-square'))." $langPollAnonymize <br>
+                    ".(($poll->show_results) ? icon('fa-square-check') : icon('fa-square'))." $langPollShowResults
                 </div>
             </div>
 
@@ -997,7 +997,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                     ),
                                     array(
                                         'title' => $langDelete,
-                                        'icon' => 'fa-times',
+                                        'icon' => 'fa-xmark',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
                                         'class' => 'delete',
                                         'confirm' => $langConfirmYourChoice

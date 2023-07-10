@@ -262,7 +262,7 @@ echo "<!DOCTYPE HTML>
                     <div class='row'>
                         <div id='navigation-btns' class='col-9 d-inline-flex justify-content-end align-items-top'>
                             $prevNextString
-                            <div id='close-btn'><a class='ms-5 text-white' href='$returl' target='_top'><span class='fa fa-times fa-lg text-warning'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></div>
+                            <div id='close-btn'><a class='ms-5 text-white' href='$returl' target='_top'><span class='fa-solid fa-xmark fa-lg text-warning'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></div>
                         </div>
                         <div class='col-3 d-flex justify-content-end progressbar-plr'>";
 

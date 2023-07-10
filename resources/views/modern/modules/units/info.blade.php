@@ -132,13 +132,13 @@
 
                                                 <div class="col-lg-6 col-12">
                                                     <div class="input-group mb-4">
-                                                        <span class="input-group-text h-40px input-bg-color input-border-color" id="basic-addon1">{{ trans('langFrom2') }}</span>
+                                                        <span class="input-group-text h-40px input-bg-color input-border-color text-white" id="basic-addon1">{{ trans('langFrom2') }}</span>
                                                         <input type="text" class="form-control mt-0" id='unitdurationfrom' name='unitdurationfrom' value='{{ $start_week }}' aria-label="{{ $start_week }}" aria-describedby="basic-addon1">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-6 col-12 mt-lg-0 mt-4">
                                                     <div class="input-group mb-4">
-                                                        <span class="input-group-text h-40px input-bg-color input-border-color" id="basic-addon2">{{ trans('langUntil') }}</span>
+                                                        <span class="input-group-text h-40px input-bg-color input-border-color text-white" id="basic-addon2">{{ trans('langUntil') }}</span>
                                                         <input type="text" class="form-control mt-0" id='unitdurationto' name='unitdurationto' value='{{ $finish_week }}' aria-label="{{ $finish_week }}" aria-describedby="basic-addon2">
                                                     </div>
                                                 </div>

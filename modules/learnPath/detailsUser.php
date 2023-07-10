@@ -94,7 +94,7 @@ if (!isset($_GET['pdf'])) {
             'level' => 'primary'),
         array('title' => $langDumpPDF,
             'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_GET[uInfo]&amp;pdf=true",
-            'icon' => 'fa-file-pdf-o',
+            'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
         array('title' => $langDumpUser,
             'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_GET[uInfo]&amp;xls=true",

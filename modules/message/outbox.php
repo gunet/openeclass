@@ -58,7 +58,7 @@ if (isset($_GET['mid'])) {
                                   'level' => 'primary'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'class' => 'delete_out_inner',
                                     'link-attrs' => "data-id='$msg->id'")
                         ));

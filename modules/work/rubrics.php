@@ -112,7 +112,7 @@ if (isset($_GET['rubric_id'])) {
                         '<input type=\'number\' name=\'scale_item_value['+par.attr('id').substr(8)+'][]\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                         '</td>'+
                         '<td class=\'text-center\'>'+
-                        '<a href=\'#\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a>'+
+                        '<a href=\'#\' class=\'removeScale\' id=\'remScale'+trc+'\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                         '</td>'+
                         '</tr>'
                 );
@@ -148,7 +148,7 @@ if (isset($_GET['rubric_id'])) {
             '    <div class=\'col-md-9 col-12 mt-4\'>'+
             '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
             '    </div>'+
-            '    <div class=\'col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center mt-4\'><a class=\'btn submitAdminBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa fa-times\' style=\'color:red\'></span></a></div>'+
+            '    <div class=\'col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center mt-4\'><a class=\'btn submitAdminBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a></div>'+
             '</div>'+
             '<div class=\'row form-group mt-4\'>'+
             '    <label class=\'col-md-3 col-12 control-label-notes mb-1\'>" . js_escape($langScales). ":</label>'+
@@ -226,7 +226,7 @@ if (isset($_GET['rubric_id'])) {
             if($crit>0)
             $crit_rows .= "		
                         <div class='col-sm-1'>
-                                <a href='#' class='removeCrit' id='remCrit$crit'><span class='fa fa-times' style='color:red'></span></a>
+                                <a href='#' class='removeCrit' id='remCrit$crit'><span class='fa-solid fa-xmark' style='color:red'></span></a>
                         </div>";
                 $crit_rows .= "</div>  
                      
@@ -255,7 +255,7 @@ if (isset($_GET['rubric_id'])) {
                                         if ($i == 0) {
                                             $crit_rows .= "<td class='text-center'></td>";
                                         } else {
-                                            $crit_rows .= "<td class='text-center'><a href='#' class='removeScale' id='remScale$cc$i'><span class='fa fa-times' style='color:red'></span></a>
+                                            $crit_rows .= "<td class='text-center'><a href='#' class='removeScale' id='remScale$cc$i'><span class='fa-solid fa-xmark' style='color:red'></span></a>
                                             </td>";
                                         }
                                         $crit_rows .= "</tr>";
@@ -482,7 +482,7 @@ if (isset($_GET['rubric_id'])) {
                                 array(
                                         'title' => $langDelete,
                                         'url' => "rubrics.php?course=$course_code&amp;delete=$rubric->id",
-                                        'icon' => 'fa-times',
+                                        'icon' => 'fa-xmark',
                                         'show' => !is_rubric_used_in_assignment($rubric->id, $course_id),
                                         'class' => 'delete',
                                         'confirm' => $langConfirmDelete)
@@ -573,7 +573,7 @@ function show_rubric ($rubric_id) {
                         array(
                             'title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$rubric->id",
-                            'icon' => 'fa-times',
+                            'icon' => 'fa-xmark',
                             'show' => !is_rubric_used_in_assignment($rubric->id, $course_id),
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete)

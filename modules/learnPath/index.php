@@ -606,7 +606,7 @@ foreach ($result as $list) { // while ... learning path list
             $lp_menu[] =
                 array('title' => $langReplace,
                     'url' => "importLearningPath.php?course=" . $course_code . "&amp;replace_id=" . $list->learnPath_id,
-                    'icon' => 'fa-times',
+                    'icon' => 'fa-xmark',
                     'confirm' => ($langAreYouSureToReplaceScorm . " \"" . $list->name) . "\"",
                     'confirm_title' => $langConfirmReplace,
                     'confirm_button' => $langReplace
@@ -616,7 +616,7 @@ foreach ($result as $list) { // while ... learning path list
         $lp_menu[] =
             array('title' => $langDelete,
                 'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'class' => 'delete',
                 'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name) . "\"" : $langDelete);
 

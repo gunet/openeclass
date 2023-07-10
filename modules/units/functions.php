@@ -593,7 +593,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
             return '';
         }
         $status = 'del';
-        $image = 'fa-times';
+        $image = 'fa-xmark';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         if ($can_upload) {
@@ -695,7 +695,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
             return '';
         } else {
             $status = 'del';
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $link = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -781,7 +781,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
             return;
         }
         $videolink = $title;
-        $imagelink = "fa-times";
+        $imagelink = "fa-xmark";
         $visibility = 'del';
     }
 
@@ -904,7 +904,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -990,7 +990,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
             return '';
         } else {
             $status = 'del';
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1050,7 +1050,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
             $link = "<a class='ex_settings $link_class' href='${urlServer}modules/units/view.php?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exercise_id&amp;unit=$id'>";
         }
         $exlink = $link . "$title</a> $exclamation_icon $assign_to_users_message $pending_label";
-        $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
+        $imagelink = $link . "</a>" . icon('fa-square-pen'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
 
@@ -1094,7 +1094,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
             if (!$is_editor) {
                 return '';
             } else {
-                $imagelink = icon('fa-times');
+                $imagelink = icon('fa-xmark');
                 $forumlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
             }
         } else {
@@ -1147,7 +1147,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $polllink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1203,7 +1203,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $wikilink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1217,7 +1217,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "</a>" .icon('fa-wikipedia-w') . "";
+        $imagelink = $link . "</a>" .icon('fa-won-sign') . "";
     }
 
     if (!empty($comments)) {
@@ -1253,7 +1253,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
         }
     } else {
@@ -1358,7 +1358,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1475,7 +1475,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
             return '';
         } else {
             $status = 'del';
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $exlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1520,7 +1520,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $chatlink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1565,7 +1565,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $bloglink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1605,7 +1605,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $h5plink = "<span class='not_visible'>$title ($langWasDeleted)</span>";
         }
     } else {
@@ -1660,7 +1660,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
         if (!$is_editor) {
             return '';
         } else {
-            $imagelink = icon('fa-times');
+            $imagelink = icon('fa-xmark');
             $tclink = "<span class='not_visible'>" .q($title) ." ($langWasDeleted)</span>";
         }
     } else {
@@ -1767,7 +1767,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                        'show' => prereq_unit_has_completion_enabled($_GET['id']) && $res_type_to_unit_compl),
                 array('title' => $langDelete,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$_GET[id]&amp;del=$resource_id",
-                      'icon' => 'fa-times',
+                      'icon' => 'fa-xmark',
                       'confirm' => $langConfirmDelete,
                       'class' => 'delete')
             ));

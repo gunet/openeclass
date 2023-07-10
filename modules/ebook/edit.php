@@ -69,7 +69,7 @@ if (isset($_GET['delete'])) {
                 <div class='form-group'>
                     <label class='col-sm-6 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12 input-group'>
-                        <input class='form-control rounded-pill me-1' type='text' name='ebook_title' value='" . q($info->title) . "' />
+                        <input class='form-control me-3' type='text' name='ebook_title' value='" . q($info->title) . "' />
                         <span class='input-group-btn'>
                             <button class='btn submitAdminBtn mt-1' name='title_submit' type='submit' value='$langModify'>$langModify</button>
                         </span>
@@ -128,7 +128,7 @@ if (isset($_GET['delete'])) {
                                           'icon' => 'fa-edit'),
                                     array('title' => $langDelete,
                                           'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;delete=$sid&amp;editEbook=1",
-                                          'icon' => 'fa-times',
+                                          'icon' => 'fa-xmark',
                                           'class' => 'delete',
                                           'confirm' => $langEBookSectionDelConfirm)
                 ));
@@ -324,7 +324,7 @@ if (isset($_GET['delete'])) {
                               'level' => 'primary-label'),
                             array('title' => $langFileAdmin,
                                   'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
-                                  'icon' => 'fa-hdd-o',
+                                  'icon' => 'fa-hard-drive',
                                   'level' => 'primary-label')
                         ));
         // Form #3 - edit subsection file assignment

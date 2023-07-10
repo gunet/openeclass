@@ -324,7 +324,7 @@ if (isset($_GET['action'])) {
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <tr class='bgNormalBlueText'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableCertTemplates</th></tr>
-                        <tr class='lightColor list-header'>
+                        <tr>
                             <th class='text-dark'>$langTitle</th>
                             <th class='text-dark'>$langDescription</th>                            
                             <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
@@ -340,7 +340,7 @@ if (isset($_GET['action'])) {
                                     'url' => "$_SERVER[SCRIPT_NAME]?action=edit_cert&amp;cid=$cert_data->id"
                                     ),
                                 array('title' => $langDelete,
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'url' => "$_SERVER[SCRIPT_NAME]?del_cert=$cert_data->id",
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete')
@@ -355,7 +355,7 @@ if (isset($_GET['action'])) {
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
                         <tr class='bgNormalBlueText'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableBadges</th></tr>
-                        <tr class='lightColor list-header'>
+                        <tr>
                             <th class='text-dark'>$langTitle</th>
                             <th class='text-dark'>$langDescription</th>
                             <th width='70' class='text-center text-dark'>$langIcon</th>
@@ -373,7 +373,7 @@ if (isset($_GET['action'])) {
                                     'url' => "$_SERVER[SCRIPT_NAME]?action=edit_badge&amp;bid=$badge_data->id"
                                     ),
                                 array('title' => $langDelete,
-                                    'icon' => 'fa-times',
+                                    'icon' => 'fa-xmark',
                                     'url' => "$_SERVER[SCRIPT_NAME]?del_badge=$badge_data->id",
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).

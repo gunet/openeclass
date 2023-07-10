@@ -80,7 +80,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $delete_button = action_button([[
                 'title' => $langDelete,
                 'class' => 'delete delete_btn',
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'link-attrs' => "id='$indirectId' data-id='$indirectId'"]]);
         }
 

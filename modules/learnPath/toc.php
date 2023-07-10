@@ -199,7 +199,7 @@ foreach ($flatElementList as $module) {
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
             $moduleImg = 'fa-file-code-o';
-            $imagePassed = "<span style='color:red'>".icon('fa-times')."</span>";
+            $imagePassed = "<span style='color:red'>".icon('fa-xmark')."</span>";
         }
 
         echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg);

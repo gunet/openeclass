@@ -423,7 +423,7 @@ if ($is_editor) {
                   'url' => "dumpgradebook.php?course=$course_code&amp;t=3&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;activity_id=$actID",
                   'level' => 'primary-label',
                   'button-class' => 'btn btn-success',
-                  'icon' => 'fa-file-excel-o')
+                  'icon' => 'fa-file-excel')
 
         ));
 

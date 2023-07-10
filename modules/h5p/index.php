@@ -170,7 +170,7 @@ if ($content) {
                 'title' => $item->reuse_enabled ? $langReuseDeactivate : $langReuseActivate,
                 'url' => "index.php?course=$course_code&amp;id=$item->id&amp;choice=do_reuse_" . ($item->reuse_enabled ? 'disable' : 'enable')
             ], [
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'title' => $langDelete,
                 'url' => "delete.php?course=$course_code&amp;id=$item->id",
                 'class' => 'delete',

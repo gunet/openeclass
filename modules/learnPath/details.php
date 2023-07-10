@@ -93,7 +93,7 @@ if ($learnPathName) {
                 'level' => 'primary'),
             array('title' => $langDumpPDF,
                 'url' => "details.php?course=$course_code&path_id=$path_id&pdf=true",
-                'icon' => 'fa-file-pdf-o',
+                'icon' => 'fa-file-pdf',
                 'level' => 'primary-label'),
             array('title' => $langDumpUser,
                 'url' => "details.php?course=$course_code&path_id=$path_id&xls=true",

@@ -52,22 +52,22 @@ function choose_image($fileName) {
         );
 
         $image = array(
-            'word' => 'fa-file-word-o',
-            'web' => 'fa-file-code-o',
-            'css' => 'fa-file-code-o',
-            'image' => 'fa-file-image-o',
-            'audio' => 'fa-file-audio-o',
-            'midi' => 'fa-file-audio-o',
-            'video' => 'fa-file-video-o',
-            'ram' => 'fa-file-audio-o',
+            'word' => 'fa-file-word',
+            'web' => 'fa-file-code',
+            'css' => 'fa-file-code',
+            'image' => 'fa-file-image',
+            'audio' => 'fa-file-audio',
+            'midi' => 'fa-file-audio',
+            'video' => 'fa-file-video',
+            'ram' => 'fa-file-audio',
             'flash' => 'fa-bolt',
-            'excel' => 'fa-file-excel-o',
-            'compressed' => 'fa-file-archive-o',
-            'rar' => 'fa-file-archive-o',
-            'code' => 'fa-file-code-o',
-            'acrobat' => 'fa-file-pdf-o',
-            'powerpoint' => 'fa-file-powerpoint-o',
-            'text' => 'fa-file-text-o',
+            'excel' => 'fa-file-excel',
+            'compressed' => 'fa-file-zipper',
+            'rar' => 'fa-file-archive',
+            'code' => 'fa-file-code',
+            'acrobat' => 'fa-file-pdf',
+            'powerpoint' => 'fa-file-powerpoint',
+            'text' => 'fa-file-lines',
         );
     }
 

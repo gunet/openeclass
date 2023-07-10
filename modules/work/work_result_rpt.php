@@ -141,7 +141,7 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
         if (!isset($cur_senarios['output'])) { // expected output disable
             $cur_senarios['output'] = '-';
         }
-        $icon = ($auto_judge_scenarios_output[$i]['passed']==1) ? "<icon class='fa fa-check'></icon>" : "<icon class='fa fa-times'></icon>";
+        $icon = ($auto_judge_scenarios_output[$i]['passed']==1) ? "<icon class='fa fa-check'></icon>" : "<icon class='fa-solid fa-xmark'></icon>";
         $table_content .= "
            <tr>
                <td style='word-break:break-all;'>".str_replace(' ', '&nbsp;', $cur_senarios['input'])."</td>

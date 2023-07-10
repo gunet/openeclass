@@ -48,6 +48,12 @@
 /************************************rgba(255, 255, 255, 0.5)**********************************************/
 /***************** this is mypersonal-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/
+
+.fc-view, .fc-view>table {
+  position: relative;
+  z-index: 0;
+}
+
 @media(max-width:991px){
   .myPersonalCalendar,.personal-calendar-header{
     min-width:500px !important;

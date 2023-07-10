@@ -89,11 +89,11 @@
                                                     </li>
                                                     @if (!is_null($announcement->end) && ($announcement->end <= date("Y-m-d H:i:s") ))
                                                         <li class='text-danger'>
-                                                            <span class='fa fa-clock-o'></span> {{ trans('langExpired') }}
+                                                            <span class='fa fa-clock'></span> {{ trans('langExpired') }}
                                                         </li>
                                                     @elseif ( !is_null($announcement->begin) && ($announcement->begin >= date("Y-m-d H:i:s") ))
                                                         <li class='text-success'>
-                                                            <span class='fa fa-clock-o'></span> {{ trans('langAdminWaiting') }}
+                                                            <span class='fa fa-clock'></span> {{ trans('langAdminWaiting') }}
                                                         </li>
                                                     @endif
                                                 </ul>
@@ -130,7 +130,7 @@
                                                     'class' => 'delete',
                                                     'url' => "$_SERVER[SCRIPT_NAME]?delete=$announcement->id",
                                                     'confirm' => trans('langConfirmDelete'),
-                                                    'icon' => 'fa-times'
+                                                    'icon' => 'fa-xmark'
                                                 ]
                                             ]) !!}
                                         </td>

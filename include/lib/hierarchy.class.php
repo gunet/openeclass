@@ -477,7 +477,7 @@ $(document).ready(function() {
                 $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
                                      + '<input type="hidden" $params value="' + newnodeid + '" />'
                                      + newnodename
-                                     + '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-bs-toggle="tooltip" data-original-title="$langNodeDel" data-bs-placement="top" title="$langNodeDel"><\/span><\/a>'
+                                     + '&nbsp;<a href="#nodCnt"><span class="fa-solid fa-xmark" data-bs-toggle="tooltip" data-original-title="$langNodeDel" data-bs-placement="top" title="$langNodeDel"><\/span><\/a>'
                                      + '<\/p>');
 
                 $( "#dialog-set-value" ).val(newnodename);
@@ -582,7 +582,7 @@ jContent;
                     $html .= '<p id="nd_' . $i . '">';
                     $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
                     $html .= $this->getFullPath($def);
-                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
+                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa-solid fa-xmark" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
             }
@@ -661,7 +661,7 @@ jContent;
                     $html .= '<p id="nd_' . $i . '">';
                     $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
                     $html .= $this->getFullPath(getDirectReference($def));
-                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-bs-toggle="tooltip" data-bs-original-title="'.$langNodeDel.'" data-bs-placement="bottom" title="'.$langNodeDel.'"></span></a></p>';
+                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa-solid fa-xmark" data-bs-toggle="tooltip" data-bs-original-title="'.$langNodeDel.'" data-bs-placement="bottom" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
             }

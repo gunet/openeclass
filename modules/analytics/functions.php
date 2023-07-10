@@ -51,7 +51,7 @@ function display_learning_analytics() {
                             'icon' => $active ? 'fa-eye-slash' : 'fa-eye'),
                     array('title' => $langDelete,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;delete_analytics=1",
-                        'icon' => 'fa-times',
+                        'icon' => 'fa-xmark',
                         'class' => 'delete',
                         'confirm' => $langAnalyticsConfirm)
                 ))
@@ -287,7 +287,7 @@ function display_analytics_elements($analytics_id) {
                                 'class' => ''
                             ),
                             array('title' => $langDelete,
-                                'icon' => 'fa-times',
+                                'icon' => 'fa-xmark',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;analytics_element_id=$id&amp;delete_analytics_element=1",
                                 'confirm' => $langAnalyticsConfirmDeletion,
                                 'class' => 'delete'))).

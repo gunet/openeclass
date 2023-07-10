@@ -358,7 +358,7 @@ if (count($result) > 0) { // topics found
             ),
             array('title' => $langDelete,
                 'url' => $del_link,
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'class' => 'delete',
                 'confirm' => $langConfirmDelete)
         );

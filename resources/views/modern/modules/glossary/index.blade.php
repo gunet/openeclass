@@ -111,7 +111,7 @@
                                                                                 'icon' => 'fa-edit'),
                                                                             array('title' => trans('langDelete'),
                                                                                 'url' => $base_url ."&amp;delete=". getIndirectReference($glossary_term->id),
-                                                                                'icon' => 'fa-times',
+                                                                                'icon' => 'fa-xmark',
                                                                                 'class' => 'delete',
                                                                                 'confirm' => trans('langConfirmDelete'))
                                                                             )

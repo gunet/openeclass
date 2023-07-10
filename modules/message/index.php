@@ -124,24 +124,24 @@ if (!isset($_GET['showQuota'])) {
                                 array('title'   => $langDropboxMassDelete,
                                       'url'     => 'javascript:void(0)',
                                       'class'   => 'delete_all_in',
-                                      'icon'    => 'fa-times')
+                                      'icon'    => 'fa-xmark')
                             ));
         } else {
             $tool_content .= action_bar(array(
                                 array('title'   => $langNewCourseMessage,
                                       'url'     => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",
-                                      'icon'    => 'fa-pencil-square-o',
+                                      'icon'    => 'fa-square-pen',
                                       'level'   => 'primary-label',
                                       'button-class' => 'btn-success'),
                                 array('title'   => $langNewPersoMessage,
                                       'url' => "$_SERVER[SCRIPT_NAME]?upload=1",
-                                      'icon' => 'fa-pencil-square-o',
+                                      'icon' => 'fa-square-pen',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-success',
                                       'show' => $personal_msgs_allowed),
                                 array('title' => $langDropboxMassDelete,
                                       'url' => 'javascript:void(0)',
-                                      'icon' => 'fa-times',
+                                      'icon' => 'fa-xmark',
                                       'class' => 'delete_all_in')
                             ));
         }

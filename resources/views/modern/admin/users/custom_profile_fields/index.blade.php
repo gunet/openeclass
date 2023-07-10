@@ -77,7 +77,7 @@
                                             ),
                                             array('title' => trans('langDelete'),
                                                     'url' => "$_SERVER[SCRIPT_NAME]?del_cat=" . getIndirectReference($res->id),
-                                                    'icon' => 'fa-times',
+                                                    'icon' => 'fa-xmark',
                                                     'class' => 'delete',
                                                     'confirm' => trans('langCPFConfirmCatDelete')
                                             )
@@ -119,7 +119,7 @@
                                                     ),
                                                     array('title' => trans('langDelete'),
                                                         'url' => "$_SERVER[SCRIPT_NAME]?del_field=" . getIndirectReference($f->id),
-                                                        'icon' => 'fa-times',
+                                                        'icon' => 'fa-xmark',
                                                         'class' => 'delete',
                                                         'confirm' => trans('langCPFConfirmFieldDelete')
                                                     )

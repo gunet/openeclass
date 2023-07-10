@@ -536,9 +536,11 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                                     <!-- Modal content-->
                                         <div class='modal-content'>
-                                            <div class='modal-header'>
-                                                <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
-                                                <button type='button' class='btn-close bg-danger' data-bs-dismiss='modal' aria-label='Close'></button>
+                                            <div class='modal-header border-0'>
+                                                <h2 class='mb-0'>$langAddEvent</h2> 
+                                                <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                                    <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                                </button>
                                             </div>
                                             <div class='modal-body'>
                                                 <div class='form-wrapper form-edit rounded'>
@@ -553,7 +555,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                                                     <div class='form-group'>
 
-                                                        <div class='control-label-notes'>$langStartDate</div>
+                                                        <div class='form-label'>$langStartDate</div>
                                                         <div id='fromNewDate'></div>
 
                                                         <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
@@ -661,10 +663,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             </div>
                                         
                                         
-                                            <div class='modal-footer'>
+                                            <div class='modal-footer border-0'>
                                                 <div class='form-group d-flex justify-content-center align-items-center'>
                                                     <input class='btn submitAdminBtn' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
-                                                    <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                                    <a class='btn cancelAdminBtn ms-2' href='index.php'>$langCancel</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -938,17 +940,19 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
                                         <!-- Modal content-->
                                             <div class='modal-content'>
-                                                <div class='modal-header'>
-                                                    <h5 class='modal-title TextSemiBold normalBlueText'>$langAddEvent</h5> 
-                                                    <button type='button' class='btn-close bg-danger' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                <div class='modal-header border-0'>
+                                                    <h2 class='mb-0'>$langAddEvent</h2> 
+                                                    <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                                        <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                                    </button>
                                                 </div>
                                                 <div class='modal-body'>
-                                                    <div class='form-wrapper form-edit rounded'>
+                                                    <div class='form-wrapper form-edit rounded border-0 px-0'>
 
                                                         <div class='form-group'>
                                                             <div class='control-label-notes'>$langStartDate</div>
                                                             <div id='from'></div>
-                                                            <div class='control-label-notes mt-2'>$langDuration <small>$langInHour</small></div>
+                                                            <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
                                                             <div class='d-flex justify-content-start align-items-center'>
                                                                 <div id='idDuration'></div>
                                                                 <input style='height:15px; width:15px;' class='ms-2' type='checkbox' id='OnOffDuration' checked>
@@ -1052,10 +1056,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                 </div>
                                             
                                             
-                                                <div class='modal-footer'>
+                                                <div class='modal-footer border-0'>
                                                     <div class='form-group d-flex justify-content-center align-items-center'>
                                                         <input class='btn submitAdminBtn' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
-                                                        <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                                                        <a class='btn cancelAdminBtn ms-2' href='index.php'>$langCancel</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1302,8 +1306,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             <div class='modal-dialog' role='document'>
                 <div class='modal-content'>
                     <div class='modal-header'>
-                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='$langClose'><span aria-hidden='true'>&times;</span></button>
-                        <h4 class='modal-title' id='iCalDescriptionLabel'>$langiCalFeed</h4>
+                        <h2 class='mb-0'>$langiCalFeed</h2> 
+                        <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                            <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                        </button>
                     </div>
                     <div class='modal-body'>
                         <form>

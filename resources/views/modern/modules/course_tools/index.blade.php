@@ -144,7 +144,7 @@
                                                             <small class='text-muted'>{{ $externalLinks->url }}</small>
                                                         </div>
                                                         <div class='col-2 text-end'>
-                                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa fa-times'></span></a>
+                                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa-solid fa-xmark'></span></a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -242,7 +242,7 @@
                                                                                 'icon' => $row->enabled? 'fa-eye': 'fa-eye-slash'),
                                                                         array(  'title' => trans('langDelete'),
                                                                                 'url' => "../lti_consumer/index.php?id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
-                                                                                'icon' => 'fa-times',
+                                                                                'icon' => 'fa-xmark',
                                                                                 'class' => 'delete',
                                                                                 'confirm' => trans('langConfirmDelete'))
                                                                         )) !!}

@@ -217,7 +217,7 @@ function show_edit_form($id, $sid, $assign) {
                                     <input type='hidden' name='submission' value='$row->id' />
                                     <div class='btn-group float-end'>
                                         <a class='linkdelete btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;a_id=$sub->id&amp;ass_id=$row->id' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langDeletePeerReview' data-bs-original-title=''>
-                                            <span class='fa fa-times'></span>
+                                            <span class='fa-solid fa-xmark'></span>
                                         </a>
                                     </div>
                                     <div class='row form-group mt-4'>

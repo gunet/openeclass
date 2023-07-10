@@ -412,7 +412,7 @@ if ($display == TRUE) {
                               'icon' => ($conf->status == 'active') ? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $langDelete,
                               'url' => "$_SERVER[SCRIPT_NAME]?delete_conference=$conf->conf_id",
-                              'icon' => 'fa-times',
+                              'icon' => 'fa-xmark',
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete)
                         )

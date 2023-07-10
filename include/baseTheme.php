@@ -640,7 +640,7 @@ function view($view_file, $view_data = array()) {
                     color: #ffa023;
                 }
 
-                .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times{
+                .menu-popover .delete.confirmAction .fa-xmark, .menu-popover .delete.delete_btn .fa-xmark{
                     color: #ffa023;
                 }
 
@@ -733,22 +733,32 @@ function view($view_file, $view_data = array()) {
                 }";
         }
 
-    }else{
-
-        $head_content .= "
-            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick.css'/>
-            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick-theme.css'/>
-            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css'/>
-            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css'/>
-            <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css'/>
-        
-            <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?donotcache'>
-            <link rel='stylesheet' href='{$urlAppend}template/modern/css/sidebar.css?donotcache'>
-            <link rel='stylesheet' href='{$urlAppend}template/modern/css/new_calendar.css?donotcache'>
-            <link rel='stylesheet' href='{$urlAppend}template/modern/css/default.css?donotcache'>
-        ";
-
     }
+    //else{
+
+        // $head_content .= "
+        //     <link rel='shortcut icon' href='{$urlAppend}template/modern/favicon/favicon.ico' />
+        //     <link rel='apple-touch-icon-precomposed' href='{$urlAppend}template/modern/favicon/openeclass_128x128.png' />
+        //     <link rel='icon' type='image/png' href='{$urlAppend}template/modern/favicon/openeclass_128x128.png' />
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/bootstrap.min.css'/>
+        //     <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'/>
+        //     <link href='{$urlAppend}template/modern/css/font-Manrope/css/Manrope.css' rel='stylesheet'/>
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}js/fullcalendar/fullcalendar.css'/>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/jquery.dataTables.min.css'/>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/owl-carousel.css'/>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/owl-theme-default.css'/>
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick.css'/>
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick-theme.css'/>
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css'/>
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css'/>
+        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css'/>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?donotcache'>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/sidebar.css?donotcache'>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/new_calendar.css?donotcache'>
+        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/default.css?donotcache'>
+        // ";
+
+    //}
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code
         FROM course, course_user

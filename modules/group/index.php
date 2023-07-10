@@ -466,7 +466,7 @@ if ($is_editor) {
                       'show' => $num_of_groups > 0),
                 array('title' => $langDeleteGroups,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
-                      'icon' => 'fa-times',
+                      'icon' => 'fa-xmark',
                       'confirm' => $langDeleteGroupAllWarn,
                       'show' => $num_of_groups > 0),
                 array('title' => $langEmptyGroups,
@@ -620,7 +620,7 @@ if ($is_editor) {
                                                                             'icon' => $visibility_icom),
                                                                         array('title' => $langDelete,
                                                                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
-                                                                            'icon' => 'fa-times',
+                                                                            'icon' => 'fa-xmark',
                                                                             'class' => 'delete',
                                                                             'confirm' => $langConfirmDelete))) .
                                                                         "
@@ -911,7 +911,7 @@ if ($is_editor) {
                                                                     if ($user_group_description) {
                                                                         $tool_content .= "<br><span class='small'><i>$user_group_description</i></span>&nbsp;&nbsp;" .
                                                                                 icon('fa-edit pe-2', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
-                                                                                icon('fa-times text-danger', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+                                                                                icon('fa-xmark text-danger', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
                                                                     } elseif ($is_member) {
                                                                         $tool_content .= "<br><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
                                                                     }

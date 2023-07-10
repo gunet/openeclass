@@ -48,6 +48,11 @@ $(document).ready(function(){
     popover_init();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
+
+
+    //fix modal appearance
+    $('.modal').appendTo("body") 
+
 });
 
 

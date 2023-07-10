@@ -456,12 +456,12 @@ $lp_action_button = action_button(array(
     array(
         'title' => "$langDocumentAsModuleLabel",
         'url' => "insertMyDoc.php?course=$course_code",
-        'icon' => 'fa-file-o'
+        'icon' => 'fa-file'
     ),
     array(
         'title' => "$langExerciseAsModuleLabel",
         'url' => "insertMyExercise.php?course=$course_code",
-        'icon' => "fa-pencil-square-o"
+        'icon' => "fa-square-pen"
     ),
     array(
         'title' => "$langLinkAsModuleLabel",
@@ -605,13 +605,13 @@ foreach ($flatElementList as $module) {
         $tool_content .= "<font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "fa-pencil-square-o";
+            $moduleImg = "fa-square-pen";
         } else if ($module['contentType'] == CTLINK_) {
             $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
             $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTDOCUMENT_) {
-            $moduleImg = "fa-folder-open-o";
+            $moduleImg = "fa-folder-open";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
             $moduleImg = "fa-film";
         } else {
@@ -661,7 +661,7 @@ foreach ($flatElementList as $module) {
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
                     'class' => 'delete',
                     'confirm' => $langAreYouSureDeleteModule,
-                    'icon' => 'fa-times')
+                    'icon' => 'fa-xmark')
             )) .
             "</td>";
     $tool_content .= "</tr>";

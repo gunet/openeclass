@@ -51,7 +51,7 @@ if (!isset($_GET['pdf'])) {
             'level' => 'primary'),
         array('title' => $langDumpPDF,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;pdf=true;",
-            'icon' => 'fa-file-pdf-o',
+            'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
         array('title' => $langDumpUser,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;xls=true;",
@@ -186,7 +186,7 @@ foreach ($flatElementList as $module) {
         $tool_content .= '<strong>' . q($module['name']) . '</strong>';
     } else { //-- if user can access module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = 'fa-pencil-square-o';
+            $moduleImg = 'fa-square-pen';
         } elseif ($module['contentType'] == CTLINK_) {
             $moduleImg = 'fa-link';
         } elseif ($module['contentType'] == CTCOURSE_DESCRIPTION_) {

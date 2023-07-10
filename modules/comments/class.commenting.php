@@ -85,10 +85,13 @@ Class Commenting {
             $out = "$comments_title
                     <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog'>
-                        <div class='modal-content' style='padding:1%'>
-                          <div class='modal-header'>
-                            <button type='button' class='close' data-bs-dismiss='modal'>&times;</button>
-                              <h4 class='modal-title'>$langComments</h4>
+                        <div class='modal-content'>
+                          <div class='modal-header border-0'>
+                            <h2 class='mb-0'>$langComments</h2>
+                            <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                            </button>
+                              
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
@@ -107,7 +110,7 @@ Class Commenting {
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
                         $post_actions = '<div class="d-flex flex-wrap">';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa fa-times text-danger pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        $post_actions .= '<span class="fa-solid fa-xmark text-danger pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa fa-edit pe-2 pb-2 text-warning" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .='</div>';
@@ -124,7 +127,7 @@ Class Commenting {
                         }
 
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa fa-times text-danger pb-2 pe-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        $post_actions .= '<span class="fa-solid fa-xmark text-danger pb-2 pe-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa fa-edit text-primary pe-2 pb-2" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
 
@@ -170,7 +173,7 @@ Class Commenting {
             }
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
-                $out .= '<div class="col-12"><div class="form-wrapper form-edit Borders pb-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $out .= '<div class="col-12  pb-5"><div class="form-wrapper form-edit Borders"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn submitAdminBtn m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form></div></div>';
@@ -178,9 +181,9 @@ Class Commenting {
         }
 
         if (!$always_open) {
-            $out .= '<div class="modal-footer">
-                        <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">'.$langClose.'</button>
-                     </div>';
+            // $out .= '<div class="modal-footer">
+            //             <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">'.$langClose.'</button>
+            //          </div>';
             $out .= '</div>';
         }
 

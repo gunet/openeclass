@@ -573,7 +573,7 @@ function poll_init() {
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0' type='text' name='answers[]' value=''><div class='form-control-static input-group-text h-40px input-bg-color input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0' type='text' name='answers[]' value=''><div class='form-control-static input-group-text h-40px input-bg-color input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }
@@ -633,7 +633,7 @@ function initialize_multifile_submission(max) {
             }
             formGroup.append(newInput);
             $(this).removeClass('submitAdminBtn').addClass('deleteAdminBtn')
-                .find('.fa-plus').removeClass('fa-plus').addClass('fa-times');
+                .find('.fa-plus').removeClass('fa-plus').addClass('fa-xmark');
         }
     });
     $('body').on('click', '.moreFiles.deleteAdminBtn', function (e) {

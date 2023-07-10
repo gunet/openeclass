@@ -300,7 +300,7 @@ foreach ($result as $row) {
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
-                            'icon' => "fa-times",
+                            'icon' => "fa-xmark",
                             'confirm' => $langConfirmPurgeExercises,
                             'class' => 'delete'
                         ),

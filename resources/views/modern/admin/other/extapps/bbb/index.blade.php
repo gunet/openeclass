@@ -82,7 +82,7 @@
                                     [
                                         'title' => trans('langDelete'),
                                         'url' => "$_SERVER[SCRIPT_NAME]?delete_server=" . getIndirectReference($bbb_server->id),
-                                        'icon' => 'fa-times',
+                                        'icon' => 'fa-xmark',
                                         'class' => 'delete',
                                         'confirm' => trans('langConfirmDelete')
                                     ]

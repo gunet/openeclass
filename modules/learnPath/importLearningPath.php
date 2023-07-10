@@ -1041,7 +1041,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     }
 
     foreach ($errorMsgs as $msg) {
-        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . icon('fa-times', $langError) . ' ' . $msg . '</span></div></div>';
+        $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . icon('fa-xmark', $langError) . ' ' . $msg . '</span></div></div>';
     }
 
     // installation completed or not message

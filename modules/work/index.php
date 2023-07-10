@@ -2504,7 +2504,7 @@ function new_assignment() {
                                 <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple></select>
                               </td>
                               <td class='text-center'>
-                                <input class='btn btn-outline-primary btn-sm rounded-pill'type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='mt-2 btn btn-outline-primary btn-sm h-40px rounded-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                <input class='btn btn-outline-primary btn-sm rounded-2 h-40px'type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='mt-2 btn btn-outline-primary btn-sm h-40px rounded-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
                                 <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple></select>
@@ -2571,7 +2571,7 @@ function new_assignment() {
                                       <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
                                       <td class='text-center'>
                                           <a href='#' class='autojudge_remove_scenario' style='display: none;'>
-                                            <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
+                                            <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                           </a>
                                       </td>
                                     </tr>
@@ -3575,7 +3575,7 @@ function show_edit_assignment($id) {
                                 </select>
                               </td>
                               <td class='text-center'>
-                                <input class='btn btn-outline-primary btn-sm rounded-pill' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm rounded-pill mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                <input class='btn btn-outline-primary btn-sm rounded-2 h-40px' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm h-40px rounded-2 mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td>
                                 <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
@@ -3650,7 +3650,7 @@ function show_edit_assignment($id) {
                             $tool_content .= "
                                     <td><input type='text' value='$aajudge[weight]' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
                                     <td><a href='#' class='autojudge_remove_scenario' style='display: ".($rows <= 0 ? 'none': 'visible').";'>
-                                    <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
+                                    <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                     </a>
                                     </td>
                                 </tr>";
@@ -3688,7 +3688,7 @@ function show_edit_assignment($id) {
                                     <td><input type='text' name='auto_judge_scenarios[$rows][output]' class='auto_judge_output' /></td>
                                     <td><input type='text' name='auto_judge_scenarios[$rows][weight]' class='auto_judge_weight'/></td>
                                     <td><a href='#' class='autojudge_remove_scenario' style='display: none;'>
-                                        <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
+                                        <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                     </a></td>
                                 </tr>";
                     }
@@ -4610,14 +4610,14 @@ function assignment_details($id, $row, $x =false) {
         $tool_content .= action_bar(array(
             array(
                 'title' => $langZipDownload,
-                'icon' => 'fa-file-archive-o',
+                'icon' => 'fa-file-zipper',
                 'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;download=$id",
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ),
             array(
                 'title' => $langExportGrades,
-                'icon' => 'fa-file-excel-o',
+                'icon' => 'fa-file-excel',
                 'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=export",
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
@@ -4645,7 +4645,7 @@ function assignment_details($id, $row, $x =false) {
             ),
             array(
                 'title' => $langDelAssign,
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=do_delete",
                 'button-class' => "deleteAdminBtn",
                 'confirm' => "$langWorksDelConfirm"
@@ -5043,7 +5043,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 if ($count_grade == $assign->reviews_per_assignment){
                                     $condition = "<span class='fa fa-fw fa-check text-success' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
                                 }else{
-                                    $condition = "<span class='fa fa-fw fa-times text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
+                                    $condition = "<span class='fa fa-fw fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='$count_grade/$assign->reviews_per_assignment'></span>";
                                 }
                                 $sum = $sum + $as->grade;
                             }
@@ -5221,7 +5221,7 @@ function show_assignment($id, $display_graph_results = false) {
 								<td class='text-center'>
                                         $icon_field
                                     <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
-                                        <span class='fa fa-fw fa-times text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
+                                        <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
                                     </a>
 							    </td>
 							</tr>";
@@ -5565,10 +5565,10 @@ function show_student_assignments() {
                             "&amp;action=add&amp;type=work_submission&amp;rid=" . $sub->id,
                             'icon' => 'fa-star'
                     ];
-                    $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
+                    $tool_content .= "<i class='fa fa-square-check'></i><br>";
                 }
             } else {
-                $tool_content .= "<i class='fa fa-square-o'></i><br>";
+                $tool_content .= "<i class='fa fa-square'></i><br>";
             }
             $tool_content .= "</td><td class='text-center'>";
             foreach ($submission as $sub) {
@@ -5756,7 +5756,7 @@ function show_assignments() {
                           'show' => $num_submitted > 0),
                     array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                          'icon' => 'fa-times',
+                          'icon' => 'fa-xmark',
                           'class' => 'delete',
                           'confirm' => $langWorksDelConfirm))).
                    "</td></tr>";

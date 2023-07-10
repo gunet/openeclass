@@ -147,7 +147,7 @@ if ($u) {
                 'level' => 'primary-label'),
             array('title' => $langDelUser,
                 'url' => "deluser.php?u=$u",
-                'icon' => 'fa-times',
+                'icon' => 'fa-xmark',
                 'level' => 'primary-label',
                 'show' => $u > 1)
             

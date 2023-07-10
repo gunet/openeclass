@@ -20,7 +20,7 @@
                                     <div class='mt-4'></div>
                                 @endif
 
-                                @if(Session::has('message'))
+                               @if(Session::has('message')) 
                                 <div class='col-12 all-alerts'>
                                     <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                         @php 

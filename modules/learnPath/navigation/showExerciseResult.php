@@ -283,7 +283,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                             $answer_choice =  "&nbsp;&mdash;";
                         }
                         $answer .= $answer_choice;
-                        $icon = "<span class='fa fa-times text-danger'></span>";
+                        $icon = "<span class='fa-solid fa-xmark text-danger'></span>";
                     }
                     // adds the correct word, followed by ] to close the blank
                     $answer .= ' / <span class="text-success"><strong>' . q($possible_answer[$answer_string[$j]]) . '</strong></span>';
@@ -320,16 +320,16 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                     echo "<tr><td><div class='text-center'>";
                     if ($studentChoice) {
-                        $icon_choice= "fa-check-square-o";
+                        $icon_choice= "fa-square-check";
                     } else {
-                        $icon_choice = "fa-square-o";
+                        $icon_choice = "fa-square";
                     }
                     echo icon($icon_choice);
                     echo "</div></div></td><td><div align='center'>";
                     if ($answerCorrect) {
-                        $icon_choice= "fa-check-square-o";
+                        $icon_choice= "fa-square-check";
                     } else {
-                        $icon_choice = "fa-square-o";
+                        $icon_choice = "fa-square";
                     }
                     echo icon($icon_choice) . "</div>";
                     echo "</td>
