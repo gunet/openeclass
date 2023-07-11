@@ -4,7 +4,7 @@
 
 <link href="{{ $urlAppend }}template/modern/css/homepage.css" rel="stylesheet" type="text/css">
 
-<div class="col-12 container-Homepage bgEclass col_maincontent_active_HomepageStart HomepageStartMobile">
+<div class="col-12 container-Homepage bg-white col_maincontent_active_HomepageStart HomepageStartMobile">
 
         @if($warning)
             <input id='showWarningModal' type='hidden' value='1'>
@@ -26,8 +26,8 @@
         @endif
        
     
-        <div class="jumbotron jumbotron-login @if($PositionFormLogin == 1 and !get_config('dont_display_login_form')) rebuiltCenterJumpotron @endif">
-            <div class='container-fluid'>
+        <div class="jumbotron jumbotron-login">
+            <div class='container-fluid container-fluid-jumbotron'>
                 <div class='col-12 p-lg-5 p-3'>
                     <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                         <div class='col-lg-6 col-12'>
@@ -42,10 +42,10 @@
                                         <form class='mt-0' action="{{ $urlAppend }}" method="post">
                                             <div>
                                                 <label for='username_id' class='form-label'>{{ trans('langUsername') }}</label>
-                                                <input id='username_id' class="login-input w-100" placeholder="" type="text" id="uname" name="uname" autocomplete="on">
+                                                <input id='username_id' class="login-input w-100" placeholder="&#xf007" type="text" id="uname" name="uname" autocomplete="on" />
                                                 <label for='password_id' class='form-label mt-4'>{{ trans('langPassword') }}&nbsp(password)</label>
-                                                <input id='password_id' class="login-input w-100" placeholder="" type="password" id="pass" name="pass" autocomplete="on">
-                                                <input class="btn w-100 login-form-submit Primary-500-bg text-white mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}">
+                                                <input id='password_id' class="login-input w-100" placeholder="&#xf084" type="password" id="pass" name="pass" autocomplete="on" />
+                                                <input class="btn w-100 login-form-submit Primary-500-bg text-white mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}" />
                                             </div>
                                         </form>
                                     </div>
@@ -59,14 +59,23 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class='col-12 d-flex justify-content-start align-items-center'>
-                                <a class='pe-3' href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
-                                    <img style='height:100px; width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
-                                </a>
-                                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>
-                                    <img style='height:100px; width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
-                                </a>
-                            </div>
+                            @if(get_config('enable_mobileapi'))
+                                <div class='col-12 d-flex justify-content-center align-items-center w-400px'>
+                                    <a class='pe-3' href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
+                                        <img style='height:100px; width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
+                                    </a>
+                                    <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>
+                                        <img style='height:100px; width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
+                                    </a>
+                                </div>
+                            @endif
+                            @if($eclass_banner_value == 1)
+                                <div class='col-12 d-flex justify-content-center align-items-center w-400px'>
+                                    <a href="http://www.openeclass.org/" target="_blank">
+                                        <img class="img-responsive banner-img bg-dark py-2" src="{{ $themeimg }}/open-eclass-banner.svg" alt="Open eClass Banner">
+                                    </a>
+                                </div>
+                            @endif
                         </div>
                         <div class='col-lg-6 col-12 d-none d-lg-block'>
                             <img class='jumbotron-image-default' src='{{ $urlAppend }}template/modern/img/jumbotron-eclass-4.0.png'>
@@ -76,7 +85,48 @@
             </div>
         </div>
 
-        <div class='container-fluid bg-white'>
+
+        @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('opencourses_enable'))
+            <div class='container-fluid bg-white container-homepage-content'>
+                <div class='col-12 p-lg-5 p-3 bg-white'>
+                    <div class="row rowMargin row-cols-1 @if(get_config('opencourses_enable') and (get_config('homepage_intro') or get_config('homepage_title'))) row-cols-lg-2 @endif g-5">
+                        @if(get_config('homepage_title') or get_config('homepage_intro'))
+                            <div class='col'>
+                                <div class='card border-0'>
+                                    <div class='card-header border-bottom-card-header bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <h3 class='pe-2'>
+                                                @if(get_config('homepage_title'))
+                                                    {!! get_config('homepage_title') !!}
+                                                @else
+                                                    {{ trans('langHomePageIntroText') }}
+                                                @endif
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class='card-body px-0 py-0'>
+                                        @if(get_config('homepage_intro'))
+                                            <div class='TextRegular msmall-text Neutral-800-cl mt-3'>{!! get_config('homepage_intro') !!}</div>
+                                        @else
+                                            <div class='TextRegular msmall-text Neutral-800-cl mt-3'>{{ trans('langNoInfoAvailable') }}</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        @if(get_config('opencourses_enable'))
+                            @if ($openCoursesExtraHTML)
+                                {!! $openCoursesExtraHTML !!}
+                            @endif
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
+
+        <div class='container-fluid bg-white container-homepage-content'>
             <div class='col-12 p-lg-5 p-3 bg-white'>
                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                     <div class='col-lg-6 col-12'>
@@ -95,7 +145,7 @@
                                 @if(count($announcements) > 0)
                                     <ul class='list-group list-group-flush'>
                                         @foreach ($announcements as $announcement)
-                                            @if($counterAn < 6)
+                                            @if($counterAn < 3)
                                                 <li class='li-unstyled border-bottom-list-group px-0 py-3'>
                                                     <a class='list-group-item border-0 px-0 py-0 TextSemiBold msmall-text Primary-500-cl' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                         {{$announcement->title}}
@@ -175,7 +225,89 @@
             </div>
         </div>
 
+
+        @if($popular_courses)
+            <div class='container-fluid bg-white container-homepage-content'>
+                <div class='col-12 p-lg-5 p-3 bg-white'>
+                    <div class="row rowMargin row-cols-1">
+                        <div class='col'>
+                            <div class='card border-0'>
+                                <div class='card-header border-bottom-card-header bg-white d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
+                                    <div class='d-flex justify-content-start align-items-center'>
+                                        <h3 class='pe-2'>
+                                            {{trans('langPopularCourse')}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <div class='card-body px-0 py-0'>
+                                    <div class='row rowMargin row-cols-1 row-cols-md-3 row-cols-lg-4 g-5'>
+                                        @foreach ($popular_courses as $pop_course)
+                                            <div class="col">
+                                                <div class='card border-card drop-shadow h-100'>
+                                                    <div class='card-body'>
+                                                        <div class="col-12 d-flex justify-content-center align-items-center">
+                                                            <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                @if($pop_course->course_image)
+                                                                    <img class='popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='Course Banner'/>
+                                                                @else
+                                                                    <img class='popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                                @endif
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-12 text-center mt-2">
+                                                            <a class='TextSemiBold msmall-text Primary-500-cl' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                                {{$pop_course->title}} ({{$pop_course->public_code}})<br>
+                                                                <p class='TextRegular msmall-text Neutral-800-cl'>{{$pop_course->prof_names}}</p>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
+
+        @if($texts)
+            <div class='container-fluid bg-white container-homepage-content'>
+                <div class='col-12 p-lg-5 p-3 bg-white'>
+                    <div class="row rowMargin row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-5">
+                        @foreach($texts as $text)
+                            <div class='col'>
+                                <div class='card border-0'>
+                                    <div class='card-header border-bottom-card-header bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                                        <div class='d-flex justify-content-start align-items-center'>
+                                            <h3 class='pe-2'>
+                                                {!! $text->title !!}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class='card-body px-0 py-0'>
+                                        <div class='TextRegular msmall-text Neutral-800-cl mt-3'>{!! $text->body !!}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
+
+
+
+
         
+        {{--
                                                     
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
         <div class='d-none d-lg-block px-4 bg-white'>
@@ -536,7 +668,11 @@
         </div>
         @endif
 
+        --}}
 
+
+
+        {{--
 
         @if(get_config('homepage_title') or get_config('homepage_intro') or get_config('enable_mobileapi') or get_config('opencourses_enable') or ($eclass_banner_value == 0) or $announcements or $popular_courses or $texts)
         <div class='d-block d-lg-none bg-white pb-3 pt-0 ps-3 pe-3'>
@@ -887,6 +1023,8 @@
 
         </div>
         @endif
+
+        --}}
     
 </div>
         

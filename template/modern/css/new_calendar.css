@@ -74,6 +74,7 @@
 .personal-calendar-header .btn-group .btn.active{
   background: #005ad9 !important;
   border-radius: 5px !important;
+  z-index: 0;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head{
   background: #ffffff;

@@ -93,7 +93,9 @@
 @media(min-width:992px){
   .col_maincontent_active{ 
     border: solid 1px #E8EDF8 ;
-    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)) ;
+    /* filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)) ; */
+    border-top-left-radius:0px;
+    border-bottom-left-radius: 0px;
   }
   
 }
@@ -134,14 +136,18 @@
   border-top-left-radius: 15px;  
   border-bottom-left-radius: 15px;  
   background-color: transparent !important ;
+
 }
 
 .ContentLeftNav{
   width:100%;
   background: #ffffff;
   border-radius: 15px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   border: solid 1px #E8EDF8;
-  filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  border-right: none;
+  /* filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)); */
 }
 
 .lineSidebar{
