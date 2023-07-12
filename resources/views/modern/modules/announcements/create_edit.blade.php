@@ -104,18 +104,18 @@
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
                                                     
                                                     <div class="row mt-4 form-group {{ $antitle_error }}">
-                                                        <label for="AnnTitle" class="col-md-3 col-12 control-label-notes">{{ trans('langAnnTitle') }}:</label>
-                                                        <div class="col-md-9 col-12 ">
+                                                        <label for="AnnTitle" class="col-12 control-label-notes">{{ trans('langAnnTitle') }}</label>
+                                                        <div class="col-12 ">
                                                             <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
-                                                            <span class='help-block'>{{ Session::getError('antitle') }}</span>
+                                                            <span class='help-block Accent-200-cl'>{{ Session::getError('antitle') }}</span>
                                                         </div>
                                                     </div>
 
                                         
 
                                                     <div class='row mt-4 form-groum'>
-                                                        <label for='AnnBody' class='col-md-3 col-12 control-label-notes'>{{ trans('langAnnBody') }}:</label>
-                                                        <div class='col-md-9 col-12'>{!! $contentToModify !!}</div>
+                                                        <label for='AnnBody' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
+                                                        <div class='col-12'>{!! $contentToModify !!}</div>
                                                     </div>
 
                                                   
@@ -124,8 +124,8 @@
                                                        
                                                            
                                                     <div class='row mt-4 form-group'>
-                                                        <label for='Email' class='col-md-3 col-12 control-label-notes'>{{ trans('langEmailOption') }}:</label>
-                                                        <div class='col-md-9 col-12'>
+                                                        <label for='Email' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
+                                                        <div class='col-12'>
                                                             <select class='form-select' name='recipients[]' multiple='multiple' id='select-recipients'>
                                                                 <option value='-1' selected>{{ trans('langAllUsers') }}</option>
                                                                 @foreach ($course_users as $cu)
@@ -145,13 +145,14 @@
                                                    
                                                        
                                                     <div class='row mt-4 form-group {{ $startdate_error }}'>
-                                                        <label for='startdate' class='col-md-3 col-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
-                                                        <div class='col-md-9 col-12'>
+                                                        <label for='startdate' class='col-12 control-label-notes'>{{ trans('langStartDate') }}</label>
+                                                        <div class='col-12'>
                                                             <div class='input-group'> 
                                                                 <span class='input-group-addon'>
-                                                                    <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
+                                                                    <input id='start_date_active' type='checkbox' name='startdate_active' {{ $start_checkbox }}>
                                                                 </span>
-                                                                <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
+                                                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
                                                             </div>
                                                             <span class='help-block'>{{ $startdate_error }}</span>
                                                         </div>
@@ -159,13 +160,14 @@
                                                 
                                                 
                                                     <div class='row mt-4 form-group {{ $enddate_error }}'>
-                                                        <label for='enddate' class='col-md-3 col-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
-                                                        <div class='col-md-9 col-12'>
+                                                        <label for='enddate' class='col-12 control-label-notes'>{{ trans('langEndDate') }}</label>
+                                                        <div class='col-12'>
                                                             <div class='input-group'>
                                                                 <span class='input-group-addon'>
-                                                                    <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
+                                                                    <input id='end_date_active' type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
                                                                 </span>
-                                                                <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
+                                                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
                                                             </div>
                                                             <span class='help-block'>{{ $enddate_error }}</span>
                                                         </div>
@@ -176,7 +178,7 @@
                                                   
 
                                                     <div class='row mt-4 form-group'>
-                                                        <div class='col-md-9 offset-md-3'>
+                                                        <div class='col-12'>
                                                             <div class='checkbox'>
                                                                 <label>
                                                                     <input type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('langViewShow') }}
@@ -191,7 +193,7 @@
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
                                                         <input type='hidden' name='course' value='{{ $course_code }}'>
                                                         <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
-                                                        <div class='col-md-9 offset-md-3'>
+                                                        <div class='col-12'>
                                                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                                                 <button type="submit" class="btn submitAdminBtn" name="submitAnnouncement" value="{{ trans('langAdd') }}">{{ trans('langSubmit') }}</button>
                                                                 <a href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" class="btn cancelAdminBtn ms-1">{{ trans('langCancel') }}</a>

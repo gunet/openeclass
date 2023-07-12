@@ -194,7 +194,7 @@ function render_eportfolio_fields_form() {
 
                 if (Session::hasError('epf_'.$f->shortname)) {
                     $form_class = 'form-group has-error';
-                    $help_block = '<span class="help-block">' . Session::getError('epf_'.$f->shortname) . '</span>';
+                    $help_block = '<span class="help-block Accent-200-cl">' . Session::getError('epf_'.$f->shortname) . '</span>';
                 } else {
                     $form_class = 'form-group mb-4';
                     $help_block = '';

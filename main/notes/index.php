@@ -170,7 +170,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                     <label for='newTitle' class='col-sm-12 control-label-notes'>$langTitle</label>
                     <div class='col-sm-12'>
                         <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . $titleToModify . "' placeholder='$langTitle'>
-                        <span class='help-block'>".Session::getError('newTitle')."</span>
+                        <span class='help-block Accent-200-cl'>".Session::getError('newTitle')."</span>
                     </div>
                 </div>
                 <div class='form-group mt-4'>

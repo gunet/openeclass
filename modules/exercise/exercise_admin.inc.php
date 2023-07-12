@@ -322,30 +322,30 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyExercise']) ? "&amp;exerciseId=$exerciseId" : "&amp;NewExercise=Yes")."'>
              <fieldset>
                  <div class='row form-group ".(Session::getError('exerciseTitle') ? "has-error" : "")."'>
-                   <label for='exerciseTitle' class='col-md-3 col-12 control-label-notes mb-1'>$langExerciseName:</label>
-                   <div class='col-md-9 col-12'>
+                   <label for='exerciseTitle' class='col-12 control-label-notes mb-1'>$langExerciseName</label>
+                   <div class='col-12'>
                      <input name='exerciseTitle' type='text' class='form-control' id='exerciseTitle' value='" . q($exerciseTitle) . "' placeholder='$langExerciseName'>
-                     <span class='help-block'>".Session::getError('exerciseTitle')."</span>
+                     <span class='help-block Accent-200-cl'>".Session::getError('exerciseTitle')."</span>
                    </div>
                  </div>
                  <div class='row form-group mt-4'>
-                   <label for='exerciseDescription' class='col-md-3 col-12 control-label-notes mb-1'>$langDescription:</label>
-                   <div class='col-md-9 col-12'>
+                   <label for='exerciseDescription' class='col-12 control-label-notes mb-1'>$langDescription</label>
+                   <div class='col-12'>
                    " . rich_text_editor('exerciseDescription', 4, 30, $exerciseDescription) . "
                    </div>
                  </div>
 
                  <div class='row form-group mt-4'>
-                   <label for='exerciseFeedback' class='col-md-3 col-12 control-label-notes mb-1'>$langExerciseFeedback:</label>
-                   <div class='col-md-9 col-12'>
+                   <label for='exerciseFeedback' class='col-12 control-label-notes mb-1'>$langExerciseFeedback</label>
+                   <div class='col-12'>
                        " . rich_text_editor('exerciseFeedback', 4, 30, $exerciseFeedback) . "
                        <span class='help-block col-sm-offset-2 col-sm-10'>$langExerciseFeedbackInfo</span>
                        </div>
                  </div>
                  
                  <div class='row form-group mt-4'>
-                     <label for='exerciseDescription' class='col-md-3 col-12 control-label-notes mb-1'>$langViewShow:</label>
-                     <div class='col-md-9 col-12'>
+                     <label for='exerciseDescription' class='col-12 control-label-notes mb-1'>$langViewShow</label>
+                     <div class='col-12'>
                          <div class='radio'>
                            <label>
                              <input type='radio' name='exerciseType' value='".SINGLE_PAGE_TYPE."' ".(($exerciseType == SINGLE_PAGE_TYPE)? 'checked' : '').">
@@ -367,8 +367,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes mb-1'>$langExerciseScaleGrade:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes mb-1'>$langExerciseScaleGrade</label>
+                    <div class='col-12'>
                         <select name='exerciseRange' class='form-select'>
                             <option value".($exerciseRange == 0 ? ' selected' : '').">-- $langExerciseNoScaleGrade --</option>
                             <option value='10'" . ($exerciseRange == 10 ? " selected" : "") .">0-10</option>
@@ -379,32 +379,34 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>
                  <div class='row input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseStartDate' class='col-md-3 col-12 control-label-notes mb-1'>$langStart:</label>
-                     <div class='col-md-9 col-12'>
+                     <label for='exerciseStartDate' class='col-12 control-label-notes mb-1'>$langStart</label>
+                     <div class='col-12'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
                                 <input style='cursor:pointer;' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
                             </span>
-                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableStartDate ? '' : ' disabled').">
+                            <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                            <input class='form-control mt-0 border-start-0' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableStartDate ? '' : ' disabled').">
                         </div>
                         <span class='help-block'>".(Session::hasError('exerciseStartDate') ? Session::getError('exerciseStartDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseStartHelpBlock")."</span>
                      </div>
                  </div>
                  <div class='row input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseEndDate' class='col-md-3 col-12 control-label-notes mb-1'>$langFinish:</label>
-                     <div class='col-md-9 col-12'>
+                     <label for='exerciseEndDate' class='col-12 control-label-notes mb-1'>$langFinish</label>
+                     <div class='col-12'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
                               <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                             </span>
-                            <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">
+                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                            <input class='form-control mt-0 border-start-0' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">
                         </div>
                         <span class='help-block'>".(Session::hasError('exerciseEndDate') ? Session::getError('exerciseEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseEndHelpBlock")."</span>
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                     <label for='exerciseTempSave' class='col-md-3 col-12 control-label-notes mb-1'>$langTemporarySave:</label>
-                     <div class='col-md-9 col-12'>
+                     <label for='exerciseTempSave' class='col-12 control-label-notes mb-1'>$langTemporarySave</label>
+                     <div class='col-12'>
                         <div class='row'>
                             <div class='col-md-6 col-12 radio'>
                                 <label>
@@ -424,8 +426,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 
                    
                 <div class='row form-group ".(Session::getError('exerciseTimeConstraint') ? "has-error" : "")." mt-4'>
-                    <label for='exerciseTimeConstraint' class='col-md-3 col-12 control-label-notes mb-1'>$langExerciseConstrain:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='exerciseTimeConstraint' class='col-12 control-label-notes mb-1'>$langExerciseConstrain</label>
+                    <div class='col-12'>
                         <input type='text' class='form-control' name='exerciseTimeConstraint' id='exerciseTimeConstraint' value='$exerciseTimeConstraint' placeholder='$langExerciseConstrain'>
                         <span class='help-block'>".(Session::getError('exerciseTimeConstraint') ? Session::getError('exerciseTimeConstraint') : "$langExerciseConstrainUnit ($langExerciseConstrainExplanation)")."</span>
                     </div>
@@ -433,8 +435,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             
             
                 <div class='row form-group ".(Session::getError('exerciseAttemptsAllowed') ? "has-error" : "")." mt-4'>
-                    <label for='exerciseAttemptsAllowed' class='col-md-3 col-12 control-label-notes mb-1'>$langExerciseAttemptsAllowed:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='exerciseAttemptsAllowed' class='col-12 control-label-notes mb-1'>$langExerciseAttemptsAllowed</label>
+                    <div class='col-12'>
                         <input type='text' class='form-control' name='exerciseAttemptsAllowed' id='exerciseAttemptsAllowed' value='$exerciseAttemptsAllowed' placeholder='$langExerciseConstrain'>
                         <span class='help-block'>".(Session::getError('exerciseAttemptsAllowed') ? Session::getError('exerciseAttemptsAllowed') : "$langExerciseAttemptsAllowedUnit ($langExerciseAttemptsAllowedExplanation)")."</span>
                     </div>
@@ -444,8 +446,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
                 $tool_content .= "
                 <div class='row form-group mt-4'>
-                     <label for='dispresults' class='col-md-3 col-12 control-label-notes mb-1'>$langAnswers:</label>
-                     <div class='col-md-9 col-12'>
+                     <label for='dispresults' class='col-12 control-label-notes mb-1'>$langAnswers</label>
+                     <div class='col-12'>
                          <div class='radio'>
                            <label>
                              <input type='radio' name='dispresults' value='1' ".(($displayResults == 1)? 'checked' : '').">
@@ -473,8 +475,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                     <label for='dispresults' class='col-md-3 col-12 control-label-notes mb-1'>$langScore:</label>
-                     <div class='col-md-9 col-12'>
+                     <label for='dispresults' class='col-12 control-label-notes mb-1'>$langScore</label>
+                     <div class='col-12'>
                          <div class='radio'>
                            <label>
                              <input type='radio' name='dispscore' value='1' ".(($displayScore == 1)? 'checked' : '').">
@@ -502,8 +504,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>
                  <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes mb-1'>$m[WorkAssignTo]:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes mb-1'>$m[WorkAssignTo]</label>
+                    <div class='col-12'>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($exerciseAssignToSpecific == 0 ? " checked" : "").">
@@ -525,8 +527,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
-                    <div class='col-md-3'></div>
-                    <div class='col-md-9 col-12'>
+                    <div class='col-12'>
                         <div class='table-responsive mt-0'>
                             <table id='assignees_tbl' class='table-default".(in_array($exerciseAssignToSpecific, [1, 2]) ? '' : ' hide')."'>
                                 <tr class='title1'>
@@ -555,8 +556,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 </div>
 
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes mb-1'>$langContinueAttempt:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes mb-1'>$langContinueAttempt</label>
+                    <div class='col-12'>
                         <div class='checkbox'>
                             <label>
                                 <input id='continueAttempt' name='continueAttempt' type='checkbox' " . ($continueTimeLimit? 'checked' : '') . ">
@@ -578,25 +579,25 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
                 <div id='CheckAccess' class='collapse'>
                     <div class='row form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")." mt-4'>
-                        <label for='exercisePasswordLock' class='col-md-3 col-12 control-label-notes mb-1'>$langPassCode:</label>
-                        <div class='col-md-9 col-12'>
+                        <label for='exercisePasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode</label>
+                        <div class='col-12'>
                             <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
-                            <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
+                            <span class='help-block Accent-200-cl'>".Session::getError('exercisePasswordLock')."</span>
                         </div>
                     </div>
                     <div class='row form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")." mt-4'>
-                        <label for='exerciseIPLock' class='col-md-3 col-12 control-label-notes mb-1'>$langIPUnlock:</label>
-                        <div class='col-md-9 col-12'>
+                        <label for='exerciseIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock</label>
+                        <div class='col-12'>
                             <select name='exerciseIPLock[]' class='form-select' id='exerciseIPLock' multiple>
                                 $exerciseIPLockOptions
                             </select>
-                            <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
+                            <span class='help-block Accent-200-cl'>".Session::getError('exerciseIPLock')."</span>
                         </div>
                     </div>" .
                     eClassTag::tagInput($exerciseId) . "
                 </div>
                 <div class='row form-group mt-5'>
-                    <div class='col-md-9 offset-md-3 d-flex justify-content-center align-items-center'>
+                    <div class='col-12 d-flex justify-content-center align-items-center'>
                       
                            
                              ".

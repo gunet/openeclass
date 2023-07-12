@@ -116,7 +116,7 @@
                                             <label for='file_title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='file_title' name='file_title' value='{{ $title }}'>
-                                                <span class='help-block'>{{ Session::getError('file_title') }}</span>
+                                                <span class='help-block Accent-200-cl'>{{ Session::getError('file_title') }}</span>
                                             </div>
                                         </div>
 

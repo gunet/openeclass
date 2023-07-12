@@ -60,7 +60,7 @@ $tool_content .= action_bar(array(
                             <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName</label>
                             <div class='col-sm-12'>
                                 <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName'>
-                                <span class='help-block'>".Session::getError('categoryname')."</span>
+                                <span class='help-block Accent-200-cl'>".Session::getError('categoryname')."</span>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
@@ -97,7 +97,7 @@ $tool_content .= action_bar(array(
                 <label for='CatName' class='col-sm-6 control-label-notes'>$langCategoryName</label>
                 <div class='col-sm-12'>
                     <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
-                                                    <span class='help-block'>".Session::getError('categoryname')."</span>
+                                                    <span class='help-block Accent-200-cl'>".Session::getError('categoryname')."</span>
                 </div>
             </div>
             <div class='form-group mt-4'>

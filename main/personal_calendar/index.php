@@ -543,7 +543,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                 </button>
                                             </div>
                                             <div class='modal-body'>
-                                                <div class='form-wrapper form-edit rounded'>
+                                                <div class='form-wrapper form-edit rounded border-0 px-0'>
                                                     
                                                     <input type='hidden' id='id' name='id' value='$eventToModify'>
                                                     <input type='hidden' name='rep' id='rep' value='$applytogroup'>
@@ -618,11 +618,12 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
 
 
                                                         <div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                                                            <label for='enddate' class='col-12 control-label-notes'>$langUntil:</label>
+                                                            <label for='enddate' class='col-12 control-label-notes'>$langUntil</label>
                                                             <div class='col-12'>
                                                                 <div class='input-group'>
-                                                                    <input class='form-control' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-                                                                    <div class='input-group-addon'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                                                                    <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                                                    <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
+                                                                    
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -647,7 +648,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                         }
                                                         $tool_content .= "
                                                             <div class='form-group mt-4'>
-                                                                <label class='col-sm-6 control-label-notes'>$langShowTo</label>
+                                                                <label class='col-sm-12 control-label-notes'>$langShowTo</label>
                                                                 <div class='col-sm-12'>
                                                                     <select class='form-select' name='visibility_level'>
                                                                         <option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>
@@ -1015,8 +1016,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     $tool_content .= "<div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                                                                             <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil</label>
                                                                             <div class='input-group'>
-                                                                                <input class='form-control mt-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
-                                                                                <span class='input-group-addon input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar fa-lg text-white'></i></span>
+                                                                                <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                                                                <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
+                                                                                
                                                                             </div>
                                                                         </div>";
 

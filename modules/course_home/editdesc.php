@@ -118,26 +118,25 @@ $tool_content = action_bar(array(
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
                     <div class='row form-group'>
-                        <label for='description' class='col-md-3 col-12 control-label-notes'>$langCourseLayout:</label>
-                        <div class='col-md-9 col-12'>
+                        <label for='description' class='col-12 control-label-notes'>$langCourseLayout</label>
+                        <div class='col-12'>
                             ".  selection($layouts, 'layout', $layout, 'class="form-control"')."
                         </div>
                     </div>
                     <div id='image_field' class='row form-group".(($layout == 1)?"":" hidden")." mt-4'>
-                        <label for='course_image' class='col-md-3 col-12 control-label-notes'>$langCourseImage:</label>
-                        <div class='col-md-9 col-12 d-inline-flex align-items-center'>
+                        <label for='course_image' class='col-12 control-label-notes'>$langCourseImage</label>
+                        <div class='col-12 d-inline-flex align-items-center'>
                             $course_image
                         </div>
                     </div>                  
                     <div class='row form-group mt-4'>
-                        <label for='description' class='col-md-3 col-12 control-label-notes'>$langDescription:</label>
-                        <div class='col-md-9 col-12'>
+                        <label for='description' class='col-12 control-label-notes'>$langDescription</label>
+                        <div class='col-12'>
                             " . rich_text_editor('description', 8, 20, $description) . "
                         </div>
                     </div>
                     <div class='row form-group mt-5'>
-                        <div class='col-md-3 col-12'></div>
-                        <div class='col-md-9 col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-center align-items-center'>
                            
                               
                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>

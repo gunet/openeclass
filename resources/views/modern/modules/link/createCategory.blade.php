@@ -80,7 +80,7 @@
                                     <label for='CatName' class='col-sm-6 control-label-notes'>{{ trans('langCategoryName') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='categoryname' size='53' placeholder='{{ trans('langCategoryName') }}' value='{{ isset($category) ? $category->name : "" }}'>
-                                        {!! Session::getError('categoryname', "<span class='help-block'>:message</span>") !!}
+                                        {!! Session::getError('categoryname', "<span class='help-block Accent-200-cl'>:message</span>") !!}
                                     </div>
                                     </div>
 

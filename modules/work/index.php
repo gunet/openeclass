@@ -2089,21 +2089,21 @@ function new_assignment() {
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
             <div class='row form-group " . ($title_error ? "has-error" : "") . "'>
-                <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langTitle:</label>
-                <div class='col-md-9 col-12'>
+                <label for='title' class='col-12 control-label-notes mb-1'>$langTitle</label>
+                <div class='col-12'>
                   <input name='title' type='text' class='form-control' id='title' placeholder='$langTitle' value='" . q($title) . "'>
                   <span class='help-block'>$title_error</span>
                 </div>
             </div>
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$langDescription:</label>
-                <div class='col-md-9 col-122'>
+                <label class='col-12 control-label-notes mb-1'>$langDescription</label>
+                <div class='col-12'>
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
             </div>
             <div class='row form-group mt-4'>
-                <label for='userfile' class='col-md-3 col-12 control-label-notes mb-1'>$langWorkFile:</label>
-                <div class='col-md-9 col-12'>" .
+                <label for='userfile' class='col-12 control-label-notes mb-1'>$langWorkFile</label>
+                <div class='col-12'>" .
         fileSizeHidenInput() . "
                   <input type='file' id='userfile' name='userfile'>
                 </div>
@@ -2111,8 +2111,8 @@ function new_assignment() {
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) { // lti options
         $tool_content .= "
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$langAssignmentType:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes mb-1'>$langAssignmentType</label>
+                <div class='col-12'>
                     <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
@@ -2126,15 +2126,15 @@ function new_assignment() {
                       </label>
                     </div>
                 </div>
-                <div class='col-md-9 col-12 offset-md-3'>
+                <div class='col-12'>
                     <span class='help-block'>$langTurnitinNewAssignNotice</span>
                 </div>
             </div>
 
-            <div class='col-md-9 col-12 offset-md-3 form-group hidden mt-4 mb-4 bg-white p-3' id='lti_label' style='box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
-                <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
-                <div class='form-group hidden mt-3' style='margin-top: 30px;'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langTiiApp:</label>
+            <div class='col-12 form-group hidden mt-4 mb-4 bg-white p-3' id='lti_label' style='box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
+                <h4>$langLTIOptions</h4>
+                <div class='form-group hidden mt-4'>
+                    <label for='title' class='col-sm-12 control-label-notes'>$langTiiApp</label>
                     <div class='col-12'>
                       <select name='lti_template' class='form-select' id='lti_templates' disabled>
                             $lti_template_options
@@ -2142,12 +2142,12 @@ function new_assignment() {
                     </div>
                 </div>
             <div class='form-group hidden mt-3'>
-                <label for='lti_launchcontainer' class='col-sm-6 control-label-notes'>$langLTILaunchContainer:</label>
+                <label for='lti_launchcontainer' class='col-sm-12 control-label-notes'>$langLTILaunchContainer</label>
                 <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer', LTI_LAUNCHCONTAINER_EMBED, 'id="lti_launchcontainer" disabled') . "</div>
             </div>";
         $tool_content .= "
-            <!-- <div class='form-group hidden mt-3'>
-                <label for='tii_submit_papers_to' class='col-sm-6 control-label-notes'>$langTiiSubmissionSettings:</label>
+            <!-- <div class='form-group hidden mt-4'>
+                <label for='tii_submit_papers_to' class='col-sm-12 control-label-notes mb-1'>$langTiiSubmissionSettings:</label>
                 <div class='col-sm-12'>
                   <select name='tii_submit_papers_to' class='form-select' id='tii_submit_papers_to' disabled>
                         <option value='0'>$langTiiSubmissionNoStore</option>
@@ -2156,8 +2156,8 @@ function new_assignment() {
                   </select>
                 </div>
             </div> -->
-            <div class='form-group hidden mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langTiiCompareAgainst:</label>
+            <div class='form-group hidden mt-4'>
+                <label class='col-sm-12 control-label-notes mb-1'>$langTiiCompareAgainst</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                       <label>
@@ -2185,8 +2185,8 @@ function new_assignment() {
                     </div>-->
                 </div>
             </div>
-            <div class='form-group hidden mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langTiiSimilarityReport:</label>
+            <div class='form-group hidden mt-4'>
+                <label class='col-sm-12 control-label-notes mb-1'>$langTiiSimilarityReport</label>
                 <div class='col-sm-12'>
                   <select name='tii_report_gen_speed' class='form-select' id='tii_report_gen_speed' disabled>
                         <option value='0' selected>$langTiiReportGenImmediatelyNoResubmit</option>
@@ -2194,7 +2194,7 @@ function new_assignment() {
                         <option value='2'>$langTiiReportGenOnDue</option>
                   </select>
                 </div>
-                <div class='col-sm-12 mt-3'>
+                <div class='col-sm-12 mt-4'>
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
@@ -2221,8 +2221,8 @@ function new_assignment() {
                     </div>
                 </div>
             </div>
-            <div class='form-group hidden mt-3'>
-                <label class='col-sm-6 control-label-notes'>$langTiiExcludeType:</label>
+            <div class='form-group hidden mt-4'>
+                <label class='col-sm-12 control-label-notes mb-1'>$langTiiExcludeType</label>
                 <div class='col-sm-12'>
                     <div class='radio'>
                       <label>
@@ -2238,7 +2238,7 @@ function new_assignment() {
                     </div>
                 </div>
             </div>
-            <div class='form-group hidden mt-3' style='margin-bottom: 20px;'>
+            <div class='form-group hidden mt-4'>
                 <label for='tii_exclude_value' class='col-sm-6 control-label-notes'>$langTiiExcludeValue:</label>
                 <div class='col-sm-12'>
                     <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='0' disabled>
@@ -2251,8 +2251,8 @@ function new_assignment() {
     }
     $tool_content .= "
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$langGradeType:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes mb-1'>$langGradeType</label>
+                <div class='col-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='numbers_button' name='grading_type' value='0'". ($grading_type==ASSIGNMENT_STANDARD_GRADE ? " checked" : "") .">
@@ -2295,15 +2295,15 @@ function new_assignment() {
                 $tool_content .= "</div>
             </div>
             <div class='row form-group".($max_grade_error ? " has-error" : "").($grading_type==ASSIGNMENT_STANDARD_GRADE ? "" : " hidden")." mt-4'>
-                <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$m[max_grade]:</label>
-                <div class='col-md-9 col-12'>
+                <label for='title' class='col-12 control-label-notes mb-1'>$m[max_grade]</label>
+                <div class='col-12'>
                   <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
                   <span class='help-block'>$max_grade_error</span>
                 </div>
             </div>
             <div class='row form-group".($scale_error ? " has-error" : "").($grading_type==ASSIGNMENT_SCALING_GRADE ? "" : " hidden")." mt-4'>
-                <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langGradeScales:</label>
-                <div class='col-md-9 col-12'>
+                <label for='title' class='col-12 control-label-notes mb-1'>$langGradeScales</label>
+                <div class='col-12'>
                   <select name='scale' class='form-select' id='scales' disabled>
                         $scale_options
                   </select>
@@ -2311,8 +2311,8 @@ function new_assignment() {
                 </div>
             </div>
             <div class='row form-group".($rubric_error ? " has-error" : "").($grading_type==ASSIGNMENT_RUBRIC_GRADE ? "" : " hidden")." mt-4'>
-                <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langGradeRubrics:</label>
-                <div class='col-md-9 col-12'>
+                <label for='title' class='col-12 control-label-notes mb-1'>$langGradeRubrics</label>
+                <div class='col-12'>
                   <select name='rubric' class='form-select' id='rubrics' disabled>
                         $rubric_options
                   </select>
@@ -2321,15 +2321,15 @@ function new_assignment() {
             </div>
 
             <div class='row form-group" .($review_error_user ? " has-error" : " ").($grading_type==ASSIGNMENT_PEER_REVIEW_GRADE ? "" : " hidden")." mt-4'>
-                <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langReviewsPerUser:</label>
-                <div class='col-md-9 col-122'>
+                <label for='title' class='col-12 control-label-notes mb-1'>$langReviewsPerUser</label>
+                <div class='col-12'>
                     <input name='reviews_per_user' type='text' class='form-control' id = 'reviews_per_user'  disabled>
                     <span class='help-block'>$langAllowableReviewValues $review_error_user</span>
                 </div>
             </div>
             <div class='row form-group" .($review_error_rubric ? " has-error" : "").($grading_type==3 ? "" : " hidden")." mt-4'>
-                <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langGradeRubrics:</label>
-                <div class='col-md-9 col-12'>
+                <label for='title' class='col-12 control-label-notes mb-1'>$langGradeRubrics</label>
+                <div class='col-12'>
                   <select name='rubric_review' class='form-select' id='reviews' disabled>
                         $rubric_options
                   </select>
@@ -2337,13 +2337,14 @@ function new_assignment() {
                 </div>
 
                 <div class='row input-append date".(Session::getError('WorkStart_review') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$WorkStart_review' data-date-format='dd-mm-yyyy'>
-                    <label for='WorkStart_review' class='col-md-3 col-12 control-label-notes mb-1'>$langReviewStart:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='WorkStart_review' class='col-12 control-label-notes mb-1'>$langReviewStart</label>
+                    <div class='col-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
                              <input style='cursor:pointer;' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
                            </span>
-                           <input class='form-control' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
+                           <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                           <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")." </span>
                         &nbsp
@@ -2351,13 +2352,14 @@ function new_assignment() {
                 </div>
 
                 <div class='row input-append date".(Session::getError('WorkEnd_review') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$WorkEnd_review' data-date-format='dd-mm-yyyy'>
-                    <label for='exerciseEndDate' class='col-md-3 col-12 control-label-notes mb-1'>$langReviewEnd:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='exerciseEndDate' class='col-12 control-label-notes mb-1'>$langReviewEnd</label>
+                    <div class='col-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
                              <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
                            </span>
-                           <input class='form-control' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                           <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkEnd_review') ? Session::getError('WorkEnd_review') : "<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                     </div>
@@ -2365,8 +2367,8 @@ function new_assignment() {
             </div>
 
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$langWorkSubType:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes mb-1'>$langWorkSubType</label>
+                <div class='col-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='file_button' name='submission_type' value='0'" .
@@ -2391,25 +2393,27 @@ function new_assignment() {
                 </div>
             </div>
             <div class='row input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
-                <label for='WorkStart' class='col-md-3 col-12 control-label-notes mb-1'>$langStartDate:</label>
-                <div class='col-md-9 col-12'>
+                <label for='WorkStart' class='col-12 control-label-notes mb-1'>$langStartDate</label>
+                <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
                          <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
                        </span>
-                       <input class='form-control' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
+                       <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                       <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
                    </div>
                    <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
                 </div>
             </div>
             <div class='row input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
-                <label for='exerciseEndDate' class='col-md-3 col-12 control-label-notes mb-1'>$langGroupWorkDeadline_of_Submission:</label>
-                <div class='col-md-9 col-12'>
+                <label for='exerciseEndDate' class='col-12 control-label-notes mb-1'>$langGroupWorkDeadline_of_Submission</label>
+                <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
                          <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
                        </span>
-                       <input class='form-control' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
+                       <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                       <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
                    </div>
                    <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                 </div>
@@ -2417,13 +2421,14 @@ function new_assignment() {
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
             <div class='row input-append date form-group hidden".(Session::getError('WorkFeedbackRelease') ? " has-error" : "")." mt-4' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
-                <label for='tii_feedbackreleasedate' class='col-md-3 col-12 control-label-notes mb-1'>$langTiiFeedbackReleaseDate:</label>
-                <div class='col-md-9 col-12'>
+                <label for='tii_feedbackreleasedate' class='col-12 control-label-notes mb-1'>$langTiiFeedbackReleaseDate</label>
+                <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
                          <input style='cursor:pointer;' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
                        </span>
-                       <input class='form-control' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
+                       <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                       <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
                    </div>
                    <span class='help-block'>".(Session::hasError('WorkFeedbackRelease') ? Session::getError('WorkFeedbackRelease') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentFeedbackReleaseHelpBlock")."</span>
                 </div>
@@ -2431,8 +2436,8 @@ function new_assignment() {
     }
     $tool_content .= "
             <div class='mt-4 form-group ". ($WorkEnd ? "" : "hide")." mt-4' id='late_sub_row'>
-                <div class='col-md-9 col-12 offset-md-3'>
-                    <div class='checkbox ps-md-2'>
+                <div class='col-12'>
+                    <div class='checkbox'>
                       <label>
                         <input type='checkbox' id='late_submission' name='late_submission' value='1'>
                         $m[late_submission_enable]
@@ -2441,8 +2446,8 @@ function new_assignment() {
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='col-md-9 col-12 offset-md-3'>
-                    <div class='checkbox ps-md-2'>
+                <div class='col-12'>
+                    <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='notify_submission' value='1'>
                         $langNotifyAssignmentSubmission
@@ -2451,8 +2456,8 @@ function new_assignment() {
                 </div>
             </div>
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$m[group_or_user]:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes mb-1'>$m[group_or_user]</label>
+                <div class='col-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='user_button' name='group_submissions' value='0' checked>
@@ -2468,8 +2473,8 @@ function new_assignment() {
                 </div>
             </div>
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$m[WorkAssignTo]:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes mb-1'>$m[WorkAssignTo]</label>
+                <div class='col-12'>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' checked>
@@ -2491,7 +2496,7 @@ function new_assignment() {
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='col-md-9 col-12 offset-md-3'>
+                <div class=col-12 offset-md-3'>
                     <div class='table-responsive'>
                         <table id='assignees_tbl' class='table-default hide'>
                             <tr class='title1'>
@@ -2526,8 +2531,8 @@ function new_assignment() {
                 "</select>";
             $tool_content .= "
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes mb-1'>$langAutoJudgeEnable:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes mb-1'>$langAutoJudgeEnable</label>
+                    <div class='col-12'>
                         <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1'></div>
                         <div class='table-responsive'>
                             <table style='display: none;'>
@@ -2588,8 +2593,8 @@ function new_assignment() {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
-                  <label class='col-md-3 col-12 control-label-notes mb-1'>$langAutoJudgeProgrammingLanguage:</label>
-                  <div class='col-md-9 col-12'>
+                  <label class='col-12 control-label-notes mb-1'>$langAutoJudgeProgrammingLanguage</label>
+                  <div class='col-12'>
                     $supported_languages
                   </div>
                 </div>";
@@ -2597,14 +2602,14 @@ function new_assignment() {
     }
     $tool_content .= "
             <div class='row form-group mt-4'>
-                <label for='assignmentPasswordLock' class='col-md-3 col-12 control-label-notes mb-1'>$langPassCode:</label>
-                <div class='col-md-9 col-12'>
+                <label for='assignmentPasswordLock' class='col-12 control-label-notes mb-1'>$langPassCode</label>
+                <div class='col-12'>
                     <input name='assignmentPasswordLock' type='text' class='form-control' id='assignmentPasswordLock' value='".q($assignmentPasswordLock)."'>
                 </div>
             </div>
             <div class='row form-group ".(Session::getError('assignmentIPLock') ? 'has-error' : '')." mt-4'>
-                <label for='assignmentIPLock' class='col-md-3 col-12 control-label-notes mb-1'>$langIPUnlock:</label>
-                <div class='col-md-9 col-12'>
+                <label for='assignmentIPLock' class='col-12 control-label-notes mb-1'>$langIPUnlock</label>
+                <div class='col-12'>
                     <select name='assignmentIPLock[]' class='form-select' id='assignmentIPLock' multiple>
                         $assignmentIPLockOptions
                     </select>
@@ -2613,7 +2618,7 @@ function new_assignment() {
             eClassTag::tagInput();
     $tool_content .= "
         <div class='form-group mt-5'>
-            <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center'>
+            <div class='col-12 d-flex justify-content-center align-items-center'>
 
                     "
                     .
@@ -3139,22 +3144,22 @@ function show_edit_assignment($id) {
     <input type='hidden' name='choice' value='do_edit' />
     <fieldset>
             <div class='row form-group ".($title_error ? "has-error" : "")."'>
-                <label for='title' class='col-md-3 col-12 control-label-notes'>$langTitle:</label>
-                <div class='col-md-9 col-12'>
+                <label for='title' class='col-12 control-label-notes'>$langTitle</label>
+                <div class='col-12'>
                   <input name='title' type='text' class='form-control' id='title' value='".q($row->title)."' placeholder='$langTitle'>
                   <span class='help-block'>$title_error</span>
                 </div>
             </div>
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes'>$langDescription:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes'>$langDescription</label>
+                <div class='col-12'>
                 " . rich_text_editor('desc', 4, 20, $row->description) . "
                 </div>
             </div>";
     if (!empty($comments)) {
         $tool_content .= "<div class='row form-group mt-4'>
-                <label for='desc' class='col-md-3 col-12 control-label-notes'>$m[comments]:</label>
-                <div class='col-md-9 col-12'>
+                <label for='desc' class='col-12 control-label-notes'>$m[comments]</label>
+                <div class='col-12'>
                 " . rich_text_editor('comments', 5, 65, $comments) . "
                 </div>
             </div>";
@@ -3162,8 +3167,8 @@ function show_edit_assignment($id) {
 
     $tool_content .= "
                 <div class='row form-group mt-4'>
-                    <label for='userfile' class='col-md-3 col-12 control-label-notes'>$langWorkFile:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='userfile' class='col-12 control-label-notes'>$langWorkFile</label>
+                    <div class='col-12'>
                       ".(($row->file_name)? "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id&amp;file_type=1'>".q($row->file_name)."</a>"
                 . "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete_file' onClick='return confirmation(\"$m[WorkDeleteAssignmentFileConfirm]\");'>
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
@@ -3172,8 +3177,8 @@ function show_edit_assignment($id) {
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes mb-1'>$langAssignmentType:</label>
-                    <div class='col-md-9 col-12 d-inline-flex'>
+                    <label class='col-12 control-label-notes mb-1'>$langAssignmentType</label>
+                    <div class='col-12 d-inline-flex'>
                         <div class='radio'>
                           <label>
                             <input type='radio' name='assignment_type' value='0'" . ($assignment_type == 0 ? " checked" : "") . ">
@@ -3187,12 +3192,12 @@ function show_edit_assignment($id) {
                           </label>
                         </div>
                     </div>
-                    <div class='col-md-9 col-12 offset-md-3 mt-1 mb-1'>
+                    <div class='col-12 mt-1 mb-1'>
                         <span class='help-block'>$langTurnitinNewAssignNotice</span>
                     </div>
                 </div>
 
-                <div class='col-md-9 offset-md-3'>
+                <div class='col-12'>
                 <div class='container-fluid form-group " . ($assignment_type == 0 ? " hidden" : "") . " p-3' id='lti_label' style='margin-top: 30px; margin-bottom:30px; box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); padding-top:10px; padding-bottom:10px;'>
                     <h4 class='col-sm-offset-1'>$langLTIOptions</h4>
                     <div class='form-group $lti_hidden mt-4'>
@@ -3220,7 +3225,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>-->
                 <div class='form-group $lti_hidden mt-4'>
-                    <label class='col-sm-6 control-label-notes'>$langTiiCompareAgainst</label>
+                    <label class='col-sm-12 control-label-notes'>$langTiiCompareAgainst</label>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
                           <label>
@@ -3249,7 +3254,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='form-group $lti_hidden mt-4'>
-                    <label class='col-sm-6 control-label-notes'>$langTiiSimilarityReport</label>
+                    <label class='col-sm-12 control-label-notes'>$langTiiSimilarityReport</label>
                     <div class='col-sm-12'>
                       <select name='tii_report_gen_speed' class='form-select' id='tii_report_gen_speed' $lti_disabled>
                             <option value='0' " . (($row->tii_report_gen_speed == 0) ? 'selected' : '') . ">$langTiiReportGenImmediatelyNoResubmit</option>
@@ -3286,8 +3291,8 @@ function show_edit_assignment($id) {
                 </div>
                 </div>
                     <div class='row form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . " mt-4'>
-                        <label class='col-md-3 col-12 control-label-notes'>$langTiiExcludeType:</label>
-                        <div class='col-md-9 col-12'>
+                        <label class='col-12 control-label-notes'>$langTiiExcludeType</label>
+                        <div class='col-12'>
                             <div class='radio'>
                               <label>
                                 <input type='radio' name='tii_exclude_type' id='tii_exclude_type_words' value='words' " . (($row->tii_exclude_type == 'words' || $row->tii_exclude_type == 'none') ? 'checked' : '') . " $lti_disabled>
@@ -3303,8 +3308,8 @@ function show_edit_assignment($id) {
                         </div>
                 </div>
                 <div class='row form-group " . (($row->tii_exclude_type == 'none') ? 'hidden' : '') . " mt-4'>
-                    <label for='tii_exclude_value' class='col-md-3 col-12 control-label-notes'>$langTiiExcludeValue:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='tii_exclude_value' class='col-12 control-label-notes'>$langTiiExcludeValue</label>
+                    <div class='col-12'>
                         <input name='tii_exclude_value' type='text' class='form-control' id='tii_exclude_value' value='" . intval($row->tii_exclude_value) . "' $lti_disabled>
                     </div>
                 </div>
@@ -3314,8 +3319,8 @@ function show_edit_assignment($id) {
     }
     $tool_content .= "
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes'>$langGradeType:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes mb-1'>$langGradeType</label>
+                    <div class='col-12'>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='numbers_button' name='grading_type' value='0'". ($grading_type==0 ? " checked" : "") .">
@@ -3357,15 +3362,15 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='row form-group".($max_grade_error ? " has-error" : "").($grading_type==0 ? "" : " hidden")." mt-4'>
-                    <label for='title' class='col-md-3 col-12 control-label-notes'>$m[max_grade]:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='title' class='col-12 control-label-notes'>$m[max_grade]</label>
+                    <div class='col-12'>
                       <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
                       <span class='help-block'>$max_grade_error</span>
                     </div>
                 </div>
                 <div class='row form-group".($scale_error ? " has-error" : "").($grading_type==1 ? "" : " hidden")." mt-4'>
-                    <label for='title' class='col-md-3 col-12 control-label-notes'>$langGradeScales:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='title' class='col-12 control-label-notes'>$langGradeScales</label>
+                    <div class='col-12'>
                       <select name='scale' class='form-select' id='scales'".(!$grading_type ? " disabled" : "").">
                             $scale_options
                       </select>
@@ -3373,8 +3378,8 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='row form-group".($rubric_error ? " has-error" : "").($grading_type==2 ? "" : " hidden")." mt-4'>
-                    <label for='title' class='col-md-3 col-12 control-label-notes'>$langGradeRubrics:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='title' class='col-12 control-label-notes'>$langGradeRubrics</label>
+                    <div class='col-12'>
                       <select name='rubric' class='form-select' id='rubrics'".(!$grading_type ? " disabled" : "").">
                             $rubric_options
                       </select>
@@ -3384,16 +3389,16 @@ function show_edit_assignment($id) {
 
 
 				<div class='row form-group" .($review_error_user ? " has-error" : " ").($grading_type==3 ? "" : " hidden")." mt-4'>
-					<label for='title' class='col-md-3 col-12 control-label-notes'>$langReviewsPerUser:</label>
-					<div class='col-md-9 col-12'>
+					<label for='title' class='col-12 control-label-notes'>$langReviewsPerUser</label>
+					<div class='col-12'>
 						<input name='reviews_per_user' id = 'reviews_per_user' type='text' class='form-control' value='".q($row->reviews_per_assignment)."'>
 						<span class='help-block'>$langAllowableReviewValues $review_error_user</span>
 					</div>
 				</div>
 
                 <div class='row form-group".($review_error_rubric ? " has-error" : "").($grading_type==3 ? "" : " hidden")." mt-4' >
-				   <label for='title' class='col-md-3 col-12 control-label-notes'>$langGradeRubrics:</label>
-                    <div class='col-md-9 col-12'>
+				   <label for='title' class='col-12 control-label-notes'>$langGradeRubrics</label>
+                    <div class='col-12'>
                      <select name='rubric_review' class='form-select' id='reviews'".(!$grading_type ? " disabled" : "").">
                             $rubric_option_review
                       </select>
@@ -3406,7 +3411,8 @@ function show_edit_assignment($id) {
                                <span class='input-group-addon'>
                                  <input style='cursor:pointer;' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
                                </span>
-                               <input class='form-control' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
+                               <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                               <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")."</span>
 							&nbsp
@@ -3419,7 +3425,8 @@ function show_edit_assignment($id) {
                                <span class='input-group-addon'>
                                  <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
                                </span>
-                               <input class='form-control' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
+                               <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                               <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkEnd_review') ? Session::getError('WorkEnd_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                         </div>
@@ -3427,8 +3434,8 @@ function show_edit_assignment($id) {
                 </div>
 
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes'>$langWorkSubType:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes mb-1'>$langWorkSubType</label>
+                    <div class='col-12'>
                         <div class='radio mb-2'>
                           <label>
                             <input type='radio' id='file_button' name='submission_type' value='0'" .
@@ -3456,26 +3463,28 @@ function show_edit_assignment($id) {
 
 
                         <div class='row input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
-                            <label for='WorkStart' class='col-md-3 col-12 control-label-notes'>$langStartDate:</label>
-                            <div class='col-md-9 col-12'>
+                            <label for='WorkStart' class='col-12 control-label-notes'>$langStartDate</label>
+                            <div class='col-12'>
                             <div class='input-group'>
                                 <span class='input-group-addon'>
                                     <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
                                 </span>
-                                <input class='form-control' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
+                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
                             </div>
                         </div>
 
                         <div class='row input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
-                            <label for='WorkEnd' class='col-md-3 col-12 control-label-notes'>$langGroupWorkDeadline_of_Submission:</label>
-                            <div class='col-md-9 col-12'>
+                            <label for='WorkEnd' class='col-12 control-label-notes'>$langGroupWorkDeadline_of_Submission</label>
+                            <div class='col-12'>
                             <div class='input-group'>
                                 <span class='input-group-addon'>
                                     <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
                                 </span>
-                                <input class='form-control' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
+                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
                             </div>
@@ -3485,13 +3494,14 @@ function show_edit_assignment($id) {
     if (is_active_external_lti_app($turnitinapp, TURNITIN_LTI_TYPE, $course_id)) {
         $tool_content .= "
                 <div class='row input-append date form-group $lti_hidden".(Session::getError('WorkFeedbackRelease') ? " has-error" : "")." mt-4' id='feedbackreleasedatepicker' data-date='$WorkFeedbackRelease' data-date-format='dd-mm-yyyy'>
-                    <label for='tii_feedbackreleasedate' class='col-md-3 col-12 control-label-notes'>$langTiiFeedbackReleaseDate:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='tii_feedbackreleasedate' class='col-12 control-label-notes'>$langTiiFeedbackReleaseDate</label>
+                    <div class='col-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
                              <input style='cursor:pointer;' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
                            </span>
-                           <input class='form-control' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                           <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkFeedbackRelease') ? Session::getError('WorkFeedbackRelease') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentFeedbackReleaseHelpBlock")."</span>
                     </div>
@@ -3500,7 +3510,7 @@ function show_edit_assignment($id) {
     }
     $tool_content .= "
                 <div class='form-group ". ($WorkEnd ? "" : "hide") ." mt-4' id='late_sub_row'>
-                    <div class='col-md-9 col-12 offset-md-3 ps-md-1'>
+                    <div class='col-12'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' id='late_submission' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '')."".($grading_type == 3 ? " disabled" : "").">
@@ -3510,7 +3520,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <div class='col-md-9 col-12 offset-md-3 ps-md-1'>
+                    <div class='col-12'>
                         <div class='checkbox'>
                           <label>
                             <input type='checkbox' name='notify_submission' value='1' $checked>
@@ -3520,8 +3530,8 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes'>$m[group_or_user]:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes'>$m[group_or_user]</label>
+                    <div class='col-12'>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='user_button' name='group_submissions' value='0' ".(($row->group_submissions==1) ? '' : 'checked').">
@@ -3537,8 +3547,8 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes'>$m[WorkAssignTo]:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes'>$m[WorkAssignTo]</label>
+                    <div class='col-12'>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_all' name='assign_to_specific' value='0' ".(($row->assign_to_specific==1) ? '' : 'checked').">
@@ -3560,7 +3570,7 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <div class='col-md-9 col-12 offset-md-3'>
+                    <div class='col-12'>
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default ".((($row->assign_to_specific==1) or ($row->assign_to_specific==2))? '' : 'hide')."'>
                             <tr class='title1'>
@@ -3593,8 +3603,8 @@ function show_edit_assignment($id) {
                     $lang = $row->lang;
                     $tool_content .= "
                     <div class='row form-group mt-4'>
-                    <label class='col-md-3 col-12 control-label-notes'>$langAutoJudgeEnable:</label>
-                    <div class='col-md-9 col-12'>
+                    <label class='col-12 control-label-notes'>$langAutoJudgeEnable</label>
+                    <div class='col-12'>
                         <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' ".($auto_judge == true ? "checked='1'" : '')." /></div>
                         <table>
                             <thead>
@@ -3705,8 +3715,8 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                     <div class='row form-group mt-4'>
-                      <label class='col-md-3 col-12 control-label-notes'>$langAutoJudgeProgrammingLanguage:</label>
-                      <div class='col-md-9 col-12'>
+                      <label class='col-12 control-label-notes'>$langAutoJudgeProgrammingLanguage</label>
+                      <div class='col-12'>
                         <select id='lang' name='lang'>";
                         foreach($autojudge->getSupportedLanguages() as $llang => $ext) {
                             $tool_content .= "<option value='$llang' ".($llang === $lang ? "selected='selected'" : "").">$llang</option>\n";
@@ -3719,14 +3729,14 @@ function show_edit_assignment($id) {
 
                 $tool_content .= "
                 <div class='row form-group mt-4'>
-                    <label for='assignmentPasswordLock' class='col-md-3 col-12 control-label-notes'>$langPassCode:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='assignmentPasswordLock' class='col-12 control-label-notes'>$langPassCode</label>
+                    <div class='col-12'>
                         <input name='assignmentPasswordLock' type='text' class='form-control' id='assignmentPasswordLock' value='".q($assignmentPasswordLock)."'>
                     </div>
                 </div>
                 <div class='row form-group ".(Session::getError('assignmentIPLock') ? 'has-error' : '')." mt-4'>
-                    <label for='assignmentIPLock' class='col-md-3 col-12 control-label-notes'>$langIPUnlock:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='assignmentIPLock' class='col-12 control-label-notes'>$langIPUnlock</label>
+                    <div class='col-12'>
                         <select name='assignmentIPLock[]' class='form-select' id='assignmentIPLock' multiple>
                             $assignmentIPLockOptions
                         </select>
@@ -4167,7 +4177,7 @@ function show_assignment_review($id, $display_graph_results = false) {
                 <td width='5' class='text-center'>
                   <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
                     $grade_field
-                    <span class='help-block'>".Session::getError("grade.$row->id")."</span>
+                    <span class='help-block Accent-200-cl'>".Session::getError("grade.$row->id")."</span>
                   </div>
                 </td>
                 <td class='text-center'>
@@ -4729,7 +4739,7 @@ function assignment_details($id, $row, $x =false) {
             </div>
             <div class='row p-2 margin-bottom-fat'>
             <div class='col-sm-4'>
-                <strong class='control-label-notes'>$langGradeType:</strong>
+                <strong class='control-label-notes mb-1'>$langGradeType:</strong>
             </div>
             <div class='col-sm-8'>";
             if ($preview_rubric == 1) {
@@ -5215,7 +5225,7 @@ function show_assignment($id, $display_graph_results = false) {
                 $tool_content.="<td class='col-md-1' class='text-center'>
 									<div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
 										$grade_field
-										<span class='help-block'>".Session::getError("grade.$row->id")."</span>
+										<span class='help-block Accent-200-cl'>".Session::getError("grade.$row->id")."</span>
 									</div>
 								</td>
 								<td class='text-center'>

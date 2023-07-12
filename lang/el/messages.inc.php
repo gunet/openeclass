@@ -4564,6 +4564,7 @@ $langRubricNotDelete = "Η ρουμπρίκα δεν μπορεί πλέον ν�
 $langRubricGrade = "Βαθμ. με ρουμπρίκα";
 $langRubricGrading = "Βαθμολόγηση με ρουμπρίκα";
 $langGradedAt = 'βαθμολογήθηκε στις';
+$langRubricCriteria = "Κριτήρια";
 $langAssignmentType = "Τύπος Εργασίας";
 $langAssignmentTypeEclass = "Eclass";
 $langAssignmentTypeTurnitin = "TurnItIn";

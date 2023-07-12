@@ -2348,7 +2348,8 @@ function certificate_settings($element, $element_id = 0) {
                            <span class='input-group-addon'>
                              <input style='cursor:pointer;' type='checkbox' id='enablecertdeadline' name='enablecertdeadline' value='1' $check_certdeadline>
                            </span>
-                           <input class='form-control' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                           <input class='form-control mt-0 border-start-0' name='enddatepicker' id='enddatepicker' type='text' value='$certdeadline' $statuscertdeadline>
                        </div>
                        <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langCertDeadlineHelp</span>
                     </div>

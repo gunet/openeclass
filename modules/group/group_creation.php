@@ -72,14 +72,14 @@ if (isset($_GET['all'])) {
             <label for='group_quantity' class='col-sm-6 control-label-notes'>$langNewGroups</label>
             <div class='col-sm-12'>
                 <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
-                <span class='help-block'>".Session::getError('group_quantity')."</span>
+                <span class='help-block Accent-200-cl'>".Session::getError('group_quantity')."</span>
             </div>
         </div>
         <div class='form-group".(Session::getError('group_max') ? " has-error":"")." mt-4'>
             <label for='group_max' class='col-sm-6 control-label-notes'>$langNewGroupMembers</label>
             <div class='col-sm-12'>
                 <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
-                <span class='help-block'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
+                <span class='help-block Accent-200-cl'>".(Session::getError('group_max') ?: "$langGroupInfiniteUsers")."</span>
             </div>
         </div>
         <div class='form-group mt-4'>
@@ -146,7 +146,7 @@ if (isset($_GET['all'])) {
             <label class='col-sm-6 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>
                 <input class='form-control' type=text name='group_name' size='40'>
-                <span class='help-block'>".Session::getError('group_name')."</span>
+                <span class='help-block Accent-200-cl'>".Session::getError('group_name')."</span>
             </div>
         </div>
         <div class='form-group mt-4'>
@@ -165,7 +165,7 @@ if (isset($_GET['all'])) {
             </div>
             <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
-                    <label class='col-sm-12 control-label-notes'>$langGroupTutor</label>
+                    <label class='col-sm-12 control-label-notes mb-2'>$langGroupTutor</label>
                     <div class='col-sm-12'>
                         $tool_content_tutor
                     </div>

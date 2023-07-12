@@ -48,7 +48,7 @@
                                                         <label for='name' class='col-sm-4 control-label-notes'>{{ trans('langCategoryName') }}: </label>
                                                         <div class='col-sm-12'>
                                                             <input type='text' class='form-control' id='term' name='name' placeholder='{{ trans('langCategoryName') }}' value='{{ $name }}'>
-                                                            <span class='help-block'>{{ Session::getError('name') }}</span>    
+                                                            <span class='help-block Accent-200-cl'>{{ Session::getError('name') }}</span>    
                                                         </div>
                                                     </div>
 

@@ -140,19 +140,19 @@ if (isset($_GET['rubric_id'])) {
                 $('#inserthere').before(
                                     '<div id=\'critDiv'+ j +'\'>'+	
                                     '<div class=\'row form-group mt-4\'>'+
-            '   <label for=\'title\' class=\'col-md-3 col-12 control-label-notes mb-1\'>". js_escape($langRubricCrit). ":</label>'+
-            '    <div class=\'col-md-9 col-12\'>'+
+            '   <label for=\'title\' class=\'col-12 control-label-notes mb-1\'>". js_escape($langRubricCrit). "</label>'+
+            '    <div class=\'col-12\'>'+
             '      <input name=\'title[]\' class=\'form-control\' id=\'title\' value=\'\' type=\'text\'> '+     
             '    </div>'+
-                '<label for=\'weight\' class=\'col-md-3 col-12 control-label-notes mb-1 mt-4\'>" . js_escape($langGradebookWeight). " (%):</label>'+
-            '    <div class=\'col-md-9 col-12 mt-4\'>'+
+                '<label for=\'weight\' class=\'col-12 control-label-notes mb-1 mt-4\'>" . js_escape($langGradebookWeight). " (%)</label>'+
+            '    <div class=\'col-12 mt-0\'>'+
             '      <input name=\'weight[]\' class=\'form-control\' id=\'weight\' value=\'\' type=\'number\'> '+     
             '    </div>'+
-            '    <div class=\'col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center mt-4\'><a class=\'btn submitAdminBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a></div>'+
+            '    <div class=\'col-12 d-flex justify-content-center align-items-center mt-4\'><a class=\'btn deleteAdminBtn\' href=\'#\' id=\'remCrit'+j+'\'><span class=\'fa-solid fa-xmark\'></span></a></div>'+
             '</div>'+
             '<div class=\'row form-group mt-4\'>'+
-            '    <label class=\'col-md-3 col-12 control-label-notes mb-1\'>" . js_escape($langScales). ":</label>'+
-            '    <div class=\'col-md-9 col-12\'>'+
+            '    <label class=\'col-12 control-label-notes mb-1\'>" . js_escape($langScales). "</label>'+
+            '    <div class=\'col-12\'>'+
             '        <div class=\'table-responsive mt-0\'>'+
             '            <table class=\'table-default\' id=\'scale_table'+ j +'\'>'+
             '                <thead class=\'list-header\'>'+
@@ -177,7 +177,7 @@ if (isset($_GET['rubric_id'])) {
             '            </table>'+
             '        </div>'+
             '    </div>'+
-            '    <div class=\'col-md-9 col-12 offset-md-3 mt-4 d-flex justify-content-center align-items-center\'>'+
+            '    <div class=\'col-12 mt-4 d-flex justify-content-center align-items-center\'>'+
             '         <a class=\'btn submitAdminBtn\' id=\'addScale'+ j +'\'>" . js_escape($langAdd) . "</a>'+
             '    </div>'+
             '	</div>'+
@@ -213,25 +213,25 @@ if (isset($_GET['rubric_id'])) {
             $crit_rows .= "
                 <div id='critDiv$crit'>
                
-                <div class='form-group mt-3'>
+                <div class='form-group mt-4'>
                    <div class='row'>
-                    <label for='title[$crit]' class='col-sm-2 control-label-notes'>$langRubricCrit:</label>
-                    <div class='col-sm-3'>
+                    <label for='title[$crit]' class='col-12 control-label-notes'>$langRubricCrit:</label>
+                    <div class='col-12'>
                         <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required".($rubric_used ? " disabled" : "").">
                     </div>
-                    <label for='weight[$crit]' class='col-sm-3 control-label-notes'>$langGradebookWeight (%):<br><small><span style='color:orange'>Σημειώση:</span> Πρέπει το άθροισμα του ποσοστού να είναι 100</small></label>
-                    <div class='col-sm-2'>
+                    <label for='weight[$crit]' class='col-12 control-label-notes mt-4'>$langGradebookWeight (%):<br><small><span style='color:orange'>Σημειώση:</span> Πρέπει το άθροισμα του ποσοστού να είναι 100</small></label>
+                    <div class='col-12'>
                         <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>     
                     </div></div>";
             if($crit>0)
             $crit_rows .= "		
-                        <div class='col-sm-1'>
-                                <a href='#' class='removeCrit' id='remCrit$crit'><span class='fa-solid fa-xmark' style='color:red'></span></a>
+                        <div class='col-12 d-flex justify-content-center mt-4'>
+                                <a href='#' class='removeCrit btn deleteAdminBtn' id='remCrit$crit'><span class='fa-solid fa-xmark'></span></a>
                         </div>";
                 $crit_rows .= "</div>  
                      
-                    <div class='form-group mt-3'>
-                    <label class='col-sm-6 control-label-notes'>$langScales:</label>
+                    <div class='form-group mt-4'>
+                    <label class='col-sm-12 control-label-notes'>$langScales:</label>
                     <div class='col-sm-12'>
                     <div class='table-responsive'>
                         <table class='table-default' id='scale_table$crit'>
@@ -266,7 +266,7 @@ if (isset($_GET['rubric_id'])) {
                                 </table>
                             </div>
                         </div>
-                        <div class='col-xs-offset-2 col-sm-10'>
+                        <div class='col-12 d-flex justify-content-center mt-4'>
                             <a class='btn submitAdminBtn margin-top-thin' id='addScale$crit'>$langAdd</a>
                         </div>
                 </div>	
@@ -294,16 +294,16 @@ if (isset($_GET['rubric_id'])) {
                         $hidden_input
                         
                         <div class='row form-group".(Session::getError('name') ? " has-error" : "")."'>
-                            <label for='name' class='col-md-3 col-12 control-label-notes mb-1'>$langTitleRubric:</label>
-                            <div class='col-md-9 col-12'>
+                            <label for='name' class='col-12 control-label-notes mb-1'>$langTitleRubric</label>
+                            <div class='col-12'>
                               <input name='name' type='text' class='form-control' id='name' value='$name'".($rubric_used ? " disabled" : "").">
-                              ".(Session::getError('name') ? "<span class='help-block'>" . Session::getError('name') . "</span>" : "")."
+                              ".(Session::getError('name') ? "<span class='help-block Accent-200-cl'>" . Session::getError('name') . "</span>" : "")."
                          </div>
                         </div>
                         
                         <div class='row form-group mt-4'>
-                                <label for='desc' class='col-md-3 col-12 control-label-notes mb-1'>$langRubricDesc:</label>
-                                <div class='col-md-9 col-12'>
+                                <label for='desc' class='col-12 control-label-notes mb-1'>$langRubricDesc</label>
+                                <div class='col-12'>
                                  " . @rich_text_editor('desc', 4, 20, $desc) . "
                                 </div>
                         </div>";
@@ -315,22 +315,22 @@ if (isset($_GET['rubric_id'])) {
        
             <div class='row form-group".(Session::getError('title') ? " has-error" : "")." mt-4'>
                 
-                    <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langRubricCrit:</label>
-                    <div class='col-md-9 col-12'>
+                    <label for='title' class='col-12 control-label-notes mb-1'>$langRubricCrit</label>
+                    <div class='col-12'>
                         <input name='title[]' type='text' class='form-control' id='title' value='$title'".($rubric_used ? " disabled" : "").">
-                        ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
+                        ".(Session::getError('title') ? "<span class='help-block Accent-200-cl'>" . Session::getError('title') . "</span>" : "")."
                     </div>
 
-                    <label for='weight' class='col-md-3 col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%):<br><small><span style='color:orange'>Σημειώση:</span> Πρέπει το άθροισμα του ποσοστού να είναι 100</small></label>
-                    <div class='col-md-9 col-12 mt-4'>
+                    <label for='weight' class='col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%)<br><small><span style='color:orange'>Σημειώση:</span> Πρέπει το άθροισμα του ποσοστού να είναι 100</small></label>
+                    <div class='col-12 mt-0'>
                             <input name='weight[]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>
                     </div>
                
             </div>
           
             <div class='row form-group mt-4'>
-                <label class='col-md-3 col-12 control-label-notes mb-1'>$langScales:</label>
-                <div class='col-md-9 col-12'>
+                <label class='col-12 control-label-notes mb-1'>$langScales</label>
+                <div class='col-12'>
                     <div class='table-responsive mt-0'>
                         <table class='table-default' id='scale_table0'>
                             <thead class='list-header'>
@@ -357,7 +357,7 @@ if (isset($_GET['rubric_id'])) {
                 </div>";
             if (!$rubric_used) {
                 $tool_content .= "
-                    <div class='col-md-9 col-12 offset-md-3 mt-5 d-flex justify-content-center'>
+                    <div class='col-12 mt-5 d-flex justify-content-center'>
                          <a class='btn submitAdminBtn' id='addScale0'>$langAdd</a>
                     </div>
                 </div>";
@@ -372,15 +372,15 @@ if (isset($_GET['rubric_id'])) {
     }
     $tool_content .= "<div id='inserthere' class=''>
                         <div class='form-group mt-4'>
-                            <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center'>
+                            <div class='col-12 d-flex justify-content-center'>
                                 <a class='btn submitAdminBtn' id='addCriteria'>$langAddRubricCriteria</a>
                             </div>
                         </div>
                     </div>
                     <div class='row form-group mt-4'>
-                        <label for='rubric_options' class='col-md-3 col-12 control-label-notes mb-1'>$langConfig:</label>
-                        <div class='col-md-9 col-12'>
-                            <div class='table-responsive'>
+                        <label for='rubric_options' class='col-12 control-label-notes mb-1'>$langConfig</label>
+                        <div class='col-12'>
+                            <div class='table-responsive mt-1'>
                             <table class='table-default' id='rubric_opts'> 
                                 <tr class='title1 bg-light'>
                                     <td colspan='2'>
@@ -408,7 +408,7 @@ if (isset($_GET['rubric_id'])) {
                     </div>";
     if (!$rubric_used) {
         $tool_content .= "<div class='form-group mt-5'>
-                        <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-center align-items-center'>
                          
                             
                               ".
@@ -550,20 +550,20 @@ function show_rubric ($rubric_id) {
         <div class='table-responsive'>
         <table class='table-default'>
             <thead class='list-header'>
-                <th style='padding-left:15px;'>$langName</th> 
+                <th>$langName</th> 
                 <th>$langDescription</th>
                 <th>$langRubricCriteria</th>
-                <th style='padding-right:15px;' class='text-end' rowspan='2'>" . icon('fa-cogs') . "</th>
+                <th class='text-end' rowspan='2'>" . icon('fa-cogs') . "</th>
             </thead>
             <tr>
-                <td style='padding-left:15px;'>$rubric->name</td>
+                <td>$rubric->name</td>
                 <td>$rubric->description</td>
                 <td>
-                <ul class='list-unstyled'>
-                    $criteria_list
-                </ul>
+                    <ul class='list-unstyled'>
+                        $criteria_list
+                    </ul>
                 </td>
-                <td style='float:right' class='option-btn-cell'>
+                <td class='option-btn-cell text-end'>
                     ". action_button(array(
                         array(
                             'title' => $langEdit,

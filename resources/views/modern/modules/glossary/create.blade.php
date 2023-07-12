@@ -46,7 +46,7 @@
                                                     <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryTerm') }} </label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' class='form-control' placeholder="{{ trans('langGlossaryTerm') }}" id='term' name='term' placeholder='{{ trans('langGlossaryTerm') }}' value='{{ $term }}'>
-                                                        <span class='help-block'>{{ Session::getError('term') }}</span>
+                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('term') }}</span>
                                                     </div>
                                                 </div>
 
@@ -54,7 +54,7 @@
                                                     <label for='term' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryDefinition') }} </label>
                                                     <div class='col-sm-12'>
                                                         <textarea name="definition" placeholder="{{ trans('langGiveText') }}" rows="4" cols="60" class="form-control">{{ $definition }}</textarea>
-                                                        <span class='help-block'>{{ Session::getError('definition') }}</span>    
+                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('definition') }}</span>    
                                                     </div>
                                                 </div>
 
@@ -62,7 +62,7 @@
                                                     <label for='url' class='col-sm-6 control-label-notes'>{{ trans('langGlossaryUrl') }} </label>
                                                     <div class='col-sm-12'>
                                                         <input type='text' placeholder="{{ trans('langGlossaryUrl') }}" class='form-control' id='url' name='url' value='{{ $url }}'>
-                                                        <span class='help-block'>{{ Session::getError('url') }}</span>     
+                                                        <span class='help-block Accent-200-cl'>{{ Session::getError('url') }}</span>     
                                                     </div>
                                                 </div>
 

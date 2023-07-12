@@ -1085,8 +1085,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                     <div class='col-md-9 col-12 offset-md-3 text-start'><h4 class='form-heading TextBold'>$langImport</h4></div>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
                         <div class='row form-group mt-5'>
-                            <label for='uploadedPackage' class='col-md-3 col-12 control-label-notes'>$langPathUploadFile:</label>
-                            <div class='col-md-9 col-12'>
+                            <label for='uploadedPackage' class='col-12 control-label-notes'>$langPathUploadFile</label>
+                            <div class='col-12'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
                                 fileSizeHidenInput() . replaceIdHiddenInput() . "
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'><br>
@@ -1100,7 +1100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
 
                         <div class='form-group mt-5'>
-                            <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-start'>
+                            <div class='col-12 d-flex justify-content-start'>
                                
                                   
                                     ".form_buttons(array(

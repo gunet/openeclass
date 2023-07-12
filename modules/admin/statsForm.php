@@ -55,32 +55,34 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
 $tool_content .= '<div class="col-12"><div class="form-wrapper form-edit rounded"><form class="form-horizontal" role="form" method="post">';   
 $tool_content .= "
 <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-6 control-label-notes'>$langStartDate:</label>
-    <div class='input-group'>         
-        <input class='form-control mt-0' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-        <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-xmark text-white'></i></span>
-        <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
+    <label class='col-sm-12 control-label-notes'>$langStartDate:</label>
+    <div class='input-group'>   
+        <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+        <input class='form-control mt-0 border-start-0' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+    
+        
     </div>
 </div>";        
 $tool_content .= "
 <div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-6 control-label-notes'>$langEndDate:</label>
+    <label class='col-sm-12 control-label-notes'>$langEndDate:</label>
     <div class='input-group'>      
-        <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
-        <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-xmark text-white'></i></span>
-        <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span> 
+        <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+        <input class='form-control mt-0 border-start-0' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+        
+        
     </div>
 </div>";
 $tool_content .= '<div class="form-group mt-4">  
-    <label class="col-sm-6 control-label-notes">' . $langFirstLetterUser . ':</label>
+    <label class="col-sm-12 control-label-notes">' . $langFirstLetterUser . ':</label>
     <div class="col-sm-12">' . $letterlinks . '</div>
   </div>
   <div class="form-group mt-4">  
-    <label class="col-sm-6 control-label-notes">' . $langUser . ':</label>
+    <label class="col-sm-12 control-label-notes">' . $langUser . ':</label>
      <div class="col-sm-12"><select name="u_user_id" class="form-select">' . $user_opts . '</select></div>
   </div>
   <div class="form-group mt-4">  
-    <label class="col-sm-6 control-label-notes">' . $langInterval . ':</label>
+    <label class="col-sm-12 control-label-notes">' . $langInterval . ':</label>
      <div class="col-sm-12"><select name="u_interval" class="form-select">' . $statsIntervalOptions . '</select></div>
   </div>
   <div class="col-sm-offset-2 col-sm-10">    

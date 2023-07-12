@@ -196,6 +196,13 @@ img {
   color: #CDD4E0;
 }
 
+.Neutral-300-bg{
+  background-color: #E8EDF8;
+}
+.Neutral-300-cl{
+  color: #E8EDF8;
+}
+
 .Primary-600-bg{
   background-color: #2546F0;
 }
@@ -1512,9 +1519,8 @@ input:-webkit-autofill:active {
 
 .form-wrapper .form-control:disabled, .table-default .form-control:disabled, .panel .form-control:disabled{
   border-color: #687DA3;
-  background-color: #E8EDF8;
+  background-color: #E8EDF8 ;
 }
-
 
 /* select in form-wrapper */
 select.form-select {
@@ -1564,6 +1570,10 @@ label:has(input[type="checkbox"]:disabled){
   color:#2B3944; 
   line-height: 16px;
 } 
+
+.form-wrapper.form-edit .control-label-notes:not(:has(.mb-1)){
+  margin-bottom: 6px;
+}
 
 .submitAdminBtn {
   border: solid thin;

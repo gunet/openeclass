@@ -96,7 +96,7 @@ function render_profile_fields_form($context, $valitron = false) {
                 if ($valitron) {
                     if (Session::hasError('cpf_'.$f->shortname)) {
                         $form_class = 'form-group has-error mt-3';
-                        $help_block = '<span class="help-block">' . Session::getError('cpf_'.$f->shortname) . '</span>';
+                        $help_block = '<span class="help-block Accent-200-cl">' . Session::getError('cpf_'.$f->shortname) . '</span>';
                     } else {
                         $form_class = 'input-group mt-3';
                         $help_block = '';

@@ -67,7 +67,7 @@
                                     <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                     <div class='col-sm-12'>
                                         <input class='form-control' placeholder="{{ trans('langTitle') }}" type='text' name='title' value='{{ isset($announcement) ? $announcement->title : "" }}'>
-                                        {!! Session::getError('title', "<span class='help-block'>:message</span>") !!}
+                                        {!! Session::getError('title', "<span class='help-block Accent-200-cl'>:message</span>") !!}
                                     </div>
                                 </div>
                                 <div class='mt-4 form-group'>
@@ -88,9 +88,10 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input type='checkbox' name='startdate_active'{{ $start_checkbox }}>
+                                                <input id='startIdCheckbox' type='checkbox' name='startdate_active'{{ $start_checkbox }}>
                                             </span>
-                                            <input class='form-control' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
+                                            <span class="add-on1 input-group-text h-40px input-border-color border-end-0"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                            <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
                                         </div>
                                     </div>
                                 </div>
@@ -99,9 +100,10 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input type='checkbox' name='enddate_active'{{ $end_checkbox }} >
+                                                <input id='endIdCheckbox' type='checkbox' name='enddate_active'{{ $end_checkbox }} >
                                             </span>
-                                            <input class='form-control' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
+                                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                            <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
                                         </div>
                                     </div>
                                 </div>
@@ -128,4 +130,6 @@
         </div>
 
 </div>
+
+
 @endsection

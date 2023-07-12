@@ -53,6 +53,33 @@ $(document).ready(function(){
     //fix modal appearance
     $('.modal').appendTo("body") 
 
+    //startdate , enddate disabled
+    if($("#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active").is(':checked')){
+        $(".add-on1").css('background-color','#ffffff');
+    }else{
+        $(".add-on1").css('background-color','#E8EDF8');
+    }
+    $('#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active').on('click',function(){
+        if($('#startIdCheckbox, #enableWorkStart, #WorkStart, #exerciseStartDate, #enableStartDate, #start_date_active').is(':checked')){
+            $('.add-on1').css('background-color','#ffffff');
+        }else{
+            $('.add-on1').css('background-color','#E8EDF8');
+        }
+    });
+
+    if($("#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active").is(':checked')){
+        $(".add-on2").css('background-color','#ffffff');
+    }else{
+        $(".add-on2").css('background-color','#E8EDF8');
+    }
+    $('#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active').on('click',function(){
+        if($('#endIdCheckbox, #enableWorkEnd, #WorkEnd, #exerciseEndDate, #enableEndDate, #enablecertdeadline, #enableWorkFeedbackRelease, #end_date_active').is(':checked')){
+            $('.add-on2').css('background-color','#ffffff');
+        }else{
+            $('.add-on2').css('background-color','#E8EDF8');
+        }
+    });
+
 });
 
 

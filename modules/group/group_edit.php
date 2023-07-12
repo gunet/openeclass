@@ -285,7 +285,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
             <label class='col-sm-6 control-label-notes'>$langGroupName</label>
             <div class='col-sm-12'>
                 <input class='form-control' type=text name='name' size='40' value='$tool_content_group_name'>
-                <span class='help-block'>".Session::getError('name')."</span>
+                <span class='help-block Accent-200-cl'>".Session::getError('name')."</span>
             </div>
         </div>
         <div class='form-group mt-4'>
@@ -298,7 +298,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                     <label class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type=text name='maxStudent' size=2 value='$max_members'>
-                        <span class='help-block'>".Session::getError('maxStudent')."</span>
+                        <span class='help-block Accent-200-cl'>".Session::getError('maxStudent')."</span>
                     </div>
                 </div>
             </div>

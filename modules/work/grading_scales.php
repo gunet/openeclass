@@ -152,18 +152,18 @@ if (isset($_GET['scale_id'])) {
                         $hidden_input
                         
                         <div class='row form-group".(Session::getError('title') ? " has-error" : "")."'>
-                            <label for='title' class='col-md-3 col-12 control-label-notes mb-1'>$langTitle:</label>
-                            <div class='col-md-9 col-12'>
+                            <label for='title' class='col-12 control-label-notes mb-1'>$langTitle</label>
+                            <div class='col-12'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
-                              ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
+                              ".(Session::getError('title') ? "<span class='help-block Accent-200-cl'>" . Session::getError('title') . "</span>" : "")."
                             </div>
                         </div>
 
                        
 
                         <div class='row form-group mt-4'>
-                            <label class='col-md-3 col-12 control-label-notes mb-1'>$langScales:</label>
-                            <div class='col-md-9 col-12'>
+                            <label class='col-12 control-label-notes mb-1'>$langScales</label>
+                            <div class='col-12'>
                                 <div class='table-responsive mt-0'>
                                     <table class='table-default' id='scale_table'>
                                         <thead>
@@ -180,7 +180,7 @@ if (isset($_GET['scale_id'])) {
                                 </div>
                             </div>";
     if (!$scale_used) {
-        $tool_content .= "<div class='col-md-9 col-12 offset-md-3 mt-5 d-flex justify-content-center'>
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center'>
                              <a class='btn submitAdminBtn' id='addScale'>$langAdd</a>
                          </div>";
     }
@@ -189,7 +189,7 @@ if (isset($_GET['scale_id'])) {
         $tool_content .= " 
      
                         <div class='form-group mt-5'>
-                            <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center'>
+                            <div class='col-12 d-flex justify-content-center'>
                             
                                
                                   ".
@@ -252,7 +252,7 @@ if (isset($_GET['scale_id'])) {
                                     $scales_list
                                 </ul>
                             </td>
-                            <td style='float:right' class='option-btn-cell'>
+                            <td class='option-btn-cell text-end'>
                             ". action_button(array(
                                     array(
                                         'title' => $langEdit,
@@ -277,9 +277,9 @@ if (isset($_GET['scale_id'])) {
                 <table class='table-default'>
                     <thead>
                         <tr class='list-header'>
-                            <th style='padding-left:15px;>$langTitle</th>
+                            <th>$langTitle</th>
                             <th>$langGradebookMEANS</th>
-                            <th class='text-end' style='padding-right:15px;'>" . icon('fa-cogs') . "</th>
+                            <th class='text-end'>" . icon('fa-cogs') . "</th>
                         </tr>
                     </thead>
                     <tbody>

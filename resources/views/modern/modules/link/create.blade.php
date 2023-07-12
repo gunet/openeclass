@@ -83,7 +83,7 @@
                                         <label for='urllink' class='col-sm-6 control-label-notes'>URL</label>
                                             <div class='col-sm-12'>
                                                 <input class='form-control' type='text' id='urllink' name='urllink' value="{{ isset($link) ? $link->url : "" }}">
-                                                {!! Session::getError('urllink', "<span class='help-block'>:message</span>") !!}
+                                                {!! Session::getError('urllink', "<span class='help-block Accent-200-cl'>:message</span>") !!}
                                             </div>
                                         </div>
 

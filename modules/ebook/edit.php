@@ -114,7 +114,7 @@ if (isset($_GET['delete'])) {
                                 </div>";
                 $section_title = "<div class='form-group".(Session::getError('new_section_title') ? " has-error" : "")."'>
                                     <input type='text size='3' class='form-control' name='new_section_title' value='$qstitle'>
-                                    <span class='help-block'>".Session::getError('new_section_title')."</span>
+                                    <span class='help-block Accent-200-cl'>".Session::getError('new_section_title')."</span>
                                 </div>
                                 ";
                 $section_editing = true;
@@ -150,7 +150,7 @@ if (isset($_GET['delete'])) {
                 <td>
                     <div class='form-group".(Session::getError('new_section_title') ? " has-error" : "")."'>
                         <input class='form-control' type='text' size='35' name='new_section_title'>
-                        <span class='help-block'>".Session::getError('new_section_title')."</span>
+                        <span class='help-block Accent-200-cl'>".Session::getError('new_section_title')."</span>
                     </div>
                 </td>
                 <td class='center'>

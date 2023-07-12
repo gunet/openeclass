@@ -69,7 +69,7 @@
                                 <div class="col-sm-12">
                                     <input class='form-control' placeholder="{{ trans('langName') }}..." id='givenname_form' type='text' name='givenname_form' value='{{ getValue('givenname_form', $pn) }}'>
                                     @if (Session::hasError('givenname_form'))
-                                    <span class="help-block">{{ Session::getError('givenname_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('givenname_form') }}</span>
                                     @endif
                                 </div>                
                             </div>
@@ -79,7 +79,7 @@
                                 <div class="col-sm-12">
                                     <input class='form-control' id='surname_form' type='text' name='surname_form' value='{{ getValue('surname_form', $ps) }}' placeholder="{{ trans('langSurname') }}...">
                                     @if (Session::hasError('surname_form'))
-                                    <span class="help-block">{{ Session::getError('surname_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('surname_form') }}</span>
                                     @endif
                                 </div>                
                             </div>
@@ -89,7 +89,7 @@
                                 <div class="col-sm-12">
                                     <input class='form-control' id='uname_form' type='text' name='uname_form' value='{{ getValue('uname_form', $pu) }}' placeholder="{{ trans('langUsername') }}...">
                                     @if (Session::hasError('uname_form'))
-                                    <span class="help-block">{{ Session::getError('uname_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('uname_form') }}</span>
                                     @endif
                                 </div>                
                             </div>             
@@ -102,7 +102,7 @@
                                     <div class="col-sm-12">
                                     {!! selection($auth_m, 'auth_form', '', "id='auth_selection' class='form-control'") !!}
                                         @if (Session::hasError('auth_selection'))
-                                        <span class="help-block">{{ Session::getError('auth_selection') }}</span>
+                                        <span class="help-block Accent-200-cl">{{ Session::getError('auth_selection') }}</span>
                                         @endif
                                     </div>                
                                 </div>
@@ -113,7 +113,7 @@
                                 <div class="col-sm-12">
                                     <input class='form-control' id='passsword_form' type='text' name='password' value='{{ getValue('password', choose_password_strength()) }}' autocomplete='off' placeholder="{{ trans('langPass') }}...">
                                     @if (Session::hasError('password'))
-                                    <span class="help-block">{{ Session::getError('password') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('password') }}</span>
                                     @endif
                                 </div>                
                             </div>
@@ -123,7 +123,7 @@
                                 <div class="col-sm-12">
                                     <input class='form-control' id='email_form' type='text' name='email_form' value='{{ getValue('email_form', $pe) }}' autocomplete='off' placeholder="{{ trans('langEmail') }} {{ get_config('email_required') ? trans('langCompulsory') : trans('langOptional') }}">
                                     @if (Session::hasError('email_form'))
-                                    <span class="help-block">{{ Session::getError('email_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('email_form') }}</span>
                                     @endif
                                 </div>                
                             </div>
@@ -133,7 +133,7 @@
                                 <div class="col-sm-12">
                                     {!! selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'") !!}
                                     @if (Session::hasError('verified_mail_form'))
-                                    <span class="help-block">{{ Session::getError('verified_mail_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('verified_mail_form') }}</span>
                                     @endif
                                 </div>                
                             </div>
@@ -143,7 +143,7 @@
                                 <div class="col-sm-12">
                                     <input class='form-control' id='phone_form' type='text' name='phone_form' value='{{ getValue('phone_form', $pphone) }}' placeholder="{{ trans('langPhone') }}...">
                                     @if (Session::hasError('phone_form'))
-                                    <span class="help-block">{{ Session::getError('phone_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('phone_form') }}</span>
                                     @endif
                                 </div>                
                             </div>  
@@ -153,7 +153,7 @@
                                 <div class="col-sm-12">
                                     {!! $tree_html !!}
                                     @if (Session::hasError('faculty'))
-                                    <span class="help-block">{{ Session::getError('faculty') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('faculty') }}</span>
                                     @endif
                                 </div>                
                             </div>
@@ -165,7 +165,7 @@
                                     <div class="col-sm-12">
                                         <input class='form-control' id='am_form' type='text' name='am_form' value='{{ getValue('am_form', $pam) }}' placeholder="{{ get_config('am_required') ? trans('langCompulsory') : trans('langOptional') }}">
                                         @if (Session::hasError('am_form'))
-                                        <span class="help-block">{{ Session::getError('am_form') }}</span>
+                                        <span class="help-block Accent-200-cl">{{ Session::getError('am_form') }}</span>
                                         @endif
                                     </div>                
                                 </div>                
@@ -196,7 +196,7 @@
                                 <div class="col-sm-12">
                                     {!! lang_select_options('language_form', "class='form-control'", Session::has('language_form') ? Session::get('language_form'): $language) !!}
                                     @if (Session::hasError('language_form'))
-                                    <span class="help-block">{{ Session::getError('language_form') }}</span>
+                                    <span class="help-block Accent-200-cl">{{ Session::getError('language_form') }}</span>
                                     @endif
                                 </div>                
                             </div>

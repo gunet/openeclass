@@ -234,7 +234,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                             <label for='title' class='col-sm-6 control-label-notes'>$langWikiTitle</label>
                             <div class='col-sm-12'>
                                 <input name='title' type='text' class='form-control' id='wikiTitle' value='".q($title) ."' placeholder='$langWikiTitle'>
-                                <span class='help-block'>".Session::getError('title')."</span>
+                                <span class='help-block Accent-200-cl'>".Session::getError('title')."</span>
                             </div>
                         </div>
                         <div class='form-group mt-4'>

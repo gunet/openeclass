@@ -359,7 +359,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle</label>
               <div class='col-sm-12'>
                 <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
-                <span class='help-block'>".Session::getError('PollName')."</span>
+                <span class='help-block Accent-200-cl'>".Session::getError('PollName')."</span>
               </div>
             </div>
 
@@ -370,9 +370,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langPollStart</label>
                         
                         <div class='input-group'>
-                                <input class='form-control mt-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
-                                <span class='help-block'>".Session::getError('PollStart')."</span>
-                                <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
+                                <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
+                                <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
+                               
                         </div>
                             
                         
@@ -385,9 +386,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <label for='PollEnd' class='col-sm-6 control-label-notes mb-1'>$langPollEnd</label>
                         
                         <div class='input-group'>
-                            <input class='form-control mt-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
-                            <span class='help-block'>".Session::getError('PollEnd')."</span>
-                            <span class='add-on input-group-text h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar text-white'></i></span>
+                            <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                            <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                            <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
+                            
                         </div>
                     </div>
                 </div>

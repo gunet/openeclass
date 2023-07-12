@@ -80,8 +80,8 @@ if (empty($search_terms)) {
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
         <div class='row form-group'>
-            <label for='search_terms' class='col-md-3 col-12 control-label-notes'>$langOR:</label>
-            <div class='col-md-9 col-12'>
+            <label for='search_terms' class='col-12 control-label-notes'>$langOR</label>
+            <div class='col-12'>
                 <input name='search_terms' type='text' class='form-control'>
             </div>
         </div>

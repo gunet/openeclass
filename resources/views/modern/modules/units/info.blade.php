@@ -110,24 +110,24 @@
                                     @endif
 
                                     <div class='row form-group'>
-                                        <label for='unitTitle' class='col-md-3 col-12 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                        <div class='col-md-9 col-12'>
+                                        <label for='unitTitle' class='col-12 control-label-notes'>{{ trans('langTitle') }}</label>
+                                        <div class='col-12'>
                                             <input type='text' class='form-control' id='unitTitle' name='unittitle' value='{{ $unitTitle }}'>
                                         </div>
                                     </div>
 
                                     <div class='row form-group mt-4'>
-                                        <label for='unitdescr' class='col-md-3 col-12 control-label-notes'>{{ trans('langUnitDescr') }}:</label>
-                                        <div class='col-md-9 col-12'>
+                                        <label for='unitdescr' class='col-12 control-label-notes'>{{ trans('langUnitDescr') }}</label>
+                                        <div class='col-12'>
                                             {!! $descriptionEditor !!}
                                         </div>
                                     </div>
                                     
                                     <div class='row form-group mt-4'>
-                                        <label for='unitduration' class='col-md-3 col-12 control-label-notes mb-1'>{{ trans('langDuration') }}
+                                        <label for='unitduration' class='col-12 control-label-notes mb-1'>{{ trans('langDuration') }}
                                             <span class='help-block'>{{ trans('langOptional') }}:</span>
                                         </label>
-                                        <div class='col-md-9 col-12'>
+                                        <div class='col-12'>
                                             <div class="row">
 
                                                 <div class="col-lg-6 col-12">
@@ -152,17 +152,9 @@
 
                                     
                                     <div class='form-group mt-5'>
-                                        <div class='col-md-9 col-12 offset-md-3 d-flex justify-content-center align-items-center'>
-                                           
-                                                
-                                                 <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
-                                           
-                                            
-                                                <a class='btn cancelAdminBtn ms-1' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
-                                              
-                                           
-                                            
-                                            
+                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                           <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
+                                           <a class='btn cancelAdminBtn ms-1' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
                                         </div>
                                     </div>
                                     {!! generate_csrf_token_form_field() !!}

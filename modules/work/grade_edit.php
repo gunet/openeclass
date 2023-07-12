@@ -192,7 +192,7 @@ function show_edit_form($id, $sid, $assign) {
 
                             }
                         }
-                        $grade_field = "<div class='col-md-9 col-12' id='myModalLabel'><h5>$rubric->name</h5>
+                        $grade_field = "<div class='col-12' id='myModalLabel'><h5>$rubric->name</h5>
                             <table class='table-default'>
                               <tr>
                                 <td>
@@ -221,30 +221,30 @@ function show_edit_form($id, $sid, $assign) {
                                         </a>
                                     </div>
                                     <div class='row form-group mt-4'>
-                                        <label class='col-md-3 col-12 control-label-notes'>$m[username]:</label>
+                                        <label class='col-12 control-label-notes'>$m[username]</label>
                                         $uid_2_name &nbsp $message
                                     </div>
 
                                     <div class='row form-group mt-4'>
-                                        <label class='col-md-3 col-12 control-label-notes'>$m[sub_date]:</label>
-                                        <div class='col-md-9 col-12'>
+                                        <label class='col-12 control-label-notes'>$m[sub_date]</label>
+                                        <div class='col-12'>
                                             <span>".q($row->date_submit)."</span>
                                         </div>
                                     </div>
                                     <div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-                                        <label for='grade' class='col-md-3 col-12 control-label-notes'>$langGradeRubric:</label>
+                                        <label for='grade' class='col-12 control-label-notes'>$langGradeRubric</label>
                                         $grade_field
-                                        <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
+                                        <span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
                                     </div>
                                     <div class='row form-group mt-4'>
-                                        <label class='col-md-3 col-12 control-label-notes'>$langGradebookGrade:</label>
-                                        <div class='col-md-9 col-12'>
+                                        <label class='col-12 control-label-notes'>$langGradebookGrade</label>
+                                        <div class='col-12'>
                                             <span>".q($row->grade)."</span>
                                         </div>
                                     </div>
                                     <div class='row form-group mt-4'>
-                                        <label class='col-md-3 col-12 control-label-notes'>$m[gradecomments]:</label>
-                                        <div class='col-md-9 col-12'>
+                                        <label class='col-12 control-label-notes'>$m[gradecomments]</label>
+                                        <div class='col-12'>
                                             <span>".q($row->comments)."</span>
                                         </div>
                                     </div>
@@ -297,8 +297,8 @@ function show_edit_form($id, $sid, $assign) {
                 // online text
                 $submission = "
                         <div class='row form-group mt-4'>
-							<label class='col-md-3 col-12 control-label-notes'>$langWorkOnlineText:</label>
-                            <div class='col-md-9 col-12'>
+							<label class='col-12 control-label-notes'>$langWorkOnlineText</label>
+                            <div class='col-12'>
                                 <p class='form-control-static'>$sub->submission_text</p>
 							</div>
 						</div>";
@@ -315,15 +315,15 @@ function show_edit_form($id, $sid, $assign) {
                 }, $files));
                 $submission = "
                         <div class='row form-group mt-4'>
-							<label class='col-md-3 col-12 control-label-notes'>$langOpenCoursesFiles:</label>
-							<div class='col-md-9 col-12'><p class='form-control-static'>$links</p></div>
+							<label class='col-12 control-label-notes'>$langOpenCoursesFiles</label>
+							<div class='col-12'><p class='form-control-static'>$links</p></div>
 						</div>";
             } else {
                 // single file
                 $submission = "
                         <div class='row form-group mt-4'>
-							<label class='col-md-3 col-12 control-label-notes'>$m[filename]:</label>
-							<div class='col-md-9 col-12'>
+							<label class='col-12 control-label-notes'>$m[filename]</label>
+							<div class='col-12'>
                                 <p class='form-control-static'>
                                     <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
                                 </p>
@@ -342,7 +342,7 @@ function show_edit_form($id, $sid, $assign) {
 					foreach ($scales as $scale) {
 						$scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
 					}
-					$grade_field = "<div class='col-md-9 col-12'><select name='grade' class='form-select' id='scales'>$scale_options</select></div>";
+					$grade_field = "<div class='col-12'><select name='grade' class='form-select' id='scales'>$scale_options</select></div>";
 				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
@@ -376,7 +376,7 @@ function show_edit_form($id, $sid, $assign) {
 							$criteria_list .= "</ul></li>";
 						}
 					}
-					$grade_field = "<div class='col-md-9 col-12' id='myModalLabel'><h5>$rubric->name</h5>
+					$grade_field = "<div class='col-12' id='myModalLabel'><h5>$rubric->name</h5>
 								<table class='table-default'>
 								<tr>
 									<td>
@@ -389,7 +389,7 @@ function show_edit_form($id, $sid, $assign) {
 								</div>";
 				}
 			} else {
-				$grade_field = "<div class='col-md-9 col-12'>"
+				$grade_field = "<div class='col-12'>"
 							  . "<input class='form-control' type='text' name='grade' maxlength='4' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)"
 							  . "</div>";
 
@@ -412,8 +412,8 @@ function show_edit_form($id, $sid, $assign) {
                     
 
 					<div class='row form-group'>
-						<label class='col-md-3 col-12 control-label-notes'>$m[username]:</label>
-						<div class='col-md-9 col-12'>
+						<label class='col-12 control-label-notes'>$m[username]</label>
+						<div class='col-12'>
 						$uid_2_name $group_submission
 						</div>
 					</div>
@@ -421,8 +421,8 @@ function show_edit_form($id, $sid, $assign) {
                    
 
 					<div class='row form-group mt-4'>
-						<label class='col-md-3 col-12 control-label-notes'>$m[sub_date]:</label>
-						<div class='col-md-9 col-12'>
+						<label class='col-12 control-label-notes'>$m[sub_date]</label>
+						<div class='col-12'>
 							".format_locale_date(strtotime($sub->submission_date))."
 						</div>
 					</div>
@@ -433,16 +433,16 @@ function show_edit_form($id, $sid, $assign) {
                     
 
 					<div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
-						<label for='grade' class='col-md-3 col-12 control-label-notes'>$langGradebookGrade:</label>
+						<label for='grade' class='col-12 control-label-notes'>$langGradebookGrade</label>
 							$grade_field
-							<span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
+							<span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>
 
                    
 
 					<div class='row form-group mt-4'>
-						<label for='comments' class='col-md-3 col-12 control-label-notes'>$m[gradecomments]:</label>
-						<div class='col-md-9 col-12'>
+						<label for='comments' class='col-12 control-label-notes'>$m[gradecomments]</label>
+						<div class='col-12'>
 							<textarea class='form-control' rows='3' name='comments'  id='comments'>$comments</textarea>
 						</div>
 					</div>
@@ -451,8 +451,8 @@ function show_edit_form($id, $sid, $assign) {
 
 
 					<div class='row form-group mt-4'>
-						<label for='comments_file' class='col-md-3 col-12 control-label-notes'>$langCommentsFile:</label>
-						<div class='col-md-9 col-12'>
+						<label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>
+						<div class='col-12'>
 							<input type='file' name='comments_file' id='comments_file' size='35'>
 							" . fileSizeHidenInput() . "
 						</div>
@@ -461,7 +461,7 @@ function show_edit_form($id, $sid, $assign) {
                    
 
 					<div class='form-group mt-4'>
-						<div class='col-md-9 col-12 offset-md-3 ps-md-1'>
+						<div class='col-12'>
 							<div class='checkbox'>
 								<label>
 									<input type='checkbox' value='1' id='email_button' name='email' checked>
@@ -475,7 +475,7 @@ function show_edit_form($id, $sid, $assign) {
 
 
 					<div class='form-group mt-5'>
-						<div class='col-md-9 col-12 offset-md-3 d-inline-flex'>
+						<div class='col-12 d-inline-flex'>
 							<input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
 							<a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 						</div>
