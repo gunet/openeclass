@@ -287,8 +287,9 @@ if (count($res) > 0) {
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
                                         <div class='modal-header'>
-                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                                        <div class='modal-title h4' id='myModalLabel_$key'>" . q($row->title) . "</div>
+                                        <div class='modal-title' id='myModalLabel_$key'>" . q($row->title) . "</div>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                      
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
                                         standard_text_escape($row->comments)
@@ -441,7 +442,21 @@ if (isset($level) && !empty($level)) {
     };
 
     $(document).ready(function() {
-        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><div class='modal-title h4' id='modal-label'>{$langCourseMetadata}</div></div><div class='modal-body'>body</div></div></div></div>\");
+        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'>
+                        <div class='modal-dialog modal-lg'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <div class='modal-title' id='modal-label'>{$langCourseMetadata}</div>
+                                    <button type='button' class='close' data-bs-dismiss='modal'>
+                                        <span class='fa-solid fa-xmark' aria-hidden='true'></span>
+                                        <span class='sr-only'>{$langCancel}</span>
+                                    </button>
+                                    
+                                </div>
+                                <div class='modal-body'>body</div>
+                            </div>
+                        </div>
+                    </div>\");
     });
 
 /* ]]> */
@@ -859,7 +874,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = format_locale_date(strtotime($ann->date));
                 $ann_content .= "<li class='list-group-item ps-0 pe-0'>
-                                    <span class='item-wholeline'><div class='text-title'><a style='font-size:15px;' class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
+                                    <span class='item-wholeline'><div class='text-title'><a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
                 }
                 $counter_ann++;

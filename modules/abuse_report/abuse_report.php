@@ -79,13 +79,14 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $langClose, $langSend,
     $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
 
-    $out = '<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#abuse_modal_'.$rtype.'_'.$rid.'"><span class="fa fa-flag-o float-end text-white pe-1" data-bs-original-title="'.$langAbuseReport.'" title="" data-bs-toggle="tooltip"></span></a>';
+    $out = '<a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#abuse_modal_'.$rtype.'_'.$rid.'"><span class="fa-regular fa-flag float-end pe-1" data-bs-original-title="'.$langAbuseReport.'" title="" data-bs-toggle="tooltip"></span></a>';
     $out .= '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
                  <div class="modal-dialog">
                      <div class="modal-content">
                          <div class="modal-header">
-                             <button type="button" class="close" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');" aria-label="'.$langClose.'"><span aria-hidden="true">&times;</span></button>
-                             <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
+                            <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
+                            <button type="button" class="close" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');" aria-label="'.$langClose.'"><i class="fa-solid fa-xmark fa-lg Neutral-700-cl"></i></button>
+                             
                          </div>
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
 	                         <form id="abuse_form_'.$rtype.'_'.$rid.'">
@@ -134,15 +135,16 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
 
     $ret[] = array('title' => $langAbuseReport,
             'url' => "javascript:void(0);",
-            'icon' => 'fa-flag-o',
+            'icon' => 'fa-regular fa-flag',
             'link-attrs' => "data-bs-toggle='modal' data-bs-target='#abuse_modal_".$rtype."_".$rid."'");
 
     $ret[] = '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
                  <div class="modal-dialog">
                      <div class="modal-content">
                          <div class="modal-header">
-                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="'.$langClose.'"><span aria-hidden="true">&times;</span></button>
-                             <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
+                            <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
+                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="'.$langClose.'"><i class="fa-solid fa-xmark fa-lg Neutral-700-cl"></i></button>
+                             
                          </div>
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
 	                         <form id="abuse_form_'.$rtype.'_'.$rid.'">

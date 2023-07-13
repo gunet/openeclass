@@ -721,7 +721,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
                            <span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langTotalPercentCompleteness'>" . disp_progress_bar($lpProgress, 1) . "</span>";
                 $lp_results_button = "<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langDetails'>
                     <a href=" . $urlAppend . "modules/units/view.php?course=" . $course_code . "&amp;res_type=lp_results&amp;path_id=" . $lp_id . "&amp;unit=" . $id. ">
-                    <span class='fa fa-line-chart' style='font-size:15px;'></span>
+                    <span class='fa fa-line-chart'></span>
                     </a>
                 </span>";
         }

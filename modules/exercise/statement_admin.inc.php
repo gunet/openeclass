@@ -289,20 +289,20 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                     <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            <span class='ps-2'>$langFillBlanksStrict $langFillBlanksStrictExample</span>
+                                            $langFillBlanksStrict $langFillBlanksStrictExample
                                         </label>
                                     </div>
                                     <div class='radio mb-2'>
                                         <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
-                                            <span class='ps-2'>$langFillBlanksTolerant $langFillBlanksTolerantExample</span>
+                                            $langFillBlanksTolerant $langFillBlanksTolerantExample
 
                                         </label>
                                     </div>
                                     <div class='radio'>
                                         <label>
                                             <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_FROM_PREDEFINED_ANSWERS."' ". (($answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) ? "checked" : "") .">
-                                            <span class='ps-2'>$langFillFromSelectedWords</span>
+                                            $langFillFromSelectedWords
                                         </label>
                                     </div>
                                 </div>

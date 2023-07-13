@@ -133,13 +133,6 @@ function act_confirm() {
 		var action_btn_class = $(this).attr('data-action-class');
 		var form = $(this).closest('form').clone().appendTo('body');
 
-		console.log('the message:'+message);
-		console.log('the title:'+title);
-		console.log('the cancel_text:'+cancel_text);
-		console.log('the action_text:'+action_text);
-		console.log('the action_btn_class:'+action_btn_class);
-
-
         e.preventDefault();
         e.stopPropagation();
 

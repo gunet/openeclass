@@ -61,7 +61,7 @@
                                     @endif
                                 @endif
 
-                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 mt-1 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                     <span class='fa fa-question-circle'></span>
                                 </a>
                                 
@@ -105,7 +105,7 @@
                                     @endif
                                 @endif
 
-                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 mt-1 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                     <span class='fa fa-question-circle'></span>
                                 </a>
                             </div>
@@ -194,7 +194,7 @@
                                                             </a>
                                                     @endif
                                                 @endif
-                                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 mt-1 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                                     <span class='fa fa-question-circle'></span>
                                                 </a>
                                             </th>
@@ -254,7 +254,7 @@
                                                             </a>
                                                     @endif
                                                 @endif
-                                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='add-unit-btn ms-2 mt-1 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                                     <span class='fa fa-question-circle'></span>
                                                 </a>
                                             </th>

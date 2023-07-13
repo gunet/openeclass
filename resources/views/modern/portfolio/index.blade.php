@@ -77,18 +77,18 @@
                     <div>
                         <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
                             <div id="cources-bars-button" class="collapse-cources-button lightBlueText">
-                                <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars custom-font" style='font-size:15px;'></i></span>
+                                <span class="list-style active pe-2"><i class="fa-solid fa-bars" style='font-size:18px;'></i></span>
                             </div>
                             <div id="cources-pics-button" class="collapse-cources-button text-secondary collapse-cources-button-deactivated" onclick="switch_cources_toggle()">
-                                <span class="grid-style"><i class="fas fa-custom-size fa-th-large custom-font" style='font-size:15px;'></i></span>
+                                <span class="grid-style"><i class="fa-solid fa-table-cells-large" style='font-size:18px;'></i></span>
                             </div>
                         </div>
                         <div id="pics-active" type='button' class='float-end mt-0' style="display:none">
                             <div id="cources-bars-button" class="collapse-cources-button text-secondary collapse-cources-button-deactivated" onclick="switch_cources_toggle()">
-                                <span class="list-style active pe-2"><i class="fas fa-custom-size fa-bars custom-font" style='font-size:15px;'></i></span>
+                                <span class="list-style active pe-2"><i class="fa-solid fa-bars" style='font-size:18px;'></i></span>
                             </div>
                             <div id="cources-pics-button" class="collapse-cources-button lightBlueText">
-                                <span class="grid-style"><i class="fas fa-custom-size fa-th-large custom-font" style='font-size:15px;'></i></span>
+                                <span class="grid-style"><i class="fa-solid fa-table-cells-large" style='font-size:18px;'></i></span>
                             </div>
                         </div>
                     </div>

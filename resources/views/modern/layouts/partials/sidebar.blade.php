@@ -38,7 +38,7 @@
                         <ul class="list-group list-group-flush">
                             @foreach ($tool_group[1] as $key2 => $tool)
                                 <li>
-                                    <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item d-flex justify-content-start align-items-start py-2 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }} style='font-size:13px;'>
+                                    <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item d-flex justify-content-start align-items-start py-2 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                                         <i class="{{ $tool_group[3][$key2] }} pe-2"></i>
                                         {!! $tool !!}
                                     </a>

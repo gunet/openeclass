@@ -235,7 +235,7 @@ if ($total_categories > 0) {
                                 $tool_content .= "<span class='float-end label label-primary' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNotify) . "'><i class='fa fa-envelope'></i></span>";
                             }
                             $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
-                                                                <b>$forum_name</b>
+                                                                $forum_name
                                                                 </a><div class='smaller'>" . $member . "</div>";
                         } else {
                             $forum_active = $is_editor || ($has_forum && $is_member);

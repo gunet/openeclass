@@ -139,7 +139,7 @@
                                             <label for="nodeopen"><span class='fa fa-unlock fa-fw'></label>
                                             {{ trans('langNodePublic') }}
                                         </label>
-                                        <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langNodePublic2') }}</div>
+                                        <div class='help-block'>{{ trans('langNodePublic2') }}</div>
                                     </div> 
                                    
 
@@ -152,7 +152,7 @@
                                             </label>
                                             {{ trans('langNodeSubscribed') }}
                                         </label>
-                                        <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langNodeSubscribed2') }}</div>
+                                        <div class='help-block'>{{ trans('langNodeSubscribed2') }}</div>
                                     </div>
                                     
 
@@ -160,9 +160,9 @@
                                         <label>
                                             <input class='input-StatusCourse' id='nodehidden' type='radio' name='visible' value='0' {{ $visibleChecked[0] }}>
                                             <label><span class='fa fa-lock fa-fw'></span></label>
-                                            {{ trans('langNodeHidden') }}
+                                            {{ trans('langViewHide') }}
                                         </label>
-                                         <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langNodeHidden2') }}</div>
+                                         <div class='help-block'>{{ trans('langNodeHidden2') }}</div>
                                     </div>
                                    
                                 </div>

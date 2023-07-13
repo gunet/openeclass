@@ -173,7 +173,7 @@ function show_post_form() {
                                         <div class="tab-content mt-4">
                                             <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_extvideo" style="padding:10px">
                                                 <label for="extvideo_video mb-1 TextBold">'.$langWallExtVideoLink.'</label>
-                                                <input class="form-control rounded-pill" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
+                                                <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                             </div>
                                             '.$video_div.'
                                             '.$docs_div.'

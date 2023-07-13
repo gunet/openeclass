@@ -138,10 +138,11 @@
         <div class='modal-dialog'>
             <div class='modal-content'>
                 <div class='modal-header'>
+                    <div class='modal-title' id='myModalLabel'>{{ trans('langCitation') }}</div>
                     <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                        <span aria-hidden='true'>&times;</span>
+                        <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
                     </button>
-                    <div class='modal-title h4' id='myModalLabel'>{{ trans('langCitation') }}</div>
+                    
                 </div>
                 <div class='modal-body'>
                     {{ $course_info->prof_names }}&nbsp;

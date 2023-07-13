@@ -823,6 +823,7 @@ a:hover{
   color: #2B3944;
   font-size: 14px;
   letter-spacing: 0px;
+  line-height: 16px;
 }
 
 .contextual-menu li:last-child .list-group-item{
@@ -897,21 +898,21 @@ body .form-action-button-mydropdowns{
 .bootbox-confirm .modal-footer .btn-primary{
   background: white !important;
   border: solid thin;
-  border-color: #ffa023;
-  color: #ffa023;
-  font-size: 12px;
+  border-color: #F57600;
+  color: #F57600;
+  font-size: 14px;
   text-transform: uppercase;
-  height:30px;
+  height:40px;
   font-weight: 600; font-style: normal;
-  border-radius: 35px;
-  margin-bottom: 10px;
+  border-radius: 4px;
+  /* margin-bottom: 10px; */
   display:flex;
   justify-content:center;
   align-items:center;
 }
 
 .bootbox-confirm .modal-footer .btn-primary:hover{
-  background: #ffa023 !important;
+  background: #F57600 !important;
   color: #ffffff;
 }
 
@@ -920,12 +921,12 @@ body .form-action-button-mydropdowns{
   border: solid thin;
   border-color: #001146;
   color: #001146;
-  font-size: 12px;
+  font-size: 14px;
   text-transform: uppercase;
-  height:30px;
+  height:40px;
   font-weight: 600; font-style: normal;
-  border-radius: 35px;
-  margin-bottom: 10px;
+  border-radius: 4px;
+  /* margin-bottom: 10px; */
   display:flex;
   justify-content:center;
   align-items:center;
@@ -950,11 +951,11 @@ body .form-action-button-mydropdowns{
   border: solid thin;
   border-color: #005ad9;
   color: #005ad9;
-  font-size: 12px;
-  text-transform: uppercase;
+  font-size: 14px;
+  
   min-height:30px;
   font-weight: 600; font-style: normal;
-  border-radius: 35px;
+  border-radius: 4px;
   display: inline-block;
   margin: 0 auto;
   width:100%;
@@ -974,13 +975,13 @@ body .form-action-button-mydropdowns{
 .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
   background:#ffffff;
   border: solid thin;
-  border-color: #ffa023;
-  color: #ffa023;
-  font-size: 12px;
-  text-transform: uppercase;
+  border-color: #F57600;
+  color: #F57600;
+  font-size: 14px;
+
   font-family: 'Manrope' , sans-serif; 
   font-weight: 600; font-style: normal;
-  border-radius: 35px;
+  border-radius: 4px;
   min-height:30px;
   display: inline-block;
   margin: 0 auto;
@@ -991,11 +992,11 @@ body .form-action-button-mydropdowns{
 
 .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times,
 .menu-popover .delete.confirmAction .fa-trash, .menu-popover .delete.delete_btn .fa-trash{ 
-  color: #ffa023; 
+  color: #F57600; 
 }
 
 .menu-popover .delete.confirmAction:hover , .menu-popover .delete.delete_btn:hover{ 
-  background: #ffa023; 
+  background: #F57600; 
   color:#ffffff;
 }
 
@@ -1017,21 +1018,69 @@ body .form-action-button-popover{
   display: block; 
 }
 
-.modal-header .close{ 
-  background-color: transparent; 
-  color:#003F87; 
+.bootbox.show .modal-content, .modal.show .modal-content{
+  padding: 15px;
 }
-
-.modal .close{ 
-  background-color: #dc3545; 
-  border: 0; 
-  color:white; 
-  width:35px; 
-  height:30px; 
+.modal.show .modal-header{
+  border: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
 }
-
-.modal-title{ 
-  font-size: 14px; 
+.bootbox.show .modal-header{
+  border: 0;
+  display: block;
+}
+.bootbox.show .modal-header .modal-title, .modal.show .modal-header .modal-title{
+  font-weight: 700;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #2B3944;
+}
+.bootbox.show .modal-header .bootbox-close-button, .modal.show .modal-header .close{
+  float: right;
+}
+.bootbox.show .modal-header h4, .modal.show .modal-header .modal-title{
+  float: left;
+}
+.bootbox.show .bootbox-close-button{
+  border:0px;
+  background-color: #ffffff;
+  margin-top: 5px !important;
+  width: 16px;
+  height: 16px;
+  font-size: 32px;
+  color: #687DA3;
+}
+.modal.show .close{
+  border:0px;
+  background-color: #ffffff;
+  margin-top: 0px;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+}
+.modal.show .close span{
+  color: #687DA3;
+}
+.bootbox.show .modal-body, .modal.show .modal-body{
+  border: 0;
+}
+.bootbox.show .bootbox-body, .modal.show .modal-body{
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #2B3944;
+}
+.bootbox.show .modal-footer, .modal.show .modal-footer{
+  border: 0;
+}
+.bootbox.show .modal-body:has(.bootbox-close-button) .bootbox-close-button{
+  margin-bottom: 15px;
 }
 
 .rating{ 
@@ -1039,7 +1088,7 @@ body .form-action-button-popover{
 }
 
 .hr-OpenCourses{
-  border:solid 1px white;
+  border:solid 1px #B3D1FF;
 }
 
 .openCourseImg{
@@ -1068,9 +1117,8 @@ body .form-action-button-popover{
   top: 50%;
   transform: translate(-50%, -50%);
   background:#ffffff ;
-  border-radius: 15px;
+  border-radius: 4px;
   max-height:80vh;
-  border:solid 2px #e8e8e8;
   padding: 20px;
 }
 .ClickCourseModalImg{
@@ -1079,22 +1127,22 @@ body .form-action-button-popover{
 
 @media(max-width:424px){
   .modal-content-opencourses{
-    width:75vw;
+    width:90vw;
   }
 }
 @media(min-width:425px) and (max-width:767px){
   .modal-content-opencourses{
-    width:80vw;
+    width:90vw;
   }
 }
 @media(min-width:768px) and (max-width:991px){
   .modal-content-opencourses{
-    width:80vw;
+    width:90vw;
   }
 }
 @media(min-width:992px) and (max-width:1023px){
   .modal-content-opencourses{
-    width:80vw;
+    width:90vw;
   }
 }
 @media(min-width:1024px) and (max-width:1199px){
@@ -1104,7 +1152,7 @@ body .form-action-button-popover{
 }
 @media(min-width:1200px){
   .modal-content-opencourses{
-    width:650px;
+    width:800px;
   }
 }
 .modal-content-opencourses::-webkit-scrollbar {
@@ -1114,14 +1162,14 @@ body .form-action-button-popover{
   background-color: transparent;
 }
 .modal-content-opencourses::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
+  background-color: #B4BED1;
 }
 .modal-content-opencourses::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
+  background-color: #B4BED1;
   border-radius: 20px;
 }
 .modal-content-opencourses::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
+  background-color: #B4BED1;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
@@ -1321,11 +1369,13 @@ body .form-action-button-popover{
 
 /* this is d-inline-flex between inputs-radio and texts */
 .radio label{ 
-display:inline-flex; justify-content: center; align-items:center ; 
-color:#2B3944; font-size: 14px; 
-font-weight: 400; font-style: normal;
-position: relative;
-transition: 0.5s;
+  display:inline-flex; justify-content: center; align-items:center ; 
+  color:#2B3944; font-size: 14px; 
+  font-weight: 400; font-style: normal;
+  position: relative;
+  transition: 0.5s;
+  line-height: 16px;
+  letter-spacing: 0px;
 } 
 
 /* this is inputs-radio for course status */
@@ -1334,21 +1384,25 @@ transition: 0.5s;
   position: absolute;
   top: 59%;
   left: 0%;
-  transform: translate(-160%, -50%); 
+  transform: translate(-175%, -50%); 
 }
 
 .radio label p{ 
   margin-top:0px; 
 } 
 
-.radio .help-block{
+/* .radio .help-block{
   margin-top: -10px;
-}
+} */
 
-.radio:has(input[type='radio']:checked) .help-block{
+/* .radio:has(input[type='radio']:checked) .help-block{
   font-size: 12px;
   font-weight: 600; font-style: normal;
   color:#2B3944;
+} */
+.radio .help-block{
+  margin-left: 34px;
+  margin-top: -10px;
 }
 
 /**************************************************************/
@@ -1386,11 +1440,15 @@ label:has(input[type="radio"]:disabled){
   font-size: 14px;
   font-weight: 500; font-style: normal;
   color: #687DA3;
+  line-height: 16px;
+  letter-spacing: 0px;
 }
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
   font-weight: 400; font-style: normal;
+  line-height: 16px;
+  letter-spacing: 0px;
   color:#2B3944;
 }
 
@@ -1398,7 +1456,7 @@ label:has(input[type="radio"]:disabled){
 
 /* this is d-inline-flex between inputs-checkbox and texts */
 .checkbox label{ 
-  display:inline-flex; justify-content: top; align-items:top; 
+  display:inline-flex; justify-content: start; align-items:start; 
   color:#2B3944; font-size: 14px; 
   font-weight: 400; font-style: normal;
 } 
@@ -1407,12 +1465,13 @@ label:has(input[type="radio"]:disabled){
 
 /* this is space between input-checkbox and texts */
 input[type="checkbox"]{
-  margin: 0 5px 0 0px;
+  margin: 0 10px 0 0px;
   accent-color: #0073E6;
-  min-width:20px;
-  height:20px;
+  min-width: 24px;
+  min-height: 24px;
   border-radius:4px;
 }
+
 .form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
   font-size: 14px;
   font-weight: 400; font-style: normal;
@@ -1600,6 +1659,7 @@ label:has(input[type="checkbox"]:disabled){
 .submitAdminBtn.active{
   background-color: #2546F0;
   color: #ffffff;
+  z-index: 0 !important;
 }
 
 .deleteAdminBtn {
@@ -2876,7 +2936,7 @@ tr.active th span,strong{
 
 div[role="progressbar"] {
   --size: 9rem;
-  --fg: #003e85;
+  --fg: #0073E6;
   --bg: #e8e8e8;
   --pgPercentage: var(--value);
   animation: growProgressBar 3s 1 forwards;
@@ -2913,7 +2973,7 @@ div[role="progressbar"]::before {
 
 .descCoursePanel{ 
   border-radius: 35px 0px 35px 0px; 
-  background: #003e87; 
+  background: #0073E6; 
   opacity: 0.7; 
 }
 
@@ -3180,10 +3240,10 @@ div[role="progressbar"]::before {
 }
 
 .radio label:has(.input-Questionnaire) .fa {
-  font-size: 17px;
+  font-size: 14px;
   position: absolute;
   top: 50%;
-  left: 0%;
+  left: 3%;
   transform: translate(-213%, -50%); 
 }
 
@@ -3282,14 +3342,14 @@ div[role="progressbar"]::before {
 }
 
 .bodyChat::-webkit-scrollbar-thumb {
-  background-color: #003e87;
+  background-color: #B4BED1;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 .bodyChat::-webkit-scrollbar-thumb:hover {
-  background-color: #005ad7;
+  background-color: #B4BED1;
 }
 
 

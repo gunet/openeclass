@@ -288,7 +288,7 @@
                                                     <label for="courseopen">{!! course_access_icon(COURSE_OPEN) !!}</label>
                                                     {{ trans('langOpenCourse') }}
                                                 </label>
-                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langPublic') }}</div>
+                                                <div class='help-block'>{{ trans('langPublic') }}</div>
                                             </div>
 
 
@@ -298,7 +298,7 @@
                                                     <label for="coursewithregistration">{!! course_access_icon(COURSE_REGISTRATION) !!}</label>
                                                     {{ trans('langTypeRegistration') }}
                                                 </label>
-                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langPrivOpen') }}</div>
+                                                <div class='help-block'>{{ trans('langPrivOpen') }}</div>
                                             </div>
 
 
@@ -308,7 +308,7 @@
                                                     <label for="courseclose">{!! course_access_icon(COURSE_CLOSED) !!}</label>
                                                     {{ trans('langClosedCourse') }}
                                                 </label>
-                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langClosedCourseShort') }}</div>
+                                                <div class='help-block'>{{ trans('langClosedCourseShort') }}</div>
                                             </div>
 
 
@@ -318,7 +318,7 @@
                                                     <label for="courseinactive">{!! course_access_icon(COURSE_INACTIVE) !!}</label>
                                                     {!! trans('langInactiveCourse') !!}
                                                 </label>
-                                                <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langCourseInactive') }}</div>
+                                                <div class='help-block'>{{ trans('langCourseInactive') }}</div>
                                             </div>
 
                                         </div>
@@ -350,14 +350,14 @@
                                             <div class="radio mb-2">
                                                 <label>
                                                     <input type='radio' value='1' name='enable_offline_course' {{ $log_offline_course_enable }} {{ $log_offline_course_inactive }}>
-                                                    <span class='ps-2'>{{ trans('langActivate') }}</span>
+                                                    {{ trans('langActivate') }}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ trans('langCourseOfflineLegend') }}</div>
+                                                <div class='help-block'>{{ trans('langCourseOfflineLegend') }}</div>
                                             </div>
                                             <div class="radio">
                                                 <label>
                                                     <input type='radio' value='0' name='enable_offline_course' {{ $log_offline_course_disable }} {{ $log_offline_course_inactive }}>
-                                                    <span class='ps-2'>{{ trans('langDeactivate') }}</span>
+                                                    {{ trans('langDeactivate') }}
                                                 </label>
                                             </div>
                                         </div>
@@ -369,15 +369,15 @@
                                         <div class='col-sm-12'>
                                             <div class='radio mb-2'>
                                                 <label>
-                                                        <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}>
-                                                        <span class='ps-2'>{{ trans('langActivate') }}</span>
+                                                    <input type='radio' value='0' name='disable_log_course_user_requests' {{ $log_course_user_requests_enable }} {{ $log_course_user_requests_inactive }}>
+                                                    {{ trans('langActivate') }}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ $log_course_user_requests_disable }}</div>
+                                                <div class='help-block'>{{ $log_course_user_requests_disable }}</div>
                                             </div>
                                             <div class='radio'>
                                                 <label>
-                                                        <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}>
-                                                        <span class='ps-2'>{{ trans('langDeactivate') }}</span>
+                                                    <input type='radio' value='1' name='disable_log_course_user_requests' {{ $log_course_user_requests_disable }} {{ $log_course_user_requests_inactive }}>
+                                                    {{ trans('langDeactivate') }}
                                                 </label>
                                             </div>
                                         </div>
@@ -389,14 +389,14 @@
                                             <div class='radio mb-2'>
                                                 <label>
                                                     <input type='radio' value='1' name='enable_access_users_list' {{ $check_enable_access_users_list }} >
-                                                    <span class='ps-2'> {{ trans('langActivate') }}</span>
+                                                    {{ trans('langActivate') }}
                                                 </label>
-                                                <div class='help-block ps-5'>{{ trans('langUsersListAccessInfo') }}</div>
+                                                <div class='help-block'>{{ trans('langUsersListAccessInfo') }}</div>
                                             </div>
                                             <div class='radio'>
                                                 <label>
                                                     <input type='radio' value='0' name='enable_access_users_list' {{ $check_disable_access_users_list}} >
-                                                    <span class='ps-2'>{{ trans('langDeactivate') }}</span>
+                                                    {{ trans('langDeactivate') }}
 
                                                 </label>
                                             </div>
@@ -409,15 +409,16 @@
                                             <div class='radio mb-2'>
                                               <label>
                                                     <input type='radio' value='1' name='s_radio' {{ $checkSharingEn }} {{ $sharing_radio_dis }}>
-                                                    <span class='ps-2'>{{ trans('langSharingEn') }}</span>
+                                                    {{ trans('langSharingEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='s_radio' {{ $checkSharingDis }} {{ $sharing_radio_dis }}>
-                                                    <span class='ps-2'>{{ trans('langSharingDis') }}</span>
+                                                    {{ trans('langSharingDis') }}
 
-                                              </label><div class='help-block ps-5'>{{ $sharing_dis_label }}</div>
+                                              </label>
+                                              <div class='help-block'>{{ $sharing_dis_label }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -431,13 +432,13 @@
                                             <div class='radio mb-2'>
                                               <label>
                                                     <input type='radio' value='1' name='f_radio' {{ $checkForumEn }}>
-                                                    <span class='ps-2'>{{ trans('langDisableForumNotifications') }}</span>
+                                                    {{ trans('langDisableForumNotifications') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='f_radio' {{ $checkForumDis }}>
-                                                    <span class='ps-2'>{{ trans('langActivateForumNotifications') }}</span>
+                                                    {{ trans('langActivateForumNotifications') }}
                                               </label>
                                             </div>
                                         </div>
@@ -454,13 +455,13 @@
                                                 <div class='radio mb-2'>
                                                   <label>
                                                         <input type='radio' value='1' name='r_radio' {{ $checkRatingEn }}>
-                                                        <span class='ps-2'>{{ trans('langRatingEn') }}</span>
+                                                        {{ trans('langRatingEn') }}
                                                   </label>
                                                 </div>
                                                 <div class='radio'>
                                                   <label>
                                                         <input type='radio' value='0' name='r_radio' {{ $checkRatingDis }}>
-                                                        <span class='ps-2'>{{ trans('langRatingDis') }}</span>
+                                                        {{ trans('langRatingDis') }}
                                                   </label>
                                                 </div>
                                             </div>
@@ -474,15 +475,16 @@
                                             <div class='radio mb-2'>
                                               <label>
                                                     <input type='radio' value='1' name='ran_radio' {{ $checkAnonRatingEn }} {{ $anon_rating_radio_dis }}>
-                                                    <span class='ps-2'>{{ trans('langRatingAnonEn') }}</span>
+                                                    {{ trans('langRatingAnonEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='ran_radio' {{ $checkAnonRatingDis }} {{ $anon_rating_radio_dis }}>
-                                                    <span class='ps-2'>{{ trans('langRatingAnonDis') }}</span>
+                                                    {{ trans('langRatingAnonDis') }}
 
-                                              </label><div class='help-block ps-5'>{{ $anon_rating_dis_label }}</div>
+                                              </label>
+                                              <div class='help-block'>{{ $anon_rating_dis_label }}</div>
                                             </div>
                                         </div>
                                     </div>
@@ -496,13 +498,13 @@
                                             <div class='radio mb-2'>
                                               <label>
                                                     <input type='radio' value='1' name='c_radio' {{ $checkCommentEn }}>
-                                                    <span class='ps-2'>{{ trans('langCommentsEn') }}</span>
+                                                    {{ trans('langCommentsEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='c_radio' {{ $checkCommentDis }}>
-                                                    <span class='ps-2'>{{ trans('langCommentsDis') }}</span>
+                                                    {{ trans('langCommentsDis') }}
                                               </label>
                                             </div>
                                         </div>
@@ -514,13 +516,13 @@
                                             <div class='radio mb-2'>
                                               <label>
                                                     <input type='radio' value='1' name='ar_radio' {{ $checkAbuseReportEn }}>
-                                                    <span class='ps-2'>{{ trans('langAbuseReportEn') }}</span>
+                                                    {{ trans('langAbuseReportEn') }}
                                               </label>
                                             </div>
                                             <div class='radio'>
                                               <label>
                                                     <input type='radio' value='0' name='ar_radio' {{ $checkAbuseReportDis }}>
-                                                    <span class='ps-2'>{{ trans('langAbuseReportDis') }}</span>
+                                                    {{ trans('langAbuseReportDis') }}
                                               </label>
                                             </div>
                                         </div>

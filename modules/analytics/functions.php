@@ -134,7 +134,7 @@ function display_general_lists($analytics_id) {
                     array(
                         array('title' => $langDetail,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
-                                'icon' => 'fa-user-o',
+                                'icon' => 'fa-regular fa-user',
                                 'level' => 'primary-label'
                             ),
                         array('title' => $langMessage,
@@ -158,7 +158,7 @@ function display_general_lists($analytics_id) {
                             array(
                                 array('title' => $langDetail,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid",
-                                        'icon' => 'fa-user-o',
+                                        'icon' => 'fa-regular fa-user',
                                         'level' => 'primary-label'
                                     ),
                                 array('title' => $langMessage,
@@ -477,7 +477,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                                 array(
                                     array('title' => $langDetail,
                                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$period",
-                                            'icon' => 'fa-user-o',
+                                            'icon' => 'fa-regular fa-user',
                                             'level' => 'primary-label'
                                         ),
                                     array('title' => $langMessage,
@@ -869,8 +869,9 @@ function edit_analytics_settings ($analytics_id = 0)
         <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langStart</label>
             <div class='col-sm-12'>
-                <div class='input'>
-                    <input class='form-control' name='start_date' id='start_date' type='text' value='$start_date'>
+                <div class='input-group'>
+                    <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0 border-start-0' name='start_date' id='start_date' type='text' value='$start_date'>
                 </div>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
             </div>
@@ -878,8 +879,9 @@ function edit_analytics_settings ($analytics_id = 0)
         <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langFinish</label>
             <div class='col-sm-12'>
-                <div class='input'>
-                    <input class='form-control' name='end_date' id='end_date' type='text' value='$end_date'>
+                <div class='input-group'>
+                    <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0 border-start-0' name='end_date' id='end_date' type='text' value='$end_date'>
                 </div>
                 <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>
             </div>

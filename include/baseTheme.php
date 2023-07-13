@@ -357,6 +357,7 @@ function view($view_file, $view_data = array()) {
 
                 .submitAdminBtn.active{
                     background-color: $theme_options_styles[leftNavBgColor];
+                    z-index: 0 !important;
                 }
 
                 .cancelAdminBtn, .deleteAdminBtn, .successAdminBtn{ height:40px; }

@@ -86,8 +86,8 @@ Class Commenting {
                     <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog'>
                         <div class='modal-content'>
-                          <div class='modal-header border-0'>
-                            <h2 class='mb-0'>$langComments</h2>
+                          <div class='modal-header'>
+                            <h4 class='modal-title'>$langComments</h4>
                             <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
                                 <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                             </button>

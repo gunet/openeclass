@@ -243,7 +243,7 @@ if (isset($_GET['stats_submit'])) {
         </div>";
     $tool_content .= "<div class='row input-append date form-group mt-4' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
             <label class='col-12 control-label-notes' for='user_date_end'>$langEndDate</label>
-            <div class='col-10'>
+            <div class='col-12'>
                 <div class='input-group'> 
                     <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                     <input class='form-control mt-0 border-start-0' id='user_date_end' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>

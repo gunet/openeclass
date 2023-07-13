@@ -82,7 +82,7 @@
                                                         <input type='radio' name='adminrights' value='admin' {{$checked['admin']}}> 
                                                         {{ trans('langAdministrator') }}
                                                     </label>
-                                                     <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langHelpAdministrator') }}</div>
+                                                     <div class='help-block'>{{ trans('langHelpAdministrator') }}</div>
                                                 </div>
 
                                                 <div class='radio mb-4'>
@@ -90,7 +90,7 @@
                                                         <input type='radio' name='adminrights' value='poweruser' {{$checked['poweruser']}}> 
                                                         {{ trans('langPowerUser') }} 
                                                     </label>  
-                                                    <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langHelpPowerUser') }}</div>
+                                                    <div class='help-block'>{{ trans('langHelpPowerUser') }}</div>
                                                 </div>
 
                                                
@@ -99,7 +99,7 @@
                                                         <input type='radio' name='adminrights' value='manageuser' {{$checked['manageuser']}}> 
                                                         {{ trans('langManageUser') }}    
                                                     </label>     
-                                                    <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langHelpManageUser') }}</div>
+                                                    <div class='help-block'>{{ trans('langHelpManageUser') }}</div>
                                                 </div>
                                                
                                               
@@ -108,7 +108,7 @@
                                                         <input type='radio' name='adminrights' value='managedepartment' id='managedepartmentradio' {{$checked['managedepartment']}}> 
                                                         {{ trans('langManageDepartment') }}
                                                     </label>
-                                                    <div class='help-block Neutral-900-cl ps-4 ms-3'><span class='fa fa-minus'></span>&nbsp{{ trans('langHelpManageDepartment') }}</div>
+                                                    <div class='help-block'>{{ trans('langHelpManageDepartment') }}</div>
                                                 </div>
                                                
                                             </div>

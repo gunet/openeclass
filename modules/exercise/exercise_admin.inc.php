@@ -509,19 +509,19 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($exerciseAssignToSpecific == 0 ? " checked" : "").">
-                            <span>$m[WorkToAllUsers]</span>
+                            $m[WorkToAllUsers]
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($exerciseAssignToSpecific == 1 ? " checked" : "").">
-                            <span>$m[WorkToUser]</span>
+                            $m[WorkToUser]
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
                             <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($exerciseAssignToSpecific == 2 ? " checked" : "").">
-                            <span>$m[WorkToGroup]</span>
+                            $m[WorkToGroup]
                           </label>
                         </div>
                     </div>

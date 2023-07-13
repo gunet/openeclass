@@ -339,7 +339,7 @@ $tool_content .= "<div class='col-12'>
                                                 
                                                 $tool_content .= "<tr>
                                                                     <td class='d-flex justify-content-between align-items-center'>
-                                                                        <a type='button' class='ViewGroup TextSemiBold' href='group_space.php?course=$course_code&amp;group_id=$gr->id'>" . q($gr->name) . "
+                                                                        <a type='button' href='group_space.php?course=$course_code&amp;group_id=$gr->id'>" . q($gr->name) . "
                                                                             &nbsp<span class='$link_class text-danger'></span>
                                                                         </a>
                                                                         <button class='btn submitAdminBtn btn-sm showSettings' type='button' data-bs-toggle='collapse' data-bs-target='#CollapseGroup_$gr->id'>
@@ -381,7 +381,7 @@ $tool_content .= "<div class='col-12'>
                                                                     $tool_content .= "  <div class='col-12 form-group mt-4'>
                                                                                             <p class='control-label-notes mb-1'>$langMax $langGroupPlacesThis</p>
                                                                                             <div class='col-sm-12'>
-                                                                                                <input class='form-control rounded-pill bgEclass border-0' type=text name='maxStudent_$gr->id' size=2 value='$max_members'>
+                                                                                                <input class='form-control' type=text name='maxStudent_$gr->id' size=2 value='$max_members'>
                                                                                             </div>";
                                                                                             $membersAvailable = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                                                                                             WHERE group_id = ?d
@@ -419,7 +419,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                     <div class='checkbox'>
                                                                                                         <label>
                                                                                                             <input type='checkbox' name='self_reg_$gr->id' $checked[$self_reg]>
-                                                                                                            <span class='small-text'>$langGroupAllowStudentRegistration</span>
+                                                                                                            $langGroupAllowStudentRegistration
                                                                                                         </label>
                                                                                                     </div>
                                                                                                 </div>
@@ -431,7 +431,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                     <div class='checkbox'>
                                                                                                         <label>
                                                                                                             <input type='checkbox' name='allow_unreg_$gr->id' $checked[$allow_unreg]>
-                                                                                                            <span class='small-text'>$langGroupAllowStudentUnregister</span>
+                                                                                                            $langGroupAllowStudentUnregister
                                                                                                         </label>
                                                                                                     </div>
                                                                                                 </div>
@@ -443,13 +443,13 @@ $tool_content .= "<div class='col-12'>
                                                                                                     <div class='radio mb-2'>
                                                                                                         <label>
                                                                                                             <input type='radio' name='private_forum_$gr->id' value='1' checked=''  $checked[$private_forum_yes]>
-                                                                                                            <span class='small-text'>$langPrivate_2</span>
+                                                                                                            $langPrivate_2
                                                                                                         </label>
                                                                                                     </div>
                                                                                                     <div class='radio'>
                                                                                                         <label>
                                                                                                             <input  type='radio' name='private_forum_$gr->id' value='0' $checked[$private_forum_no]>
-                                                                                                            <span class='small-text'>$langPrivate_3</span>
+                                                                                                            $langPrivate_3
                                                                                                         </label>
                                                                                                     </div>
                                                                                                 </div>
@@ -461,40 +461,40 @@ $tool_content .= "<div class='col-12'>
                                                                                     <p class='control-label-notes mb-1'>$langTools</p>
                                                                                     <div class='row'>";
                                                                                                 
-                                                                    $tool_content .= "  <div class='col-12 form-group d-flex justify-content-start align-items-start'>
+                                                                    $tool_content .= "  <div class='col-12 form-group'>
                                                                                             <div class='checkbox'>
                                                                                                 <label>
                                                                                                     <input type='checkbox' name='public_users_list_$gr->id' $checked[$public_users_list]>
+                                                                                                    $langGroupPublicUserList
                                                                                                 </label>
                                                                                             </div>
-                                                                                            <span class='small-text tmpGreyColor'>$langGroupPublicUserList</span>
                                                                                         </div>
                                                                         
-                                                                                        <div class='col-12 form-group mt-2 d-flex justify-content-start align-items-start'>
+                                                                                        <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label>
                                                                                                     <input type='checkbox' name='forum_$gr->id' $checked[$has_forum]>
+                                                                                                    $langGroupForum
                                                                                                 </label>
                                                                                             </div> 
-                                                                                            <span class='small-text tmpGreyColor'>$langGroupForum</span>
                                                                                         </div>
                                                                             
-                                                                                        <div class='col-12 form-group mt-2 d-flex justify-content-start align-items-start'>
+                                                                                        <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label>
                                                                                                     <input type='checkbox' name='documents_$gr->id' $checked[$documents]>
+                                                                                                    $langDoc
                                                                                                 </label>
                                                                                             </div>
-                                                                                            <span class='small-text tmpGreyColor'>$langDoc</span>
                                                                                         </div>
                                                                             
-                                                                                        <div class='col-12 form-group mt-2 d-flex justify-content-start align-items-start'>
+                                                                                        <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label>
                                                                                                     <input type='checkbox' name='wiki_$gr->id' $checked[$wiki]>
+                                                                                                    $langWiki
                                                                                                 </label>
                                                                                             </div>
-                                                                                            <span class='small-text tmpGreyColor'>$langWiki</span>
                                                                                         </div>
                                                                                     </div>";    
 

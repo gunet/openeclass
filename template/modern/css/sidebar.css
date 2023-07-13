@@ -44,10 +44,11 @@
 .contextual-sidebar .list-group-item{
   border:0px;
   border-bottom: solid 1px #EFF6FF;
-  font-weight: 600;
+  font-weight: 400;
   color: #2B3944;
-  font-size: 15px;
+  font-size: 14px;
   letter-spacing: 0px;
+  line-height: 16px;
 }
 
 .contextual-sidebar li:last-child .list-group-item{

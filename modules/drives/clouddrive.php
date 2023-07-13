@@ -86,8 +86,9 @@ final class CloudDriveManager {
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
         <h4 class='modal-title' id='myModalLabel'>" . $langPathUploadFile . "</h4>
+        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+        
       </div>
       <div class='modal-body' style=' overflow:auto;'>
         <div id='fileTreeDemo' class='browsearea' ></div>

@@ -146,14 +146,14 @@
                                                     <div id="myModal{{$mycourse->k}}" class="modal">
 
                                                         <!-- Modal content -->
-                                                        <div class="modal-content modal-content-opencourses overflow-auto px-lg-4 py-lg-3">
-                                                            <div class='row'>
-                                                                <div class='col-10'>
-                                                                    <span class="courseInfoText TextExtraBold blackBlueText">{{$mycourse->i}}</span>
-                                                                    <span class='courseInfoText TextMedium blackBlueText ms-1'>({{$mycourse->c}})</span>
+                                                        <div class="modal-content modal-content-opencourses overflow-auto px-lg-5 py-lg-5">
+                                                            <div class='col-12 d-flex justify-content-between align-items-start'>
+                                                                <div>
+                                                                    <span class='modal-title TextBold' style='font-size:22px;'>{{$mycourse->i}}</span>
+                                                                    <span>({{$mycourse->c}})</span>
                                                                 </div>
-                                                                <div class='col-2'>
-                                                                    <button type='button' class="close btn-sm text-uppercase d-flex justify-content-center align-items-center float-end" style='font-size:30px;'>&times;</button>
+                                                                <div>
+                                                                    <button type='button' class="close border-0 bg-white mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                                                 </div>
                                                             </div>
                                                             
@@ -169,13 +169,13 @@
                                                                 <div class='col-3 d-flex justify-content-end align-items-center pe-4 blackBlueText'>
                                                                     {!! course_access_icon($mycourse->visible) !!}
                                                                     @if($mycourse->p == 1)
-                                                                        <span class="fa fa-star textgreyColor ps-3" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="{{trans('langPopular')}} {{trans('langCourse')}}" aria-label="{{trans('langPopular')}} {{trans('langCourse')}}"></span>
+                                                                        <span class="fa fa-star Primary-600-cl ps-3" data-bs-toggle="tooltip" data-bs-placement="top" title="" data-bs-original-title="{{trans('langPopular')}} {{trans('langCourse')}}" aria-label="{{trans('langPopular')}} {{trans('langCourse')}}"></span>
                                                                     @endif
                                                                 </div>
                                                             </div>
                                                         
                                                             
-                                                            <div class='col-12 d-flex justify-content-center align-items-start ps-md-5 pe-md-5'>
+                                                            <div class='col-12 d-flex justify-content-center align-items-start'>
                                                                 @if($mycourse->img == NULL)
                                                                     <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
                                                                 @else
@@ -183,7 +183,7 @@
                                                                 @endif
                                                             </div>
 
-                                                            <div class='col-12 openCourseDes mt-3 ps-md-5 pe-md-5 blackBlueText pb-3'>
+                                                            <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'>
                                                                 @if(empty($mycourse->de))
                                                                     <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
                                                                 @else

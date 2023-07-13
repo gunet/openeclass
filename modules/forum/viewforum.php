@@ -325,7 +325,7 @@ if (count($result) > 0) { // topics found
             }
             $pagination .= "&nbsp;</span></strong>";
         }
-        $tool_content .= "<td>$image <a href='$topiclink'><b>" . q($topic_title) . "</b></a>$pagination</td>";
+        $tool_content .= "<td>$image <a href='$topiclink'>" . q($topic_title) . "</a>$pagination</td>";
         $tool_content .= "<td class='text-center'>$replies</td>";
         $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";

@@ -2,10 +2,11 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
+                <div class='modal-title' id='assigneesModalLabel'>{{ trans("m['WorkAssignTo']") }}...</div>
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
-                    <span aria-hidden='true'>&times;</span>
+                    <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
                 </button>
-                <div class='modal-title h4' id='assigneesModalLabel'>{{ trans("m['WorkAssignTo']") }}...</div>
+                
             </div>
             <form method='post' action='{{ $targetUrl }}'>
                 {!! generate_csrf_token_form_field() !!}
@@ -32,10 +33,11 @@
     <div class='modal-dialog' role='document'>
         <div class='modal-content'>
             <div class='modal-header'>
+                <div class='modal-title' id='watchersModalLabel'>{{ trans("langWatchers") }}...</div>
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='{{ trans('langCancel') }}'>
-                    <span aria-hidden='true'>&times;</span>
+                    <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
                 </button>
-                <div class='modal-title h4' id='watchersModalLabel'>{{ trans("langWatchers") }}...</div>
+                
             </div>
             <form method='post' action='{{ $targetUrl }}'>
                 {!! generate_csrf_token_form_field() !!}

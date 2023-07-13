@@ -485,7 +485,7 @@ foreach ($result as $list) { // while ... learning path list
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
 
-        $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
+        $play_img = "<span class='fa fa-line-chart'></span>";
 
         if(!$is_editor){ // If is student
             $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
@@ -507,7 +507,7 @@ foreach ($result as $list) { // while ... learning path list
 
         $tool_content .= "
             <td>
-                <div><strong>$play_url</strong><span class='float-end' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>                
+                <div>$play_url<span class='float-end' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>                
                 <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
             </td>";
 

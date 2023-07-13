@@ -104,19 +104,19 @@ if (isset($_POST['submit'])) {
         <div class='form-group'>
             <label class='col-sm-6 control-label-notes'>$langName</label>
             <div class='col-sm-12'>
-                <input class='form-control rounded-pill' value='".q($guest_info->givenname)."' disabled>
+                <input class='form-control' value='".q($guest_info->givenname)."' disabled>
             </div>
         </div>
         <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langSurname</label>
             <div class='col-sm-12'>
-                <input class='form-control rounded-pill' value='".q($guest_info->surname)."' disabled>
+                <input class='form-control' value='".q($guest_info->surname)."' disabled>
             </div>
         </div>
         <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langUsername</label>
             <div class='col-sm-12'>
-                <input class='form-control rounded-pill' value='".q($guest_info->username)."' disabled>
+                <input class='form-control' value='".q($guest_info->username)."' disabled>
             </div>
         </div>
         <div class='form-group mt-4'>

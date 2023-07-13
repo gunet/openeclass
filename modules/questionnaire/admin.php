@@ -443,19 +443,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
-                        <span>$m[WorkToAllUsers]</span>
+                        $m[WorkToAllUsers]
                       </label>
                     </div>
                     <div class='radio mb-2'>
                       <label>
                         <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
-                        <span>$m[WorkToUser]</span>
+                        $m[WorkToUser]
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "").">
-                        <span>$m[WorkToGroup]</span>
+                        $m[WorkToGroup]
                       </label>
                     </div>
                 </div>
@@ -509,7 +509,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input class='input-Questionnaire' type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
                         <label for='colles_type'>   
                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$colles_desc'></span>
-                            <span>$langCollesSurvey</span>
+                            $langCollesSurvey
                         </label>
                       </label>
                     </div>
@@ -517,7 +517,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                       <label>
                          <input class='input-Questionnaire' type='radio' id='attls_type' name='survey_type' value='2'".($PollSurveyType == POLL_ATTLS ? " checked" : "").">
                          <label for='attls_type'>   
-                            <span>$langATTLSSurvey</span>
+                            $langATTLSSurvey
                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$rate_scale'></span>
                         </label>
                       </label>

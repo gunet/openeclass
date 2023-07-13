@@ -619,9 +619,10 @@ jContent;
         $html .= '<div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="treeModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close treeModalClose"><span aria-hidden="true">&times;</span><span class="sr-only">' . $langCancel . '</span></button>
+                <div class="modal-header"> 
                     <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
+                    <button type="button" class="close treeModalClose"> <span class="fa-solid fa-xmark fa-lg Neutral-700-cl" aria-hidden="true"></span><span class="sr-only">' . $langCancel . '</span></button>
+                   
                 </div>
                 <div class="modal-body">
                     <div id="js-tree"></div>
@@ -699,8 +700,9 @@ jContent;
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close treeModalClose"><span aria-hidden="true">&times;</span><span class="sr-only">' . $langCancel . '</span></button>
-                    <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
+                     <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
+                    <button type="button" class="close treeModalClose"> <span class="fa-solid fa-xmark fa-lg Neutral-700-cl" aria-hidden="true"></span><span class="sr-only">' . $langCancel . '</span></button>
+                   
                 </div>
                 <div class="modal-body">
                     <div id="js-tree"></div>

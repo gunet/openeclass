@@ -528,7 +528,7 @@ $tool_content .= action_bar(array(
     array(
         'title' => $langWikiAllPages,
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId() ."&amp;action=all",
-        'icon' => 'fa-files-o',
+        'icon' => 'fa-regular fa-file',
         'level' => 'primary'
     ),
     array(

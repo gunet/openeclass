@@ -112,11 +112,12 @@
                                             <div class='modal-dialog'>
                                                 <div class='modal-content'>
                                                     <div class='modal-header'>
+                                                        <h4 class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</h4>
                                                         <button type='button' class='close treeCourseModalClose'>
-                                                            <span aria-hidden='true'>&times;</span>
+                                                            <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
                                                             <span class='sr-only'>{{ trans('langCancel') }}</span>
                                                         </button>
-                                                        <h4 class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</h4>
+                                                        
                                                     </div>
                                                     <div class='modal-body'>
                                                         <div id='js-tree-course'></div>
