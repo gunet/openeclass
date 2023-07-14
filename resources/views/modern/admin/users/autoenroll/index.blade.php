@@ -63,7 +63,7 @@
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                         
                                         
-                                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</div>
+                                                <h3>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</h3>
                                             
                                         
                                                 <div>

@@ -962,11 +962,11 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                             <div class='card panelCard px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                     
-                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                        <h3>
                                           
                                                 ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ."
                                             
-                                        </div>
+                                        </h3>
                                         <div>
                                             <div>
                                                 ".action_button(array(

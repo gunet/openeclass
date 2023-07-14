@@ -294,7 +294,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_edit_video" style="padding:10px">
                               '.list_videos($id).'
                           </div>';
-            $video_li = '<li><a id="nav_edit_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li class="nav-item"><a id="nav_edit_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
@@ -305,7 +305,7 @@ if (isset($_GET['showPost'])) { //show comments case
                               <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id, NULL, TRUE).'
                           </div>';
-            $docs_li = '<li><a id="nav_edit_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li class="nav-item"><a id="nav_edit_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -318,7 +318,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs($id,'mydocs', TRUE).'
                           </div>';
-            $mydocs_li = '<li><a id="nav_edit_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li class="nav-item"><a id="nav_edit_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -328,7 +328,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $links_div = '<div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_edit_links" style="padding:10px">
                               '.list_links($id).'
                           </div>';
-            $links_li = '<li><a id="nav_edit_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+            $links_li = '<li class="nav-item"><a id="nav_edit_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
         } else {
             $links_div = '';
             $links_li = '';
@@ -338,7 +338,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_edit_exercises" style="padding:10px">
                               '.list_exercises($id).'
                           </div>';
-            $exercises_li = '<li><a id="nav_edit_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+            $exercises_li = '<li class="nav-item"><a id="nav_edit_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
         } else {
             $exercises_div = '';
             $exercises_li = '';
@@ -348,7 +348,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_edit_assigments" style="padding:10px">
                               '.list_assignments($id).'
                           </div>';
-            $assignments_li = '<li><a id="nav_edit_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+            $assignments_li = '<li class="nav-item"><a id="nav_edit_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
         } else {
             $assignments_div = '';
             $assignments_li = '';
@@ -358,7 +358,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $chats_div = '<div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_edit_chats" style="padding:10px">
                               '.list_chats($id).'
                           </div>';
-            $chats_li = '<li><a id="nav_edit_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+            $chats_li = '<li class="nav-item"><a id="nav_edit_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
         } else {
             $chats_div = '';
             $chats_li = '';
@@ -368,7 +368,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $polls_div = '<div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_edit_polls" style="padding:10px">
                               '.list_polls($id).'
                           </div>';
-            $polls_li = '<li><a id="nav_edit_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+            $polls_li = '<li class="nav-item"><a id="nav_edit_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
         } else {
             $polls_div = '';
             $polls_li = '';
@@ -378,7 +378,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_edit_forums" style="padding:10px">
                               '.list_forums($id).'
                           </div>';
-            $forums_li = '<li><a id="nav_edit_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li class="nav-item"><a id="nav_edit_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -395,8 +395,8 @@ if (isset($_GET['showPost'])) { //show comments case
                             </div>
                             <div class="panel panel-default mt-3 border-0">
                                 <div class="panel-body border-0">
-                                    <ul class="nav nav-tabs walltabs border-0">
-                                        <li class="active"><a id="nav_edit_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                    <ul class="nav nav-tabs border-0">
+                                        <li class="nav-item"><a id="nav_edit_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$video_li.'
                                         '.$docs_li.'
                                         '.$mydocs_li.'

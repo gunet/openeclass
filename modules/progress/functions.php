@@ -58,9 +58,9 @@ function display_certificates() {
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     $langCertificates
-                                </div>
+                                </h3>
                                 <div>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
                                 </div>
@@ -165,9 +165,9 @@ function display_badges() {
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     $langBadges
-                                </div>
+                                </h3>
                                 <div>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
                                 </div>
@@ -516,9 +516,9 @@ function display_activities($element, $id, $unit_id = 0) {
             <div class='col-12 mt-3'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                        <h3>
                             $langAttendanceActList
-                        </div>
+                        </h3>
                         <div>
                             $addActivityBtn
                         </div>
@@ -588,9 +588,9 @@ function display_activities($element, $id, $unit_id = 0) {
                                 <div class='col-12'>
                                     <div class='card panelCard px-lg-4 py-lg-3'>
                                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                            <h3>
                                                 $langUnitCompletion
-                                            </div>
+                                            </h3>
                                             <div>
                                                 $addActivityBtn
                                             </div>
@@ -687,9 +687,9 @@ function display_activities($element, $id, $unit_id = 0) {
 
                         <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     $langUnitPrerequisites
-                                </div>
+                                </h3>
                                 <div>
                                     $addPrereqBtn
                                 </div>
@@ -1161,7 +1161,7 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                 }
                 $dir = $entry['path'];
                 if ($is_dir) {
-                    $image = 'fa-folder-o';
+                    $image = 'fa-folder-open';
                     $file_url = $urlbase . $dir;
                     $link_text = $entry['name'];
 
@@ -2152,9 +2152,9 @@ function display_settings($element, $element_id, $unit_id = 0) {
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     $langProgressBasicInfo
-                                </div>
+                                </h3>
                                 <div>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
@@ -2480,7 +2480,7 @@ function student_view_progress() {
                     <div class='col-12 mt-3'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langBadges</div>
+                                <h3>$langBadges</h3>
                             </div>
                             <div class='card-body'>";
 
@@ -2531,7 +2531,7 @@ function student_view_progress() {
                     <div class='col-12 mt-3'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langCertificates</div>
+                            <h3>$langCertificates</h3>
                             </div>
                             <div class='card-body'>";
 
@@ -2735,7 +2735,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
             <div class='col-12'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$element_title</div>
+                    <h3>$element_title</h3>
                     </div>
                     <div class='card-body'>
                         <div class='row'>
@@ -2787,7 +2787,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         <div class='col-12 mt-3'>
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langAttendanceActivity</div>
+                <h3>$langAttendanceActivity</h3>
                 </div>
                 <div class='card-body'>
                     <div class='res-table-wrapper'>

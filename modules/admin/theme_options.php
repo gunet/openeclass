@@ -456,8 +456,8 @@ $tool_content .= "
 
   <!-- Nav tabs -->
   <ul class='nav nav-tabs' role='tablist'>
-    <li role='presentation' class='nav-item' style='border:solid 1px #ffffff;'><a class='nav-link active normalColorBlueText TextSemiBold' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
-    <li role='presentation' class='nav-item' style='border:solid 1px #ffffff;'><a class='nav-link normalColorBlueText TextSemiBold' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link active' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -465,7 +465,7 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
         <div class='form-wrapper form-edit rounded-2 p-lg-5 p-3'>
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-4'>$langLayoutConfig</legend>
+            <h3 class='theme_options_legend  mt-4'>$langLayoutConfig</h3>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langLayout:</label>
                 <div class='form-inline col-sm-12'>
@@ -499,7 +499,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langLogoConfig</legend>
+            <h3 class='theme_options_legend mt-2'>$langLogoConfig</h3>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
@@ -515,7 +515,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langBgColorConfig</legend>
+            <h3 class='theme_options_legend mt-2'>$langBgColorConfig</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
@@ -549,7 +549,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langLinksCongiguration</legend>
+            <h3 class='theme_options_legend mt-2'>$langLinksCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
@@ -563,7 +563,7 @@ $tool_content .= "
             <hr>
 
 
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langLoginConfiguration</legend>
+            <h3 class='theme_options_legend mt-2'>$langLoginConfiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                     <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient:</label>
                     <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
@@ -607,7 +607,7 @@ $tool_content .= "
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
         <div class='form-wrapper form-edit rounded'>
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-4'>$langBgColorConfig</legend>
+            <h3 class='theme_options_legend mt-4'>$langBgColorConfig</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
               <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
@@ -616,7 +616,7 @@ $tool_content .= "
 
             <hr>
 
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langMainMenuConfiguration</legend>
+            <h3 class='theme_options_legend mt-2'>$langMainMenuConfiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuBgColor' class='control-label-notes me-2 mb-2'>$langMainMenuBgColor:</label>
               <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
@@ -637,7 +637,7 @@ $tool_content .= "
             <hr>
 
 
-            <legend class='theme_options_legend normalColorBlueText TextBold text-uppercase fs-5 mt-2'>$langSubMenuConfig</legend>
+            <h3 class='theme_options_legend mt-2'>$langSubMenuConfig</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftSubMenuFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColor:</label>
               <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>

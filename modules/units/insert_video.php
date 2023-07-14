@@ -70,7 +70,7 @@ function list_videos() {
             foreach ($sql as $videocat) {
                 $tool_content .= "<tr>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
-                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;<strong>" . q($videocat->name) . "</strong>";
+                $tool_content .= "<td>".icon('fa-folder-open')."&nbsp;&nbsp;<strong>" . q($videocat->name) . "</strong>";
                 if (!empty($videocat->description)) {
                     $videocat_description_text = "<div style='margin-top: 10px;'>" .  q($videocat->description). "</div>";
                 } else {

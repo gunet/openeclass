@@ -72,12 +72,12 @@
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     {{ $request->title }}
                                     @if ($request->type_id)
                                         <small>&nbsp->&nbsp{{ $type->name }}</small>
                                     @endif
-                                </div>
+                                </h3>
                             </div>
                             
 

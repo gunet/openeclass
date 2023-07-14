@@ -50,7 +50,7 @@ function list_links() {
                 }
                 $tool_content .= "<tr>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='catlink[]' value='$catrow->id' /></td>";
-                $tool_content .= "<td>&nbsp;&nbsp;<strong>".icon('fa-folder-o')."&nbsp;&nbsp;". q($catrow->name) . "</strong>$description_text</td>";
+                $tool_content .= "<td>&nbsp;&nbsp;<strong>".icon('fa-folder-open')."&nbsp;&nbsp;". q($catrow->name) . "</strong>$description_text</td>";
                 $tool_content .= "</tr>";
                 $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = ?d", $course_id, $catrow->id);
                 foreach ($sql2 as $linkcatrow) {

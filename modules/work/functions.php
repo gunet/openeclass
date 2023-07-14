@@ -370,7 +370,7 @@ function show_submission_details($id) {
     <div class='col-12 mt-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$m[SubmissionWorkInfo]</div>
+                <h3>$m[SubmissionWorkInfo]</h3>
             </div>
             <div class='card-body'>
                 <div class='row p-2 margin-bottom-fat'>

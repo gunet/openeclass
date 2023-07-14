@@ -44,22 +44,12 @@
 
     @if($cources)
     <div class='col-md-6 col-12 text-end text-uppercase TextMedium mt-md-0 mt-4'>
-        <a class='all_courses' href='{{$urlAppend}}main/my_courses.php'>{{ trans('langMyCoursesSide') }} 
+        <a class='all_courses_portfolio' href='{{$urlAppend}}main/my_courses.php'>{{ trans('langMyCoursesSide') }} 
             <span class='fa fa-angle-right fs-6 ms-1 fw-bold'></span>
         </a>
     </div>
     @endif
 
-    {{--<div class='d-flex justify-content-center'> 
-        <a class="btn-slide" href="{{$urlServer}}modules/auth/courses.php" >
-            <span class="circle d-flex justify-content-center align-items-center">
-                <i class="fa fa-pencil ms-2"></i>        
-            </span>
-            
-            <span class="title">{{ trans('langRegCourses') }}</span>
-            <span class="title title-hover">{{ trans('langRegCourses') }}</span>
-        </a>
-    </div>--}}
 </div>
 
 <script>

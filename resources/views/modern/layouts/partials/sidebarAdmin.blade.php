@@ -8,7 +8,7 @@
     <div class='col-12 mb-4'>
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langNewEclassVersion') }}</div>
+                <h3>{{ trans('langNewEclassVersion') }}</h3>
             </div>
             <div class='card-body'>
                 {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
@@ -21,7 +21,7 @@
 <div class='col-12'>
     <div class='card panelCard BorderSolid px-lg-4 py-lg-3'>
         <div class='card-header border-0 bg-white'>
-            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langQuickLinks') }}</span>
+            <h3>{{ trans('langQuickLinks') }}</h3>
         </div>
         <div class='card-body'>
             <div class='d-flex flex-wrap'>
@@ -101,14 +101,14 @@
             <div class='col'>
                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white m-auto h-100'>
                     <div class='card-header border-0 bg-white'>
-                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ $tool_group[0]['text'] }}</span>
+                        <h3>{{ $tool_group[0]['text'] }}</h3>
                     </div>
                     <div class='card-body'>
                         <ul>
                             @foreach ($tool_group[1] as $key2 => $tool)
                                 <li class="p-1">
                                     <a href="{!! $tool_group[2][$key2] !!}" class='link_admin_tool {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                                        <span class='toolAdminText'>{!! $tool !!}</span>  
+                                        {!! $tool !!}
                                     </a>
                                 </li>
                             @endforeach
@@ -126,27 +126,27 @@
             <div class='col'>
                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
                     <div class='card-header border-0 bg-white'>
-                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langAdministratorTools')}}</span>
+                        <h3>{{trans('langAdministratorTools')}}</h3>
                     </div>
                     <div class='card-body'>
                         <ul>
                             @if ($is_admin)
                                 <li class="p-1">
                                     <a class='link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
-                                        <span class='toolAdminText'>{!!  $GLOBALS['langAdmins'] !!}</span>   
+                                        {!!  $GLOBALS['langAdmins'] !!} 
                                     </a>
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
                                 <li class="p-1">
                                     <a class='link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                        <span class='toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
+                                        {!!  $GLOBALS['langAdminAn'] !!}
                                     </a>
                                 </li>
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="p-1">
                                     <a class='link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
-                                        <span class='toolAdminText'>{!!  $GLOBALS['langAdminManual'] !!}</span>      
+                                        {!!  $GLOBALS['langAdminManual'] !!}     
                                     </a>
                                 </li>
                             @endif
@@ -158,7 +158,7 @@
                 @if($is_admin)
                     <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
                         <div class='card-header border-0 bg-white'>
-                            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langFaculties')}}</span>
+                            <h3>{{trans('langFaculties')}}</h3>
                         </div>
                         <div class='card-body'>
                             <ul>

@@ -194,13 +194,13 @@
                             <div class='card-header border-0 bg-white d-md-flex justify-content-md-between align-items-md-center'>
 
 
-                                        <div>
-                                            <span class="text-uppercase normalColorBlueText TextBold fs-6">{{ trans('langCourseProgram') }}</span>
+                                        <div class='d-flex'>
+                                            <h3>{{ trans('langCourseProgram') }}</h3>
                                             @if ($is_editor)
                                                 @php
                                                     warnCourseInvalidDepartment(true);
                                                 @endphp
-                                                <a class='mt-2' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
+                                                <a class='mt-2 ms-2' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
                                                     <span class='fa fa-pencil' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEditMeta') }}'></span>
                                                 </a>
                                             @endif
@@ -389,9 +389,9 @@
                             <div class='card panelCard px-lg-4 py-lg-3'>
 
                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                    <h3>
                                         {{ trans('langCourseUnits') }}
-                                    </div>
+                                    </h3>
                                     <div class='d-flex'>
                                         @if ($is_editor)
                                             <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
@@ -452,9 +452,9 @@
                                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                                                     <div class='card-header bg-white border-0'>
 
-                                                            <span class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                            <h3>
                                                                 {!! q(getSerializedMessage($item->heading)) !!}
-                                                            </span>
+                                                            </h3>
 
                                                     </div>
                                                     <div class='card-body'>
@@ -497,7 +497,7 @@
                             <div class="card panelCard px-lg-4 py-lg-3 bg-white @if($course_info->view_type =='units' or $course_info->view_type =='activity') mt-4 @else mt-0 @endif">
                                 <div class='card-header border-0 bg-white'>
 
-                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langAnnouncements') }}</span>
+                                        <h3>{{ trans('langAnnouncements') }}</h3>
 
                                 </div>
                                 <div class='card-body bg-white ps-0 pe-0 pt-1 pb-1'>
@@ -552,7 +552,7 @@
                             <div class="card panelCard px-lg-4 py-lg-3 mt-4">
                                 <div class='card-header border-0 bg-white'>
 
-                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langAnnouncements') }}</span>
+                                        <h3>{{ trans('langAnnouncements') }}</h3>
 
                                 </div>
                                 <div class='card-body bg-white ps-0 pe-0 pt-1 pb-1'>
@@ -572,7 +572,7 @@
                             @if(isset($course_completion_id) and $course_completion_id > 0)
                                 <div class="card panelCard px-lg-4 py-lg-3 mt-4">
                                     <div class='card-header border-0 bg-white'>
-                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langCourseCompletion') }}</span>
+                                        <h3>{{ trans('langCourseCompletion') }}</h3>
                                     </div>
                                     <div class='card-body'>
                                         <div class='text-center'>
@@ -601,7 +601,7 @@
                         @if (isset($level) && !empty($level))
                             <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
                                 <div class='card-header border-0 bg-white'>
-                                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langOpenCourseShort') }}</span>
+                                    <h3>{{ trans('langOpenCourseShort') }}</h3>
                                 </div>
                                 <div class='card-body'>
                                     {!! $opencourses_level !!}
@@ -616,7 +616,7 @@
                             <div class='card panelCard px-lg-4 py-lg-3 bg-white mt-4'>
                                 <div class='card-header border-0 bg-white'>
 
-                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langWidgets') }}</span>
+                                        <h3>{{ trans('langWidgets') }}</h3>
 
                                 </div>
                                 <div class='card-body'>

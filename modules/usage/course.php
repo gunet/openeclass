@@ -56,7 +56,7 @@ $tool_content .= "
     <div class='col-12'>
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langUsage</div>
+                <h3>$langUsage</h3>
             </div>
             <div class='card-body'>
                 <div class='row'>

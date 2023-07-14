@@ -86,7 +86,7 @@ function list_videos($id = NULL) {
         if ($sql) {
             foreach ($sql as $videocat) {
                 $ret_string .= "<tr>";
-                $ret_string .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
+                $ret_string .= "<td>".icon('fa-folder-open')."&nbsp;&nbsp;" .
                                  q($videocat->name) . "</td>";
                 $ret_string .= "<td colspan='3'>" . standard_text_escape($videocat->description) . "</td>";
                 $ret_string .= "</tr>";

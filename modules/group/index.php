@@ -627,7 +627,7 @@ if ($is_editor) {
                                                                 </div>
                                                             </div>
                                                             <div class='card-body rounded-0'>";
-                                                            $tool_content .= "<p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>";
+                                                            $tool_content .= "<p class='form-label'>$langGroupTutor</p>";
                                                             if(count($tutors)>0){
                                                                 foreach ($tutors as $t) {
                                                                     $tool_content .= display_user($t->user_id) . "<br><div class='mt-2'></div>";
@@ -637,7 +637,7 @@ if ($is_editor) {
                                                             }
 
 
-                                            $tool_content .= "<p class='card-title fw-bold mb-0 fs-6 mt-3'>$langDescription</p>";
+                                            $tool_content .= "<p class='form-label mt-3'>$langDescription</p>";
                                                                 if(!empty($group_description)){
                                                                     $tool_content .= "<p class='small-text'>$group_description</p>";
                                                                 }else{
@@ -893,7 +893,7 @@ if ($is_editor) {
                                                                 }
                                         $tool_content .= "</div>
                                                         <div class='card-body rounded-0'>
-                                                                <p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>";
+                                                                <p class='form-label'>$langGroupTutor</p>";
 
                                                                 if(count($tutors) > 0){
                                                                     foreach ($tutors as $t) {
@@ -902,7 +902,7 @@ if ($is_editor) {
                                                                 }else{
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                                                 }
-                                            $tool_content .= "<p class='card-title fw-bold mb-0 fs-6 mt-3'>$langDescription</p>";
+                                            $tool_content .= "<p class='form-label mt-3'>$langDescription</p>";
                                                                 if(!empty($group_description)){
                                                                     $tool_content .= "<p class='small-text'>$group_description</p>";
                                                                 }else{

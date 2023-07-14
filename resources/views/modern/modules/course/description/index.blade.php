@@ -70,15 +70,15 @@
                                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                            
                                             
-                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
-                                                <span>{{ $course_desc->title}}</span>
+                                            <h3>
+                                                {{ $course_desc->title}}
                                                 @if ($course_desc->visible && $is_editor)
                                                    
                                                     <span data-bs-original-title='{{ trans('langSeenToCourseHome') }}' data-bs-toggle='tooltip' data-bs-placement='bottom' class='label label-primary'>
                                                         <i class='fa fa-eye'></i>
                                                     </span>
                                                 @endif
-                                            </div>
+                                            </h3>
                                             
                                             @if ($is_editor)
                                             

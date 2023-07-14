@@ -48,7 +48,7 @@ function show_post_form() {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div" role="tabpanel" aria-labelledby="nav_video" style="padding:10px">
                               '.list_videos().'
                           </div>';
-            $video_li = '<li><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
+            $video_li = '<li class="nav-item"><a id="nav_video" class="nav-link" data-bs-toggle="tab" href="#videos_div">'.$langVideo.'</a></li>';
         } else {
             $video_div = '';
             $video_li = '';
@@ -59,7 +59,7 @@ function show_post_form() {
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
-            $docs_li = '<li><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li class="nav-item"><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -70,7 +70,7 @@ function show_post_form() {
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
-            $mydocs_li = '<li><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li class="nav-item"><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -80,7 +80,7 @@ function show_post_form() {
             $links_div = '<div class="form-group tab-pane fade" id="links_div" role="tabpanel" aria-labelledby="nav_links" style="padding:10px">
                               '.list_links().'
                           </div>';
-            $links_li = '<li><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
+            $links_li = '<li class="nav-item"><a id="nav_links" class="nav-link" data-bs-toggle="tab" href="#links_div">'.$langLinks.'</a></li>';
         } else {
             $links_div = '';
             $links_li = '';
@@ -90,7 +90,7 @@ function show_post_form() {
             $exercises_div = '<div class="form-group tab-pane fade" id="exercises_div" role="tabpanel" aria-labelledby="nav_exercises" style="padding:10px">
                               '.list_exercises().'
                           </div>';
-            $exercises_li = '<li><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
+            $exercises_li = '<li class="nav-item"><a id="nav_exercises" class="nav-link" data-bs-toggle="tab" href="#exercises_div">'.$langExercises.'</a></li>';
         } else {
             $exercises_div = '';
             $exercises_li = '';
@@ -100,7 +100,7 @@ function show_post_form() {
             $assignments_div = '<div class="form-group tab-pane fade" id="assignments_div" role="tabpanel" aria-labelledby="nav_assigments" style="padding:10px">
                               '.list_assignments().'
                           </div>';
-            $assignments_li = '<li><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
+            $assignments_li = '<li class="nav-item"><a id="nav_assigments" class="nav-link" data-bs-toggle="tab" href="#assignments_div">'.$langWorks.'</a></li>';
         } else {
             $assignments_div = '';
             $assignments_li = '';
@@ -110,7 +110,7 @@ function show_post_form() {
             $chats_div = '<div class="form-group tab-pane fade" id="chats_div" role="tabpanel" aria-labelledby="nav_chats" style="padding:10px">
                               '.list_chats().'
                           </div>';
-            $chats_li = '<li><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
+            $chats_li = '<li class="nav-item"><a id="nav_chats" class="nav-link" data-bs-toggle="tab" href="#chats_div">'.$langChat.'</a></li>';
         } else {
             $chats_div = '';
             $chats_li = '';
@@ -120,7 +120,7 @@ function show_post_form() {
             $polls_div = '<div class="form-group tab-pane fade" id="polls_div" role="tabpanel" aria-labelledby="nav_polls" style="padding:10px">
                               '.list_polls().'
                           </div>';
-            $polls_li = '<li><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
+            $polls_li = '<li class="nav-item"><a id="nav_polls" class="nav-link" data-bs-toggle="tab" href="#polls_div">'.$langQuestionnaire.'</a></li>';
         } else {
             $polls_div = '';
             $polls_li = '';
@@ -130,7 +130,7 @@ function show_post_form() {
             $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_forums" style="padding:10px">
                               '.list_forums().'
                           </div>';
-            $forums_li = '<li><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li class="nav-item"><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -147,7 +147,7 @@ function show_post_form() {
                 <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
                     <div class="card-header border-0 bg-white">
                         
-                            <span class="text-uppercase normalColorBlueText TextBold fs-6">'.$langWall.'&nbsp'.$langOfCourse.'</span>
+                            <h3>'.$langWall.'&nbsp'.$langOfCourse.'</h3>
                         
                     </div>
                     <div class="card-body">
@@ -158,7 +158,7 @@ function show_post_form() {
                                 </div>
                                 <div id="resources_panel" class="card cardPanel collapse mt-3 border-0">
                                     <div class="card-body border-0">
-                                        <ul class="nav nav-tabs walltabs border-0">
+                                        <ul class="nav nav-tabs border-0">
                                             <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                             '.$video_li.'
                                             '.$docs_li.'

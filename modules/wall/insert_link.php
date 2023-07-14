@@ -48,7 +48,7 @@ function list_links($id = NULL) {
         if (count($sql) > 0) {
             foreach ($sql as $catrow) {
                 $ret_string .= "<tr>";
-                $ret_string .= "<td><b>" . icon('fa-folder-o') . "&nbsp;" .
+                $ret_string .= "<td><b>" . icon('fa-folder-open') . "&nbsp;" .
                     q($catrow->name) . "</b></td>";
                 $ret_string .= "<td >" . standard_text_escape($catrow->description) . "</td>";
                 $ret_string .= "<td class='text-center'><input type='checkbox' name='catlink[]' value='$catrow->id' /></td>";

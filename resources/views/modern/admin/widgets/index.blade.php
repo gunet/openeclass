@@ -144,9 +144,9 @@
 
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist">
-                                    <li role="presentation" class="nav-item"><a class='nav-link active nav-link-adminTools' href="#home" aria-controls="home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}} </a></li>
-                                    <li role="presentation" class='nav-item'><a class='nav-link nav-link-adminTools' href="#portfolio" aria-controls="portfolio" role="tab" data-bs-toggle="tab">{{ trans('langPortfolio')}}</a></li>
-                                    <li role="presentation" class='nav-item'><a class='nav-link nav-link-adminTools' href="#course_home" aria-controls="course_home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}}&nbsp{{ trans('langOfCourse')}}</a></li>
+                                    <li role="presentation" class="nav-item"><a class='nav-link active' href="#home" aria-controls="home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}} </a></li>
+                                    <li role="presentation" class='nav-item'><a class='nav-link' href="#portfolio" aria-controls="portfolio" role="tab" data-bs-toggle="tab">{{ trans('langPortfolio')}}</a></li>
+                                    <li role="presentation" class='nav-item'><a class='nav-link' href="#course_home" aria-controls="course_home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}}&nbsp{{ trans('langOfCourse')}}</a></li>
                                 </ul>
 
                             <!-- Tab panes -->

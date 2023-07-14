@@ -61,7 +61,7 @@ function render_eportfolio_fields_content($uid) {
             <div class="col-lg-6 col-12">
             <div class="card panelCard px-lg-4 py-lg-3 h-100" id="IndexPortfolio'.$c->id.'">
                                                 <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
-                                                    <div class="text-uppercase normalColorBlueText TextBold fs-6">'.$c->name.'</div>
+                                                    <h3>'.$c->name.'</h3>
                                                 </div>
                                                  <div class="card-body">
                                                      
@@ -89,7 +89,7 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
                     $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
-                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-12"><span class="tag"><strong class="panel-title control-label-notes">'.q($f->name).': </strong></span></div>';
+                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-12"><span class="tag"><div class="form-label">'.q($f->name).': </div></span></div>';
                     $cat_return_string['panels'] .= '<div class="col-12"><span>';
                     
                     switch ($f->datatype) {

@@ -62,7 +62,7 @@
                             <div class="col">
                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langAnalyticsEditElements') }}</div>
+                                        <h3>{{ trans('langAnalyticsEditElements') }}</h3>
                                     </div>
                                     <div class="card-body">
                                         <div class="col-12">
@@ -90,35 +90,35 @@
                             <div class="col">
                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langPersInfo') }}</div>
+                                        <h3>{{ trans('langPersInfo') }}</h3>
                                     </div>
                                     <div class="card-body">
 
                                         @if (!empty($userdata->email) and allow_access($userdata->email_public))
-                                            <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langEmail') }}</p>
+                                            <p class='form-label'>{{ trans('langEmail') }}</p>
                                             <p class='card-text'>{!! mailto($userdata->email) !!}</p>
                                         @endif
 
 
                                         @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
-                                            <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langPhone') }}</p>
+                                            <p class='form-label'>{{ trans('langPhone') }}</p>
                                             <p class='card-text'>{{ q($userdata->phone) }}</p>
                                         @endif
 
 
-                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langStatus') }}</p>
+                                        <p class='form-label'>{{ trans('langStatus') }}</p>
                                         <p class='card-text'>{{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}</p>
 
 
                                         @if (!empty($userdata->am) and allow_access($userdata->am_public))
-                                            <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langAm') }}</p>
+                                            <p class='form-label'>{{ trans('langAm') }}</p>
                                             <p class='card-text'>{{ q($userdata->am) }}</p>
                                         @endif
 
 
                                         @if($id == $uid && !empty($extAuthList))
                                             @foreach ($extAuthList as $item)
-                                                <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langProviderConnectWith') }}</p>
+                                                <p class='form-label'>{{ trans('langProviderConnectWith') }}</p>
                                                 <p class='card-text'>
                                                     <img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''>
                                                     {{ $authFullName[$item->auth_id] }}
@@ -128,7 +128,7 @@
 
 
 
-                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langFaculty') }}</p>
+                                        <p class='form-label'>{{ trans('langFaculty') }}</p>
                                         <p class='card-text'>
                                             @foreach ($user->getDepartmentIds($id) as $i=>$dep)
                                                 {!! $tree->getFullPath($dep) !!}
@@ -139,10 +139,10 @@
                                         </p>
 
 
-                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langProfileMemberSince') }}</p>
+                                        <p class='form-label'>{{ trans('langProfileMemberSince') }}</p>
                                         <p class='card-text'>{{ format_locale_date(strtotime($userdata->registered_at)) }}</p>
 
-                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langAboutMe') }}</p>
+                                        <p class='form-label'>{{ trans('langAboutMe') }}</p>
                                         <p class='card-text m-0 p-0'>{!! $userdata->description !!}</p>
 
                                     </div>
@@ -161,7 +161,7 @@
                             <div class='col-12 mt-4'>
                                 <div class="card panelCard px-lg-4 py-lg-3">
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyCertificates') }}</div>
+                                        <h3>{{ trans('langMyCertificates') }}</h3>
                                     </div>
                                     <div class="card-body">
                                         @if(count($cert_completed) == 1)
@@ -203,7 +203,7 @@
                             <div class='col-12 mt-4'>
                                 <div class="card panelCard px-lg-4 py-lg-3">
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langBadges') }}</div>
+                                        <h3>{{ trans('langBadges') }}</h3>
                                     </div>
                                     <div class="card-body">
                                         @if(count($badge_completed) == 1)
@@ -244,7 +244,7 @@
                         <div class="col-12 mt-4">
                             <div class="card panelCard px-lg-4 py-lg-3">
                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{trans('langUnregUser')}}</div>
+                                    <h3>{{trans('langUnregUser')}}</h3>
                                 </div>
                                 <div class="card-body">
                                     <p class='card-text'>{{ trans('langExplain') }}</p>

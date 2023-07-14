@@ -70,7 +70,7 @@
                                             <div class='col'>
                                                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
                                                     <div class='card-header border-0 bg-white'>
-                                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langPlatformIdentity') }}</span>
+                                                        <h3>{{ trans('langPlatformIdentity') }}</h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
@@ -112,7 +112,7 @@
                                             <div class='col'>
                                                 <div class='card panelCard BorderSolid px-lg-4 py-lg-3 bg-white h-100'>
                                                     <div class='card-header border-0 bg-white'>
-                                                        <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langIndexInfo') }}</span>
+                                                        <h3>{{ trans('langIndexInfo') }}</h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>
@@ -179,9 +179,9 @@
                                         <div class='col'>
                                             <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                    <h3>
                                                        {{ trans('langInfoAdmin') }}
-                                                    </div>
+                                                    </h3>
                                                 </div>
                                                 <div class='card-body'>
                                                     <div class='row p-2 margin-bottom-thin'>
@@ -258,9 +258,9 @@
                                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>
 
                                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                                        <h3>
                                                             {{ trans('langCronInfo') }}
-                                                        </div>
+                                                        </h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         <div class='row p-2 margin-bottom-thin'>

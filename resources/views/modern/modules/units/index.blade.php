@@ -187,7 +187,7 @@
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
                             <div class='card-header border-0 bg-white d-xl-flex justify-content-xl-between align-items-xl-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ $pageName }}</div>
+                                <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
                                     <div class='normalColorBlueText TextSemiBold'>
                                         <small>{{ $course_start_week }}&nbsp{{ $course_finish_week }}</small>
@@ -215,14 +215,14 @@
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                    <h3>
                                         <div class='d-inline-flex align-items-top'>
                                             {{ trans('langActivities')}}
                                             <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                                <span class="fa fa-pencil ms-2" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                                <span class="fa fa-pencil ms-2 mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
                                             </a>
                                         </div>
-                                    </div>
+                                    </h3>
                                 </div>
                                 <div class='card-body'>
                                     <table class='table table-bordered'>

@@ -4674,13 +4674,13 @@ function assignment_details($id, $row, $x =false) {
     <div class='col-12'>
     <div class='card panelCard px-lg-4 py-lg-3'>
         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+            <h3>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
                     <span class='fa fa-edit' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
-            </div>
+            </h3>
         </div>
         <div class='card-body'>
             <div class='row p-2 margin-bottom-fat'>

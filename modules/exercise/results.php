@@ -135,7 +135,7 @@ if ($is_editor) {
 
 $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-        <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q_math($exerciseTitle) . "</div></div>";
+        <h3>" . q_math($exerciseTitle) . "</h3></div>";
 if ($exerciseDescription_temp) {
     $tool_content .= "<div class='card-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }

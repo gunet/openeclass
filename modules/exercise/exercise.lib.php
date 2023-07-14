@@ -320,11 +320,11 @@ function display_exercise($exercise_id) {
     $tool_content .= "
     <div class='col-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-              <div class='text-uppercase normalColorBlueText TextBold fs-6'>" . q_math($exercise->selectTitle()) . "
+              <h3>" . q_math($exercise->selectTitle()) . "
                 <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
                   <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
                 </a>
-              </div>
+              </h3>
             </div>
             <div class='card-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>

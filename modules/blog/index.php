@@ -702,9 +702,9 @@ if ($action == "showPost") {
 
                                     
                                        
-                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                            <h3>
                                                 ".q($post->getTitle())."
-                                            </div>
+                                            </h3>
                                        
                                             <div>
                                                 ". action_button(array(

@@ -793,7 +793,7 @@ function display_my_documents($dialogBox, $style)
             }
             $dir = $entry['path'];
             if ($is_dir) {
-                $image = 'fa-folder-o';
+                $image = 'fa-folder-open';
                 $file_url = $urlbase . $dir;
                 $link_text = $entry['name'];
 

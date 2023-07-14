@@ -3657,9 +3657,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $iconTag = '';
         if ($level == 'primary-label') {
             if (isset($option['icon'])) {
-                $iconTag = "<span class='fa $option[icon] space-after-icon vsmall-text'></span>";
+                $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs TextSemiBold vsmall-text ps-1'>$title</span>";
+                $title = "<span class='hidden-xs TextSemiBold ps-1'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
@@ -3695,7 +3695,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $action_button .= "<button  type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
-                                <span class='hidden-xs'>$secondary_title</span> 
+                                <span class='hidden-xs TextSemiBold'>$secondary_title</span> 
                                 <span class='caret'></span><span class='hidden'></span>
                             </button>";
         $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='toolDropdown'>

@@ -71,7 +71,7 @@ function display_learning_analytics() {
                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                         
                            
-                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langLearningAnalytics</div>
+                            <h3>$langLearningAnalytics</h3>
                            
                             <div>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
@@ -177,12 +177,12 @@ function display_general_lists($analytics_id) {
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     
                                         <a data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
                                         <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
                                    
-                                </div>
+                                </h3>
                             
                         </div>          
                         <div class='card-body'>         
@@ -304,7 +304,7 @@ function display_analytics_elements($analytics_id) {
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                     
                        
-                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langAnalyticsParameters</div>
+                        <h3>$langAnalyticsParameters</h3>
                         
                         <div>
                             $addParametersBtn
@@ -344,9 +344,9 @@ function display_analytics_information($analytics_id) {
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                     
-                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                        <h3>
                             $title<span class='$active_vis small-text ms-1'>($active_msg)</span>
-                        </div>
+                        </h3>
                         <div>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
                                     . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
@@ -501,7 +501,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         <div class='col-12 mt-3'>                 
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>             
-                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>$analytics_title->title</div>
+                    <h3>$analytics_title->title</h3>
                 </div>
                 <div class='card-body'>
                      $results
@@ -657,7 +657,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                 <div class='col-12 mt-3'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$analytics_title->title</div>
+                            <h3>$analytics_title->title</h3>
                         </div>
                         <div class='card-body'>
                             $results
@@ -690,9 +690,9 @@ function display_user_info($user_id) {
         <div class='col-12'>
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                    <h3>
                         $givenname $surname
-                    </div>
+                    </h3>
                 </div>
                 <div class='card-body'>
                     

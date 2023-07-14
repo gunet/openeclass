@@ -227,7 +227,7 @@ $(function() {
         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
           
            
-            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$heading</div>
+            <h3>$heading</h3>
             
             
             <div class='d-flex justify-content-end align-items-center'>$type " .

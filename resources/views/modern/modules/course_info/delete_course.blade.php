@@ -31,6 +31,8 @@
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
+                    {!! $action_bar !!}
+
                     
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -71,17 +73,18 @@
 
                     <div class="col-12">
                         <div class='form-wrapper form-edit rounded'>
-                            {!! $action_bar !!}
+                            
                             <form class='form-horizontal' role='form' method='post' action=' {{ $form_url }}'>
+                                <p class='text-start'>{{ trans('langByDel') }}</p>
                                 {{ showSecondFactorChallenge() }}
                                 <div class='form-group'>
-                                    <div class='col-10 offset-5'>
+                                    <div class='col-12'>
                                         <input class='btn deleteAdminBtn' type='submit' name='delete' value='{{ trans('langDelete') }}'>
                                     </div>
                                 </div>
-                                <div class='pt-3 help-block'>
-                                    <small>{{ trans('langByDel') }}</small>
-                                </div>
+                                
+                                
+                                
                                 {!! generate_csrf_token_form_field() !!}
                             </form>
                         </div>

@@ -172,7 +172,7 @@
                                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                                     
                                                         
-                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{!! $text->title !!}</div>
+                                                        <h3>{!! $text->title !!}</h3>
                                                         
                                                         <div>
                                                             <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}'>

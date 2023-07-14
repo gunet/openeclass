@@ -495,9 +495,9 @@ $tool_content .= "<div class='col-12 mt-3'>
                      
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                            
-                               <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                               <h3>
                                    $langLearningPathStructure
-                               </div> 
+                               </h3> 
                                <div>
                                     $lp_action_button
                                </div>

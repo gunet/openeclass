@@ -47,7 +47,9 @@ $tool_content .= "
                     <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile</label>
                     <div class='col-sm-12'>
                         <input type='file' id='userFile' name='userFile'>
-                        <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
+                        <div class='infotext col-12 margin-bottom-fat TextSemiBold Neutral-900-cl mt-4'>
+                            $langMaxFileSize " . ini_get('upload_max_filesize') . "
+                        </div>
                     </div>
                 </div>
                 <div class='form-group mt-5'>

@@ -607,7 +607,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
             return '';
         }
         if ($file->format == '.dir') {
-            $image = 'fa-folder-o';
+            $image = 'fa-folder-open';
             $download_hidden_link = '';
             $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>" .
                 q($title) . "</a>";
@@ -826,7 +826,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
     $vlcat = Database::get()->querySingle("SELECT * FROM video_category WHERE id = ?d AND course_id = ?d", $videolinkcat_id, $course_id);
     $content = "
         <tr$class_vis data-id='$resource_id'>
-          <td width='1'>".icon('fa-folder-o')."</td>
+          <td width='1'>".icon('fa-folder-open')."</td>
           <td class='text-start' width='1'>$act_name</td>
           <td>" . q($title);
 
@@ -1302,7 +1302,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             return '';
         } else {
             $content = "<tr class='not_visible' data-id='$resource_id'>
-                        <td width='1'>" . icon('fa-folder-o') . "</td>
+                        <td width='1'>" . icon('fa-folder-open') . "</td>
                         <td class='text-start' width='1'>$act_name</td>
                         <td>" . q($title) . " ($langWasDeleted)";
 
@@ -1311,7 +1311,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
         foreach ($sql as $lcat) {
             $content .= "
                         <tr$class_vis data-id='$resource_id'>
-                          <td width='1'>".icon('fa-folder-o')."</td>
+                          <td width='1'>".icon('fa-folder-open')."</td>
                           <td class='text-start' width='1'>$act_name</td>
                           <td>" . q($lcat->name);
             if (!empty($lcat->description)) {

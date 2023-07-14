@@ -144,8 +144,8 @@ $TotalExercisesUngraded = Database::get()->querySingle("SELECT COUNT(eurid) AS u
 
 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                  <div class='text-uppercase normalColorBlueText TextBold fs-6'>" .$langQuestionCorrectionTitle . "</div>
-                  <h5>" . $langQuestionCorrectionTitle2 . $TotalExercisesUngraded->ungraded_answers . $langUngradedAnswers . "</h5>
+                  <h3>" .$langQuestionCorrectionTitle . "</h3>
+                  <h6>" . $langQuestionCorrectionTitle2 . $TotalExercisesUngraded->ungraded_answers . $langUngradedAnswers . "</h6>
                 </div>
                 <div class='card-body'>";
 

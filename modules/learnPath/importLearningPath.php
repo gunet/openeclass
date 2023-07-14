@@ -1082,9 +1082,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         <div class='col-12'>
             
                 <div class='form-wrapper form-edit rounded'>
-                    <div class='col-md-9 col-12 offset-md-3 text-start'><h4 class='form-heading TextBold'>$langImport</h4></div>
+                    <div class='col-12 text-start'><h4 class='form-heading TextBold'>$langImport</h4></div>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
-                        <div class='row form-group mt-5'>
+                        <div class='row form-group mt-3'>
                             <label for='uploadedPackage' class='col-12 control-label-notes'>$langPathUploadFile</label>
                             <div class='col-12'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
@@ -1092,7 +1092,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'><br>
                                 
                                 <span class='small-text help-block'>$langLearningPathUploadFile</span><br>
-                                <span class='help-block' style='margin-bottom: 0px;'><small>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small></span>
+                                <div class='infotext col-12 margin-bottom-fat TextSemiBold Neutral-900-cl mt-4'>
+                                    $langMaxFileSize " . ini_get('upload_max_filesize') . "
+                                </div>
                             </div>
                         </div>
 
@@ -1126,7 +1128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
     $tool_content .= "
             
-                <div class='col-md-9 col-12 offset-md-3 mt-4'>
+                <div class='col-12 mt-4'>
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                         <p>$langNote:</p>
                         <p>$langScormIntroTextForDummies</p></span>

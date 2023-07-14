@@ -17,15 +17,15 @@
 
   table.dataTable{
     width:100% !important;
-    background: #f5f5f5; 
+
     border-collapse: collapse;
     /* overflow: hidden; */
-    border-radius: 0.5em;
-    border: solid 1px #e8e8e8; 
+    border-radius: 4px;
+    border: solid 1px #E8EDF8; 
   }
 
   table.dataTable tbody tr{
-    background-color: #f5f5f5;
+    background-color: #ffffff;
   }
 
   table.dataTable.no-footer {
@@ -34,7 +34,9 @@
 
   table.dataTable th, table.dataTable td{ 
     padding:10px; 
-    border-bottom: solid 1px #e8e8e8;
+    border-bottom: solid 1px #E8EDF8;
+    border-left: solid 1px #E8EDF8;
+    border-right: solid 1px #E8EDF8;
   }
 
   /**************************************************** form-control ************************************************************************/
@@ -49,32 +51,32 @@
     margin-top: 5px;
   }
   .dataTables_wrapper .form-control:focus ,  .dataTables_wrapper input[type="search"]:focus{
-    border-color: white !important;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6) !important;
+    border-color: #0073E6 !important;
     outline: 0 none !important;
-    background-color: #e8e8e8;
-    color:#001146;
-    font-family: 'Manrope' , sans-serif; font-weight: 600;
+    box-shadow: none;
+    background-color: #ffffff;
+    color:#0073E6;
+    font-family: 'Manrope' , sans-serif; font-weight: 400;
   }
 
   /********************************************************* form-select **********************************************************************/
   .dataTables_wrapper select {
-    background-color: #e8e8e8;
-    border-radius: 35px;
+    background-color: #ffffff;
+    border-radius: 4px;
     font-size: 14px;
-    font-family: 'Manrope' , sans-serif; font-weight: 600;
+    font-family: 'Manrope' , sans-serif; font-weight: 400;
     height:30px;
-    border:0px;
-    color:#001146;
+    border-color: #687DA3;
+    color:#687DA3;
     padding-top: 0px;
     margin-top: 5px;
   }
   .dataTables_wrapper select:focus {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(12, 103, 222, 0.6);
+    box-shadow: none;
     outline: 0 none;
-    background-color: #e8e8e8;
+    background-color: #ffffff;
   }
-  .dataTables_wrapper select option{color: #9d9d9c; font-family: 'Manrope' , sans-serif; font-weight: 600;}
+  .dataTables_wrapper select option{color: #687DA3; font-family: 'Manrope' , sans-serif; font-weight: 400;}
 
 
   /************************************************ pagination buttons next-prev ***************************************************************/
@@ -195,7 +197,7 @@
 
 
   .dataTables_wrapper .dataTables_paginate .paginate_button.previous, .dataTables_wrapper .dataTables_paginate .paginate_button.first{
-    border-radius: 15px;
+    border-radius: 4px;
     width:32px;
     height: 30px;
     display: flex;

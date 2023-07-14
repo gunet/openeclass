@@ -736,8 +736,8 @@ if ($total_cunits > 0) {
 
             if ($is_editor) {
 
-                $cunits_content .= "<div class='float-end'>
-                <div class='reorder-btn ms-2 mb-2'>
+                $cunits_content .= "<div class='float-end d-flex justify-content-center align-items-center'>
+                <div class='reorder-btn me-3'>
                     <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                 </div>
 

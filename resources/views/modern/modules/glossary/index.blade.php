@@ -98,9 +98,11 @@
                                                     <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                                         <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">                   
                                                            
-                                                            <a class='text-uppercase normalColorBlueText TextBold fs-6' href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
-                                                                {{ $glossary_term->term }}
-                                                            </a>
+                                                           
+                                                                <a class='ViewGroup TextSemiBold' href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
+                                                                    {{ $glossary_term->term }}
+                                                                </a>
+                                                           
 
                                                             @if($is_editor)
                                                                 <div>

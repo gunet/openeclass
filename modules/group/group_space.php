@@ -254,11 +254,11 @@ if (isset($_GET['group_as'])) {
                 <div class='col-xl-7 col-lg-6 col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langGroupInfo</div>
+                            <h3>$langGroupInfo</h3>
                         </div>
                         <div class='card-body'>
                         
-                                <p class='card-title fw-bold mb-0 fs-6'>$langGroupTutor</p>";
+                                <p class='form-label'>$langGroupTutor</p>";
                                 if($tutors){
                                     $tool_content .= "<ul>";
                                     foreach($tutors as $t){
@@ -269,7 +269,7 @@ if (isset($_GET['group_as'])) {
                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
                                 }
                $tool_content .= "                            
-                                <p class='card-title fw-bold mb-0 fs-6'>$langDescription</p>
+                                <p class='form-label'>$langDescription</p>
                                 <p class='small-text'>$tool_content_description</p>
                                 <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-white pb-3'>";
                             if ($max_members > 0) {
@@ -284,7 +284,7 @@ if (isset($_GET['group_as'])) {
                 <div class='col-xl-5 col-lg-6 d-none d-lg-block'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langTools</div>
+                            <h3>$langTools</h3>
                         </div>
                         <div class='card-body'>
                             <ul class='ps-3'>";
@@ -367,18 +367,18 @@ if (isset($_GET['group_as'])) {
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langGroupMembersInfo</div>
+                                <h3>$langGroupMembersInfo</h3>
                             </div>
                             <div class='card-body'>
                           <ul class='list-group list-group-flush'>
                               <li class='list-group-item'>
                                   <div class='row'>";
             if ($is_editor or $is_tutor) {
-                $tool_content .= "<div class='col-4 card-title fw-bold mb-0 fs-6'>$langSurnameName</div>
-                                      <div class='col-4 card-title fw-bold mb-0 fs-6'>$langAm</div>
-                                      <div class='col-4 card-title fw-bold mb-0 fs-6'>$langEmail</div>";
+                $tool_content .= "<div class='col-4 form-label'>$langSurnameName</div>
+                                      <div class='col-4 form-label'>$langAm</div>
+                                      <div class='col-4 form-label'>$langEmail</div>";
             } else {
-                $tool_content .= "<div class='col-12 card-title fw-bold mb-0 fs-6'>$langSurnameName</div>";
+                $tool_content .= "<div class='col-12 form-label'>$langSurnameName</div>";
             }
             $tool_content .= "</div></li>";
 

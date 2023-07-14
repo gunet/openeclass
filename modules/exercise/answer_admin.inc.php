@@ -415,9 +415,9 @@ if (isset($_GET['modifyAnswers'])) {
     }
     $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
                       <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langQuestion &nbsp;" .
+                        <h3>$langQuestion &nbsp;" .
                             icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."
-                        </div>
+                        </h3>
                       </div>
                       <div class='card-body'>
                             <h6><small class='fw-bold'>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h6>
@@ -430,12 +430,12 @@ if (isset($_GET['modifyAnswers'])) {
 
         $tool_content .= "<div class='col-12 mt-3'><div class='card panelCard px-lg-4 py-lg-3'>
                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                             <div class='text-uppercase normalColorBlueText TextBold fs-6'>$langQuestionAnswers";
+                             <h3>$langQuestionAnswers";
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<br><small>$langNegativeScoreLegend</small>";
                              }
                             
-        $tool_content .= "   </div>
+        $tool_content .= "   </h3>
                            </div>
                        <div class='card-body'>";
 

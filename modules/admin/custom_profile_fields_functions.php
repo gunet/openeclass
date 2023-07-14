@@ -368,7 +368,7 @@ function render_profile_fields_content($context) {
                                             }
 
                                             $return_str .= "<div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>".$cat->name."</div>
+                                                                <h3>".$cat->name."</h3>
                                                             </div>
 
                                                             <div class='card-body'>";
@@ -384,7 +384,7 @@ function render_profile_fields_content($context) {
                                                                                                                     WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
 
                                                                             $return_str .= "
-                                                                                                <p class='card-title fw-bold mb-0 fs-6'>".$f->name."</p>
+                                                                                                <p class='form-label'>".$f->name."</p>
                                                                                             ";
 
                                                                                                 if (!$fdata_res || $fdata_res->data == '') {

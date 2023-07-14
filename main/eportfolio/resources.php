@@ -377,7 +377,7 @@ if ($userdata) {
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                        
                                            
-                                            <div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($data['title'])."</div>
+                                            <h3>".q($data['title'])."</h3>
                                            
                                            
                                             <div>
@@ -426,7 +426,7 @@ if ($userdata) {
         $active_class = ' class="nav-item"';
 
         if ($blog_posts) {
-            $blog_li = '<li'.$active_class.' role="presentation"><button id="blogtab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
+            $blog_li = '<li class="nav-item" role="presentation"><button id="blogtab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#blog">'.$langBlogPosts.'</button></li>';
             if ($active_class != '') {
                 $blog_div_class = 'tab-pane fade show active';
             } else {
@@ -438,7 +438,7 @@ if ($userdata) {
         }
 
         if ($submissions) {
-            $work_li = '<li'.$active_class.' role="presentation"><button id="worktab" class="nav-link" data-bs-toggle="tab" data-bs-target="#works">'.$langWorks.'</button></li>';
+            $work_li = '<li class="nav-item" role="presentation"><button id="worktab" class="nav-link" data-bs-toggle="tab" data-bs-target="#works">'.$langWorks.'</button></li>';
             if ($active_class != '') {
                 $work_div_class = 'tab-pane fade show active';
             } else {
@@ -450,7 +450,7 @@ if ($userdata) {
         }
 
         if ($docs) {
-            $mydocs_li = '<li'.$active_class.' role="presentation"><button id="docstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mydocs">'.$langDoc.'</button></li>';
+            $mydocs_li = '<li class="nav-item" role="presentation"><button id="docstab" class="nav-link" data-bs-toggle="tab" data-bs-target="#mydocs">'.$langDoc.'</button></li>';
             if ($active_class != '') {
                 $mydocs_div_class = 'tab-pane fade show active';
             } else {
@@ -486,7 +486,7 @@ if ($userdata) {
                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                         
                                            
-                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($data['title'])."</div>
+                                        <h3>".q($data['title'])."</h3>
                                     
                                         <div>
                                             ". action_button(array(
@@ -536,7 +536,7 @@ if ($userdata) {
                 } else {
                     $assignment_type = $m['group_work'];
                 }
-                $submission_header_content = "<div class='text-uppercase normalColorBlueText TextBold fs-6'>".q($data['title'])."</div>";
+                $submission_header_content = "<h3>".q($data['title'])."</h3>";
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn submitAdminBtn mb-3 btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>

@@ -804,9 +804,9 @@ function get_course_user_registration($course_id, $user_id) {
 function plot_placeholder($plot_id, $title = null){
     $p = "<div class='panel panel-default'><div class='panel-body'>";
     if(!is_null($title)){
-        $p .= "<div class='inner-heading'><span id='{$plot_id}_title' class='TextBold text-uppercase'>"
+        $p .= "<div class='inner-heading'><h3 id='{$plot_id}_title'>"
             . $title
-            . "</span>"
+            . "</h3>"
             . "</div>";
     }
     $p .= "<div id='$plot_id'></div>";
@@ -826,9 +826,9 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
     $t = "<div class='panel-body'>";
     if(!is_null($title)){
         $t .= "<div class='inner-heading'>"
-            . "<span id='".$table_id."_title' class='TextBold text-uppercase'>"
+            . "<h3 id='".$table_id."_title'>"
             . $title
-            . "</span>"
+            . "</h3>"
             ."<div class='float-end' id='{$table_id}_buttons'></div><div style='clear:both;'></div>"
             . "</div>";
     }

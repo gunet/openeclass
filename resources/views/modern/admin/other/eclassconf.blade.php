@@ -113,11 +113,11 @@
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
-                                    <div class='panel panel-admin px-lg-4 py-lg-3 bg-white' id='one'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langBasicCfgSetting') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin' id='one'>
+                                        <div class='panel-heading'>
+                                            
+                                                {{ trans('langBasicCfgSetting') }}
+                                            
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -234,11 +234,11 @@
 
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='two'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langUpgReg') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='two'>
+                                        <div class='panel-heading'>
+                                           
+                                               {{ trans('langUpgReg') }}
+                                            
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -427,11 +427,11 @@
 
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='three'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langEclassThemes') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='three'>
+                                        <div class='panel-heading'>
+                                            
+                                                {{ trans('langEclassThemes') }}
+                                           
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
                                             <fieldset>
@@ -463,12 +463,12 @@
 
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='four'>
+                                    <div class='panel panel-admin mt-4' id='four'>
                                        
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{trans('langHomePageSettings')}}</span>
-                                            </div>
+                                        <div class='panel-heading'>
+                                           
+                                                {{trans('langHomePageSettings')}}
+                                            
                                         </div>
                                         <div class='panel-body'>
                                             <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
@@ -599,11 +599,11 @@
 
 
                                     @if(!$install)
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='five'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langEmailSettings') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='five'>
+                                        <div class='panel-heading'>
+                                           
+                                               {{ trans('langEmailSettings') }}
+                                         
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -701,11 +701,10 @@
                                     </div>
                                     @endif
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='six'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langCourseSettings') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='six'>
+                                        <div class='panel-heading'>
+                                           
+                                                {{ trans('langCourseSettings') }}
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -754,12 +753,12 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='seven'>
+                                    <div class='panel panel-admin mt-4' id='seven'>
 
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langMetaCommentary') }}</span>
-                                            </div>
+                                        <div class='panel-heading'>
+                                           
+                                              {{ trans('langMetaCommentary') }}
+                                           
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -791,11 +790,11 @@
 
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='eight'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langOtherOptions') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='eight'>
+                                        <div class='panel-heading'>
+                                           
+                                                {{ trans('langOtherOptions') }}
+                                           
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -934,12 +933,12 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='nine'>
+                                    <div class='panel panel-admin mt-4' id='nine'>
 
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langDocumentSettings') }}</span>
-                                            </div>
+                                        <div class='panel-heading'>
+                                           
+                                                {{ trans('langDocumentSettings') }}
+                                            
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1001,11 +1000,11 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='ten'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langDefaultQuota') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='ten'>
+                                        <div class='panel-heading'>
+                                            
+                                               {{ trans('langDefaultQuota') }}
+                                           
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1038,12 +1037,12 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='eleven'>
+                                    <div class='panel panel-admin mt-4' id='eleven'>
 
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langUploadWhitelist') }}</span>
-                                            </div>
+                                        <div class='panel-heading'>
+                                            
+                                               {{ trans('langUploadWhitelist') }}
+                                           
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1067,12 +1066,12 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='twelve'>
+                                    <div class='panel panel-admin mt-4' id='twelve'>
 
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langLogActions') }}</span>
-                                            </div>
+                                        <div class='panel-heading'>
+                                           
+                                               {{ trans('langLogActions') }}
+                                           
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1120,12 +1119,12 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='thirteen'>
+                                    <div class='panel panel-admin mt-4' id='thirteen'>
 
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langLoginFailCheck') }}</span>
-                                            </div>
+                                        <div class='panel-heading'>
+                                           
+                                                {{ trans('langLoginFailCheck') }}
+                                           
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1171,11 +1170,11 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4 px-lg-4 py-lg-3 bg-white' id='fourteen'>
-                                        <div class='panel-heading bg-body'>
-                                            <div class='col-12 Help-panel-heading'>
-                                                <span class='panel-title text-uppercase Help-text-panel-heading'>{{ trans('langPrivacyPolicy') }}</span>
-                                            </div>
+                                    <div class='panel panel-admin mt-4' id='fourteen'>
+                                        <div class='panel-heading'>
+                                           
+                                                {{ trans('langPrivacyPolicy') }}
+                                         
                                         </div>
                                         <div class='panel-body'>
                                             <div class='margin-bottom-fat margin-top-fat pb-3'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>

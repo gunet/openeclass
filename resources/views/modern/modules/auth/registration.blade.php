@@ -65,7 +65,7 @@
                                             <div class='col'>
                                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langOfStudent') }}</div>
+                                                        <h3>{{ trans('langOfStudent') }}</h3>
                                                     </div>
                                                     <div class='card-body'>
 
@@ -107,7 +107,7 @@
                                             <div class='col'>
                                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langRegister') }}&nbsp{{ trans('langOfStudent') }}</div>
+                                                        <h3>{{ trans('langRegister') }}&nbsp{{ trans('langOfStudent') }}</h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         <p class='TextRegular blackBlueText'>{{ trans('langStudentCannotRegister') }}</p>
@@ -121,7 +121,7 @@
                                             <div class='col'>
                                                 <div class="card panelCard px-lg-4 py-lg-3 h-100">
                                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langOfTeacher') }}</div>
+                                                        <h3>{{ trans('langOfTeacher') }}</h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         @if ($eclass_prof_reg) 
@@ -163,7 +163,7 @@
                                             <div class='col'>
                                                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langTeacherCannotRegister') }}</span></div>
                                                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langRegister') }}&nbsp{{ trans('langOfTeacher') }}</div>
+                                                        <h3>{{ trans('langRegister') }}&nbsp{{ trans('langOfTeacher') }}</h3>
                                                     </div>
                                                     <div class='card-body'>
                                                         <p class='TextRegular blackBlueText'>{{ trans('langTeacherCannotRegister') }}</p>

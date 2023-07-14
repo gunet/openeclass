@@ -76,7 +76,7 @@
                     <div class='col-12'>
                         <div class="card panelCard px-lg-4 py-lg-3">
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langActivateCourseTools') }}</div>
+                                <h3>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
                             <div class='card-body'>
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
@@ -124,9 +124,9 @@
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     {{ trans('langOperations') }}
-                                </div>
+                                </h3>
                                 <div>
                                     <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
@@ -163,9 +163,9 @@
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                 
-                                <div class='text-uppercase normalColorBlueText TextBold fs-6'>
+                                <h3>
                                     {{ trans('langLtiConsumer') }}
-                                </div>
+                                </h3>
                                    
                                 <div>
                                     <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>

@@ -966,23 +966,24 @@ function lang_selections_Mobile() {
     if (count($session->active_ui_languages) < 2) {
         return ('&nbsp;');
     }
-    if (isset($_SESSION['uid'])){
-        $langDropdown = "user-language-menuOn";
-    }
+
     $lang_select = "
       <a class='btn btn-transparent d-flex justify-content-center align-items-center me-2' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <i class='fa-solid fa-globe'></i>
+          <i class='fa-solid fa-earth-europe'></i>
       </a>
-      <ul class='m-0 p-0 dropdown-menu dropdown-menu-end $langDropdown contextual-menu me-0' role='menu' aria-labelledby='dropdownMenuLang'>";
+      <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='dropdownMenuLang'>
+      <ul class='list-group list-group-flush'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
         $lang_select .=
             "<li role='presentation'$class>
-                <a class='list-group-item border border-top-0 border-bottom-secondary' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    <div class='d-inline-flex align-items-center'><span class='fa-solid fa-language' aria-hidden='true'></span><span class='TextMedium ps-1'>" .
-                    q($native_language_names_init[$code]) . "</span></div></a></li>";
+                <a class='list-group-item d-flex justify-content-start align-items-start py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
+                    <span class='fa-solid fa-earth-europe pe-2' aria-hidden='true'></span>
+                    " .q($native_language_names_init[$code]) . "
+                </a>
+            </li>";
     }
-    $lang_select .= "</ul>";
+    $lang_select .= "</ul></div>";
     return $lang_select;
 }
 

@@ -53,7 +53,7 @@
                         @foreach($myCourses as $course)
                             @php $temp_pages++; @endphp
                             <div class="col cardCourse{{ $pagesPag }}">
-                                <div class="card h-100 card{{ $pagesPag }} Borders">
+                                <div class="card h-100 card{{ $pagesPag }} Borders border-card">
                                     @php 
                                         $courseImage = ''; 
                                         if(!empty($course->course_image)){
@@ -65,35 +65,35 @@
                                     <img src="{{ $courseImage }}" class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" alt="course image">
                                     <div class="card-body">
                                         <div class="card-title d-flex justify-content-between align-items-start">
-                                            <a class='@if($course->visible == 3) InvisibleCourse @endif TextSemiBold pe-2 fs-6' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
+                                            <a class='@if($course->visible == 3) InvisibleCourse @endif TextSemiBold pe-2' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
                                             @if($course->visible == 1) 
-                                                <button type="button" class="btn btn-transparent fs-6 p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
+                                                <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
                                                     <span class='fa fa-lock text-secondary'></span>
                                                 </button>
                                             @endif
                                             @if($course->visible == 2) 
-                                                <button type="button" class="btn btn-transparent fs-6 p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langOpenCourse')}}">
+                                                <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langOpenCourse')}}">
                                                     <span class='fa fa-unlock text-success'></span>
                                                 </button>
                                             @endif
                                             @if($course->visible == 0) 
-                                                <button type="button" class="btn btn-transparent fs-6 p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langClosedCourse')}}">
+                                                <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langClosedCourse')}}">
                                                     <span class='fa fa-lock orangeText'></span>
                                                 </button>
                                             @endif
                                             @if($course->visible == 3) 
-                                                <button type="button" class="btn btn-transparent fs-6 p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langInactiveCourse')}}">
+                                                <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langInactiveCourse')}}">
                                                     <span class='fa fa-exclamation-triangle text-danger InvisibleCourse'></span>
                                                 </button>
                                             @endif
                                         </div>
                                         <p class="card-text">
-                                            <p class='card-title fw-bold mb-0 fs-6 @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langCode') }}</p>
-                                            <p class="text-secondary @if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->public_code) }}</p>
+                                            <p class='form-label @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langCode') }}</p>
+                                            <p class=" @if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->public_code) }}</p>
                                         </p>
                                         <p class="card-text">
-                                            <p class='card-title fw-bold mb-0 fs-6 @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}</p>
-                                            <p class="text-secondary @if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->professor) }}</p>
+                                            <p class='form-label @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}</p>
+                                            <p class="@if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->professor) }}</p>
                                         </p>
                                         
                                     </div>

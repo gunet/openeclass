@@ -17,7 +17,7 @@
         <div class="col-12 px-0">
             <div class='card panelCard BorderSolid px-lg-4 py-lg-3 border-0'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                    <div class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langSummaryProfile') }}</div>
+                    <h3>{{ trans('langSummaryProfile') }}</h3>
                 </div>
                 <div class='card-body'>
                     <div class='row'>
@@ -72,7 +72,7 @@
         <div class='col-xl-8 col-12 Courses-Content pe-lg-0 mt-lg-3 mt-4 px-0'>
             <div class='card panelCard BorderSolid panelCardNoBorder px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                    <span class="text-uppercase normalColorBlueText TextBold fs-6">{{ trans('langMyCoursesSide') }}</span>
+                    <h3>{{ trans('langMyCoursesSide') }}</h3>
                     
                     <div>
                         <div id="bars-active" type='button' class='float-end mt-0' style="display:flex;">
@@ -179,7 +179,7 @@
             @include('portfolio.portfolio-calendar')
             <div class='card panelCard border-0 BorderSolid mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                 <div class='card-header bg-white border-0 text-start'>
-                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoAnnouncements') }}</span>
+                    <h3>{{ trans('langMyPersoAnnouncements') }}</h3>
                 </div>
                 <div class='card-body'>
                     @if(empty($user_announcements))
@@ -198,7 +198,7 @@
             <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                 <div class='card-header bg-white border-0 text-start'>
                 
-                    <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyPersoMessages') }}</span>
+                    <h3>{{ trans('langMyPersoMessages') }}</h3>
                     
                 </div>
                 <div class='card-body'>
@@ -219,7 +219,7 @@
                 <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
                     <div class='card-header bg-white border-0 text-start'>
                     
-                            <span class='text-uppercase normalColorBlueText TextBold fs-6'>{{ trans('langMyWidgets') }}</span>
+                            <h3>{{ trans('langMyWidgets') }}</h3>
                         
                     </div>
                     <div class='card-body'>
