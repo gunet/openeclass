@@ -115,7 +115,7 @@
                             
                                 <form action='{{$_SERVER[SCRIPT_NAME]}}' method='post' style="padding-top:20px;">
                                     <ul class='list-group list_grouping' style="padding-top:25px; padding-bottom:25px;">
-                                        <li class='list-group-item list-header'>
+                                        <li class='list-group-item bgTheme'>
                                             <a name='top'></a>
                                             {!! $langFaculty !!}:{!! $getFullPath !!}
                                             {!! $childHtml !!}

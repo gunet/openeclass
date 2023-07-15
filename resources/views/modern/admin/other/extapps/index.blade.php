@@ -57,9 +57,10 @@
                         <div class='col-12'>
                             <table class="table-default extapp-table">
                                 <thead class='list-header'>
-                                    <td class='bgTheme text-white TextSemiBold'>{{ trans('langExtAppName') }}</td>
-                                    <td class='bgTheme text-white TextSemiBold'>{{ trans('langDescription') }}</td>
+                                    <th>{{ trans('langExtAppName') }}</th>
+                                    <th>{{ trans('langDescription') }}</th>
                                 </thead>
+                                <tbody>
                                 @foreach (ExtAppManager::getApps() as $app)
                                     <tr>
                                     <!--WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!-->
@@ -101,6 +102,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                </tbody>
                             </table>
                         </div>
                     </div>

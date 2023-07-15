@@ -87,15 +87,15 @@
                                 </caption>            
                                 <thead>
                                     <tr class='list-header'>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langName') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langCPFShortName') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langDescription') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langCPFFieldDatatype') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langCPFFieldRequired') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langCPFFieldRegistration') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langCPFFieldUserType') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{{ trans('langCPFFieldVisibility') }}</td>
-                                        <td class='bgTheme text-white TextSemiBold'>{!! icon('fa-gears') !!}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langName') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langCPFShortName') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langDescription') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langCPFFieldDatatype') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langCPFFieldRequired') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langCPFFieldRegistration') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langCPFFieldUserType') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{{ trans('langCPFFieldVisibility') }}</td>
+                                        <td class='bg-header-table text-white TextSemiBold'>{!! icon('fa-gears') !!}</td>
                                     </tr>
                                 </thead>
                             

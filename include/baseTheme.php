@@ -343,11 +343,17 @@ function view($view_file, $view_data = array()) {
                     border: solid thin;
                     border-color: $theme_options_styles[leftNavBgColor];
                     color: $theme_options_styles[leftNavBgColor];
-                    font-size: 12px;
-                    text-transform: uppercase;
+                    font-size: 14px;
                     height:40px;
-                    font-family: 'Manrope' , sans-serif; font-weight: 600;
-                    border-radius: 35px;
+                    min-width: 40px;
+                    font-weight: 600; font-style: normal;
+                    border-radius: 4px !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #ffffff;
+                    letter-spacing: 0px;
+                    line-height: 16px;
                 }
             
                 .submitAdminBtn:hover {
@@ -357,6 +363,7 @@ function view($view_file, $view_data = array()) {
 
                 .submitAdminBtn.active{
                     background-color: $theme_options_styles[leftNavBgColor];
+                    color: #ffffff;
                     z-index: 0 !important;
                 }
 
@@ -429,7 +436,7 @@ function view($view_file, $view_data = array()) {
                     background:$rgba_no_alpha;
                 }
 
-                .bgTheme{
+                .bgTheme, .bg-header-table{
                     background-color:$rgba_no_alpha !important;
                 }
 
@@ -565,6 +572,10 @@ function view($view_file, $view_data = array()) {
 
                 .circle-img-contant { 
                     background-color: $theme_options_styles[linkColor];
+                }
+
+                .contextual-sidebar .list-group-item.active{
+                    color: $theme_options_styles[linkColor] !important;
                 }
             ";
         }

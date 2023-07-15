@@ -2409,6 +2409,8 @@ th, td {
 
 .list-header{ background:#2B3944; }
 
+.bg-header-table {background:#2B3944 !important;}
+
 .table-default .list-header,
 .announcements_table .list-header,
 .announcements_table .notes_thead{

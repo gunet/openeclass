@@ -59,7 +59,7 @@ if (count($roots) <= 0) {
     $tool_content .= "
         <div class='col-sm-12'>
             <div class='list-group'>
-                <a href='#' class='list-group-item list-header'><b>$langFaculty</b></a>
+                <a href='#' class='list-group-item bgTheme text-white TextSemiBold'>$langFaculty</a>
             ";
     $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
     $tool_content .= "

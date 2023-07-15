@@ -323,7 +323,7 @@ if (isset($_GET['action'])) {
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='bgNormalBlueText'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableCertTemplates</th></tr>
+                        <tr class='bg-header-table'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableCertTemplates</th></tr>
                         <tr>
                             <th class='text-dark'>$langTitle</th>
                             <th class='text-dark'>$langDescription</th>                            
@@ -354,7 +354,7 @@ if (isset($_GET['action'])) {
     
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='bgNormalBlueText'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableBadges</th></tr>
+                        <tr class='bg-header-table'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableBadges</th></tr>
                         <tr>
                             <th class='text-dark'>$langTitle</th>
                             <th class='text-dark'>$langDescription</th>
