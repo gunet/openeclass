@@ -25,6 +25,10 @@
 
     .container-homepage-content {max-width: 1920px !important;}
 
+    .basic-content{
+        min-height: calc(100vh - 80px - 70px);
+    }
+
 }
 
 @media(max-width:991px){

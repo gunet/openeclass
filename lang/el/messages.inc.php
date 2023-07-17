@@ -4029,7 +4029,7 @@ $langEditProfile = "ΕΠΕΞΕΡΓΑΣΙΑ ΠΡΟΦΙΛ";
 $langDeleteAccount ="ΔΙΑΓΡΑΦΗ ΛΟΓΑΡΙΑΣΜΟΥ";
 $langLastVisit = "Τελευταία επίσκεψη";
 $langMyCourses = "Τα μαθήματα μου";
-$langAllAnnouncements = "ΟΛΕΣ ΟΙ ΑΝΑΚΟΙΝΩΣΕΙΣ";
+$langAllAnnouncements = "Δείτε όλες τις ανακοινώσεις";
 $langRecentMessages = "Πρόσφατα μηνύματα";
 $langAllMessages = "ΟΛΑ ΤΑ ΜΗΝΥΜΑΤΑ";
 $langWelcomeTo = "Καλως Ήρθατε στην ";
@@ -5666,7 +5666,7 @@ $langQuickNotesSide = 'Γρήγορη σημείωση';
 $langNumOpenCoursesBanner = "ανοικτά<br>$langsCourses";
 $langNumOpenCourseBanner = "ανοικτό<br>$langsCourse";
 $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";
-$langNationalOpenCourses = "ΕΘΝΙΚΗ ΠΥΛΗ ΑΝΟΙΚΤΩΝ ΜΑΘΗΜΑΤΩΝ";
+$langNationalOpenCourses = "Εθνική Πύλη Ανοικτών Μαθημάτων";
 $langExtAppName = "Εφαρμογή";
 $langClearSettings = "Καθαρισμός Ρυθμίσεων";
 $langNotConfigured = 'Δεν έχει ρυθμιστεί';
@@ -6149,4 +6149,5 @@ $langCreateCourseLeftForm = "Η δημιουργία μαθήματος είνα
                              Για να ολοκληρωθεί η διαδικασία δημιουργίας του μαθήματός σας, πατήστε το κουμπί με την ένδειξη «Δημιουργία Μαθήματος».";
 
 
-$langEclassInfo = "Η πλατφόρμα Open eClass 4.0 αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων. Ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα και υποστηρίζει την υπηρεσία Ασύγχρονης Τηλεκπαίδευσης χωρίς περιορισμούς και δεσμεύσεις.";
+$langEclassInfo = "Η πλατφόρμα Open eClass 4.0 αποτελεί ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και ακολουθεί τη φιλοσοφία του λογισμικού ανοικτού κώδικα.";
+$langSaidForUs = "Είπαν για εμάς";

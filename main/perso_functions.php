@@ -271,8 +271,8 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                             <div class='item-wholeline text-start'>
                                 <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                     
-                                <div class='blackBlueText TextBold'>$course_title</div>
-                                <div class='small-text Neutral-900-cl TextRegular'>$ann_date</div>
+                                <p class='TextSemiBold'>$course_title</p>
+                                <div class='TextRegular msmall-text Neutral-800-cl'>$ann_date</div>
                             </div>
                         </li>";
                 } else {
@@ -283,8 +283,8 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                         <div class='item-wholeline text-start'>
                             <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             
-                            <div class='blackBlueText TextBold'>$langAdminAn&nbsp; <span class='fa fa-user text-danger'></span></div>
-                            <div class='small-text Neutral-900-cl TextRegular'>$ann_date</div>
+                            <p class='TextSemiBold'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
+                            <div class='TextRegular msmall-text Neutral-800-cl'>$ann_date</div>
                         </div>
                     </li>";
                 }
@@ -329,8 +329,8 @@ function getUserMessages() {
                                         
                                         <a class='TextSemiBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         
-                                        <div class='blackBlueText TextBold'>$course_title</div>
-                                        <div class='small-text Neutral-900-cl TextRegular'>$message_date</div>
+                                        <p class='TextSemiBold'>$course_title</p>
+                                        <div class='TextRegular msmall-text Neutral-800-cl'>$message_date</div>
                                     </div>
                                 </li>";
         }

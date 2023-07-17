@@ -20,7 +20,9 @@
         @endif
                 <div class="row">
                 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @if(isset($_SESSION['uid']))
+                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @endif
 
                     @if($course_code and $currentCourseName)
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">

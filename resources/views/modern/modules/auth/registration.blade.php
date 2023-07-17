@@ -11,11 +11,9 @@
                     
                 <div class="row">
 
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
-                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                        {!! $action_bar !!}
+                        <div class='col-12'>
+                            <h1>{{ trans('langRegistration')}}</h1>
+                        </div>
 
                         @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
@@ -57,125 +55,102 @@
                         @endif
 
                         @if ($user_registration)
-                            <div class='col-12'>
-                                <div class="row row-cols-1 row-cols-md-2 g-4">
-                                    @if (!$registration_info)
-                                        <!-- student registration -->
-                                        @if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE)  
-                                            <div class='col'>
-                                                <div class="card panelCard px-lg-4 py-lg-3 h-100">
-                                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <h3>{{ trans('langOfStudent') }}</h3>
-                                                    </div>
-                                                    <div class='card-body'>
+                            <div class='col-12 mt-4'>
+                                <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
+                                    <div class='col-lg-6 col-12'>
+                                        <ul class="nav nav-tabs" id="myRegistration">
+                                            <li class="nav-item">
+                                                <button class="nav-link active" id="reg-student" data-bs-toggle="tab" data-bs-target="#regStudent" type="button" role="tab" aria-controls="regStudent" aria-selected="true" aria-current="page">{{ trans('langOfStudent') }}</button>
+                                            </li>
+                                            <li class="nav-item">
+                                                <button class="nav-link" id="reg-teacher" data-bs-toggle="tab" data-bs-target="#regTeacher" type="button" role="tab" aria-controls="regTeacher" aria-selected="true" aria-current="page">{{ trans('langOfTeacher') }}</button>
+                                            </li>
+                                        </ul>
 
-                                                        <ul>
-                                                            @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
-                                                                <li><a href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a></li>
-                                                            @else ($eclass_stud_reg == 1) <!-- allow student registration via request -->
-                                                                <li><a href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a></li>
-                                                            @endif
-                                                        </ul>
-
-                                                        @if (count($auth) > 1 and $alt_auth_stud_reg != FALSE) <!-- allow user registration via alt auth methods -->
-                                                            @if ($alt_auth_stud_reg == 2) <!-- registration -->
-                                                                <p class='TextBold blackBlueText mb-1 mt-4'>{{ trans('langUserAccountInfo4') }}:</p>
-                                                            @else
-                                                                <p class='TextBold blackBlueText mb-1 mt-4'>{{ trans('langUserAccountInfo1') }}:</p>
-                                                            @endif
-                                                            <ul>
-                                                                @foreach ($auth as $k => $v)
-                                                                    @if ($v != 1)  <!--  bypass the eclass auth method -->
-                                                                        <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
-                                                                        @if ($v < 8) 
-                                                                            <li><a href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
-                                                                        @else
-                                                                            @if($eclass_stud_reg == 1) 
-                                                                                <li><a href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                        <div class="tab-content mt-5" id="myContentRegistration">
+                                            @if (!$registration_info)
+                                                <div class="tab-pane fade show active" id="regStudent" role="tabpanel" aria-labelledby="reg-student">
+                                                    @if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE)  
+                                                        <div class="col-12">
+                                                            <ul class="list-group list-group-flush">
+                                                                @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
+                                                                    <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a></li>
+                                                                @else ($eclass_stud_reg == 1) <!-- allow student registration via request -->
+                                                                    <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a></li>
+                                                                @endif
+                                                                @if (count($auth) > 1 and $alt_auth_stud_reg != FALSE) <!-- allow user registration via alt auth methods -->
+                                                                    @foreach ($auth as $k => $v)
+                                                                        @if ($v != 1)  <!--  bypass the eclass auth method -->
+                                                                            <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
+                                                                            @if ($v < 8) 
+                                                                                <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                             @else
-                                                                                <li><a href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                                @if($eclass_stud_reg == 1) 
+                                                                                    <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                                @else
+                                                                                    <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                                @endif
                                                                             @endif
                                                                         @endif
-                                                                    @endif
-                                                                @endforeach
+                                                                    @endforeach
+                                                                @endif
                                                             </ul>
-                                                        @endif
-                                                    </div>
+                                                        </div>
+                                                    @else
+                                                        <div class='col-12'>
+                                                            <p class='TextRegular'>{{ trans('langStudentCannotRegister') }}</p>
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            </div>
-                                        @else
-                                            <div class='col'>
-                                                <div class="card panelCard px-lg-4 py-lg-3 h-100">
-                                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <h3>{{ trans('langRegister') }}&nbsp{{ trans('langOfStudent') }}</h3>
-                                                    </div>
-                                                    <div class='card-body'>
-                                                        <p class='TextRegular blackBlueText'>{{ trans('langStudentCannotRegister') }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-
-                                        <!--  teacher registration -->
-                                        @if ($eclass_prof_reg or $alt_auth_prof_reg)  <!-- allow teacher registration -->
-                                            <div class='col'>
-                                                <div class="card panelCard px-lg-4 py-lg-3 h-100">
-                                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <h3>{{ trans('langOfTeacher') }}</h3>
-                                                    </div>
-                                                    <div class='card-body'>
-                                                        @if ($eclass_prof_reg) 
-                                                            <ul>
-                                                                @if (empty($provider)) 
-                                                                    <li><a href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a></li>
-                                                                @else 
-                                                                    <li><a href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a></li>
-                                                                @endif    
-                                                            </ul>
-                                                        @endif
-                                                        @if (count($auth) > 1 and $alt_auth_prof_reg)
-                                                            <p class='TextBold blackBlueText mt-4 mb-1'>{{ trans('langUserAccountInfo1') }} {{ trans('langWith') }}:</p>
-                                                            <ul>
-                                                                @foreach ($auth as $k => $v)
-                                                                    @if ($v != 1)   <!-- bypass the eclass auth method -->
-                                                                        <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
-                                                                        @if ($v < 8) 
-                                                                            @if ($alt_auth_prof_reg) 
-                                                                            <li><a href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                <div class="tab-pane fade" id="regTeacher" role="tabpanel" aria-labelledby="reg-teacher">
+                                                    @if ($eclass_prof_reg or $alt_auth_prof_reg)  <!-- allow teacher registration -->
+                                                        <div class='col-12'>
+                                                            <ul class="list-group list-group-flush">
+                                                                @if ($eclass_prof_reg) 
+                                                                    @if (empty($provider)) 
+                                                                        <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a></li>
+                                                                    @else 
+                                                                        <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a></li>
+                                                                    @endif    
+                                                                @endif
+                                                                @if (count($auth) > 1 and $alt_auth_prof_reg)
+                                                                    @foreach ($auth as $k => $v)
+                                                                        @if ($v != 1)   <!-- bypass the eclass auth method -->
+                                                                            <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
+                                                                            @if ($v < 8) 
+                                                                                @if ($alt_auth_prof_reg) 
+                                                                                <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                                                @else 
+                                                                                <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                                @endif
                                                                             @else 
-                                                                            <li><a href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                                @if ($alt_auth_prof_reg) 
+                                                                                    <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                                                @else 
+                                                                                    <li class="list-group-item border-bottom-list-group"><a class='TextBold text-decoration-underline' href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                                                @endif    
                                                                             @endif
-                                                                        @else 
-                                                                            @if ($alt_auth_prof_reg) 
-                                                                                <li><a href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                            @else 
-                                                                                <li><a href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                            @endif    
                                                                         @endif
-                                                                    @endif
-                                                                @endforeach
-                                                            </li>
-                                                        @endif
-                                                    </div>
+                                                                    @endforeach
+                                                                @endif
+                                                            </ul>
+                                                        </div>
+                                                    @else 
+                                                        <div class='col-12'>
+                                                            <p class='TextRegular'>{{ trans('langTeacherCannotRegister') }}</p>
+                                                        </div>
+                                                    @endif
                                                 </div>
-                                            </div>
-                                        @else 
-                                            <div class='col'>
-                                                <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langTeacherCannotRegister') }}</span></div>
-                                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                        <h3>{{ trans('langRegister') }}&nbsp{{ trans('langOfTeacher') }}</h3>
-                                                    </div>
-                                                    <div class='card-body'>
-                                                        <p class='TextRegular blackBlueText'>{{ trans('langTeacherCannotRegister') }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    @endif
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
+                                        <img src='{{ $urlAppend }}template/modern/img/RegImg.png' />
+                                    </div>
                                 </div>
                             </div>
                         @else
-                            <div class='col-12'>
+                            <div class='col-12 mt-4'>
                                 <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langCannotRegister') }}</span></div>
                             </div>
                         @endif

@@ -95,17 +95,17 @@ function render_profile_fields_form($context, $valitron = false) {
 
                 if ($valitron) {
                     if (Session::hasError('cpf_'.$f->shortname)) {
-                        $form_class = 'form-group has-error mt-3';
+                        $form_class = 'form-group has-error mt-4';
                         $help_block = '<span class="help-block Accent-200-cl">' . Session::getError('cpf_'.$f->shortname) . '</span>';
                     } else {
-                        $form_class = 'input-group mt-3';
+                        $form_class = 'input-group mt-4';
                         $help_block = '';
                     }
                 } else {
-                    $form_class = 'form-group mt-3';
+                    $form_class = 'form-group mt-4';
                     $help_block = '';
                 }
-                $return_string .= '<div class="'.$form_class.'">';
+                $return_string .= '<div class="col-lg-6 col-12 px-lg-3 px-0"><div class="'.$form_class.'">';
                 $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
                
 
@@ -216,7 +216,7 @@ function render_profile_fields_form($context, $valitron = false) {
                 } elseif (isset($req_label)) {
                     $return_string .= '<small><em>'.$req_label.'</em></small>';
                 }
-                $return_string .= $help_block.'</div>';
+                $return_string .= $help_block.'</div></div>';
                 unset($req_label);
             }
         }

@@ -3902,21 +3902,16 @@ function setOpenCoursesExtraHTML() {
         $openCoursesExtraHTML = "
             
         
-            <div class='col'>
-                <div class='card border-0'>
-                    <div class='card-header border-bottom-card-header bg-white d-flex justify-content-between align-items-center px-0 py-0'>
-                        <div class='d-flex justify-content-start align-items-center'>
-                            <h3 class='pe-2'>$langOpenCoursesShort</h3>
-                        </div>
-                    </div>
-                    <div class='card-body px-0 py-3'>
+            <div class='col-xl-8 col-12 banner_openCourses'>
+                <div class='card border-card h-100'>
+                    <div class='card-body card-body d-flex justify-content-center align-items-center'>
                         <div class='row rowMargin w-100 ms-0'>
 
-                            <div class='col-lg-5 offset-lg-0 col-8 offset-2 d-flex justify-content-center align-items-center'>
-                                <img style='height:120px; width:100%;' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
+                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                <img class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
                             </div>
             
-                            <div class='col-lg-7 col-12'>
+                            <div class='col-12'>
                                 <div class='row'>
                                     <div class='col-12 ps-0 mt-3'>
                                         <a target='_blank' href='$openFacultiesUrl'>
@@ -3927,7 +3922,7 @@ function setOpenCoursesExtraHTML() {
                                         </a>
                                     </div>
                                     <div class='col-12 ps-0 pe-0 mt-3'>
-                                        <a class='btn rounded-pill opencourses_btn TextBold d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
+                                        <a class='btn opencourses_btn d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                             $langNationalOpenCourses
                                             <span class='fa-solid fa-chevron-right ms-2'></span>
                                         </a>

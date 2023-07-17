@@ -313,6 +313,14 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
+                .mobileAPI{
+                    margin-top:25px;
+                }
+
+                .a_tools_site_footer, .copyright, .social-icon-tool{
+                    color:#ffffff;
+                }
+
                .menu-item,.form-value{ color: #ffffff; }
                .jumbotron-login{
                     background-repeat: no-repeat;
@@ -525,7 +533,7 @@ function view($view_file, $view_data = array()) {
         }
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
-                a, .toolAdminText{
+                a, .toolAdminText, .announce-link-homepage{
                     color: $theme_options_styles[linkColor];
                 }
 

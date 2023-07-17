@@ -341,144 +341,214 @@ if ($all_set) {
         $phone_star = $langOptional;
     }
 
-    $tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                        'url' => "{$urlAppend}modules/auth/registration.php",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary')), false);
+    // $tool_content .= action_bar(array(
+    //                 array('title' => $langBack,
+    //                     'url' => "{$urlAppend}modules/auth/registration.php",
+    //                     'icon' => 'fa-reply',
+    //                     'level' => 'primary')), false);
 
-    $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langUserData</span></div></div>";
+    $tool_content .= "<div class='col-12'>
+                            <div class='alert alert-info'>
+                                <i class='fa-solid fa-circle-info fa-lg'></i><span>$langUserData</span>
+                            </div>
+                      </div>
+                      <div class='col-12 mt-4'>
+                            <h1>$pageName</h1>
+                      </div>";
     $tool_content .= "
-    <div class='row'>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-        <div class='col-12 h-100 left-form'></div>
-    </div>
-    <div class='col-lg-6 col-12'>
-    <div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
-        <input type='hidden' name='p' value='$prof'>
-        <div class='form-group'>
-            <label for='Name' class='col-sm-12 control-label-notes'>$langName</label>
-            <div class='col-sm-12'>";
+    <div class='col-12 mt-4'>
+    <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
+                <div class='col-lg-6 col-12'>
+                    <div class='form-wrapper form-edit px-0 border-0'>
+                        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
+                                <input type='hidden' name='p' value='$prof'>
 
-        if ($user_data) {
-            $user_data_first_name = explode(' ', $user_data->firstName);
-            $givenname = $user_data_first_name[0];
-            $tool_content .= "<p class='form-control-static'>" . q($givenname) . "</p>";
-            $tool_content .= "<input type='hidden' name='givenname' value = '" . $givenname . "'>";
-        } else {
-            $tool_content .= "<input class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
-        }
-        $tool_content .= "</div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='SurName' class='col-sm-12 control-label-notes'>$langSurname</label>
-            <div class='col-sm-12'>";
-        if ($user_data) {
-            $user_data_first_name = explode(' ', $user_data->firstName);
-            $surname = $user_data_first_name[1];
-            $tool_content .= "<p class='form-control-static'>" . q($surname) . "</p>";
-            $tool_content .= "<input type='hidden' name='surname' value='$surname'>";
-        } else {
-            $tool_content .= "<input class='form-control' type='text' name='surname' value='' size='30' maxlength='60' placeholder='$langSurname'>";
-        }
+                                <div class='row'>
+                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                        <div class='form-group'>
+                                            <label for='Name' class='col-sm-12 control-label-notes'>$langName</label>
+                                            <div class='col-sm-12'>";
 
-        $tool_content .= "</div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='UserName' class='col-sm-12 control-label-notes'>$langUsername</label>
-            <div class='col-sm-12'>";
-        if ($user_data) {
-            $username = str_replace(' ', '', $user_data->displayName);
-            $tool_content .= "<p class='form-control-static'>" . q($username) . "</p>";
-            $tool_content .= "<input type='hidden' name='username' value='$username'>";
-        } else {
-            $tool_content .= "<input class='form-control' placeholder='$langUsername' type='text' name='username' size='30' maxlength='50' value=''>";
-        }
+                                            if ($user_data) {
+                                                $user_data_first_name = explode(' ', $user_data->firstName);
+                                                $givenname = $user_data_first_name[0];
+                                                $tool_content .= "<p class='form-control-static'>" . q($givenname) . "</p>";
+                                                $tool_content .= "<input type='hidden' name='givenname' value = '" . $givenname . "'>";
+                                            } else {
+                                                $tool_content .= "<input class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
+                                            }
+                                            $tool_content .= "</div>
+                                        </div>
+                                    </div>
+                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                        <div class='form-group mt-lg-0 mt-4'>
+                                            <label for='SurName' class='col-sm-12 control-label-notes'>$langSurname</label>
+                                            <div class='col-sm-12'>";
+                                            if ($user_data) {
+                                                $user_data_first_name = explode(' ', $user_data->firstName);
+                                                $surname = $user_data_first_name[1];
+                                                $tool_content .= "<p class='form-control-static'>" . q($surname) . "</p>";
+                                                $tool_content .= "<input type='hidden' name='surname' value='$surname'>";
+                                            } else {
+                                                $tool_content .= "<input class='form-control' type='text' name='surname' value='' size='30' maxlength='60' placeholder='$langSurname'>";
+                                            }
 
-        $tool_content .= "</div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='ProfEmail' class='col-sm-12 control-label-notes'>$langProfEmail</label>
-            <div class='col-sm-12'>";
-            if ($user_data) {
-                $usermail = q($user_data->email);
-            } else {
-                $usermail = '';
-            }
-            $tool_content .= "<input class='form-control' type='text' name='usermail' value='$usermail' size='30' maxlength='100' placeholder='$langCompulsory'>";
-            $tool_content .= "</div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='UserPhone' class='col-sm-12 control-label-notes'>$langPhone</label>
-            <div class='col-sm-12'>";
-            if ($user_data) {
-                $userphone = q($user_data->phone);
-            } else {
-                $userphone = '';
-            }
-            $tool_content .= "<input class='form-control' type='text' name='userphone' value='$userphone' size='20' maxlength='20' placeholder='$phone_star'>
-            </div>
-        </div>";
-    if (!$prof) {
-        $tool_content .= "<div class='form-group mt-4'>
-                <label for='ProfEmail' class='col-sm-6 control-label-notes'>$langAm:</label>
-                <div class='col-sm-12'>
-                    <input class='form-control' type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
-                </div>
-            </div>";
-    }
-    $tool_content .= "<div class='form-group mt-4'>
-            <label for='ProfComments' class='col-sm-12 control-label-notes'>$langComments</label>
-                <div class='col-sm-12'>
-                    <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason...'>" . q($usercomment) . "</textarea>
-                </div>
-            </div>
-            <div class='form-group mt-4'>
-                <label for='ProfComments' class='col-sm-12 control-label-notes'>$langFaculty</label>
-            <div class='col-sm-12'>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
-    $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</div></div>";
-    $tool_content .= "<div class='form-group mt-4'>
-              <label for='UserLang' class='col-sm-6 control-label-notes'>$langLanguage</label>
-              <div class='col-sm-12'>";
-    $tool_content .= lang_select_options('localize', "class='form-control'");
-    $tool_content .= "</div></div>";
-    if ($display_captcha) {
-        $securimage = new Securimage();
-        $captchaHtml = $securimage->getCaptchaHtml([
-            'securimage_path' => $urlAppend . 'modules/auth/securimage',
-            'input_text' => '',
-        ]);
-        $tool_content .= "<div class='form-group mt-4'>
-                   <label for='captcha_code' class='col-sm-12 control-label-notes'>$langCaptcha</label>
-                   <div class='col-sm-12'>$captchaHtml</div>
-              </div>";
-    }
+                                            $tool_content .= "</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-    // check if provider_id from an authenticated user and
-    // a valid provider name are set so as to show the relevant form
-    if ($provider_name and $provider_id) {
-        $tool_content .= "<div class='form-group mt-4'>
-          <label for='UserLang' class='col-sm-12 control-label-notes'>$langProviderConnectWith</label>
-          <div class='col-sm-12'><p class='form-control-static'>
-            <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
-          </div>
-          <div class='col-sm-offset-2 col-sm-10'>
-            <input type='hidden' name='provider' value='" . $provider_name . "' />
-            <input type='hidden' name='provider_id' value='" . $provider_id . "' />
-          </div>
-          </div>";
-    }
-    // add custom profile fields
-    $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
-    $tool_content .= "<div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                    <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
+
+                                <div class='row'>
+                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                        <div class='form-group mt-4'>
+                                                <label for='UserName' class='col-sm-12 control-label-notes'>$langUsername</label>
+                                                <div class='col-sm-12'>";
+                                            if ($user_data) {
+                                                $username = str_replace(' ', '', $user_data->displayName);
+                                                $tool_content .= "<p class='form-control-static'>" . q($username) . "</p>";
+                                                $tool_content .= "<input type='hidden' name='username' value='$username'>";
+                                            } else {
+                                                $tool_content .= "<input class='form-control' placeholder='$langUsername' type='text' name='username' size='30' maxlength='50' value=''>";
+                                            }
+
+                                            $tool_content .= "</div>
+                                        </div>
+                                    </div>
+                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                        <div class='form-group mt-4'>
+                                            <label for='ProfEmail' class='col-sm-12 control-label-notes'>$langProfEmail</label>
+                                            <div class='col-sm-12'>";
+                                            if ($user_data) {
+                                                $usermail = q($user_data->email);
+                                            } else {
+                                                $usermail = '';
+                                            }
+                                            $tool_content .= "<input class='form-control' type='text' name='usermail' value='$usermail' size='30' maxlength='100' placeholder='$langCompulsory'>";
+                                            $tool_content .= "</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class='row'>
+                                     <div class='col-12 px-lg-3 px-0'>
+                                        <div class='form-group mt-4'>
+                                            <label for='UserPhone' class='col-sm-12 control-label-notes'>$langPhone</label>
+                                            <div class='col-sm-12'>";
+                                            if ($user_data) {
+                                                $userphone = q($user_data->phone);
+                                            } else {
+                                                $userphone = '';
+                                            }
+                                            $tool_content .= "<input class='form-control' type='text' name='userphone' value='$userphone' size='20' maxlength='20' placeholder='$phone_star'>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
+                            if (!$prof) {
+                                $tool_content .= "
+                                    <div class='row'>
+                                        <div class='col-12 px-lg-3 px-0'>
+                                            <div class='form-group mt-4'>
+                                                <label for='ProfEmail' class='col-sm-6 control-label-notes'>$langAm:</label>
+                                                <div class='col-sm-12'>
+                                                    <input class='form-control' type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>";
+                            }
+                            $tool_content .= "
+                                    <div class='row'>
+                                        <div class='col-12 px-lg-3 px-0'>
+                                            <div class='form-group mt-4'>
+                                                <label for='ProfComments' class='col-sm-12 control-label-notes'>$langComments</label>
+                                                <div class='col-sm-12'>
+                                                    <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason...'>" . q($usercomment) . "</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                            <div class='form-group mt-4'>
+                                                <label for='ProfComments' class='col-sm-12 control-label-notes'>$langFaculty</label>
+                                                <div class='col-sm-12'>";
+                                                    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
+                                                    $head_content .= $js;
+                                                    $tool_content .= $html;
+                                $tool_content .= "</div>
+                                            </div>
+                                        </div>";
+                        $tool_content .= "
+                                        <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                            <div class='form-group mt-4'>
+                                                    <label for='UserLang' class='col-sm-6 control-label-notes'>$langLanguage</label>
+                                                    <div class='col-sm-12'>";
+                                                        $tool_content .= lang_select_options('localize', "class='form-control'");
+                                                        $tool_content .= "
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>";
+                                            if ($display_captcha) {
+                                                $securimage = new Securimage();
+                                                $captchaHtml = $securimage->getCaptchaHtml([
+                                                    'securimage_path' => $urlAppend . 'modules/auth/securimage',
+                                                    'input_text' => '',
+                                                ]);
+
+                                $tool_content .= "
+                                    <div class='row'>
+                                        <div class='col-12 px-lg-3 px-0'>
+                                            <div class='form-group mt-4'>
+                                                <label for='captcha_code' class='col-sm-12 control-label-notes'>$langCaptcha</label>
+                                                <div class='col-sm-12'>$captchaHtml</div>
+                                            </div>
+                                        </div>
+                                    </div>";
+                            }
+
+                            // check if provider_id from an authenticated user and
+                            // a valid provider name are set so as to show the relevant form
+                            if ($provider_name and $provider_id) {
+                                $tool_content .= "
+                                <div class='row'>
+                                    <div class='col-12 px-lg-3 px-0'>
+                                        <div class='form-group mt-4'>
+                                            <label for='UserLang' class='col-sm-12 control-label-notes'>$langProviderConnectWith</label>
+                                            <div class='col-sm-12'><p class='form-control-static'>
+                                                <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q($authFullName[$auth_id]) . "<br /><small>$langProviderConnectWithTooltip</small></p>
+                                            </div>
+                                            <div class='col-sm-offset-2 col-sm-10'>
+                                                <input type='hidden' name='provider' value='" . $provider_name . "' />
+                                                <input type='hidden' name='provider_id' value='" . $provider_id . "' />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>";
+                            }
+                            // add custom profile fields
+                            $tool_content .= "<div class='row'>";
+                                $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
+                            $tool_content .= "</div>";
+                            $tool_content .= "
+                                            <div class='row'>
+                                                <div class='col-12 px-lg-3 px-0'>
+                                                    <div class='form-group mt-5'>
+                                                        <input class='btn submitAdminBtn submitAdminBtnDefault w-100' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
+                                                    </div>
+                                                </div>
+                                            </div>
+                        </form>
                     </div>
-      </form>
-      </div></div></div>";
+                </div>
+                <div class='col-lg-6 col-12'>
+                    <img src='{$urlAppend}template/modern/img/RegImg.png' />
+                </div>
+    </div>
+    </div>";
 }
 
 draw($tool_content, 0, null, $head_content);
