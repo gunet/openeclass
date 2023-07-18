@@ -87,7 +87,7 @@
                                 {{ trans('langRegister') }}
                             </a>
                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
-                                <a id="btn_create_course" class="btn submitAdminBtn submitAdminBtnDefault btn_create_course" href="{{ $urlAppend }}modules/create_course/create_course.php">
+                                <a id="btn_create_course" class="btn submitAdminBtn submitAdminBtnDefault btn_create_course bgTheme text-white" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                     <i class="fa-solid fa-plus"></i>&nbsp{{ trans('langCreate') }}
                                 </a>
                             @endif

@@ -33,6 +33,12 @@ body{
   }
 }
 
+@media(min-width:992px){
+  .main-section-courses{
+    min-height: calc(100vh - 80px - 352px - 80px);
+  }
+}
+
 .container, .container-fluid{
   padding: 72px 64px 72px 64px;
 }
