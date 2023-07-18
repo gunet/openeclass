@@ -5600,3 +5600,5 @@ $langBBBCronEnableInstructions = '
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
+$langEmailBody = "Email Body";
+$langCustomEmailBody = "Custom Email Body";

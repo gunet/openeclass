@@ -3579,6 +3579,9 @@ $langHybridAuthSetup2 = " Id/Key</strong> και <strong>";
 $langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
 $langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
 $langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
+$langEmailBody = "Email Body";
+$langCustomEmailBody = "Προσαρμοσμένο Email Body";
+
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
@@ -6060,3 +6063,15 @@ $langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι �
                     για τους διαθέσιμους τύπους περιεχομένων.";
 $langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";
 $langReuseDeactivate = "Απενεργοποίηση Διαμοιρασμού";
+$langCustomMailHelp = "
+<p>Placeholder μεταβλητών</p>
+</br>
+<ul>
+  <li>[first] : Όνομα</li>
+  <li>[last] : Επώνυμο</li>
+  <li>[id] : Αριθμός μητρώου</li>
+  <li>[email] : Διεύθυνση e-mail</li>
+  <li>[phone] : Τηλέφωνο</li>
+  <li>[username] : Όνομα χρήστη</li>
+  <li>[password] : Κωδικός χρήστη</li>
+</ul>";

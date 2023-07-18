@@ -42,6 +42,9 @@ $error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
 if (isset($_POST['submit'])) {
+//    var_dump($_POST['emailNewBodyEditor']);
+//    var_dump($_POST['emailNewBodyInput']);
+
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     register_posted_variables(array('email_public' => true,
         'am_public' => true,
@@ -104,7 +107,7 @@ if (isset($_POST['submit'])) {
                 if (!isset($info['password'])) {
                     $info['password'] = choose_password_strength();
                 }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
+                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $_POST['emailNewBodyEditor'], $_POST['emailNewBodyInput']);
                 if ($new === false) {
                     $unparsed_lines .= q($line . "\n" . $error . "\n");
                 } else {
@@ -144,6 +147,31 @@ if (isset($_POST['submit'])) {
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
                 ),false);
+
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#send_mail').change(function() {
+                if ($(this).is(':checked')) {
+                  $('.customEmailBodyDiv').removeClass('hidden');
+                } else {
+                  $('.customEmailBodyDiv, .emailbody, .customMailHelp').addClass('hidden');
+                  $('.emailNewBodyInput').val(0);
+                  $('#customEmailBody').prop('checked', false);
+                }
+            });
+            
+            $('#customEmailBody').change(function() {
+                if ($(this).is(':checked')) {
+                  $('.emailbody, .customMailHelp').removeClass('hidden');
+                  $('.emailNewBodyInput').val(1);
+                } else {
+                  $('.emailbody, .customMailHelp').addClass('hidden');
+                  $('.emailNewBodyInput').val(0);
+                }
+            });
+        });
+    </script>";
+
     $tool_content .= "<div class='alert alert-info'>$langMultiRegUserInfo</div>
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
@@ -207,6 +235,29 @@ if (isset($_POST['submit'])) {
         list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"'));
     }
     $head_content .= $js;
+
+    $emailNewBody = "
+        <div id='mail-body' class='editor-body'>
+            <br>
+            <div>$langSettings</div>
+            <div id='mail-body-inner'>
+                <ul id='forum-category'>
+                    <li><span><b>$langUserCodename: </b></span> <span>[username]</span></li>
+                    <li><span><b>$langPass: </b></span> <span>[password]</span></li>
+                    <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+            </div>
+            <div>
+            <br>
+                <p>$langProblem</p><br>" . get_config('admin_name') . "
+                <ul id='forum-category'>
+                    <li>$langManager: $siteName</li>
+                    <li>$langTel: </li>
+                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                </ul></p>
+            </div>
+        </div>";
+
     $tool_content .= $html;
     $tool_content .= "</div>
         </div>
@@ -242,6 +293,36 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </div>
+        
+        <div class='form-group customEmailBodyDiv hidden'>
+        
+        <label for='customEmailBody' class='col-sm-3 control-label'>$langCustomEmailBody</label>
+            <div class='col-sm-9'>
+                <div class='checkbox'>
+                    <label>
+                        <input name='customEmailBody' id='customEmailBody' type='checkbox'>$langYes
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class='form-group emailbody hidden'>
+        
+            <label for='email_body' class='col-sm-3 control-label'>$langEmailBody:</label>
+            <div class='col-sm-9'>
+                ".rich_text_editor('emailNewBodyEditor', 4, 20, $emailNewBody)."
+            </div>
+            <input type='hidden' class='emailNewBodyInput' name='emailNewBodyInput' value=0>
+                        
+        </div>
+        
+        <div class='form-group customMailHelp hidden'>
+            <label for='email_body' class='col-sm-3 control-label'></label>
+            <div class='col-sm-9'>
+                <div class='alert alert-info'>$langCustomMailHelp</div>
+            </div>
+        </div>
+        
         <div class='form-group'>
             <div class='col-sm-9 col-sm-offset-3'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
@@ -256,7 +337,12 @@ if (isset($_POST['submit'])) {
 
 draw($tool_content, 3, null, $head_content);
 
-function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
+function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public,$emailNewBodyEditor, $emailNewBodyInput) {
+
+//    var_dump($emailNewBodyEditor);
+//    var_dump($emailNewBodyInput);
+//    die('create_user function');
+
     global $langAsProf, $langYourReg, $siteName,
         $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
         $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
@@ -316,9 +402,23 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 </div>
             </div>";
 
-    $emailMain = "
+
+//    $emailMain = $emailNewBodyEditor;
+
+    if ($emailNewBodyInput == 1) {
+        $emailNewBodyEditor = str_replace("[username]", $uname, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[password]", $password, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[first]", $givenname, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[last]", $surname, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[phone]", $phone, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[email]", mb_strtolower(trim($email)), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[id]", $am, $emailNewBodyEditor);
+        $emailMain = $emailNewBodyEditor;
+
+    } else {
+        $emailMain = "
     <!-- Body Section -->
-        <div id='mail-body'>
+        <div id='mail-body' class='default-body'>
             <br>
             <div>$langSettings</div>
             <div id='mail-body-inner'>
@@ -338,6 +438,9 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 </ul></p>
             </div>
         </div>";
+    }
+
+
 
     $emailbody = $emailHeader.$emailMain;
 
