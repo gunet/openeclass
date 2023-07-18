@@ -13,13 +13,9 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
-
-            <div class="col-12 col_maincontent_active_Homepage">
-
-                <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -203,7 +199,7 @@
                                 <label for='desription' class='col-sm-12 control-label-notes'>{{ trans('langProfileAboutMe') }}</label>
                                 <div class='col-sm-12'>{!! $info_text_area !!}</div>
                             </div>
-                            {!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}
+                            <div class='row'>{!! render_profile_fields_form(array('origin' => 'edit_profile')) !!}</div>
                             @if (count($allProviders) > 0)
 
                                 <div class='form-group mt-4'>
@@ -237,10 +233,10 @@
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div></div>
-                </div>
-            </div>
+               
         </div>
     
+</div>
 </div>
 
 @endsection

@@ -354,7 +354,7 @@ function view($view_file, $view_data = array()) {
                     font-size: 14px;
                     height:40px;
                     min-width: 40px;
-                    font-weight: 600; font-style: normal;
+                    font-weight: 700; font-style: normal;
                     border-radius: 4px !important;
                     display: flex;
                     align-items: center;

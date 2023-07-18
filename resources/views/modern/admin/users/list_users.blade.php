@@ -2,13 +2,9 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
-
-            <div class="col-12 col_maincontent_active_Homepage">
-                    
-                <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -78,7 +74,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class='col-12 mt-3'>
+                    <div class='col-12 mt-4'>
                         <!--Edit all function-->
                         <form action='multiedituser.php' method='post' class='d-flex'> 
                         <!--redirect all request vars towards delete all action-->
@@ -93,9 +89,8 @@
                         {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>   
-                </div>
-            </div>
+                
         </div>
-   
+</div>
 </div>         
 @endsection

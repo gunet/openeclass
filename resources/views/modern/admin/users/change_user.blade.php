@@ -2,13 +2,10 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
 
-            <div class="col-12 col_maincontent_active_Homepage">
-                    
-                <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -61,27 +58,27 @@
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded'>
                         
-                        <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                            <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                                
+                                <div class='form-group'>
+                                <label for = 'username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
+                                    <div class='col-sm-12'>
+                                        <input id='username' class='form-control' type='text' name='username' placeholder='{{ trans('langUsername') }}...'>
+                                    </div>
+                                </div>
                             
-                            <div class='form-group'>
-                            <label for = 'username' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
-                                <div class='col-sm-12'>
-                                    <input id='username' class='form-control' type='text' name='username' placeholder='{{ trans('langUsername') }}...'>
+                                <div class='form-group mt-5'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        {!! showSecondFactorChallenge() !!}
+                                        <input class='btn submitAdminBtn' type='submit' value='{{ trans('langSubmit') }}'>
+                                    </div>
                                 </div>
-                            </div>
-                         
-                            <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-center align-items-center'>
-                                    {!! showSecondFactorChallenge() !!}
-                                    <input class='btn submitAdminBtn' type='submit' value='{{ trans('langSubmit') }}'>
-                                </div>
-                            </div>
-                            {!! generate_csrf_token_form_field() !!}            
-                        </form>
-                    </div></div>
-                </div>
-            </div>
+                                {!! generate_csrf_token_form_field() !!}            
+                            </form>
+                        </div>
+                    </div>
+                
         </div>
-    
+</div>
 </div>
 @endsection

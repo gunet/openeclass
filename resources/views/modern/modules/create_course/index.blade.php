@@ -79,13 +79,9 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
-
-          <div class="col-12 col_maincontent_active_Homepage">
-
-              <div class="row">
 
                   @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -125,11 +121,7 @@
                     @endif
 
                   <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                      <div class='col-12 h-100 left-form'>
-                          {{--<p class='TextSemiBold normalColorBlueText fst-italic text-wrap p-5 text-center'>
-                              {!! trans('langCreateCourseLeftForm') !!}
-                          </p>--}}
-                      </div>
+                      <div class='col-12 h-100 left-form'></div>
                   </div>
                   <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit rounded'>
@@ -309,9 +301,9 @@
                   </form>
                 </div>
               </div>
-              </div>
-          </div>
+              
         </div>
     
+</div>
 </div>
 @endsection

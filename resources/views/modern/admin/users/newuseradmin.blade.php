@@ -2,13 +2,9 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
-
-            <div class="col-12 col_maincontent_active_Homepage">
-                    
-                <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -240,7 +236,7 @@
                                 <input type='hidden' name='pstatus' value='{{ $pstatus }}'>
                             @endif
                             <div class='mt-3'></div>
-                            {!! render_profile_fields_form($cpf_context, true) !!}
+                            <div class='row'>{!! render_profile_fields_form($cpf_context, true) !!}</div>
                             {!! showSecondFactorChallenge() !!}
                            
                             <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
@@ -250,9 +246,8 @@
                         {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div></div>    
-                </div>
-            </div>
+                
         </div>
-    
+</div>
 </div>    
 @endsection

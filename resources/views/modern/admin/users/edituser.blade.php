@@ -2,13 +2,9 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
-
-            <div class="col-12 col_maincontent_active_Homepage">
-
-                <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -182,7 +178,7 @@
 
                                         <!--show custom profile fields input-->
                                         @if ($info->status != USER_GUEST)
-                                            {!! render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u)) !!}
+                                            <div class='row'>{!! render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u)) !!}</div>
                                         @endif
                                         <input type='hidden' name='u' value='{{ $u }}'>
                                         <input type='hidden' name='u_submitted' value='1'>
@@ -252,12 +248,11 @@
                                 </div>
                             </div>
                         @else
-                        <div class='col-12 mt-3'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
+                        <div class='col-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
                         @endif
 
-                </div>
-            </div>
+                
         </div>
-    
+</div>    
 </div>
 @endsection

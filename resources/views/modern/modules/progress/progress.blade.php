@@ -50,7 +50,7 @@
             {
                 font-size: 20px;
                 height:60%;
-                font-weight: 600;
+                font-weight: 700;
             }
 
             .certificate_panel_date
@@ -147,7 +147,7 @@
                 background: #FFFFFF;
                 color: #AAAAAA;
                 line-height: 38px;
-                font-weight: 600;
+                font-weight: 700;
                 text-align: center;
             }
 
@@ -160,7 +160,7 @@
                 height: 72px; /* original was height: 40px;*/
                 color: #555;
                 line-height: 48px;
-                font-weight: 600;
+                font-weight: 700;
                 text-align: center;
             }
 

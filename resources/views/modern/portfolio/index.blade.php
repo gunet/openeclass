@@ -10,8 +10,8 @@
 @endif
 --}}
 
-<div class="col-12 basic-section basic-section-mobile p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
 
     <div class="row rowMargin">
         <div class="col-12 px-0">
@@ -232,6 +232,7 @@
     </div>
     
 
+</div>
 </div>
 
 <script>

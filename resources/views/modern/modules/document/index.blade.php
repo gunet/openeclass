@@ -4,8 +4,8 @@
 
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
 
             @if($course_code)
@@ -19,7 +19,7 @@
             @if($course_code)
             <div class="col-xl-10 col-lg-9 col-12 col_maincontent_active p-lg-5">
             @else
-            <div class="col-12 col_maincontent_active_Homepage">
+            <div class="col-12">
             @endif
 
                 <div class="row">
@@ -279,6 +279,7 @@
             </div>
         </div>
     
+</div>
 </div>
 
 

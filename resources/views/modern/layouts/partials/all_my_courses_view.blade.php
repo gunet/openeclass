@@ -1,7 +1,4 @@
 
-    <div class="col-12 col_maincontent_active_Homepage">
-
-        <div class="row">
 
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -226,8 +223,7 @@
                 </div> 
             @endif
 
-        </div>
-    </div>
+        
 
 
 

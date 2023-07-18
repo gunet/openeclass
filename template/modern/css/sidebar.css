@@ -1,28 +1,4 @@
 
-/* .tool-sidebar-text{color:#ffffff; font-size: 12px;} */
-
-/* ------------------------ LEFT MENU HOVER ITEMS --------------------- */
-
-/* .leftMenuToolCourse{ background: transparent; }
-
-.toolSidebarTxt{ font-size: 13px; color: #ffffff; font-family: 'Manrope', sans-serif; font-weight: 500; font-style: normal;}
-
-.posTool { margin-top:3px; }
-
-.leftMenuToolCourse.active{ background-color:  #d9eaff; }
-
-.leftMenuToolCourse.active span{ color: #003F87; }
-
-.leftMenuToolCourse:hover{ background-color: #005ad7; }
-
-.leftMenuToolCourse.active:hover{ background-color:  #ccc; border: 0; }
-
-#background-cheat-leftnav{background:#003e85;}
-#leftnav{background:transparent;}
-#bgr-cheat-footer{background: #001146;} a{color:#005ad9;}
-#leftnav .panel a.list-group-item:hover{background: #005ad7;}
-#leftnav .panel a.list-group-item.active:hover{background: #ccc;} */
-
 .tool-sidebar { 
   color: #f5f5f5;
 }
@@ -81,13 +57,8 @@
 
 /* --------------------------------------- Basic classes ------------------------------- */
 
-/* .nav-link{ font-size:14px;  border-bottom: solid 1px #ffffff; }
-
-.nav-item:active{  border:0; } */
-
 .col_maincontent_active{ 
   transition: 0.4s;  
-  min-height: calc(100vh - 80px - 70px - 96px); 
   background-color: white; 
   border-radius: 4px; 
 }
@@ -99,37 +70,6 @@
     border-bottom-left-radius: 0px;
   }
   
-}
-
-.col_maincontent_active_Homepage{ 
-  transition: 0.4s;  
-  min-height: calc(100vh - 80px - 70px - 96px);
-  background-color: transparent;  
-  border-radius:15px;
- }
- @media(max-width:991px){
-  .col_maincontent_active_Homepage, .basic-section-mobile{background-color: #ffffff;}
- }
-
-.col_maincontent_active_HomepageStart{ 
-  transition: 0.4s;  
-  background-color: white;  
-  border-radius:15px; 
-}
-@media(min-width:992px){
-  .col_maincontent_active_HomepageStart{
-    min-height: calc(100vh - 80px + 147px - 390px - 300px - 70px);
-    border-radius:0px;
-  }
-}
-
-@media(max-width:991px){
-  .col_maincontent_active, .col_maincontent_active_Homepage, .details-mobile, .basic-section-mobile{ 
-      padding: 100px 25px 44px 25px !important;
-  }
-  .HomepageStartMobile{
-    padding-top: 56px;
-  }
 }
 
 .col_sidebar_active{ 
@@ -282,7 +222,7 @@ input:checked + .slider-round:before { -webkit-transform: translateX(105px); -ms
 .on { display: none; }
 
 .on, .off {  color: white; position: absolute; transform: translate(-50%,-50%);
-  top: 50%; left: 50%; font-size: 10px; font-weight: 600; font-style: normal; }
+  top: 50%; left: 50%; font-size: 10px; font-weight: 700; font-style: normal; }
 
 input:checked+ .slider-round .on {display: block;}
 

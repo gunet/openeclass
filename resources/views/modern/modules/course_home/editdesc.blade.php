@@ -3,8 +3,8 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
 
 
@@ -122,6 +122,7 @@
         </div>
 
 
+</div>
 </div>
 
 

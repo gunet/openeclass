@@ -2,14 +2,9 @@
 
 @section('content')
 
-<div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-
+<div class="col-12 main-section">
+<div class='{{ $container }}'>
         <div class="row rowMargin">
-
-            <div class="col-12 col_maincontent_active_Homepage">
-
-                <div class="row">
-
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -77,10 +72,10 @@
                         </div>
                     </div>
                     
-                </div>
-            </div>
+                
         </div>
    
+</div>
 </div>
 
 

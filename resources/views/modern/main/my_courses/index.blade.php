@@ -2,9 +2,11 @@
 
 @section('content')
 
-        <div class="col-12 basic-section p-xl-5 px-lg-3 py-lg-5">
-            <div class="row rowMargin">
-                 @include('layouts.partials.all_my_courses_view',['myCourses' => $myCourses])
+        <div class="col-12 main-section">
+            <div class='{{ $container }}'>
+                <div class="row rowMargin">
+                    @include('layouts.partials.all_my_courses_view',['myCourses' => $myCourses])
+                </div>
             </div>
         </div>
 
