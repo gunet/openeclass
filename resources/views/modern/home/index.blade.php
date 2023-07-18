@@ -83,8 +83,8 @@
                 <div class="row rowMargin row-cols-1 g-5">
                     @if(get_config('homepage_title') or get_config('homepage_intro'))
                         <div class='col'>
-                            <div class='card border-0'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                            <div class='card border-0 bg-transparent'>
+                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                     <div class='d-flex justify-content-start align-items-center'>
                                         <h3 class='pe-2'>
                                             @if(get_config('homepage_title'))
@@ -114,8 +114,8 @@
         <div class='{{ $container }}'>
             <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                 <div class='col-lg-6 col-12'>
-                    <div class='card border-0'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                    <div class='card bg-transparent border-0'>
+                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                             <div class='d-flex justify-content-start align-items-center'>
                                 <h3 class='pe-2'>{{ trans('langViewStatics') }}</h3>
                             </div>
@@ -169,8 +169,8 @@
                     </div>
                 </div>
                 <div class='col-lg-6 col-12'>
-                    <div class='card border-0'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                    <div class='card bg-transparent border-0'>
+                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                             <div class='d-flex justify-content-start align-items-center'>
                                 <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
                                 <a href='{{ $urlServer }}rss.php'><i class="fa-solid fa-rss"></i></a>
@@ -186,7 +186,7 @@
                                     @foreach ($announcements as $announcement)
                                         @if($counterAn < 3)
                                             <li class='li-unstyled border-bottom-list-group px-0 py-3'>
-                                                <a class='list-group-item announce-link-homepage border-0 px-0 py-0 TextBold msmall-text' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                <a class='list-group-item announce-link-homepage bg-transparent border-0 px-0 py-0 TextBold msmall-text' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                     {{$announcement->title}}
                                                 </a>
                                                 <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
@@ -214,8 +214,8 @@
                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                     @if(!get_config('dont_display_testimonials'))
                         <div class='col-lg-6 col-12'>
-                            <div class='card border-0'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                            <div class='card bg-transparent border-0'>
+                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                     <h3>{{ trans('langSaidForUs') }}</h3>
                                 </div>
                                 <div class='card-body px-0'>
@@ -224,7 +224,7 @@
                                             <?php for($i=0; $i<3; $i++){ ?>
                                                 <div class="carousel-item @if($i==0) active @endif">
                                                     <div class='col-12 d-md-flex'>
-                                                        <div class='card border-0 h-100 ps-md-5 pe-md-2 px-5'>
+                                                        <div class='card bg-transparent border-0 h-100 ps-md-5 pe-md-2 px-5'>
                                                             <div class='card-body Primary-200-bg'>
                                                                 <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.</p>
                                                             </div>
@@ -232,7 +232,7 @@
                                                                 <div class="form-label">John Smith</div>
                                                             </div>
                                                         </div>
-                                                        <div class='card border-0 h-100 ps-md-3 pe-md-5 mt-md-0 mt-3 px-5'>
+                                                        <div class='card bg-transparent border-0 h-100 ps-md-3 pe-md-5 mt-md-0 mt-3 px-5'>
                                                             <div class='card-body Primary-200-bg'>
                                                                 <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.</p>
                                                             </div>
@@ -257,7 +257,7 @@
                     @endif
                     @if($eclass_banner_value == 1 or get_config('opencourses_enable'))
                         <div class='col-lg-6 col-12'>
-                            <div class='col-12 bg-white'>
+                            <div class='col-12'>
                                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-3'>
                                     @if($eclass_banner_value == 1)
                                         <div class='col-xl-4 col-12 banner_openCourses'>
@@ -288,8 +288,8 @@
             <div class='{{ $container }}'>
                 <div class="row rowMargin row-cols-1">
                     <div class='col'>
-                        <div class='card border-0'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
+                        <div class='card bg-transparent border-0'>
+                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                 <div class='d-flex justify-content-start align-items-center'>
                                     <h3 class='pe-2'>
                                         {{trans('langPopularCourse')}}
@@ -337,8 +337,8 @@
                 <div class="row rowMargin row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-5">
                     @foreach($texts as $text)
                         <div class='col'>
-                            <div class='card border-0'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                            <div class='card bg-transparent border-0'>
+                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                     <div class='d-flex justify-content-start align-items-center'>
                                         <h3 class='pe-2'>
                                             {!! $text->title !!}

@@ -3385,8 +3385,8 @@ $langProfilePersInfo = 'Προσωπικά Στοιχεία';
 $langProfileAboutMe = 'Σχετικά με μένα';
 $langStatus = "Ιδιότητα";
 $langProfileMemberSince = 'Μέλος από';
-$langSumCoursesEnrolled = "$langCourses που παρακολουθώ";
-$langSumCoursesSupport = "$langCourses που υποστηρίζω";
+$langSumCoursesEnrolled = "$langCourses που </br>παρακολουθώ";
+$langSumCoursesSupport = "$langCourses που </br>υποστηρίζω";
 $langProfileLastVisit = "Τελευταία επίσκεψη";
 $langProfileQuickPassword = "Αλλαγή Συνθηματικού";
 $langShowSettingsInfo = "αφορά την εμφάνιση στους υπόλοιπους χρήστες (εκτός των $langsOfTeachers)";
@@ -4031,7 +4031,7 @@ $langLastVisit = "Τελευταία επίσκεψη";
 $langMyCourses = "Τα μαθήματα μου";
 $langAllAnnouncements = "Δείτε όλες τις ανακοινώσεις";
 $langRecentMessages = "Πρόσφατα μηνύματα";
-$langAllMessages = "ΟΛΑ ΤΑ ΜΗΝΥΜΑΤΑ";
+$langAllMessages = "Δείτε όλα τα μηνύματα...";
 $langWelcomeTo = "Καλως Ήρθατε στην ";
 
 /* * *************************************************************

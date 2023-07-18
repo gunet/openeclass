@@ -88,78 +88,92 @@ function getUserLessonInfo($uid) {
                 $fav_status = 1;
                 $fav_message = $langFavorite;
             }
-            $lesson_content .= "<tr class='$visclass'>
-			  <td class='border-top-0 border-start-0 border-end-0 ps-0'>
-			  <div>
-                    <a class='TextSemiBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
-                        &nbsp<span class='TextSemiBold text-md-end text-start'> <span class='blackBlueText'>(" . q($data->public_code) . ")</span></span>
-                    </a>
+            $lesson_content .= "
+                <tr class='$visclass row-course'>
+			        <td class='border-top-0 border-start-0 border-end-0'>
+                        <div>
+                            <a class='TextRegular text-decoration-underline' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
+                                &nbsp(" . q($data->public_code) . ")
+                            </a>
 
-                    <button class='ClickCoursePortfolio border-0 rounded-pill bg-transparent' id='{$data->code}' type'button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
-                        <img class='ClickCourseModalImg' src='{$urlServer}template/modern/img/info_a.svg'>
-                    </button>
-
-                    <div id='PortfolioModal{$data->code}' class='modal'>
-
-                        <div class='modal-content modal-content-opencourses overflow-auto px-lg-5 py-lg-5'>
-                            <div class='col-12 d-flex justify-content-between align-items-start'>
-                                <div>
-                                    <span class='modal-title TextBold' style='font-size:22px;'>{$data->title}</span>
-                                    <span>({$data->public_code})</span>
-                                </div>
-                                <div>
-                                    <button type='button' class='close border-0 bg-white mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
-                                </div>
-                            </div>
                             
-                            <hr class='hr-OpenCourses'>
-
-                            <div class='row mb-3'>
-                                <div class='col-9 d-flex justify-content-start align-items-start ps-4'>
-                                    <p class='small-text TextRegular blackBlueText d-inline-flex align-items-center'>
-                                        <span class='fa fa-user lightBlueText pe-2 pt-0'></span>
-                                        <span class='blackBlueText'>{$data->professor}</span>
-                                    </p>
-                                </div>
-                                <div class='col-3 d-flex justify-content-end align-items-center pe-4 blackBlueText'>
-                                    " . course_access_icon($data->visible) . " ";
-                                     if($data->popular_course == 1){
-                                        $lesson_content .= "<span class='fa fa-star Primary-600-cl ps-3' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-bs-original-title='$langPopular&nbsp$langCourse'' aria-label='$langPopular&nbsp$langCourse'></span>";
-                                     }
-                                $lesson_content .= "</div>
-                            </div>
-                        
-                            
-                            <div class='col-12 d-flex justify-content-center align-items-start'>";
-                                if($data->course_image == NULL){
-                                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
-                                }else{
-                                    $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
-                                }
-                            $lesson_content .= "</div>
-
-                            <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
-                                if(empty($data->description)){
-                                    $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
-                                }else{
-                                    $lesson_content .= "{$data->description}";
-                                }
-                                $lesson_content .= "</div>
                         </div>
+			            <div>
+                            <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
+                        </div>
+                    </td>";
 
-                    </div>
-              </div>
-			  <div><small class='small-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small></div></td>";
-            $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top pe-0'><div class='col-12'><div class='d-inline-flex'>";
-            $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-            if ($data->status == USER_STUDENT) {
-                $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
-                $student_courses_count++;
-            } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
-                $teacher_courses_count++;
-            }
-            $lesson_content .= "</div></div></td></tr>";
+
+$lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top'>
+                        <div class='col-12 portfolio-tools'>
+                            <div class='d-inline-flex'>";
+
+        $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='#' id='{$data->code}' type'button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
+                                <i class='fa-solid fa-display'></i>
+                            </a>
+
+                            <div id='PortfolioModal{$data->code}' class='modal'>
+
+                                <div class='modal-content modal-content-opencourses overflow-auto px-lg-5 py-lg-5'>
+                                    <div class='col-12 d-flex justify-content-between align-items-start'>
+                                        <div>
+                                            <span class='modal-title TextBold' style='font-size:22px;'>{$data->title}</span>
+                                            <span>({$data->public_code})</span>
+                                        </div>
+                                        <div>
+                                            <button type='button' class='close border-0 bg-white mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr class='hr-OpenCourses'>
+
+                                    <div class='row mb-3'>
+                                        <div class='col-9 d-flex justify-content-start align-items-start ps-4'>
+                                            <p class='small-text TextRegular blackBlueText d-inline-flex align-items-center'>
+                                                <span class='fa fa-user lightBlueText pe-2 pt-0'></span>
+                                                <span class='blackBlueText'>{$data->professor}</span>
+                                            </p>
+                                        </div>
+                                        <div class='col-3 d-flex justify-content-end align-items-center pe-4 blackBlueText'>
+                                            " . course_access_icon($data->visible) . " ";
+                                            if($data->popular_course == 1){
+                                                $lesson_content .= "<span class='fa fa-star Primary-600-cl ps-3' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-bs-original-title='$langPopular&nbsp$langCourse'' aria-label='$langPopular&nbsp$langCourse'></span>";
+                                            }
+                                        $lesson_content .= "</div>
+                                    </div>
+                                
+                                    
+                                    <div class='col-12 d-flex justify-content-center align-items-start'>";
+                                        if($data->course_image == NULL){
+                                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
+                                        }else{
+                                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
+                                        }
+                                    $lesson_content .= "</div>
+
+                                    <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
+                                        if(empty($data->description)){
+                                            $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                                        }else{
+                                            $lesson_content .= "{$data->description}";
+                                        }
+                                        $lesson_content .= "</div>
+                                </div>
+
+                            </div>";
+
+                                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+                                if ($data->status == USER_STUDENT) {
+                                    $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                                    $student_courses_count++;
+                                } elseif ($data->status == USER_TEACHER) {
+                                    $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                                    $teacher_courses_count++;
+                                }
+        $lesson_content .= "</div>
+                        </div>
+                    </td>
+                </tr>";
         }
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses
@@ -269,10 +283,10 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_content .= "
                         <li class='list-group-item ps-0 pe-0'>
                             <div class='item-wholeline text-start'>
-                                <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                                <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                     
-                                <p class='TextSemiBold'>$course_title</p>
-                                <div class='TextRegular msmall-text Neutral-800-cl'>$ann_date</div>
+                                <p class='TextBold mb-0'>$course_title</p>
+                                <div class='TextRegular Neutral-800-cl mb-3'>$ann_date</div>
                             </div>
                         </li>";
                 } else {
@@ -281,10 +295,10 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_content .= "
                     <li class='list-group-item ps-0 pe-0'>
                         <div class='item-wholeline text-start'>
-                            <a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             
-                            <p class='TextSemiBold'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
-                            <div class='TextRegular msmall-text Neutral-800-cl'>$ann_date</div>
+                            <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
+                            <div class='TextRegular Neutral-800-cl mb-3'>$ann_date</div>
                         </div>
                     </li>";
                 }
@@ -325,12 +339,12 @@ function getUserMessages() {
             $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item ps-0 pe-0'>
                                     <div class='item-wholeline text-start'>
-                                        <div class='text-title TextSemiBold'><span>$langFrom:</span>".display_user($message->author_id, false, false)."</div>
+                                        <div class='text-title TextSemiBold'><span>$langFrom:</span><span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span></div>
                                         
-                                        <a class='TextSemiBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                        <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         
-                                        <p class='TextSemiBold'>$course_title</p>
-                                        <div class='TextRegular msmall-text Neutral-800-cl'>$message_date</div>
+                                        <p class='TextBold mb-0'>$course_title</p>
+                                        <div class='TextRegular Neutral-800-cl mb-3'>$message_date</div>
                                     </div>
                                 </li>";
         }

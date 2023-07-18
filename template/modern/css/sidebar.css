@@ -62,6 +62,11 @@
   background-color: white; 
   border-radius: 4px; 
 }
+@media(max-width:991px){
+  .col_maincontent_active{ 
+    padding: 16px;
+  }
+}
 @media(min-width:992px){
   .col_maincontent_active{ 
     border: solid 1px #E8EDF8 ;

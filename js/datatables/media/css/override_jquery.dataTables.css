@@ -112,9 +112,9 @@
 
 
   .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-    color: #001146 !important;
+    color: #0073E6 !important;
     border: 0px;
-    background:#e8e8e8; 
+    background:#E8EDF8; 
     border-radius: 30%;
     height: 30px;
     width: 32px;
@@ -136,9 +136,9 @@
     align-items: center;
   }
   .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    color: #001146 !important;
+    color: #0073E6 !important;
     border: 0px;
-    background: #e8e8e8;
+    background: #E8EDF8;
     border-radius: 30%;
     height: 30px;
     width: 32px;
@@ -148,7 +148,7 @@
   }
   .dataTables_wrapper .dataTables_paginate .paginate_button:active {
     outline: none;
-    background: #ffffff;
+    background: #E8EDF8;
     box-shadow: none;
     border-radius: 30%;
     height: 30px;

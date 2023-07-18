@@ -264,6 +264,7 @@ function view($view_file, $view_data = array()) {
         $logo_img = $themeimg.'/eclass-new-logo.svg';
         $logo_img_small = $themeimg.'/logo-eclass-small.svg';
     }
+    
 
     $styles_str = '';
     $leftsideImg = '';
@@ -313,11 +314,15 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
+                body{
+                    background: #ffffff;
+                }
+
                 .mobileAPI{
                     margin-top:25px;
                 }
 
-                .a_tools_site_footer, .copyright, .social-icon-tool{
+                .a_tools_site_footer, .copyright, .social-icon-tool, .toolHomePage, .userLoginMobile, .loginText{
                     color:#ffffff;
                 }
 
@@ -533,7 +538,7 @@ function view($view_file, $view_data = array()) {
         }
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
-                a, .toolAdminText, .announce-link-homepage{
+                a, .toolAdminText, .announce-link-homepage, .user-menu-btn:hover, .menu-item:hover{
                     color: $theme_options_styles[linkColor];
                 }
 
@@ -738,20 +743,20 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        if (isset($theme_options_styles['imageUpload'])){
-            $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
-        }
+        // if (isset($theme_options_styles['imageUpload'])){
+        //     $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
+        // }
 
-        if (isset($theme_options_styles['imageUploadSmall'])){
-            $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
-            $styles_str .= "
-                @media(max-width:991px){
-                    .eclass-nav-icon{
-                        background-color: #ffffff; 
-                        border-radius:0%;
-                    }
-                }";
-        }
+        // if (isset($theme_options_styles['imageUploadSmall'])){
+        //     $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
+        //     $styles_str .= "
+        //         @media(max-width:991px){
+        //             .eclass-nav-icon{
+        //                 background-color: #ffffff; 
+        //                 border-radius:0%;
+        //             }
+        //         }";
+        // }
 
     }
     //else{

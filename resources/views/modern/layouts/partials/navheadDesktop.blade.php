@@ -60,8 +60,8 @@
             
                 @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
                     <a class='d-flex align-items-center text-uppercase TextSemiBold userLoginMobile ms-0' href="{{$urlAppend}}main/login_form.php">
-                        <span class="fa-solid fa-user basic-value-cl pe-1"></span>
-                        <span class='loginText basic-value-cl small-text'>{{ trans('langUserLogin') }}</span>
+                        <span class="fa-solid fa-user loginText pe-1"></span>
+                        <span class='loginText small-text'>{{ trans('langUserLogin') }}</span>
                     </a>
                 @endif
 

@@ -112,7 +112,7 @@ jQuery(document).ready(function() {
       });
       $('#portfolio_lessons_filter label').prepend('<span class=\"sr-only\">$langSearch</span>')
     },
-    'dom': '<\"all_courses ps-md-0\">frtip',
+    'dom': '<\"all_courses float-end px-0\">frtip',
     'oLanguage': {
            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
            'sZeroRecords':  '".$langNoResult."',
@@ -130,8 +130,14 @@ jQuery(document).ready(function() {
            }
        }
   });
- $('div.all_courses').html('<div class=\"d-flex justify-content-md-start justify-content-center flex-wrap\"><a class=\"btn submitAdminBtn mb-3 ms-md-0 mx-2\" href=\"{$urlAppend}modules/auth/courses.php\">$langRegCourses</a><a id=\"btn_create_course\" class=\"btn submitAdminBtn btn_create_course\" href=\"{$urlAppend}modules/create_course/create_course.php\">$langCourseCreate</a></div>');
-  jQuery('.panel_title').click(function()
+
+ //$('div.all_courses').html('<div class=\"d-flex justify-content-md-start justify-content-center flex-wrap\"><a class=\"btn submitAdminBtn mb-3 ms-md-0 mx-2\" href=\"{$urlAppend}modules/auth/courses.php\">$langRegCourses</a><a id=\"btn_create_course\" class=\"btn submitAdminBtn btn_create_course\" href=\"{$urlAppend}modules/create_course/create_course.php\">$langCourseCreate</a></div>');
+  
+
+ $('div.all_courses').html('<div class=\"d-flex justify-content-end flex-wrap\"><a class=\"btn showCoursesBars active\"><i class=\"fa-solid fa-table-list\"></i></a><a class=\"btn showCoursesPics\"><i class=\"fa-solid fa-table-cells-large\"></i></a></div>');
+ 
+ 
+ jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();
     mypanel.slideToggle(100);
@@ -171,6 +177,8 @@ jQuery(document).ready(function() {
 'function show_month(day,month,year){
     $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});
 }
+
+
 
 </script>';
 

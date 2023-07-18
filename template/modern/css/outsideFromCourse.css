@@ -11,8 +11,26 @@ table.dataTable tbody tr{
     background-color: #ffffff;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current{ background: #ffffff;}
-#portfolio_lessons_paginate .paginate_button.current{ background: #e8e8e8;}
+#portfolio_lessons_paginate .paginate_button.current{ background: #E8EDF8;}
 
+#portfolio_lessons_wrapper .dataTables_filter{
+     float: left !important;
+}
 #portfolio_lessons_filter input[type="search"]{
-    border:solid 1px #e8e8e8 !important;
+    border:solid 1px #687DA3 !important;
+    height:40px !important;
+}
+@media(min-width:992px){
+    #portfolio_lessons_filter input[type="search"]{
+        width:350px;
+    }
+}
+
+
+#portofolio_lessons .row-course{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+#portofolio_lessons .row-course:hover{
+    background-color: #E8EDF8;
 }
