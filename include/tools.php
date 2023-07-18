@@ -662,10 +662,6 @@ function adminMenu() {
             array_push($sideMenuImg, "fa-caret-right");
         }
 
-        array_push($sideMenuText, $GLOBALS['langMentoringPlatform']);
-        array_push($sideMenuLink, "../../modules/admin/mentoring_platform_enable.php");
-        array_push($sideMenuImg, "fa-caret-right");
-
         // array_push($sideMenuText, $GLOBALS['langAdminAn']);
         // array_push($sideMenuLink, "../admin/adminannouncements.php");
         // array_push($sideMenuImg, "fa-caret-right");

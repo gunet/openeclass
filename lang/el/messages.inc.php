@@ -3609,6 +3609,7 @@ $langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
 $langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
 $langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 
+
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
 $langDateReject = "Ημ/νία απόρριψης";
@@ -6101,7 +6102,20 @@ $langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι �
                     για τους διαθέσιμους τύπους περιεχομένων.";
 $langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";
 $langReuseDeactivate = "Απενεργοποίηση Διαμοιρασμού";
-
+$langEmailBody = "Email Body";
+$langCustomEmailBody = "Προσαρμοσμένο Email Body";
+$langCustomMailHelp = "
+    <p>Placeholder μεταβλητών</p>
+    </br>
+    <ul>
+      <li>[first] : Όνομα</li>
+      <li>[last] : Επώνυμο</li>
+      <li>[id] : Αριθμός μητρώου</li>
+      <li>[email] : Διεύθυνση e-mail</li>
+      <li>[phone] : Τηλέφωνο</li>
+      <li>[username] : Όνομα χρήστη</li>
+      <li>[password] : Κωδικός χρήστη</li>
+    </ul>";
 
 // ticketing (aka request)
 $langRequests = "Αιτήματα";

@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
             //Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
-            Session::flash('message',"$langMultiRegFieldError <b>$field)</b>"); 
+            Session::flash('message',"$langMultiRegFieldError <b>$field)</b>");
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/multireguser.php');
             exit;
@@ -88,7 +88,7 @@ if (isset($_POST['submit'])) {
 
                 if ($info['email'] and !valid_email($info['email'])) {
                     //Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
-                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email'])); 
+                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email']));
                     Session::flash('alert-class', 'alert-danger');
                     $info['email'] = '';
                 }
@@ -108,7 +108,7 @@ if (isset($_POST['submit'])) {
                 if (!isset($info['password'])) {
                     $info['password'] = choose_password_strength();
                 }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, @$info['email'], $departments, @$info['id'], @$info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public);
+                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $_POST['emailNewBodyInput']);
                 if ($new === false) {
                     $data['unparsed_lines'] .= q($line . "\n" . $error . "\n");
                 } else {
@@ -167,13 +167,35 @@ if (isset($_POST['submit'])) {
     }
     $head_content .= $js;
     $data['html'] = $html;
+    $data['emailNewBody'] = $emailNewBody = "<div id='mail-body' class='editor-body'>
+            <br>
+            <div>$langSettings</div>
+            <div id='mail-body-inner'>
+                <ul id='forum-category'>
+                    <li><span><b>$langUserCodename: </b></span> <span>[username]</span></li>
+                    <li><span><b>$langPass: </b></span> <span>[password]</span></li>
+                    <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+            </div>
+            <div>
+            <br>
+                <p>$langProblem</p><br>" . get_config('admin_name') . "
+                <ul id='forum-category'>
+                    <li>$langManager: $siteName</li>
+                    <li>$langTel: ".get_config('phone')."</li>
+                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                </ul></p>
+            </div>
+        </div>";
+
+    $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody");
 
     $view = 'admin.users.multireguser';
 }
 $data['menuTypeID'] = 3;
 view($view, $data);
 
-function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public) {
+function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $emailNewBodyInput) {
     global $langAsProf, $langYourReg, $siteName,
         $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
         $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
@@ -233,9 +255,19 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 </div>
             </div>";
 
-    $emailMain = "
+    if ($emailNewBodyInput == 1) {
+        $emailNewBodyEditor = str_replace("[username]", q($uname), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[password]", q($password), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[first]", q($givenname), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[last]", q($surname), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[phone]", q($phone), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[email]", mb_strtolower(trim($email)), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[id]", q($am), $emailNewBodyEditor);
+        $emailMain = $emailNewBodyEditor;
+    } else {
+        $emailMain = "
     <!-- Body Section -->
-        <div id='mail-body'>
+        <div id='mail-body' class='default-body'>
             <br>
             <div>$langSettings</div>
             <div id='mail-body-inner'>
@@ -255,6 +287,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 </ul></p>
             </div>
         </div>";
+    }
 
     $emailbody = $emailHeader.$emailMain;
 
