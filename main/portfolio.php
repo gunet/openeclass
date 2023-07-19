@@ -107,7 +107,7 @@ jQuery(document).ready(function() {
     'bSort' : false,
     'fnDrawCallback': function( oSettings ) {
       $('#portfolio_lessons_filter label input').attr({
-        class : 'form-control input-sm searchCoursePortfolio ms-0 mb-3',
+        class : 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
         placeholder : '$langSearch...'
       });
       $('#portfolio_lessons_filter label').prepend('<span class=\"sr-only\">$langSearch</span>')
@@ -130,6 +130,7 @@ jQuery(document).ready(function() {
            }
        }
   });
+
 
  //$('div.all_courses').html('<div class=\"d-flex justify-content-md-start justify-content-center flex-wrap\"><a class=\"btn submitAdminBtn mb-3 ms-md-0 mx-2\" href=\"{$urlAppend}modules/auth/courses.php\">$langRegCourses</a><a id=\"btn_create_course\" class=\"btn submitAdminBtn btn_create_course\" href=\"{$urlAppend}modules/create_course/create_course.php\">$langCourseCreate</a></div>');
   

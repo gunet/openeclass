@@ -1975,6 +1975,9 @@ label:has(input[type="checkbox"]:disabled){
 .panel-admin-calendar{
   border-radius:4px;
   border: solid 1px #E8EDF8;
+  max-width: 296px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .panel-admin-calendar .panel-heading{
   background: #2B3944;
@@ -2623,6 +2626,7 @@ tr.active th span,strong{
 }
 .list-group-default .list-group-item.element:hover{
   cursor:not-allowed;
+  background-color: #EFF6FF;
 }
 .categoryName:hover{
   cursor:  url(../images/pointer.png), auto;
@@ -3225,6 +3229,12 @@ tr.active th span,strong{
 }
 .row-course:hover .portfolio-tools{
   display: block;
+}
+.portfolio-tools a{
+  color:#687DA3;
+}
+.portfolio-tools a:hover{
+  color:#0073E6;
 }
 
 

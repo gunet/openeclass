@@ -80,7 +80,7 @@ function getUserLessonInfo($uid) {
                 $visclass = "not_visible";
             }
             if (isset($data->favorite)) {
-                $favorite_icon = 'fa-star';
+                $favorite_icon = 'fa-star Primary-500-cl';
                 $fav_status = 0;
                 $fav_message = '';
             } else {
@@ -104,7 +104,7 @@ function getUserLessonInfo($uid) {
                     </td>";
 
 
-$lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-top'>
+$lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                         <div class='col-12 portfolio-tools'>
                             <div class='d-inline-flex'>";
 

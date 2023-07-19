@@ -16,8 +16,6 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/components/underscore/underscore-min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sortable/Sortable.min.js?v=4.0-dev"></script>
 
-    <div class='panel-heading bg-white border-0 px-0'><h3>{{ trans('langAgenda') }}</h3></div>
-
     {!! $user_personal_calendar !!}
 
     <script >

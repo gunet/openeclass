@@ -177,7 +177,7 @@
                                                     </a>
                                                 </div>
 
-                                                <div class="small-text Neutral-900-cl TextRegular">{{ $cource->professor }}</div>
+                                                <div class="vsmall-text Neutral-900-cl TextRegular">{{ $cource->professor }}</div>
                                             </div>
                                         
                                         </div>
@@ -273,6 +273,7 @@
             </div>
             <div class='col-lg-4 col-12'>
 
+                <div class='col-12 mb-4 mt-1'><h3>{{ trans('langAgenda') }}</h3></div>
                 @include('portfolio.portfolio-calendar')
 
                 <div class='card bg-transparent border-0 mt-5'>
