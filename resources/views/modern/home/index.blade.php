@@ -10,12 +10,12 @@
             <input id='showWarningModal' type='hidden' value='1'>
             <div class="modal fade bg-light" id="WarningModal" aria-hidden="true" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content shadow-sm border-0">
-                        <div class="modal-header bgOrange">
+                    <div class="modal-content shadow-sm border-0 p-0">
+                        <div class="modal-header bgOrange d-flex justify-content-between align-items-center">
                             <h5 class="modal-title text-white">{{ trans('langError') }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body bgEclass">
+                        <div class="modal-body bg-white">
                             {!! $warning !!}
                         </div>
                     </div>
@@ -30,7 +30,7 @@
             <div class='{{ $container }}'>
                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
                     <div class='col-xxl-6 col-lg-5 col-12'>
-                        <h1>{{ trans('langEclass') }}</h1>
+                        <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
                         <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
                         @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                             <div class='card cardLogin border-0 px-xxl-5 pt-xxl-5 pb-xxl-3 p-lg-3'>
@@ -44,7 +44,7 @@
                                             <input id='username_id' class="login-input w-100" placeholder="&#xf007" type="text" id="uname" name="uname" autocomplete="on" />
                                             <label for='password_id' class='form-label mt-4'>{{ trans('langPassword') }}&nbsp(password)</label>
                                             <input id='password_id' class="login-input w-100" placeholder="&#xf084" type="password" id="pass" name="pass" autocomplete="on" />
-                                            <input class="btn w-100 login-form-submit Primary-500-bg text-white mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}" />
+                                            <input class="btn w-100 login-form-submit mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}" />
                                         </div>
                                     </form>
                                 </div>
@@ -71,7 +71,7 @@
 
                     </div>
                     <div class='col-xxl-6 col-lg-7 col-12 d-none d-lg-block'>
-                        <img class='jumbotron-image-default' src='{{ $urlAppend }}template/modern/img/jumbotron-eclass-4.0.png'>
+                        <img class='jumbotron-image-default' src='{{ $urlAppend }}template/modern/img/jumbotron-eclass4.png'>
                     </div>
                 </div>
             </div>

@@ -314,8 +314,18 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
+               
+
                 body{
                     background: #ffffff;
+                }
+
+                .eclass-title, .eclassInfo{
+                    color: #2B3944;
+                }
+
+                .navbar-eclass .fa-bars, .navbar-eclass .fa-wrench{
+                    color:#ffffff;
                 }
 
                 .mobileAPI{
@@ -380,6 +390,26 @@ function view($view_file, $view_data = array()) {
                     z-index: 0 !important;
                 }
 
+                .submitAdminBtnDefault{
+                    background-color: $theme_options_styles[leftNavBgColor];
+                    color: #ffffff;
+                }
+
+                .login-form-submit {
+                    border: solid thin;
+                    border-color: $theme_options_styles[leftNavBgColor];
+                    color: #ffffff;
+                    font-size: 14px;
+                    height:40px;
+                    font-weight: 700;
+                    font-style: normal;
+                    background-color: $theme_options_styles[leftNavBgColor];
+                  }
+
+                .login-form-submit:hover {
+                    color: #ffffff;
+                }
+
                 .cancelAdminBtn, .deleteAdminBtn, .successAdminBtn{ height:40px; }
 
                 .searchGroupBtn:hover{
@@ -403,6 +433,8 @@ function view($view_file, $view_data = array()) {
                 .admin-list-group .list-group-item:hover{
                     background:$theme_options_styles[leftNavBgColor];
                 }
+
+                
 
                 .tool-sidebar{
                     color:#ffffff;
@@ -533,11 +565,15 @@ function view($view_file, $view_data = array()) {
                     --fg: $theme_options_styles[leftNavBgColor];
                     --bg: #e8e8e8;
                 }
+
+                
                 
             ";
         }
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
+
+                
                 a, .toolAdminText, .announce-link-homepage, .user-menu-btn:hover, .menu-item:hover{
                     color: $theme_options_styles[linkColor];
                 }
@@ -547,7 +583,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[linkColor];
                 }
 
-                .login-form-submit, .opencourses_btn {
+                .opencourses_btn {
                     border-color: $theme_options_styles[linkColor];
                     color: $theme_options_styles[linkColor];
                 }
@@ -603,7 +639,7 @@ function view($view_file, $view_data = array()) {
                     color:#ffffff;
                 }
 
-                .login-form-submit:hover, .opencourses_btn:hover {
+                .opencourses_btn:hover {
                     background-color: $theme_options_styles[linkColor];
                     color: #ffffff;
                 }

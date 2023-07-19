@@ -6,13 +6,11 @@
 <div class='{{ $container }}'>
         <div class="row rowMargin">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    <div class='col-12'>
+                        <h1>{{ trans('langManuals') }}</h1>
+                    </div>
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    {!! $action_bar !!}
-
-                    <div class='col-12 mb-4'>
+                    <div class='col-12 mt-4 mb-4'>
                         <div class='list-group'>
                             <li class='list-group-item bgTheme text-white TextSemiBold'>{{ $general_tutorials['title'] }}</li>
                             @foreach ($general_tutorials['links'] as $gt)

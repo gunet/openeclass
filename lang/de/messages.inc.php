@@ -1280,6 +1280,7 @@ $m['professor'] = $langTeacher;
 $m['legend'] = 'Legende';
 $m['legrestricted'] = 'Registrierung erforderlich';
 $m['nolessons'] = 'Es gibt keine verfügbaren Kurse!';
+$langNoCourses = "Es gibt keine verfügbaren Kurse!";
 $m['name'] = "Kurs";
 $m['code'] = "Kurs Passwort";
 $m['prof'] = "$langTeacher";

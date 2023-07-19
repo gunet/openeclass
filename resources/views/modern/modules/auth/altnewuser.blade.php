@@ -52,13 +52,13 @@
                         @else
 
                             <div class='col-12 mt-4'>
-                                <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
+                                <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                                     <div class='col-lg-6 col-12'>
                                         <div class='form-wrapper form-edit px-0 border-0'>
                                             <form class='form-horizontal' role='form' method='post' action='altsearch.php'>
                                                 <fieldset> {{ $auth_instructions }}
                                                     <div class='row'>
-                                                        <div class='col-12 px-lg-3 px-0'>
+                                                        <div class='col-12 px-3'>
                                                             <div class='form-group'>
                                                                 <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                                 <div class='col-sm-12'>
@@ -68,7 +68,7 @@
                                                         </div>
                                                     </div>
                                                     <div class='row'>
-                                                        <div class='col-12 px-lg-3 px-0'>
+                                                        <div class='col-12 px-3'>
                                                             <div class='form-group mt-4'>
                                                                 <label for='Pass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
                                                                 <div class='col-sm-12'>
@@ -81,7 +81,7 @@
                                                     <input type='hidden' name='auth' value='{{ $auth }}'>
 
                                                     <div class='row'>
-                                                        <div class='col-12 px-lg-3 px-0'>
+                                                        <div class='col-12 px-3'>
                                                             <div class='form-group mt-5'>
                                                                 
                                                                     {!! $form_buttons !!}
@@ -98,7 +98,7 @@
                                         
                                     </div>
                                     <div class='col-lg-6 col-12'>
-                                        <img src='{{ $urlAppend }}template/modern/img/RegImg.png' />
+                                        <img class='form-image' src='{{ $urlAppend }}template/modern/img/RegImg.png' />
                                     </div>
                                 </div>
                             </div>

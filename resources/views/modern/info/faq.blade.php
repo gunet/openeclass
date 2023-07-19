@@ -5,9 +5,13 @@
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
         <div class="row rowMargin">
-            <div class='col-12'>
+
+            @if(isset($_SESSION['uid']))
+                @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+            @endif
+            <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
                 <h1>{{ trans('langFaq')}}</h1>
-                <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
+                <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                     <div class='col-lg-6 col-12'>
                         <div class='panel'>
                             <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
@@ -46,7 +50,7 @@
                         </div>
                     </div>
                     <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
-                        <img src='{{ $urlAppend }}template/modern/img/faqImg.png' />
+                        <img class='form-image' src='{{ $urlAppend }}template/modern/img/faqImg.png' />
                     </div>
                 </div>
             </div>

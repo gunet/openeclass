@@ -882,6 +882,7 @@ jContent;
 
             $ret .= ($c == 0) ? '' : '» ';
             $ret .= (empty($href)) ? self::unserializeLangField($parent->name) . ' ' : "<a href='" . $href . $parent->id . "'>" . self::unserializeLangField($parent->name) . "</a> ";
+           
             $c++;
         }
 
@@ -1135,9 +1136,14 @@ jContent;
                         continue;
                     }
 
-                    $ret .= "<li class='list-group-item'><div class='table_td_header'><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
-                    $ret .= (!empty($code)) ? "&nbsp;(" . q($code) . ")" : '';
-                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></div>";
+                    $ret .= "<li class='list-group-item element'>
+                                <div class='table_td_header d-flex justify-content-between align-items-center'>
+                                    <div>
+                                        <a class='categoryName text-decoration-underline' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
+                                $ret .= (!empty($code)) ? "&nbsp;(" . q($code) . ")" : '';
+                            $ret.="</div>";
+                            $ret .= "<div class='vsmall-text Neutral-700-cl text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
+                                </div>";
                     $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>$description</div>" : '';
                     $ret .= "</li>";
                 }
@@ -1227,10 +1233,10 @@ jContent;
         global $langSelectFac;
 
         $ret = "<div class='col-12'>";
-        $ret .= "<div class='form-wrapper form-edit Borders'>
+        $ret .= "<div class='form-wrapper form-edit Borders border-0' style='background-color:#EFF2FB;'>
                     <form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
         $ret .= "<div class='form-group'>";
-        $ret .= "<label class='col-sm-12 control-label-notes'>$langSelectFac:</label>";
+        $ret .= "<label class='col-12 form-label mb-0'>$langSelectFac</label>";
         $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'", $options);
         $ret .= "</div></form></div></div>";
         return $ret;

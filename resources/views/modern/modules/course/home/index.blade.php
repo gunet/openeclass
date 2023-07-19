@@ -518,9 +518,9 @@
 
                     <div class="col-xxl-4 col-xl-5 col-lg-12 col-md-12 mt-lg-4 mt-4 float-end ">
 
-                        <div class="panel panel-admin p-0 bg-white drop-shadow border-card borderBoxPanelNoShadow">
+                        <div class="panel panel-admin panel-admin-calendar p-0 border-0">
                             {!! $user_personal_calendar !!}
-                            <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap p-3'>
+                            <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
 
                                 <div class='d-flex align-items-center px-2 py-1'>
                                     <span class='event event-important'></span>

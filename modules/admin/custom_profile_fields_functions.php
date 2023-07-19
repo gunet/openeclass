@@ -105,7 +105,7 @@ function render_profile_fields_form($context, $valitron = false) {
                     $form_class = 'form-group mt-4';
                     $help_block = '';
                 }
-                $return_string .= '<div class="col-lg-6 col-12 px-lg-3 px-0"><div class="'.$form_class.'">';
+                $return_string .= '<div class="col-lg-6 col-12 px-3"><div class="'.$form_class.'">';
                 $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
                
 

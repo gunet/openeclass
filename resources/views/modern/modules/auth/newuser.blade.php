@@ -68,7 +68,7 @@
                 @else
 
                     <div class='col-12 mt-4'>
-                        <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
+                        <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                 
                             <div class='col-lg-6 col-12'>
                                 <div class='form-wrapper form-edit rounded px-0 border-0'>
@@ -76,7 +76,7 @@
                                         <fieldset>
 
                                             <div class='row'>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group'>
                                                         <label for='Name' class='col-sm-12 control-label-notes'>{{ trans('langName') }}</label>
                                                         <div class='col-sm-12'>
@@ -84,7 +84,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-lg-0 mt-4'>
                                                         <label for='SurName' class='col-sm-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                                         <div class='col-sm-12'>
@@ -96,7 +96,7 @@
 
                                             
                                             <div class='row'>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                         <div class='col-sm-12'>
@@ -104,7 +104,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
                                                         <div class='col-sm-12'>
@@ -116,7 +116,7 @@
 
                                             
                                             <div class='row'>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPass2' class='col-sm-12 control-label-notes'>{{ trans('langConfirmation') }}</label>
                                                         <div class='col-sm-12'>
@@ -124,7 +124,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserEmail' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                                         <div class='col-sm-12'>
@@ -136,7 +136,7 @@
 
                                             
                                             <div class='row'>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserAm' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                                         <div class='col-sm-12'>
@@ -144,7 +144,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPhone' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
                                                         <div class='col-sm-12'>
@@ -156,7 +156,7 @@
 
                                         
                                             <div class='row'>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserFac' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                                         <div class='col-sm-12'>
@@ -164,7 +164,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserLang' class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                                                         <div class='col-sm-12'>
@@ -178,7 +178,7 @@
 
                                             @if ($display_captcha)
                                                 <div class='row'>
-                                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                    <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
                                                             <label for='captcha_code' class='col-sm-12 control-label-notes'>{{ trans('langCaptcha') }}</label>
                                                             <div class='col-sm-12'>{!! $captcha !!}</div>
@@ -194,7 +194,7 @@
                                             @if(!empty($provider_name) && !empty($provider_id))
                                             
                                                 <div class='row'>
-                                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                                    <div class='col-lg-6 col-12 px-3'>
                                                         <div class='form-group mt-4'>
                                                             <label for='UserLang' class='col-sm-12 control-label-notes'>{{ trans('langProviderConnectWith') }}</label>
                                                             <div class='col-sm-12'><p class='form-control-static'>
@@ -209,7 +209,7 @@
 
                                             
                                             <div class='row'>
-                                                <div class='col-12 px-lg-3 px-0'>
+                                                <div class='col-12 px-3'>
                                                     <div class='form-group mt-5'>
                                                     
                                                         <input class='btn submitAdminBtn submitAdminBtnDefault w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
@@ -223,7 +223,7 @@
                             </div>
 
                             <div class='col-lg-6 col-12'>
-                                <img src='{{ $urlAppend }}template/modern/img/RegImg.png' />
+                                <img class='form-image' src='{{ $urlAppend }}template/modern/img/RegImg.png' />
                             </div>
 
                         </div>

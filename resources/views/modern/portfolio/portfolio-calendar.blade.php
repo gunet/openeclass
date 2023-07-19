@@ -6,7 +6,8 @@
 ?>
 
 
-<div class='panel panel-admin panel-Calendar-portfolio drop-shadow border-card mt-lg-0 mt-2'>
+<div class='panel panel-admin panel-admin-calendar border-0 mt-lg-0 mt-2'>
+   
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>
     <link href="{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css?v=4.0-dev" rel="stylesheet" type="text/css">
@@ -15,7 +16,10 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/components/underscore/underscore-min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sortable/Sortable.min.js?v=4.0-dev"></script>
 
+    <div class='panel-heading bg-white border-0 px-0'><h3>{{ trans('langAgenda') }}</h3></div>
+
     {!! $user_personal_calendar !!}
+
     <script >
         jQuery(document).ready(function() {
 
@@ -51,7 +55,7 @@
         }
 
     </script>
-    <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap p-3'>
+    <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
        
             
                 <div class='d-flex align-items-center px-2 py-1'>

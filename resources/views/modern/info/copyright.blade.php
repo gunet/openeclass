@@ -5,12 +5,13 @@
 <div class='{{ $container }}'>
         <div class="row rowMargin">
 
-                    <div class="col-12">
-                        <div class='text-center'>
-                            <span class='courseInfoText TextExtraBold blackBlueText'>Copyright</span>
-                        </div>
+                    <div class='col-12'>
+                            <h1>Copyright</h1>
+                    </div>
+                    <div class="col-12 mt-4">
+                        
                     
-                        <div class='border-card mt-5 Borders bg-white p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
+                        <div class='border-card Borders bg-white p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
                     </div>
                
         </div>

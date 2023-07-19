@@ -84,7 +84,7 @@ function getUserLessonInfo($uid) {
                 $fav_status = 0;
                 $fav_message = '';
             } else {
-                $favorite_icon = 'fa-regular fa-bookmark';
+                $favorite_icon = 'fa-regular fa-star';
                 $fav_status = 1;
                 $fav_message = $langFavorite;
             }
@@ -286,7 +286,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                                 <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                                     
                                 <p class='TextBold mb-0'>$course_title</p>
-                                <div class='TextRegular Neutral-800-cl mb-3'>$ann_date</div>
+                                <div class='TextRegular Neutral-800-cl'>$ann_date</div>
                             </div>
                         </li>";
                 } else {
@@ -298,7 +298,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                             <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             
                             <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
-                            <div class='TextRegular Neutral-800-cl mb-3'>$ann_date</div>
+                            <div class='TextRegular Neutral-800-cl'>$ann_date</div>
                         </div>
                     </li>";
                 }
@@ -344,7 +344,7 @@ function getUserMessages() {
                                         <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         
                                         <p class='TextBold mb-0'>$course_title</p>
-                                        <div class='TextRegular Neutral-800-cl mb-3'>$message_date</div>
+                                        <div class='TextRegular Neutral-800-cl'>$message_date</div>
                                     </div>
                                 </li>";
         }

@@ -7,15 +7,13 @@
 
         <div class="row rowMargin">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    {!! $action_bar !!}
+                <div class='col-12'>
+                        <h1>{{ trans('langPrivacyPolicy') }}</h1>
+                </div>
                     
-                    <div class='col-12'>
-                        <div class='border-card bg-white Borders p-lg-5 p-3'>{!! $policy !!}</div>
-                    </div>
+                <div class='col-12 mt-4'>
+                    <div class='border-card bg-white Borders p-lg-5 p-3'>{!! $policy !!}</div>
+                </div>
                    
                 
         </div>

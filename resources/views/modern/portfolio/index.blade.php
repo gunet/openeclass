@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class='px-3 text-lg-start text-center'>
-                        <div class='form-label mb-0 mt-4'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </div>
+                        <h4 class='mb-0 mt-4'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
                         <p class='Neutral-900-cl mb-0'>
                             @if(($session->status == USER_TEACHER))
                                 {{ trans('langMetaTeacher') }}
@@ -87,7 +87,7 @@
                                 {{ trans('langRegister') }}
                             </a>
                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
-                                <a id="btn_create_course" class="btn submitAdminBtn submitAdminBtnDefault btn_create_course bgTheme text-white" href="{{ $urlAppend }}modules/create_course/create_course.php">
+                                <a id="btn_create_course" class="btn submitAdminBtn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
                                     <i class="fa-solid fa-plus"></i>&nbsp{{ trans('langCreate') }}
                                 </a>
                             @endif
@@ -172,11 +172,12 @@
                                                     
                                             <div class='card-body'>
                                                 <div class="lesson-title">
-                                                    <a class='TextSemiBold' href="{{$urlServer}}courses/{{$cource->code}}/index.php">{{ $cource->title }}</a>
-                                                    <span class="TextSemiBold blackBlueText lesson-id">({{ $cource->public_code }})</span>
+                                                    <a class='TextRegular text-decoration-underline' href="{{$urlServer}}courses/{{$cource->code}}/index.php">
+                                                        {{ $cource->title }}&nbsp({{ $cource->public_code }})
+                                                    </a>
                                                 </div>
 
-                                                <div class="small-text Neutral-900-cl TextRegular mt-0">{{ $cource->professor }}</div>
+                                                <div class="small-text Neutral-900-cl TextRegular">{{ $cource->professor }}</div>
                                             </div>
                                         
                                         </div>

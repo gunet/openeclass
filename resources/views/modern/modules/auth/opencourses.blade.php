@@ -31,11 +31,10 @@
 <div class='{{ $container }}'>
         <div class="row rowMargin">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @if(isset($_SESSION['uid']))
+                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @endif
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    {!! $action_bar !!}
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -68,30 +67,54 @@
                     </div>
                     @endif
 
-                    <div class='col-12'>
-                        <div class="card h-100 Borders">
-                            <div class="card-body">
-                                @if (isset($buildRoots))
-                                    {!! $buildRoots !!}
-                                @endif
-                                <div class='form-wrapper form-edit rounded border-0'>
-                                    <p class='control-label-notes mb-2'>{!! trans('langFaculty') !!}:</p>
-                                    <ul>
-                                        <li class='px-0 border-0'> 
-                                            <strong class='normalBlueText'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</strong>
-                                        </li>
-                                    </ul>
-                                    <div class='col-12'>
-                                        {!! $childHTML !!}
+                    <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
+                        <h1>{{ trans('langCourses') }}</h1>
+                    </div>
+                    <div class='col-12 mt-4'>
+                        <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
+                            <div class='col-lg-6 col-12'>
+                                <div class='col-12'>
+                                    <div class="card border-card h-100 Borders border-0">
+                                        <div class="card-body p-0">
+
+                                            
+                                            @if (isset($buildRoots))
+                                                {!! $buildRoots !!}
+                                            @endif
+                                           
+                                            
+                                            <div class='col-12 mt-4' id='accordion'>
+                                                <ul class='list-group list-group-flush list-group-default'>
+                                                    <li class="list-group-item">
+                                                        <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#Category'>
+                                                            <i class='fa-solid fa-chevron-down'></i>
+                                                            &nbsp&nbsp{!! $tree->getFullPath($fc) !!}
+                                                            
+                                                            {{-- {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!} --}}
+                                                        </a>
+                                                    </li>
+                                                    <div id='Category' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
+                                                        {!! $childHTML !!}
+                                                    </div>
+                                                </ul>
+                                            </div>
+                                               
+                                           
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class='col-lg-6 col-12'>
+                                <img class='form-image' src='{{ $urlAppend }}template/modern/img/CoursesImg.png' />
                             </div>
                         </div>
                     </div>
 
+                    
+
 
                     @if (count($courses) > 0)
-                        <div class='col-12 mt-2'>
+                        <div class='col-12 mt-5'>
                             <div class='table-responsive'>
                                 <table class='table-default' id="myopencourses_table">
                                     <thead>
@@ -134,8 +157,8 @@
                                                     @endif
 
 
-                                                    <button class="ClickCourse border-0 rounded-pill bg-transparent" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                       <img class='ClickCourseModalImg' src='{{ $urlAppend }}template/modern/img/info_a.svg'>
+                                                    <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                        <i class='fa-solid fa-display'></i>
                                                     </button>
 
                                                     <!-- The Modal -->
@@ -207,6 +230,10 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    @else
+                        <div class='col-12 mt-5'>
+                            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses')}}</span></div>
                         </div>
                     @endif
                 

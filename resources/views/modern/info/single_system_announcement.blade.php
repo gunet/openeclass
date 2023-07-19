@@ -6,7 +6,9 @@
 <div class='{{ $container }}'>
         <div class="row rowMargin">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @if(isset($_SESSION['uid']))
+                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @endif
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 

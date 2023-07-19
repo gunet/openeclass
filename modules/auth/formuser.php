@@ -357,14 +357,14 @@ if ($all_set) {
                       </div>";
     $tool_content .= "
     <div class='col-12 mt-4'>
-    <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
+    <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                 <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit px-0 border-0'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=$auth_id' method='post'>
                                 <input type='hidden' name='p' value='$prof'>
 
                                 <div class='row'>
-                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                    <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group'>
                                             <label for='Name' class='col-sm-12 control-label-notes'>$langName</label>
                                             <div class='col-sm-12'>";
@@ -380,7 +380,7 @@ if ($all_set) {
                                             $tool_content .= "</div>
                                         </div>
                                     </div>
-                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                    <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-lg-0 mt-4'>
                                             <label for='SurName' class='col-sm-12 control-label-notes'>$langSurname</label>
                                             <div class='col-sm-12'>";
@@ -400,7 +400,7 @@ if ($all_set) {
 
 
                                 <div class='row'>
-                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                    <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-4'>
                                                 <label for='UserName' class='col-sm-12 control-label-notes'>$langUsername</label>
                                                 <div class='col-sm-12'>";
@@ -415,7 +415,7 @@ if ($all_set) {
                                             $tool_content .= "</div>
                                         </div>
                                     </div>
-                                    <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                    <div class='col-lg-6 col-12 px-3'>
                                         <div class='form-group mt-4'>
                                             <label for='ProfEmail' class='col-sm-12 control-label-notes'>$langProfEmail</label>
                                             <div class='col-sm-12'>";
@@ -432,7 +432,7 @@ if ($all_set) {
 
 
                                 <div class='row'>
-                                     <div class='col-12 px-lg-3 px-0'>
+                                     <div class='col-12 px-3'>
                                         <div class='form-group mt-4'>
                                             <label for='UserPhone' class='col-sm-12 control-label-notes'>$langPhone</label>
                                             <div class='col-sm-12'>";
@@ -449,7 +449,7 @@ if ($all_set) {
                             if (!$prof) {
                                 $tool_content .= "
                                     <div class='row'>
-                                        <div class='col-12 px-lg-3 px-0'>
+                                        <div class='col-12 px-3'>
                                             <div class='form-group mt-4'>
                                                 <label for='ProfEmail' class='col-sm-6 control-label-notes'>$langAm:</label>
                                                 <div class='col-sm-12'>
@@ -461,7 +461,7 @@ if ($all_set) {
                             }
                             $tool_content .= "
                                     <div class='row'>
-                                        <div class='col-12 px-lg-3 px-0'>
+                                        <div class='col-12 px-3'>
                                             <div class='form-group mt-4'>
                                                 <label for='ProfComments' class='col-sm-12 control-label-notes'>$langComments</label>
                                                 <div class='col-sm-12'>
@@ -471,7 +471,7 @@ if ($all_set) {
                                         </div>
                                     </div>
                                     <div class='row'>
-                                        <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                        <div class='col-lg-6 col-12 px-3'>
                                             <div class='form-group mt-4'>
                                                 <label for='ProfComments' class='col-sm-12 control-label-notes'>$langFaculty</label>
                                                 <div class='col-sm-12'>";
@@ -482,7 +482,7 @@ if ($all_set) {
                                             </div>
                                         </div>";
                         $tool_content .= "
-                                        <div class='col-lg-6 col-12 px-lg-3 px-0'>
+                                        <div class='col-lg-6 col-12 px-3'>
                                             <div class='form-group mt-4'>
                                                     <label for='UserLang' class='col-sm-6 control-label-notes'>$langLanguage</label>
                                                     <div class='col-sm-12'>";
@@ -501,7 +501,7 @@ if ($all_set) {
 
                                 $tool_content .= "
                                     <div class='row'>
-                                        <div class='col-12 px-lg-3 px-0'>
+                                        <div class='col-12 px-3'>
                                             <div class='form-group mt-4'>
                                                 <label for='captcha_code' class='col-sm-12 control-label-notes'>$langCaptcha</label>
                                                 <div class='col-sm-12'>$captchaHtml</div>
@@ -515,7 +515,7 @@ if ($all_set) {
                             if ($provider_name and $provider_id) {
                                 $tool_content .= "
                                 <div class='row'>
-                                    <div class='col-12 px-lg-3 px-0'>
+                                    <div class='col-12 px-3'>
                                         <div class='form-group mt-4'>
                                             <label for='UserLang' class='col-sm-12 control-label-notes'>$langProviderConnectWith</label>
                                             <div class='col-sm-12'><p class='form-control-static'>
@@ -535,7 +535,7 @@ if ($all_set) {
                             $tool_content .= "</div>";
                             $tool_content .= "
                                             <div class='row'>
-                                                <div class='col-12 px-lg-3 px-0'>
+                                                <div class='col-12 px-3'>
                                                     <div class='form-group mt-5'>
                                                         <input class='btn submitAdminBtn submitAdminBtnDefault w-100' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
                                                     </div>
@@ -545,7 +545,7 @@ if ($all_set) {
                     </div>
                 </div>
                 <div class='col-lg-6 col-12'>
-                    <img src='{$urlAppend}template/modern/img/RegImg.png' />
+                    <img class='form-image' src='{$urlAppend}template/modern/img/RegImg.png' />
                 </div>
     </div>
     </div>";

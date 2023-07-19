@@ -27,11 +27,9 @@
 <div class='{{ $container }}'>
         <div class="row rowMargin">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-
-                    {!! $action_bar !!}
+                    <div class='col-12 mb-4'>
+                        <h1>{{ trans('lang_remind_pass') }}</h1>
+                    </div>
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -174,7 +172,7 @@
                         @endif
                     @else
                         <div class='col-12'>
-                            <div class='col-lg-6 col-12 ms-auto me-auto mb-4' style='text-align: justify;'>
+                            <div class='col-12 mb-5' style='text-align: justify;'>
                                 {!! trans('lang_pass_intro') !!}
                             </div>
 

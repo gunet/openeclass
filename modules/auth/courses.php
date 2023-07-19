@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
     $fac = getfacfromfc($fc);
     list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
     if (!$fac) { // if user does not belong to department
-        $tool_content .= "<div class='col-12 mt-3'><div class='shadow-sm p-3 mb-3 bg-body rounded bg-primary'>".$langAddHereSomeCourses."</div></div>";
+        $tool_content .= "<div class='col-12 mt-4'><div class='shadow-sm p-3 mb-3 bg-body rounded bg-primary'>".$langAddHereSomeCourses."</div></div>";
 
         if (count($roots) <= 0) {
             die("ERROR: no root nodes");
@@ -122,18 +122,42 @@ if (isset($_POST['submit'])) {
                                       'level' => 'primary',
                                       'button-class' => 'btn-secondary')
                             ),false);
-        if (count($roots) > 1) {
-            $tool_content .= $tree->buildRootsSelectForm($fc);
-        }
-        $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>";
-        $tool_content .= "<ul class='list-group smallRadius Borders'>
-                                  <li class='list-group-item p-3 '><a name='top'></a>$langFaculty: " .
-                $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
-                                  </li>";
-        list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
-        $tool_content .= $childHTML;
-        $subTrees = $tree->buildSubtrees(array($fc));
-        $tool_content .= "</ul></form>";
+
+        $tool_content .= "<div class='col-12 mt-4'>
+                            <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
+                                <div class='col-lg-6 col-12'>
+                                    <div class='col-12'>
+                                        <div class='card border-card h-100 Borders border-0'>
+                                            <div class='card-body p-0'>";
+                                if (count($roots) > 1) {
+                                    $tool_content .= $tree->buildRootsSelectForm($fc);
+                                }
+
+                                $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>
+                                                    <div class='col-12' id='accordionRegister'>";
+                                        $tool_content .= "<ul class='list-group list-group-flush list-group-default'>
+                                                                <li class='list-group-item'>
+                                                                    <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#RegisterCourses'>
+                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp&nbsp" .$tree->getFullPath($fc) . "
+                                                                    </a>
+                                                                </li>";
+                                            $tool_content .= "<div id='RegisterCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionRegister'>";
+                                                                    list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+                                                                    $tool_content .= $childHTML;
+                                                                    $subTrees = $tree->buildSubtrees(array($fc));
+                                            $tool_content .= "</div>";
+                                        $tool_content .= "</ul>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='col-lg-6 col-12'>
+                                    <img class='form-image' src='{$urlAppend}template/modern/img/CoursesImg.png' />
+                                </div>
+                            </div>";
+       $tool_content .= "</div>";
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
@@ -286,7 +310,7 @@ function expanded_faculte($facid, $uid) {
             if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
                 if (!empty($password)) {
-                    $requirepassword = "<br /><span class='orangeText'>$m[code]:</span> <input type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
+                    $requirepassword = "<br /><span class='orangeText'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
                 } else {
                     $requirepassword = '';
                 }
@@ -296,7 +320,7 @@ function expanded_faculte($facid, $uid) {
             }
         } else { // display unregistered courses
             if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {
-                $requirepassword = "<br /><span class='orangeText'>$m[code]:</span> <input type='password' name='pass$cid' autocomplete='off' />";
+                $requirepassword = "<br /><span class='orangeText'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
             } else {
                 $requirepassword = '';
             }

@@ -48,21 +48,37 @@ if (count($roots) <= 0) {
     header("Location:" . $urlServer . $redirectUrl . intval($roots[0]->id));
     exit();
 } else {
-    $tool_content = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-secondary')
-                            ),false);
+    // $tool_content = action_bar(array(
+    //                             array('title' => $langBack,
+    //                                   'url' => $urlServer,
+    //                                   'icon' => 'fa-reply',
+    //                                   'level' => 'primary',
+    //                                   'button-class' => 'btn-secondary')
+    //                         ),false);
+
+    $margin = '';
+    if(isset($_SESSION['uid'])){
+        $margin = 'mt-4';
+    }
     
     $tool_content .= "
-        <div class='col-sm-12'>
-            <div class='list-group'>
-                <a href='#' class='list-group-item bgTheme text-white TextSemiBold'>$langFaculty</a>
-            ";
-    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
-    $tool_content .= "
+        <div class='col-12 $margin'>
+            <h1>$langCourses</h1>
+        </div>
+        <div class='col-12 mt-4'>
+            <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
+                <div class='col-lg-6 col-12'>
+                    <ul class='list-group list-group-flush'>
+                        
+                        ";
+                $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
+                $tool_content .= "
+                       
+                    </ul>
+                </div>
+                <div class='col-lg-6 col-12'>
+                    <img class='form-image' src='{$urlAppend}template/modern/img/CoursesImg.png' />
+                </div>
             </div>
         </div>";
 }

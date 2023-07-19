@@ -2958,6 +2958,7 @@ $m['closed'] = "Κλειστά $langsCourses";
 $m['max_grade'] = 'Μέγιστη βαθμολογία';
 $m['legend'] = 'Υπόμνημα';
 $m['nolessons'] = 'Δεν υπάρχουν διαθέσιμα $langsCourses!';
+$langNoCourses = "Δεν υπάρχουν διαθέσιμα $langsCourses στην συγκεκριμένη κατηγορία!";
 $m['code'] = "Συνθηματικό $langsOfCourse";
 $m['mailprof'] = "Για να εγγραφείτε στο $langsCourse θα πρέπει να στείλετε mail στον διδάσκοντα του $langsOfCourse
 κάνοντας κλικ";

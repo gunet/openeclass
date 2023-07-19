@@ -30,7 +30,7 @@ foreach ($q as $l) {
         }
         $authLink[] = array(false, "
             
-              <div class='col-xl-8 col-lg-8 col-md-8 col-12'><a class='btn login-form-submit TextBold rounded-pill btn-block w-100 d-flex justify-content-center align-items-center' href='$authUrl'>$langEnter</a></div>
+              <div class='col-xl-8 col-lg-8 col-md-8 col-12'><a class='btn w-100 login-form-submit d-flex justify-content-center align-items-center mt-4' href='$authUrl'>$langEnter</a></div>
             ", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
@@ -54,26 +54,17 @@ foreach ($q as $l) {
         <div class='col-12'>
             <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
               $next
-              <div class='form-group'>
-                <div class='col-xl-8 col-lg-8 col-md-8 col-12 login-form-spacing m-auto d-block'>
-                  <input class='login-input w-100 rounded-pill TextSemiBold' name='uname' aria-describedby='usernameIcon' placeholder='$langUsername'$userValue>
-                </div>
-                <div class='col-xl-8 col-lg-8 col-md-8 col-12 login-form-spacing m-auto d-block'>
-                    <input class='login-input w-100 rounded-pill TextSemiBold mt-2' name='pass' type='password' aria-describedby='passwordIcon' placeholder='$langPass' style='height:40px;'>
-                </div>
+              <div>
+                  <label for='username_id' class='form-label'>$langUsername</label>
+                  <input id='username_id' class='login-input w-100' placeholder='&#xf007' type='text' id='uname' name='uname' autocomplete='on' />
+                  <label for='password_id' class='form-label mt-4'>$langPassword&nbsp(password)</label>
+                  <input id='password_id' class='login-input w-100' placeholder='&#xf084' type='password' id='pass' name='pass' autocomplete='on' />
+                  <input class='btn w-100 login-form-submit mt-4' type='submit' name='submit' value='$langEnter' />
               </div>
-            
-              <div class='form-group mt-3'>
-                <div class='col-xl-8 col-lg-8 col-md-8 col-12 m-auto d-block'>
-                  <button class='btn login-form-submit w-100 TextBold rounded-pill mt-2' type='submit' name='submit' value='$langEnter'>$langEnter</button>
-                </div>
-
-                <div class='col-12 text-center mt-4'>
-                  <a class='orangeText btnlostpass' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                </div>
-                
-              </div>
-          </form>
+            </form>
+            <div class='col-12 text-center mt-4'>
+                <a class='text-decoration-underline' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+            </div>
         </div>", $authTitle);
     }
 }
@@ -81,64 +72,88 @@ foreach ($q as $l) {
 $columns = 12 / count($authLink);
 $pageName = $langUserLogin;
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-          'url' => "$urlServer",
-          'icon' => 'fa-reply',
-          'level' => 'primary',
-          'button-class' => 'btn-primary')), false);
+// $tool_content .= action_bar(array(
+//     array('title' => $langBack,
+//           'url' => "$urlServer",
+//           'icon' => 'fa-reply',
+//           'level' => 'primary',
+//           'button-class' => 'btn-primary')), false);
 
-$tool_content .= "<div class='login-page mt-3'>";
-$marginForm = '';
-if($columns == 12){
-  $columns = 1 ;
-  $marginForm = 'col-xl-6 col-lg-8 col-md-8 col-12 ms-auto me-auto';
-}else{
-  $columns = 3 ;
-  $marginForm = 'col';
-}
 
-$tool_content .= "<div class='row row-cols-1 row-cols-lg-$columns g-4'>
-                    ";
-foreach ($authLink as $authInfo) {
-    $tool_content .= "
-   
-      <div class='$marginForm'>
-        <div class='card panelCard px-lg-4 py-lg-3 px-3 py-2 h-100'>
-          <div class='card-header border-0 bg-white d-flex justify-content-center align-items-center'>
-              <div class='fs-5 TextBold mb-0 text-center blackBlueText text-capitalize'>
-                <img class='UserLoginIcon m-auto d-block' src='{$urlAppend}template/modern/img/user_login.svg'>
-                " . q($authInfo[2]) . "
-              </div>
-          </div>
-          <div class='card-body d-flex justify-content-center align-items-start flex-wrap'>" .
-              $authInfo[1];
-              if (Session::has('login_error') and $authInfo[0]) {
-                  $tool_content .= "<div class='col-12'>
-                                      
-                                      <input id='showWarningModal2' type='hidden' value='1'>
-                                      <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
-                                          <div class='modal-dialog modal-dialog-centered'>
-                                              <div class='modal-content border-0'>
-                                                  <div class='modal-header bgOrange'>
-                                                      <h5 class='modal-title text-white'>$langError</h5>
-                                                      <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                                  </div>
-                                                  <div class='modal-body bg-white'>
-                                                    ".Session::get('login_error')."
-                                                  </div>
-                                              </div>
-                                          </div>
+$tool_content .= "<div class='col-12'>
+                    <h1>$langUserLogin</h1>
+                  </div>";
+
+$tool_content .= "<div class='col-12 mt-5'>";
+  $tool_content .= "<div class='row row-cols-1 row-cols-lg-2 g-5'>";
+    $tool_content .= "<div class='col'>";
+                          $counter = 0;
+                          $active = '';
+      $tool_content .= "<div id='carouselLogin' class='carousel slide' data-bs-ride='carousel' data-bs-interval='false'>
+                          <div class='carousel-inner'>";
+                            foreach ($authLink as $authInfo) {
+                                if($counter == 0){
+                                  $active = 'active';
+                                }else{
+                                  $active = '';
+                                }
+                                $tool_content .= "
+                              
+                                  <div class='carousel-item $active'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 px-3 py-2 h-100'>
+                                      <div class='card-header border-0 bg-white text-center'>
+                                          <h2>
+                                            " . q($authInfo[2]) . "
+                                          </h2>
                                       </div>
-                                    </div>";
-              }
-    $tool_content .= "
-          </div>
-        </div>
-      </div>";
+                                      <div class='card-body d-flex justify-content-center align-items-start flex-wrap'>" .
+                                          $authInfo[1];
+                                          if (Session::has('login_error') and $authInfo[0]) {
+                                              $tool_content .= "<div class='col-12'>
+                                                                  
+                                                                  <input id='showWarningModal2' type='hidden' value='1'>
+                                                                  <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                                                      <div class='modal-dialog modal-dialog-centered'>
+                                                                          <div class='modal-content border-0 p-0'>
+                                                                              <div class='modal-header bgOrange d-flex justify-content-between align-items-center'>
+                                                                                  <h5 class='modal-title text-white'>$langError</h5>
+                                                                                  <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                                              </div>
+                                                                              <div class='modal-body bg-white'>
+                                                                                ".Session::get('login_error')."
+                                                                              </div>
+                                                                          </div>
+                                                                      </div>
+                                                                  </div>
+                                                                </div>";
+                                          }
+                                $tool_content .= "
+                                      </div>
+                                    </div>
+                                  </div>";
 
-}
-$tool_content .= "</div></div>";
+                              $counter++;
+                            }
+    $tool_content .= "    </div>";
+                          if(count($authLink)>1){
+          $tool_content .=" <button class='carousel-control-prev' type='button' data-bs-target='#carouselLogin' data-bs-slide='prev'>
+                              <span class='carousel-control-prev-icon' aria-hidden='true'></span>
+                              <span class='visually-hidden'>Previous</span>
+                            </button>
+                            <button class='carousel-control-next' type='button' data-bs-target='#carouselLogin' data-bs-slide='next'>
+                              <span class='carousel-control-next-icon' aria-hidden='true'></span>
+                              <span class='visually-hidden'>Next</span>
+                            </button>";
+                          }
+       $tool_content .= "</div>
+                      </div>
+
+                      <div class='col'>
+                        <img class='form-image' src='{$urlAppend}template/modern/img/jumbotron-eclass4.png'>
+                      </div>
+
+                    </div>
+                  </div>";
 
 $head_content .= "
 <script type='text/javascript'>
