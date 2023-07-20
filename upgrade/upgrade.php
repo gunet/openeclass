@@ -185,7 +185,8 @@ if ($command_line or $ajax_call) {
     }
 
     $oldversion = get_config('version');
-    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '4.0'];
+    $versions = ['3.1', '3.2', '3.3', '3.4', '3.5', '3.6', '3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14', '3.15', '4.0'];
+
     if (isset($_SESSION['upgrade_step'])) {
         $step = $_SESSION['upgrade_step'];
     }
@@ -311,12 +312,14 @@ if ($command_line or $ajax_call) {
                     upgrade_to_3_14($tbl_options);
                     break_on_step();
                 }
-
                 if ($step == 2) {
                     message($langEncodeUserProfilePics, "$version-encode");
                     encode_user_profile_pics();
                     steps_finished();
                 }
+            } elseif ($version == '3.15') {
+                upgrade_to_3_15($tbl_options);
+                steps_finished();
             } elseif ($version === '4.0') {
                 upgrade_to_4_0($tbl_options);
                 steps_finished();

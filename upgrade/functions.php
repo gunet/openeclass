@@ -2460,7 +2460,11 @@ function upgrade_to_3_14($tbl_options) : void {
     if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
         Database::get()->query("ALTER TABLE `group_properties`ADD `public_users_list` tinyint NOT NULL DEFAULT '1'");
     }
-
+    // question feedback
+    if (!DBHelper::fieldExists('exercise_question', 'feedback')) {
+        Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
+    }
+    // exercise end message (aka feedback)
     if (!DBHelper::fieldExists('exercise', 'general_feedback')) {
         Database::get()->query("ALTER TABLE `exercise` ADD `general_feedback` TEXT CHARACTER SET utf8mb4 COLLATE 'utf8mb4_unicode_520_ci' NULL");
     }
@@ -2493,17 +2497,23 @@ function upgrade_to_3_14($tbl_options) : void {
 
 }
 
+/** @brief upgrade queries to 3.15
+* @param $tbl_options
+* @return void
+*/
+function upgrade_to_3_15($tbl_options) : void
+{
+    if (!DBHelper::fieldExists('course_user','course_reviewer')) {
+        Database::get()->query("ALTER TABLE course_user ADD `course_reviewer` TINYINT NOT NULL DEFAULT '0' AFTER editor");
+    }
+}
+
 /**
  * @brief upgrade queries to 4.0
  * @param $tbl_options
  * @return void
  */
 function upgrade_to_4_0($tbl_options): void {
-
-    // question feedback
-    if (!DBHelper::fieldExists('exercise_question', 'feedback')) {
-        Database::get()->query("ALTER TABLE exercise_question ADD `feedback` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci AFTER description");
-    }
 
     // widgets
     if (!DBHelper::tableExists('widget')) {
