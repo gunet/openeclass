@@ -87,49 +87,42 @@ if (!is_null($objExercise->selectEndDate())) {
     $end_date = new DateTime($objExercise->selectEndDate());
 }
 $showScore = $displayScore == 1
-            || $is_editor
+            || $is_course_reviewer
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
 
 
-if ($is_editor) {
-    $tool_content .= action_bar([
-        [
-            'title' => $langCheckGrades,
-            'icon' => 'fa-bar-chart',
-            'class' => 'check-grades',
-            'level' => 'primary-label',
-            'button-class' => 'btn-success'
-        ],
-        [
-            'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary-label'
-        ],
-        [
-            'title' => "$langResults ($langDumpUser)",
-            'url' => "dump_results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-            'icon' => 'fa fa-download',
-            'button-class' => 'btn-success',
-        ],
-        [
-            'title' => "$langPollFullResults ($langDumpUser)",
-            'url' => "dump_results_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
-            'icon' => 'fa fa-download',
-            'button-class' => 'btn-success',
-        ]
-    ]);
-} else {
-    $tool_content .= action_bar([
-        [
-            'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary-label'
-        ]
-    ]);
-}
+
+$tool_content .= action_bar([
+    [
+        'title' => $langCheckGrades,
+        'icon' => 'fa-bar-chart',
+        'class' => 'check-grades',
+        'level' => 'primary-label',
+        'button-class' => 'btn-success',
+        'show' => $is_editor
+    ],
+    [
+        'title' => $langBack,
+        'url' => "index.php?course=$course_code",
+        'icon' => 'fa fa-reply',
+        'level' => 'primary-label'
+    ],
+    [
+        'title' => "$langResults ($langDumpUser)",
+        'url' => "dump_results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+        'icon' => 'fa fa-download',
+        'button-class' => 'btn-success',
+        'show' => $is_course_reviewer
+    ],
+    [
+        'title' => "$langPollFullResults ($langDumpUser)",
+        'url' => "dump_results_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
+        'icon' => 'fa fa-download',
+        'button-class' => 'btn-success',
+        'show' => $is_course_reviewer
+    ]
+]);
 
 $tool_content .= "<div class='panel panel-primary'>
     <div class='panel panel-heading'>" . q_math($exerciseTitle) . "</div>";
@@ -149,7 +142,7 @@ $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='st
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === ATTEMPT_CANCELED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_CANCELED) . "</option>
         </select>";
 
-if ($is_editor) {
+if ($is_course_reviewer) {
     $result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname FROM `exercise_user_record`
                                                             JOIN user ON exercise_user_record.uid = user.id
                                                             WHERE eid = ?d) 

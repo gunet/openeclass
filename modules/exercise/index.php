@@ -125,7 +125,7 @@ $head_content .= "<script type='text/javascript'>
         </script>";
 
 // only for administrator
-if ($is_editor) {
+if ($is_course_reviewer) {
     load_js('tools.js');
 
     if (isset($_GET['exerciseId'])) {
@@ -148,78 +148,80 @@ if ($is_editor) {
         exit;
     }
 
-    if (!empty($_GET['choice'])) {
-        // construction of Exercise
-        $objExerciseTmp = new Exercise();
-        if ($objExerciseTmp->read($exerciseId)) {
-            switch ($_GET['choice']) {
-                case 'delete': // deletes an exercise
-                    if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
-                        $objExerciseTmp->delete();
-                        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                        Session::Messages($langPurgeExerciseSuccess, 'alert-success');
-                        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    } else {
-                        Session::Messages($langResourceBelongsToCert, "alert-warning");
-                    }
-                    break;
-                case 'purge': // purge exercise results
-                    if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
-                        $objExerciseTmp->purge();
-                        $objExerciseTmp->save();
-                        Session::Messages($langPurgeExerciseResultsSuccess);
-                        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    } else {
-                        Session::Messages($langResourceBelongsToCert, "alert-warning");
-                    }
-                    break;
-                case 'enable':  // enables an exercise
-                    $objExerciseTmp->enable();
-                    $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;
-                case 'disable': // disables an exercise
-                    if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
-                        $objExerciseTmp->disable();
+    if ($is_editor) {
+        if (!empty($_GET['choice'])) {
+            // construction of Exercise
+            $objExerciseTmp = new Exercise();
+            if ($objExerciseTmp->read($exerciseId)) {
+                switch ($_GET['choice']) {
+                    case 'delete': // deletes an exercise
+                        if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
+                            $objExerciseTmp->delete();
+                            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                            Session::Messages($langPurgeExerciseSuccess, 'alert-success');
+                            redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        } else {
+                            Session::Messages($langResourceBelongsToCert, "alert-warning");
+                        }
+                        break;
+                    case 'purge': // purge exercise results
+                        if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
+                            $objExerciseTmp->purge();
+                            $objExerciseTmp->save();
+                            Session::Messages($langPurgeExerciseResultsSuccess);
+                            redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        } else {
+                            Session::Messages($langResourceBelongsToCert, "alert-warning");
+                        }
+                        break;
+                    case 'enable':  // enables an exercise
+                        $objExerciseTmp->enable();
                         $objExerciseTmp->save();
                         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    } else {
-                        Session::Messages($langResourceBelongsToCert, "alert-warning");
-                    }
-                    break;
-                case 'public':  // make exercise public
-                    $objExerciseTmp->makepublic();
-                    $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;
-                case 'limited':  // make exercise limited
-                    $objExerciseTmp->makelimited();
-                    $objExerciseTmp->save();
-                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;
-                case 'clone':  // make exercise limited
-                    $objExerciseTmp->duplicate();
-                    Session::Messages($langCopySuccess, 'alert-success');
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;
-                case 'distribution': //distribute answers
-                    $objExerciseTmp->distribution($_GET['correction_output']);
-                    Session::Messages($langDistributionSuccess, 'alert-success');
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;
-                case 'cancelDistribution': //canceling distributed answers
-                    $objExerciseTmp->cancelDistribution();
-                    Session::Messages($langCancelDistributionSuccess, 'alert-success');
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;
+                        redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        break;
+                    case 'disable': // disables an exercise
+                        if (!resource_belongs_to_progress_data(MODULE_ID_EXERCISE, $exerciseId)) {
+                            $objExerciseTmp->disable();
+                            $objExerciseTmp->save();
+                            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                            redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        } else {
+                            Session::Messages($langResourceBelongsToCert, "alert-warning");
+                        }
+                        break;
+                    case 'public':  // make exercise public
+                        $objExerciseTmp->makepublic();
+                        $objExerciseTmp->save();
+                        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        break;
+                    case 'limited':  // make exercise limited
+                        $objExerciseTmp->makelimited();
+                        $objExerciseTmp->save();
+                        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+                        redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        break;
+                    case 'clone':  // make exercise limited
+                        $objExerciseTmp->duplicate();
+                        Session::Messages($langCopySuccess, 'alert-success');
+                        redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        break;
+                    case 'distribution': //distribute answers
+                        $objExerciseTmp->distribution($_GET['correction_output']);
+                        Session::Messages($langDistributionSuccess, 'alert-success');
+                        redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        break;
+                    case 'cancelDistribution': //canceling distributed answers
+                        $objExerciseTmp->cancelDistribution();
+                        Session::Messages($langCancelDistributionSuccess, 'alert-success');
+                        redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
+                        break;
+                }
             }
+            // destruction of Exercise
+            unset($objExerciseTmp);
         }
-        // destruction of Exercise
-        unset($objExerciseTmp);
     }
     $result = Database::get()->queryArray('SELECT * FROM exercise
                                             WHERE course_id = ?d
@@ -355,7 +357,7 @@ if (!$nbrExercises) {
             $tool_content .= '<tr>';
         }
         // prof only
-        if ($is_editor) {
+        if ($is_course_reviewer) {
             if (!empty($row->description)) {
                 $descr = "<br>$row->description";
             } else {
@@ -436,48 +438,49 @@ if (!$nbrExercises) {
             $langModify_temp = htmlspecialchars($langModify);
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
-
-            $tool_content .= "<td class='text-center'>".action_button(array(
-                    array('title' => $langEditChange,
-                          'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
-                          'icon' => 'fa-edit'),
-                    array('title' => $langCorrectByQuestion,
-                          'icon-class' => 'by_question',
-                          'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
-                          'url' => "#",
-                          'icon' => 'fa-pencil',
-                          'show' => $counter1),
-                    array('title' => $langDistributeExercise,
-                          'icon-class' => 'distribution',
-                          'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
-                          'url' => "#",
-                          'icon' => 'fa-exchange',
-                          'show' => $counter1),
-                    array('title' => $row->active ?  $langViewHide : $langViewShow,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable")."&amp;exerciseId=" . $row->id,
-                          'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
-                    array('title' => $row->public ? $langResourceAccessLock : $langResourceAccessUnlock,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
-                          'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
-                          'show' => course_status($course_id) == COURSE_OPEN),
-                    array('title' => $langUsage,
-                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
-                          'icon' => 'fa-line-chart'),
-                    array('title' => $langCreateDuplicate,
-                          'icon-class' => 'warnLink',
-                          'icon-extra' => "data-exerciseid='$row->id'",
-                          'url' => "#",
-                          'icon' => 'fa-copy'),
-                    array('title' => $langPurgeExerciseResults,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
-                          'icon' => 'fa-eraser',
-                          'confirm' => $langConfirmPurgeExerciseResults),
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmPurgeExercise)
-                    ))."</td></tr>";
+            if ($is_editor) {
+                $tool_content .= "<td class='text-center'>" . action_button(array(
+                        array('title' => $langEditChange,
+                            'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
+                            'icon' => 'fa-edit'),
+                        array('title' => $langCorrectByQuestion,
+                            'icon-class' => 'by_question',
+                            'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
+                            'url' => "#",
+                            'icon' => 'fa-pencil',
+                            'show' => $counter1),
+                        array('title' => $langDistributeExercise,
+                            'icon-class' => 'distribution',
+                            'icon-extra' => "data-exerciseid= [\"$eid\",\"$row->id\"]",
+                            'url' => "#",
+                            'icon' => 'fa-exchange',
+                            'show' => $counter1),
+                        array('title' => $row->active ? $langViewHide : $langViewShow,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . ($row->active ? "choice=disable" : "choice=enable") . "&amp;exerciseId=" . $row->id,
+                            'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $row->public ? $langResourceAccessLock : $langResourceAccessUnlock,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;" . ($row->public ? "choice=limited" : "choice=public") . "&amp;exerciseId=$row->id",
+                            'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
+                            'show' => course_status($course_id) == COURSE_OPEN),
+                        array('title' => $langUsage,
+                            'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
+                            'icon' => 'fa-line-chart'),
+                        array('title' => $langCreateDuplicate,
+                            'icon-class' => 'warnLink',
+                            'icon-extra' => "data-exerciseid='$row->id'",
+                            'url' => "#",
+                            'icon' => 'fa-copy'),
+                        array('title' => $langPurgeExerciseResults,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                            'icon' => 'fa-eraser',
+                            'confirm' => $langConfirmPurgeExerciseResults),
+                        array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmPurgeExercise)
+                    )) . "</td></tr>";
+            }
 
         // student only
         } else {
@@ -517,7 +520,7 @@ if (!$nbrExercises) {
             } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$langHasExpiredS</font>)";
+                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<span style='color:red;'>$langHasExpiredS</span>)";
             }
             if (has_user_participate_in_exercise($row->id)) {
                 $tool_content .= "&nbsp; <span class='fa fa-check-square-o' data-toggle='tooltip' data-placement='right' data-title='$langHasParticipated'></span>";
@@ -782,5 +785,4 @@ function has_user_participate_in_exercise($eid)
     } else {
         return false;
     }
-
 }

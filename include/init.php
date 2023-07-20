@@ -33,7 +33,7 @@ chdir($webDir);
 require 'vendor/autoload.php';
 require_once 'include/main_lib.php';
 
-// If session isn't started, start it
+// If session hasn't started, start it
 if (!session_id()) {
     session_start();
 }
@@ -289,6 +289,7 @@ register_shutdown_function('restore_dbname_override');
 // If $require_current_course is true, initialise course settings
 // Read properties of current course
 $is_editor = false;
+$is_course_reviewer = false;
 if (isset($require_current_course) and $require_current_course) {
     if (!isset($_SESSION['dbname'])) {
         $toolContent_ErrorExists = $langSessionIsLost;
@@ -338,12 +339,13 @@ if (isset($require_current_course) and $require_current_course) {
         if ($is_admin or $is_power_user) {
             $status = USER_TEACHER;
         } elseif ($uid) {
-            $stat = Database::get()->querySingle("SELECT status, editor FROM course_user
+            $stat = Database::get()->querySingle("SELECT status, editor, course_reviewer FROM course_user
                                                            WHERE user_id = ?d AND
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
                 $is_editor = $stat->editor;
+                $is_course_reviewer = $stat->course_reviewer;
             }
             if ($is_departmentmanage_user and isset($course_code)) {
                 // the department manager has rights to the courses of his department(s)
@@ -367,7 +369,7 @@ if (isset($require_current_course) and $require_current_course) {
 
                 if ($atleastone) {
                     $status = USER_TEACHER;
-                    $is_editor = $is_course_admin = true;
+                    $is_editor = $is_course_admin = $is_course_reviewer = true;
                     $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
                 }
             }
@@ -378,7 +380,7 @@ if (isset($require_current_course) and $require_current_course) {
             } elseif ($status == 0 and ($visible == COURSE_REGISTRATION or $visible == COURSE_CLOSED) and !@$course_guest_allowed) {
                 Session::Messages($langLoginRequired, 'alert-info');
                 redirect_to_home_page('modules/course_home/register.php?course=' . $course_code);
-            } elseif ($status != USER_TEACHER and !$is_editor and $visible == COURSE_INACTIVE) {
+            } elseif ($status != USER_TEACHER and !$is_editor and !$is_course_reviewer and $visible == COURSE_INACTIVE) {
                 $toolContent_ErrorExists = $langCheckProf;
             }
         }
@@ -559,12 +561,17 @@ if ($is_admin or $is_power_user) {
 
 if (isset($_SESSION['courses'])) {
     if (isset($course_code)) {
+        if (check_course_reviewer()) { // check if user course reviewer
+            $is_course_reviewer = true;
+        }
         if (check_editor()) { // check if user is editor of course
             $is_editor = true;
+            $is_course_reviewer = true;
         }
         if (@$_SESSION['courses'][$course_code] == USER_TEACHER or @$_SESSION['courses'][$course_code] == USER_DEPARTMENTMANAGER) {
             $is_course_admin = true;
             $is_editor = true;
+            $is_course_reviewer = true;
         }
     }
 } else {
@@ -576,7 +583,7 @@ if (isset($_SESSION['student_view'])) {
     if (isset($course_code) and $_SESSION['student_view'] === $course_code) {
         $_SESSION['courses'][$course_code] = $courses[$course_code] = USER_STUDENT;
         $saved_is_editor = $is_editor;
-        $is_admin = $is_editor = $is_course_admin = false;
+        $is_admin = $is_editor = $is_course_admin = $is_course_reviewer = false;
     } else {
         unset($_SESSION['student_view']);
     }
@@ -599,11 +606,17 @@ if (isset($require_editor) and $require_editor) {
     }
 }
 
+if (isset($require_course_reviewer) and $require_course_reviewer) {
+    if (!$is_course_reviewer) {
+        $toolContent_ErrorExists = $langCheckProf;
+    }
+}
+
 $module_id = current_module_id();
 
 // Security check:: Users must not be able to access inactive (if students) or disabled tools.
 if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
-    if ($is_editor) {
+    if ($is_course_reviewer or $is_editor) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE module_id NOT IN (SELECT module_id FROM module_disable) AND
                               course_id = ?d", $course_id);

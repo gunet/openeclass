@@ -99,6 +99,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = '.USER_STUDENT;
         } elseif ($filter == 'tutor') {
             $search_sql .= ' AND course_user.tutor = 1';
+        } elseif ($filter == 'course_reviewer') {
+            $search_sql .= ' AND course_user.course_reviewer = 1';
         } elseif ($filter == 'reviewer') {
             $search_sql .= ' AND course_user.reviewer = 1';
         }
@@ -117,7 +119,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                 AND `course_user`.`course_id` = ?d $search_sql", $course_id, $search_values)->total;
     $result = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email,
                            user.am, user.has_icon, course_user.status,
-                           course_user.tutor, course_user.editor, course_user.reviewer,
+                           course_user.tutor, course_user.editor, course_user.course_reviewer, course_user.reviewer,
                            DATE(course_user.reg_date) AS reg_date
                     FROM course_user, user
                     WHERE `user`.`id` = `course_user`.`user_id`
@@ -164,6 +166,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
             ),
             array(
+                'title' => $langGiveRightCourseReviewer,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->course_reviewer == '0' ? "give" : "remove")."CourseReviewer=". getIndirectReference($myrow->id),
+                'icon' => $myrow->course_reviewer == '0' ? "fa-square-o" : "fa-check-square-o"
+            ),
+            array(
                 'title' => $langGiveRightEditor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
@@ -188,13 +195,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         ));
         if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
             $user_roles = array($langEditor);
+        } elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
+            $user_roles = array($langCourseReviewer);
         } elseif ($myrow->status == USER_TEACHER) {
             $user_roles = array($langTeacher);
         } else {
             $user_roles = array($langStudent);
         }
-        if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
-        if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
+        if ($myrow->tutor == '1') {
+            $user_roles[] = $langTutor;
+        }
+        if ($myrow->reviewer == '1') {
+            $user_roles[] = $langOpenCoursesReviewer;
+        }
 
         $user_role_string = implode(',<br>', $user_roles);
 
@@ -250,6 +263,7 @@ $head_content .= "
                                         '<option value=\'teacher\'>$langTeacher</option>'+
                                         '<option value=\'student\'>$langStudent</option>'+
                                         '<option value=\'editor\'>$langEditor</option>'+
+                                        '<option value=\'course_reviewer\'>$langCourseReviewer</option>'+
                                         '<option value=\'tutor\'>$langTutor</option>'+
                                         ".(get_config('opencourses_enable') ? "'<option value=\'reviewer\'>$langOpenCoursesReviewer</option>'+" : "")."
                                     '</select>')
@@ -371,6 +385,14 @@ if (isset($_GET['giveAdmin'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
                                                                'dest_uid' => $new_editor_gid,
                                                                'right' => '+2'));
+} elseif (isset($_GET['giveCourseReviewer'])) {
+    $new_course_reviewer_gid = intval(getDirectReference($_GET['giveCourseReviewer']));
+    Database::get()->query("UPDATE course_user SET course_reviewer = 1
+                            WHERE user_id = ?d
+                            AND course_id = ?d", $new_course_reviewer_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+        'dest_uid' => $new_course_reviewer_gid,
+        'right' => '+4'));
 } elseif (isset($_GET['removeAdmin'])) {
     $removed_admin_gid = intval(getDirectReference($_GET['removeAdmin']));
     Database::get()->query("UPDATE course_user SET status = " . USER_STUDENT . "
@@ -396,6 +418,14 @@ if (isset($_GET['giveAdmin'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
                                                                'dest_uid' => $removed_editor_gid,
                                                                'right' => '-2'));
+} elseif (isset($_GET['removeCourseReviewer'])) {
+    $removed_course_reviewer_gid = intval(getDirectReference($_GET['removeCourseReviewer']));
+    Database::get()->query("UPDATE course_user SET course_reviewer = 0
+                        WHERE user_id = ?d
+                        AND course_id = ?d", $removed_course_reviewer_gid, $course_id);
+    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
+        'dest_uid' => $removed_course_reviewer_gid,
+        'right' => '-4'));
 }
 
 if (get_config('opencourses_enable')) {

@@ -631,8 +631,6 @@ function check_guest($id = null) {
 
 /**
  * @brief function to check if user is a course editor
- * @global type $uid
- * @global type $course_id
  * @return boolean
  */
 function check_editor($user_id = null, $cid = null) {
@@ -662,6 +660,28 @@ function check_editor($user_id = null, $cid = null) {
     } else {
         return false;
     }
+}
+
+/**
+ * @brief check if user is course reviewer
+ * @return bool
+ */
+function check_course_reviewer() {
+    global $uid, $course_id, $is_admin;
+
+    if ($is_admin) {
+        return true;
+    }
+
+    $s = Database::get()->querySingle("SELECT status, course_reviewer FROM course_user
+                                        WHERE user_id = ?d AND
+                                        course_id = ?d", $uid, $course_id);
+    if ($s and ($s->status == USER_TEACHER or $s->course_reviewer == 1)) {
+        return true;
+    } else {
+        return false;
+    }
+
 }
 
 /**
@@ -2001,7 +2021,6 @@ function deleteUser($id, $log) {
  * @brief Return the value of a key from the config table, or a default value (or null) if not found
  * @param type $key
  * @param type $default
- * @return type
  */
 function get_config($key, $default = null) {
     $cache = new FileCache('config', 300);

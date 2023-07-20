@@ -621,15 +621,15 @@ function adminMenu() {
 }
 
 /**
- *
- * @brief Creates a multi-dimensional array of the user's tools
+ * @brief Creates a multidimensional array of the user's tools
  * in regard to the user's user level
  * (student | professor | platform administrator)
  * @param bool $rich Whether to include rich text notifications in title
  * @return array
  */
-function lessonToolsMenu($rich=true) {
-    global $uid, $is_editor, $is_course_admin, $courses,
+function lessonToolsMenu($rich=true): array
+{
+    global $uid, $is_editor, $is_course_admin, $is_course_reviewer, $courses,
            $course_code, $langAdministrationTools,
            $modules, $admin_modules, $urlAppend, $status, $course_id;
 
@@ -637,7 +637,7 @@ function lessonToolsMenu($rich=true) {
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
 
-    if ($is_editor || $is_course_admin) {
+    if ($is_editor || $is_course_admin || $is_course_reviewer) {
         $tools_sections =
             array(array('type' => 'Public',
                         'title' => $GLOBALS['langActiveTools'],
@@ -665,7 +665,7 @@ function lessonToolsMenu($rich=true) {
         $arrMenuType = array('type' => 'text',
                              'text' => $section['title'],
                              'class' => $section['class']);
-        array_push($sideMenuSubGroup, $arrMenuType);
+        $sideMenuSubGroup[] = $arrMenuType;
 
         setlocale(LC_COLLATE, $GLOBALS['langLocale']);
         usort($result, function ($a, $b) {
@@ -697,59 +697,59 @@ function lessonToolsMenu($rich=true) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge pull-right'>$new_msgs</span></b>");
+                        $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                            " $mail_status<span class='badge pull-right'>$new_msgs</span></b>";
                     } else {
-                        array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
+                        $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                     }
                 } else {
-                    array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
+                    $sideMenuText[] = q($modules[$mid]['title']) . ' ' . $mail_status;
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
-                    "<span class='badge pull-right'>$new_docs</span></b>");
+                $sideMenuText[] = '<b>' . q($modules[$mid]['title']) .
+                    "<span class='badge pull-right'>$new_docs</span></b>";
             } else {
-                array_push($sideMenuText, q($modules[$mid]['title']));
+                $sideMenuText[] = q($modules[$mid]['title']);
             }
 
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
-                            '/?course=' . $course_code));
-            array_push($sideMenuImg, $modules[$mid]['image']);
+            $sideMenuLink[] = q($urlAppend . 'modules/' . $modules[$mid]['link'] .
+                '/?course=' . $course_code);
+            $sideMenuImg[] = $modules[$mid]['image'];
 
-            array_push($sideMenuID, $mid);
+            $sideMenuID[] = $mid;
         }
 
         if ($section['type'] == 'Public') {
 
             // display course pages links (if any)
             foreach (getCoursePages($course_id) as $page) {
-                array_push($sideMenuText, q($page->title));
-                array_push($sideMenuLink, $urlAppend . "modules/course_home/page.php?course=$course_code&amp;id=" . $page->id);
-                array_push($sideMenuImg, 'fa-caret-right');
-                array_push($sideMenuID, -1);
+                $sideMenuText[] = q($page->title);
+                $sideMenuLink[] = $urlAppend . "modules/course_home/page.php?course=$course_code&amp;id=" . $page->id;
+                $sideMenuImg[] = 'fa-caret-right';
+                $sideMenuID[] = -1;
             }
 
             // display external links (if any)
             foreach (getExternalLinks() as $ex_link) {
-                array_push($sideMenuText, q($ex_link->title));
-                array_push($sideMenuLink, q($ex_link->url));
-                array_push($sideMenuImg, 'fa-external-link');
-                array_push($sideMenuID, -1);
+                $sideMenuText[] = q($ex_link->title);
+                $sideMenuLink[] = q($ex_link->url);
+                $sideMenuImg[] = 'fa-external-link';
+                $sideMenuID[] = -1;
             }
 
             foreach (getLTILinksForTools() as $lti_link) {
-                array_push($sideMenuText, q($lti_link->title));
-                array_push($sideMenuLink, q($lti_link->url));
-                array_push($sideMenuImg, q($lti_link->menulink));
-                array_push($sideMenuID, -1);
+                $sideMenuText[] = q($lti_link->title);
+                $sideMenuLink[] = q($lti_link->url);
+                $sideMenuImg[] = q($lti_link->menulink);
+                $sideMenuID[] = -1;
             }
         }
 
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuSubGroup, $sideMenuID);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
+        $sideMenuSubGroup[] = $sideMenuID;
+        $sideMenuGroup[] = $sideMenuSubGroup;
     }
 
     if ($is_course_admin) {  // display course admin tools
@@ -761,20 +761,20 @@ function lessonToolsMenu($rich=true) {
         $arrMenuType = array('type' => 'text',
                              'text' => $langAdministrationTools,
                              'class' => 'course_admin');
-        array_push($sideMenuSubGroup, $arrMenuType);
+        $sideMenuSubGroup[] = $arrMenuType;
 
         foreach ($admin_modules as $adm_mod) {
-            array_push($sideMenuText, $adm_mod['title']);
-            array_push($sideMenuLink, q($urlAppend . 'modules/' . $adm_mod['link'] .
-                            '/?course=' . $course_code));
-            array_push($sideMenuImg, $adm_mod['image']);
+            $sideMenuText[] = $adm_mod['title'];
+            $sideMenuLink[] = q($urlAppend . 'modules/' . $adm_mod['link'] .
+                '/?course=' . $course_code);
+            $sideMenuImg[] = $adm_mod['image'];
         }
 
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuSubGroup, $sideMenuID);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
+        $sideMenuSubGroup[] = $sideMenuID;
+        $sideMenuGroup[] = $sideMenuSubGroup;
     }
     return $sideMenuGroup;
 }
@@ -808,7 +808,7 @@ function pickerMenu() {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
     $arrMenuType['class'] = 'picker';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
     if (isset($course_id) and $course_id >= 1) {
         $visible = ($is_editor) ? '' : 'AND visible = 1';
@@ -821,26 +821,26 @@ function pickerMenu() {
 
         foreach ($result as $module) {
             $mid = $module->module_id;
-            array_push($sideMenuText, q($modules[$mid]['title']));
-            array_push($sideMenuLink, q($urlServer . 'modules/' .
-                            $modules[$mid]['link'] . '/' . $params));
-            array_push($sideMenuImg, $modules[$mid]['image'] . "_on.png");
+            $sideMenuText[] = q($modules[$mid]['title']);
+            $sideMenuLink[] = q($urlServer . 'modules/' .
+                $modules[$mid]['link'] . '/' . $params);
+            $sideMenuImg[] = $modules[$mid]['image'] . "_on.png";
         }
     }
 
     // link for common documents
     if (get_config('enable_common_docs')) {
-        array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
-        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php' . $params));
-        array_push($sideMenuImg, 'docs.png');
+        $sideMenuText[] = q($GLOBALS['langCommonDocs']);
+        $sideMenuLink[] = q($urlServer . 'modules/admin/commondocs.php' . $params);
+        $sideMenuImg[] = 'docs.png';
     }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
-        array_push($sideMenuText, q($GLOBALS['langMyDocs']));
-        array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php' . $params));
-        array_push($sideMenuImg, 'docs.png');
+        $sideMenuText[] = q($GLOBALS['langMyDocs']);
+        $sideMenuLink[] = q($urlServer . 'main/mydocs/index.php' . $params);
+        $sideMenuImg[] = 'docs.png';
     }
 
     // link for group documents
@@ -863,18 +863,18 @@ function pickerMenu() {
 
             if ($usercheck) {
                 // display extra menu entry for group documents
-                array_push($sideMenuText, q($GLOBALS['langGroupDocumentsLink'] . "'" . $result->name . "'"));
-                array_push($sideMenuLink, q($urlServer . 'modules/group/document.php' . $params . "&group_id=" . q($result->id)));
-                array_push($sideMenuImg, 'fa-folder-open-o');
+                $sideMenuText[] = q($GLOBALS['langGroupDocumentsLink'] . "'" . $result->name . "'");
+                $sideMenuLink[] = q($urlServer . 'modules/group/document.php' . $params . "&group_id=" . q($result->id));
+                $sideMenuImg[] = 'fa-folder-open-o';
             }
         }
     }
 
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
 
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    $sideMenuGroup[] = $sideMenuSubGroup;
     return $sideMenuGroup;
 }
 

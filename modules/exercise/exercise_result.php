@@ -65,7 +65,7 @@ if (isset($_GET['eurId'])) {
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
     $user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $exercise_user_record->uid);
-    if (!$is_editor && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
+    if (!$is_course_reviewer && $exercise_user_record->uid != $uid || $exercise_user_record->attempt_status == ATTEMPT_PAUSED) {
        // student is not allowed to view other people's exercise results
        // Nobody can see results of a paused exercise
        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
@@ -208,12 +208,12 @@ if (!is_null($objExercise->selectEndDate())) {
 }
 
 $showResults = $displayResults == 1
-               || $is_editor
+               || $is_course_reviewer
                || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts
                || $displayResults == 4 && $end_date < $cur_date;
 
 $showScore = $displayScore == 1
-            || $is_editor
+            || $is_course_reviewer
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
 

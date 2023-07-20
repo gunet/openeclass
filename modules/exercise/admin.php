@@ -25,7 +25,7 @@ require_once 'question.class.php';
 require_once 'answer.class.php';
 require_once 'exercise.lib.php';
 
-$require_editor = true;
+$require_course_reviewer = true;
 $require_current_course = true;
 $require_help = TRUE;
 $helpTopic = 'exercises';
@@ -66,102 +66,108 @@ if (isset($_GET['exerciseId'])) {
     $shuffleQuestions = $objExercise->selectShuffle();
 }
 
-// initializes the Question object
-if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
-    // construction of the Question object
-    $objQuestion = new Question();
+if ($is_course_reviewer) {
+    if (isset($_GET['preview'])) { // exercise preview
+        $pageName = $langSee;
+        display_exercise($exerciseId);
+    }
+}
 
-    // reads question data
-    if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
-        if (isset($_GET['modifyQuestion'])) {
-            $question_id = intval($_GET['modifyQuestion']);
-        } elseif (isset($_GET['modifyAnswers'])) {
-            $question_id = intval($_GET['modifyAnswers']);
-        }
-        // if question not found
-        if (!$objQuestion->read($question_id)) {
-            Session::Messages($langQuestionNotFound);
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
-        }
-        if (isset($_GET['modifyAnswers'])) {
-            //clone and redirect to edit
-            if (isset($_GET['clone'])) {
-                // if user comes from an exercise page
-                if (isset($exerciseId)) {
-                    // duplicates the question
-                    $new_question_id = $objQuestion->duplicate();
-                    // deletes the old question from the specific exercise
-                    $objQuestion->delete($exerciseId);
-                    // removes the old question ID from the question list of the Exercise object
-                    $objExercise->removeFromList($question_id);
-                    // adds the new question ID into the question list of the Exercise object
-                    $objExercise->addToList($new_question_id);
-                    // construction of the duplicated Question
-                    $objQuestion = new Question();
-                    $objQuestion->read($new_question_id);
-                    // copies answers from the old question to the new
-                    $objAnswer = new Answer($question_id);
-                    $objAnswer->duplicate($new_question_id);
-                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id&exerciseId=$exerciseId");
-                    exit();
-                // if user comes from question pool
-                } else {
-                    $new_question_id = $objQuestion->duplicate();
-                    $objQuestion = new Question();
-                    $objQuestion->read($new_question_id);
-                    $objAnswer = new Answer($question_id);
-                    $objAnswer->duplicate($new_question_id);
-                    redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id");
-                    exit();
-                }
-            } else {
-                $objAnswer = new Answer($question_id);
+if ($is_editor) {
+// initializes the Question object
+    if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+        // construction of the Question object
+        $objQuestion = new Question();
+
+        // reads question data
+        if (isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
+            if (isset($_GET['modifyQuestion'])) {
+                $question_id = intval($_GET['modifyQuestion']);
+            } elseif (isset($_GET['modifyAnswers'])) {
+                $question_id = intval($_GET['modifyAnswers']);
             }
-            include 'answer_admin.inc.php';
-            $pageName = $langQuestionManagement;
-            $navigation[] = array(
-                'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
-                'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
-            );
+            // if question not found
+            if (!$objQuestion->read($question_id)) {
+                Session::Messages($langQuestionNotFound);
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
+            }
+            if (isset($_GET['modifyAnswers'])) {
+                //clone and redirect to edit
+                if (isset($_GET['clone'])) {
+                    // if user comes from an exercise page
+                    if (isset($exerciseId)) {
+                        // duplicates the question
+                        $new_question_id = $objQuestion->duplicate();
+                        // deletes the old question from the specific exercise
+                        $objQuestion->delete($exerciseId);
+                        // removes the old question ID from the question list of the Exercise object
+                        $objExercise->removeFromList($question_id);
+                        // adds the new question ID into the question list of the Exercise object
+                        $objExercise->addToList($new_question_id);
+                        // construction of the duplicated Question
+                        $objQuestion = new Question();
+                        $objQuestion->read($new_question_id);
+                        // copies answers from the old question to the new
+                        $objAnswer = new Answer($question_id);
+                        $objAnswer->duplicate($new_question_id);
+                        redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id&exerciseId=$exerciseId");
+                        exit();
+                        // if user comes from question pool
+                    } else {
+                        $new_question_id = $objQuestion->duplicate();
+                        $objQuestion = new Question();
+                        $objQuestion->read($new_question_id);
+                        $objAnswer = new Answer($question_id);
+                        $objAnswer->duplicate($new_question_id);
+                        redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyQuestion=$new_question_id");
+                        exit();
+                    }
+                } else {
+                    $objAnswer = new Answer($question_id);
+                }
+                include 'answer_admin.inc.php';
+                $pageName = $langQuestionManagement;
+                $navigation[] = array(
+                    'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
+                    'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+                );
+            } else {
+                $pageName = $langInfoQuestion;
+                $navigation[] = array(
+                    'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
+                    'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+                );
+                include 'statement_admin.inc.php';
+            }
         } else {
-            $pageName = $langInfoQuestion;
+            $pageName = $langNewQu;
             $navigation[] = array(
                 'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
                 'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
             );
             include 'statement_admin.inc.php';
         }
-    } else {
+    } elseif (isset($_GET['importIMSQTI'])) {
         $pageName = $langNewQu;
         $navigation[] = array(
             'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
-            );
-        include 'statement_admin.inc.php';
-    }
-} elseif (isset($_GET['importIMSQTI'])) {
-    $pageName = $langNewQu;
-    $navigation[] = array(
-      'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
-      'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
-    );
-    include 'imsqti.inc.php';
+        );
+        include 'imsqti.inc.php';
 
-} elseif (isset($_GET['preview'])) { // exercise preview
-    $pageName = $langSee;
-    display_exercise($exerciseId);
-} else {
-    if (isset($_GET['NewExercise'])) {
-        $pageName = $langNewEx;
-    } elseif (isset($_GET['modifyExercise'])) {
-        $pageName = $langInfoExercise;
-        $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
     } else {
-        $pageName = $langExerciseManagement;
-    }
-    include 'exercise_admin.inc.php';
-    if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
-        include 'question_list_admin.inc.php';
+        if (isset($_GET['NewExercise'])) {
+            $pageName = $langNewEx;
+        } elseif (isset($_GET['modifyExercise'])) {
+            $pageName = $langInfoExercise;
+            $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
+        } else {
+            $pageName = $langExerciseManagement;
+        }
+        include 'exercise_admin.inc.php';
+        if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
+            include 'question_list_admin.inc.php';
+        }
     }
 }
 

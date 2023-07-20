@@ -39,6 +39,11 @@ $langOfEditor = "Βοηθού εκπαιδευτή";
 $langsEditor = "βοηθός εκπαιδευτή";
 $langsOfEditor = "βοηθού εκπαιδευτή";
 
+$langCourseReviewer = "Επόπτης";
+$langOfCourseReviewer = "Επόπτη";
+$langsCourseReviewer = "επόπτης";
+$langsOfCourseReviewer = "επόπτη";
+
 $langGroupTutor = "Υπεύθυνος ομάδας";
 $langsOfGroupTutor = "υπεύθυνου ομάδας";
 
@@ -51,7 +56,7 @@ $langsStudent = "εκπαιδευόμενος";
 $langsOfStudent = "εκπαιδευόμενου";
 $langsStudents = "εκπαιδευόμενοι";
 $langsOfStudents = "εκπαιδευόμενων";
-$langsOfStudentss = "εκπαιδευόμενoυς";
+$langsOfStudentss = "εκπαιδευόμενους";
 $langsstudent_acc = "εκπαιδευόμενο";
 
 $langGuest = "Χρήστης Επισκέπτης";
