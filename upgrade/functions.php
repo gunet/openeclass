@@ -2493,6 +2493,18 @@ function upgrade_to_3_14($tbl_options) : void {
 }
 
 /**
+ * @brief upgrade queries to 3.15
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_3_15($tbl_options) : void
+{
+    if (!DBHelper::fieldExists('course_user','course_reviewer')) {
+        Database::get()->query("ALTER TABLE course_user ADD `course_reviewer` TINYINT NOT NULL DEFAULT '0' AFTER editor");
+    }
+}
+
+/**
  * @brief Create Indexes
  */
 

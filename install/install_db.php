@@ -206,6 +206,7 @@ $db->query("CREATE TABLE `course_user` (
       `status` TINYINT(4) NOT NULL DEFAULT 0,
       `tutor` INT(11) NOT NULL DEFAULT 0,
       `editor` INT(11) NOT NULL DEFAULT 0,
+      `course_reviewer` TINYINT(4) NOT NULL DEFAULT 0,
       `reviewer` INT(11) NOT NULL DEFAULT 0,
       `reg_date` DATETIME NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
