@@ -120,10 +120,9 @@ if ($total_categories > 0) {
         }
 
         $tool_content .= "<div class='col-12 mt-3'><caption>";
-        $tool_content .= "<div class='col-12 shadow-default p-3 Borders mb-4'>
-                          <div class='row'>
-                          <div class='col-sm-6 text-md-start text-center mt-1'><strong>$langCategory :</strong> $cat_title</div>";
-        $tool_content .= "<div class='col-sm-6 text-md-end text-center mt-md-0 mt-3'>";
+        $tool_content .= "<div class='col-12 d-flex justify-content-between align-items-center border-card px-3 py-2 mb-4'>
+                          <div><strong>$langCategory :</strong> $cat_title</div>";
+        $tool_content .= "<div>";
         $tool_content .= action_button(
                 array(
                     array(
@@ -161,7 +160,7 @@ if ($total_categories > 0) {
                     )
                 )
             );
-        $tool_content .= "</div></div></div></caption>";
+        $tool_content .= "</div></div></caption>";
 
         $tool_content .= "<div class='mt-0 table-responsive'><table class='table-default'>";
         $tool_content .= "<thead class='list-header'>";

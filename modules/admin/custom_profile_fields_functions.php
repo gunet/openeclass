@@ -87,6 +87,7 @@ function render_profile_fields_form($context, $valitron = false) {
                                             "AND user_type <> ?d ORDER BY sortorder DESC", $args);
 
         if (count($res) > 0) {
+            
             foreach ($res as $f) {
 
                 if (isset($fdata)) {
@@ -105,7 +106,13 @@ function render_profile_fields_form($context, $valitron = false) {
                     $form_class = 'form-group mt-4';
                     $help_block = '';
                 }
-                $return_string .= '<div class="col-lg-6 col-12 px-3"><div class="'.$form_class.'">';
+
+                $column = 'col-lg-6 col-12';
+                // if case is editor then set column to equals 12. 
+                if($f->datatype == 2){
+                    $column = 'col-12';
+                }
+                $return_string .= '<div class="'.$column.' px-3"><div class="'.$form_class.'">';
                 $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
                
 
@@ -208,7 +215,7 @@ function render_profile_fields_form($context, $valitron = false) {
                         break;
                 }
                 if (!empty($f->description)) {
-                    $return_string .= '<small><em>'.standard_text_escape($f->description);
+                    $return_string .= '<small><em">'.standard_text_escape($f->description);
                     if (isset($req_label)) {
                         $return_string .= $req_label;
                     }
