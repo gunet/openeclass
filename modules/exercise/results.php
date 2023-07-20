@@ -61,7 +61,7 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
 if ($is_editor && isset($_GET['purgeAttempID'])) {
     $eurid = $_GET['purgeAttempID'];
     $objExercise->purgeAttempt($exerciseIdIndirect, $eurid);
-    Session::flash('message',$langPurgeExerciseResultsSuccess); 
+    Session::flash('message',$langPurgeExerciseResultsSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
@@ -70,7 +70,7 @@ if ($is_editor && isset($_GET['modifyAttempID'])) {
     $eurid = $_GET['modifyAttempID'];
     $status = $_GET['status'];
     $objExercise->modifyAttempt($eurid, $status);
-    Session::flash('message',$langChangeAttemptStatus); 
+    Session::flash('message',$langChangeAttemptStatus);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=" . getIndirectReference($_GET['exerciseId']));
 }
@@ -89,49 +89,40 @@ if (!is_null($objExercise->selectEndDate())) {
     $end_date = new DateTime($objExercise->selectEndDate());
 }
 $showScore = $displayScore == 1
-            || $is_editor
+            || $is_course_reviewer
             || $displayScore == 3 && $exerciseAttemptsAllowed == $userAttempts
             || $displayScore == 4 && $end_date < $cur_date;
 
-
-if ($is_editor) {
     $tool_content .= action_bar([
-        [
-            'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary'
-        ],
         [
             'title' => $langCheckGrades,
             'icon' => 'fa-bar-chart',
             'class' => 'check-grades',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'
+            'button-class' => 'btn-success',
+            'show' => $is_editor
+        ],
+        [
+            'title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa fa-reply',
+            'level' => 'primary'
         ],
         [
             'title' => "$langResults ($langDumpUser)",
             'url' => "dump_results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
             'icon' => 'fa fa-download',
             'button-class' => 'btn-success',
+            'show' => $is_course_reviewer
         ],
         [
             'title' => "$langPollFullResults ($langDumpUser)",
             'url' => "dump_results_full.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect",
             'icon' => 'fa fa-download',
             'button-class' => 'btn-success',
+            'show' => $is_course_reviewer
         ]
     ]);
-} else {
-    $tool_content .= action_bar([
-        [
-            'title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa fa-reply',
-            'level' => 'primary'
-        ]
-    ]);
-}
 
 $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
@@ -152,7 +143,7 @@ $tool_content .= "<div class='col-12 mt-3'><select class='form-select' style='ma
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_CANCELED."' ".(($status === ATTEMPT_CANCELED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_CANCELED) . "</option>
         </select></div>";
 
-if ($is_editor) {
+if ($is_course_reviewer) {
     $result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname FROM `exercise_user_record`
                                                             JOIN user ON exercise_user_record.uid = user.id
                                                             WHERE eid = ?d) 

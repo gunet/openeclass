@@ -247,12 +247,12 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
 
 
 /**
- * @brief exercise teacher view*
+ * @brief exercise teacher view
  * @param type $exercise_id
  */
 function display_exercise($exercise_id) {
 
-    global $tool_content, $head_content, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
+    global $tool_content, $head_content, $is_editor, $langQuestion, $picturePath, $langChoice, $langCorrespondsTo,
            $langAnswer, $langComment, $langQuestionScore, $langTotalScore, $langQuestionsManagement,
            $langScore, $course_code, $langBack, $langModify, $langExerciseExecute, $langFrom2,
            $langFromRandomCategoryQuestions, $langFromRandomDifficultyQuestions, $langQuestionFeedback,
@@ -309,20 +309,26 @@ function display_exercise($exercise_id) {
             'url' => "admin.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-cogs',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'
+            'button-class' => 'btn-success',
+            'show' => $is_editor
+        ],
+        ['title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
         ]
-        
     ]);
-
 
     $tool_content .= "
     <div class='col-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-              <h3>" . q_math($exercise->selectTitle()) . "
-                <a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
-                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
-                </a>
-              </h3>
+              <h3>" . q_math($exercise->selectTitle());
+              if ($is_editor) {
+                    $tool_content .= "<a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>
+                      <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
+                    </a>";
+                }
+              $tool_content .= "</h3>
             </div>
             <div class='card-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>
         </div>
@@ -391,15 +397,18 @@ function display_exercise($exercise_id) {
             <thead>
                 <tr class='active'>
                 <td colspan='$colspan'>
-                    <strong><u>$langQuestion</u>: $i</strong>
-                    <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
-                    <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
-                    </a>
-                    </td>
+                    <strong><u>$langQuestion</u>: $i</strong>";
+            if ($is_editor) {
+                $tool_content .= "<a $modal_params href = 'admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid' >
+                    <span class='fa fa-edit' data - bs - toggle = 'tooltip' data - bs - placement = 'bottom' data - bs - original - title = '$langModify' ></span >
+                    </a >";
+            }
+                $tool_content .= "</td>
                 </tr>
             </thead>
             <tr>
               <td colspan='$colspan'>";
+
             $tool_content .= "
             <strong>" . q_math($questionName) . "</strong>
             <br>" . standard_text_escape($questionDescription) . "<br><br>

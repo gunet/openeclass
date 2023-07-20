@@ -848,12 +848,13 @@ class Log {
      * @param type $details
      * @return string
      */
-    private function course_user_action_details($details, $type) {
+    private function course_user_action_details($details, $type): string
+    {
 
         global $langOfUser, $langToUser,
         $langsOfTeacher, $langsOfEditor, $langRegistration, $langAddGUser,
         $langUnCourse, $langTheU, $langGiveRight,
-        $langRemovedRight, $langsOfGroupTutor,
+        $langRemovedRight, $langsOfGroupTutor, $langsOfCourseReviewer,
         $langDelUsers, $langParams;
 
         $details = unserialize($details);
@@ -889,6 +890,10 @@ class Log {
                        $content .= "$langGiveRight $langsOfGroupTutor $langToUser";
                        $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
+            case '+4': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langGiveRight $langsOfCourseReviewer $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
+                       break;
             case '-1': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
                        $content .= "$langRemovedRight $langsOfTeacher $langToUser";
                        $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
@@ -901,6 +906,10 @@ class Log {
                        $content .= "$langRemovedRight $langsOfGroupTutor $langToUser";
                        $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
                 break;
+            case '-4': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
+                       $content .= "$langRemovedRight $langsOfCourseReviewer $langToUser";
+                       $content .= "&nbsp;&laquo" . display_user($details['dest_uid'], false, false) . "&raquo";
+                       break;
             case '+10': $content = "$langAddGUser&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo&nbsp;";
                 break;
         }

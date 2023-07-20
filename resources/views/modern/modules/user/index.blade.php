@@ -84,6 +84,7 @@
                            '<option value="teacher">{{ js_escape(trans('langTeacher')) }}</option>' +
                            '<option value="student">{{ js_escape(trans('langStudent')) }}</option>' +
                            '<option value="editor">{{ js_escape(trans('langEditor')) }}</option>' +
+                           '<option value="course_reviewer">{{ js_escape(trans('langCourseReviewer')) }}</option> '+
                            '<option value="tutor">{{ js_escape(trans('langTutor')) }}</option>' +
                         @if (get_config('opencourses_enable'))
                            '<option value="reviewer">{{ js_escape(trans('langOpenCoursesReviewer')) }}</option>' +
@@ -199,16 +200,16 @@
 <div class='{{ $container }} py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
-                    
+
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -230,7 +231,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -242,7 +243,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -252,12 +253,12 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
- 
+
                     <div class='col-12'>
                         <div class='table-responsive'>
                             <table id='users_table_{{ $course_code }}' class='table-default'>
@@ -289,7 +290,7 @@
             </div>
 
         </div>
-    
+
 </div>
 </div>
 
