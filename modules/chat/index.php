@@ -136,8 +136,9 @@ if ($is_editor) {
                     <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
                 </div>
             </div>";
-
+        $tool_content .= "<div class='form-group'>";
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "</div>";
         $tool_content .= "</form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
             //<![CDATA[
