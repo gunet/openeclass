@@ -3,29 +3,39 @@
     <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
         <div class='d-flex justify-content-start align-items-center h-100'>
-            <a class='IconBtn ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
+
+            <a class='ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
                 <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
             </a>
-            <div class='d-flex justify-content-start align-items-center flex-wrap'>
+
+            <ul class="container-items nav">
                 @if(!get_config('hide_login_link'))
-                    <a id="link-home" class="menu-item mx-lg-3 d-flex justify-content-center align-items-center @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}"> 
-                        {{ trans('langHome') }}
-                    </a>
+                    <li class="nav-item">
+                        <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}"> 
+                            {{ trans('langHome') }}
+                        </a>
+                    </li>
                 @endif
                 @if (!isset($_SESSION['uid']))
-                    <a id="link-register" class="menu-item mx-lg-3 d-flex justify-content-center align-items-center @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
-                        {{ trans('langRegistration') }}
-                    </a>
+                    <li class="nav-item">
+                        <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
+                            {{ trans('langRegistration') }}
+                        </a>
+                    </li>
                 @endif
-                <a id="link-lessons" class="menu-item mx-lg-3 d-flex justify-content-center align-items-center" href="{{ $urlServer }}modules/auth/listfaculte.php">
-                    {{ trans('langCourses') }}
-                </a>
+                <li class="nav-item">
+                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                        {{ trans('langCourses') }}
+                    </a>
+                </li>
                 
-                <a id="link-faq" class="menu-item ms-lg-3 d-flex justify-content-center align-items-center" href="{{$urlAppend}}info/faq.php">
-                    {{ trans('langFaq') }}
-                </a>
+                <li class="nav-item">
+                    <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
+                        {{ trans('langFaq') }}
+                    </a>
+                </li>
+            </ul>
                 
-            </div>
         </div>
 
         <div class='d-flex justify-content-end align-items-center h-100 pe-4'>
@@ -33,15 +43,21 @@
                     
             @if(get_config('enable_search'))
                 <div class='h-30px'>
-                    <form class="d-flex justify-content-start align-items-center h-30px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
-                        <div class="input-group input-group-search rounded-0">
+                    <form id='submitSearch' class="d-flex justify-content-start align-items-center h-30px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' >
+                        {{--<div class="input-group input-group-search rounded-0">
                             <span class="input-group-text rounded-0 bg-white border-0 px-0 py-0" id="basic-inputSearch">
                                 <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-white border-0 p-0 rounded-0" type="submit" name="quickSearch">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </span>
-                            <input id="search_terms" type="text" class="inputSearch inputSearchbtn form-control rounded-0" placeholder='Search...' name="search_terms" aria-describedby="basic-inputSearch"/>
+                            <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='Search...' name="search_terms" aria-describedby="basic-inputSearch"/>
+                        </div>--}}
+                        <div>
+                            <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-white border-0 p-0 rounded-0" type="button" name="quickSearch">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
                         </div>
+                        <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='Search...' name="search_terms" aria-describedby="basic-inputSearch"/>
                     </form> 
                 </div>
                 <div class='split-left h-30px ps-0 pe-3'></div>
@@ -60,23 +76,15 @@
             
                 @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
                     <a class='d-flex align-items-center text-uppercase TextSemiBold userLoginMobile ms-0' href="{{$urlAppend}}main/login_form.php">
-                        <span class="fa-solid fa-user loginText pe-1"></span>
-                        <span class='loginText small-text'>{{ trans('langUserLogin') }}</span>
+                        <i class="fa-solid fa-user loginText pe-1"></i>
+                        <span class='loginText small-text hidden-lg text-capitalize'>{{ trans('langUserLogin') }}</span>
                     </a>
                 @endif
 
                 @if(isset($_SESSION['uid']))
                     <div class='d-flex justify-content-end p-0 themeId'>
                         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                            @if ((isset($is_admin) and $is_admin) or
-                                (isset($is_power_user) and $is_power_user) or
-                                (isset($is_usermanage_user) and ($is_usermanage_user)) or
-                                (isset($is_departmentmanage_user) and $is_departmentmanage_user))
-                                <a id="AdminToolBtn" type="button" class="btn d-flex justify-content-center align-items-center" aria-haspopup="true"
-                                        aria-expanded="false" data-bs-toggle="tooltip" data-bs-placement="left"
-                                        title="{{trans('langAdminTool')}}" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench basic-value-cl"></i>
-                                </a>
-                            @endif
+                            
 
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn user-menu-btn d-flex justify-content-center align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
@@ -84,8 +92,22 @@
                                         {{ $_SESSION['uname'] }}
                                         <i class="fa-solid fa-chevron-down ps-2"></i>
                                 </button>
-                                <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu" aria-labelledby="btnGroupDrop1">
+                                <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user" aria-labelledby="btnGroupDrop1">
                                     <ul class="list-group list-group-flush">
+
+                                        @if ((isset($is_admin) and $is_admin) or
+                                            (isset($is_power_user) and $is_power_user) or
+                                            (isset($is_usermanage_user) and ($is_usermanage_user)) or
+                                            (isset($is_departmentmanage_user) and $is_departmentmanage_user))
+                                            <li>
+                                                <a id="AdminToolBtn" class="list-group-item d-flex justify-content-start align-items-start py-3"
+                                                        href="{{ $urlAppend }}modules/admin/index.php">
+                                                        <i class="fa-solid fa-wrench pe-2"></i>
+                                                        {{ trans('langAdminTool') }}
+                                                </a>
+                                            </li>
+                                        @endif
+
 
                                         @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                         <li>
@@ -276,4 +298,29 @@
     //     }
     // });
 
+</script>
+
+
+
+<script type='text/javascript'>
+    $(document).ready(function() {
+        
+        $('.inputSearch').on('focus',function(){
+            $('.container-items').addClass('d-none');
+        });
+        $('#btn-search').on('focus',function(){
+            setTimeout(function () {
+                $('.container-items').removeClass('d-none');
+            }, 500);
+            setTimeout(function () {
+                $('#submitSearch').submit();
+            }, 200);
+        });
+        $(".inputSearch").focusout(function(){
+            setTimeout(function () {
+                $('.container-items').removeClass('d-none');
+            }, 500);
+            
+        });
+    });
 </script>

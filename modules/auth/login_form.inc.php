@@ -73,7 +73,7 @@ function login_form($format='main') {
                     $hybridLinkId = count($authLink) - 1;
                 }
             } else {
-                $authLink[] = "<a class='btn btn-block btn-social btn-$class' href='{$urlServer}index.php?provider={$l->auth_name}'><span class='fa fa-$font'></span>" . ucfirst($l->auth_name) . "</a>";
+                $authLink[] = "<a class='btn btn-block btn-social btn-$class' href='{$urlServer}index.php?provider={$l->auth_name}'><span class='fa-brands fa-$font'></span>" . ucfirst($l->auth_name) . "</a>";
 	    }
         } elseif (!$loginFormEnabled) {
             $autofocus = count($authLink)? '' : 'autofocus' ;

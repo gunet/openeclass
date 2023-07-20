@@ -33,7 +33,7 @@
                         <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
                         <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
                         @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
-                            <div class='card cardLogin border-0 px-xxl-5 pt-xxl-5 pb-xxl-3 p-lg-3'>
+                            <div class='card cardLogin border-0 px-xxl-5 pt-xxl-5 pb-xxl-3 p-lg-3 mt-3'>
                                 <div class='card-header bg-transparent border-0 text-center'>
                                     <h2>{{ trans('langUserLogin') }}</h2>
                                 </div>
@@ -59,7 +59,7 @@
                             </div>
                         @endif
                         @if(get_config('enable_mobileapi'))
-                            <div class="col-12 mobileAPI d-flex @if(get_config('dont_display_login_form')) justify-content-start @else justify-content-center @endif align-items-start mb-lg-0 mb-3">
+                            <div class="col-12 mobileAPI d-flex @if(get_config('dont_display_login_form')) justify-content-start @else justify-content-center @endif align-items-start mb-lg-0 mt-3 mb-3">
                                 <a class='pe-3' href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
                                     <img style='width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
                                 </a>

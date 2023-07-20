@@ -5668,3 +5668,4 @@ Optionally specify the distribution license of your course.</br></br>
 Specify the type of access to your course. </br></br>";
 
 $langEclassInfo = "The Open eClass 4.0 platform is a complete Electronic Course Management System. It follows the philosophy of open source software and supports the Asynchronous Distance Learning service without limitations and commitments.";
+$langSaidForUs = "They said about us";

@@ -41,7 +41,7 @@ foreach ($q as $l) {
             $providerFont = 'windows';
         }
         $hybridProviderHtml = "<a class='btn btn-block btn-social btn-$providerClass btn-sm m-2' href='{$urlServer}index.php?provider=" .
-            $l->auth_name . "'><span class='fa fa-$providerFont'></span>" . ucfirst($l->auth_name) . "</a>";
+            $l->auth_name . "'><span class='fa-brands fa-$providerFont'></span>" . ucfirst($l->auth_name) . "</a>";
         if (is_null($hybridLinkId)) {
             $authLink[] = array(false, $hybridProviderHtml, $langViaSocialNetwork);
             $hybridLinkId = count($authLink) - 1;

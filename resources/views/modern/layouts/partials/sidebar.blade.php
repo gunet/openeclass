@@ -5,7 +5,7 @@
     @php $is_course_teacher = check_editor($uid,$course_id); @endphp
 
     @if(($is_editor or $is_power_user or $is_departmentmanage_user or $is_usermanage_user or $is_course_teacher) && $course_code)
-        <p class="text-center form-value mt-3 viewPageAs">{{ trans('langViewAs') }}:</p>
+        <p class="text-center form-value mt-3 viewPageAs mb-3">{{ trans('langViewAs') }}:</p>
 
          <!-- THIS IS SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE-BUTTON -->
         <form method="post" action="{{ $urlAppend }}main/student_view.php?course={{ $course_code }}" id="student-view-form" class='d-flex justify-content-center mb-5'>

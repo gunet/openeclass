@@ -5846,3 +5846,4 @@ Spécifiez le type d'accès à votre cours. </br></br>";
 
 
 $langEclassInfo = "La plateforme Open eClass 4.0 est un système complet de gestion électronique des cours. Il suit la philosophie des logiciels open source et prend en charge le service d'apprentissage à distance asynchrone sans limitations ni engagements.";
+$langSaidForUs = "Ils ont dit de nous";

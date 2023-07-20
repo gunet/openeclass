@@ -262,7 +262,8 @@ function view($view_file, $view_data = array()) {
         $logo_img_small = $themeimg.'/logo-eclass-small-theme.svg';
     }else{
         $logo_img = $themeimg.'/eclass-new-logo.svg';
-        $logo_img_small = $themeimg.'/logo-eclass-small.svg';
+        // $logo_img_small = $themeimg.'/logo-eclass-small.svg';
+        $logo_img_small = $themeimg.'/eclass-new-logo.svg';
     }
     
 
@@ -270,6 +271,7 @@ function view($view_file, $view_data = array()) {
     $leftsideImg = '';
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
+
     if ($theme_id and $theme_id!=0) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
@@ -302,6 +304,98 @@ function view($view_file, $view_data = array()) {
              $styles_str .= "#openeclass-banner {display: none;}";
              $eclass_banner_value = 0;
         }
+
+
+        $styles_str .= "
+            body{
+                background: #ffffff;
+            }
+
+            // .eclass-title, .eclassInfo{
+            //     display:none;
+            // }
+
+            .navbar-eclass .fa-bars{
+                color:#ffffff;
+            }
+
+            #btn-search{
+                height:30px;
+                width:30px;
+                background-color:#ffffff;
+            }
+            .inputSearch{
+                height:30px;
+            }
+
+            .mobileAPI{
+                margin-top:25px;
+            }
+
+            .a_tools_site_footer, .copyright, .social-icon-tool, .toolHomePage, .userLoginMobile, .loginText{
+                color:#ffffff;
+            }
+
+            .menu-item,.form-value{ 
+                color: #ffffff; 
+            }
+
+            .jumbotron-login{
+                    background-repeat: no-repeat;
+                    background-size: cover;
+            }
+
+            .jumbotron-image-default{
+                display: none;
+            }
+
+
+            .left-form{ 
+                background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
+            }
+
+            .breadcrumb-item::before{
+                margin-top:0px;
+            }
+
+            .login-form-submit:hover {
+                color: #ffffff;
+            }
+
+            .cancelAdminBtn, .deleteAdminBtn, .successAdminBtn{ 
+                height:40px; 
+            }
+
+            .tool-sidebar{
+                color:#ffffff;
+            }
+
+            .user-menu-btn{
+                color:#ffffff;
+            }
+
+            .lightColor{ 
+                background-color: #f5f5f5; 
+            }
+            
+            .greyColor { 
+                background-color: #D3D3D3;
+            }
+            
+            .textgreyColor { 
+                color: #bdbdbd;
+            }
+
+            .admin-list-group .list-group-item:hover .toolAdminText{
+                color:#ffffff;
+            }
+
+            
+
+
+        ";
+
+
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
             $aboutLeftForm = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
@@ -314,52 +408,12 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
-               
-
-                body{
-                    background: #ffffff;
-                }
-
-                .eclass-title, .eclassInfo{
-                    color: #2B3944;
-                }
-
-                .navbar-eclass .fa-bars, .navbar-eclass .fa-wrench{
-                    color:#ffffff;
-                }
-
-                .mobileAPI{
-                    margin-top:25px;
-                }
-
-                .a_tools_site_footer, .copyright, .social-icon-tool, .toolHomePage, .userLoginMobile, .loginText{
-                    color:#ffffff;
-                }
-
-               .menu-item,.form-value{ color: #ffffff; }
-               .jumbotron-login{
-                    background-repeat: no-repeat;
-                    background-size: cover;
-               }
-               .jumbotron-image-default{display: none;}
-
-
-
-                .left-form{ 
-                    background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
-                }
-
-                .breadcrumb-item::before{margin-top:0px;}
 
                 .cal-day-today.cal-day-holiday .number-day-cal {
                     background-color: $theme_options_styles[leftNavBgColor] !important;
                     padding: 1px 6px 1px 6px;
                     border-radius: 2% !important;
                     color: #ffffff;
-                }
-
-                .UserMenuBtn:hover{
-                    background-color: $theme_options_styles[linkColor];
                 }
 
                 .submitAdminBtn {
@@ -404,17 +458,12 @@ function view($view_file, $view_data = array()) {
                     font-weight: 700;
                     font-style: normal;
                     background-color: $theme_options_styles[leftNavBgColor];
-                  }
-
-                .login-form-submit:hover {
-                    color: #ffffff;
                 }
-
-                .cancelAdminBtn, .deleteAdminBtn, .successAdminBtn{ height:40px; }
 
                 .searchGroupBtn:hover{
                     background-color: $theme_options_styles[leftNavBgColor];
                 }
+
                 .searchGroupBtn:hover span{
                     color:#ffffff;
                 }
@@ -435,20 +484,6 @@ function view($view_file, $view_data = array()) {
                 }
 
                 
-
-                .tool-sidebar{
-                    color:#ffffff;
-                }
-
-                .user-menu-btn{
-                    color:#ffffff;
-                }
-
-                .bgBody{
-                    background-color:transparent;
-                }
-                
-
                 .statistics:before{
                     background: $theme_options_styles[leftNavBgColor];
                 }
@@ -456,18 +491,7 @@ function view($view_file, $view_data = array()) {
                 .notes_thead, .list-header, .bgNormalBlueText{
                     background: $theme_options_styles[leftNavBgColor];
                 }
-                .lightColor{ 
-                    background-color: #f5f5f5; 
-                }
-                  
-                .greyColor { 
-                    background-color: #D3D3D3;
-                }
-                  
-                .textgreyColor { 
-                    color: #bdbdbd;
-                }
-
+                
                 .openCoursesPanel{
                     background:$theme_options_styles[leftNavBgColor];
                 }
@@ -502,21 +526,6 @@ function view($view_file, $view_data = array()) {
                     .userLoginMobile:hover{
                         background-color:$rgba_no_alpha;
                     }
-                }
-
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
-                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active,
-                .personal-calendar-header .btn-group .btn.active{
-                    background:$theme_options_styles[linkColor] !important;
-                }
-
-                .legendViewContent2{
-                    border-bottom:solid 1px $theme_options_styles[linkColor];
-                }
-                @media(max-width:991px){
-                .legendViewContent2{
-                    border-bottom:solid 1px #e8e8e8;
-                }
                 }
 
                 .btn_left_rigth{
@@ -566,6 +575,10 @@ function view($view_file, $view_data = array()) {
                     --bg: #e8e8e8;
                 }
 
+                .Help-text-panel-heading, .normalColorBlueText {
+                    color:  $theme_options_styles[leftNavBgColor] !important;
+                }
+
                 
                 
             ";
@@ -573,7 +586,25 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
 
-                
+                .UserMenuBtn:hover{
+                    background-color: $theme_options_styles[linkColor];
+                }
+
+                .legendViewContent2{
+                    border-bottom:solid 1px $theme_options_styles[linkColor];
+                }
+                @media(max-width:991px){
+                    .legendViewContent2{
+                        border-bottom:solid 1px #e8e8e8;
+                    }
+                }
+
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active,
+                .personal-calendar-header .btn-group .btn.active{
+                    background:$theme_options_styles[linkColor] !important;
+                }
+
                 a, .toolAdminText, .announce-link-homepage, .user-menu-btn:hover, .menu-item:hover{
                     color: $theme_options_styles[linkColor];
                 }
@@ -600,13 +631,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
-                
-
-                .Help-text-panel-heading, .normalColorBlueText {
-                    color:  $theme_options_styles[leftNavBgColor] !important;
-                }
-                
-
                 .slider-round { 
                     background-color: $theme_options_styles[linkColor];
                 }
@@ -626,6 +650,12 @@ function view($view_file, $view_data = array()) {
                 .contextual-sidebar .list-group-item.active{
                     color: $theme_options_styles[linkColor] !important;
                 }
+
+                .opencourses_btn:hover {
+                    background-color: $theme_options_styles[linkColor];
+                    color: #ffffff;
+                }
+
             ";
         }
 
@@ -634,15 +664,6 @@ function view($view_file, $view_data = array()) {
                 a:hover, a:focus {
                     color: $theme_options_styles[linkHoverColor];
                 } 
-                
-                .admin-list-group .list-group-item:hover .toolAdminText{
-                    color:#ffffff;
-                }
-
-                .opencourses_btn:hover {
-                    background-color: $theme_options_styles[linkColor];
-                    color: #ffffff;
-                }
             ";
         }
 
@@ -668,19 +689,11 @@ function view($view_file, $view_data = array()) {
                     background:#ccc;
                 }
 
-                .dropdown_menu_user .list-group-item:hover, .mydropdowns .list-group-item:hover, .user-language-menu .list-group-item:hover{
+                .dropdown_menu_user .list-group-item:hover, .user-language-menu .list-group-item:hover{
                     background-color:$theme_options_styles[leftSubMenuHoverBgColor];
                 }
 
-                .manage-course-ul .manage-course-li a:hover{ 
-                    background: $theme_options_styles[leftSubMenuHoverBgColor];
-                }
-
-                .manage-course-ul .manage-course-li a:hover span{ 
-                    color: #ffffff;
-                }
-
-                .mydropdowns .confirmAction:hover{
+                .confirmAction:hover{
                     background-color:#ffa023;
                 }
 
@@ -795,31 +808,6 @@ function view($view_file, $view_data = array()) {
         // }
 
     }
-    //else{
-
-        // $head_content .= "
-        //     <link rel='shortcut icon' href='{$urlAppend}template/modern/favicon/favicon.ico' />
-        //     <link rel='apple-touch-icon-precomposed' href='{$urlAppend}template/modern/favicon/openeclass_128x128.png' />
-        //     <link rel='icon' type='image/png' href='{$urlAppend}template/modern/favicon/openeclass_128x128.png' />
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/bootstrap.min.css'/>
-        //     <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'/>
-        //     <link href='{$urlAppend}template/modern/css/font-Manrope/css/Manrope.css' rel='stylesheet'/>
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}js/fullcalendar/fullcalendar.css'/>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/jquery.dataTables.min.css'/>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/owl-carousel.css'/>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/owl-theme-default.css'/>
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick.css'/>
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/slick-theme.css'/>
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css'/>
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css'/>
-        //     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css'/>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?donotcache'>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/sidebar.css?donotcache'>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/new_calendar.css?donotcache'>
-        //     <link rel='stylesheet' href='{$urlAppend}template/modern/css/default.css?donotcache'>
-        // ";
-
-    //}
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code
         FROM course, course_user

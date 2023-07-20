@@ -146,10 +146,10 @@
                                                                         <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
                                                                         <input type='hidden' name='pass' value=''>
                                                                         <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                        <button class='btn submitAdminBtn' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
+                                                                        <button type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
                                                                     </form>
                                                             @else
-                                                                    <a class='btn submitAdminBtn' role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
+                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
                                                                     <span class='fa fa-plane'></span></a>
                                                             @endif
                                                             </div>
@@ -158,7 +158,7 @@
 
 
                                                     <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                        <i class='fa-solid fa-display'></i>
+                                                        <i class='fa-solid fa-display Primary-500-cl'></i>
                                                     </button>
 
                                                     <!-- The Modal -->

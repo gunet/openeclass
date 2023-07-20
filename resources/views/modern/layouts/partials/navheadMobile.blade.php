@@ -8,8 +8,8 @@
                     <i class='fa-solid fa-bars'></i>
                 </button>
 
-                <a class='d-flex justify-content-center align-items-center' type="button" href="{{ $urlServer }}">
-                    <img class="eclass-nav-icon ms-1 px-2 bg-transparent" src="{{ $logo_img_small }}">
+                <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}">
+                    <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}">
                 </a>
             </div>
             
