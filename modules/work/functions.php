@@ -854,3 +854,67 @@ function grading_scales_exist() {
         return false;
     }
 }
+
+/**
+ * @brief display assignment submissions results in graph
+ * @param $id
+ * @return void
+ */
+function display_assignment_submissions_graph_results($id)
+{
+    global $tool_content, $course_id, $langGraphResults;
+
+    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
+                                                        CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
+                                                        CAST(UNIX_TIMESTAMP(due_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_due,
+                                                        auto_judge
+                                                    FROM assignment
+                                                      WHERE course_id = ?d AND id = ?d", $course_id, $id);
+
+    assignment_details($id, $assign);
+
+    $result1 = Database::get()->queryArray("SELECT grade FROM assignment_submit WHERE assignment_id = ?d ORDER BY grade ASC", $id);
+    $gradeOccurances = array(); // Named array to hold grade occurrences/stats
+    $gradesExists = 0;
+    foreach ($result1 as $row) {
+        $theGrade = $row->grade;
+        if ($theGrade) {
+            $gradesExists = 1;
+            if (!isset($gradeOccurances[$theGrade])) {
+                $gradeOccurances[$theGrade] = 1;
+            } else {
+                if ($gradesExists) {
+                    ++$gradeOccurances[$theGrade];
+                }
+            }
+        }
+    }
+    // display pie chart with grades results
+    if ($gradesExists) {
+        // Used to display grades distribution chart
+        $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign
+                                                                 WHERE assign.assignment_id = ?d AND
+                                                                 assign.grade <> ''", $id)->count;
+
+        if ($assign->grading_scale_id and $assign->grading_type == 1) {
+            $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+            $scales = unserialize($serialized_scale_data);
+            $scale_values = array_value_recursive('scale_item_value', $scales);
+        }
+        foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
+            $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
+            if ($assign->grading_scale_id and $assign->grading_type == 1) {
+                $key = closest($gradeValue, $scale_values, true)['key'];
+                $gradeValue = $scales[$key]['scale_item_name'];
+            }
+            $this_chart_data['grade'][] = "$gradeValue";
+            $this_chart_data['percentage'][] = $percentage;
+        }
+        $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
+        /****   C3 plot   ****/
+        $tool_content .= "<div class='row plotscontainer'>";
+        $tool_content .= "<div class='col-lg-12'>";
+        $tool_content .= plot_placeholder("grades_chart", $langGraphResults);
+        $tool_content .= "</div></div>";
+    }
+}
