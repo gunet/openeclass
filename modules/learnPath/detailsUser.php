@@ -43,7 +43,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = TRUE;
-$require_editor = TRUE;
+$require_course_reviewer = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 

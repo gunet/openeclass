@@ -26,8 +26,11 @@
  * @brief Displays course user progress in LPs
  */
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 $require_current_course = TRUE;
-$require_editor = TRUE;
+$require_course_reviewer = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
@@ -80,13 +83,12 @@ if (!isset($_GET['pdf'])) {
             'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
         array('title' => $langDumpUser,
-            'url' => "dumpuserlearnpathdetailsanalysis.php?course=$course_code",
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;xls=true",
             'icon' => 'fa-download',
             'level' => 'primary-label')
         ),
         false);
 }
-
 
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
@@ -108,6 +110,12 @@ $tool_content .= "<div class='table-responsive'>
             </tr>
         </thead>";
 
+$course_title = course_code_to_title($_GET['course']);
+
+$data[] = [ $course_title ];
+$data[] = [];
+$data[] = [ $langSurnameName, $langLearnPath, $langAttempts, $langTotalTimeSpent, $langProgress ];
+
 $usersList = Database::get()->queryArray("SELECT U.`surname`, U.`givenname`, U.`id`, U.`email`
                 FROM `user` AS U, `course_user` AS CU
                     WHERE U.`id`= CU.`user_id`
@@ -121,6 +129,7 @@ foreach ($usersList as $user) {
     $iterator = 1;
     $globalprog = 0;
     $globaltime = "00:00:00";
+    $lpaths = array();
     $lp_content = "";
 
     foreach ($learningPathList as $learningPath) {
@@ -132,6 +141,11 @@ foreach ($usersList as $user) {
         if (!empty($lpTotalTime)) {
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
+
+        // ---- xls format ----
+        $lpContent = array('', $learningPath->name, $lpAttemptsNb, $lpTotalTime, $prog);
+        $lpaths[] = $lpContent;
+        // --------------------
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
         $lp_content .= "<td>" . q($learningPath->name) . "</td>";
@@ -146,6 +160,13 @@ foreach ($usersList as $user) {
     if ($globaltime === "00:00:00") {
         $globaltime = "";
     }
+
+    // ---- xls format ----
+    $data[] = ["$user->surname $user->givenname ($user->email)", ' ', ' ', $globaltime, $total . '%'];
+    foreach ($lpaths as $lpContent) {
+        $data[] = [$lpContent[0], $lpContent[1], $lpContent[2], $lpContent[3], $lpContent[4] . '%'];
+    }
+    // --------------------
 
     $tool_content .= "<tr>";
     if (!isset($_GET['pdf'])) {
@@ -165,7 +186,29 @@ foreach ($usersList as $user) {
 }
 $tool_content .= "</tbody></table></div>";
 
-if (isset($_GET['pdf'])) {
+if (isset($_GET['xls'])) {
+
+    $spreadsheet = new Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+    $sheet->setTitle($langTrackAllPathExplanation);
+    $sheet->getDefaultColumnDimension()->setWidth(30);
+    $filename = $course_code . "_learning_path_user_stats_analysis.xlsx";
+
+    $sheet->mergeCells("A1:E1");
+    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    for ($i = 1; $i <= 5; $i++) {
+        $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
+    }
+    // create spreadsheet
+    $sheet->fromArray($data, NULL);
+    // file output
+    $writer = new Xlsx($spreadsheet);
+    header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    set_content_disposition('attachment', $filename);
+    $writer->save("php://output");
+    exit;
+
+} else if (isset($_GET['pdf'])) {
     $pdf_content = "
         <!DOCTYPE html>
         <html lang='el'>
