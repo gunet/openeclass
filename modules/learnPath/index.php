@@ -347,6 +347,26 @@ if ($is_editor) {
             </div>
         </div>";
     }
+} else if ($is_course_reviewer) {
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div id='operations_container'>" .
+                    action_bar(array(
+                        array('title' => $langTrackAllPathExplanation,
+                            'url' => "detailsAll.php?course=$course_code",
+                            'icon' => 'fa-line-chart',
+                            'level' => 'primary-label',
+                            'button-class' => 'btn-success'),
+                        array('title' => $langTrackAllPathExplanationAnalysis,
+                            'url' => "detailsAllAnalysis.php?course=$course_code",
+                            'icon' => 'fa-line-chart',
+                            'level' => 'primary-label',
+                            'button-class' => 'btn-success')
+                    )) .
+            "</div>
+        </div>
+    </div>";
 }
 
 // check if there are learning paths available
