@@ -266,7 +266,7 @@ if ($can_upload) {
 
     $tool_content .= "
     <div class='row mt-4'>
-        <div class='infotext col-12 margin-bottom-fat TextSemiBold Neutral-900-cl'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+        <div class='infotext col-12 margin-bottom-fat TextBold Neutral-900-cl'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
 
 

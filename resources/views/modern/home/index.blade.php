@@ -297,7 +297,7 @@
                                 </div>
                             </div>
                             <div class='card-body px-0 py-0'>
-                                <div class='row rowMargin row-cols-1 row-cols-md-3 row-cols-lg-4 g-lg-5'>
+                                <div class='row rowMargin row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-5'>
                                     @foreach ($popular_courses as $pop_course)
                                         <div class="col mb-lg-0 mb-4">
                                             <div class='card border-card h-100'>

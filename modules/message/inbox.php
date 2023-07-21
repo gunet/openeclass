@@ -422,7 +422,7 @@ if (isset($_GET['mid'])) {
                     </div>
                 </fieldset>";
 
-            $out .= "<div class='text-center TextSemiBold mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+            $out .= "<div class='text-center TextBold mt-3'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div></div>";
             if ($course_id == 0) {
                 $out .= "</div>";

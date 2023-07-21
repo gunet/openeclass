@@ -25,9 +25,10 @@
                 <a id="Tool{{$key}}" class="collapsed parent-menu mt-5" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                     <div class="panel-sidebar-heading ps-lg-3 pe-lg-3">
                         <div class="panel-title h3 bg-transparent">
-                            <div class='d-flex justify-content-between align-items-end'>
+                            <div class='d-flex justify-content-start align-items-start gap-1'>
+                                <span class="fa fa-chevron-up" style='transition: transform .3s ease-in-out;'></span>
                                 {{ $tool_group[0]['text'] }}
-                                <span class="fa fa-chevron-up"></span>
+                                
                             </div>
                         </div>
                         <div class='lineSidebar'></div>

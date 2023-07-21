@@ -1092,7 +1092,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'><br>
                                 
                                 <span class='small-text help-block'>$langLearningPathUploadFile</span><br>
-                                <div class='infotext col-12 margin-bottom-fat TextSemiBold Neutral-900-cl mt-4'>
+                                <div class='infotext col-12 margin-bottom-fat TextBold Neutral-900-cl mt-4'>
                                     $langMaxFileSize " . ini_get('upload_max_filesize') . "
                                 </div>
                             </div>

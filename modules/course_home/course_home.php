@@ -596,11 +596,11 @@ if ($total_cunits > 0) {
             $cunits_content .= "<div id='unit_$cu_indirect' class='col-12' data-id='$cu->id'><div class='panel clearfix'><div class='col-12'>
                 <div class='item-content'>
                     <div class='item-header clearfix'>
-                        <div class='item-title h4 $class_vis lightBlueText TextMedium'>";
+                        <div class='item-title h4 $class_vis'>";
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a class='TextSemiBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
             $cunits_content .= "<br><small><span class='help-block'>";
             if (!(is_null($cu->start_week))) {
@@ -717,16 +717,16 @@ if ($total_cunits > 0) {
             if ($not_shown) {
                 $cunits_content .= q($cu->title) ;
             } else {
-                $cunits_content .= "<a style='line-height: 1.42857143; display:block;' class='$class_vis TextSemiBold' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
+                $cunits_content .= "<a class='TextBold $class_vis' href='{$urlServer}modules/units/index.php?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
-            $cunits_content .= "<small><span class='help-block $class_vis'>";
+            $cunits_content .= "<p><span class='help-block $class_vis'>";
             if (!(is_null($cu->start_week))) {
                 $cunits_content .= "$langFrom2 " . format_locale_date(strtotime($cu->start_week), 'short', false);
             }
             if (!(is_null($cu->finish_week))) {
                 $cunits_content .= " $langTill " . format_locale_date(strtotime($cu->finish_week), 'short', false);
             }
-            $cunits_content .= "</span></small>";
+            $cunits_content .= "</span></p>";
             $cunits_content .= "</div>";
 
             $cunits_content .= "</div>
@@ -874,7 +874,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = format_locale_date(strtotime($ann->date));
                 $ann_content .= "<li class='list-group-item ps-0 pe-0'>
-                                    <span class='item-wholeline'><div class='text-title'><a class='TextSemiBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
+                                    <span class='item-wholeline'><div class='text-title'><a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
                 }
                 $counter_ann++;

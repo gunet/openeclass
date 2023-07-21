@@ -1281,7 +1281,7 @@ body .form-action-button-popover{
 
 .openCourseImg{
   width: 100%;
-  height: auto;
+  max-height: 400px;
   background-size: cover ;
   background-repeat: no-repeat ;
   background-position: center ;
@@ -2605,7 +2605,7 @@ th, td {
 .table-default .list-header,
 .announcements_table .list-header,
 .announcements_table .notes_thead{
-  min-height:43px !important;
+  min-height:40px !important;
 }
 
 .table-default .list-header th,

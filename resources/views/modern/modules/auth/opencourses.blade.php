@@ -260,16 +260,21 @@
         modal.style.display = "block";
 
         $('[data-bs-toggle="tooltip"]').tooltip("hide");
+
+        var $div = $('<div />').appendTo('body');
+        $div.attr('class', 'modal-backdrop fade show');
     });
 
     $(".close").click(function() {
         modal.style.display = "none";
+        $(".modal-backdrop").remove();
     });
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            $(".modal-backdrop").remove();
         }
         $('[data-bs-toggle="tooltip"]').tooltip("hide");
     }

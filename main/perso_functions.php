@@ -339,7 +339,7 @@ function getUserMessages() {
             $message_date = format_locale_date($message->timestamp);
             $message_content .= "<li class='list-group-item ps-0 pe-0'>
                                     <div class='item-wholeline text-start'>
-                                        <div class='text-title TextSemiBold'><span>$langFrom:</span><span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span></div>
+                                        <div class='text-title TextBold'><span>$langFrom:</span><span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span></div>
                                         
                                         <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
                                         

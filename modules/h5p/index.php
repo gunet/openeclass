@@ -80,7 +80,7 @@ if ($is_editor) {
     $tool_content .= "
         <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport'>
             <span class='fa fa-upload space-after-icon'></span>
-            <span class='TextSemiBold hidden-xs'>$langImport</span>
+            <span class='TextBold hidden-xs'>$langImport</span>
         </a>";
 
     // end custom action bar

@@ -605,7 +605,7 @@ if ($is_editor) {
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                         <div class='card panelCard $link_class card$pagesPag px-lg-4 py-lg-3 h-100'>
                                                             <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                                                <a class='ViewGroup TextSemiBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
+                                                                <a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                                                                 <div>
                                                                     " .
                                                                     action_button(array(
@@ -881,13 +881,13 @@ if ($is_editor) {
                                                       <div class='card panelCard card$pagesPag px-lg-4 py-lg-3 h-100'>
                                                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>";
                                                                 if ($is_member or $is_tutor) {
-                                                                $tool_content .= "<a class='ViewGroup TextSemiBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
+                                                                $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                                                                                     "</a> 
-                                                                                    <span class='badge bg-success TextSemiBold text-white text-capitalize'>$langMyGroup</span>";
+                                                                                    <span class='badge bg-success TextBold text-white text-capitalize'>$langMyGroup</span>";
                                                                 } else {
                                                                     $full_group_message = '';
                                                                     if ($max_members > 0 and $max_members == $member_count) {
-                                                                        $full_group_message = " <span class='badge bg-warning TextSemiBold text-white text-capitalize'>$langGroupFull</span>";
+                                                                        $full_group_message = " <span class='badge bg-warning TextBold text-white text-capitalize'>$langGroupFull</span>";
                                                                     }
                                                                         $tool_content .= q($group_name) . "$full_group_message";
                                                                 }

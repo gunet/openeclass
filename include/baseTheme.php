@@ -259,7 +259,8 @@ function view($view_file, $view_data = array()) {
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     if ($theme_id and $theme_id!=0) {
         $logo_img = $themeimg.'/eclass-logo-theme.svg';
-        $logo_img_small = $themeimg.'/logo-eclass-small-theme.svg';
+        //$logo_img_small = $themeimg.'/logo-eclass-small-theme.svg';
+        $logo_img_small = $themeimg.'/eclass-logo-theme.svg';
     }else{
         $logo_img = $themeimg.'/eclass-new-logo.svg';
         // $logo_img_small = $themeimg.'/logo-eclass-small.svg';

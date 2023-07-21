@@ -62,7 +62,7 @@
                                     <img src="{{ $courseImage }}" class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" alt="course image">
                                     <div class="card-body">
                                         <div class="card-title d-flex justify-content-between align-items-start">
-                                            <a class='@if($course->visible == 3) InvisibleCourse @endif TextSemiBold pe-2' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
+                                            <a class='@if($course->visible == 3) InvisibleCourse @endif TextBold pe-2' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
                                             @if($course->visible == 1) 
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
                                                     <span class='fa fa-lock text-secondary'></span>

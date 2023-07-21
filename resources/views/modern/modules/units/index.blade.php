@@ -189,7 +189,7 @@
                             <div class='card-header border-0 bg-white d-xl-flex justify-content-xl-between align-items-xl-center'>
                                 <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
-                                    <div class='normalColorBlueText TextSemiBold'>
+                                    <div class='form-value'>
                                         <small>{{ $course_start_week }}&nbsp{{ $course_finish_week }}</small>
                                     </div>
                                 @endif

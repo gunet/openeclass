@@ -225,7 +225,7 @@ if (isset($_GET['store']) && $is_editor) {
                                 </div>
                             </div>
                             <div class='panel-footer d-flex justify-content-end'>
-                                <p class='bgEclass rounded-pill ps-2 pe-2 TextSemiBold'>$datetime</p>
+                                <p class='form-value'>$datetime</p>
                             </div>
                         </div>
                     </div>\n";

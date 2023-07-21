@@ -154,7 +154,7 @@ Class Commenting {
                                     ".$post_actions."
                                 </div>
                                 <div class='card-body'>
-                                    <p class='blackBlueText TextSemiBold'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
+                                    <p class='form-value'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
                                     "<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                                 </div>
                             </div>

@@ -488,12 +488,12 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= action_button($dyntools)."</div></caption>";
 
             $tool_content .= "<thead><tr class='notes_thead'>
-                <td class='bg-header-table TextSemiBold text-white'>$langName</td>
-                <td class='bg-header-table TextSemiBold text-white'>$langCPFShortName</td>
-                <td class='bg-header-table TextSemiBold text-white'>$langDescription</td>
-                <td class='bg-header-table TextSemiBold text-white'>$langCPFFieldDatatype</td>
-                <td class='bg-header-table TextSemiBold text-white'>$langCPFFieldRequired</td>
-                <td class='bg-header-table TextSemiBold text-white'>" . icon('fa-gears') . "</td>
+                <td class='bg-header-table TextBold text-white'>$langName</td>
+                <td class='bg-header-table TextBold text-white'>$langCPFShortName</td>
+                <td class='bg-header-table TextBold text-white'>$langDescription</td>
+                <td class='bg-header-table TextBold text-white'>$langCPFFieldDatatype</td>
+                <td class='bg-header-table TextBold text-white'>$langCPFFieldRequired</td>
+                <td class='bg-header-table TextBold text-white'>" . icon('fa-gears') . "</td>
 		        </tr></thead>";
 
             $q = Database::get()->queryArray("SELECT * FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $res->id);

@@ -395,7 +395,7 @@ if ($userdata) {
                                          
                                     </div>
                                     <div class='card-body'>
-                                        <p class='blackBlueText TextSemiBold'>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
+                                        <p>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
                                     </div>
                                     <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
                                         

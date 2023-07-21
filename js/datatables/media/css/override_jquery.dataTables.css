@@ -14,6 +14,21 @@
         overflow:hidden !important;
       }
   }
+  .dataTables_wrapper::-webkit-scrollbar, 
+  .dataTables_scroll::-webkit-scrollbar, 
+  .dataTables_scrollBody::-webkit-scrollbar,
+  .table-responsive::-webkit-scrollbar{
+    height: 4px;
+    width: 4px;
+    background: #e8e8e8;
+  }
+  .dataTables_wrapper::-webkit-scrollbar-thumb:horizontal, 
+  .dataTables_scroll::-webkit-scrollbar-thumb:horizontal, 
+  .dataTables_scrollBody::-webkit-scrollbar-thumb:horizontal,
+  .table-responsive::-webkit-scrollbar-thumb:horizontal{
+    background: #B4BED1;
+    border-radius: 10px;
+  }
 
   table.dataTable{
     width:100% !important;

@@ -223,7 +223,7 @@ function generate_single_post_html($post) {
                                             '.$post_actions.'
                                         </div>
                                         <div class="card-body bubble overflow-auto Borders">
-                                            <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
+                                            <p class="blackBlueText TextBold">'.$datetime.'</p>
                                             
 
                                             <div class="margin-top-thin" style="padding:20px">
@@ -295,7 +295,7 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating_content = $rating->put($is_editor, $uid, $course_id);
 
         $comm = new Commenting('wallpost', $id);
-        $comm_content = "<a class='btn commentPress TextSemiBold blackBlueText float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
+        $comm_content = "<a class='commentPress TextBold float-end' href='".$urlServer."modules/wall/index.php?course=$course_code&amp;showPost=".$id."#comments_title'>
                             <span class='fa fa-comments'></span>&nbsp$langComments (".$comm->getCommentsNum().")
                         </a>";
 
@@ -354,7 +354,7 @@ function generate_infinite_container_html($posts, $next_page) {
                       </div>
 
                       <div class="card-body bubble overflow-auto Borders">
-                        <p class="blackBlueText TextSemiBold">'.$datetime.'</p>
+                        <p class="form-value">'.$datetime.'</p>
                        
                         <div class="margin-top-thin" style="padding:20px">' .
                           $extvideo_block . '

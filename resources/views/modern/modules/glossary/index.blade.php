@@ -99,7 +99,7 @@
                                                         <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">                   
                                                            
                                                            
-                                                                <a class='ViewGroup TextSemiBold' href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
+                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
                                                                     {{ $glossary_term->term }}
                                                                 </a>
                                                            
