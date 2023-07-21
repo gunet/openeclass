@@ -163,8 +163,12 @@ function do_user_merge($source, $target) {
     $tmp_table = "user_merge_{$source_id}_{$target_id}";
     $q = Database::get()->query("CREATE TEMPORARY TABLE `$tmp_table` AS
                               SELECT course_id, $target_id AS user_id,
-                                     MIN(status) AS status, MAX(tutor) AS tutor,
-                                     MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
+                                     MIN(status) AS status,
+                                     MAX(tutor) AS tutor,
+                                     MAX(editor) AS editor,
+                                     MAX(course_reviewer) AS course_reviewer,
+                                     MAX(reviewer) AS reviewer,
+                                     MIN(reg_date) AS reg_date,
                                      MAX(receive_mail) AS receive_mail,
                                      MAX(document_timestamp) AS document_timestamp,
                                      favorite
