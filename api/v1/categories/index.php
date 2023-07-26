@@ -62,4 +62,4 @@ function api_method($access) {
 }
 
 chdir('..');
-require_once 'index.php';
+require_once 'apiCall.php';

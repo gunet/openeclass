@@ -101,13 +101,14 @@ if (isset($_POST['submit'])) {
                 }
                 $surname = isset($info['last']) ? $info['last'] : '';
                 $givenname = isset($info['first']) ? $info['first'] : '';
+                $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
                 if (!isset($info['username'])) {
                     $info['username'] = create_username($newstatus, $departments, $surname, $givenname, $_POST['prefix']);
                 }
                 if (!isset($info['password'])) {
                     $info['password'] = choose_password_strength();
                 }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $_POST['emailNewBodyEditor'], $_POST['emailNewBodyInput']);
+                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $_POST['emailNewBodyInput']);
                 if ($new === false) {
                     $unparsed_lines .= q($line . "\n" . $error . "\n");
                 } else {
@@ -252,7 +253,7 @@ if (isset($_POST['submit'])) {
                 <p>$langProblem</p><br>" . get_config('admin_name') . "
                 <ul id='forum-category'>
                     <li>$langManager: $siteName</li>
-                    <li>$langTel: </li>
+                    <li>$langTel: ".get_config('phone')."</li>
                     <li>$langEmail: " . get_config('email_helpdesk') . "</li>
                 </ul></p>
             </div>
@@ -406,13 +407,13 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 //    $emailMain = $emailNewBodyEditor;
 
     if ($emailNewBodyInput == 1) {
-        $emailNewBodyEditor = str_replace("[username]", $uname, $emailNewBodyEditor);
-        $emailNewBodyEditor = str_replace("[password]", $password, $emailNewBodyEditor);
-        $emailNewBodyEditor = str_replace("[first]", $givenname, $emailNewBodyEditor);
-        $emailNewBodyEditor = str_replace("[last]", $surname, $emailNewBodyEditor);
-        $emailNewBodyEditor = str_replace("[phone]", $phone, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[username]", q($uname), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[password]", q($password), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[first]", q($givenname), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[last]", q($surname), $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[phone]", q($phone), $emailNewBodyEditor);
         $emailNewBodyEditor = str_replace("[email]", mb_strtolower(trim($email)), $emailNewBodyEditor);
-        $emailNewBodyEditor = str_replace("[id]", $am, $emailNewBodyEditor);
+        $emailNewBodyEditor = str_replace("[id]", q($am), $emailNewBodyEditor);
         $emailMain = $emailNewBodyEditor;
 
     } else {

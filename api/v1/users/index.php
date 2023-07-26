@@ -104,4 +104,4 @@ function api_method($access) {
 
 require_once '../../../include/lib/pwgen.inc.php';
 chdir('..');
-require_once 'index.php';
+require_once 'apiCall.php';
