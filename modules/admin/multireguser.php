@@ -102,6 +102,7 @@ if (isset($_POST['submit'])) {
                 }
                 $surname = isset($info['last']) ? $info['last'] : '';
                 $givenname = isset($info['first']) ? $info['first'] : '';
+                $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
                 if (!isset($info['username'])) {
                     $info['username'] = create_username($newstatus, $departments, $surname, $givenname, $_POST['prefix']);
                 }
