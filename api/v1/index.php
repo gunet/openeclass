@@ -19,6 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+
+//die('dead');
+
 if (!defined('COURSE_OPEN')) {
     require_once '../../include/baseTheme.php';
 }
@@ -76,7 +79,15 @@ if (function_exists('api_method')) {
             'auth_required' => false,
             'description' => 'Get info of user with username {S}',
         ],
+        [
+            'url' => $base . 'registration/?course_id={S}',
+            'method' => 'GET',
+            'auth_required' => false,
+            'description' => 'Get registration info',
+        ],
     ];
     header('Content-Type: application/json');
     echo json_encode($api_methods, JSON_UNESCAPED_UNICODE);
 }
+
+
