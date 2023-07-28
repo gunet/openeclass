@@ -430,7 +430,7 @@ if (isset($_POST['submit'])) {
         'enable_docs_public_write' => true,
         'enable_social_sharing_links' => true,
         'enable_strong_passwords' => true,
-        'enable_unsubscribe_course' => true,
+        'disable_student_unregister_cours' => true,
         'login_fail_check' => true,
         'login_fail_threshold' => true,
         'login_fail_deny_interval' => true,
@@ -1080,7 +1080,7 @@ else {
     $mydocs_teacher_quota = floatval(get_config('mydocs_teacher_quota'));
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_enable_strong_passwords = get_config('enable_strong_passwords') ? 'checked' : '';
-    $cbox_enable_unsubscribe_course = get_config('enable_unsubscribe_course') ? 'checked' : '';
+    $cbox_disable_student_unregister_cours = get_config('disable_student_unregister_cours') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
@@ -1209,7 +1209,7 @@ else {
                                 </div>
                                 <div class='checkbox'>
                                     <label>
-                                        <input id='unsubscribe_course' type='checkbox' name='enable_unsubscribe_course' value='1' $cbox_enable_unsubscribe_course>
+                                        <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' $cbox_disable_student_unregister_cours>
                                         $langUnsubscribeCourse 
                                     </label>
                                 </div>

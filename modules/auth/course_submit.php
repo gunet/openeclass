@@ -82,12 +82,18 @@ if ($q) {
             die('unauthorized');
         }
     } else {
-        Database::get()->query("DELETE FROM group_members
+
+        if (get_config('disable_student_unregister_cours') == 0) {
+
+            Database::get()->query("DELETE FROM group_members
                                  WHERE user_id = ?d AND
                                        group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $uid, $cid);
-        Database::get()->query("DELETE FROM `course_user` WHERE course_id = ?d AND user_id = ?d", $cid, $uid);
-        Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
-        die('unregistered');
+            Database::get()->query("DELETE FROM `course_user` WHERE course_id = ?d AND user_id = ?d", $cid, $uid);
+            Log::record($cid, MODULE_ID_USERS, LOG_DELETE, array('uid' => $uid, 'right' => 0));
+            die('unregistered');
+
+        }
+
     }
 } else {
     die('invalid');
