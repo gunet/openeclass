@@ -39,8 +39,6 @@ function getUserLessonInfo($uid) {
            $langWelcomeSelect, $langPreview, $langOfCourse,
            $langThisCourseDescriptionIsEmpty;
 
-    $get_config_enable_unsubscribe_course = get_config('enable_unsubscribe_course');
-
     $lesson_content = '';
     $lesson_ids = array();
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
@@ -148,7 +146,7 @@ function getUserLessonInfo($uid) {
 
                     $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
                     if ($data->status == USER_STUDENT) {
-                        if ($get_config_enable_unsubscribe_course == 0) {
+                        if (get_config('disable_student_unregister_cours') == 0) {
                             $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                             $student_courses_count++;
                         }

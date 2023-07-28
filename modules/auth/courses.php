@@ -231,6 +231,8 @@ function expanded_faculte($facid, $uid) {
         $unlock_all_courses = false;
     }
 
+
+
     // build a list of course followed by user.
     $myCourses = array();
     Database::get()->queryFunc("SELECT course.code course_code, course.public_code public_code,
@@ -268,6 +270,9 @@ function expanded_faculte($facid, $uid) {
         $password = q($mycours->password);
         $courses_list[$cid] = array($mycours->k, $mycours->visible);
         $course_request_access_link = '';
+
+        $cbox_disable_student_unregister_cours = get_config('disable_student_unregister_cours') ? 'disabled' : '';
+
         // link creation
         if ($mycours->visible == COURSE_OPEN or $unlock_all_courses or isset($myCourses[$cid])) {
             // open course, registered to course, or power user who can see all
@@ -314,7 +319,7 @@ function expanded_faculte($facid, $uid) {
                 } else {
                     $requirepassword = '';
                 }
-                $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class /><span class='checkmark'></span></label>";
+                $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class $cbox_disable_student_unregister_cours /><span class='checkmark'></span></label>";
             } else {
                 $retString .= "<i class='fa fa-user'></i>";
             }

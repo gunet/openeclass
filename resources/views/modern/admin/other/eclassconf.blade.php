@@ -946,7 +946,7 @@
                                                         </div>
                                                         <div class='checkbox'>
                                                             <label class='label-container'>
-                                                                <input id='unsubscribe_course' type='checkbox' name='enable_unsubscribe_course' value='1' {{ $cbox_enable_unsubscribe_course }}>
+                                                                <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' {{ $cbox_disable_student_unregister_cours }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langUnsubscribeCourse') }}
                                                             </label>
