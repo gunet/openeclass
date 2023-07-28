@@ -39,6 +39,9 @@ function getUserLessonInfo($uid) {
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
     $lesson_content = '';
+
+    $get_config_enable_unsubscribe_course = get_config('enable_unsubscribe_course');
+
     $lesson_ids = array();
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                              course.code code,
@@ -92,8 +95,10 @@ function getUserLessonInfo($uid) {
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             $lesson_content .= "&nbsp;&nbsp;";
             if ($data->status == USER_STUDENT) {
-                $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
-                $student_courses_count++;
+                if ($get_config_enable_unsubscribe_course == 0) {
+                    $lesson_content .= icon('fa-minus-circle', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                    $student_courses_count++;
+                }
             } elseif ($data->status == USER_TEACHER) {
                 $lesson_content .= icon('fa-wrench', $langAdm, "{$urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;

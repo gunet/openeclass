@@ -6077,3 +6077,6 @@ $langCustomMailHelp = "
   <li>[username] : Όνομα χρήστη</li>
   <li>[password] : Κωδικός χρήστη</li>
 </ul>";
+
+$langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
+
