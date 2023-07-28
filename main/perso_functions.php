@@ -36,7 +36,10 @@ function getUserLessonInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions,
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
-           $langWelcomeSelect, $langPreview, $langOfCourse, $langPopular,$langThisCourseDescriptionIsEmpty,$langRegCourses;
+           $langWelcomeSelect, $langPreview, $langOfCourse,
+           $langThisCourseDescriptionIsEmpty;
+
+    $get_config_enable_unsubscribe_course = get_config('enable_unsubscribe_course');
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -94,21 +97,18 @@ function getUserLessonInfo($uid) {
                         <div>
                             <a class='TextRegular text-decoration-underline' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                                 &nbsp(" . q($data->public_code) . ")
-                            </a>
-
-                            
+                            </a>                            
                         </div>
 			            <div>
                             <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
                         </div>
                     </td>";
 
-
-$lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
+            $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end align-middle'>
                         <div class='col-12 portfolio-tools'>
                             <div class='d-inline-flex'>";
 
-        $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='#' id='{$data->code}' type'button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
+            $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='#' id='{$data->code}' type'button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
                                 <i class='fa-solid fa-display'></i>
                             </a>
 
@@ -126,38 +126,36 @@ $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end
                                         <div>
                                             <button type='button' class='close border-0 bg-white mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                         </div>
-                                    </div>
-
-                                    
+                                    </div>                                    
                                     <div class='course-content mt-4'>
                                         <div class='col-12 d-flex justify-content-center align-items-start'>";
-                                            if($data->course_image == NULL){
+                                            if($data->course_image == NULL) {
                                                 $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
-                                            }else{
+                                            } else {
                                                 $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
                                             }
-                    $lesson_content .= "</div>
-
-                                        <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
-                                            if(empty($data->description)){
-                                                $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
-                                            }else{
-                                                $lesson_content .= "{$data->description}";
-                                            }
+                $lesson_content .= "</div>
+                <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
+                    if(empty($data->description)) {
+                        $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                    } else {
+                        $lesson_content .= "{$data->description}";
+                    }
                     $lesson_content .= "</div>
                                     </div>
                                 </div>
-
                             </div>";
 
-                                $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-                                if ($data->status == USER_STUDENT) {
-                                    $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
-                                    $student_courses_count++;
-                                } elseif ($data->status == USER_TEACHER) {
-                                    $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
-                                    $teacher_courses_count++;
-                                }
+                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+                    if ($data->status == USER_STUDENT) {
+                        if ($get_config_enable_unsubscribe_course == 0) {
+                            $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                            $student_courses_count++;
+                        }
+                    } elseif ($data->status == USER_TEACHER) {
+                        $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                        $teacher_courses_count++;
+                    }
         $lesson_content .= "</div>
                         </div>
                     </td>
@@ -256,7 +254,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
         return $arr_an;
     } else {
         //Προσθήκη μετρητή ώστε να εμφανίζονται μέχρι 2 ανακοινώσεις σαν pagination
-        // Ολες οι τελευταίες ανακοινωσεις εμφανίζονται όταν πατήσει ο χρήστης το κουμπί.
+        // Όλες οι τελευταίες ανακοινώσεις εμφανίζονται όταν πατήσει ο χρήστης το κουμπί.
         $counterAn = 0;
         $ann_content = '';
         if($q){
@@ -377,7 +375,6 @@ function user_accept_policy($uid, $accept = true) {
 /*
  * @DIKH MOY SYNARTHSH GIA NA FTIAKSW TO PAGINATION ME TIS EIKONES TWN MATHIMATWN STO PORTFOLIO BLADE ARXEIO
 */
-
 function getUserCoursesPic($uid) {
 
     global $session;

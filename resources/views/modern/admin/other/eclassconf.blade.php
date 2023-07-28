@@ -63,7 +63,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -75,7 +75,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -85,13 +85,13 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
-                    
+
 
                     @if (Session::get('scheduleIndexing'))
                         <!--schedule indexing if necessary-->
@@ -114,9 +114,9 @@
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
                                     <div class='panel panel-admin' id='one'>
                                         <div class='panel-heading'>
-                                            
+
                                                 {{ trans('langBasicCfgSetting') }}
-                                            
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -235,9 +235,9 @@
 
                                     <div class='panel panel-admin mt-4' id='two'>
                                         <div class='panel-heading'>
-                                           
+
                                                {{ trans('langUpgReg') }}
-                                            
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -368,7 +368,7 @@
                                                     <div class='checkbox col-sm-12'>
                                                     <label class='label-container'>
                                                         <input type='checkbox' name='block_duration_alt_account' value='1' {{ $cbox_block_duration_alt_account }}>
-                                                        <span class='checkmark'></span>    
+                                                        <span class='checkmark'></span>
                                                         {{ trans('lang_message_block_duration_account') }}
                                                     </label>
                                                     </div>
@@ -433,9 +433,9 @@
 
                                     <div class='panel panel-admin mt-4' id='three'>
                                         <div class='panel-heading'>
-                                            
+
                                                 {{ trans('langEclassThemes') }}
-                                           
+
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
                                             <fieldset>
@@ -468,11 +468,11 @@
 
                                     @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                     <div class='panel panel-admin mt-4' id='four'>
-                                       
+
                                         <div class='panel-heading'>
-                                           
+
                                                 {{trans('langHomePageSettings')}}
-                                            
+
                                         </div>
                                         <div class='panel-body'>
                                             <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
@@ -609,9 +609,9 @@
                                     @if(!$install)
                                     <div class='panel panel-admin mt-4' id='five'>
                                         <div class='panel-heading'>
-                                           
+
                                                {{ trans('langEmailSettings') }}
-                                         
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -714,7 +714,7 @@
                                     @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                     <div class='panel panel-admin mt-4' id='six'>
                                         <div class='panel-heading'>
-                                           
+
                                                 {{ trans('langCourseSettings') }}
                                         </div>
                                         <div class='panel-body'>
@@ -775,9 +775,9 @@
                                     <div class='panel panel-admin mt-4' id='seven'>
 
                                         <div class='panel-heading'>
-                                           
+
                                               {{ trans('langMetaCommentary') }}
-                                           
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -815,9 +815,9 @@
 
                                     <div class='panel panel-admin mt-4' id='eight'>
                                         <div class='panel-heading'>
-                                           
+
                                                 {{ trans('langOtherOptions') }}
-                                           
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -910,14 +910,14 @@
                                                         </div>
                                                         @endif
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container'>
                                                                 <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_eportfolio_enable') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container'>
                                                                 <input type='checkbox' name='block_username_change' value='1' {{ $cbox_block_username_change }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_block_username_change') }}
@@ -931,17 +931,24 @@
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container'>
                                                                 <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {{ $cbox_enable_social_sharing_links }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableSocialSharingLiks') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container'>
                                                                 <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {{ $cbox_enable_strong_passwords }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('langEnableStrongPasswords') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input id='unsubscribe_course' type='checkbox' name='enable_unsubscribe_course' value='1' {{ $cbox_enable_unsubscribe_course }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langUnsubscribeCourse') }}
                                                             </label>
                                                         </div>
                                                     </div>
@@ -978,9 +985,9 @@
                                     <div class='panel panel-admin mt-4' id='nine'>
 
                                         <div class='panel-heading'>
-                                           
+
                                                 {{ trans('langDocumentSettings') }}
-                                            
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1048,9 +1055,9 @@
 
                                     <div class='panel panel-admin mt-4' id='ten'>
                                         <div class='panel-heading'>
-                                            
+
                                                {{ trans('langDefaultQuota') }}
-                                           
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1086,9 +1093,9 @@
                                     <div class='panel panel-admin mt-4' id='eleven'>
 
                                         <div class='panel-heading'>
-                                            
+
                                                {{ trans('langUploadWhitelist') }}
-                                           
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1116,9 +1123,9 @@
                                     <div class='panel panel-admin mt-4' id='twelve'>
 
                                         <div class='panel-heading'>
-                                           
+
                                                {{ trans('langLogActions') }}
-                                           
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1173,9 +1180,9 @@
                                     <div class='panel panel-admin mt-4' id='thirteen'>
 
                                         <div class='panel-heading'>
-                                           
+
                                                 {{ trans('langLoginFailCheck') }}
-                                           
+
                                         </div>
                                         <div class='panel-body'>
                                             <fieldset>
@@ -1224,9 +1231,9 @@
 
                                     <div class='panel panel-admin mt-4' id='fourteen'>
                                         <div class='panel-heading'>
-                                           
+
                                                 {{ trans('langPrivacyPolicy') }}
-                                         
+
                                         </div>
                                         <div class='panel-body'>
                                             <div class='margin-bottom-fat margin-top-fat pb-3'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>
@@ -1322,7 +1329,7 @@
 
                     {!! modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', trans('langConfirmEnableIndexTitle'), trans('langConfirmEnableIndex'), 'confirmIndexCancel', 'confirmIndexOk') !!}
                     {!! modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', trans('langConfirmEnableMobileAPITitle'), trans('langConfirmEnableMobileAPI'), 'confirmMobileAPICancel', 'confirmMobileAPIOk') !!}
-               
+
         </div>
     </div>
 </div>

@@ -2512,6 +2512,8 @@ $langOtherOptions = "More settings";
 $langDefaultQuota = "Default Quota for New Courses";
 $langCreateBackup = "Create configuration backup";
 $langInvalidMail = "Non-valid email addresses";
+$langCustomEmailBody = "Custom Email Body";
+$langUnsubscribeCourse = "Disable Course Unsubscription";
 $langLinkUnsubscribe = "Note: You have received this email because you are registered to course '%s'.<br />
 To stop receiving messages from this course, click";
 $langEmailUnsubscribe = "Course notifications";
@@ -5697,8 +5699,8 @@ $langOpenOptions = "Open options";
  * ********************************************************************* */
 $langMentoringPlatform = "Platform mentoring";
 $langEnableMentoringPlatform = "Enable Mentoring platform";
-$langEnableMentoringPlatformSuccess = "The mentoring platform has been successfully activated."; 
-$langDisableMentoringPlatformSuccess = "The mentoring platform has been successfully deactivated."; 
+$langEnableMentoringPlatformSuccess = "The mentoring platform has been successfully activated.";
+$langDisableMentoringPlatformSuccess = "The mentoring platform has been successfully deactivated.";
 $langDisableMentoringPlatform = "Enable Mentoring platform";
 $langMentoringPlatforms = "Platform mentoring";
 $langSignOut = "Logout";
@@ -5893,7 +5895,7 @@ $langMaxMentees = "Maximum number of mentees";
 $langNoGroupMentoring = "The group was not created. Try again.";
 $langNoMenteesExistInGroup = "There are no registered mentees in this group";
 $langDeleteMenteeFromGroup = "Remove from group";
-$langDeleteMentoringGroup = "Delete group"; 
+$langDeleteMentoringGroup = "Delete group";
 $langDeleteMentoringGroupMsg = "Caution! If you delete the group, all contents and all registered users will be removed.</br>
 Do you want to continue?";
 $langDeleteMenteeFromGroupSuccess = "The user has been removed from the group";
@@ -6155,7 +6157,7 @@ $langMentorProgram = "Mentor";
 $langMenteeProgram = "Mentee";
 $langMembersProgram = "Program members";
 $langViewHour = "View";
-$langDelPictureSucc = "Photo removed successfully."; 
+$langDelPictureSucc = "Photo removed successfully.";
 $langAboutUser = "About the user ";
 
 $langAddfiltersformentor = "Create filters for mentors";
@@ -6238,7 +6240,7 @@ $langVersionEclass = "eClass Edition";
 $langDelSpecializationNoSuccessMsgMentor = "The deletion was not completed because the user is a mentor of a program.</br>
                                             Remove it from the program and try again.";
 $langNoMentoringProgramsAsMentee = "There are no programs available that you are joining as a mentee.";
-$langSpaceDoc = "Storage overview"; 
+$langSpaceDoc = "Storage overview";
 $langMentoringActivePrograms = "Actively";
 $langMentoringDeactivePrograms = "Not active";
 $langTotalMentors = "Mentors";

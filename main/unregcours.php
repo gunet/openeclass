@@ -26,6 +26,8 @@ require_once 'include/log.class.php';
 
 $pageName = $langUnregCourse;
 
+$get_config_enable_unsubscribe_course = get_config('enable_unsubscribe_course');
+
 if (isset($_GET['cid'])) {
     $cid = q($_GET['cid']);
     $_SESSION['cid_tmp'] = $cid;
