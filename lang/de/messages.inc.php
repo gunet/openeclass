@@ -914,6 +914,7 @@ $langHelp = "Hilfe";
 $langSelection = "Auswahl";
 $langMenu = "Menu";
 $langLogout = "Auswählen (Logout)";
+$langLogout2 = "Auswählen (Logout)";
 $langSupportForum = "Hilfe (Support) Forum";
 $langInvalidAuth = "Ungültige Authentifizierungsmethode";
 $langContact = 'Kontakt';

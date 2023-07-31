@@ -934,6 +934,7 @@ $langHelp = "Guida";
 $langSelection = "Opzione";
 $langMenu = "Menu";
 $langLogout = "Uscire";
+$langLogout2 = "Uscire";
 $langSupportForum = "Forum di supporto";
 $langInvalidAuth = "Modo di certificazione sbagliato";
 $langContact = "Contatto";

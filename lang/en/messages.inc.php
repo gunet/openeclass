@@ -948,6 +948,7 @@ $langHelp = "Help";
 $langSelection = "Selection";
 $langMenu = "Menu";
 $langLogout = "Logout";
+$langLogout2 = "Logout";
 $langSupportForum = "Support forum";
 $langInvalidAuth = "Invalid auth method";
 $langContact = 'Contact';

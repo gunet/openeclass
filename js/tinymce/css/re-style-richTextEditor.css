@@ -28,3 +28,7 @@
 .mce-statusbar.mce-container.mce-panel.mce-stack-layout-item.mce-last{
     border: 0px !important;
 }
+
+.mce-fullscreen{
+    z-index: 9999 !important;
+}

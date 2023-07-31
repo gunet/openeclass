@@ -59,6 +59,16 @@ $(document).ready(function(){
             localStorage.setItem("MenuBtnStorage",clickerMenuBtn);
             sidebar.classList.toggle("active-nav");
             container.classList.toggle("active-cont");
+            
+            
+            $('.col_sidebar_active .menu-items').css('display','block');
+            $('.col_sidebar_active .menu-header').css('display','block');
+
+            setTimeout(() => {
+                $('.active-nav .menu-items').css('display','none');
+                $('.col_sidebar_active.active-nav .menu-header').css('display','none');
+            }, 400);
+
         });
     }else{
         localStorage.setItem("MenuBtnStorage",0);
@@ -67,6 +77,15 @@ $(document).ready(function(){
     if(localStorage.getItem("MenuBtnStorage") %2 > 0){
         sidebar.classList.toggle("active-nav");
         container.classList.toggle("active-cont");
+
+        $('.col_sidebar_active .menu-items').css('display','block');
+        $('.col_sidebar_active .menu-header').css('display','block');
+
+        setTimeout(() => {
+            $('.active-nav .menu-items').css('display','none');
+            $('.col_sidebar_active.active-nav .menu-header').css('display','none');
+        }, 400);
+        
     }else{
         if(sidebar!=null && container!=null){
             sidebar.classList.remove("active-nav");

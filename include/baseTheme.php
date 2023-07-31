@@ -502,7 +502,10 @@ function view($view_file, $view_data = array()) {
                     color: #ffffff !important;
                 }
 
-                #bgr-cheat-header, .ContentLeftNav, .contextual-sidebar .list-group-item{
+                // #bgr-cheat-header, .ContentLeftNav, .contextual-sidebar .list-group-item{
+                //     background:$rgba_no_alpha;
+                // }
+                #bgr-cheat-header{
                     background:$rgba_no_alpha;
                 }
 
@@ -580,16 +583,23 @@ function view($view_file, $view_data = array()) {
                     color:  $theme_options_styles[leftNavBgColor] !important;
                 }
 
+                #leftnav .panel a{
+                    color:#2B3944;
+                }
+
+                #leftnav .panel a.parent-menu{
+                    color: #2B3944;
+                }
+
+                #leftnav .panel a.parent-menu span{
+                    color: #2B3944;
+                }
                 
                 
             ";
         }
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
-
-                .UserMenuBtn:hover{
-                    background-color: $theme_options_styles[linkColor];
-                }
 
                 .legendViewContent2{
                     border-bottom:solid 1px $theme_options_styles[linkColor];
@@ -657,6 +667,14 @@ function view($view_file, $view_data = array()) {
                     color: #ffffff;
                 }
 
+                .user-menu-content:hover{
+                    border-top: solid 4px $theme_options_styles[linkColor];
+                }
+                
+                .user-menu-btn:hover .fa-chevron-down{
+                    color: $theme_options_styles[linkColor];
+                }
+
             ";
         }
 
@@ -670,9 +688,10 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['leftSubMenuFontColor'])){
             $styles_str .= "
-                #leftnav .panel a{
-                    color: $theme_options_styles[leftSubMenuFontColor];
-                }
+                // #leftnav .panel a{
+                //     color: $theme_options_styles[leftSubMenuFontColor];
+                // }
+                
                 .toolSidebarTxt{
                     color: $theme_options_styles[leftSubMenuFontColor];
                 }
@@ -739,26 +758,26 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['leftMenuFontColor'])){
             $styles_str .= "
-                #leftnav .panel a.parent-menu{
-                    color: $theme_options_styles[leftMenuFontColor];
-                }
+                // #leftnav .panel a.parent-menu{
+                //     color: $theme_options_styles[leftMenuFontColor];
+                // }
 
-                #leftnav .panel a.parent-menu span{
-                    color: $theme_options_styles[leftMenuFontColor];
-                }
+                // #leftnav .panel a.parent-menu span{
+                //     color: $theme_options_styles[leftMenuFontColor];
+                // }
                 
             ";
         }
 
         if (!empty($theme_options_styles['leftMenuBgColor'])){
             $styles_str .= "
-                #leftnav .panel a.parent-menu{
-                    background: $theme_options_styles[leftMenuBgColor];
-                }
+                // #leftnav .panel a.parent-menu{
+                //     background: $theme_options_styles[leftMenuBgColor];
+                // }
 
-                #leftnav .panel a.parent-menu .panel-title{
-                    background: $theme_options_styles[leftMenuBgColor];
-                }
+                // #leftnav .panel a.parent-menu .panel-title{
+                //     background: $theme_options_styles[leftMenuBgColor];
+                // }
                 
             ";
         }

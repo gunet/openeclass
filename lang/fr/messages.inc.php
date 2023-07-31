@@ -1006,6 +1006,7 @@ $langSelection = "Sélection";
 $langMenu = "Menu";
 $langLogout = "Déconnexion"
 ;
+$langLogout2 = "Déconnexion";
 $langSupportForum = "Forum de Soutien";
 $langInvalidAuth = "Mode d'authentification invalide"
 ;

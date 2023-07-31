@@ -3,16 +3,16 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }}'>
-        <div class="row rowMargin">
+<div class='{{ $container }} py-lg-0'>
+        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-            <div id="background-cheat-leftnav" class="col-xl-2 col-lg-3 col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
-			<div class="col-xl-10 col-lg-9 col-12 col_maincontent_active p-lg-5">
+			<div class="col_maincontent_active">
                     
                 <div class="row">
 

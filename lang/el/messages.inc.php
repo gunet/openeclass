@@ -2418,6 +2418,7 @@ $langSelection = "Επιλογή";
 $langSelect = "Επιλογή";
 $langMenu = "Μενού";
 $langLogout = "Έξοδος";
+$langLogout2 = "Αποσύνδεση";
 $langSupportForum = "Περιοχή Υποστήριξης";
 $langInvalidAuth = "Λάθος τρόπος πιστοποίησης";
 $langContact = 'Επικοινωνία';

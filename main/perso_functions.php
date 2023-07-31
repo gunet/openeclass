@@ -114,50 +114,38 @@ $lesson_content .= "<td class='border-top-0 border-start-0 border-end-0 text-end
 
                             <div id='PortfolioModal{$data->code}' class='modal'>
 
-                                <div class='modal-content modal-content-opencourses overflow-auto px-lg-5 py-lg-5'>
+                                <div class='modal-content modal-content-opencourses px-lg-5 py-lg-5'>
                                     <div class='col-12 d-flex justify-content-between align-items-start'>
                                         <div>
-                                            <span class='modal-title TextBold' style='font-size:22px;'>{$data->title}</span>
-                                            <span>({$data->public_code})</span>
+                                            <h2 class='d-flex justify-content-start align-items-start gap-3 TextBold mb-0'>
+                                                <span class='settings-icons mt-1 Neutral-600-cl'>" . course_access_icon($data->visible) . "</span>
+                                                {$data->title}
+                                            </h2>
+                                            <p class='course-professor-code'>{$data->public_code}&nbsp - &nbsp{$data->professor}</p>
                                         </div>
                                         <div>
                                             <button type='button' class='close border-0 bg-white mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                         </div>
                                     </div>
-                                    
-                                    <hr class='hr-OpenCourses'>
 
-                                    <div class='row mb-3'>
-                                        <div class='col-9 d-flex justify-content-start align-items-start ps-4'>
-                                            <p class='small-text TextRegular blackBlueText d-inline-flex align-items-center'>
-                                                <span class='fa fa-user lightBlueText pe-2 pt-0'></span>
-                                                <span class='blackBlueText'>{$data->professor}</span>
-                                            </p>
-                                        </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center pe-4 blackBlueText'>
-                                            " . course_access_icon($data->visible) . " ";
-                                            if($data->popular_course == 1){
-                                                $lesson_content .= "<span class='fa fa-star Primary-600-cl ps-3' data-bs-toggle='tooltip' data-bs-placement='top' title='' data-bs-original-title='$langPopular&nbsp$langCourse'' aria-label='$langPopular&nbsp$langCourse'></span>";
+                                    
+                                    <div class='course-content mt-4'>
+                                        <div class='col-12 d-flex justify-content-center align-items-start'>";
+                                            if($data->course_image == NULL){
+                                                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
+                                            }else{
+                                                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
                                             }
-                                        $lesson_content .= "</div>
-                                    </div>
-                                
-                                    
-                                    <div class='col-12 d-flex justify-content-center align-items-start'>";
-                                        if($data->course_image == NULL){
-                                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
-                                        }else{
-                                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
-                                        }
-                                    $lesson_content .= "</div>
+                    $lesson_content .= "</div>
 
-                                    <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
-                                        if(empty($data->description)){
-                                            $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
-                                        }else{
-                                            $lesson_content .= "{$data->description}";
-                                        }
-                                        $lesson_content .= "</div>
+                                        <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
+                                            if(empty($data->description)){
+                                                $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                                            }else{
+                                                $lesson_content .= "{$data->description}";
+                                            }
+                    $lesson_content .= "</div>
+                                    </div>
                                 </div>
 
                             </div>";
