@@ -10,15 +10,14 @@
 
 @if($course_code and !isset($_GET['fromFlipped']))
     <div class='d-none d-md-block mt-4'>
-        <div class='col-12 pb-3 ps-3 pe-0'>
+        <div class='col-12 d-flex justify-content-between align-items-start'>
             @if($is_editor)
-                <div class='row'>
-                    <div class='col-10 ps-0 pe-0'>
+
+                    <div>
                         @if($toolName)
                             <div class='col-12 mb-2'>
-                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span>
-                                <span class='courseInfoText TextBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
-                                <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
+                                <h2 class='mb-0'>{{$currentCourseName}}</h2>
+                                <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p>
                             </div>
                             <div class='col-12 d-inline-flex'>
                                 <!-- toolName -->
@@ -68,24 +67,22 @@
                             </div>
                         @else
                             <div class='col-12'>
-                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span>
-                                <span class='courseInfoText TextBold normalBlueText'>({{course_id_to_public_code($course_id)}})</span><br>
-                                <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span> 
+                                <h2 class='mb-0'>{{$currentCourseName}}</h2>
+                                <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p> 
                             </div>
                         @endif
                     </div>
-                    <div class='col-2 d-flex justify-content-end align-items-top'>
+                    <div>
                         @include('layouts.partials.manageCourse',[$urlAppend => $urlAppend,'coursePrivateCode' => $course_code])
                     </div>
-                </div>
+                
             @else
-                <div class='row'>
-                    <div class='col-12 ps-0'>
+
+                    <div>
                         @if($toolName)
                             <div class='col-12 mb-2'>
-                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span> 
-                                <span class='courseInfoText TextBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br>
-                                <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
+                                <h2 class='mb-0'>{{$currentCourseName}}</h2>
+                                <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p>
                             </div>
                             <div class='col-12 d-inline-flex'>
                                 <span class='text-secondary fst-italic'>{{$toolName}}</span>
@@ -111,13 +108,12 @@
                             </div>
                         @else
                             <div class='col-12'>
-                                <span class='courseInfoText TextBold blackBlueText me-1'>{{$currentCourseName}}</span>
-                                <span class='courseInfoText TextBold normalBlueText'>{{course_id_to_public_code($course_id)}}</span><br> 
-                                <span class='small-text TextRegular blackBlueText'>{{course_id_to_prof($course_id)}}</span>
+                                <h2 class='mb-0'>{{$currentCourseName}}</h2>
+                                <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p>
                             </div>
                         @endif
                     </div>
-                </div>
+                
             @endif
         </div></br>
     </div>

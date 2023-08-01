@@ -5,13 +5,8 @@
         <!-- this is toggle-button in breadcrumb -->
         @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']))
             <nav class="me-lg-0 me-2">
-                {{--
-                <button type="button" id="menu-btn" class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block btn submitAdminBtn btn-sm menu_btn_button">
-                    <i class="fa-solid fa-align-left"></i>
-                </button>
-                --}}
-                <a class="btn submitAdminBtn btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools" style='height:30px;'>
-                    <i class="fa fa-bars"></i>
+                <a class="btn d-lg-none p-0" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
+                    <img src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' />
                 </a>
             </nav>
         @endif

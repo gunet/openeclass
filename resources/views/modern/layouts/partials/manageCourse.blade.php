@@ -1,11 +1,11 @@
 
-<div class="dropdown dropstart">
-    <button class="btn basic-size rounded-circle bg-light float-end" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
-        <span data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{trans('langModifyInfo')}}">
-            <i class="fa-solid fa-ellipsis-vertical"></i>
-        </span>
+<div class="dropdown">
+    <button class="btn submitAdminBtn submitAdminBtnDefault manageCourseBtn float-end d-flex justify-content-center align-items-center gap-2" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+            <i class="fa-solid fa-gear"></i>
+            <span class='hidden-lg hidden-md hidden-xs TextBold'>{{trans('langModifyInfo')}}</span>
+            <i class="fa-solid fa-chevron-down"></i>
     </button>
-    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu" aria-labelledby="dropdownManageCourse">
+    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownManageCourse">
         <ul class="list-group list-group-flush">
             <li>
                 <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}">

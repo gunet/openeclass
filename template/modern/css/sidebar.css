@@ -63,6 +63,7 @@
     border-top-left-radius:0px;
     border-bottom-left-radius: 0px;
     padding: 72px 0px 72px 64px;
+    min-height: calc(100vh - 80px - 80px);
   }
   
 }
@@ -108,9 +109,6 @@
   .nav-link{  font-size:13px;  border-bottom: solid 1px white; }
 
   .active-nav{ opacity:1; }
-
-  .menu_btn_button{ display:none; pointer-events: none; }
-
 }
 
 /* mobile L */
@@ -130,13 +128,10 @@
   .nav-link{ font-size:13px; border-bottom: solid 1px white; }
 
   .active-nav{ opacity:1; }
-
-  .menu_btn_button{  display:none;  pointer-events: none; }
   
 }
 
 @media(min-width:992px) and (max-width:1023px){
-  .menu_btn_button{ display:block; pointer-events: all; }
 
   #background-cheat-leftnav, .ContentLeftNav{
     width: 156px;
@@ -146,12 +141,11 @@
   .course-wrapper:has(.active-nav) .ContentLeftNav{
     width: 45px;
     transition: all 0.5s ease-in-out;
-  }
-
-  .col_sidebar_active{
-    width: 45px;
-    transition: all 0.5s ease-in-out;
     z-index: 0;
+  }
+  .course-wrapper:not(:has(.active-nav)) #background-cheat-leftnav,
+  .course-wrapper:not(:has(.active-nav)) .ContentLeftNav{
+    transition: all 0.5s ease-in-out;
   }
 
   .col_sidebar_active.active-nav .menu-items, 
@@ -164,7 +158,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width: 35px;
+    width:35px;
   }
 
   .col_maincontent_active{
@@ -172,12 +166,12 @@
     z-index: 1;
   }
 
-  .course-wrapper.course-wrapper:has(.active-nav) .menu_btn_button img{
+  .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
     transition: transform 0.5s ease-in-out;
   }
 
-  .course-wrapper.course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
+  .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
     transition: transform 0.5s ease-in-out;
   }
@@ -192,12 +186,11 @@
   .course-wrapper:has(.active-nav) .ContentLeftNav{
     width: 45px;
     transition: all 0.5s ease-in-out;
-  }
-
-  .col_sidebar_active{
-    width: 45px;
-    transition: all 0.5s ease-in-out;
     z-index: 0;
+  }
+  .course-wrapper:not(:has(.active-nav)) #background-cheat-leftnav,
+  .course-wrapper:not(:has(.active-nav)) .ContentLeftNav{
+    transition: all 0.5s ease-in-out;
   }
 
   .col_sidebar_active.active-nav .menu-items, 
@@ -210,7 +203,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width: 35px;
+    width:35px;
   }
 
   .col_maincontent_active{
@@ -218,12 +211,12 @@
     z-index: 1;
   }
 
-  .course-wrapper.course-wrapper:has(.active-nav) .menu_btn_button img{
+  .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
     transition: transform 0.5s ease-in-out;
   }
 
-  .course-wrapper.course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
+  .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
     transition: transform 0.5s ease-in-out;
   }
@@ -240,12 +233,11 @@
   .course-wrapper:has(.active-nav) .ContentLeftNav{
     width: 45px;
     transition: all 0.5s ease-in-out;
-  }
-
-  .col_sidebar_active{
-    width: 45px;
-    transition: all 0.5s ease-in-out;
     z-index: 0;
+  }
+  .course-wrapper:not(:has(.active-nav)) #background-cheat-leftnav,
+  .course-wrapper:not(:has(.active-nav)) .ContentLeftNav{
+    transition: all 0.5s ease-in-out;
   }
 
   .col_sidebar_active.active-nav .menu-items, 
@@ -258,7 +250,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width: 35px;
+    width:35px;
   }
 
   .col_maincontent_active{
@@ -266,12 +258,12 @@
     z-index: 1;
   }
 
-  .course-wrapper.course-wrapper:has(.active-nav) .menu_btn_button img{
+  .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
     transition: transform 0.5s ease-in-out;
   }
 
-  .course-wrapper.course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
+  .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
     transition: transform 0.5s ease-in-out;
   }
@@ -290,12 +282,11 @@
   .course-wrapper:has(.active-nav) .ContentLeftNav{
     width: 45px;
     transition: all 0.5s ease-in-out;
-  }
-
-  .col_sidebar_active{
-    width: 45px;
-    transition: all 0.5s ease-in-out;
     z-index: 0;
+  }
+  .course-wrapper:not(:has(.active-nav)) #background-cheat-leftnav,
+  .course-wrapper:not(:has(.active-nav)) .ContentLeftNav{
+    transition: all 0.5s ease-in-out;
   }
 
   .col_sidebar_active.active-nav .menu-items, 
@@ -308,7 +299,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width: 35px;
+    width:35px;
   }
 
   .col_maincontent_active{
@@ -316,19 +307,16 @@
     z-index: 1;
   }
 
-  
-  .course-wrapper.course-wrapper:has(.active-nav) .menu_btn_button img{
+  .course-wrapper:has(.active-nav) .menu_btn_button img{
     transform: rotate(180deg);
     transition: transform 0.5s ease-in-out;
   }
 
-  .course-wrapper.course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
+  .course-wrapper:not(:has(.active-nav)) .menu_btn_button img{
     transform: rotate(0deg);
     transition: transform 0.5s ease-in-out;
   }
-.course-wrapper.course-wrapper:not(:has(.active-nav)) .menu_btn_button{
-    z-index: 2 !important;
-  }
+
 }
 
 
@@ -356,7 +344,7 @@ input:checked + .slider-round { background-color: #74AFE9; }
 input:focus + .slider-round { box-shadow: 0 0 1px #0073E6; }
 
 input:checked + .slider-round:before { -webkit-transform: translateX(105px); -ms-transform: translateX(105px); transform: translateX(105px); }
-.course-wrapper.course-wrapper:has(.active-nav) input:checked + .slider-round:before{
+.course-wrapper:has(.active-nav) input:checked + .slider-round:before{
   -webkit-transform: translateX(0px); -ms-transform: translateX(0px); transform: translateX(0px);
 }
 

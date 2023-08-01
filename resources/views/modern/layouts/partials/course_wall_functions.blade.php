@@ -17,14 +17,14 @@
         $extvideo = Session::has('extvideo')? Session::get('extvideo'): '';
     @endphp
 
-    <div class="col-12">
-        <div class='card panelCard p-md-3 bg-white'>
-            <div class='card-header bg-white border-0'>
+    <div class="col-12 mt-5">
+        <div class='card panelCard border-0'>
+            <div class='card-header px-0 py-0 border-0 bg-white d-md-flex justify-content-md-between align-items-md-center'>
                
                     <h3>{{trans('langWall')}}</h3>
                 
             </div>
-            <div class='card-body'>
+            <div class='card-body px-0 py-0'>
                 <div class="form-wrapper form-edit rounded">
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
                         <fieldset> 
@@ -135,7 +135,7 @@
                                 {!!
                                     form_buttons(array(
                                         array(
-                                            'class' => 'submitAdminBtn',
+                                            'class' => 'submitAdminBtn submitAdminBtnDefault',
                                             'text'  =>  trans('langSubmit'),
                                             'name'  =>  'submit',
                                             'value' =>  trans('langSubmit')
@@ -242,7 +242,7 @@
 @endphp
 
     @if (count($posts) == 0)
-        <div class="col-12 mt-3"><div class="alert alert-warning"><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoWallPosts') }}</span></div></div>
+        <div class="col-12 mt-5"><div class="alert alert-warning"><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoWallPosts') }}</span></div></div>
     @else
         {!! generate_infinite_container_html($posts, $posts_per_page, 2) !!}<div class='mb-4'></div>
     @endif

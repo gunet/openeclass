@@ -257,13 +257,13 @@ function generate_infinite_container_html($posts, $next_page) {
                           });
                       </script>';
     $ret = '
-        <div class="card panelCard px-lg-4 py-lg-3 wallWrapper mt-4">
-          <div class="card-header bg-white border-0">
+        <div class="card panelCard border-0 mt-5">
+          <div class="card-header px-0 py-0 border-0 bg-white d-md-flex justify-content-md-between align-items-md-center">
             
                 <h3>'.$langWallPostsShow.'</h3>
             
           </div>
-          <div class="card-body pt-0">
+          <div class="card-body p-0">
             <div class="infinite-container">';
 
     foreach ($posts as $post) {
@@ -343,7 +343,7 @@ function generate_infinite_container_html($posts, $next_page) {
         $ret .= '
               <div class="infinite-item ">
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
-                  <div class="col-12 mt-3 mb-2">
+                  <div class="col-12 mb-4">
                     <div class="card panelCard">
                       <div class="card-header bg-white border-0">
                         <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .

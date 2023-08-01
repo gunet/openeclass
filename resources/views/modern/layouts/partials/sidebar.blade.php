@@ -1,7 +1,7 @@
 
 <div id="leftnav" class="col-12 sidebar float-menu pt-3">
 
-    <div class='col-12 text-end'>
+    <div class='col-12 text-end d-none d-lg-block'>
         <button type="button" id="menu-btn" class="btn menu_btn_button">
             <img src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' />
         </button>
@@ -40,12 +40,12 @@
                         </div>
                     </div>
                 </a>
-                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }} rounded-0 Collapse{{ $key }}" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
+                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse {{ $tool_group[0]['class'] }}{{ $key == $default_open_group? ' show': '' }} rounded-0 Collapse{{ $key }} mt-3" aria-labelledby="Tool{{$key}}" data-bs-parent="#sidebar-accordion">
                     <div class="m-0 p-0 contextual-sidebar w-auto border-0">
                         <ul class="list-group list-group-flush">
                             @foreach ($tool_group[1] as $key2 => $tool)
                                 <li>
-                                    <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item d-flex justify-content-start align-items-start py-2 border-0 gap-2 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                                    <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item d-flex justify-content-start align-items-start py-1 border-0 gap-2 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
                                         <i class="{{ $tool_group[3][$key2] }} mt-1"></i>
                                         <span class='menu-items TextBold'>{!! $tool !!}</span>
                                     </a>

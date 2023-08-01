@@ -109,7 +109,7 @@ $tool_content .= "
                     <span class='TextBold hidden-xs pe-2'>$langOpenMind</span> 
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='Open'>
+                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Open'>
                     <ul class='list-group list-group-flush'>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
                         <li><input class='py-3' id='file_input' type='file' onchange='open_file();'/></li>
@@ -121,7 +121,7 @@ $tool_content .= "
                     <span class='TextBold hidden-xs pe-2'>$langEditMind</span>  
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='Alter'>
+                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Alter'>
                     <ul class='list-group list-group-flush'>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
@@ -135,7 +135,7 @@ $tool_content .= "
                     <span class='TextBold hidden-xs pe-2'>$langThemes</span> 
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='ChooseTheme'>
+                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='ChooseTheme'>
                     <ul class='list-group list-group-flush'>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
@@ -161,7 +161,7 @@ $tool_content .= "
                     <span class='TextBold hidden-xs pe-2'>$langSave</span> 
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='Save'>
+                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Save'>
                     <ul class='list-group list-group-flush'>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
                         <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";

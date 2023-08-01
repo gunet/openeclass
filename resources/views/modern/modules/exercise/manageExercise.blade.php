@@ -25,7 +25,7 @@
                     <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5">
 
                                 <nav class="navbar navbar-expand-lg navrbar_menu_btn">
-                                    <button type="button" id="menu-btn" class="btn btn-primary menu_btn_button">
+                                    <button type="button" id="menu-btn" class="btn btn-primary">
                                         <i class="fas fa-align-left"></i>
                                         <span></span>
                                     </button>

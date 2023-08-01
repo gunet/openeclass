@@ -33,7 +33,7 @@
                             <img class="user-icon-filename mt-0 me-2" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                     </button>
 
-                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu" aria-labelledby="dropdownMenuButton1">
+                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownMenuButton1">
                         <ul class="list-group list-group-flush dropdown_menu_user">
                             <li>
                                 <a class='list-group-item d-flex justify-content-center align-items-center py-3'><span class='normalBlueText fs-6 fw-bold'>{{ $_SESSION['uname'] }}</span></a>

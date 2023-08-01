@@ -39,10 +39,16 @@ body{
   }
 }
 
-.container, .container-fluid{
-  padding: 72px 64px 72px 64px;
+.container-fluid {
+  max-width: 1920px;
 }
-@media(max-width:991px){
+.container-fluid{
+  padding: 40px 64px 40px 64px;
+}
+.container{
+  padding: 32px 24px 32px 24px;
+}
+@media(max-width:1199px){
   .container, .container-fluid{
     padding: 32px 24px 32px 24px;
   }
@@ -163,15 +169,15 @@ img {
 }
   
 .legendViewContent{
-  border-bottom:solid 1px #e8e8e8;
+  border-bottom:solid 1px #E8EDF8;
 }
   
 .legendViewContent2{
-  border-bottom:solid 1px #B3D1FF;
+  border-bottom:solid 1px #E8EDF8;
 }
 @media(max-width:991px){
   .legendViewContent2{
-    border-bottom:solid 1px #e8e8e8;
+    border-bottom:solid 1px #E8EDF8;
   }
 }
   
@@ -511,7 +517,7 @@ a:hover{
   font-weight: 400 !important;
   font-size: 14px !important;
   line-height: 16px !important;
-  color: #2B3944;
+  color: #4F6893;
   font-style: normal;
 }
 
@@ -593,7 +599,12 @@ a:hover{
 /**********************************************************************************************************************/
 
 .navbar-eclass{
-  z-index:2;
+  z-index:9999;
+}
+
+/* textEditor */
+body:has(.mce-fullscreen) .navbar-eclass{
+  z-index: 0;
 }
 
 #bgr-cheat-header{ 
@@ -1021,6 +1032,9 @@ body .form-action-button-mydropdowns{
   display: block; 
 }
 
+.contextual-border{
+  border: solid 1px #CDD4E0;
+}
 /**********************************************************************************************************************/
 /****************************************************** TABS **********************************************************/
 /**********************************************************************************************************************/
@@ -3442,6 +3456,18 @@ div[role="progressbar"]::before {
   opacity: 0.7; 
 }
 
+@media(min-width:1200px) and (max-width:1399px){
+  .manageCourseBtn{
+    min-width: 250px;
+  }
+}
+@media(min-width:1400px){
+  .manageCourseBtn{
+    min-width: 230px;
+  }
+}
+
+
 
 /**********************************************************************************************************************/
 /************************************************* GROUPS *************************************************************/
@@ -3453,7 +3479,7 @@ div[role="progressbar"]::before {
 
 .panelCard{
   border-radius: 4px ;
-  border: solid 1px #E8EDF8 !important;
+  border: solid 1px #E8EDF8;
   /* filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)) !important; */
 }
 
@@ -3859,6 +3885,7 @@ div[role="progressbar"]::before {
   height: 200px;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
+  object-fit: cover;
 }
 
 .mycourses-pagination .page-item .page-link:focus, .mentors-pagination .page-item .page-link:active{
@@ -4123,7 +4150,7 @@ div[role="progressbar"]::before {
 
   .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; margin-right:10px; }
 
-  .uploadImageCourse{ height: 300px;  width: 100%; object-fit: fill ; margin:auto; display: block;}
+  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 
 }
 
@@ -4133,7 +4160,7 @@ div[role="progressbar"]::before {
 
   .user-icon-filename{ width:20px; height:20px; border-radius:50%; margin-right:10px; }
 
-  .uploadImageCourse{ height: 300px;  width: 100%; object-fit: fill ; margin:auto; display: block;}
+  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 }
 
 /* ------------------------------------------------------- L tablet -------------------------------------------------------------------------*/
@@ -4146,7 +4173,7 @@ div[role="progressbar"]::before {
 
   .user-icon-filename{ width:30px; height:30px; border-radius:50%; margin-right:10px; }
 
-  .uploadImageCourse{ height: 250px;  width: 100%; object-fit: fill ; margin:auto; display: block;}
+  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 
 }
 
@@ -4158,7 +4185,7 @@ div[role="progressbar"]::before {
 
 @media (min-width: 1200px) and (max-width: 1399px){ 
 
-  .uploadImageCourse{ height: 350px;  width: 100%; object-fit: fill ; margin:auto; display: block;}
+  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 
   .user-icon-filename{ width:30px; height:30px; border-radius:50%; margin-right:10px; }
 }
@@ -4171,7 +4198,7 @@ div[role="progressbar"]::before {
 
 @media (min-width:1400px){
 
-  .uploadImageCourse{ height: 400px; width: 100%; object-fit: fill ; margin:auto; display: block;}
+  .uploadImageCourse{ height: 280px; width: 100%; object-fit: cover ; margin:auto; display: block;}
 
   .user-icon-filename{ width:30px; height:30px; border-radius:50%; margin-right:10px; }
 }

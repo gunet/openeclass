@@ -3643,7 +3643,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $dataAttrs = 'data-bs-display="static" data-bs-toggle="dropdown" data-bs-placement="bottom" aria-haspopup="true" aria-expanded="false"';
             $form_begin = '<div class="btn-group" role="group">';
             $form_end = '</div>';
-            $subMenu = '<div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu">
+            $subMenu = '<div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border">
                             <ul class="list-group list-group-flush">';
                 foreach ($option['options'] as $subOption) {
                 $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
@@ -3698,7 +3698,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                                 <span class='hidden-xs TextBold'>$secondary_title</span> 
                                 <span class='caret'></span><span class='hidden'></span>
                             </button>";
-        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu' aria-labelledby='toolDropdown'>
+        $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='toolDropdown'>
                                 <ul class='list-group list-group-flush'>
                                     ".implode('', $out_secondary)."
                                 </ul>
