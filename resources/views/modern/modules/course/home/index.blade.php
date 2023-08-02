@@ -413,7 +413,7 @@
                                 @if(count($items) > 0)
 
                                     <div class='panel'>
-                                        <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
+                                        <div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
                                             <ul class="list-group list-group-flush @if($is_editor) mt-3 @else mt-5 @endif">
                                                 @foreach ($items as $item)
                                                     @if (trim($item->content))

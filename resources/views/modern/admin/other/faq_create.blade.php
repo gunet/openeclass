@@ -7,7 +7,7 @@
 
             $(document).on('click', '.expand:not(.revert)', function(e) {
                 e.preventDefault();
-                $('.faq-section .panel-collapse').addClass('show');
+                $('.group-section .panel-collapse').addClass('show');
                 $(this).toggleClass('revert');
                 $(this).children().eq(0).toggleClass('fa-plus-circle').toggleClass('fa-minus-circle');
                 $(this).children().eq(1).html('{{ trans('langFaqCloseAll') }}');
@@ -15,8 +15,8 @@
 
             $(document).on('click', '.expand.revert', function(e) {
                 e.preventDefault();
-                $('.faq-section .panel-collapse').removeClass('show');
-                $('.faq-section .panel-collapse').addClass('hide');
+                $('.group-section .panel-collapse').removeClass('show');
+                $('.group-section .panel-collapse').addClass('hide');
                 $(this).toggleClass('revert');
                 $(this).children().eq(0).toggleClass('fa-minus-circle').toggleClass('fa-plus-circle');
                 $(this).children().eq(1).html('{{ trans('langFaqExpandAll') }}');
@@ -28,7 +28,7 @@
                 idOrder = $(this).data('order');
                 elem_rem = $(this).parents('.list-group-item');
                 var ids = [];
-                $('.faq-section .list-group-item').each(function () {
+                $('.group-section .list-group-item').each(function () {
                     ids.push($(this).data('id'));
                 });
                 bootbox.confirm('{{ trans('langConfirmDelete') }}', function(result) {
@@ -191,7 +191,7 @@
                         </div>
                     @else
                         <div class='col-12'>
-                            <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
+                            <div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
                                 @if (count($faqs) == 0)
                                     <div class='panel list-group-item'>
                                         <div class='text-center text-muted'><em>{{ trans('langFaqNoEntries') }}</em> <br><br> <em>{{ trans('langFaqAddNew') }}</em></div>

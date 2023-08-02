@@ -79,8 +79,8 @@ if ($is_editor) {
     // Import
     $tool_content .= "
         <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport'>
-            <span class='fa fa-upload space-after-icon'></span>
-            <span class='TextBold hidden-xs'>$langImport</span>
+            <span class='fa-solid fa-upload space-after-icon sttings-icons'></span>
+            <span class='TextBold hidden-xs ps-2'>$langImport</span>
         </a>";
 
     // end custom action bar

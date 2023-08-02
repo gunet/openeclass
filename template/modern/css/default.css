@@ -126,6 +126,13 @@ img {
   border-right: none;
   border-bottom: solid 1px #EFF6FF;
 }
+
+.border-bottom-default{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #E8EDF8;
+}
   
 .li-unstyled{
   list-style:none !important;
@@ -727,7 +734,7 @@ body:has(.mce-fullscreen) .navbar-eclass{
   border-top: solid 4px #0073E6;
   cursor:  url(../images/pointer.png), auto;
 }
-.user-menu-content:hover .user-menu-btn{
+.user-menu-content:hover .user-menu-btn,.user-menu-content:hover .userLoginMobile{
   margin-top: -4px;
   cursor:  url(../images/pointer.png), auto;
 }
@@ -965,38 +972,13 @@ body:has(.mce-fullscreen) .navbar-eclass{
 
 .contextual-menu-user{
   width:296px;
-  /* max-height: calc(100vh - 80px - 80px);
-  overflow-x: auto; */
   border: solid 1px #CDD4E0;
 }
 
-
-.contextual-menu-user .list-group-item{
-  gap: 8px;
-}
 .contextual-menu-user .list-group-item .fa-solid, .contextual-menu-user .list-group-item .fa-regular{
   width: 16px;
   height: 16px;
 }
-/* .contextual-menu-user::-webkit-scrollbar {
-  width: 20px;
-}
-.contextual-menu-user::-webkit-scrollbar-track {
-  background-color: #ffffff;
-}
-.contextual-menu-user::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-}
-.contextual-menu-user::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-}
-.contextual-menu-user::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-  border: 6px solid transparent;
-  background-clip: content-box;
-} */
 
 .contextual-menu li{
   list-style:none !important;
@@ -1075,10 +1057,10 @@ body .form-action-button-mydropdowns{
 /************************************************* ACCORDIONS *********************************************************/
 /**********************************************************************************************************************/
 
-.faq-section .list-group-item{
+.group-section .list-group-item{
   border-bottom: solid 1px #E8EDF8 ;
 }
-.faq-section .list-group-item .accordion-btn{
+.group-section .list-group-item .accordion-btn{
   font-size:15px;
   font-weight: 700;
   font-style: normal;
@@ -1087,21 +1069,21 @@ body .form-action-button-mydropdowns{
   letter-spacing: 0px;
   gap: 9px;
 }
-.faq-section .list-group-item .accordion-btn:hover{
+.group-section .list-group-item .accordion-btn:hover{
   text-decoration: none;
   cursor:  url(../images/pointer.png), auto;
   color: #0073E6;
 }
 
-.faq-section .list-group-item .accordion-btn[aria-expanded="true"], .faq-section .list-group-item .accordion-btn.showAll{
+.group-section .list-group-item .accordion-btn[aria-expanded="true"], .group-section .list-group-item .accordion-btn.showAll{
   color: #0073E6;
 }
 
-.faq-section .list-group-item .accordion-btn[aria-expanded="true"] .fa-chevron-down, .faq-section .list-group-item .accordion-btn.showAll .fa-chevron-down{
+.group-section .list-group-item .accordion-btn[aria-expanded="true"] .fa-chevron-down, .group-section .list-group-item .accordion-btn.showAll .fa-chevron-down{
   transform: rotate(180deg);
   transition: transform .3s ease-in-out;
 }
-.faq-section .list-group-item .accordion-btn[aria-expanded="false"] .fa-chevron-down{
+.group-section .list-group-item .accordion-btn[aria-expanded="false"] .fa-chevron-down{
   transform: rotate(0deg);
   transition: transform .3s ease-in-out;
 }

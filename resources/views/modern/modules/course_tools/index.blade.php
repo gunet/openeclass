@@ -128,7 +128,7 @@
                                     {{ trans('langOperations') }}
                                 </h3>
                                 <div>
-                                    <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg'>{{ trans('langAddExtLink') }}</span></a>
+                                    <a class='btn submitAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&amp;action=true'><span class='fa fa-plus-circle'></span> <span class='hidden-xs hidden-lg ps-2'>{{ trans('langAddExtLink') }}</span></a>
                                 </div>
                                 
                             </div>
@@ -169,7 +169,7 @@
                                    
                                 <div>
                                     <a class='btn submitAdminBtn' href='../lti_consumer/index.php?course={{ $course_code }}&amp;add=1'>
-                                        <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs hidden-lg'>{{ trans('langNewLTITool') }}</span>
+                                        <span class='fa fa-plus-circle pe-1'></span><span class='hidden-xs hidden-lg ps-2'>{{ trans('langNewLTITool') }}</span>
                                     </a>
                                 </div>
                                 

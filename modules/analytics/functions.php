@@ -74,7 +74,10 @@ function display_learning_analytics() {
                             <h3>$langLearningAnalytics</h3>
                            
                             <div>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>$langAdd</span></a>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit_analytics=1' class='btn submitAdminBtn'>
+                                    <i class='fa-solid fa-plus settings-icons'></i>
+                                    <span class='hidden-xs TextBold ps-2'>$langAdd</span>
+                                </a>
                             </div>
                         
                     </div>
@@ -349,7 +352,7 @@ function display_analytics_information($analytics_id) {
                         </h3>
                         <div>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;edit_analytics=1' class='btn submitAdminBtn'>"
-                                    . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langModify</span>
+                                    . "<i class='fa-solid fa-pencil settings-icons'></i><span class='hidden-xs TextBold ps-2'>$langModify</span>
                             </a>
                         </div>
                    

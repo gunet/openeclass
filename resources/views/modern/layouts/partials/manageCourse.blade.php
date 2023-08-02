@@ -8,71 +8,71 @@
     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownManageCourse">
         <ul class="list-group list-group-flush">
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-gears pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/course_info/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-gears settings-icons"></i>
                     {{trans('langCourseInfo')}}
                 </a>
             </li>
             @if ($is_course_admin)
                 <li>
-                    <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/course_home/editdesc.php?course={{$coursePrivateCode}}">
-                        <i class="fa-solid fa-pen-to-square pe-2"></i>
+                    <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/course_home/editdesc.php?course={{$coursePrivateCode}}">
+                        <i class="fa-solid fa-pen-to-square settings-icons"></i>
                         {{trans('langDescription')}}
                     </a>
                 </li>
             @endif
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/user/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-user pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/user/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-user settings-icons"></i>
                     {{trans('langUsers')}}
                 </a>
             </li>
 
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/usage/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-chart-simple pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/usage/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-chart-simple settings-icons"></i>
                     {{trans('langUsage')}}
                 </a>
             </li>
 
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/course_tools/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-screwdriver-wrench pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/course_tools/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-screwdriver-wrench settings-icons"></i>
                     {{trans('langTools')}}
                 </a>
             </li>
             
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/abuse_report/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-flag pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/abuse_report/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-flag settings-icons"></i>
                     {{trans('langAbuseReports')}}
                 </a>
             </li>
             
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-building-columns pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/course_prerequisites/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-building-columns settings-icons"></i>
                     {{trans('langCoursePrerequisites')}}     
                 </a>
             </li>
 
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-wand-magic-sparkles pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/course_widgets/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-wand-magic-sparkles settings-icons"></i>
                     {{trans('langWidgets')}}
                 </a>
             </li>
 
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-link pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/lti_consumer/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-link settings-icons"></i>
                     {{trans('langLtiConsumer')}}
                 </a>
             </li>
 
             <li>
-                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}">
-                    <i class="fa-solid fa-chart-line pe-2"></i>
+                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/analytics/index.php?course={{$coursePrivateCode}}">
+                    <i class="fa-solid fa-chart-line settings-icons"></i>
                     {{trans('langLearningAnalytics')}}
                 </a>
             </li>

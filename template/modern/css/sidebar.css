@@ -7,6 +7,10 @@
   background: #ffffff;
 }
 
+.menu-items .fa{
+  color:#B4BED1;
+}
+
 .contextual-sidebar{
   width:270px;
   list-style-type:none;
@@ -135,7 +139,7 @@
 @media(min-width:992px) and (max-width:1023px){
 
   #background-cheat-leftnav, .ContentLeftNav{
-    width: 156px;
+    width: 200px;
   }
 
   .course-wrapper:has(.active-nav) #background-cheat-leftnav,
@@ -159,7 +163,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width:35px;
+    width:40px;
   }
 
   .col_maincontent_active{
@@ -180,7 +184,7 @@
 
 @media(min-width:1024px) and (max-width:1199px){
   #background-cheat-leftnav, .ContentLeftNav{
-    width: 156px;
+    width: 200px;
   }
 
   .course-wrapper:has(.active-nav) #background-cheat-leftnav,
@@ -204,7 +208,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width:35px;
+    width:40px;
   }
 
   .col_maincontent_active{
@@ -251,7 +255,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width:35px;
+    width:40px;
   }
 
   .col_maincontent_active{
@@ -300,7 +304,7 @@
   }
 
   .col_sidebar_active.active-nav .switch-sidebar .slider-round{
-    width:35px;
+    width:40px;
   }
 
   .col_maincontent_active{
@@ -326,42 +330,168 @@
 /************************************** THIS IS Α SECOND CHOICE OF VIEW-STUDENT-TEACHER TOOGLE BUTTON ************************************/
 /* ************************************************************************************************************************************* */
 /* ************************************************************************************************************************************* */
-.switch-sidebar { position: relative; display: inline-block; height: 30px;  width:140px; }
-
-.slider-btn-on{ width:140px; }
-
-.switch-sidebar input {display:none;}
-
-.slider-round { position: absolute;  cursor: pointer; top: 0; left: 0; right: 0;
-  bottom: 0; background-color: #0073E6; -webkit-transition: .4s; transition: .4s; }
-
-.slider-round:before { position: absolute; content: ""; height: 23px; width: 23px;
-  left: 6px; bottom: 3.6px; background-color: white; -webkit-transition: .4s; transition: .4s; 
-  background-repeat: no-repeat; background-size: cover; background-image: url(../img/change.svg);
+.switch-sidebar { 
+  position: relative; 
+  display: inline-block; 
+  height: 40px; 
+}
+@media(max-width:991px){
+  .switch-sidebar{
+    width: 160px;
+  }
+}
+@media(min-width:992px) and (max-width:1199px){
+  .switch-sidebar{
+    width: 172px;
+  }
+}
+@media(min-width:1200px) and (max-width:1399px){
+  .switch-sidebar{
+    width: 178px;
+  }
+}
+@media(min-width:1400px){
+  .switch-sidebar{
+    width: 228px;
+  }
 }
 
-input:checked + .slider-round { background-color: #74AFE9; }
+/* .slider-btn-on{ 
+  width:140px; 
+} */
+@media(max-width:991px){
+  .slider-btn-on{ 
+    width:160px; 
+  }
+}
+@media(min-width:992px) and (max-width:1199px){
+  .slider-btn-on{ 
+    width:172px; 
+  }
+}
+@media(min-width:1200px) and (max-width:1399px){
+  .slider-btn-on{ 
+    width:178px; 
+  }
+}
+@media(min-width:1400px){
+  .slider-btn-on{ 
+    width:228px; 
+  }
+}
 
-input:focus + .slider-round { box-shadow: 0 0 1px #0073E6; }
+.switch-sidebar input {
+  display:none;
+}
 
-input:checked + .slider-round:before { -webkit-transform: translateX(105px); -ms-transform: translateX(105px); transform: translateX(105px); }
+.slider-round { 
+  position: absolute;  
+  cursor: pointer; 
+  top: 0; 
+  left: 0; 
+  right: 0;
+  bottom: 0; 
+  background-color: #F7F9FE; 
+  -webkit-transition: .4s; 
+  transition: .4s; 
+  border: solid 1px #CDD4E0; 
+}
+
+.slider-round:before { 
+  position: absolute; 
+  content: ""; 
+  height: 38px; 
+  width: 38px;
+  top:0px;
+  left: 0px; 
+  bottom: 0px; 
+  background-color: white; 
+  -webkit-transition: .4s; 
+  transition: .4s; 
+  background-repeat: no-repeat;
+  background-size: 16px; 
+  background-position: center;
+  background-image: url(../img/Icons_user-tie.svg);
+  border: solid 1px #CDD4E0; 
+}
+
+input:checked + .slider-round { 
+  background-color: #F7F9FE; 
+}
+
+input:focus + .slider-round { 
+  box-shadow: 0 0 1px #F7F9FE; 
+}
+
+@media(max-width:991px){
+  input:checked + .slider-round:before { 
+    -webkit-transform: translateX(124px); 
+    -ms-transform: translateX(124px);
+    transform: translateX(124px); 
+  }
+}
+
+@media(min-width:992px) and (max-width:1199px){
+  input:checked + .slider-round:before { 
+    -webkit-transform: translateX(132px); 
+    -ms-transform: translateX(132px);
+    transform: translateX(132px); 
+  }
+}
+
+@media(min-width:1200px) and (max-width:1399px){
+  input:checked + .slider-round:before { 
+    -webkit-transform: translateX(138px); 
+    -ms-transform: translateX(138px);
+    transform: translateX(138px); 
+  }
+}
+
+@media(min-width:1400px){
+  input:checked + .slider-round:before { 
+    -webkit-transform: translateX(188px); 
+    -ms-transform: translateX(188px);
+    transform: translateX(188px); 
+  }
+}
+
+
 .course-wrapper:has(.active-nav) input:checked + .slider-round:before{
-  -webkit-transform: translateX(0px); -ms-transform: translateX(0px); transform: translateX(0px);
+  -webkit-transform: translateX(0px); 
+  -ms-transform: translateX(0px);
+  transform: translateX(0px);
 }
 
+.on { 
+  display: none; 
+}
 
-.on { display: none; }
+.on, .off {  
+  color: #2B3944; 
+  position: absolute; 
+  transform: translate(-50%,-50%);
+  top: 50%; 
+  left: 50%; 
+  font-size: 12px; 
+  font-weight: 700; 
+  font-style: normal; 
+}
 
-.on, .off {  color: white; position: absolute; transform: translate(-50%,-50%);
-  top: 50%; left: 50%; font-size: 10px; font-weight: 700; font-style: normal; }
+input:checked+ .slider-round .on {
+  display: block;
+}
 
-input:checked+ .slider-round .on {display: block;}
+input:checked + .slider-round .off {
+  display: none;
+}
 
-input:checked + .slider-round .off {display: none;}
+.slider-round { 
+  border-radius: 34px; 
+}
 
-.slider-round { border-radius: 34px; }
-
-.slider-round:before { border-radius: 50%;}
+.slider-round:before {
+  border-radius: 50%;
+}
 
 
 

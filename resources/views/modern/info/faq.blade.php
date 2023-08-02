@@ -14,7 +14,7 @@
                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
                     <div class='col-lg-6 col-12'>
                         <div class='panel'>
-                            <div class='panel-group faq-section' id='accordion' role='tablist' aria-multiselectable='true'>
+                            <div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
                             
                                 @if (count($faqs) == 0)
                                     <div class='alert alert-warning mt-5'>

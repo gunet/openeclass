@@ -642,14 +642,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
-                .slider-round { 
-                    background-color: $theme_options_styles[linkColor];
-                }
-
-                input:focus + .slider-round { 
-                    box-shadow: 0 0 1px $theme_options_styles[linkColor]; 
-                }
-
                 .div_social{
                     background-color:$theme_options_styles[linkColor];
                 }

@@ -3646,8 +3646,8 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $subMenu = '<div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border">
                             <ul class="list-group list-group-flush">';
                 foreach ($option['options'] as $subOption) {
-                $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
-                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' pe-2"></span>' : '';
+                $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
+                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' settings-icons"></span>' : '';
                 $subMenu .= q($subOption['title']) . '</div></a></li>';
 
                 }
@@ -3657,9 +3657,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $iconTag = '';
         if ($level == 'primary-label') {
             if (isset($option['icon'])) {
-                $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
+                $iconTag = "<span class='fa $option[icon] space-after-icon settings-icons'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs TextBold ps-1'>$title</span>";
+                $title = "<span class='hidden-xs TextBold ps-2'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
@@ -3668,7 +3668,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         } elseif ($level == 'primary') {
             if (isset($option['icon'])) {
-                $iconTag = "<span class='fa $option[icon]'></span>";
+                $iconTag = "<span class='fa $option[icon] settings-icons'></span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
@@ -3677,9 +3677,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item d-flex justify-content-start align-items-start py-3'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
                 " $link_attrs>" .
-                "<span class='fa $option[icon] pe-2'></span> $title</a>$form_end</li>");
+                "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
         }
         $i++;
     }
