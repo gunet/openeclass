@@ -4,7 +4,7 @@
                 </div>
                 <div class="offcanvas-body">
                     <div class='col-12 mt-3'>
-                        <img class=" bg-transparent m-auto d-block" src="{{ $logo_img }}" style='width:150px;'>
+                        <img class=" bg-transparent m-auto d-block" src="{{ $urlAppend }}template/modern/img/eclass-new-logo.svg" style='width:150px;'>
                     </div>
                     @if(get_config('enable_search'))
                         <div class='col-12 mt-5 d-flex justify-content-center align-items-center px-4'>

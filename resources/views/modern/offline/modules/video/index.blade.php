@@ -1,8 +1,8 @@
 @extends('layouts.default')
 
 @section('content')
-<div class="col-12 main-section">
-<div class='{{ $container }} py-lg-0'>
+<div class="col-12 main-section bg-white">
+<div class='container-fluid py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -32,7 +32,7 @@
 
                     @if ($count_video > 0 or $count_video_links > 0)
                         @if (count($items))
-                            <div class='row'>
+                            
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
                                         <table class='table-default nocategory-links'>
@@ -44,11 +44,11 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            
                         @endif
                     
                         @if ($num_of_categories > 0)
-                            <div class='row'>
+                           
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
                                         <table class='table-default category-links'>
@@ -77,7 +77,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            </div>
+                            
                         @endif
                     @else
                         <div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div>

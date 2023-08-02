@@ -382,7 +382,7 @@ if (isset($_GET['rubric_id'])) {
                         <div class='col-12'>
                             <div class='table-responsive mt-1'>
                             <table class='table-default' id='rubric_opts'> 
-                                <tr class='title1 bg-light'>
+                                <tr class='title1'>
                                     <td colspan='2'>
                                         <div class='checkbox'>
                                             <label>
@@ -392,7 +392,7 @@ if (isset($_GET['rubric_id'])) {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class='title1 bg-light'>
+                                <tr class='title1'>
                                     <td colspan='2'>
                                         <div class='checkbox'>
                                             <label>

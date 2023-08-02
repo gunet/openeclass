@@ -694,6 +694,7 @@ function get_theme_options() {
     $data = [];
 
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+    
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
@@ -732,7 +733,7 @@ function get_theme_options() {
             $rgba_no_alpha[3] = "1)";
             $rgba_no_alpha = implode(',', $rgba_no_alpha);
 
-            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer,#collapseTools{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
+            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
         if (!empty($theme_options_styles['linkColor'])) {
             $styles_str .= "a {color: $theme_options_styles[linkColor];}";
@@ -740,33 +741,70 @@ function get_theme_options() {
         if (!empty($theme_options_styles['linkHoverColor'])) {
             $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];}";
         }
-        if (!empty($theme_options_styles['leftSubMenuFontColor'])) {
-            $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
-        }
-        if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) {
-            $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
-        }
-        if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) {
-            $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
-        }
-        if (!empty($theme_options_styles['leftMenuFontColor'])) {
-            $styles_str .= "#leftnav .panel a.parent-menu{color: $theme_options_styles[leftMenuFontColor];}";
-        }
-        if (!empty($theme_options_styles['leftMenuBgColor'])) {
-            $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
-        }
-        if (!empty($theme_options_styles['leftMenuHoverFontColor'])) {
-            $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
-        }
-        if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) {
-            $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
-        }
+        // if (!empty($theme_options_styles['leftSubMenuFontColor'])) {
+        //     $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
+        // }
+        // if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) {
+        //     $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
+        // }
+        // if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) {
+        //     $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
+        // }
+        // if (!empty($theme_options_styles['leftMenuFontColor'])) {
+        //     $styles_str .= "#leftnav .panel a.parent-menu{color: $theme_options_styles[leftMenuFontColor];}";
+        // }
+        // if (!empty($theme_options_styles['leftMenuBgColor'])) {
+        //     $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
+        // }
+        // if (!empty($theme_options_styles['leftMenuHoverFontColor'])) {
+        //     $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
+        // }
+        // if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) {
+        //     $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
+        // }
         if (isset($theme_options_styles['imageUpload'])) {
             $data['logo_img'] = "$urlThemeData/$theme_options_styles[imageUpload]";
         }
         if (isset($theme_options_styles['imageUploadSmall'])) {
             $data['logo_img_small'] = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
         }
+
+
+
+
+        $styles_str .= "
+            .a_tools_site_footer, .copyright{ color: #ffffff; }
+
+            body{
+                background-color: #ffffff;
+            }
+            
+            .navbar-eclass{
+                z-index: 0;
+            }
+            
+            .banner-image{
+                max-height: 350px;
+                width:100%;
+                object-fit: cover;
+            }
+            
+            @media (max-width: 991px){
+                .main-section {
+                    padding-top: 0px;
+                }
+            }
+            
+            @media (min-width: 992px){
+                .col_maincontent_active {
+                    padding: 72px 64px 72px 64px;
+                }
+            }
+
+        ";
+
+
+
         $data['styles'] = $styles_str;
 
         return $data;

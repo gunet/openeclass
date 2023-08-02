@@ -75,8 +75,8 @@ $real_filename = remove_filename_unsafe_chars($public_code . '-offline.zip');
 /////////////////////////////
 // generic and course data //
 /////////////////////////////
-$logo_img = "./template/modern/img/eclass-new-logo.png";
-$logo_img_small = "./template/modern/img/logo_eclass_small.png";
+$logo_img = "./template/modern/img/eclass-new-logo.svg";
+$logo_img_small = "./template/modern/img/eclass-new-logo.svg";
 
 $theme_data = get_theme_options();
 
@@ -190,12 +190,12 @@ $bladeData['themeimg'] = $bladeData['urlAppend'] . 'template/modern/img';
 if (!empty($theme_data['logo_img'])) {
     $bladeData['logo_img'] = $bladeData['urlAppend'] . $theme_data['logo_img'];
 } else {
-    $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.png';
+    $bladeData['logo_img'] = $bladeData['themeimg'] . '/eclass-new-logo.svg';
 }
 if (!empty($theme_data['logo_img_small'])) {
     $bladeData['logo_img_small'] = $bladeData['urlAppend'] . $theme_data['logo_img_small'];
 } else {
-    $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/logo_eclass_small.png';
+    $bladeData['logo_img_small'] = $bladeData['themeimg'] . '/eclass-new-logo.svg';
 }
 
 $bladeData['toolArr'] = lessonToolsMenu_offline(true, $bladeData['urlAppend']);

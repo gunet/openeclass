@@ -4214,10 +4214,6 @@ div[role="progressbar"]::before {
     min-height: 56px; 
   }
 
-  .offcanvas-start.d-lg-none.show{
-      background-color: #003e87;
-  }
-
   .eclass-nav-icon{
     width:150px; height:30px; 
   }

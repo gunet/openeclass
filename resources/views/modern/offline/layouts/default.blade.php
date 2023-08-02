@@ -20,11 +20,15 @@
 
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/all.css">
-    <link href="{{ $urlAppend }}template/modern/css/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
 
-    <!-- DataTables and Checkitor -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    
+    <!-- Font Manrope -->
+    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+
+    <!-- DataTables 1.10.19 version -->
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>
+
 
     <!-- Our css modern if we need it -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
@@ -32,11 +36,13 @@
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/offline-default.css"/>
 
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache">
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache">
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/offline-default.css?donotcache"/>
 
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)
@@ -48,14 +54,14 @@
 
 
     <!-- jQuery -->
-    <script type="text/javascript" src="{{$urlAppend}}js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/jquery-3.6.0.min.js"></script>
 
     <!-- Bootstrap v5 js -->
-    <script type="text/javascript" src="{{$urlAppend}}js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap.bundle.min.js"></script>
 
-    <!-- DataTables and Checkitor js-->
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <!-- DataTables v1.10.19 and Checkitor v11.0.1 js-->
+    <script src="{{ $urlAppend }}js/jquery.dataTables.min.js"></script>
+    <script src="{{ $urlAppend }}js/classic-ckeditor.js"></script>
 
     <!-- Bootbox -->
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js"></script>
@@ -69,6 +75,7 @@
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
     <!-- cLICKbOARD -->
     <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
+    
 
     <script>
         $(function() {
@@ -83,6 +90,7 @@
             locale: "{{ $language }}"
         });
     </script>
+
 
     <!-- Our js modern -->
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
@@ -103,7 +111,7 @@
 
 <body>
 
-    <div class="ContentEclass d-flex flex-column min-vh-100 px-0">
+    <div class="ContentEclass d-flex flex-column min-vh-100">
         <!-- Desktop navbar -->
         <div class="d-none d-lg-block">
             @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
@@ -114,9 +122,7 @@
             @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
         </div>
 
-        <div class="basic-content {{ $container }} @if($container == 'container-fluid') px-xl-0 px-lg-3 @endif px-0">
-            @yield('content')
-        </div>
+        @yield('content')
 
         <!-- Desktop navbar -->
         <div class="d-none d-lg-block">

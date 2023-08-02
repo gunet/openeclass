@@ -9,30 +9,30 @@
                             @if($toolName)
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>{{$toolName}}
+                                        {{$toolName}}
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
-                                    </span>
+                                        <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
+                                    </span> 
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user orangeText pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-code orangeText pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
+                                        <span>{{course_id_to_public_code($course_id)}}</span>                                     
                                     </span>
                                 </div>
                             @else
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
+                                        <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>      
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user orangeText pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-code orangeText pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
+                                        <span>{{course_id_to_public_code($course_id)}}</span>                              
                                     </span>
                                 </div>
                             @endif
@@ -44,43 +44,36 @@
                             @if($toolName)
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>{{$toolName}}
+                                        {{$toolName}}
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
+                                        <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user orangeText pe-1'></span><span class='text-secondary fs-6 ms-1'>{{course_id_to_prof($course_id)}}</span>
-                                        <span class="fas fa-code orangeText pe-1"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                                     
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
+                                        <span>{{course_id_to_public_code($course_id)}}</span>                                     
                                     </span>
                                 </div>
                             @else
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
+                                        <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>      
                                     <span class='control-label-notes'>
-                                        <span class='fas fa-user orangeText pe-2'></span><span class='text-secondary fs-6'>{{course_id_to_prof($course_id)}}</span> 
-                                        <span class="fas fa-code orangeText pe-2"></span><span class='text-secondary fs-6'>{{course_id_to_public_code($course_id)}}</span>                              
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
+                                        <span>{{course_id_to_public_code($course_id)}}</span>                              
                                     </span>
                                 </div>
                             @endif
                         </div>
                     </div>
                 @endif
-            @else
-                <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
-                    <span class="control-label-notes">
-                        <i class="fas fa-tools orangeText" aria-hidden="true"></i> 
-                        {{$toolName}} 
-                    </span>
-                </div>
             @endif
         
     </div></br>
@@ -92,78 +85,40 @@
             @if($course_code)
                 @if($is_editor)
                     <div class='row'>
-                        <div class='col-12 border border-top-0 border-start-0 border-end-0 border-bottom-secondary'>
+                        <div class='col-12 border border-top-0 border-start-0 border-end-0 border-bottom-secondary px-0'>
                            
                                 <table class='table'>
                                     <thead>
                                         @if($toolName)
                                             <tr class='border-0'>
                                                 <th class='border-0'>
-                                                    <div class='row'>
-                                                        <div class='col-2'>
-                                                            <span class='control-label-notes'>
-                                                                <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>
-                                                            </span>
-                                                        </div>
-                                                        <div class='col-10'>
-                                                            <span class='control-label-notes fs-6'>
-                                                                {{$toolName}}
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <span class='control-label-notes'>
+                                                        {{$toolName}}
+                                                    </span>
                                                 </th>
                                             </tr>
                                         @endif
                                        
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='row'>
-                                                    <div class='col-2'>
-                                                        <span class='control-label-notes'>
-                                                            <span class="fas fa-university orangeText pe-2" aria-hidden="true"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-10'>
-                                                        <span class='control-label-notes fs-6'>
-                                                            <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <a class='fs-3' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                             </th>
                                         </tr>
                                         
                                             
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='row'>
-                                                    <div class='col-2'>
-                                                        <span class='control-label-notes'>
-                                                            <span class="fas fa-user orangeText pe-2" aria-hidden="true"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-10'>
-                                                        <span class='control-label-notes fs-6'>
-                                                            {{course_id_to_prof($course_id)}}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <span>
+                                                    {{course_id_to_prof($course_id)}}
+                                                </span>
                                             </th>
                                         </tr>
 
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='row'>
-                                                    <div class='col-2'>
-                                                        <span class='control-label-notes'>
-                                                            <span class="fas fa-code orangeText pe-2" aria-hidden="true"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-10'>
-                                                        <span class='control-label-notes fs-6'>
-                                                        {{course_id_to_public_code($course_id)}}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <span>
+                                                    {{course_id_to_public_code($course_id)}}
+                                                </span>
                                             </th>
                                         </tr>
                                         
@@ -184,71 +139,33 @@
                                         @if($toolName)
                                             <tr class='border-0'>
                                                 <th class='border-0'>
-                                                    <div class='row'>
-                                                        <div class='col-2'>
-                                                            <span class='control-label-notes'>
-                                                                <span class="fas fa-tools orangeText pe-2" aria-hidden="true"></span>
-                                                            </span>
-                                                        </div>
-                                                        <div class='col-10'>
-                                                            <span class='control-label-notes fs-6'>
-                                                                {{$toolName}}
-                                                            </span>
-                                                        </div>
-                                                    </div>
+                                                    <span>
+                                                        {{$toolName}}
+                                                    </span>
                                                 </th>
                                             </tr>
                                         @endif
                                        
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='row'>
-                                                    <div class='col-2'>
-                                                        <span class='control-label-notes'>
-                                                            <span class="fas fa-university orangeText pe-2" aria-hidden="true"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-10'>
-                                                        <span class='control-label-notes fs-6'>
-                                                            <a href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <a class='fs-3' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                             </th>
                                         </tr>
                                         
                                             
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='row'>
-                                                    <div class='col-2'>
-                                                        <span class='control-label-notes'>
-                                                            <span class="fas fa-user orangeText pe-2" aria-hidden="true"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-10'>
-                                                        <span class='control-label-notes fs-6'>
-                                                            {{course_id_to_prof($course_id)}}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <span>
+                                                    {{course_id_to_prof($course_id)}}
+                                                </span>
                                             </th>
                                         </tr>
 
                                         <tr class='border-0'>
                                             <th class='border-0'>
-                                                <div class='row'>
-                                                    <div class='col-2'>
-                                                        <span class='control-label-notes'>
-                                                            <span class="fas fa-code orangeText pe-2" aria-hidden="true"></span>
-                                                        </span>
-                                                    </div>
-                                                    <div class='col-10'>
-                                                        <span class='control-label-notes fs-6'>
-                                                        {{course_id_to_public_code($course_id)}}
-                                                        </span>
-                                                    </div>
-                                                </div>
+                                                <span>
+                                                    {{course_id_to_public_code($course_id)}}
+                                                </span>
                                             </th>
                                         </tr>
                                         
@@ -261,13 +178,6 @@
                         </div>
                     </div>
                 @endif
-            @else
-                <div class='d-flex justify-content-center ps-1 pt-1 pb-2'>
-                    <span class="control-label-notes">
-                        <i class="fas fa-tools orangeText text-center" aria-hidden="true"></i> 
-                        {{$toolName}} 
-                    </span>
-                </div>
             @endif
         
     </div></br>

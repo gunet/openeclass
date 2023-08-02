@@ -1,8 +1,8 @@
 @extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
-<div class="col-12 main-section">
-<div class='{{ $container }} py-lg-0'>
+<div class="col-12 main-section bg-white">
+<div class='container-fluid py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -35,7 +35,7 @@
                     @endif
 
                     @if (count($fileInfo) or $curDirName)
-                        <div class='row'>
+                       
                             <div class='col-md-12'>
                                 <div class='panel'>
                                     <div class='panel-body'>
@@ -55,9 +55,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                    
 
-                        <div class='row'>
+               
                             <div class='col-md-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
@@ -136,7 +136,7 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                        
                     @else
                         <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoDocuments') }}</span></div>
                     @endif
