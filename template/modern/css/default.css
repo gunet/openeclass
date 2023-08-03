@@ -3183,6 +3183,46 @@ tr.active th span,strong{
   color: #001146; 
 }
 
+.cardTestimonial{
+  min-width:200px;
+}
+@media(min-width:992px) and (max-width:1199px){
+  .cardTestimonial{
+    min-width:150px;
+  }
+}
+
+@media(max-width:767px){
+  .cardTestimonial{
+    margin-bottom: 15px;
+  }
+}
+
+.cardTestimonial > .card-body{
+  max-height: 170px;
+  overflow-y: auto;
+}
+
+.cardTestimonial > .card-body::-webkit-scrollbar {
+  width: 20px;
+}
+.cardTestimonial > .card-body::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.cardTestimonial > .card-body::-webkit-scrollbar-thumb {
+  background-color: #d1d6e1;
+}
+.cardTestimonial > .card-body::-webkit-scrollbar-thumb {
+  background-color: #d1d6e1;
+  border-radius: 20px;
+}
+.cardTestimonial > .card-body::-webkit-scrollbar-thumb {
+  background-color: #d1d6e1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
 
 .carousel-control-prev {
   position: absolute;

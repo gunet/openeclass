@@ -29,7 +29,7 @@
         <div class="jumbotron jumbotron-login">
             <div class='{{ $container }}'>
                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-lg-5'>
-                    <div class='col-xxl-6 col-lg-5 col-12'>
+                    <div class='col-xxl-6 col-lg-5 col-12 @if($PositionFormLogin) ms-auto me-auto @endif'>
                         <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
                         <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
                         @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
@@ -70,7 +70,7 @@
                         @endif
 
                     </div>
-                    <div class='col-xxl-6 col-lg-7 col-12 d-none d-lg-block'>
+                    <div class='col-xxl-6 col-lg-7 col-12 d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
                         <img class='jumbotron-image-default' src='{{ $urlAppend }}template/modern/img/jumbotron-eclass4.png'>
                     </div>
                 </div>
@@ -223,8 +223,8 @@
                                         <div class="carousel-inner">
                                             <?php for($i=0; $i<3; $i++){ ?>
                                                 <div class="carousel-item @if($i==0) active @endif">
-                                                    <div class='col-12 d-md-flex'>
-                                                        <div class='card bg-transparent border-0 h-100 ps-md-5 pe-md-2 px-5'>
+                                                    <div class='col-12 d-md-flex gap-3 px-5'>
+                                                        <div class='card cardTestimonial bg-transparent border-0 d-flex align-items-strech'>
                                                             <div class='card-body Primary-200-bg'>
                                                                 <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.</p>
                                                             </div>
@@ -232,9 +232,9 @@
                                                                 <div class="form-label">John Smith</div>
                                                             </div>
                                                         </div>
-                                                        <div class='card bg-transparent border-0 h-100 ps-md-3 pe-md-5 mt-md-0 mt-3 px-5'>
+                                                        <div class='card cardTestimonial bg-transparent border-0 d-flex align-items-strech '>
                                                             <div class='card-body Primary-200-bg'>
-                                                                <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.</p>
+                                                                <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet..</p>
                                                             </div>
                                                             <div class='card-footer text-end border-0 Primary-200-bg'>
                                                                 <div class="form-label">John Smith</div>
@@ -260,7 +260,7 @@
                             <div class='col-12'>
                                 <div class='row rowMargin row-cols-1 row-cols-lg-2 g-3'>
                                     @if($eclass_banner_value == 1)
-                                        <div class='col-xl-4 col-12 banner_openCourses'>
+                                        <div class="@if((get_config('dont_display_testimonials') and  !get_config('opencourses_enable')) or (!get_config('opencourses_enable'))) col-xl-8 ms-auto me-auto @else col-xl-4 @endif col-12 banner_openCourses">
                                             <div class='card border-card h-100'>
                                                 <div class='card-body d-flex justify-content-center align-items-center'>
                                                     <a href="http://www.openeclass.org/" target="_blank">

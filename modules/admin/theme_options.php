@@ -587,7 +587,7 @@ $tool_content .= "
                       <div class='radio'>
                         <label>
                           <input type='radio' name='FormLoginPlacement' value='right-position' ".(($theme_options_styles['FormLoginPlacement'] == 'right-position')? 'checked' : '').">
-                          $langFormLoginPlacementRight &nbsp;
+                          $langFormLoginPlacementLeft &nbsp;
                         </label>
                       </div>
                 </div>

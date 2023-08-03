@@ -5646,7 +5646,7 @@ $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα φόντου οθόνης σύνδεσης";
 $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
 $langFormLoginPlacementCenter = "Κεντρική Στοίχιση";
-$langFormLoginPlacementRight = "Στοίχιση στα δεξιά";
+$langFormLoginPlacementLeft = "Στοίχιση στα αριστερά";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 
 /* * ***********************************************************
