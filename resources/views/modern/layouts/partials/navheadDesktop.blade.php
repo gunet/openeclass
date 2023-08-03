@@ -80,7 +80,7 @@
                     @endif
 
                     @if(isset($_SESSION['uid']))
-                        <div class='d-flex justify-content-end p-0 themeId'>
+                        <div class='d-flex justify-content-end p-0'>
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 
 
@@ -287,15 +287,9 @@
         $('#link-faq').addClass('active');
     }
 
-    // if(localStorage.getItem("menu-item") == "register"){
-    //     $('#link-register').addClass('active');
-    // }
-
-    // $('.menu-item').on('click',function(){
-    //     if(localStorage.getItem("menu-item") == "register"){
-
-    //     }
-    // });
+    if($('#link-register').hasClass('active') || $('#link-lessons').hasClass('active') || $('#link-faq').hasClass('active')){
+        $('#link-home').removeClass('active2');
+    }
 
 </script>
 

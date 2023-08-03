@@ -389,10 +389,6 @@ img {
     color: #2B3944 !important; 
 }
 
-.bgNormalBlueText { 
-  background-color: #0073E6; 
-}
-
 .lightBlueText { 
   color:#005ad7; 
 }
@@ -673,7 +669,7 @@ body:has(.mce-fullscreen) .navbar-eclass{
   color: #0073E6;
 }
 
-.menu-item.active{
+.menu-item.active, .menu-item.active2{
   background-color: #EFF6FF;
   color: #0073E6;
   font-size: 14px;
@@ -3861,20 +3857,6 @@ div[role="progressbar"]::before {
 .iframeLti{ 
   height: 500px !important; 
   border-radius:4px !important;
-}
-
-/**********************************************************************************************************************/
-/*************************************************** ADMIN TOOLS ******************************************************/
-/**********************************************************************************************************************/
-
-.admin-list-group .list-group-item{
-  color: #005ad9; 
-  font-weight: 700; font-style: normal;
-}
-
-.admin-list-group .list-group-item:hover {
-  background-color: #005ad9;
-  color: #ffffff;
 }
 
 /**********************************************************************************************************************/

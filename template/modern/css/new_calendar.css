@@ -3,6 +3,10 @@
 /***************** this is portfolio-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/
 
+#calendar-header{
+  background-color: #2B3944;
+}
+
 #cal-header{ border-top-left-radius: 4px; border-top-right-radius:4px ;}
 
 @media (max-width: 991px){ #cal-header{  margin-left:0px;  margin-right:0px; } }
@@ -117,8 +121,8 @@
   }
 }
 .myCalendarEvents .fc-header-toolbar{
-  background: #0073E6;
-  border-color: #0073E6;
+  background: #2B3944;
+  border-color: #2B3944;
   display: flex;
   justify-content: space-between;
   align-items: center;

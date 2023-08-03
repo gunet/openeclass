@@ -643,7 +643,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $content .= "<div class='card-header bg-light'><div class='panel-title'>$langMsgRe " . q($topic_subject);
     } else {
         $content .= "<div id='$myrow->id' class='parent-post-message card panelCard mt-3'>";
-        $content .= "<div class='card-header bgNormalBlueText'><div class='panel-title text-white'>". q($topic_subject);
+        $content .= "<div class='card-header'><div class='panel-title text-white'>". q($topic_subject);
     }
 
     if ($is_editor) {

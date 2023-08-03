@@ -366,7 +366,7 @@ if(!isset($_POST['final_submit'])){
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
                         <tr class='list-header'>
-                        <td class='bgTheme'></td>
+                        <td style='background: #2B3944;'></td>
                         <th scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
             $i=1;
 

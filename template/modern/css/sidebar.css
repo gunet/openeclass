@@ -55,11 +55,11 @@
   background-color: white; 
   border-radius: 0px;
 }
-@media(max-width:991px){
+/* @media(max-width:991px){
   .col_maincontent_active{ 
     padding: 4px 16px 4px 16px;
   }
-}
+} */
 @media(min-width:992px){
   .col_maincontent_active{ 
     border: 0px;

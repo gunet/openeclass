@@ -1041,7 +1041,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                         
                             <div class="calendar-header">
                                 
-                                    <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center bgNormalBlueText flex-wrap">
+                                    <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
                                         
                                             <div class="btn-group">
                                                     <button class="btn bg-transparent text-white" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
