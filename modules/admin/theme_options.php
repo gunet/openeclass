@@ -24,8 +24,13 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
+                'rgba(255, 255, 255, 1)' => array('bgColorHeader','buttonTextColor', 'whiteButtonHoveredTextColor'),
+                'rgba(247, 249, 254, 1)' => array('bgColorFooter'),
+                'rgb(0, 115, 230)' => array('buttonBgColor','whiteButtonHoveredBgColor', 'whiteButtonTextColor'),
                 'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
                 'rgba(173,173,173,1)' => array('leftMenuFontColor', 'leftSubMenuFontColor'),
+                'rgba(43, 57, 68, 1)' => array('linkColorHeaderFooter','loginTextColor'),
+                'rgba(0, 115, 230, 1)' => array('linkHoverColorHeaderFooter'),
                 "rgba(77,161,228,1)" => array('linkColor', 'leftSubMenuHoverBgColor', 'leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(238,238,238,1)" => array('leftSubMenuHoverFontColor'),
@@ -363,7 +368,7 @@ if (isset($_POST['optionsSave'])) {
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline mt-0' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
-                        <a class='confirmAction mt-md-0 btn deleteAdminBtn $del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='deleteAdminBtn'>$langDelete</a>
+                        <a class='confirmAction mt-md-0 btn deleteAdminBtn $del_class delThemeBtn' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='deleteAdminBtn'>$langDelete</a>
                     </form>";
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {
@@ -549,7 +554,95 @@ $tool_content .= "
 
             <hr>
 
-            <h3 class='theme_options_legend mt-2'>$langLinksCongiguration</h3>
+
+
+            <h3 class='theme_options_legend mt-2'>$langBgHeaderCongiguration</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='bgColorHeader' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <input name='bgColorHeader' type='text' class='form-control colorpicker' id='bgColorHeader' value='$theme_options_styles[bgColorHeader]'>
+              
+            </div>
+
+            <hr>
+
+            <h3 class='theme_options_legend mt-2'>$langBgFooterCongiguration</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='bgColorFooter' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <input name='bgColorFooter' type='text' class='form-control colorpicker' id='bgColorFooter' value='$theme_options_styles[bgColorFooter]'>
+              
+            </div>
+
+            <hr>
+
+
+            <h3 class='theme_options_legend mt-2'>$langLinksHeaderFooterCongiguration</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkColorHeaderFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+              <input name='linkColorHeaderFooter' type='text' class='form-control colorpicker' id='linkColorHeaderFooter' value='$theme_options_styles[linkColorHeaderFooter]'>
+              
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkHoverColorHeaderFooter' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+              <input name='linkHoverColorHeaderFooter' type='text' class='form-control colorpicker' id='linkHoverColorHeaderFooter' value='$theme_options_styles[linkHoverColorHeaderFooter]'>
+            </div>
+
+            <hr>
+
+
+
+
+
+            <h3 class='theme_options_legend mt-2'>$langButtonsColorCongiguration</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='buttonBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <input name='buttonBgColor' type='text' class='form-control colorpicker' id='buttonBgColor' value='$theme_options_styles[buttonBgColor]'>
+              
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='buttonTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+              <input name='buttonTextColor' type='text' class='form-control colorpicker' id='buttonTextColor' value='$theme_options_styles[buttonTextColor]'>
+            </div>
+
+            <hr>
+
+            
+
+
+
+
+
+
+
+
+
+            <h3 class='theme_options_legend mt-2'>$langButtonsColorWhiteCongiguration</h3>
+
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='whiteButtonTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+              <input name='whiteButtonTextColor' type='text' class='form-control colorpicker' id='whiteButtonTextColor' value='$theme_options_styles[whiteButtonTextColor]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='whiteButtonHoveredTextColor' class='control-label-notes mb-2 me-2'>$langHoverTextColor:</label>
+              <input name='whiteButtonHoveredTextColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredTextColor' value='$theme_options_styles[whiteButtonHoveredTextColor]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='whiteButtonHoveredBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
+              <input name='whiteButtonHoveredBgColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredBgColor' value='$theme_options_styles[whiteButtonHoveredBgColor]'>
+            </div>
+
+            <hr>
+
+
+
+
+
+
+
+          
+
+
+
+            <h3 class='theme_options_legend mt-2'>$langLinksCongiguration ($langEclass)</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
@@ -569,6 +662,11 @@ $tool_content .= "
                     <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
                     <i class='fa fa-arrow-right ms-3 me-3'></i>
                     <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
+            </div>
+            <div class='form-group mt-4'>
+                <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
+                <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
+               
             </div>
             <div class='form-group mt-4'>
                 <label for='loginImg' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>

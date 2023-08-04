@@ -137,6 +137,10 @@ img {
 .li-unstyled{
   list-style:none !important;
 }
+
+.h-80px{
+  height:80px;
+}
   
 .h-40px{ 
   height:40px; 
@@ -358,7 +362,7 @@ img {
 }
 
 .bgTheme{
-  background-color: #0073E6 !important;
+  background-color: #2546F0 !important;
 }
 
 .orangeText{ 
@@ -382,7 +386,7 @@ img {
 }
 
 .normalBlueText { 
-  color: #0073E6; 
+  color: #2546F0; 
 }
 
 .normalColorBlueText{
@@ -390,11 +394,11 @@ img {
 }
 
 .lightBlueText { 
-  color:#005ad7; 
+  color:#0073E6; 
 }
 
 .bgLightBlue { 
-  background-color: #005ad7;
+  background-color: #0073E6;
 }
 
 .bgEclass { 
@@ -726,16 +730,45 @@ body:has(.mce-fullscreen) .navbar-eclass{
   }
 }
 
-.user-menu-content:hover{
+/* .user-menu-content:hover{
+  border-top: solid 4px #0073E6;
+  cursor:  url(../images/pointer.png), auto;
+} */
+
+/* .user-menu-content:hover .user-menu-btn,
+.user-menu-content:hover .userLoginMobile {
+  margin-top: -4px;
+  cursor:  url(../images/pointer.png), auto;
+} */
+
+/* .user-menu-content:hover,
+.user-menu-content:focus{
+  border-top: solid 4px #0073E6;
+  cursor:  url(../images/pointer.png), auto;
+  margin-top: -4px;
+} */
+
+
+.user-menu-btn:hover,
+.user-menu-btn:focus{
   border-top: solid 4px #0073E6;
   cursor:  url(../images/pointer.png), auto;
 }
-.user-menu-content:hover .user-menu-btn,.user-menu-content:hover .userLoginMobile{
+
+.user-menu-btn:hover .user-icon-filename,
+.user-menu-btn:focus .user-icon-filename{
   margin-top: -4px;
-  cursor:  url(../images/pointer.png), auto;
 }
-.user-menu-btn:hover .fa-chevron-down{
+
+.user-menu-btn:hover .user-name,
+.user-menu-btn:focus .user-name{
+  margin-top: -4px;
+}
+
+.user-menu-btn:hover .fa-chevron-down,
+.user-menu-btn:focus .fa-chevron-down{
   color: #0073E6;
+  margin-top: -4px;
 }
 
 .loginText{
@@ -962,13 +995,18 @@ body:has(.mce-fullscreen) .navbar-eclass{
 .contextual-menu{
   width:270px;
   list-style-type:none;
-  border: solid 1px #EFF6FF;
+  border: solid 1px #CDD4E0;
   filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
 }
 
 .contextual-menu-user{
   width:296px;
   border: solid 1px #CDD4E0;
+}
+
+.contextual-menu-user.show{
+  top: 90%;
+  
 }
 
 .contextual-menu-user .list-group-item .fa-solid, .contextual-menu-user .list-group-item .fa-regular{
@@ -1000,6 +1038,7 @@ body:has(.mce-fullscreen) .navbar-eclass{
   text-decoration: none;
   cursor:  url(../images/pointer.png), auto;
 }
+
 
 body .form-action-button-mydropdowns{ 
   display: none; 
@@ -1091,8 +1130,6 @@ body .form-action-button-mydropdowns{
 /***************************************** BOOTBOX - MENUPOPOVER -MODALS **********************************************/
 /**********************************************************************************************************************/
 
-
-
 .modal-open{
   padding-right: 0px !important;
 }
@@ -1106,8 +1143,8 @@ body .form-action-button-mydropdowns{
 .bootbox-confirm .modal-footer .btn-primary{
   background: white !important;
   border: solid thin;
-  border-color: #F57600;
-  color: #F57600;
+  border-color: #C44601;
+  color: #C44601;
   font-size: 14px;
   text-transform: uppercase;
   height:40px;
@@ -1119,7 +1156,7 @@ body .form-action-button-mydropdowns{
 }
 
 .bootbox-confirm .modal-footer .btn-primary:hover{
-  background: #F57600 !important;
+  background: #C44601 !important;
   color: #ffffff;
 }
 
@@ -1182,8 +1219,8 @@ body .form-action-button-mydropdowns{
 .menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
   background:#ffffff;
   border: solid thin;
-  border-color: #F57600;
-  color: #F57600;
+  border-color: #C44601;
+  color: #C44601;
   font-size: 14px;
 
   font-family: 'Manrope' , sans-serif; 
@@ -1199,11 +1236,11 @@ body .form-action-button-mydropdowns{
 
 .menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times,
 .menu-popover .delete.confirmAction .fa-trash, .menu-popover .delete.delete_btn .fa-trash{ 
-  color: #F57600; 
+  color: #C44601; 
 }
 
 .menu-popover .delete.confirmAction:hover , .menu-popover .delete.delete_btn:hover{ 
-  background: #F57600; 
+  background: #C44601; 
   color:#ffffff;
 }
 
@@ -1872,12 +1909,29 @@ label:has(input[type="checkbox"]:disabled){
 .submitAdminBtnDefault{
   background-color: #2546F0;
   color: #ffffff;
+  border: solid thin;
+  border-color: #2546F0;
+  font-size: 14px;
+  height:40px;
+  min-width: 40px;
+  font-weight: 700; font-style: normal;
+  border-radius: 4px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  letter-spacing: 0px;
+  line-height: 16px;
+}
+.submitAdminBtnDefault:hover {
+  background-color: #2546F0;
+  color: #ffffff;
+  text-decoration: none;
 }
 
 .deleteAdminBtn {
   border: solid thin;
-  border-color: #F57600;
-  color: #F57600;
+  border-color: #C44601;
+  color: #C44601;
   font-size: 14px;
   height:40px;
   min-width: 40px;
@@ -1892,7 +1946,7 @@ label:has(input[type="checkbox"]:disabled){
 }
 
 .deleteAdminBtn:hover {
-  background-color: #F57600;
+  background-color: #C44601;
   color: #ffffff;
 }
 
@@ -2344,7 +2398,7 @@ label:has(input[type="checkbox"]:disabled){
   border:solid 1px #e8e8e8;
 }
 .panel-danger .panel-heading{
-  background: #dc3545;
+  background: #C44601;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
@@ -2796,6 +2850,19 @@ tr.active th span,strong{
   justify-content: center;
 }
 
+/**********************************************************************************************************************/
+/*********************************************** THEME OPTIONS ********************************************************/
+/**********************************************************************************************************************/
+
+body .delThemeBtn{
+  display: none;
+}
+
+.form-wrapper .delThemeBtn{
+  display: block;
+  line-height: 25px;
+}
+
 
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE ***********************************************************/
@@ -3025,10 +3092,6 @@ tr.active th span,strong{
   padding-left: 2px; 
 }
 
-.hidden-xs{
-  font-size: 12px;
-}
-
 .wrapper { 
   display: flex; 
   width: 100%; 
@@ -3088,6 +3151,7 @@ tr.active th span,strong{
 .opencourses_btn:hover {
   background-color: #005ad9;
   color: #ffffff;
+  text-decoration: none;
 }
 
 @media(max-width:991px){
@@ -3577,7 +3641,7 @@ div[role="progressbar"]::before {
 }
 
 .info_reg_course:hover{ 
-  color: #F57600; 
+  color: #C44601; 
 }
 
 .list_grouping{ 
@@ -3690,7 +3754,7 @@ div[role="progressbar"]::before {
 
 
 .visibleFile{ 
-  color:#F57600; 
+  color:#2B3944; 
   font-size:21px; 
 }
 
@@ -4162,7 +4226,7 @@ div[role="progressbar"]::before {
 
   .course-units{ -moz-box-shadow: none;  -webkit-box-shadow: none; box-shadow: none; border-radius: 25px; padding:25px; }
 
-  .user-icon-filename{ width:20px; height:20px; border-radius:50%; margin-right:10px; }
+  .user-icon-filename{ width:20px; height:20px; border-radius:50%;}
 
   .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 }
@@ -4175,7 +4239,7 @@ div[role="progressbar"]::before {
 
 @media (min-width: 1024px) and (max-width: 1199px){ 
 
-  .user-icon-filename{ width:30px; height:30px; border-radius:50%; margin-right:10px; }
+  .user-icon-filename{ width:30px; height:30px; border-radius:50%;}
 
   .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 
@@ -4191,7 +4255,7 @@ div[role="progressbar"]::before {
 
   .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 
-  .user-icon-filename{ width:30px; height:30px; border-radius:50%; margin-right:10px; }
+  .user-icon-filename{ width:30px; height:30px; border-radius:50%;}
 }
 
 /* -------------------------------------------------large - desktop - laptop --------------------------------------------------------------- */
@@ -4204,7 +4268,7 @@ div[role="progressbar"]::before {
 
   .uploadImageCourse{ height: 280px; width: 100%; object-fit: cover ; margin:auto; display: block;}
 
-  .user-icon-filename{ width:30px; height:30px; border-radius:50%; margin-right:10px; }
+  .user-icon-filename{ width:30px; height:30px; border-radius:50%;}
 }
 
 

@@ -260,11 +260,6 @@ function view($view_file, $view_data = array()) {
     $container = 'container';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 
-    $theme_name = '';
-    if($theme_id){
-        $theme_name = Database::get()->querySingle("SELECT name FROM theme_options WHERE id = ?d",$theme_id)->name;
-    }
-
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $logo_img_small = $themeimg.'/eclass-new-logo.svg';
 
@@ -280,6 +275,23 @@ function view($view_file, $view_data = array()) {
             body{
                 background: #ffffff !important;
             }
+
+            #btn-search{
+                height:33px;
+                width:30px;
+                background-color:#ffffff;
+                border-right: solid 1px #E8EDF8 !important;
+            }
+
+            .menu-item.active,
+            .menu-item.active2{
+                color: #2B3944;
+            }
+
+            .jumbotron-image-default{
+                display: none;
+            }
+
         "
         ;
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
@@ -293,10 +305,38 @@ function view($view_file, $view_data = array()) {
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
             $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
         }
+
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
-        if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { 
-            background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; border:0px; no-repeat center center fixed; -webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;}";
+        if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
+            $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
+            $styles_str .= "
+                .jumbotron.jumbotron-login {
+                     background: $gradient_str; 
+                }
+            ";
+        }
+
+        
+        if (!empty($theme_options_styles['loginTextColor'])){
+            $styles_str .= "
+                .eclass-title, .eclassInfo{
+                    color: $theme_options_styles[loginTextColor];
+                }
+            ";
+        }
+        
+        if (isset($theme_options_styles['loginImg'])){
+            $styles_str .= "
+                .jumbotron.jumbotron-login { 
+                    background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
+                    border:0px; no-repeat center center fixed; 
+                    -webkit-background-size: cover; 
+                    -moz-background-size: cover; 
+                    -o-background-size: cover; 
+                    background-size: cover;
+                }
+            ";
+        }
         if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
             $PositionFormLogin = 1;
         }
@@ -309,6 +349,215 @@ function view($view_file, $view_data = array()) {
              $styles_str .= "#openeclass-banner {display: none;}";
              $eclass_banner_value = 0;
         }
+
+       
+        if (!empty($theme_options_styles['bgColorHeader'])) {
+            $styles_str .= "
+                #bgr-cheat-header {
+                    background: $theme_options_styles[bgColorHeader];
+                }
+
+                .panel-admin>.panel-heading, .descCoursePanel, #cal-header{
+                    background:$theme_options_styles[bgColorHeader];
+                }
+
+                div[role='progressbar'] {
+                    --fg: $theme_options_styles[bgColorHeader];
+                    --bg: #e8e8e8;
+                }
+
+                .bgTheme{
+                    background-color: $theme_options_styles[bgColorHeader] !important;
+                }
+
+                .nav-link-adminTools.normalColorBlueText.active{
+                    background-color: $theme_options_styles[bgColorHeader];
+                    color: #ffffff !important;
+                }
+
+                .input-StatusCourse:checked{
+                    background-color: $theme_options_styles[bgColorHeader];
+                }
+
+                .circle-img-contant { 
+                    background-color: $theme_options_styles[bgColorHeader];
+                }
+
+            ";
+        }
+
+        if (!empty($theme_options_styles['bgColorFooter'])) {
+            $styles_str .= "
+                .site-footer, .div_social{
+                    background: $theme_options_styles[bgColorFooter];
+                }
+            ";
+        }
+
+        if (!empty($theme_options_styles['linkColorHeaderFooter'])){
+            $styles_str .= "
+
+                #bgr-cheat-header .form-value, #bgr-cheat-header .fa-bars{
+                    color:$theme_options_styles[linkColorHeaderFooter];
+                }
+
+                .user-menu-btn .user-name,
+                .user-menu-btn .fa-chevron-down,
+                .loginText{
+                    color: $theme_options_styles[linkColorHeaderFooter];
+                }
+
+                .menu-item{
+                    color: $theme_options_styles[linkColorHeaderFooter];
+                }
+
+                .copyright, 
+                .social-icon-tool, 
+                .a_tools_site_footer {
+                    color:$theme_options_styles[linkColorHeaderFooter];
+                }
+
+            ";
+        }
+
+        if (!empty($theme_options_styles['linkHoverColorHeaderFooter'])){
+            $styles_str .= "
+
+                .menu-item:hover,
+                .menu-item:focus{
+                    color: $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+
+                .user-menu-btn:hover,
+                .user-menu-btn:focus{
+                    border-top: solid 4px $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+
+                .user-menu-btn:hover .user-name,
+                .user-menu-btn:focus .user-name{
+                    color: $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+
+                .user-menu-btn:hover .fa-chevron-down,
+                .user-menu-btn:focus .fa-chevron-down{
+                    color: $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+
+                .copyright:hover, .copyright:focus,
+                .social-icon-tool:hover, .social-icon-tool:focus,
+                .a_tools_site_footer:hover, .a_tools_site_footer:focus {
+                    color: $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+                  
+            ";
+        }
+
+        if (!empty($theme_options_styles['buttonBgWhiteColor'])) {
+            $styles_str .= "
+                .submitAdminBtn, .opencourses_btn {
+                    border-color: $theme_options_styles[buttonBgWhiteColor];
+                    color: $theme_options_styles[buttonBgWhiteColor];
+                }
+
+            ";
+        }
+  
+        if (!empty($theme_options_styles['whiteButtonTextColor'])) {
+            $styles_str .= "
+                .submitAdminBtn, .opencourses_btn, .searchGroupBtn {
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                    background-color: #ffffff;
+                }
+
+                .menu-popover .list-group-item{
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                    background-color: #ffffff;
+                }
+
+
+            ";
+        }
+        
+        if (!empty($theme_options_styles['whiteButtonHoveredTextColor'])) {
+            $styles_str .= "
+                .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
+                .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
+
+                .menu-popover:focus{
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
+
+                .menu-popover .list-group-item:hover{
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
+
+
+            ";
+        }
+        
+        if (!empty($theme_options_styles['whiteButtonHoveredBgColor'])) {
+            $styles_str .= "
+                .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
+                .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .menu-popover:focus{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .menu-popover .list-group-item:hover{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+            ";
+        }
+        
+        
+      
+        if (!empty($theme_options_styles['buttonBgColor'])) {
+            $styles_str .= "
+                .submitAdminBtn.active, submitAdminBtn.active:hover{
+                    background-color: $theme_options_styles[buttonBgColor];
+                    z-index: 0 !important;
+                }
+
+                .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+                .login-form-submit, .login-form-submit:hover {
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+            ";
+        }
+
+        if (!empty($theme_options_styles['buttonTextColor'])) {
+            $styles_str .= "
+                .submitAdminBtn.active, .submitAdminBtn.active:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
+
+                .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
+
+                .login-form-submit, .login-form-submit:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
+
+            ";
+        }
+        
 
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
@@ -327,116 +576,17 @@ function view($view_file, $view_data = array()) {
                     background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
                 }
 
-                .bgNormalBlueText{
-                     background: $theme_options_styles[leftNavBgColor];
-                }
-
-                #bgr-cheat-header {
-                    background: $theme_options_styles[leftNavBgColor];
-                }
-
-                .site-footer {
-                    background: $theme_options_styles[leftNavBgColor];
-                }
-
-                .div_social{
-                    background-color:$theme_options_styles[leftNavBgColor];
-                }
-
-                .submitAdminBtn, .opencourses_btn {
-                    border: solid thin;
-                    border-color: $theme_options_styles[leftNavBgColor];
-                    color: $theme_options_styles[leftNavBgColor];
-                    font-size: 14px;
-                    height:40px;
-                    min-width: 40px;
-                    font-weight: 700; font-style: normal;
-                    border-radius: 4px !important;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    background-color: #ffffff;
-                    letter-spacing: 0px;
-                    line-height: 16px;
-                }
-
-                .submitAdminBtn:hover, .opencourses_btn:hover {
-                    background-color: $theme_options_styles[leftNavBgColor];
-                    color: #ffffff;
-                }
-
-                .submitAdminBtn.active{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                    color: #ffffff;
-                    z-index: 0 !important;
-                }
-
-                .submitAdminBtnDefault{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                    color: #ffffff;
-                }
-
-                .login-form-submit {
-                    border: solid thin;
-                    border-color: $theme_options_styles[leftNavBgColor];
-                    color: #ffffff;
-                    font-size: 14px;
-                    height:40px;
-                    font-weight: 700;
-                    font-style: normal;
-                    background-color: $theme_options_styles[leftNavBgColor];
-                }
-
-                .searchGroupBtn:hover{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                }
-
-                .menu-popover .list-group-item{
-                    border-color: $theme_options_styles[leftNavBgColor];
-                }
-
-                .menu-popover .list-group-item:hover{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                }
-
                 .pagination-glossary .page-item.active .page-link{
                     background-color: $theme_options_styles[leftNavBgColor];
                     border-color: $theme_options_styles[leftNavBgColor];
                     color:#ffffff !important;
                 }
 
-                .panel-admin>.panel-heading, .descCoursePanel, #cal-header{
-                    background:$theme_options_styles[leftNavBgColor];
-                }
-
-                div[role='progressbar'] {
-                    --fg: $theme_options_styles[leftNavBgColor];
-                    --bg: #e8e8e8;
-                }
-
-                .bgTheme{
-                    background-color: $theme_options_styles[leftNavBgColor] !important;
-                }
-
-                .nav-link-adminTools.normalColorBlueText.active{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                    color: #ffffff !important;
-                }
-
-                .input-StatusCourse:checked{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                }
-
-                .jumbotron-image-default{
-                    display: none;
-                }
-
-                .circle-img-contant { 
-                    background-color: $theme_options_styles[leftNavBgColor];
-                }
+                
 
             ";
         }
+        
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
 
@@ -458,28 +608,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[linkColor];
                 }
 
-                .menu-item{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                #btn-search{
-                    height:33px;
-                    width:30px;
-                    background-color:#ffffff;
-                    color: $theme_options_styles[linkColor];
-                    border-right: solid 1px #E8EDF8 !important;
-                }
-
-                #bgr-cheat-header .form-value, #bgr-cheat-header .fa-bars{
-                    color:$theme_options_styles[linkColor];
-                }
-
                 .Help-text-panel-heading, .normalColorBlueText {
                     color:  $theme_options_styles[linkColor] !important;
-                }
-
-                .copyright, .social-icon-tool, .a_tools_site_footer {
-                    color:$theme_options_styles[linkColor];
                 }
 
                 .list-group-default .list-group-btn {
@@ -489,6 +619,7 @@ function view($view_file, $view_data = array()) {
                 .nav-tabs .nav-item:hover .nav-link{
                     color: $theme_options_styles[linkColor];
                 }
+
                 .nav-tabs .nav-item .nav-link.active {
                     font-weight: 700;
                     font-style: normal;
@@ -504,27 +635,6 @@ function view($view_file, $view_data = array()) {
                 .contextual-sidebar .list-group-item.active {
                     color: $theme_options_styles[linkColor];
                 }
-
-                .menu-popover .list-group-item{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                .user-menu-btn, .loginText{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                .eclass-title, .eclassInfo{
-                    color: $theme_options_styles[linkColor];
-                }
-
-                .user-menu-btn:hover,
-                .loginText:hover{
-                    color:$theme_options_styles[linkColor];
-                }
-
-                .user-menu-btn:hover .fa-chevron-down{
-                    color: $theme_options_styles[linkColor];
-                }
                 
             ";
         }
@@ -532,19 +642,9 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkHoverColor'])){
             $styles_str .= "
                 a:hover, a:focus, 
-                .menu-item:hover, .menu-item:focus, 
-                .social-icon-tool:hover, .social-icon-tool:focus,
                 #bgr-cheat-header .form-value:hover, #bgr-cheat-header .form-value:focus{
                     color: $theme_options_styles[linkHoverColor];
                 } 
-
-                .user-menu-content:hover{
-                    border-top: solid 4px $theme_options_styles[linkHoverColor];
-                }
-
-                .user-menu-content:hover .user-menu-btn,.user-menu-content:hover .userLoginMobile{
-                    margin-top: -4px;
-                }
 
                 #btn-search:hover, #btn-search:focus{
                     color: $theme_options_styles[linkHoverColor];
@@ -567,21 +667,6 @@ function view($view_file, $view_data = array()) {
                 .contextual-sidebar .list-group-item:hover {
                     color: $theme_options_styles[linkHoverColor];
                 }
-
-                .menu-popover .list-group-item:hover{
-                    color:$theme_options_styles[linkHoverColor];
-                }
-
-                .menu-item.active, .menu-item.active2 {
-                    background-color: #EFF6FF;
-                    color: $theme_options_styles[linkHoverColor];
-                    font-size: 14px;
-                    letter-spacing: 0px;
-                    line-height: 16px;
-                    border-radius: 4px;
-                }
-                
-
 
             ";
         }

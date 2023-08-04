@@ -135,7 +135,7 @@
                                 {!!
                                     form_buttons(array(
                                         array(
-                                            'class' => 'submitAdminBtn submitAdminBtnDefault',
+                                            'class' => 'submitAdminBtnDefault',
                                             'text'  =>  trans('langSubmit'),
                                             'name'  =>  'submit',
                                             'value' =>  trans('langSubmit')

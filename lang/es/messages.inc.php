@@ -3878,7 +3878,14 @@ $langMainMenuConfiguration = "Menu Group Configuration";
 $langSubMenuConfig = "Menu Group Item Configuration";
 $langBgColorConfig = 'Background Color Configuration';
 $langLinksCongiguration = 'Links Configuration';
+$langLinksHeaderFooterCongiguration = 'Header - Footer Link Settings';
+$langBgHeaderCongiguration = "Background color Header";
+$langBgFooterCongiguration = "Background color Footer";
 $langLoginConfiguration = "Login Screen Configuration";
+$langButtonsColorCongiguration = "Buttons Settings with color";
+$langTextColor = "Text Color";
+$langHoverTextColor = "Color Hovered Text";
+$langHoverWhiteColorButton = "Background Color Hovered Button";
 $langTag = 'Tag';
 $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>
 <p>The platform supports the <a href='http://ocw-project.gunet.gr/'>Open Academic $langCourses</a> project along with the <a href='http://openeclass.org/'>Open eClass platform</a> and the national $langsCourse seach portal also developed by GUnet.</p>";

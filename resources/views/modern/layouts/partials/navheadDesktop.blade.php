@@ -70,7 +70,7 @@
             @endif
 
             <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
-                <div class='d-flex justify-content-start align-items-center h-30px'>
+                <div class='d-flex justify-content-start align-items-center h-80px'>
                 
                     @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
                         <a class='d-flex align-items-center text-uppercase TextBold userLoginMobile ms-0' href="{{$urlAppend}}main/login_form.php">
@@ -80,15 +80,15 @@
                     @endif
 
                     @if(isset($_SESSION['uid']))
-                        <div class='d-flex justify-content-end p-0'>
+                        <div class='d-flex justify-content-end p-0 h-80px'>
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                                 
 
                                 <div class="btn-group" role="group">
-                                    <button id="btnGroupDrop1" type="button" class="btn user-menu-btn d-flex justify-content-center align-items-center TextBold rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
-                                            {{ $_SESSION['uname'] }}
-                                            <i class="fa-solid fa-chevron-down ps-2"></i>
+                                    <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
+                                            <span class='TextBold user-name'>{{ $_SESSION['uname'] }}</span>
+                                            <i class="fa-solid fa-chevron-down"></i>
                                     </button>
                                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user" aria-labelledby="btnGroupDrop1">
                                         <ul class="list-group list-group-flush">
