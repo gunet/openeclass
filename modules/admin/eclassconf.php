@@ -124,6 +124,9 @@ if (isset($_POST['submit'])) {
         'personal_blog_rating' => true,
         'personal_blog_sharing' => true,
         'block_username_change' => true,
+        'disable_name_surname_change' => true,
+        'disable_email_change' => true,
+        'disable_am_change' => true,
         'block_duration_account' => true,
         'block_duration_alt_account' => true,
         'display_captcha' => true,
@@ -350,6 +353,9 @@ else {
     $data['cbox_personal_blog_rating'] = get_config('personal_blog_rating') ? 'checked' : '';
     $data['cbox_personal_blog_sharing'] = get_config('personal_blog_sharing') ? 'checked' : '';
     $data['cbox_block_username_change'] = get_config('block_username_change') ? 'checked' : '';
+    $data['cbox_disable_name_surname_change'] = get_config('disable_name_surname_change') ? 'checked' : '';
+    $data['cbox_disable_email_change'] = get_config('disable_email_change') ? 'checked' : '';
+    $data['cbox_disable_am_change'] = get_config('disable_am_change') ? 'checked' : '';
     $data['cbox_enable_mobileapi'] = get_config('enable_mobileapi') ? 'checked' : '';
     $data['max_glossary_terms'] = get_config('max_glossary_terms');
     $data['cbox_enable_indexing'] = get_config('enable_indexing') ? 'checked' : '';

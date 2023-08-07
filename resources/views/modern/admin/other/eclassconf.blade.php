@@ -924,7 +924,28 @@
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='disable_name_surname_change' value='1' {{ $cbox_disable_name_surname_change }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('lang_disable_name_surname_change') }}
+                                                                </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='disable_email_change' value='1' {{ $cbox_disable_email_change> }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('lang_disable_email_change') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='disable_am_change' value='1' {{ $cbox_disable_am_change }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('lang_disable_am_change') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
                                                                 <input {!! $id_enable_mobileapi !!} type='checkbox' name='enable_mobileapi' value='1' {{ $cbox_enable_mobileapi }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_enable_mobileapi') }}

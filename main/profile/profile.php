@@ -87,12 +87,24 @@ if ($auth != 1) {
     $allow_password_change = true;
 }
 
-if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
+if (in_array($password, array('shibboleth', 'cas', 'ldap')) or get_config('disable_name_surname_change')) {
     $data['allow_name_change'] = $allow_name_change = false;
 } else {
     $data['allow_name_change'] = $allow_name_change = true;
 }
 
+if ((get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid']) or get_config('disable_am_change')) {
+    $data['allow_am_change'] = $allow_am_change = false;
+} else {
+    $data['allow_am_change'] = $allow_am_change = true;
+}
+
+
+if ((get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_info']['email']) and $_SESSION['auth_user_info']['email']) or get_config('disable_email_change')) {
+    $data['allow_email_change'] = $allow_email_change = false;
+} else {
+    $data['allow_email_change'] = $allow_email_change = true;
+}
 
 // Handle AJAX profile image delete
 if (isset($_POST['delimage'])) {
@@ -166,10 +178,8 @@ if (isset($_POST['submit'])) {
         $image_base = $image_path . '_' . profile_image_hash($uid) . '_';
 
         if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_base . IMAGESIZE_LARGE . '.jpg')) {
-            //Session::Messages($langInvalidPicture);
             Session::flash('message',$langInvalidPicture);
             Session::flash('alert-class', 'alert-warning');
-            //redirect_to_home_page("main/profile/profile.php");
             if($showMentoringProfile == 1){
                 redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
             }else{
@@ -177,10 +187,8 @@ if (isset($_POST['submit'])) {
             }
         }
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_base . IMAGESIZE_SMALL . '.jpg')) {
-            //Session::Messages($langInvalidPicture);
             Session::flash('message',$langInvalidPicture);
             Session::flash('alert-class', 'alert-warning');
-            //redirect_to_home_page("main/profile/profile.php");
             if($showMentoringProfile == 1){
                 redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
             }else{
@@ -196,10 +204,8 @@ if (isset($_POST['submit'])) {
 
     // check if email is valid
     if (!empty($email_form) and !valid_email($email_form)) {
-        //Session::Messages($langEmailWrong);
         Session::flash('message',$langEmailWrong);
         Session::flash('alert-class', 'alert-warning');
-        //redirect_to_home_page("main/profile/profile.php");
         if($showMentoringProfile == 1){
             redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
         }else{
@@ -209,10 +215,8 @@ if (isset($_POST['submit'])) {
 
     // check if there are empty fields
     if (!$all_ok) {
-        //Session::Messages($langFieldsMissing);
         Session::flash('message',$langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
-        //redirect_to_home_page("main/profile/profile.php");
         if($showMentoringProfile == 1){
             redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
         }else{
@@ -229,15 +233,20 @@ if (isset($_POST['submit'])) {
         $givenname_form = $_SESSION['givenname'];
     }
 
+    if (!$allow_am_change) {
+        $am_form = $myrow->am;
+    }
+
+    if (!$allow_email_change) {
+        $email_form = $myrow->email;
+    }
     $username_form = canonicalize_whitespace($username_form);
         // check if username exists
     if ($username_form != $_SESSION['uname']) {
         $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $username_form);
         if ($username_check) {
-            //Session::Messages($langUserFree);
             Session::flash('message',$langUserFree);
             Session::flash('alert-class', 'alert-warning');
-            //redirect_to_home_page("main/profile/profile.php");
             if($showMentoringProfile == 1){
                 redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
             }else{
@@ -254,10 +263,8 @@ if (isset($_POST['submit'])) {
         foreach ($cpf_check as $cpf_error) {
             $cpf_error_str .= $cpf_error;
         }
-       // Session::Messages($cpf_error_str);
         Session::flash('message',$cpf_error_str);
         Session::flash('alert-class', 'alert-warning');
-        //redirect_to_home_page("main/profile/profile.php");
         if($showMentoringProfile == 1){
             redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
         }else{
@@ -315,7 +322,6 @@ if (isset($_POST['submit'])) {
         if ($need_email_verification) { // email has been changed and needs verification
             redirect_to_home_page("modules/auth/mail_verify_change.php?from_profile=true");
         } else {
-           // Session::Messages($langProfileReg, 'alert-success');
             Session::flash('message',$langProfileReg);
             Session::flash('alert-class', 'alert-success');
             if($showMentoringProfile == 1){
@@ -326,7 +332,6 @@ if (isset($_POST['submit'])) {
         }
     }
     if ($old_language != $language) {
-       // Session::Messages($langProfileReg, 'alert-success');
         Session::flash('message',$langProfileReg);
         Session::flash('alert-class', 'alert-success');
         if($showMentoringProfile == 1){
@@ -334,7 +339,7 @@ if (isset($_POST['submit'])) {
         }else{
             redirect_to_home_page("main/profile/display_profile.php");
         }
-        
+
     }
 }
 

@@ -36,7 +36,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -48,7 +48,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -58,13 +58,13 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
-                    
+
                     <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit @if($showMentoringProfile == 1) rounded-2 p-3 solidPanel @else rounded @endif'>
                         <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
@@ -108,30 +108,30 @@
                                 <div class='form-group mt-4'>
                                     <label for='email_form' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                     <div class='row'>
-                                        <div class='@if($showMentoringProfile == 0) col-sm-6 @else col-sm-12 @endif'>
-                                            <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
+                                        <div class='col-sm-6'>
+                                            @if ($allow_email_change)
+                                                <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
+                                            @else
+                                                <p class='form-control-static'>{{ $email_form }}</p>
+                                                <input type='hidden' name='am_form' value='{{ $email_form }}'>
+                                            @endif
                                         </div>
-                                        @if($showMentoringProfile == 0)
-                                            <div class='col-sm-6 mt-md-0 mt-2'>
-                                                {!! selection($access_options, 'email_public', $email_public, "class='form-control'") !!}
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
 
-                                @if($showMentoringProfile == 0)
-                                    <div class='form-group mt-4'>
-                                        <label for='am_form' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
-                                        <div class='row'>
-                                            <div class='col-sm-6'>
+                                <div class='form-group mt-4'>
+                                    <label for='am_form' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
+                                    <div class='row'>
+                                        <div class='col-sm-6'>
+                                            @if ($allow_am_change)
                                                 <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
-                                            </div>
-                                            <div class='col-sm-6 mt-md-0 mt-2'>
-                                                {!! selection($access_options, 'am_public', $am_public, "class='form-control'") !!}
-                                            </div>
+                                            @else
+                                                <p class='form-control-static'>{{ $am_form }}</p>
+                                                <input type='hidden' name='am_form' value='{{ $am_form }}'>
+                                            @endif
                                         </div>
                                     </div>
-                                @endif
+                                </div>
 
                                 <div class='form-group mt-4'>
                                     <label for='phone_form' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
@@ -139,11 +139,6 @@
                                         <div class='@if($showMentoringProfile == 0) col-sm-6 @else col-sm-12 @endif'>
                                             <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
                                         </div>
-                                        @if($showMentoringProfile == 0)
-                                            <div class='col-sm-6 mt-md-0 mt-2'>
-                                                {!! selection($access_options, 'phone_public', $phone_public, "class='form-control'") !!}
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
 
@@ -173,7 +168,7 @@
                                     </div>
                                 @endif
 
-                                
+
                                 @if (!get_config('restrict_owndep'))
                                     @if(!get_config('mentoring_always_active'))
                                         <div class='form-group mt-4'>
@@ -186,7 +181,7 @@
                                         <input type='hidden' name='department[]'>
                                     @endif
                                 @endif
-                               
+
 
 
 
@@ -257,7 +252,7 @@
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
                         <div class='col-12 h-100 left-form'></div>
                     </div>
-                
+
         </div>
     </div>
 </div>
