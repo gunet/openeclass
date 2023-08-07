@@ -6079,4 +6079,9 @@ $langCustomMailHelp = "
 </ul>";
 
 $langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
+<<<<<<< local
 
+=======
+$lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα' και το 'επώνυμο'";
+$lang_disable_email_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το e-mail";
+$lang_disable_am_change = "Να μην επιτρέπεται να αλλάζουν τον Αριθμό Μητρώου";>>>>>>> graft

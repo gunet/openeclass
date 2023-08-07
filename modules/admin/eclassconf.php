@@ -398,6 +398,9 @@ if (isset($_POST['submit'])) {
         'personal_blog_rating' => true,
         'personal_blog_sharing' => true,
         'block_username_change' => true,
+        'disable_name_surname_change' => true,
+        'disable_email_change' => true,
+        'disable_am_change' => true,
         'block_duration_account' => true,
         'block_duration_alt_account' => true,
         'display_captcha' => true,
@@ -1068,6 +1071,9 @@ else {
     $cbox_personal_blog_rating = get_config('personal_blog_rating') ? 'checked' : '';
     $cbox_personal_blog_sharing = get_config('personal_blog_sharing') ? 'checked' : '';
     $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';
+    $cbox_disable_name_surname_change = get_config('disable_name_surname_change') ? 'checked' : '';
+    $cbox_disable_email_change = get_config('disable_email_change') ? 'checked' : '';
+    $cbox_disable_am_change = get_config('disable_am_change') ? 'checked' : '';
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
     $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
@@ -1187,6 +1193,24 @@ else {
                                     <label>
                                         <input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change>
                                         $lang_block_username_change
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_name_surname_change' value='1' $cbox_disable_name_surname_change>
+                                        $lang_disable_name_surname_change
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_email_change' value='1' $cbox_disable_email_change>
+                                        $lang_disable_email_change
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_am_change' value='1' $cbox_disable_am_change>
+                                        $lang_disable_am_change
                                     </label>
                                 </div>
                                 <div class='checkbox'>
