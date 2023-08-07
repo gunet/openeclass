@@ -79,12 +79,26 @@ if ($auth != 1) {
     $allow_password_change = true;
 }
 
-if (in_array($password, array('shibboleth', 'cas', 'ldap'))) {
+if (in_array($password, array('shibboleth', 'cas', 'ldap')) or get_config('disable_name_surname_change')) {
     $allow_name_change = false;
 } else {
     $allow_name_change = true;
 }
 
+
+//
+if ((get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid']) or get_config('disable_am_change')) {
+    $allow_am_change = false;
+} else {
+    $allow_am_change = true;
+}
+
+//
+if ((get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_info']['email']) and $_SESSION['auth_user_info']['email']) or get_config('disable_email_change')) {
+    $allow_email_change = false;
+} else {
+    $allow_email_change = true;
+}
 
 // Handle AJAX profile image delete
 if (isset($_POST['delimage'])) {
@@ -187,6 +201,14 @@ if (isset($_POST['submit'])) {
     if (!$allow_name_change) {
         $surname_form = $_SESSION['surname'];
         $givenname_form = $_SESSION['givenname'];
+    }
+
+    if (!$allow_am_change) {
+        $am_form = $myrow->am;
+    }
+
+    if (!$allow_email_change) {
+        $email_form = $myrow->email;
     }
 
     $username_form = canonicalize_whitespace($username_form);
@@ -493,17 +515,18 @@ if ($allow_username_change) {
 }
 $tool_content .= "</div></div>";
 
-$email_field = "<input class='form-control' type='text' name='email_form' id='email_form' value='$email_form'>";
-$am_field = "<input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>";
-if (isset($_SESSION['auth_user_info'])) {
-    if (get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_info']['email']) and $_SESSION['auth_user_info']['email']) {
-        $email_field = "<p class='form-control-static'>$email_form</p>";
-        $tool_content .= "<input type='hidden' name='email_form' value='$email_form'>";
-    }
-    if (get_config('am_prevent_autoset_change') and isset($_SESSION['auth_user_info']['studentid']) and $_SESSION['auth_user_info']['studentid']) {
-        $am_field = "<p class='form-control-static'>$am_form</p>";
-        $tool_content .= "<input type='hidden' name='am_form' value='$am_form'>";
-    }
+if ($allow_email_change) {
+    $email_field = "<input class='form-control' type='text' name='email_form' id='email_form' value='$email_form'>";
+} else {
+    $email_field = "<p class='form-control-static'>$email_form</p>";
+    $tool_content .= "<input type='hidden' name='am_form' value='$email_form'>";
+}
+
+if ($allow_am_change) {
+    $am_field = "<input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>";
+} else {
+    $am_field = "<p class='form-control-static'>$am_form</p>";
+    $tool_content .= "<input type='hidden' name='am_form' value='$am_form'>";
 }
 
 $tool_content .= "<div class='form-group'>
