@@ -2095,6 +2095,8 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @global type $langPopUpFrame
  * @global type $is_editor
  * @global type $is_admin
+ * @global type $mentoring_program_code
+ * @global type $mentoring_platform
  * @param type $name
  * @param type $rows
  * @param type $cols
@@ -2103,7 +2105,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore, $mentoring_program_code, $program_group_id, $mentoring_platform;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -2142,7 +2144,16 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 }
             }
             $url = $urlAppend . "modules/" . $activemodule . "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
-        } elseif ($is_admin) { /* special case for admin announcements */
+        }elseif(isset($mentoring_program_code) && $mentoring_program_code){
+            $filebrowser = "file_browser_callback : openDocsPicker,";
+            $activemodule = 'mentoring/programs/group/document/mydoc.php';
+            $url = $urlAppend . "modules/" . $activemodule . "?mydocs=true&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
+        }elseif(isset($mentoring_platform) && $mentoring_platform){
+            if($is_admin){
+                $filebrowser = "file_browser_callback : openDocsPicker,";
+                $url = $urlAppend . "modules/mentoring/programs/group/document/mydoc.php?common_docs=true&embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
+            }
+        }elseif ($is_admin and !$mentoring_platform) { /* special case for admin announcements about eclass platform not mentoring case*/
             $filebrowser = "file_browser_callback : openDocsPicker,";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce" . $append_module . $append_forum . "&docsfilter=";
         }
@@ -2739,8 +2750,8 @@ function profile_image($user_id, $size, $class=null) {
         $user = Database::get()->querySingle("SELECT has_icon, pic_public,
             CONCAT(surname, ' ', givenname) AS fullname
             FROM user WHERE id = ?d", $user_id);
-        $username = q(trim($user->fullname));
-        if ($user->pic_public or $_SESSION['status'] == USER_TEACHER or
+        $username = q(trim($user->fullname ?? ''));
+        if (($user and $user->pic_public) or $_SESSION['status'] == USER_TEACHER or
             $uid == $user_id or
             (isset($course_id) and $course_id and $is_editor)) {
                 $hash = profile_image_hash($user_id);
@@ -3557,7 +3568,7 @@ function form_buttons($btnArray) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo, $course_code, $toolName, $pageName;
+    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo, $course_code, $toolName, $pageName, $mentoring_platform;
 
     $out_primary = $out_secondary = array();
     $i=0;
@@ -3733,19 +3744,37 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if(isset($_SESSION['uid'])){
                 $marginBottom = 'my-4';
             }
-            $titleHeader = (!empty($pageName) ? $pageName : $toolName);
-            return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
-                        <div class='col-lg-5 col-md-6 col-12'><h1 class='mb-0'>$titleHeader</h1></div>
-                        <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
-                            <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
+
+            if(!isset($mentoring_platform) and !$mentoring_platform){
+                $titleHeader = (!empty($pageName) ? $pageName : $toolName);
+                return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
+                            <div class='col-lg-5 col-md-6 col-12'><h1 class='mb-0'>$titleHeader</h1></div>
+                            <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
+                                <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
+                                    <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>
+                                        $out
+                                        $action_button
+                                    </div>
+                                </div>
+                            </div>
+                            $pageTitleActive
+                        </div>";
+            }else{
+
+                return "<div class='col-12 mt-3 mb-3 MentoringActionBar'>
+                        <div class='col-12 action_bar d-flex justify-content-start'>
+                            <div class='margin-top-thin margin-bottom-fat hidden-print'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>
+                                    <div class='btn-group btn-group-sm flex-wrap'>
                                     $out
                                     $action_button
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         $pageTitleActive
                     </div>";
+            }
         }
         
     } else {
@@ -4033,7 +4062,7 @@ function fileSizeHidenInput() {
  * @return string
  */
 function documentBackLink($path) {
-    global $upload_target_url, $groupset;
+    global $upload_target_url, $groupset, $mentoring_platform;
 
     $opts = '';
     if ($groupset) {
@@ -4043,7 +4072,12 @@ function documentBackLink($path) {
         $opts .= ($opts? '&amp;': '') . "openDir=$path";
     }
     if ($opts) {
-        $initial = defined('COMMON_DOCUMENTS') || defined('MY_DOCUMENTS');
+        if(isset($mentoring_platform) and $mentoring_platform){
+            $initial = defined('MENTORING_COMMON_DOCUMENTS') || defined('MENTORING_MYDOCS');
+        }else{
+            $initial = defined('COMMON_DOCUMENTS') || defined('MY_DOCUMENTS');
+        }
+        
         return $upload_target_url . ($initial? '?': '&amp;') . $opts;
     } else {
         return $upload_target_url;

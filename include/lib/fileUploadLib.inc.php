@@ -262,11 +262,12 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
 /**
  * @brief A page that shows a table with statistic data and a gauge bar
  * @global type $pageName
+ * @global type $mentoring_program_code
  * @param type $quota
  * @param type $used
  */
 function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
-    global $pageName;
+    global $pageName,$mentoring_program_code,$program_group_id,$mentoring_program_id;
 
     if ($menuTypeID) {
         $data['menuTypeID'] = $menuTypeID;
@@ -287,8 +288,30 @@ function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
                     array('title' => trans('langBack'),
                           'url' => $backPath,
                           'icon' => 'fa-reply',
-                          'level' => 'primary')));
-    view('modules.document.quota', $data);
+                          'level' => 'primary-label')));
+    if(isset($mentoring_program_code)){
+        if(isset($program_group_id) and $program_group_id){
+            $data['group_id'] = $program_group_id; 
+            $data['is_group_doc'] = 1;
+
+            $checkIsCommon = Database::get()->querySingle("SELECT common FROM mentoring_group 
+                                                WHERE id = ?d 
+                                                AND mentoring_program_id = ?d",$program_group_id,$mentoring_program_id)->common;
+
+            if($checkIsCommon == 1){
+                $data['isCommonGroup'] = 1;
+            }else{
+                $data['isCommonGroup'] = 0;
+            }
+        }else{
+            $data['is_group_doc'] = 0;
+        }
+        
+        view('modules.mentoring.programs.group.document.quota', $data);
+    }else{
+        view('modules.document.quota', $data);
+    }
+   
 }
 
 // Actions to do before extracting file from zip archive
@@ -297,7 +320,7 @@ function showquota($quota, $used, $backPath=null, $menuTypeID=null) {
 function process_extracted_file($file_in_zip) {
     global $uploadPath, $realFileSize, $basedir, $course_id,
         $subsystem, $subsystem_id, $uploadPath, $group_sql,
-        $uploading_as_user;
+        $uploading_as_user, $mentoring_program_code, $mentoring_program_id;
 
     $replace = !$uploading_as_user && isset($_POST['replace']);
 
@@ -324,15 +347,29 @@ function process_extracted_file($file_in_zip) {
     if (substr($file_in_zip['name'], -1 == '/') and $file_in_zip['size'] == 0) {
         // Directory has been created by make_path(),
         // only need to update the index
-        $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        if(isset($mentoring_program_code)){
+            $r = Database::get()->querySingle("SELECT id FROM mentoring_document WHERE $group_sql AND path = ?s", $path);
+            
+        }else{
+            $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
+        }
+        
         return null;
     } else {
         // Check if file already exists
-        $result = Database::get()->querySingle("SELECT id, path, visible FROM document
-                                           WHERE $group_sql AND
-                                                 path REGEXP ?s AND
-                                                 filename = ?s LIMIT 1", ("^$path/[^/]+$"), $filename);
+        if(isset($mentoring_program_code)){
+            $result = Database::get()->querySingle("SELECT id, path, visible FROM mentoring_document
+            WHERE $group_sql AND
+                  path REGEXP ?s AND
+                  filename = ?s LIMIT 1", ("^$path/[^/]+$"), $filename);
+        }else{
+            $result = Database::get()->querySingle("SELECT id, path, visible FROM document
+            WHERE $group_sql AND
+                  path REGEXP ?s AND
+                  filename = ?s LIMIT 1", ("^$path/[^/]+$"), $filename);
+        }
+        
         $format = get_file_extension($filename);
         if ($result) {
             $old_id = $result->id;
@@ -341,10 +378,18 @@ function process_extracted_file($file_in_zip) {
             if ($replace) {
                 // Overwrite existing file
                 $new_filename_in_zip = $basedir . $file_path;
-                Database::get()->query("UPDATE document
-                                                 SET date_modified = ?t
-                                                 WHERE $group_sql AND
-                                                       id = ?d", $file_date, $old_id);
+                if(isset($mentoring_program_code)){
+                    Database::get()->query("UPDATE mentoring_document
+                    SET date_modified = ?t
+                    WHERE $group_sql AND
+                          id = ?d", $file_date, $old_id);
+                }else{
+                    Database::get()->query("UPDATE document
+                    SET date_modified = ?t
+                    WHERE $group_sql AND
+                          id = ?d", $file_date, $old_id);
+                }
+                
                 return $new_filename_in_zip;
             } else {
                 // Rename existing file
@@ -352,48 +397,91 @@ function process_extracted_file($file_in_zip) {
                 do {
                     $backup = preg_replace('/\.[a-zA-Z0-9_-]+$/', '', $filename) .
                             '_backup_' . $backup_n . '.' . $format;
-                    $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM document
-                                                              WHERE $group_sql AND
-                                                                    path REGEXP ?s AND
-                                                                    filename = ?s LIMIT 1", ("^$path/[^/]+$"), $backup)->count;
+                    if(isset($mentoring_program_code)){
+                        $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM mentoring_document
+                        WHERE $group_sql AND
+                              path REGEXP ?s AND
+                              filename = ?s LIMIT 1", ("^$path/[^/]+$"), $backup)->count;
+                    }else{
+                        $n = Database::get()->querySingle("SELECT COUNT(*) as count FROM document
+                        WHERE $group_sql AND
+                              path REGEXP ?s AND
+                              filename = ?s LIMIT 1", ("^$path/[^/]+$"), $backup)->count;
+                    }
+                    
                     $backup_n++;
                 } while ($n > 0);
-                Database::get()->query("UPDATE document SET filename = ?s
-                                                 WHERE $group_sql AND
-                                                       path = ?s", $backup, $file_path);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $old_id);
+                if(isset($mentoring_program_code)){
+                    Database::get()->query("UPDATE mentoring_document SET filename = ?s
+                    WHERE $group_sql AND
+                          path = ?s", $backup, $file_path);
+
+                }else{
+                    Database::get()->query("UPDATE document SET filename = ?s
+                    WHERE $group_sql AND
+                          path = ?s", $backup, $file_path);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $old_id);
+                }
+                
             }
         }
 
         $path .= '/' . safe_filename($format);
-        $id = Database::get()->query("INSERT INTO document SET
-                                 course_id = ?d,
-                                 subsystem = ?d,
-                                 subsystem_id = ?d,
-                                 path = ?s,
-                                 filename = ?s,
-                                 visible = 1,
-                                 comment = ?s,
-                                 category = ?d,
-                                 title = '',
-                                 creator = ?s,
-                                 date = ?t,
-                                 date_modified = ?t,
-                                 subject = ?s,
-                                 description = ?s,
-                                 author = ?s,
-                                 format = ?s,
-                                 language = ?s,
-                                 copyrighted = ?d"
-                , $course_id, $subsystem, $subsystem_id, $path, $filename, $file_comment, $file_category
-                , $file_creator, $file_date, $file_date, $file_subject, $file_description
-                , $file_author, $format, $file_language, $file_copyrighted)->lastInsertID;
-        // Logging
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
-        Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
-            'filepath' => $path,
-            'filename' => $filename,
-            'comment' => $file_comment));
+        if(isset($mentoring_program_code)){
+            $id = Database::get()->query("INSERT INTO mentoring_document SET
+            mentoring_program_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            filename = ?s,
+            visible = 1,
+            comment = ?s,
+            category = ?d,
+            title = '',
+            creator = ?s,
+            date = ?t,
+            date_modified = ?t,
+            subject = ?s,
+            description = ?s,
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = ?d"
+                    , $mentoring_program_id, $subsystem, $subsystem_id, $path, $filename, $file_comment, $file_category
+                    , $file_creator, $file_date, $file_date, $file_subject, $file_description
+                    , $file_author, $format, $file_language, $file_copyrighted)->lastInsertID;
+
+        }else{
+            $id = Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            filename = ?s,
+            visible = 1,
+            comment = ?s,
+            category = ?d,
+            title = '',
+            creator = ?s,
+            date = ?t,
+            date_modified = ?t,
+            subject = ?s,
+            description = ?s,
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = ?d"
+                    , $course_id, $subsystem, $subsystem_id, $path, $filename, $file_comment, $file_category
+                    , $file_creator, $file_date, $file_date, $file_subject, $file_description
+                    , $file_author, $format, $file_language, $file_copyrighted)->lastInsertID;
+                    // Logging
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+                    Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
+                    'filepath' => $path,
+                    'filename' => $filename,
+                    'comment' => $file_comment));
+        }
+        
         // File will be extracted with new encoded filename
         //$new_filename_in_zip = $basedir . $path;
         $new_filename_in_zip = substr($path, 1);
@@ -406,13 +494,20 @@ function process_extracted_file($file_in_zip) {
 // document table.
 // Returns the full encoded path created.
 function make_path($path, $path_components) {
-    global $basedir, $givenname, $surname, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id;
+    global $basedir, $givenname, $surname, $path_already_exists, $course_id, $group_sql, $subsystem, $subsystem_id, $mentoring_program_code, $mentoring_program_id, $uid;
 
     $path_already_exists = true;
     foreach ($path_components as $component) {
-        $q = Database::get()->querySingle("SELECT path FROM document
-                WHERE $group_sql AND filename = ?s AND path REGEXP ?s",
-                $component, "^$path/[^/]+$");
+        if(isset($mentoring_program_code)){
+            $q = Database::get()->querySingle("SELECT path FROM mentoring_document
+            WHERE $group_sql AND filename = ?s AND path REGEXP ?s",
+            $component, "^$path/[^/]+$");
+        }else{
+            $q = Database::get()->querySingle("SELECT path FROM document
+            WHERE $group_sql AND filename = ?s AND path REGEXP ?s",
+            $component, "^$path/[^/]+$");
+        }
+       
         if ($q) {
             // Path component already exists in database
             $path_already_exists = true;
@@ -422,21 +517,35 @@ function make_path($path, $path_components) {
             $path_already_exists = false;
             $path .= '/' . safe_filename();
             make_dir($basedir . $path);
-            $id = Database::get()->query("INSERT INTO document SET
-                      course_id = ?d,
-                      subsystem = ?d,
-                      subsystem_id = ?d,
-                      path = ?s,
-                      filename = ?s,
-                      visible = 1,
-                      creator = ?s,
-                      date = NOW(),
-                      date_modified = NOW(),
-                      format = '.dir'",
-                $course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
-            Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
-                'path' => $path,
-                'filename' => $component));
+            if(isset($mentoring_program_code)){
+                $id = Database::get()->query("INSERT INTO mentoring_document SET
+                mentoring_program_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                filename = ?s,
+                visible = 1,
+                creator = ?s,
+                date = NOW(),
+                date_modified = NOW(),
+                format = '.dir',
+                lock_user_id = ?d",$mentoring_program_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname), $uid)->lastInsertID;
+
+            }else{
+                $id = Database::get()->query("INSERT INTO document SET
+                course_id = ?d,
+                subsystem = ?d,
+                subsystem_id = ?d,
+                path = ?s,
+                filename = ?s,
+                visible = 1,
+                creator = ?s,
+                date = NOW(),
+                date_modified = NOW(),
+                format = '.dir'",$course_id, $subsystem, $subsystem_id, $path, $component, ($givenname . $surname))->lastInsertID;
+                Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,'path' => $path,'filename' => $component));
+            }
+            
         }
     }
     return $path;

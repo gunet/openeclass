@@ -5,7 +5,7 @@
 
         <div class='d-flex justify-content-start align-items-center h-100'>
 
-            <a class='ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
+            <a class='ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}?goToMentoring=false">
                 <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
             </a>
 
@@ -106,6 +106,15 @@
                                                 </li>
                                             @endif
 
+                                            @if(get_config('mentoring_platform'))
+                                            <li>
+                                                <a id="goToMentoring" class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php">
+                                                   <i class="fa-solid fa-wand-magic"></i>
+                                                   {{trans('langMentoringPlatform')}}
+                                                </a>
+                                            </li>
+                                            @endif
+
 
                                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                             <li>
@@ -115,6 +124,7 @@
                                                 </a>
                                             </li>
                                             @endif
+
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/portfolio.php">
                                                     <i class="fa-solid fa-house settings-icons"></i>
@@ -144,7 +154,7 @@
                                             </li>
                                             @if (get_config('eportfolio_enable'))
                                                 <li>
-                                                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
+                                                    <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}&fromMentoring=true">
                                                         <i class="fa-regular fa-address-card settings-icons"></i>
                                                         {{ trans('langMyePortfolio') }}   
                                                     </a>

@@ -123,7 +123,7 @@ function file_url_escape($name) {
 }
 
 function public_file_path($disk_path, $filename = null) {
-    global $group_sql;
+    global $group_sql,$mentoring_program_code;
     static $seen_paths;
     $dirpath = dirname($disk_path);
 
@@ -138,9 +138,15 @@ function public_file_path($disk_path, $filename = null) {
             foreach ($components as $c) {
                 $partial_path .= '/' . $c;
                 if (!isset($seen_paths[$partial_path])) {
-                    $name = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM document
-                                                                       WHERE $group_sql AND
-                                                                             path = ?s", $partial_path)->filename;
+                    if(isset($mentoring_program_code)){
+                        $name = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM mentoring_document
+                        WHERE $group_sql AND
+                                path = ?s", $partial_path)->filename;
+                    }else{
+                        $name = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM document
+                                                                        WHERE $group_sql AND
+                                                                                path = ?s", $partial_path)->filename;
+                    }
                     $dirname .= '/' . file_url_escape($name);
                     $seen_paths[$partial_path] = $dirname;
                 } else {
@@ -152,9 +158,15 @@ function public_file_path($disk_path, $filename = null) {
         }
     }
     if (!isset($filename)) {
-        $filename = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM document
-                                               WHERE $group_sql AND
-                                                     path = ?s", $disk_path)->filename;
+        if(isset($mentoring_program_code)){
+            $filename = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM mentoring_document
+            WHERE $group_sql AND
+                    path = ?s", $disk_path)->filename;
+        }else{
+            $filename = Database::get()->querySingle("SELECT TRIM(filename) AS filename FROM document
+                                                WHERE $group_sql AND
+                                                        path = ?s", $disk_path)->filename;
+        }
     }
     return $dirname . '/' . file_url_escape($filename);
 }

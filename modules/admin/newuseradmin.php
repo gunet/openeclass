@@ -35,8 +35,14 @@ $user = new User();
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-    $requiredFields = array('auth_form', 'surname_form',
+    if(!get_config('mentoring_always_active')){
+        $requiredFields = array('auth_form', 'surname_form',
         'givenname_form', 'language_form', 'department', 'pstatus');
+    }else{
+        $requiredFields = array('auth_form', 'surname_form',
+        'givenname_form', 'language_form', 'pstatus');
+    }
+    
     if (get_config('am_required') and @$_POST['pstatus'] == 5) {
         $requiredFields[] = 'am_form';
     }
@@ -312,13 +318,21 @@ if (isset($_GET['id'])) { // if we come from prof request
 } elseif (@$_GET['type'] == 'user') {
     $data['pstatus'] =  $pstatus = USER_STUDENT;
     $data['cpf_context'] =  array('origin' => 'student_register');
-    $pageName = $langUserDetails;
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $pageName = $langUserDetails;
+    }else{
+        $pageName = $langMenteeDetails;
+    }
     $title = $langInsertUserInfo;
     $data['params'] =  $params = "?type=user";
 } else {
     $data['pstatus'] =  $pstatus = USER_TEACHER;
     $data['cpf_context'] = array('origin' => 'teacher_register');
-    $pageName = $langProfReg;
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $pageName = $langProfReg;
+    }else{
+        $pageName = $langProfTutorMentorReg;
+    }
     $title = $langNewProf;
     $data['params'] =  $params = "?type=";
 }

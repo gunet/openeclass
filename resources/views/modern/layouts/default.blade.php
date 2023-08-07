@@ -48,6 +48,11 @@
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache"/>
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache"/>
 
+    @if((get_config('mentoring_platform') and $mentoring_platform) or (get_config('mentoring_always_active')))
+        <link rel='stylesheet' type='text/css' href="{{ $urlAppend }}template/modern/css/mentoringCss.css" />
+        <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/mentoringCss.css?donotcache">
+    @endif
+
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)
     <style>
@@ -121,16 +126,32 @@
 
 <body>
 
+
     <div class="ContentEclass d-flex flex-column min-vh-100">
+
         <!-- Desktop navbar -->
         <div class="d-none d-lg-block">
-            @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
+            @if(get_config('mentoring_platform') and $mentoring_platform and !get_config('mentoring_always_active'))
+                @include('modules.mentoring.layouts.navheadDesktopMentoring')
+            @elseif(get_config('mentoring_platform') and $mentoring_platform and get_config('mentoring_always_active'))
+                @include('modules.mentoring.layouts.navheadDesktopMentoring')
+            @else
+                @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
+            @endif
         </div>
 
         <!-- Mobile navbar -->
         <div class="d-block d-lg-none">
-            @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
-            @include('layouts.partials.off-canvas-mobile-header')
+            @if(get_config('mentoring_platform') and $mentoring_platform and !get_config('mentoring_always_active'))
+                @include('modules.mentoring.layouts.navheadMobileMentoring',['logo_img_small' => $logo_img_small])
+                @include('modules.mentoring.common.common_menu_list_mobile')
+            @elseif(get_config('mentoring_platform') and $mentoring_platform and get_config('mentoring_always_active'))
+                @include('modules.mentoring.layouts.navheadMobileMentoring',['logo_img_small' => $logo_img_small])
+                @include('modules.mentoring.common.common_menu_list_mobile')
+            @else
+                @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
+                @include('layouts.partials.off-canvas-mobile-header')
+            @endif
         </div>
 
         @yield('content')

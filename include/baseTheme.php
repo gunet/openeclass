@@ -37,12 +37,16 @@ if (isset($toolContent_ErrorExists)) {
     Session::flash('message',$toolContent_ErrorExists);
     Session::flash('alert-class', 'alert-warning');
     if (!$uid) {
-        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI'] ?? '');
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     } elseif ($_SESSION['status'] == USER_GUEST) {
         redirect_to_home_page();
     } else {
-        redirect_to_home_page("main/portfolio.php");
+        if(!isset($mentoring_platform) or !$mentoring_platform){
+            redirect_to_home_page("main/portfolio.php");
+        }else{
+            redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+        }
     }
     exit();
 }
@@ -61,7 +65,13 @@ function view($view_file, $view_data = array()) {
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
             $require_editor, $langHomePage,
-            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg;
+            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg,
+            $mentoring_program_code, 
+            $mentoring_program_id, $mentoring_platform , $is_editor_mentoring_program;
+
+    if(!isset($mentoring_platform) or !$mentoring_platform){
+        $mentoring_platform = $mentoring_program_code = $mentoring_program_id = $is_editor_mentoring_program = null;
+    }
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -83,9 +93,12 @@ function view($view_file, $view_data = array()) {
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
     $default_open_group = 0; // Open first tool group by default
-    foreach ($toolArr as $tool_group_id => $tool_group) {
-        if (in_array($current_module_dir, array_map('module_path', $tool_group[2]))) {
-            $default_open_group = $tool_group_id;
+
+    if(!isset($mentoring_platform) or !$mentoring_platform){
+        foreach ($toolArr as $tool_group_id => $tool_group) {
+            if (in_array($current_module_dir, array_map('module_path', $tool_group[2]))) {
+                $default_open_group = $tool_group_id;
+            }
         }
     }
 
@@ -815,7 +828,8 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin');
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin','mentoring_program_code',
+            'mentoring_program_id','mentoring_platform','is_editor_mentoring_program');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
@@ -865,7 +879,8 @@ function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null
         $switchLangURL, $theme, $themeimg, $is_course_admin,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $language, $saved_is_editor, $langProfileImage,
-        $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ;
+        $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ,
+        $mentoring_program_code, $mentoring_program_id, $mentoring_platform , $is_editor_mentoring_program;
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     if ($is_embedonce) {

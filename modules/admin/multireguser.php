@@ -134,13 +134,18 @@ if (isset($_POST['submit'])) {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
     });
-    $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
-                                    ACCESS_USERS => $langProfileInfoUsers);
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
+                                        ACCESS_USERS => $langProfileInfoUsers);
+    }else{
+        $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoTutors,
+                                        ACCESS_USERS => $langProfileInfoUsers);
+    }
     $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",
                     'icon' => 'fa-reply',
-                    'level' => 'primary')
+                    'level' => 'primary-label')
                 ), false);
 
     $data['eclass_method_unique'] = TRUE;

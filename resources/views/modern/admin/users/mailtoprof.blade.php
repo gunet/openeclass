@@ -87,10 +87,20 @@
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
                                         <label class='me-3' >
-                                            <input type='checkbox' name='send_to_prof' value='1'>{{ trans('langProfOnly') }}
+                                            <input type='checkbox' name='send_to_prof' value='1'>
+                                            @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                                {{ trans('langProfOnly') }}
+                                            @else
+                                                {{ trans('langProfTutorMentorOnly') }}
+                                            @endif
                                         </label>
                                         <label>
-                                            <input type='checkbox' name='send_to_users' value='1'>{{ trans('langStudentsOnly') }}
+                                            <input type='checkbox' name='send_to_users' value='1'>
+                                            @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                                {{ trans('langStudentsOnly') }}
+                                            @else
+                                                {{ trans('langMenteesOnly') }}
+                                            @endif
                                         </label>
                                     </div>
                                 </div>

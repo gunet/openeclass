@@ -26,6 +26,31 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'modules/admin/modalconfirmation.php';
 
+if(get_config('mentoring_always_active')){
+    if(isset($mentoring_program_code) and $mentoring_program_code){
+        unset($_SESSION['program_code']);
+        unset($_SESSION['program_id']);
+        unset($_SESSION['mentoring_group_id']);
+        unset($mentoring_program_code);
+        unset($mentoring_program_id);
+    }
+    if ($language != get_config('default_language') && isset($_SESSION['uid'])) {
+        $language = get_config('default_language');
+        // include_messages
+        include "lang/$language/common.inc.php";
+        $extra_messages = "config/{$language_codes[$language]}.inc.php";
+        if (file_exists($extra_messages)) {
+            include $extra_messages;
+        } else {
+            $extra_messages = false;
+        }
+        include "lang/$language/messages.inc.php";
+        if ($extra_messages) {
+            include $extra_messages;
+        }
+    }
+}
+
 $toolName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 

@@ -40,12 +40,20 @@ $columns = 'null, null, null, null, { orderable: false }';
 // Deal with navigation
 switch ($show) {
     case "closed":
-        $toolName = $langReqHaveClosed;
+        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+            $toolName = $langReqHaveClosed;
+        }else{
+            $toolName = $langReqHaveClosedTutorMentor;
+        }
         $pagination_link = '&amp;show=closed';
         $columns = 'null, null, null, null, null, { orderable: false }';
         break;
     case "rejected":
-        $toolName = $langReqHaveBlocked;
+        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+            $toolName = $langReqHaveBlocked;
+        }else{
+            $toolName = $langReqHaveClosedTutorMentor;
+        }
         $columns = 'null, null, null, null, null, { orderable: false }';
         break;
 }
@@ -84,16 +92,33 @@ $head_content .= "<script type='text/javascript'>
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
     $list_status = 5;
-    $toolName = $langUserOpenRequests;
+    
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $toolName = $langUserOpenRequests;
+    }else{
+        $toolName = $langUserOpenMenteeRequests;
+    }
     $data['reqtype'] = $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
-    $linkreg = $langUserDetails;
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $linkreg = $langUserDetails;
+    }else{
+        $linkreg = $langMenteeDetails;
+    }
     $linkget = '?type=user';
 } else {
     $list_status = 1;
-    $toolName = $langOpenProfessorRequests;
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $toolName = $langOpenProfessorRequests;
+    }else{
+        $toolName = $langOpenProfessorTutorMentorRequests;
+    }
     $data['reqtype'] = $reqtype = '';
-    $linkreg = $langProfReg;
+    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        $linkreg = $langProfReg;
+    }else{
+        $linkreg = $langProfTutorMentorReg;
+    }
     $linkget = '';
 }
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -144,7 +169,7 @@ if (!empty($show) and $show == 'closed') {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
         //Session::Messages($langReintroductionApplication, 'alert-success');
-        Session::flash('message',$langReintroductionApplication);
+        Session::flash('message',$langReintroductionApplication); 
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
@@ -167,10 +192,12 @@ if (!empty($show) and $show == 'closed') {
     if (!empty($id) && ($id > 0)) {
         // restore request
         Database::get()->query("UPDATE user_request set state = 1, date_closed = NULL WHERE id = ?d", $id);
-        Session::flash('message',$langReintroductionApplication);
+        //Session::Messages($langReintroductionApplication, 'alert-success');
+        Session::flash('message',$langReintroductionApplication); 
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/listreq.php');
     } else {
+
         $data['user_requests'] = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
@@ -190,11 +217,13 @@ if (!empty($show) and $show == 'closed') {
                                            date_closed = " . DBHelper::timeAfter() . "
                                        WHERE id = ?d", $id);
             if ($list_status == 1) {
-                Session::flash('message',$langProfessorRequestClosed);
+                //Session::Messages($langProfessorRequestClosed, 'alert-info');
+                Session::flash('message',$langProfessorRequestClosed); 
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/admin/listreq.php');
             } else {
-                Session::flash('message',$langRequestStudent);
+                //Session::Messages($langRequestStudent, 'alert-info');
+                Session::flash('message',$langRequestStudent); 
                 Session::flash('alert-class', 'alert-info');
                 redirect_to_home_page('modules/admin/listreq.php');
             }
@@ -250,7 +279,8 @@ if (!empty($show) and $show == 'closed') {
                         $message = $list_status == 1 ? $langTeacherRequestHasRejected : $langRequestReject;
                         $message .= " $langRequestMessageHasSent <b>" . q($_POST['prof_email']) . "</b>";
                         //$message .= "<p><b class='pe-3'>$langComments:</b>" . q($_POST['comment']) . "</p>";
-                        Session::flash('message',$message);
+                        //Session::Messages($message, 'alert-success');
+                        Session::flash('message',$message); 
                         Session::flash('alert-class', 'alert-success');
                         redirect_to_home_page('modules/admin/listreq.php');
 

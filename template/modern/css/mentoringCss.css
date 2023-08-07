@@ -1,0 +1,1390 @@
+/* -------------------------------------------- BASIC COLOR ----------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+
+.orangeText{ 
+    color: #ffa023; 
+  }
+  
+  .bluePalette1{
+    color: #be2f66;
+  }
+  
+  .bgBluePalette1{
+    background-color: #dee9ff;;
+  }
+  
+  .greyText { 
+    color: #f5f5f5; 
+  }
+  
+  .bgOrange {
+     background-color: #ffa023;
+  }
+  
+  .blackBlueText { 
+    color:#001146; 
+  }
+  
+  .bgBlackBlue { 
+    background-color: #001146;
+  }
+  
+  .normalBlueText { 
+    color: #003e85; 
+  }
+  
+  .bgNormalBlueText { 
+    background-color: #003e85; 
+  }
+  
+  .lightBlueText { 
+    color:#005ad7; 
+  }
+  
+  .bgLightBlue { 
+    background-color: #005ad7;
+  }
+  
+  .bgEclass { 
+    background-color: #e8e8e8;
+  }
+  
+  .lightColor{ 
+    background-color: #f5f5f5; 
+  }
+  
+  .greyColor { 
+    background-color: #D3D3D3;
+  }
+  
+  .textgreyColor { 
+    color: #bdbdbd;
+  }
+
+
+@media(max-width:991px){
+   .container-login {
+        padding-top: 56px;
+        min-height: calc(100vh - 56px - 340px + 56px);
+    } 
+}
+
+
+.ContentEclass{
+    padding: 0px;
+}
+
+.card-group .row{
+    min-width: 100% !important;
+}
+.card{
+    border: 1px solid #E8EDF8;
+}
+
+/* for footer */
+.site-footer, #bgr-cheat-footer{border-radius:0px;}
+
+/* for header mobile */
+.navbar-eclass-mentoring{ 
+    border-radius: 0px;
+    min-height: 56px; 
+    background-color: #ffffff;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+}
+
+a:hover{
+    text-decoration: none;
+ }
+
+.dataTables_scrollBody{
+    overflow:hidden !important;
+}
+@media(min-width:992px) and (max-width:1199px){
+    .colMentorsChoosing{
+        overflow: auto;
+    }
+}
+
+/* for action_bar */
+.btn-group .submitAdminBtn, .btn-group .cancelAdminBtn, .btn-group .deleteAdminBtn,
+.submitAdminBtn, .cancelAdminBtn, .deleteAdminBtn{
+    border-radius: 5px !important;
+}
+
+.table-default{
+    border-radius: 2px !important;
+}
+
+.panel-admin, .panel-default{
+    border-radius: 2px;
+}
+.panel-admin .panel-heading, .panel-default .panel-heading{
+    border-radius: 2px;
+}
+.panel-admin .panel-body, .panel-default .panel-body{
+    border-radius: 2px !important;
+}
+.panel-admin .panel-footer, .panel-default .panel-footer{
+    border-radius: 2px;
+}
+
+.currentProgramInfo .MentoringActionBar{
+    margin-bottom: 0px !important;
+}
+
+.fromMentoringEportofolio .action_bar .margin-top-thin{
+    margin: auto !important;
+    display: block !important;
+}
+
+@media(max-width:991px){
+  .cardImgHome{
+    height: 250px;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+      aspect-ratio: 16 / 9 !important;
+  }  
+}
+@media(min-width:992px){
+    .cardImgHome{
+      height: 300px;
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover;
+        aspect-ratio: 16 / 9 !important;
+    }  
+  }
+
+.ImgProgramMyProfile{
+    height:25px; width:25px;
+}
+
+@media(max-width:991px){
+.breadcrumb_mentoring{
+    overflow-x: hidden;
+    padding-top: 10px;
+}
+}
+
+.breadcrumb_mentoring .breadcrumb-item{
+    margin-bottom: 25px;
+    
+}
+.breadcrumb_mentoring .breadcrumb-item a{
+    background-color: transparent;
+    padding-top: 5px;
+    padding-bottom: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color:#003e87;
+    border: solid 2px #EFF6FF;
+}
+.breadcrumb_mentoring .breadcrumb-item a:hover{
+    background-color: #EFF6FF;
+    color:#003e87;
+}
+.breadcrumb_mentoring .breadcrumb-item::before{
+    margin-top:0px;
+}
+.breadcrumb_mentoring .breadcrumb-item.active{
+    font-weight: 600;
+    color:  #770087;
+}
+
+
+
+.mentors-pagination .page-item .page-link:focus, .mentors-pagination .page-item .page-link:active{
+    outline: none !important;
+   box-shadow: none;
+}
+
+
+/* prev button */
+.mentors-pagination .page-item-previous.disabled{
+    opacity: 0.3;
+}
+/* next button */
+.mentors-pagination .page-item-next.disabled{
+    opacity: 0.3;
+}
+
+.mentors-pagination .page-item{
+    padding: 5px;
+    background-color: #f3f3f3;
+}
+@media(max-width:991px){
+    .mentors-pagination .page-item{
+        padding: 0px;
+    }
+}
+.mentors-pagination .page-item .page-link{
+    border-radius: 30%;
+    color: #003e87;
+    font-weight: 400;
+    font-size: 12px;
+    border:none;
+}
+
+.mentors-pagination .page-item .page-link:hover{
+    background-color: #e8e8e8;
+}
+.mentors-pagination .page-item .page-link.active:hover{
+    background-color: #93b9e5;
+    color: #ffffff;
+}
+
+.mentors-pagination .page-item .fa::before{
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.mentors-pagination .page-item .page-link.active{
+    background-color: #003e87;
+    color: #ffffff;
+}
+
+.mentors-pagination .page-item-pages{
+    background-color: #ffffff;
+    box-shadow: slategrey;
+}
+.mentors-pagination .page-item-previous{
+    background-color: #ffffff;
+    border-top-left-radius:10px;
+    border-bottom-left-radius:10px;
+    border: none !important;
+}
+.mentors-pagination .page-item-next{
+    background-color: #ffffff;
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+}
+.mentors-pagination .page-item-next .page-link,.mentors-pagination .page-item-next .page-link:hover{
+    border: none;
+}
+.mentors-pagination .page-item-previous .page-link,.mentors-pagination .page-item-previous .page-link:hover{
+    border: none;
+}
+.mentors-pagination .page-item-next .page-link:hover,.mentors-pagination .page-item-previous .page-link:hover{
+    background-color: #e8e8e8 !important;
+}
+
+@media(max-width:425px){
+    .login-input-mentoring{
+        width:100%;
+    }
+}
+@media(min-width:426px) and (max-width:991px){
+    .login-input-mentoring{
+        width:70%;
+    }
+}
+
+@media(min-width:992px){
+    .login-input-mentoring{
+        width:60%;
+    }
+}
+
+
+.MentorCard:hover{
+    opacity: 0.7;
+}
+
+@media(max-width:991px){
+    .user-icon-filename{
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+    }
+}
+
+@media(max-width:767px){
+    .cancelRequestProgram{
+        margin: auto;
+        display: block;
+    }
+
+    .programTools{
+        width: 220px;
+    }
+    .programTools .dropdown-item{
+        white-space: pre-line;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+    }
+    .programTools .dropdown-item span{
+        margin-top: 2px;
+    }
+    
+    .MobileButton{
+        margin: auto;
+        display: block;
+    }
+
+}
+
+.cardImgProfile, .HeightImageCard, .cardImage, .ProfileProgramCard, .ProfileMeetingCard, .MentorImage, .MentorProgramCard, .requestCardImage{
+    /* width:256px;
+    height:256px;
+    aspect-ratio: 1 / 1;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    object-fit: cover;
+    filter: blur(0px); */
+
+    width: 150px;
+    height: 150px;
+    background-size: cover ;
+    background-repeat: no-repeat ;
+    background-position: center ;
+    margin: auto;
+    display: block;
+}
+
+.MentorImage, .ProfileProgramCard, .MentorProgramCard, .ProfileMeetingCard{
+    object-fit: cover;
+}
+
+@media(max-width:767px){
+    .ProfileProgramCard{
+        padding-top: 15px;
+    }
+}
+.requestCardImage{
+    padding-top: 15px;
+}
+
+.cardImages, .cardProfileProgram {
+    width: 100%;
+}
+
+.HeightImageCard{
+    height: 200px;
+    object-fit: cover;
+}
+
+
+.ImageTutorGroup{
+    margin-left: 0;
+    object-fit: cover;
+}
+@media(max-width:767px){
+    .ImageTutorGroup{
+       margin: auto;
+       display: block;
+    }
+}
+
+.CardProgramImg{
+    width: 100%;
+    height: auto;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+
+.viewProgram:hover, .btnMyPrograms:hover, .btnDisablePrograms:hover, .showMentorsBtnHome:hover, .showProgramsBtnHome:hover{
+    background-color: #003e87;
+    color: white;
+}
+
+.availableBtn{
+    background-color: #003e87;
+    color: white;
+}
+.availableBtn:hover{
+    opacity: 0.8;
+    color:white;
+}
+
+@media(min-width:768px) and (max-width:991px){
+    .hidden-md-mentoring{
+        display: none;
+    }
+}
+@media(min-width:992px){
+    .hidden-lg-mentoring{
+        display: none;
+    }
+}
+
+.languageMenuUser{
+    margin-top:-1px;
+}
+
+
+.panelHeadingWall{
+    background: linear-gradient(90deg, rgb(255, 235, 219) 0%, rgb(162, 162, 213) 35%, rgb(169, 195, 200) 100%) !important;
+}
+
+.pageWall{
+    background: linear-gradient(90deg, rgb(72, 107, 120) 0%, rgb(117, 117, 176) 35%, rgb(54, 117, 130) 100%);
+}
+
+.tools-menu-group{
+    list-style-type: none;
+}
+
+.tools-menu-group li a:hover{
+    color:#0d6efd;
+    font-weight: 700;
+}
+
+.btnSubmitWallPost{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 12.5rem;
+    margin: 0;
+    background-color: #2673ca;
+    border: none;
+    border-radius: 0.3125rem; 
+    color: #ffffff;
+}
+.btnSubmitWallPost:hover{
+    color: #ffffff;
+    background-color: #003e87;
+ }
+
+/*********************************** NEW CLASSES FOR MENTORING ************************************/
+@media(min-width:992px) and (max-width:1249px){
+    .hidden-lg{
+      display:none;
+    }
+}
+
+/*********************************** HEADER MENTORING ************************************/
+.navbarMentoring{
+    background-color: #ffffff;
+    height: 80px !important;
+    filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+}
+  
+.colMeetingInfoMentor,.pageCounter{
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgb(0, 53, 158) 100%);
+}
+/*********************************** HOMEPAGE MENTORING ************************************/
+
+@media(min-width:992px){
+   .MentoringHomePageContent{
+        margin-top:150px;
+    } 
+}
+@media(max-width:991px){
+    .MentoringHomePageContent{
+         margin-top:56px;
+     } 
+ }
+
+.jumbotronMentoring.jumbotron-login{ 
+    /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgb(0, 53, 158) 100%),
+    url(../images/books.jpeg); */
+    background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.73), rgba(0, 0, 0, 0.73)),
+    url(../images/statistics.jpg);
+    animation: animatedBackground 15s linear infinite alternate;
+    background-position: 0px 0px;
+    background-repeat: repeat-x;
+}
+
+.socialHomePage{
+    width:auto;
+    height:70px;
+    border-radius: 15%;
+}
+@media(min-width:992px){
+    .jumbotronMentoring.jumbotron-login { height:540px; padding-top: 140px; }
+}
+@media(min-width:992px) and (max-width:1203px){
+    .jumbotronMentoring.jumbotron-login { height:565px;}
+}
+@media(max-width:991px){
+    .jumbotronMentoring.jumbotron-login .container-fluid{
+        padding: 16px;
+    }
+}
+
+@keyframes animatedBackground {
+    from {
+      background-position: 0 0;
+    }
+    to {
+      background-position: 100% 0;
+    }
+}
+
+.Mentoring_SectionMenu{max-width:1200px;}
+@media(min-width:992px){
+    .Mentoring_SectionMenu{
+        min-height:calc(100vh - 540px - 188.5px);
+    }
+}
+@media(min-width:768px) and (max-width:991px){
+    .Mentoring_SectionMenu{
+        min-height:calc(100vh - 56px - 215px - 330px);
+    }
+}
+@media(max-width:767px){
+    .Mentoring_SectionMenu{
+        min-height:calc(100vh - 56px - 215px - 330px);
+    }
+}
+
+.ViewMentorBtn{
+    border-radius: 5px;
+    border: solid 1px #0d6efd;
+    background-color: #ffffff;
+    color: #003e87;
+}
+.ViewMentorBtn:hover{
+    background-color: #e8e8e8;
+}
+  
+
+@media(max-width:991px){
+    .panelSpecialization{
+        border: 0px !important;
+    }
+    .SidebarSpecializations{
+        display: none;
+    }
+    .RowMentors:has(.SidebarOn) .SidebarSpecializations{
+        display:block;
+        height: 100%;
+        width: 260px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        background-color: white;
+        overflow-x: hidden;
+        padding-top: 60px;
+        transition: 0.5s;
+    }
+    .RowMentor:not(:has(.SideBarOn)) .SidebarSpecializations{
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+
+
+    .SidebarToolsGroup{
+        display: none;
+    }
+    .SidebarToolsGroup.SidebarOn{
+        display:block;
+        height: 100%; 
+        width: 260px; 
+        position: fixed; 
+        z-index: 1; 
+        top: 0;
+        left: 0;
+        background-color: white; 
+        overflow-x: hidden; 
+        padding-top: 60px; 
+        transition: 0.5s; 
+    }
+    .SidebarToolsGroup.SideBarOn{
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+    .SidebarToolsGroup .panel-admin{
+        border: 0px !important;
+    }
+
+
+}
+@media(min-width:992px){
+    .SidebarSpecializations{
+        display: block;
+    }
+}
+
+
+/*********************************** OTHER MENTORING ************************************/
+.searchMentorsByKeys .form-control{
+    background-color: #ffffff;
+}
+.searchMentorsByKeys .form-control:focus,.searchMentorsByKeys .form-control:active{
+   outline: none !important;
+   box-shadow: none;
+   /* border: 1px solid #eaeaea !important; */
+}
+
+.specializationsAccordion .accordion-button{
+   background-color: #ffffff !important;
+   color: #003e85 !important;
+   font-weight: 700 !important;
+   font-size: 15px !important;
+}
+.specializationsAccordion .accordion-button.collapsed{
+    border-bottom: solid 1px #e6e6e6 !important;
+ }
+.specializationsAccordion .accordion-button:hover{
+    background-color: #eeeeee !important;
+}
+
+.specializationsAccordion .accordion-header,.specializationsAccordion .accordion-header:focus,.specializationsAccordion .accordion-header:active,
+.accordionHome .accordion-header,.accordionHome .accordion-header:focus,.accordionHome .accordion-header:active, .accordionHome .accordion-button{
+    box-shadow: none !important;
+    border: 0px !important;
+}
+.specializationsAccordion .collapse.show{
+    background-color: #fafafa;
+}
+
+.col_maincontent_active_mentoring .form-wrapper.form-edit.rounded{
+   padding: 25px !important;
+   border: solid 1px #e8e8e8 !important;
+}
+
+@media (max-width:991px){
+    .col_maincontent_active_mentoring{
+      margin-top: 56px !important;
+      min-height: calc(100vh - 56px - 54px);
+      border-radius:0px;
+    }
+}
+@media(min-width:992px){
+    .col_maincontent_active_mentoring{
+        margin-top: 75px;
+        min-height: calc(100vh - 75px - 188.56px);
+    }
+}
+
+.col_maincontent_active_mentoring{
+    background-color: #f3f3f3;
+    border-radius: 0px;
+}
+
+.col_maincontent_active_mentoring .row{
+    width: 100%;
+}
+
+@media(min-width:1400px){
+    .col_maincontent_active_mentoring .row{
+        max-width: 1365px;
+    }
+}
+    
+.mentoring_program_ul{
+    background: transparent;
+}
+
+.image_mentoring_program{
+    width:80%;
+    height:300px;
+    margin: auto;
+    display: block;
+}
+
+.badge-mentor{
+    background-color: #89dd89;
+}
+.bgDangerMentor{
+    background-color: #d06a6a;
+}
+
+.img-info-programs{
+    width:15px ;
+}
+
+.sendingRequestMentee:hover{
+    background-color: #001146;
+    color: #ffffff;
+}
+
+.mentoring_program_nav_item_nav_link.active{
+    border-bottom: solid 2px #0d6efd !important;
+    color:#ffffff !important;
+}
+
+.mentoring_program_nav_item_nav_linkProgram{
+    font-size: 15px;
+    color: slategrey !important;
+    font-weight: 600;
+}
+.mentoring_program_nav_item_nav_linkProgram.active{
+    background-color: transparent !important;
+    border-bottom: solid 3px #003e87;
+    color:#003e87 !important;
+    font-size: 15px;
+}
+
+.mentor_eportfolio .panel-default{
+    border-radius: 5px;
+}
+.mentor_eportfolio .panel-default .panel-heading{
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #ffffff;
+}
+
+.mentor_eportfolio .panel-default .panel-heading .panel-title{
+    color: #003e85;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.mentor_eportfolio .panel-default .panel-body{
+    border-radius: 4px !important;
+}
+
+.user_request_panel .panel-body{
+    height: 300px;
+    overflow-x: auto;
+    background-color: #e8e8e8;
+}
+.user_request .panel-default, .user_request .panel-default .panel-body{
+    border-radius: 5px;
+    background-color: #ffffff;
+}
+.user_request .panel-default .panel-heading{
+    background-color: transparent;
+    color: #001146;
+}
+.user_request .panel-default .panel-heading .panel-title{
+    color: #001146;
+}
+
+.group_panels_mentoring .panel-default{
+    min-height: 280px;
+
+}
+.group_panels_mentoring .panel-body{
+    height: 220px;
+    overflow-x: auto;
+}
+
+/* width */
+.group_panels_mentoring .panel-body::-webkit-scrollbar {
+    width: 10px; 
+  }
+  
+  /* Track */
+.group_panels_mentoring .panel-body::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+  }
+  
+  /* Handle */
+.group_panels_mentoring .panel-body::-webkit-scrollbar-thumb {
+    background: #e8e8e8;
+    border-radius: 10px;
+  }
+  
+  /* Handle on hover */
+.group_panels_mentoring .panel-body::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+.disable_rentezvous{
+    opacity:0.6;
+}
+
+@media (max-width:767px){
+    .hidden-xs-mentoring{
+        display: none;
+    }
+}
+
+@media(min-width:992px){
+    .cardBodyAllPrograms{
+        min-height:200px;
+    }
+}
+
+.mentoring_accordion_flush .accordion-item .accordion-button{
+    background-color: #e8e8e8 !important;
+}
+
+.MentoringHelp-text-panel-heading {
+    color: #003e87 !important; 
+    font-weight: 800; 
+    font-style: normal;
+}
+
+#table_history_rentezvous_length,#table_history_rentezvous_filter,
+#table_mentees_for_current_group_length,#table_mentees_for_current_group_filter,
+#table_all_available_programs_length,#table_all_available_programs_filter,
+#table_programs_of_mentors_length,#table_programs_of_mentors_filter,
+#table_forums_length,#table_forums_filter,#table_accepted_requests_length,#table_accepted_requests_filter,
+#table_no_accepted_requests_length,#table_no_accepted_requests_filter,#mentoring_log_results_table_length,
+#mentoring_log_results_table_filter,#table_programs_as_tutor_length,#table_programs_as_tutor_filter,
+#table_programs_as_mentor_length,#table_programs_as_mentor_filter,#table_programs_as_mentee_length,#table_programs_as_mentee_filter,
+#all_mentors_table_length,#all_mentors_table_filter,#MentorsTable_filter,#MentorsTable_length,
+#historyBookingTable_length,#historyBookingTable_filter,#table_announcements_length,#table_announcements_filter{
+    margin-bottom: 15px;
+}
+
+.mentoring-step-1{
+    height:50px; width:50px;
+}
+.mentoring-line{
+    height:1px; width:200px; background:black;
+}
+.mentoring-step-2{
+    height:50px; width:50px; border:solid 1px #003e85;
+}
+
+.popover{
+    border: solid 2px #e8e8e8;
+}
+
+.GroupsToolsMentoringDropdown{
+    width: 270px;
+}
+.GroupsToolsMentoringDropdown li .list-group-item:hover{
+    background-color: #0d6efd !important;
+    color: #ffffff;
+}
+.GroupsToolsMentoringDropdown li .list-group-item.deleteGroups:hover{
+    background-color: red !important;
+    color: #ffffff;
+}
+
+.solidPanel{
+    border:solid 1px #e8e8e8 !important;
+}
+
+.mentoring_logo_img{
+    height:120px; width:120px;
+}
+
+.mobileMenuUl .list-group-item:hover,.mobileMenuUl .list-group-item:focus,.mobileMenuUl .list-group-item:active{
+    background-color: #e8e8e8 !important;
+    color: #001146 !important;
+}
+.mobileMenuUl .active{
+    background-color: #0d6efd !important;
+}
+
+.search_clear_filter:hover{
+    background-color: #dfdfdf;
+}
+
+/* .alert-warning, .alert-info, .alert-danger, .alert-success{ margin-top:14px; }
+
+.alert-success { border: 1px solid #22B473; background-color: rgb(223,240,216); color: #22B473; border-radius: 5px; font-weight: 500; font-style: normal; }
+
+.alert-info { border: 1px solid #3D80D0; background-color: rgb(217,237,247); color: #3D80D0; border-radius: 5px; font-weight: 500; font-style: normal; }
+
+.alert-warning { border: 1px solid #FFA023; background-color: rgb(252,248,227); color: #FFA023; border-radius: 5px; font-weight: 500; font-style: normal; }
+
+.alert-danger { border: 1px solid rgb(244,17,14); background-color: rgb(242,222,222); color: rgb(244, 17, 14); border-radius: 5px; font-weight: 500; font-style: normal; } */
+
+/**************************************************** BOOKING CALENDAR *****************************************************************/
+
+@media(max-width:991px){
+    .calendarBookingsClass{
+        width:1000px !important;
+    }
+}
+
+.calendarBookingsClass table tr{
+    height: 50px !important;
+}
+
+.calendarBookingsClass table .fc-head tr{
+    height: 20px !important;
+}
+
+.calendarBookingsClass table tr .fc-day-header.fc-widget-header{
+    background-color: #e8e8e8 !important;
+}
+
+.calendarBookingsClass table tr .fc-time-grid-event.fc-v-event.fc-event.fc-start.fc-end.d-block.fc-draggable.fc-resizable{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    border: 2px solid white !important;
+}
+.calendarBookingsClass table tr .fc-time-grid-event.fc-v-event.fc-event.fc-start.fc-end.d-block.fc-draggable.fc-resizable:hover{
+    background-color: #001146 !important;
+}
+
+.calendarBookingsClass table tr .fc-time-grid-event.d-none{
+    display: none !important;
+}
+.calendarBookingsClass table tr .fc-time-grid-event.pe-none{
+    background-color: #198754 ;
+}
+
+.calendarBookingsClass table tr .fc-time-grid-event .fc-content .fc-time{
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color:#ffffff;
+    
+}
+
+.calendarBookingsClass .fc-title{
+    display: none;
+}
+.calendarBookingsClass .fc-time span{
+    padding: 0 1px;
+    white-space: normal;
+}
+
+/****************************************************** MEETINGS CALENDAR ***************************************************************/
+
+@media(max-width:991px){
+    .MeetingsCalendar{
+        width:1000px !important;
+    }
+}
+
+.MeetingsCalendar table tr{
+    /* height: 150px !important; */
+    height: 50px !important;
+}
+
+.MeetingsCalendar table .fc-head tr{
+    height: 20px !important;
+}
+
+.MeetingsCalendar table tr .fc-day-header.fc-widget-header{
+    background-color: #e8e8e8 !important;
+}
+
+.MeetingsCalendar table tr .fc-time-grid-event.d-block{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    z-index: 0 !important;
+
+}
+.MeetingsCalendar table tr .fc-time-grid-event.d-block:hover{
+    background-color: #001146 !important;
+}
+
+.MeetingsCalendar .fc-time-grid-event{
+    border: solid 2px white !important;
+}
+
+.MeetingsCalendar table tr .fc-time-grid-event.d-none{
+    display: none !important;
+}
+
+.MeetingsCalendar table tr .fc-time-grid-event .fc-content{
+    width: 100% !important;
+}
+
+.MeetingsCalendar table tr .fc-time-grid-event .fc-content .fc-time{
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color:#ffffff;
+}
+
+.MeetingsCalendar table tr .fc-time-grid-event .fc-content .fc-title{
+    display: none ;
+}
+
+
+
+.ourMentorsCard:hover{
+    box-shadow: 10px 10px 8px #888888;
+}
+
+
+.MeetingsCalendar .fc-time-grid-event .fc-content {
+    overflow: hidden !important;
+    max-height: 100% !important;
+}
+
+.MeetingsCalendar .fc-time span{
+    padding: 0 1px;
+    white-space: normal;
+}
+
+/****************************************************** BOOKING MENTEE CALENDAR ***************************************************************/
+
+@media(max-width:991px){
+    .bookingCalendarMentee{
+        width:1000px !important;
+    }
+}
+
+.bookingCalendarMentee table tbody tr{
+    height: 70px;
+}
+
+.bookingCalendarMentee table .fc-head tr{
+    height: 20px;
+}
+
+.bookingCalendarMentee table tr .fc-day-header.fc-widget-header{
+    background-color: #e8e8e8;
+}
+
+.bookingCalendarMentee table tr .fc-time-grid-event, .bookingCalendarMentee table tr .fc-time-grid-event.d-block{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    border: solid 2px #ffffff !important;
+}
+.bookingCalendarMentee table tr .fc-time-grid-event:hover, .bookingCalendarMentee table tr .fc-time-grid-event.d-block:hover{
+    background-color: #001146 !important;
+}
+
+.bookingCalendarMentee .bookingAdd, .bookingCalendarMentee .bookingDelete{
+    border: solid 2px #ffffff !important;
+    cursor: pointer;
+}
+
+.bookingCalendarMentee table tr .fc-time-grid-event.d-none{
+    display: none !important;
+}
+
+.bookingCalendarMentee table tr .fc-time-grid-event .fc-content{
+    width: 100%;
+}
+
+.bookingCalendarMentee table tr .fc-time-grid-event .fc-content .fc-time{
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color:#ffffff;
+    margin-top: 5px ;
+}
+
+.smallText{
+    font-size: 12px;
+}
+
+
+
+/********************************************* DATES MENTOR CALENDAR VIEW **********************************************/
+
+.calendarViewDatesTutorGroup .fc-header-toolbar {
+    margin-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-right, .calendarViewDatesTutorGroup .fc-header-toolbar .fc-left .fc-today-button{
+    display: none;
+}
+
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-left .fc-button-group .fc-prev-button, .calendarViewDatesTutorGroup .fc-header-toolbar .fc-left .fc-button-group .fc-next-button{
+    width:30px;
+    height: 30px;
+    background: #2673ca !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.calendarViewDatesTutorGroup .fc-icon.fc-icon-right-single-arrow, .calendarViewDatesTutorGroup .fc-icon.fc-icon-left-single-arrow{
+    font-size: 10px;
+    color: #ffffff;
+    padding: 0;
+}
+
+.calendarViewDatesTutorGroup .fc-left{
+    float: right !important;
+}
+
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-center{
+    float: left !important;
+}
+.calendarViewDatesTutorGroup .fc-header-toolbar .fc-center h2{
+    font-size: 15px;
+    color: #001146;
+    font-weight: 700;
+    margin-top: 5px;
+    margin-bottom: auto;
+    text-transform: uppercase;
+}
+
+.calendarViewDatesTutorGroup .fc-day-header.fc-widget-header{
+    background-color: #ffffff;
+}
+.calendarViewDatesTutorGroup .fc-day-header.fc-widget-header span{
+    font-size: 15px;
+    color: #001146;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+
+
+.calendarViewDatesTutorGroup .fc-day-number{
+    float: none;
+    font-size: 14px;
+    color: #003e87;
+    font-weight: 700;
+}
+
+.calendarViewDatesTutorGroup .fc-row.fc-widget-header{
+    background-color: #f8f9fa !important;
+ 
+}
+
+
+/* width */
+.calendarViewDatesTutorGroup .fc-scroller.fc-time-grid-container::-webkit-scrollbar {
+    width: 10px !important;
+}
+
+/* Track */
+.calendarViewDatesTutorGroup .fc-scroller.fc-time-grid-container::-webkit-scrollbar-track {
+    background: #ffffff !important;
+}
+
+/* Handle */
+.calendarViewDatesTutorGroup .fc-scroller.fc-time-grid-container::-webkit-scrollbar-thumb {
+    background: #e8e8e8 !important;
+}
+
+/* Handle on hover */
+.calendarViewDatesTutorGroup .fc-scroller.fc-time-grid-container::-webkit-scrollbar-thumb:hover {
+    background: #003e87 !important;
+}
+
+
+
+.calendarViewDatesTutorGroup td.fc-event-container .fc-day-grid-event.fc-h-event.fc-event.fc-start.fc-end{
+    border: 0px !important;
+    background-color: transparent !important;
+    display: flex ;
+    justify-content: center ;
+    align-items: center ;
+    margin-bottom: 5px;
+}
+
+.calendarViewDatesTutorGroup .fc-widget-content .fc-day{
+    background-color: transparent !important;
+}
+
+
+/********************************************* MENTORING MODALS **********************************************/
+
+.modal-open{
+    padding: 0px !important;
+}
+
+.modal-dialog .modal-content{
+    padding: 0px !important;
+}
+
+.modal-primary .modal-header{
+   background-color: #0d6efd;
+   
+}
+.modal-primary .modal-header .modal-title{
+    color:white !important;
+}
+.modal-primary .modal-header .btn-close{
+    background-color:white !important;
+}
+.btn-primary{
+    background: #0d6efd !important;
+}
+
+
+.modal-danger .modal-header{
+    background-color: #dc3545;
+}
+.modal-danger .modal-header .modal-title{
+    color:white !important;
+}
+.modal-danger .modal-header .btn-close{
+     background-color:white !important;
+}
+.btn-danger{
+    background: #dc3545 !important;
+}
+
+
+.modal-warning .modal-header{
+    background-color: #fd7e14;
+}
+.modal-warning .modal-header .modal-title{
+    color:white !important;
+}
+.modal-warning .modal-header .btn-close{
+     background-color:white !important;
+}
+/* .btn-warning{
+    background: #fd7e14 !important;
+} */
+
+
+.modal-success .modal-header{
+    background-color: #198754;
+}
+.modal-success .modal-header .modal-title{
+    color:white !important;
+}
+.modal-success .modal-header .btn-close{
+     background-color:white !important;
+}
+.btn-success{
+    background: #198754 !important;
+}
+
+
+
+
+
+
+.backButtonMentoring{
+    border: solid 2px #EFF6FF;
+}
+.backButtonMentoring span{
+    font-size: 14px;
+    color: #003e87;
+}
+
+.backButtonMentoring:hover{
+   background-color: #003e87;
+}
+.backButtonMentoring:hover span{
+    color: #ffffff;
+ }
+
+ .viewProgramWidth{
+    width: 200px;
+    background-color:#2673ca;
+    color: #ffffff;
+ }
+ .viewProgramWidth:hover{
+    color: #ffffff;
+    background-color: #003e87;
+ }
+
+ .viewOptionToolBtn{
+    width: auto;
+    background-color:#2673ca;
+    color: #ffffff;
+ }
+ .viewOptionToolBtn:hover{
+    color: #ffffff;
+    background-color: #003e87;
+ }
+
+ .GroupSelectTitle{
+    color:#94ccf4;
+ }
+
+ .ContentSpaceGroup{
+    background-repeat: no-repeat; background-size: cover;
+    background-image: url(../img/backgroundMentoring2.jpg);
+    width: 100%;
+    object-fit:cover;
+    filter: grayscale(100%);
+    aspect-ratio: 16 / 9; 
+    max-height: 300px;
+ }
+
+.tagClick{
+    margin-top: 1px !important;
+}
+
+.insideHomeImage{
+    object-fit:cover; filter: grayscale(100%);
+}
+
+.AnnounceLine{
+    background: #0d6efd;
+    height:auto; width:1px; transform: rotate(90);
+}
+
+.announcements-card-body, .announcement-card-footer{
+    /* background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgb(24, 24, 78) 35%, rgb(0, 53, 158) 100%); */
+    background-color: #ffffff;
+}
+.announcements-card-body{
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+.announcement-card-footer{
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.announcement-image2{
+  height:160px;
+  width: 160px;
+}
+
+@media(max-width:991px){
+    .announcement-image2{
+        height:40px;
+        width: 40px;
+      }
+}
+
+.announcement-date-home{
+    min-width: 50px;
+}
+
+
+.table-default tbody tr{
+    background-color: white;
+}
+
+.table-default tbody .list-header{
+    background-color: #003e85;
+}
+
+#mentoring_ann_table_admin_logout tbody tr{
+    background-color: white;
+}
+
+#goToLoginForm{
+    margin-top: 1px;
+}
+@media(max-width:991px){
+    #goToLoginForm{
+        margin-top: -1px;
+    }
+    .user-language-menu{
+        margin-right: 0px !important;
+    }
+}
+@media(min-width:992px){
+    .user-language-menu{
+        margin-top: 15px !important;
+    }
+}
+@media(max-width:767px){
+    .DoBookingMentee{
+        margin: auto;
+        display: block;
+    }
+}
+/* text-editor fullscreen shows up from fixed-top header */
+.mce-fullscreen{
+    z-index: 1031 !important;
+}
+
+.profileAbout{
+    background-color: #e8e8e8 !important;
+}
+
+.showAnn:hover, .all_announcements:hover{
+    color:#0769fc ;
+}

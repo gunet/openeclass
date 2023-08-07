@@ -137,7 +137,15 @@ if (!$upgrade_begin and $uid) {
         }
     }
     // if user is not guest redirect him to portfolio
-    header("Location: {$urlServer}main/portfolio.php");
+    if(get_config('mentoring_platform')){
+        if(isset($mentoring_platform) and $mentoring_platform){
+            header("Location: {$urlServer}modules/mentoring/mentoring_platform_home.php");
+        }else{
+            header("Location: {$urlServer}main/portfolio.php");
+        }
+    }else{
+        header("Location: {$urlServer}main/portfolio.php");
+    }
 } else {
     // check authentication methods
     $hybridLinkId = null;
@@ -230,14 +238,27 @@ if (!$upgrade_begin and $uid) {
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
                                                 
 
-    $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
+    if(isset($mentoring_platform) and $mentoring_platform){
+
+        $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `mentoring_admin_announcement`
+        WHERE `visible` = 1
+                AND lang=?s
+                AND (`begin` <= NOW() or `begin` IS null)
+                AND (NOW() <= `end` or `end` IS null)
+        ORDER BY `order` DESC", $language);
+
+        $data['texts'] = Database::get()->queryArray("SELECT * FROM `mentoring_homepageTexts` WHERE `lang` = ?s ORDER BY `order` ASC",$language);
+    }else{
+
+        $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
                                                 WHERE `visible` = 1
                                                         AND lang=?s
                                                         AND (`begin` <= NOW() or `begin` IS null)
                                                         AND (NOW() <= `end` or `end` IS null)
                                                 ORDER BY `order` DESC", $language);
 
-    $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s ORDER BY `order` ASC",$language);
+        $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s ORDER BY `order` ASC",$language);
+    }
 
     $data['dateFormatLong'] = $dateFormatLong;
 
@@ -268,5 +289,9 @@ if (!$upgrade_begin and $uid) {
 
     $data['menuTypeID'] = 0;
 
-    view('home.index', $data);
+    if(!isset($mentoring_platform) or !$mentoring_platform){
+        view('home.index', $data);
+    }else{
+        view('modules.mentoring.home.homepage', $data);
+    }
 }

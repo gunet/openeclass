@@ -394,6 +394,7 @@
 
 
 
+                                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                                 <div class='form-group mt-4'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
                                                     <div class='col-sm-12'>
@@ -418,6 +419,7 @@
                                                         ) !!}
                                                     </div>
                                                 </div>
+                                                @endif
                                             </fieldset>
                                         </div>
                                     </div>
@@ -459,7 +461,7 @@
 
 
 
-
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                     <div class='panel panel-admin mt-4' id='four'>
                                        
                                         <div class='panel-heading'>
@@ -593,6 +595,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
+                                    @endif
 
 
                                     @if(!$install)
@@ -698,6 +701,7 @@
                                     </div>
                                     @endif
 
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                     <div class='panel panel-admin mt-4' id='six'>
                                         <div class='panel-heading'>
                                            
@@ -748,8 +752,10 @@
                                             </fieldset>
                                         </div>
                                     </div>
+                                    @endif
 
 
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                     <div class='panel panel-admin mt-4' id='seven'>
 
                                         <div class='panel-heading'>
@@ -784,6 +790,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
+                                    @endif
 
 
 
@@ -821,6 +828,7 @@
                                                                 {{ trans('lang_am_required') }}
                                                             </label>
                                                         </div>
+                                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                                         <div class='checkbox'>
                                                             <label>
                                                                 <input id='index_enable' type='checkbox' name='enable_indexing' value='1' {{ $cbox_enable_indexing }}>
@@ -869,6 +877,7 @@
                                                                 {{ trans('lang_personal_blog_sharing') }}
                                                             </label>
                                                         </div>
+                                                        @endif
                                                         <div class='checkbox'>
                                                             <label>
                                                                 <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
@@ -1063,6 +1072,7 @@
                                     </div>
 
 
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                     <div class='panel panel-admin mt-4' id='twelve'>
 
                                         <div class='panel-heading'>
@@ -1114,6 +1124,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
+                                    @endif
 
 
                                     <div class='panel panel-admin mt-4' id='thirteen'>
@@ -1239,15 +1250,23 @@
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#two">{{ trans('langUpgReg') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#three">{{ trans('langEclassThemes') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#four">{{ trans('langHomePageSettings') }}</a>
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                        <a class="nav-link nav-link-adminTools normalColorBlueText" href="#four">{{ trans('langHomePageSettings') }}</a>
+                                    @endif
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#five">{{ trans('langEmailSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#six">{{ trans('langCourseSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#seven">{{ trans('langMetaCommentary') }}</a>
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                        <a class="nav-link nav-link-adminTools normalColorBlueText" href="#six">{{ trans('langCourseSettings') }}</a>
+                                    @endif
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                        <a class="nav-link nav-link-adminTools normalColorBlueText" href="#seven">{{ trans('langMetaCommentary') }}</a>
+                                    @endif
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eight">{{ trans('langOtherOptions') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#nine">{{ trans('langDocumentSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#ten">{{ trans('langDefaultQuota') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
+                                    @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                        <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
+                                    @endif
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#fourteen">{{ trans('langPrivacyPolicy') }}</a>
                                 </nav>

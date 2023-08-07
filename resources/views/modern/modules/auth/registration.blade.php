@@ -56,10 +56,23 @@
                         <div class='col-lg-6 col-12'>
                             <ul class="nav nav-tabs" id="myRegistration">
                                 <li class="nav-item">
-                                    <button class="nav-link active" id="reg-student" data-bs-toggle="tab" data-bs-target="#regStudent" type="button" role="tab" aria-controls="regStudent" aria-selected="true" aria-current="page">{{ trans('langOfStudent') }}</button>
+                                    <button class="nav-link active" id="reg-student" data-bs-toggle="tab" data-bs-target="#regStudent" type="button" role="tab" aria-controls="regStudent" aria-selected="true" aria-current="page">
+                                        
+                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                            {{ trans('langOfStudent') }}
+                                        @else
+                                            {{ trans('langMentee') }}
+                                        @endif
+                                    </button>
                                 </li>
                                 <li class="nav-item">
-                                    <button class="nav-link" id="reg-teacher" data-bs-toggle="tab" data-bs-target="#regTeacher" type="button" role="tab" aria-controls="regTeacher" aria-selected="true" aria-current="page">{{ trans('langOfTeacher') }}</button>
+                                    <button class="nav-link" id="reg-teacher" data-bs-toggle="tab" data-bs-target="#regTeacher" type="button" role="tab" aria-controls="regTeacher" aria-selected="true" aria-current="page">
+                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                            {{ trans('langOfTeacher') }}
+                                        @else
+                                            {{ trans('langSuchAsTutorMentor') }}
+                                        @endif
+                                    </button>
                                 </li>
                             </ul>
 

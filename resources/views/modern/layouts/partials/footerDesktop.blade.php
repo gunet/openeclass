@@ -20,3 +20,11 @@
         </div>
     </div>
 </footer>
+
+@if(isset($mentoring_platform) and $mentoring_platform)
+<script>
+    $('.a_tools_site_footer, .copyright').on('click',function(){
+        localStorage.removeItem("MenuMentoring");
+    });
+</script>
+@endif

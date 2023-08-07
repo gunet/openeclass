@@ -218,7 +218,7 @@ if (isset($_POST['install4'])) {
         Debug::setLevel(Debug::ALWAYS);
         Database::core();
         if (!check_engine()) {
-            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInnoDBMissing</span></div>";
+          $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langInnoDBMissing</span></div>";
             unset($_POST['install4']);
             $_POST['install3'] = true;
         } else {
@@ -226,18 +226,18 @@ if (isset($_POST['install4'])) {
             try {
                 Database::get();
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" .
-                    sprintf($langDatabaseExists, '<b>' . q($dbNameForm) . '</b>') .
-                    "</span></div>";
+                sprintf($langDatabaseExists, '<b>' . q($dbNameForm) . '</b>') .
+                "</span></div>";
             } catch (Exception $e) {
                 // no problem, database doesn't exist
             }
         }
     } catch (Exception $e) {
-        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span><p>" .
-            $langErrorConnectDatabase . '</p><p><i>' .
-            q($e->getMessage()) . "</i></p><p>$langCheckDatabaseSettings</p></span></div>";
-        unset($_POST['install4']);
-        $_POST['install3'] = true;
+          $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span><p>" .
+          $langErrorConnectDatabase . '</p><p><i>' .
+          q($e->getMessage()) . "</i></p><p>$langCheckDatabaseSettings</p></span></div>";
+      unset($_POST['install4']);
+      $_POST['install3'] = true;
     }
 }
 
@@ -248,7 +248,7 @@ if (isset($_POST['install2'])) {
     $_SESSION['step'] = 2;
     $gpl_link = '../info/license/gpl_print.txt';
     $tool_content .= "
-       <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoLicence</span></div>
+    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoLicence</span></div>
        <form class='form-horizontal form-wrapper shadow-lg p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group step2-form'>
@@ -261,10 +261,10 @@ if (isset($_POST['install2'])) {
               <div class='col-12'>
                 <div class='row'>
                   <div class='col-lg-6 col-12'>
-                    <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100' name='install1' value='&laquo; $langPreviousStep'>
+                    <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install1' value='&laquo; $langPreviousStep'>
                   </div>
                   <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                    <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='install3' value='$langAccept'>
+                    <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install3' value='$langAccept'>
                   </div>
                 </div>
               </div>
@@ -280,7 +280,7 @@ elseif (isset($_POST['install3'])) {
     $langStep = sprintf($langStep1, 3, 7);
     $_SESSION['step'] = 3;
     $tool_content .= "
-       <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWillWrite $langDBSettingIntro</span></div>
+    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWillWrite $langDBSettingIntro</span></div>
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
@@ -319,10 +319,10 @@ elseif (isset($_POST['install3'])) {
              <div class='col-12'>
               <div class='row'>
                   <div class='col-lg-6 col-12'>
-                    <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100' name='install2' value='&laquo; $langPreviousStep'>
+                    <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install2' value='&laquo; $langPreviousStep'>
                   </div>
                   <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                    <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='install4' value='$langNextStep &raquo;'>
+                    <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install4' value='$langNextStep &raquo;'>
                   </div>
                 </div>
             </div>
@@ -373,10 +373,10 @@ elseif (isset($_POST['install4'])) {
             <div class='col-12'>
               <div class='row'>
                   <div class='col-lg-6 col-12'>
-                     <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100' name='install3' value='&laquo; $langPreviousStep'>
+                     <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install3' value='&laquo; $langPreviousStep'>
                   </div>
                   <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                     <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='install5' id='install5' value='$langNextStep &raquo;'>
+                     <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install5' id='install5' value='$langNextStep &raquo;'>
                   </div>
               </div>
             </div>
@@ -410,10 +410,10 @@ elseif (isset($_POST['install5'])) {
              <div class='col-12'>
                <div class='row'>
                 <div class='col-lg-6 col-12'>
-                  <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100' name='install4' value='&laquo; $langPreviousStep'>
+                  <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install4' value='&laquo; $langPreviousStep'>
                 </div>
                 <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                  <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='install6' value='$langNextStep &raquo;'>
+                  <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install6' value='$langNextStep &raquo;'>
                 </div>
               </div>
              </div>
@@ -463,7 +463,7 @@ elseif (isset($_POST['install6'])) {
     </script>
     ";
     $tool_content .= "
-       <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langReviewSettings</span></div>
+    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langReviewSettings</span></div>
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>" .
            display_entry(q($dbHostForm), $langdbhost) .
@@ -487,10 +487,10 @@ elseif (isset($_POST['install6'])) {
              <div class='col-12'>
               <div class='row'>
                 <div class='col-lg-5 col-12'>
-                  <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100' name='install5' value='&laquo; $langPreviousStep'>
+                  <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install5' value='&laquo; $langPreviousStep'>
                 </div>
                 <div class='col-lg-7 col-12 mt-lg-0 mt-3'>
-                 <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='install7' id='install7' value='$langInstall &raquo;'>
+                 <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install7' id='install7' value='$langInstall &raquo;'>
                 </div>
               </div>
              </div>
@@ -554,7 +554,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         <br />
         <div>$langProtect</div>
         <br /><br />
-        <form action='../'><input class='btn btn-sm btn-primary submitAdminBtn w-100' type='submit' value='$langEnterFirstTime' /></form>";
+        <form action='../'><input class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' type='submit' value='$langEnterFirstTime' /></form>";
     }
     $_SESSION['langswitch'] = $lang;
     draw($tool_content);
@@ -594,11 +594,15 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/eportfolio/work_submissions/index.php');
     mkdir_try('courses/eportfolio/mydocs');
     touch_try('courses/eportfolio/mydocs/index.php');
-    mkdir_try('storage');
-    mkdir_try('storage/views');
+    mkdir_try('mentoring_programs');
+    mkdir_try('mentoring_programs/commondocs');
+    mkdir_try('mentoring_programs/mydocs');
+    mkdir_try('mentoring_programs/temp');
+    // mkdir_try('storage');
+    // mkdir_try('storage/views');
     if ($configErrorExists) {
-        $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . implode('', $errorContent) . "</span></div>" .
-            "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</span></div>";
+      $tool_content .= "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>" . implode('', $errorContent) . "</span></div>" .
+      "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langWarnInstallNotice1 <a href='$install_info_file'>$langHere</a> $langWarnInstallNotice2</span></div>";
         draw($tool_content);
         exit();
     }
@@ -683,7 +687,7 @@ elseif (isset($_POST['install1'])) {
               </div>
               <div class='form-group mt-5'>
                 <div class='col-12'>
-                  <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-50' name='install1' value='$langNextStep &raquo;'>
+                  <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-50 text-white' name='install1' value='$langNextStep &raquo;'>
                   <input type='hidden' name='welcomeScreen' value='true'>
                 </div>
               </div>

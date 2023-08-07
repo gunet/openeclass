@@ -98,32 +98,43 @@
                                                 {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'") !!}
                                             </div>
                                         </div>
+                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='am' value='{{ $info->am }}'>
                                             </div>
                                         </div>
+                                        @endif
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langTel') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='phone' value='{{ $info->phone }}'>
                                             </div>
                                         </div>
+                                        @if(!get_config('mentoring_always_active'))
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $html !!}
                                             </div>
                                         </div>
+                                        @else
+                                            <input type='hidden' name='department[]'>
+                                        @endif
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>
                                             <div class='col-sm-12'>
-                                                @if ($info->status == USER_GUEST)
-                                                    {!! selection(array(USER_GUEST => trans('langGuest')), 'newstatus', intval($info->status), "class='form-control'") !!}
+                                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                                    @if ($info->status == USER_GUEST)
+                                                        {!! selection(array(USER_GUEST => trans('langGuest')), 'newstatus', intval($info->status), "class='form-control'") !!}
+                                                    @else
+                                                        {!! selection(array(USER_TEACHER => trans('langTeacher'),
+                                                            USER_STUDENT => trans('langStudent')), 'newstatus', intval($info->status), "class='form-control'") !!}
+                                                    @endif
                                                 @else
-                                                    {!! selection(array(USER_TEACHER => trans('langTeacher'),
-                                                        USER_STUDENT => trans('langStudent')), 'newstatus', intval($info->status), "class='form-control'") !!}
+                                                    {!! selection(array(USER_TEACHER => trans('langTutorMentor'),
+                                                            USER_STUDENT => trans('langMentee')), 'newstatus', intval($info->status), "class='form-control'") !!}
                                                 @endif
                                             </div>
                                         </div>
@@ -149,12 +160,14 @@
                                                 <p class='form-control-static'>{{ $u }}</p>
                                             </div>
                                         </div>
+                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langUserWhitelist') }}</label>
                                             <div class='col-sm-12'>
                                                 <textarea class='w-100' rows='6' name='user_upload_whitelist'>{{ $info->whitelist }}</textarea>
                                             </div>
                                         </div>
+                                        @endif
                                         @if ($ext_uid)
                                             <div class='form-group mt-4'>
                                                 <label class='col-sm-12 control-label-notes'>{{trans('langProviderConnectWith')}}</label>
@@ -194,61 +207,63 @@
                         </div>
 
                         <!--user is registered to courses-->
-                        @if (count($sql) > 0)
-                            <div class='col-12 mt-3'>
-                                <div class='shadow-sm p-3 rounded'>
-                                    <h6 class='text-center text-uppercase lightBlueText fw-bold w-auto p-2 bg-light'>{{ trans('langStudentParticipation') }}</h6>
-                                    <div class='table-responsive'>
-                                        <table class='table-default'>
-                                            <tr class='list-header'>
-                                                <th>{{ trans('langCode') }}</th>
-                                                <th>{{ trans('langLessonName') }}</th>
-                                                <th>{{ trans('langCourseRegistrationDate') }}</th>
-                                                <th>{{ trans('langProperty') }}</th>
-                                                <th>{{ trans('langActions') }}</th>
-                                            </tr>
-                                            @foreach ($sql as $logs)
-                                                @if ($logs->visible == COURSE_INACTIVE)
-                                                    <tr class='not_visible'>
-                                                @else
-                                                    <tr>
-                                                @endif
-                                                        <td>
-                                                            <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
-                                                        </td>
-                                                        <td>{{ $logs->title }}</td>
-                                                        <td class='text-center'>
-                                                            @if (!$logs->reg_date)
-                                                                {{ trans('langUnknownDate') }}
-                                                            @else
-                                                                {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }}
-                                                            @endif
-                                                        </td>
-                                                        @if ($logs->status == USER_TEACHER)
-                                                            <td class='text-center'>
-                                                                {{ trans('langTeacher') }}
+                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                            @if (count($sql) > 0)
+                                <div class='col-12 mt-3'>
+                                    <div class='shadow-sm p-3 rounded'>
+                                        <h6 class='text-center text-uppercase lightBlueText fw-bold w-auto p-2 bg-light'>{{ trans('langStudentParticipation') }}</h6>
+                                        <div class='table-responsive'>
+                                            <table class='table-default'>
+                                                <tr class='list-header'>
+                                                    <th>{{ trans('langCode') }}</th>
+                                                    <th>{{ trans('langLessonName') }}</th>
+                                                    <th>{{ trans('langCourseRegistrationDate') }}</th>
+                                                    <th>{{ trans('langProperty') }}</th>
+                                                    <th>{{ trans('langActions') }}</th>
+                                                </tr>
+                                                @foreach ($sql as $logs)
+                                                    @if ($logs->visible == COURSE_INACTIVE)
+                                                        <tr class='not_visible'>
+                                                    @else
+                                                        <tr>
+                                                    @endif
+                                                            <td>
+                                                                <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
                                                             </td>
-                                                            <td class='text-center'>---</td>
-                                                        @else
+                                                            <td>{{ $logs->title }}</td>
                                                             <td class='text-center'>
-                                                                @if ($logs->status == USER_STUDENT)
-                                                                    {{ trans('langStudent') }}
+                                                                @if (!$logs->reg_date)
+                                                                    {{ trans('langUnknownDate') }}
                                                                 @else
-                                                                    {{ trans('langVisitor') }}
+                                                                    {{ format_locale_date(strtotime($logs->reg_date), 'short', false) }}
                                                                 @endif
                                                             </td>
-                                                            <td class='text-center'>
-                                                                {!! icon('fa-xmark text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
-                                                            </td>
-                                                        @endif
-                                                    </tr>
-                                            @endforeach
-                                        </table>
+                                                            @if ($logs->status == USER_TEACHER)
+                                                                <td class='text-center'>
+                                                                    {{ trans('langTeacher') }}
+                                                                </td>
+                                                                <td class='text-center'>---</td>
+                                                            @else
+                                                                <td class='text-center'>
+                                                                    @if ($logs->status == USER_STUDENT)
+                                                                        {{ trans('langStudent') }}
+                                                                    @else
+                                                                        {{ trans('langVisitor') }}
+                                                                    @endif
+                                                                </td>
+                                                                <td class='text-center'>
+                                                                    {!! icon('fa-xmark text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
+                                                                </td>
+                                                            @endif
+                                                        </tr>
+                                                @endforeach
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @else
-                        <div class='col-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
+                            @else
+                            <div class='col-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
+                            @endif
                         @endif
 
                 

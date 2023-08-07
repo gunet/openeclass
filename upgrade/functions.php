@@ -2691,6 +2691,558 @@ function upgrade_to_4_0($tbl_options): void {
     if (!DBHelper::fieldExists('api_token', 'expired')) {
         Database::get()->query("ALTER TABLE `api_token` ADD `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
     }
+
+
+
+
+     //mentoring
+     if (!DBHelper::tableExists('mentoring_programs')) {
+        Database::get()->query("CREATE TABLE `mentoring_programs` (
+            `id` INT(11) NOT NULL auto_increment,
+            `code` VARCHAR(20) NOT NULL,
+            `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
+            `title` VARCHAR(255) NOT NULL DEFAULT '',
+            `public_code` VARCHAR(255) NOT NULL DEFAULT '',
+            `keywords` TEXT NOT NULL,
+            `visible` TINYINT(4) NOT NULL,
+            `tutor` VARCHAR(255) NOT NULL DEFAULT '',
+            `created` DATETIME NOT NULL,
+            `doc_quota` FLOAT NOT NULL default '104857600',
+            `video_quota` FLOAT NOT NULL default '104857600',
+            `group_quota` FLOAT NOT NULL default '104857600',
+            `dropbox_quota` FLOAT NOT NULL default '104857600',
+            `start_date` DATETIME DEFAULT NULL,
+            `finish_date` DATETIME DEFAULT NULL,
+            `description` MEDIUMTEXT DEFAULT NULL,
+            `program_image` VARCHAR(400) NULL,
+            PRIMARY KEY (`id`),
+            INDEX `mentoring_programs_index` (`code`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_programs','other_groups_reg')) {
+        Database::get()->query("ALTER table mentoring_programs ADD `other_groups_reg` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_programs','allow_unreg_mentee')) {
+        Database::get()->query("ALTER table mentoring_programs ADD `allow_unreg_mentee` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::tableExists('mentoring_programs_user')) {
+        Database::get()->query("CREATE TABLE `mentoring_programs_user` (
+        `mentoring_program_id` INT(11) NOT NULL auto_increment,
+        `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+        `status` TINYINT(4) NOT NULL DEFAULT 0,
+        `tutor` INT(11) NOT NULL DEFAULT 0,
+        `mentor` INT(11) NOT NULL DEFAULT 0,
+        `reg_date` DATETIME NOT NULL,
+        PRIMARY KEY (`mentoring_program_id`, `user_id`),
+        INDEX `mpu_index` (`user_id`, `status`)) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('mentoring_programs_user','is_guided')) {
+        Database::get()->query("ALTER table mentoring_programs_user ADD `is_guided` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::tableExists('mentoring_rentezvous')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_rentezvous` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `mentoring_program_id` INT(11) NOT NULL,
+            `mentor_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `start` DATETIME NOT NULL,
+            `end` DATETIME NOT NULL,
+            PRIMARY KEY(id),
+            FOREIGN KEY (mentoring_program_id) REFERENCES mentoring_programs(id) ON DELETE CASCADE,
+            FOREIGN KEY (mentor_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_rentezvous','group_id')) {
+        Database::get()->query("ALTER table mentoring_rentezvous ADD `group_id` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_rentezvous','type_tc')) {
+        Database::get()->query("ALTER table mentoring_rentezvous ADD `type_tc` VARCHAR(255) DEFAULT NULL");
+    }
+    if (!DBHelper::fieldExists('mentoring_rentezvous','api_url')) {
+        Database::get()->query("ALTER table mentoring_rentezvous ADD `api_url` VARCHAR(255) DEFAULT NULL");
+    }
+    if (!DBHelper::fieldExists('mentoring_rentezvous','meeting_id')) {
+        Database::get()->query("ALTER table mentoring_rentezvous ADD `meeting_id` VARCHAR(42) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL");
+    }
+    if (!DBHelper::fieldExists('mentoring_rentezvous','passcode')) {
+        Database::get()->query("ALTER table mentoring_rentezvous ADD `passcode` VARCHAR(255) DEFAULT NULL");
+    }
+    
+    if (!DBHelper::tableExists('mentoring_rentezvous_user')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_rentezvous_user` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `mentoring_rentezvous_id` INT(11) NOT NULL,
+            `mentee_id` INT(11) NOT NULL,
+            PRIMARY KEY(id),
+            FOREIGN KEY (mentoring_rentezvous_id) REFERENCES mentoring_rentezvous(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_programs_requests')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_programs_requests` (
+            `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `mentoring_program_id` INT(11) NOT NULL,
+            `guided_id` INT(11) NOT NULL DEFAULT 0,
+            `status_request` INT(11) DEFAULT NULL,
+            FOREIGN KEY (`mentoring_program_id`) REFERENCES mentoring_programs(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring forum
+    if (!DBHelper::tableExists('mentoring_forum')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_forum` (
+                `id` INT(10) NOT NULL AUTO_INCREMENT,
+                `name` VARCHAR(255) DEFAULT '' NOT NULL,
+                `desc` MEDIUMTEXT NOT NULL,
+                `num_topics` INT(10) DEFAULT 0 NOT NULL,
+                `num_posts` INT(10) DEFAULT 0 NOT NULL,
+                `last_post_id` INT(10) DEFAULT 0 NOT NULL,
+                `cat_id` INT(10) DEFAULT 0 NOT NULL,
+                `mentoring_program_id` INT(11) NOT NULL,
+                PRIMARY KEY (`id`)) $tbl_options");
+    }
+    
+    if (!DBHelper::tableExists('mentoring_forum_category')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_forum_category` (
+            `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `cat_title` VARCHAR(255) DEFAULT '' NOT NULL,
+            `cat_order` INT(11) DEFAULT 0 NOT NULL,
+            `mentoring_program_id` INT(11) NOT NULL,
+            KEY `mentoring_forum_category_index` (`id`, `mentoring_program_id`)) $tbl_options");
+    }
+    
+    if (!DBHelper::tableExists('mentoring_forum_notify')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_forum_notify` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` INT(11) DEFAULT 0 NOT NULL,
+            `cat_id` INT(11) DEFAULT 0 NOT NULL ,
+            `forum_id` INT(11) DEFAULT 0 NOT NULL,
+            `topic_id` INT(11) DEFAULT 0 NOT NULL ,
+            `notify_sent` BOOL DEFAULT 0 NOT NULL ,
+            `mentoring_program_id` INT(11) DEFAULT 0 NOT NULL) $tbl_options");
+    }
+    
+    if (!DBHelper::tableExists('mentoring_forum_post')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_forum_post` (
+            `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `topic_id` INT(10) NOT NULL DEFAULT 0,
+            `post_text` MEDIUMTEXT NOT NULL,
+            `poster_id` INT(10) NOT NULL DEFAULT 0,
+            `post_time` DATETIME,
+            `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
+            `parent_post_id` INT(10) NOT NULL DEFAULT 0,
+            `topic_filepath` varchar(200) DEFAULT NULL,
+            `topic_filename` varchar(200) DEFAULT NULL) $tbl_options");
+    }
+    
+    if (!DBHelper::tableExists('mentoring_forum_topic')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_forum_topic` (
+            `id` INT(10) NOT NULL auto_increment,
+            `title` VARCHAR(255) DEFAULT NULL,
+            `poster_id` INT(10) DEFAULT NULL,
+            `topic_time` DATETIME,
+            `num_views` INT(10) NOT NULL DEFAULT 0,
+            `num_replies` INT(10) NOT NULL DEFAULT 0,
+            `last_post_id` INT(10) NOT NULL DEFAULT 0,
+            `forum_id` INT(10) NOT NULL DEFAULT 0,
+            `locked` TINYINT DEFAULT 0 NOT NULL,
+            PRIMARY KEY  (`id`)) $tbl_options");
+    }
+   
+    if (!DBHelper::tableExists('mentoring_forum_user_stats')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_forum_user_stats` (
+            `user_id` INT(11) NOT NULL,
+            `num_posts` INT(11) NOT NULL,
+            `mentoring_program_id` INT(11) NOT NULL,
+            PRIMARY KEY (`user_id`,`mentoring_program_id`)) $tbl_options");
+    }
+   
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // group mentoring
+
+    if (!DBHelper::tableExists('mentoring_group_properties')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_group_properties` (
+            `mentoring_program_id` INT(11) NOT NULL,
+            `group_id` INT(11) NOT NULL PRIMARY KEY,
+            `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
+            `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
+            `forum` TINYINT(4) NOT NULL DEFAULT 1,
+            `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
+            `documents` TINYINT(4) NOT NULL DEFAULT 1,
+            `wiki` TINYINT(4) NOT NULL DEFAULT 0,
+            `agenda` TINYINT(4) NOT NULL DEFAULT 0) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_group_properties','self_request')) {
+        Database::get()->query("ALTER table mentoring_group_properties ADD `self_request` TINYINT(4) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_group_properties','announcements')) {
+        Database::get()->query("ALTER table mentoring_group_properties ADD `announcements` TINYINT(4) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_group_properties','wall')) {
+        Database::get()->query("ALTER table mentoring_group_properties ADD `wall` TINYINT(4) NOT NULL DEFAULT 0");
+    }
+
+
+    if (!DBHelper::tableExists('mentoring_group')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_group` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `mentoring_program_id` INT(11) NOT NULL DEFAULT 0,
+            `name` varchar(255) NOT NULL DEFAULT '',
+            `description` TEXT,
+            `forum_id` int(11) NULL,
+            `category_id` int(11) NULL,
+            `max_members` int(11) NOT NULL DEFAULT 0,
+            `secret_directory` varchar(100) NOT NULL DEFAULT 0,
+            `visible` TINYINT(4) NOT NULL DEFAULT 1) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_group','allow_manage_doc')) {
+        Database::get()->query("ALTER table mentoring_group ADD `allow_manage_doc` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_group','common')) {
+        Database::get()->query("ALTER table mentoring_group ADD `common` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::tableExists('mentoring_group_members')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_group_members` (
+            `group_id` int(11) NOT NULL,
+            `user_id` int(11) NOT NULL,
+            `is_tutor` int(11) NOT NULL DEFAULT 0,
+            `description` TEXT,
+            PRIMARY KEY (`group_id`, `user_id`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_group_members','status_request')) {
+        Database::get()->query("ALTER table mentoring_group_members ADD `status_request` INT(11) DEFAULT NULL");
+    }
+
+    if (!DBHelper::tableExists('mentoring_group_category')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_group_category` (
+            `id` INT(6) NOT NULL AUTO_INCREMENT,
+            `mentoring_program_id` INT(11) NOT NULL,
+            `name` VARCHAR(255) NOT NULL,
+            `description` TEXT,
+            PRIMARY KEY (`id`, `mentoring_program_id`)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_programs_old_session')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_programs_old_session` (
+            `id` INT(6) NOT NULL AUTO_INCREMENT,
+            `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+            `mentoring_program_code` VARCHAR(20) NOT NULL,
+            `reg_date` DATETIME NOT NULL,
+            PRIMARY KEY (`id`, `user_id`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_programs_old_session','forum_id')) {
+        Database::get()->query("ALTER table mentoring_programs_old_session ADD `forum_id` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_programs_old_session','group_id')) {
+        Database::get()->query("ALTER table mentoring_programs_old_session ADD `group_id` INT(11) NOT NULL DEFAULT 0");
+    }
+    if (!DBHelper::fieldExists('mentoring_programs_old_session','topic_id')) {
+        Database::get()->query("ALTER table mentoring_programs_old_session ADD `topic_id` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring documents
+    
+    if (!DBHelper::tableExists('mentoring_document')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_document` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `mentoring_program_id` INT(11) NOT NULL DEFAULT 0,
+            `subsystem` TINYINT(4) NOT NULL,
+            `subsystem_id` INT(11) DEFAULT NULL,
+            `path` VARCHAR(255) NOT NULL,
+            `extra_path` VARCHAR(255) NOT NULL DEFAULT '',
+            `filename` VARCHAR(255) NOT NULL COLLATE utf8mb4_bin,
+            `visible` TINYINT(4) NOT NULL DEFAULT 1,
+            `public` TINYINT(4) NOT NULL DEFAULT 1,
+            `comment` TEXT,
+            `category` TINYINT(4) NOT NULL DEFAULT 0,
+            `title` TEXT,
+            `creator` TEXT,
+            `date` DATETIME NOT NULL,
+            `date_modified` DATETIME NOT NULL,
+            `subject` TEXT,
+            `description` TEXT,
+            `author` VARCHAR(255) NOT NULL DEFAULT '',
+            `format` VARCHAR(32) NOT NULL DEFAULT '',
+            `language` VARCHAR(16) NOT NULL DEFAULT 'el',
+            `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
+            `editable` TINYINT(4) NOT NULL DEFAULT 0,
+            `lock_user_id` INT(11) NOT NULL DEFAULT 0) $tbl_options");
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring logs
+
+    if (!DBHelper::tableExists('mentoring_log')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_log` (
+            `id` int(11) NOT NULL auto_increment,
+            `user_id` int(11) NOT NULL default 0,
+            `mentoring_program_id` int(11) NOT NULL default 0,
+            `module_id` int(11) NOT NULL default 0,
+            `details` text NOT NULL,
+            `action_type` int(11) NOT NULL default 0,
+            `ts` datetime NOT NULL,
+            `ip` varchar(45) NOT NULL default 0,
+            PRIMARY KEY  (`id`)) $tbl_options");
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring mentor availability
+
+    if (!DBHelper::tableExists('mentoring_mentor_availability')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_mentor_availability` (
+            `id` int(11) NOT NULL auto_increment,
+            `user_id` int(11) NOT NULL default 0,
+            `start` DATETIME DEFAULT NULL,
+            `end` DATETIME DEFAULT NULL,
+            PRIMARY KEY  (`id`)) $tbl_options");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring mentor availability
+
+    if (!DBHelper::tableExists('mentoring_mentor_availability_group')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_mentor_availability_group` (
+            `id` int(11) NOT NULL auto_increment,
+            `user_id` int(11) NOT NULL default 0,
+            `group_id` int(11) NOT NULL default 0,
+            `start` DATETIME DEFAULT NULL,
+            `end` DATETIME DEFAULT NULL,
+            PRIMARY KEY  (`id`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_mentor_availability_group','mentoring_program_id')) {
+        Database::get()->query("ALTER table mentoring_mentor_availability_group ADD `mentoring_program_id` int(11) NOT NULL DEFAULT 0");
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring Tags tables
+    if (!DBHelper::tableExists('mentoring_mentor_tag')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_mentor_tag` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` int(11) NOT NULL,
+            `date` DATETIME DEFAULT NULL,
+            `tag_id` int(11) NOT NULL) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_tag')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS mentoring_tag (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            UNIQUE KEY (name)) $tbl_options");
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring skills tables
+
+    if (!DBHelper::tableExists('mentoring_specializations')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS mentoring_specializations (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            UNIQUE KEY (name)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_specializations_translations')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS mentoring_specializations_translations (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `specialization_id` int(11) NOT NULL,
+            `name` VARCHAR(255) NOT NULL,
+            `lang` VARCHAR(16) NOT NULL,
+            FOREIGN KEY (`specialization_id`) REFERENCES mentoring_specializations(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    
+    if (!DBHelper::tableExists('mentoring_skills')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_skills` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            UNIQUE KEY (name)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_skills_translations')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS mentoring_skills_translations (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `skill_id` int(11) NOT NULL,
+            `name` VARCHAR(255) NOT NULL,
+            `lang` VARCHAR(16) NOT NULL,
+            FOREIGN KEY (`skill_id`) REFERENCES mentoring_skills(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_specializations_skills')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_specializations_skills` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `skill_id` int(11) NOT NULL,
+            `specialization_id` int(11) NOT NULL,
+            FOREIGN KEY (`skill_id`) REFERENCES mentoring_skills(id) ON DELETE CASCADE,
+            FOREIGN KEY (`specialization_id`) REFERENCES mentoring_specializations(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+
+    if (!DBHelper::tableExists('mentoring_keywords')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_keywords` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            `specialization_id` int(11) NOT NULL,
+            `skill_id` int(11) NOT NULL,
+            FOREIGN KEY (skill_id) REFERENCES mentoring_skills(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_mentor_skills')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_mentor_skills` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `specialization_id` int(11) NOT NULL,
+            `skill_id` int(11) NOT NULL,
+            `user_id` int(11) NOT NULL,
+            FOREIGN KEY (`specialization_id`) REFERENCES mentoring_specializations(id) ON DELETE CASCADE,
+            FOREIGN KEY (`skill_id`) REFERENCES mentoring_skills(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring booking by mentee
+
+    if (!DBHelper::tableExists('mentoring_booking')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_booking` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `mentoring_program_id` INT(11) NOT NULL,
+            `group_id` INT(11) NOT NULL DEFAULT 0,
+            `mentor_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL,
+            `start` DATETIME NOT NULL,
+            `end` DATETIME NOT NULL,
+            PRIMARY KEY(id),
+            FOREIGN KEY (mentoring_program_id) REFERENCES mentoring_programs(id) ON DELETE CASCADE,
+            FOREIGN KEY (mentor_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::fieldExists('mentoring_booking','accepted')) {
+        Database::get()->query("ALTER table mentoring_booking ADD `accepted` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    
+    if (!DBHelper::tableExists('mentoring_booking_user')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_booking_user` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `mentoring_booking_id` INT(11) NOT NULL,
+            `mentee_id` INT(11) NOT NULL,
+            PRIMARY KEY(id),
+            FOREIGN KEY (mentoring_booking_id) REFERENCES mentoring_booking(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring wall
+    if (!DBHelper::tableExists('mentoring_wall_post')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_wall_post` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `mentoring_program_id` INT(11) NOT NULL,
+            `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+            `content` TEXT DEFAULT NULL,
+            `extvideo` VARCHAR(255) DEFAULT '',
+            `timestamp` INT(11) NOT NULL DEFAULT 0,
+            `pinned` TINYINT(1) NOT NULL DEFAULT 0,
+            INDEX `mentoring_wall_post_index` (`mentoring_program_id`)) $tbl_options");
+    }
+    if (!DBHelper::fieldExists('mentoring_wall_post','group_id')) {
+        Database::get()->query("ALTER table mentoring_wall_post ADD `group_id` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    if (!DBHelper::tableExists('mentoring_wall_post_resources')) {
+        Database::get()->query("CREATE TABLE `mentoring_wall_post_resources` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `post_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL DEFAULT '',
+            `res_id` INT(11) NOT NULL,
+            `type` VARCHAR(255) NOT NULL DEFAULT '',
+            INDEX `mentoring_wall_post_resources_index` (`post_id`)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('mentoring_comments')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_comments` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `rid` INT(11) NOT NULL,
+            `rtype` VARCHAR(50) NOT NULL,
+            `content` TEXT NOT NULL,
+            `time` DATETIME NOT NULL,
+            `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0) $tbl_options");
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring announcements
+    if (!DBHelper::tableExists('mentoring_announcement')) {
+        Database::get()->query("CREATE TABLE `mentoring_announcement` (
+            `id` INT(11) NOT NULL auto_increment,
+            `title` VARCHAR(255) NOT NULL DEFAULT '',
+            `content` TEXT,
+            `date` DATETIME NOT NULL,
+            `mentoring_program_id` INT(11) NOT NULL DEFAULT 0,
+            `group_id` INT(11) NOT NULL DEFAULT 0,
+            `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
+            `visible` TINYINT(4) NOT NULL DEFAULT 0,
+            `start_display` DATETIME DEFAULT NULL,
+            `stop_display` DATETIME DEFAULT NULL,
+            PRIMARY KEY (id)) $tbl_options");
+    }
+    if (!DBHelper::tableExists('mentoring_announcement_user')) {
+        Database::get()->query("CREATE TABLE `mentoring_announcement_user` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT,
+            `announcement_id` INT(11) NOT NULL,
+            `toUser` INT(11) NOT NULL DEFAULT 0,
+            PRIMARY KEY(id),
+            FOREIGN KEY (announcement_id) REFERENCES mentoring_announcement(id) ON DELETE CASCADE) $tbl_options");
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // mentoring homepage texts
+    if (!DBHelper::tableExists('mentoring_homepageTexts')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `mentoring_homepageTexts` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
+            `title` text NULL,
+            `body` text NULL,
+            `order` int(11) NOT NULL,
+            PRIMARY KEY (`id`)) $tbl_options");
+    }
+
+    // admin announcements
+    if (!DBHelper::tableExists('mentoring_admin_announcement')) {
+        Database::get()->query("CREATE TABLE `mentoring_admin_announcement` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `title` VARCHAR(255) NOT NULL,
+            `body` TEXT,
+            `date` DATETIME NOT NULL,
+            `begin` DATETIME DEFAULT NULL,
+            `end` DATETIME DEFAULT NULL,
+            `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
+            `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
+            `visible` TINYINT(4)) $tbl_options");
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    if (!DBHelper::fieldExists('user','is_mentor')) {
+        Database::get()->query("ALTER table user ADD `is_mentor` INT(11) NOT NULL DEFAULT 0");
+    }
+
+    $enable_mentoring_platform = get_config('mentoring_platform');
+    if (!$enable_mentoring_platform) {
+        set_config('mentoring_platform', 0);
+    }
+
+    $always_mentoring_platform_active = get_config('mentoring_always_active');
+    if(!$always_mentoring_platform_active){
+        set_config('mentoring_always_active', 0);
+    }
+
+    $creation_mentoring_tables = get_config('creation_mentoring_tables');
+    if (!$creation_mentoring_tables) {
+        set_config('creation_mentoring_tables', 1);
+    }
+
+    $tutor_mentor_as_mentee = get_config('mentoring_tutor_as_mentee');
+    if(!$tutor_mentor_as_mentee){
+        set_config('mentoring_tutor_as_mentee', 0);
+    }
+
+
+
+
+
+
+
 }
 
 

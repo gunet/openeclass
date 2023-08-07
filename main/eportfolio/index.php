@@ -28,6 +28,39 @@ require_once 'include/lib/forcedownload.php';
 require_once 'main/eportfolio/eportfolio_functions.php';
 require_once 'modules/sharing/sharing.php';
 
+//////////////////////////////////////////////////////////////////////////
+if(isset($_GET['fromMentoring']) and $_GET['fromMentoring'] == 'true'){
+    if(get_config('mentoring_always_active') ){
+        if ($language != get_config('default_language')) {
+            $language = get_config('default_language');
+            // include_messages
+            include "lang/$language/common.inc.php";
+            $extra_messages = "config/{$language_codes[$language]}.inc.php";
+            if (file_exists($extra_messages)) {
+                include $extra_messages;
+            } else {
+                $extra_messages = false;
+            }
+            include "lang/$language/messages.inc.php";
+            if ($extra_messages) {
+                include $extra_messages;
+            }
+        }
+    }
+    if(isset($mentoring_platform) and $mentoring_platform){
+        unset($_SESSION['program_code']);
+        unset($_SESSION['program_id']);
+        unset($_SESSION['mentoring_group_id']);
+        unset($mentoring_program_code);
+        unset($mentoring_program_id);
+        unset($is_editor_mentoring_program);
+    }else{
+        redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+    }
+}    
+//////////////////////////////////////////////////////////////////////////
+
+
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
     if ($session->status == 0) {
@@ -111,29 +144,32 @@ if ($userdata) {
                               </script>";
         }
 
-        $tool_content .= action_bar(array(
-                                        array('title' => $langBio,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
-                                            'icon' => 'fa-download',
-                                            'level' => 'primary-label',
-                                            'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
-                                        array('title' => $langResume,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                                            'level' => 'primary-label',
-                                            'button-class' => 'btn-primary'),
-                                        array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
-                                              'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
-                                              'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
-                                        array('title' => $langResourcesCollection,
-                                            'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
-                                            'level' => 'primary-label'),
-                                        array('title' => $langEditResume,
-                                            'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
-                                            'icon' => 'fa-edit'),
-                                        array('title' => $langUploadBio,
-                                            'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
-                                            'icon' => 'fa-upload')
-                                    ));    
+        $tool_content .= "<div class='fromMentoringEportofolio'>";
+            $tool_content .= action_bar(array(
+                                            array('title' => $langBio,
+                                                'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
+                                                'icon' => 'fa-download',
+                                                'level' => 'primary-label',
+                                                'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
+                                            array('title' => $langResume,
+                                                'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                                                'level' => 'primary-label',
+                                                'button-class' => 'btn-primary'),
+                                            array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
+                                                'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
+                                                'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
+                                            array('title' => $langResourcesCollection,
+                                                'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                                                'show' => (!get_config('mentoring_always_active')),
+                                                'level' => 'primary-label'),
+                                            array('title' => $langEditResume,
+                                                'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
+                                                'icon' => 'fa-edit'),
+                                            array('title' => $langUploadBio,
+                                                'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
+                                                'icon' => 'fa-upload')
+                                        ));    
+        $tool_content .= "</div>";
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
@@ -166,6 +202,7 @@ if ($userdata) {
             send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
         }
     }
+    
 
     $head_content .= "<script type='text/javascript'>
     $(document).ready(function() {
@@ -193,6 +230,8 @@ if ($userdata) {
         });
     });
     </script>";
+    
+
     
     $ret_str = render_eportfolio_fields_content($id);
 

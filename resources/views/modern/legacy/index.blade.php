@@ -22,7 +22,9 @@
                 <div class="row">
                 
                     @if(isset($_SESSION['uid']))
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                        @if(!$mentoring_platform)
+                             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                        @endif
                     @endif
 
                     @if($course_code and $currentCourseName)

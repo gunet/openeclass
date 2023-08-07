@@ -155,7 +155,7 @@
                             </div>
                             @if ($pstatus == 5)
                                 <!--only for students-->
-                       
+                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                 <div class="form-group{{ Session::hasError('am_form') ? ' has-error' : '' }} mt-4">
                                     <label for="am_form" class="col-sm-12 control-label-notes">{{ trans('langAm') }}</label>
                                     <div class="col-sm-12">
@@ -164,7 +164,8 @@
                                         <span class="help-block Accent-200-cl">{{ Session::getError('am_form') }}</span>
                                         @endif
                                     </div>                
-                                </div>                
+                                </div>   
+                                @endif             
                             @endif
                             @if (get_config('block_duration_account'))
                             

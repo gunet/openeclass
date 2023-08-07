@@ -241,7 +241,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $qry_base .= ' AND ' . $qry_criteria;
         }
         $qry = "SELECT DISTINCT user.id, user.surname, user.givenname, user.username, user.email,
-                           user.verified_mail, course_user.status " . $qry_base;
+                           user.verified_mail, user.is_mentor , course_user.status " . $qry_base;
         add_param('c');
         array_unshift($terms, $c);
     } elseif ($search == 'no_login') { // users who have never logged in
@@ -250,7 +250,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
         }
-        $qry = "SELECT DISTINCT id, surname, givenname, username, email, verified_mail, status " .
+        $qry = "SELECT DISTINCT id, surname, givenname, username, email, verified_mail,is_mentor, status " .
                 $qry_base;
         add_param('search', 'no_login');
     } else {
@@ -258,7 +258,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($qry_criteria) {
             $qry_base .= ' WHERE ' . $qry_criteria;
         }
-        $qry = 'SELECT DISTINCT user.id, surname, givenname, username, email, status, verified_mail' .
+        $qry = 'SELECT DISTINCT user.id, surname, givenname, username, email, status, verified_mail, is_mentor' .
                 $qry_base;
     }
     $terms_base[] = $terms;
@@ -300,8 +300,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                                                                 OR email LIKE ?s)", $keywords)->total;
     }
 
-
-
     $data['iTotalRecords'] = $all_results;
     $data['iTotalDisplayRecords'] = $filtered_results;
     $data['aaData'] = array();
@@ -330,15 +328,41 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
         switch ($myrow->status) {
             case USER_TEACHER:
-                $icon = 'fa-university';
+                if(get_config('mentoring_platform')){
+                    if($myrow->is_mentor == 1){
+                        $icon = 'fa-magic';
+                    }else{
+                        $icon = 'fa-university';
+                    }
+                }else{
+                    $icon = 'fa-university';
+                }
+                   
                 $tip = $langTeacher;
                 break;
             case USER_STUDENT:
-                $icon = 'fa-graduation-cap';
+                if(get_config('mentoring_platform')){
+                    if($myrow->is_mentor == 1){
+                        $icon = 'fa-magic';
+                    }else{
+                        $icon = 'fa-graduation-cap';
+                    }
+                }else{
+                    $icon = 'fa-graduation-cap';
+                }
+                
                 $tip = $langStudent;
                 break;
             case USER_GUEST:
-                $icon = 'fa-male';
+                if(get_config('mentoring_platform')){
+                    if($myrow->is_mentor == 1){
+                        $icon = 'fa-magic';
+                    }else{
+                        $icon = 'fa-male';
+                    }
+                }else{
+                    $icon = 'fa-male';
+                }
                 $tip = $langVisitor;
                 break;
             default:
@@ -352,14 +376,37 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         } else {
             $iuid = getIndirectReference($myrow->id);
             $changetip = q("$langChangeUserAs $myrow->username");
-            $profileUrl = $urlAppend .
-                "main/profile/display_profile.php?id=$myrow->id&amp;token=" .
-                token_generate($myrow->id, true);
+            if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+                $profileUrl = $urlAppend .
+                    "main/profile/display_profile.php?id=$myrow->id&amp;token=" .
+                    token_generate($myrow->id, true);
+            }else{
+                $profileUrl = $urlAppend ."modules/mentoring/profile/user_profile.php?user_id=".getInDirectReference($myrow->id);
+            }
+
+            if(get_config('mentoring_platform')){
+                $mentor_icon = '';
+                $mentor_message = "$landAddMentor $langmentor";
+                $mentor_action = "mentor=1";
+                if ($myrow->is_mentor) {
+                    $mentor_icon = icon('fa-magic');
+                    $mentor_message = $landDeleteMentor.' '.$langmentor;
+                    $mentor_action = "mentor=0";
+                }
+            }
+            
+
             $icon_content = action_button(array(
                 array(
                     'title' => $langEditChange,
                     'icon' => 'fa-edit',
                     'url' => "edituser.php?u=$myrow->id"
+                ),
+                array(
+                    'title' => $mentor_message,
+                    'icon' => 'fa-magic',
+                    'url' => "$_SERVER[SCRIPT_NAME]?u=$myrow->id&$mentor_action",
+                    'show' => show_mentoring_users($myrow->id)
                 ),
                 array(
                     'title' => $langDisplayProfile,
@@ -376,16 +423,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langActions,
                     'icon' => 'fa-list-alt',
-                    'url' => "userlogs.php?u=$myrow->id"
+                    'url' => "userlogs.php?u=$myrow->id",
+                    'show' => ((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                 ),
                 array(
                     'title' => $langUsage,
                     'icon' => 'fa-pie-chart',
-                    'url' => "../usage/index.php?t=u&u=$myrow->id"
+                    'url' => "../usage/index.php?t=u&u=$myrow->id",
+                    'show' => ((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                 ),
                 array(
                     'title' => $langDelete,
-                    'icon' => 'fa-xmark',
+                    'icon' => 'fa-times',
                     'url' => "deluser.php?u=$myrow->id"
                 )
             ));
@@ -402,6 +451,21 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
+}
+
+// change user mentor
+if (isset($_GET['mentor'])) {
+    $checkIfMentorIsMentorToProgram = Database::get()->queryArray("SELECT *FROM mentoring_programs_user
+                                                                    WHERE mentor = ?d AND user_id = ?d",1,$_GET['u']);
+    if(count($checkIfMentorIsMentorToProgram) > 0 and $_GET['mentor'] == 0){
+        Session::flash('message', $langNoDeleteMentorAsMemberOfProgram);
+        Session::flash('alert-class', 'alert-warning');
+    }else{
+        Database::get()->querySingle("UPDATE user SET is_mentor = ?d WHERE id = ?d", $_GET['mentor'], $_GET['u']);
+        Session::flash('message', $langFaqEditSuccess);
+        Session::flash('alert-class', 'alert-success');
+    }
+    
 }
 
 load_js('tools.js');
@@ -496,21 +560,21 @@ $toolName = $langListUsersActions;
 
 // Display Actions Toolbar
 $data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                'url' => "search_user.php",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
-            array('title' => $langAllUsers,
-                'url' => "$_SERVER[SCRIPT_NAME]",
-                'icon' => 'fa-search',
-                'level' => 'primary-label'),
-            array('title' => $langInactiveUsers,
-                'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
-                'icon' => 'fa-search',
-                'level' => 'primary-label',
-                'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive'))
-           
-                ));
+    array('title' => $langBack,
+        'url' => "search_user.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary'),
+    array('title' => $langAllUsers,
+        'url' => "$_SERVER[SCRIPT_NAME]",
+        'icon' => 'fa-search',
+        'level' => 'primary-label'),
+    array('title' => $langInactiveUsers,
+        'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
+        'icon' => 'fa-search',
+        'level' => 'primary-label',
+        'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive'))
+   
+        ));
 
 $data['menuTypeID'] = 3;
 // display search results
@@ -529,5 +593,20 @@ function add_param($name, $value = null) {
     }
     if ($value !== 0 and $value !== '') {
         $params[] = $name . '=' . urlencode($value);
+    }
+}
+
+function show_mentoring_users($user_id){
+    if(get_config('mentoring_platform')){
+        $mentor = Database::get()->queryArray("SELECT status FROM user WHERE id = ?d",$user_id);
+        foreach($mentor as $m){
+            if($m->status == USER_TEACHER or $m->status == USER_STUDENT){
+                return true;
+            }else{
+                return false;
+            }   
+        }
+    }else{
+        return false;
     }
 }
