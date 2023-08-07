@@ -30,6 +30,7 @@ class Access {
      * @return string|null;
      */
     public static function getToken() {
+
         if (isset($_GET['token']) and $_GET['token'] !== '') {
             return $_GET['token'];
         } elseif (isset($_POST['token']) and $_POST['token'] !== '') {

@@ -26,6 +26,11 @@ require_once 'include/log.class.php';
 
 $pageName = $langUnregCourse;
 
+
+if (get_config('disable_student_unregister_cours')) {
+    redirect_to_home_page();
+}
+
 if (isset($_GET['cid'])) {
     $cid = q($_GET['cid']);
     $_SESSION['cid_tmp'] = $cid;

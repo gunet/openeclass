@@ -59,6 +59,7 @@ if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_GET['edit'])) {
         if ($_POST['submit'] == 'create_token') { // generate api token
+
             $token = "eclass_".bin2hex(random_bytes(32));
             $result_update_new = Database::get()->query("UPDATE api_token SET token = ?s,
                                                         updated = " . DBHelper::timeAfter() . ", 

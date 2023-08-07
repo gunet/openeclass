@@ -5602,3 +5602,4 @@ $langAPITokenLongDesc = "Information for calls currently supported by the API ca
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
 $langEmailBody = "Email Body";
 $langCustomEmailBody = "Custom Email Body";
+$langUnsubscribeCourse = "Disable Course Unsubscription";
