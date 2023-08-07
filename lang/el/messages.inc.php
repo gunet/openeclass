@@ -2532,6 +2532,7 @@ $langCaseInsensitiveUsername = "Χωρίς διάκριση πεζών/κεφα�
 $lang_email_required = "Να είναι υποχρεωτικό το email του $langOfUser";
 $lang_email_verification_required = "Να είναι υποχρεωτική η επιβεβαίωση του e-mail του $langOfUser";
 $lang_email_prevent_autoset_change = "Να μην επιτρέπεται η αλλαγή e-mail που έχει οριστεί αυτόματα κατά την πιστοποίηση";
+$langEmailUpdatedAutomaticaly = 'Το e-mail σας ενημερώθηκε αυτόματα από το σύστημα πιστοποίησης σε "%s" (από "%s").';
 $lang_am_prevent_autoset_change = "Να μην επιτρέπεται η αλλαγή αριθμού μητρώου που έχει οριστεί αυτόματα κατά την πιστοποίηση";
 $lang_dont_mail_unverified_mails = "Να μην γίνεται αποστολή e-mail σε $langUsersS που δεν έχουν επιβεβαιώσει την ηλεκτρονική τους διεύθυνση";
 $lang_email_from = "Τα emails θα στέλνονται από την προσωπική διεύθυνση αποστολέα των χρηστών";
@@ -6077,6 +6078,6 @@ $langCustomMailHelp = "
 </ul>";
 
 $langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
-$lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα' και το 'επώνυμο'";
+$lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το όνομα και το επώνυμο";
 $lang_disable_email_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το e-mail";
-$lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα' και το 'επώνυμο'";
+$lang_disable_am_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες τον αριθμό μητρώου";
