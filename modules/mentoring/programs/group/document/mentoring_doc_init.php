@@ -163,7 +163,7 @@ function mentoring_initialize_group_id($param = 'group_id') {
             if(isset($mentoring_program_id) && $mentoring_program_id){// wall for common group
                 $program_group_id = Database::get()->querySingle("SELECT id FROM mentoring_group WHERE mentoring_program_id = ?d AND common = ?d",$mentoring_program_id,1)->id;
             }else{
-                header("Location: {$urlServer}modules/mentoring/programs/show_programs.php");
+                header("Location: {$urlServer}modules/mentoring/mentoring_platform_home.php");
                 exit;
             }
         }

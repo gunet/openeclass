@@ -501,11 +501,11 @@ function adminMenu() {
         array_push($sideMenuLink, '../admin/change_user.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+        //if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
             array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
             array_push($sideMenuLink, '../admin/custom_profile_fields.php');
             array_push($sideMenuImg, 'fa-caret-right');
-        }
+        //}
 
         array_push($sideMenuText, $GLOBALS['langEPFAdminSideMenuLink']);
         array_push($sideMenuLink, '../admin/eportfolio_fields.php');

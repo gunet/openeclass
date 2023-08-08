@@ -18,6 +18,7 @@
     </div>
 @endif
 
+@if((!get_config('mentoring_always_active') and get_config('mentoring_platform')) or (!get_config('mentoring_platform')))
 <div class='col-12'>
     <div class='card panelCard BorderSolid px-lg-4 py-lg-3'>
         <div class='card-header border-0 bg-white'>
@@ -82,6 +83,7 @@
         </div>
     </div>
 </div>
+@endif
 
 
 @php 
@@ -138,11 +140,19 @@
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
-                                <li class="p-1">
-                                    <a class='link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                        {!!  $GLOBALS['langAdminAn'] !!}
-                                    </a>
-                                </li>
+                                @if(get_config('mentoring_always_active') and get_config('mentoring_platform'))
+                                    <li class="p-1">
+                                        <a href="{{ $urlAppend }}modules/admin/mentoring_adminannouncements.php" class='link_admin_tool'>
+                                            <span class='msmall-text toolAdminText'>{!!  $GLOBALS['langAdminAn'] !!}</span>
+                                        </a>
+                                    </li>
+                                @else
+                                    <li class="p-1">
+                                        <a class='link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
+                                            {!!  $GLOBALS['langAdminAn'] !!}
+                                        </a>
+                                    </li>
+                                @endif
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="p-1">
                                     <a class='link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
