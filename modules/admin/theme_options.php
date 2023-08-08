@@ -364,7 +364,7 @@ if (isset($_POST['optionsSave'])) {
     $activate_class = isset($preview_theme) ? '' : ' hidden';
     $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class me-2 mb-2' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
-    $preview_btn = "<a href='#' class='btn submitAdminBtn $preview_class me-2 mb-2' id='theme_preview'>$langSee</a>";
+    $preview_btn = "<a href='#' class='btn submitAdminBtn submitAdminBtnClassic $preview_class me-2 mb-2' id='theme_preview'>$langSee</a>";
     $del_class = ($theme_id != 0) ? "" : " hidden";
     $delete_btn = "
                     <form class='form-inline mt-0' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>

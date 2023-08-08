@@ -153,13 +153,13 @@
 
                             <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
                                 <a class="nav-link mentoring_program_nav_item_nav_linkProgram active TextSemiBold rounded-0" id="info_mentoring" data-bs-toggle="tab" href="#info_mentoring_program" role="tab" aria-controls="info_mentoring_program" aria-selected="true">
-                                    <span class='fa fa-info'></span><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langMentoringInfo')}}</span>
+                                    <span class='fa fa-info'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMentoringInfo')}}</span>
                                 </a>
                             </li>
 
                             <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
                                 <a class="nav-link mentoring_program_nav_item_nav_linkProgram TextMedium rounded-0" id="mentor_mentoring" data-bs-toggle="tab" href="#mentors_mentoring_program" role="tab" aria-controls="mentors_mentoring_program" aria-selected="false">
-                                    <span class='fa fa-user'></span><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langMentoringMentorss') }}</span>
+                                    <span class='fa fa-user'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMentoringMentorss') }}</span>
                                 </a>
                             </li>
                            
@@ -170,7 +170,7 @@
                                 @endphp
                                 <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
                                     <a class="nav-link mentoring_program_nav_item_nav_linkProgram TextMedium rounded-0" id="request_mentoring" data-bs-toggle="tab" href="#requests_mentoring_program" role="tab" aria-controls="requests_mentoring_program" aria-selected="false">
-                                        <span class='fa-solid fa-paper-plane'></span><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langRequestsPrograms')}}</span>
+                                        <span class='fa-solid fa-paper-plane'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langRequestsPrograms')}}</span>
                                         @if($sum_requests > 0)&nbsp<span class='badge bg-primary text-white'>{{ $sum_requests }}</span>@endif
                                     </a>
                                 </li>
@@ -180,7 +180,7 @@
                             @if($is_editor_mentoring_program or $is_admin)
                                 <li class="nav-item mentoring_program_nav_item dropdown rounded-pill" role="presentation">
                                     <a class="nav-link mentoring_program_nav_item_nav_linkProgram dropdown-toggle TextMedium rounded-pill" data-bs-display='static' data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                                        <span class='fa fa-cogs'></span><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langMoreChoices') }}</span>
+                                        <span class='fa fa-cogs'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMoreChoices') }}</span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end programTools">
                                         <li><a class="dropdown-item" href="{{ $urlAppend }}modules/mentoring/programs/actions_program.php?program_id={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-tasks pe-2'></span>{{ trans('langMentoringAction' )}}</a></li>
@@ -196,7 +196,7 @@
                      <!-- Tabs navs -->
 
                         <!-- Tabs content -->
-                    <div class='col-12 mt-3 pe-0'>
+                    <div class='col-12 mt-3'>
                         @php $is_access_user = false; @endphp
                         @foreach($type_of_uid as $exist)
                             @if($exist['tutor_or_mentor'] != 3 or $is_admin)
@@ -204,7 +204,7 @@
                             @endif
                         @endforeach
                         <div class='row'>
-                            <div class='col-12 pe-0'>
+                            <div class='col-12'>
                                 <div class="tab-content p- rounded-2" id="ex1-content">
 
                                     <div class="tab-pane fade show active p-3" id="info_mentoring_program" role="tabpanel" aria-labelledby="info_mentoring">
@@ -239,7 +239,7 @@
                                                                             {{--<a class="btn btn-sm viewOptionToolBtn rounded-2" href="{{ $urlAppend }}modules/mentoring/programs/group/index.php?commonGroupView=1">
                                                                                 <span class='fa fa-comment'></span>&nbsp<span class='small-text'>{{ trans('langMentoringGroupSpace' )}}</span>
                                                                             </a>--}}
-                                                                            <a class="btn viewOptionToolBtn text-uppercase TextBold rounded-2 d-flex justify-content-center align-items-center w-75 ms-auto me-auto" href="{{ $urlAppend }}modules/mentoring/programs/group/select_group.php">
+                                                                            <a class="btn viewOptionToolBtn mt-3 text-uppercase TextBold rounded-2 d-flex justify-content-center align-items-center w-75 ms-auto me-auto" href="{{ $urlAppend }}modules/mentoring/programs/group/select_group.php">
                                                                                 <span class='fa fa-comment'></span>&nbsp<span class='small-text'>{{ trans('langMentoringGroupSpace' )}}</span>
                                                                             </a>
                                                                         @endif

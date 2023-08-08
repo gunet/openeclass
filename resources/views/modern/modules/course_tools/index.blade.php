@@ -109,7 +109,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="3">
-                                                    <input type="submit" class="btn submitAdminBtn m-auto d-block" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
+                                                    <input type="submit" class="btn submitAdminBtn submitAdminBtnDefault m-auto d-block" value="{{ trans('langSubmit') }}" name="toolStatus" onClick="selectAll('active_box',true)" />
                                                 </td>
                                             </tr>
                                         </table>

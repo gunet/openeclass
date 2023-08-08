@@ -61,9 +61,7 @@
 
                     @if($is_tutor_of_mentoring_program or $is_admin)
 
-                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                            <div class='col-12 h-100 left-form'></div>
-                        </div>
+                        
                         <div class='col-lg-6 col-12'>
                             <form class='form-wrapper form-edit rounded-2 p-3 solidPanel' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}">
                                 <div class='form-group'>
@@ -97,6 +95,9 @@
                                 </div>     
                                 
                             </form>
+                        </div>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
                         </div>
                         @if(!empty($logs))
                             <div class='col-12 mt-4'>{!! $logs !!}</div>

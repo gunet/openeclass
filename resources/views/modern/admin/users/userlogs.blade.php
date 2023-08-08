@@ -53,9 +53,7 @@
 
                     @if($users_login_data) <div class='mt-5'></div> @endif
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
 
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded'>
@@ -96,6 +94,9 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
                     </div>
 
                 

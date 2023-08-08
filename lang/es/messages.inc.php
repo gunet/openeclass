@@ -5642,6 +5642,28 @@ Especifica el tipo de acceso a tu curso. </br></br>";
 
 $langEclassInfo = "La plataforma Open eClass 4.0 es un completo Sistema Electrónico de Gestión de Cursos. Sigue la filosofía del software de código abierto y soporta el servicio de Aprendizaje a Distancia Asíncrono sin limitaciones y compromisos.";
 $langSaidForUs = "dijeron de nosotros";
+$langCloseOptions = "Cerrar opciones";
+$langOpenOptions = "Opciones abiertas";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

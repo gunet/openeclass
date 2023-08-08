@@ -2,7 +2,7 @@
 <div id="leftnav" class="col-12 sidebar float-menu pt-3">
 
     <div class='col-12 text-end d-none d-lg-block'>
-        <button type="button" id="menu-btn" class="btn menu_btn_button">
+        <button type="button" id="menu-btn" class="btn menu_btn_button" data-bs-toggle="tooltip" data-bs-placement="right">
             <img class='settings-icons' src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' />
         </button>
     </div>
@@ -46,7 +46,9 @@
                             <ul class="list-group list-group-flush">
                                 @foreach ($tool_group[1] as $key2 => $tool)
                                     <li>
-                                        <a href="{!! $tool_group[2][$key2] !!}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
+                                        <a href="{!! $tool_group[2][$key2] !!}" 
+                                            class='list-group-item d-flex justify-content-start align-items-start gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}
+                                            data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right" title="{!! $tool !!}">
                                             <i class="{{ $tool_group[3][$key2] }} mt-1 settings-icons"></i>
                                             <span class='menu-items TextBold'>{!! $tool !!}</span>
                                         </a>
@@ -63,3 +65,31 @@
     </div>
     
 </div>
+
+
+
+<script type="text/javascript">
+    $(document).ready( function () {
+        if($( "#background-cheat-leftnav" ).hasClass( "active-nav" )){
+            $('#menu-btn').attr('data-bs-original-title','{{ js_escape(trans('langOpenOptions')) }}');
+            $('.contextual-sidebar .list-group-item').tooltip('enable');
+        }else{
+            $('#menu-btn').attr('data-bs-original-title','{{ js_escape(trans('langCloseOptions')) }}');
+            $('.contextual-sidebar .list-group-item').tooltip('disable');
+        }
+        
+        $('#menu-btn').on('click',function(){
+            $('#menu-btn').tooltip('hide');
+            if($( "#background-cheat-leftnav" ).hasClass( "active-nav" )){
+                $('#menu-btn').attr('data-bs-original-title','{{ js_escape(trans('langOpenOptions')) }}');
+                $('.contextual-sidebar .list-group-item').tooltip('enable');
+            }else{
+                $('#menu-btn').attr('data-bs-original-title','{{ js_escape(trans('langCloseOptions')) }}');
+                $('#menu-btn').tooltip('enable');
+                $('.contextual-sidebar .list-group-item').tooltip('disable');
+            }
+        });
+    } );
+</script>
+
+

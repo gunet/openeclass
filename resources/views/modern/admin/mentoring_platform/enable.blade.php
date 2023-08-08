@@ -44,9 +44,7 @@
                         <div class='col-md-9 col-12 ms-auto me-auto'>{!! $action_bar !!}</div>
                     </div>
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                          <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded p-3'>
                             <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}">
@@ -113,6 +111,9 @@
                                 </div>
                             </form>
                         </div>
+                    </div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                          <div class='col-12 h-100 left-form'></div>
                     </div>
                     
                   

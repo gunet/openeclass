@@ -14,12 +14,12 @@
             @if(!isset($_SESSION['uid']))
                 @if(!get_config('mentoring_always_active'))
                 <a id='MentoringgoToEclassPlatformBtnMobile' class='btn btnBackOpenEclass rounded-2 TextSemiBold me-4' href='{{ $urlAppend }}?goToMentoring=false'>
-                    <span class='fa fa-reply'></span><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langExitMentoring')}}</span>
+                    <span class='fa fa-reply'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langExitMentoring')}}</span>
                 </a>
                 @endif
                 <a id='goToLoginForm' class="text-uppercase TextSemiBold text-white small-text me-2 @if(!get_config('mentoring_always_active')) mb-1 @endif" href="{{ $urlAppend }}main/login_form.php">
                     <img class="UserLoginIcon2" src="{{ $urlAppend }}template/modern/img/user_login_mentoring.svg"> 
-                    <span class="hidden-lg @if(!get_config('mentoring_always_active')) hidden-md-mentoring hidden-xs-mentoring @endif loginText">{{ trans('langLogIn') }}</span>
+                    <span class="hidden-lg @if(!get_config('mentoring_always_active')) hidden-md-mentoring hidden-xs-mentoring TextBold @endif loginText">{{ trans('langLogIn') }}</span>
                 </a>
                 <div class="me-1 @if(get_config('mentoring_always_active')) languageMenuUser @endif">{!! lang_selections_Mobile() !!}</div>
             @endif

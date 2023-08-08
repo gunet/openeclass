@@ -74,9 +74,6 @@
                         
                         @if ($can_upload == 1)
                             @if($menuTypeID == 3 or $menuTypeID == 1)
-                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                                    <div class='col-12 h-100 left-form'></div>
-                                </div>
                                 <div class='col-lg-6 col-12'>
                             @else
                                 <div class='col-12'>
@@ -148,6 +145,11 @@
                                     </form>
                                 </div>
                             </div>
+                            @if($menuTypeID == 3 or $menuTypeID == 1)
+                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                    <div class='col-12 h-100 left-form'></div>
+                                </div>
+                            @endif
                         @else
                         <div class='col-12'>
                             <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNotAllowed') }}</span></div>

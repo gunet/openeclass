@@ -120,9 +120,7 @@ if ($can_upload) {
       
     if($menuTypeID == 3 or $menuTypeID == 1){
       $tool_content .= "<div class='row'>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-            <div class='col-12 h-100 left-form'></div>
-        </div>
+        
         <div class='col-lg-6 col-12'>";
     }else{
         $tool_content .= "<div class='col-sm-12'>";
@@ -293,7 +291,13 @@ if ($can_upload) {
         
       </div>
     </form>
-    </div></div>";
+    </div></div>
+    ";
+    if($course_id < 1){
+      $tool_content .= "<div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                          <div class='col-12 h-100 left-form'></div>
+                      </div>";
+    }
     
 
     if($menuTypeID == 3 or $menuTypeID == 1){

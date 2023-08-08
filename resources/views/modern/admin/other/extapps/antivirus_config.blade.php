@@ -52,9 +52,7 @@
                     
 
                     
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
                     <div class='col-lg-6 col-12'>
                         <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
@@ -84,6 +82,9 @@
                             {!! generate_csrf_token_form_field() !!}
                             <input class='btn submitAdminBtn m-auto d-block mt-5' type='submit' name='submit' value='{{ trans('langModify') }}'>
                         </form>
+                    </div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
                     </div>
                    
                

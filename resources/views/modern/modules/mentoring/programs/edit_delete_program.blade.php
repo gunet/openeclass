@@ -71,9 +71,7 @@
 
                     {!! $action_bar !!}
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                          <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
 
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded-2 p-md-0 p-3 solidPanel'>
@@ -83,7 +81,7 @@
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                         
-                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold'>{{ trans('langStepMentoring') }}&nbsp1</p>
+                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold mb-3'>{{ trans('langStepMentoring') }}&nbsp1</p>
 
                                         <div class='d-none d-md-block mb-3'>
                                             <div class='col-12 d-flex justify-content-md-center align-items-md-center'>
@@ -210,7 +208,7 @@
                                     </div>
 
                                     <div class="carousel-item">
-                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold'>{{ trans('langStepMentoring') }}&nbsp2</p>
+                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold mb-3'>{{ trans('langStepMentoring') }}&nbsp2</p>
 
                                         <div class='d-none d-md-block mb-3'>
                                             <div class='col-12 d-flex justify-content-md-center align-items-md-center'>
@@ -347,6 +345,9 @@
 
                           </form>
                         </div>
+                    </div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                          <div class='col-12 h-100 left-form'></div>
                     </div>
                       
                     

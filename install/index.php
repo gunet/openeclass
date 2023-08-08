@@ -261,10 +261,10 @@ if (isset($_POST['install2'])) {
               <div class='col-12'>
                 <div class='row'>
                   <div class='col-lg-6 col-12'>
-                    <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install1' value='&laquo; $langPreviousStep'>
+                    <input type='submit' class='btn cancelAdminBtn w-100' name='install1' value='&laquo; $langPreviousStep'>
                   </div>
                   <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                    <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install3' value='$langAccept'>
+                    <input type='submit' class='btn submitAdminBtnDefault w-100' name='install3' value='$langAccept'>
                   </div>
                 </div>
               </div>
@@ -319,10 +319,10 @@ elseif (isset($_POST['install3'])) {
              <div class='col-12'>
               <div class='row'>
                   <div class='col-lg-6 col-12'>
-                    <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install2' value='&laquo; $langPreviousStep'>
+                    <input type='submit' class='btn cancelAdminBtn w-100' name='install2' value='&laquo; $langPreviousStep'>
                   </div>
                   <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                    <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install4' value='$langNextStep &raquo;'>
+                    <input type='submit' class='btn submitAdminBtnDefault w-100' name='install4' value='$langNextStep &raquo;'>
                   </div>
                 </div>
             </div>
@@ -373,10 +373,10 @@ elseif (isset($_POST['install4'])) {
             <div class='col-12'>
               <div class='row'>
                   <div class='col-lg-6 col-12'>
-                     <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install3' value='&laquo; $langPreviousStep'>
+                     <input type='submit' class='btn cancelAdminBtn w-100' name='install3' value='&laquo; $langPreviousStep'>
                   </div>
                   <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                     <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install5' id='install5' value='$langNextStep &raquo;'>
+                     <input type='submit' class='btn submitAdminBtnDefault w-100' name='install5' id='install5' value='$langNextStep &raquo;'>
                   </div>
               </div>
             </div>
@@ -410,10 +410,10 @@ elseif (isset($_POST['install5'])) {
              <div class='col-12'>
                <div class='row'>
                 <div class='col-lg-6 col-12'>
-                  <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install4' value='&laquo; $langPreviousStep'>
+                  <input type='submit' class='btn cancelAdminBtn w-100' name='install4' value='&laquo; $langPreviousStep'>
                 </div>
                 <div class='col-lg-6 col-12 mt-lg-0 mt-3'>
-                  <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install6' value='$langNextStep &raquo;'>
+                  <input type='submit' class='btn submitAdminBtnDefault w-100' name='install6' value='$langNextStep &raquo;'>
                 </div>
               </div>
              </div>
@@ -487,10 +487,10 @@ elseif (isset($_POST['install6'])) {
              <div class='col-12'>
               <div class='row'>
                 <div class='col-lg-5 col-12'>
-                  <input type='submit' class='btn btn-sm btn-secondary cancelAdminBtn w-100 text-white' name='install5' value='&laquo; $langPreviousStep'>
+                  <input type='submit' class='btn cancelAdminBtn w-100' name='install5' value='&laquo; $langPreviousStep'>
                 </div>
                 <div class='col-lg-7 col-12 mt-lg-0 mt-3'>
-                 <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100 text-white' name='install7' id='install7' value='$langInstall &raquo;'>
+                 <input type='submit' class='btn submitAdminBtnDefault w-100' name='install7' id='install7' value='$langInstall &raquo;'>
                 </div>
               </div>
              </div>
@@ -652,7 +652,7 @@ elseif (isset($_POST['install1'])) {
     </ul>
     <div class='info'>$langBeforeInstall1<a href='$install_info_file' target=_blank>$langInstallInstr</a>.
     <div class='smaller'>$langBeforeInstall2<a href='$readme_file' target=_blank>$langHere</a>.</div></div><br />
-    <div class='col-12 d-flex justify-content-center mt-5'><input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-100' name='install2' value='$langNextStep &raquo;' /></div>" .
+    <div class='col-12 d-flex justify-content-center mt-5'><input type='submit' class='btn submitAdminBtnDefault w-100' name='install2' value='$langNextStep &raquo;' /></div>" .
             hidden_vars($all_vars) . "</form>\n";
     draw($tool_content);
 } else {
@@ -687,7 +687,7 @@ elseif (isset($_POST['install1'])) {
               </div>
               <div class='form-group mt-5'>
                 <div class='col-12'>
-                  <input type='submit' class='btn btn-sm btn-primary submitAdminBtn w-50 text-white' name='install1' value='$langNextStep &raquo;'>
+                  <input type='submit' class='btn submitAdminBtnDefault w-100' name='install1' value='$langNextStep &raquo;'>
                   <input type='hidden' name='welcomeScreen' value='true'>
                 </div>
               </div>

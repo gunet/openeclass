@@ -53,9 +53,7 @@
                     @if (isset($auth_methods_active) == 0)
                         <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langAuthChangeno') }}</span></div></div>
                     @else
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded'>
                             <form class='form-horizontal' role='form' name='authchange' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>   
@@ -74,6 +72,9 @@
                             {!! generate_csrf_token_form_field() !!}    
                             </form>
                         </div>
+                    </div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
                     </div>
                     @endif    
                 

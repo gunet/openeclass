@@ -67,9 +67,7 @@
                     </div>
                     @endif
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                          <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
 
                     <div class='col-lg-6 col-12'>
 
@@ -81,7 +79,7 @@
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
                                               
-                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold'>{{ trans('langStepMentoring') }}&nbsp1&nbsp<span class='small-text'>->&nbsp{{trans('langUserFillData')}}</span></p>
+                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold mb-3'>{{ trans('langStepMentoring') }}&nbsp1&nbsp<span class='small-text'>->&nbsp{{trans('langUserFillData')}}</span></p>
 
                                         <div class='d-none d-md-block mb-3'>
                                             <div class='col-12 d-flex justify-content-md-center align-items-md-center'>
@@ -203,7 +201,7 @@
                                     </div>
                                     
                                     <div class="carousel-item">
-                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold'>{{ trans('langStepMentoring') }}&nbsp2&nbsp<span class='small-text'>->&nbsp{{trans('langMentoringMentor')}}</span></p>
+                                        <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold mb-3'>{{ trans('langStepMentoring') }}&nbsp2&nbsp<span class='small-text'>->&nbsp{{trans('langMentoringMentor')}}</span></p>
 
                                         <div class='d-none d-md-block mb-5'>
                                             <div class='col-12 d-flex justify-content-md-center align-items-md-center'>
@@ -312,7 +310,7 @@
                                     </div>
 
                                     <div class='carousel-item'>
-                                            <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold'>{{ trans('langStepMentoring') }}&nbsp3&nbsp<span class='small-text'>->&nbsp{{trans('langCommonGroup')}}</span></p>
+                                            <p class='badge bgNormalBlueText fs-6 text-uppercase TextBold mb-3'>{{ trans('langStepMentoring') }}&nbsp3&nbsp<span class='small-text'>->&nbsp{{trans('langCommonGroup')}}</span></p>
 
                                             <div class='d-none d-md-block mb-3'>
                                                 <div class='col-12 d-flex justify-content-md-center align-items-md-center'>
@@ -516,6 +514,9 @@
                             </div>
                           </form>
                         </div>
+                    </div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                          <div class='col-12 h-100 left-form'></div>
                     </div>
                       
                

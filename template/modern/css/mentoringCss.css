@@ -1199,9 +1199,7 @@ a:hover{
 .modal-primary .modal-header .btn-close{
     background-color:white !important;
 }
-.btn-primary{
-    background: #0d6efd !important;
-}
+
 
 
 .modal-danger .modal-header{
@@ -1213,9 +1211,7 @@ a:hover{
 .modal-danger .modal-header .btn-close{
      background-color:white !important;
 }
-.btn-danger{
-    background: #dc3545 !important;
-}
+
 
 
 .modal-warning .modal-header{
@@ -1227,9 +1223,6 @@ a:hover{
 .modal-warning .modal-header .btn-close{
      background-color:white !important;
 }
-/* .btn-warning{
-    background: #fd7e14 !important;
-} */
 
 
 .modal-success .modal-header{
@@ -1241,12 +1234,6 @@ a:hover{
 .modal-success .modal-header .btn-close{
      background-color:white !important;
 }
-.btn-success{
-    background: #198754 !important;
-}
-
-
-
 
 
 

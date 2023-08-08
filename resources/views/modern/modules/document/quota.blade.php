@@ -16,7 +16,7 @@
             @endif
 
             @if($course_code)
-            <div class="col-12 col_maincontent_active p-lg-5">
+            <div class="col_maincontent_active">
             @else
             <div class="col-12">
             @endif

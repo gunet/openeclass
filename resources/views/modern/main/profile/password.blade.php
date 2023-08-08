@@ -25,7 +25,17 @@
 <div class='{{ $container }}'>
         <div class="row rowMargin">
 
-                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @if($showMentoringProfile == 0)
+                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    @else
+                        <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a class='TextSemiBold' href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home"><span class='fa fa-home'></span>&nbsp{{ trans('langHomeMentoringPlatform') }}</a></li>
+                                <li class="breadcrumb-item"><a class='TextSemiBold' href="{{ $urlAppend }}modules/mentoring/profile/user_profile.php">{{ trans('langMyProfile') }}</a></li>
+                                <li class="breadcrumb-item active TextMedium" aria-current="page">{{ trans('langChangePass') }}</li>
+                            </ol>
+                        </nav>
+                    @endif
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -62,9 +72,7 @@
                     </div>
                     @endif
 
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
                     <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' role='form' method='post' action='{{ $passUrl }}'>
@@ -118,6 +126,9 @@
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div></div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div>
                 
         </div>
     

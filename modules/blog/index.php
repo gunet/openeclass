@@ -387,9 +387,7 @@ if ($action == "createPost") {
         if(!$course_code){
             $tool_content .= "
             <div class='row'>
-                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                    <div class='col-12 h-100 left-form'></div>
-                </div>
+                
                 <div class='col-lg-6 col-12'>
             ";
         }else{
@@ -446,9 +444,14 @@ if ($action == "createPost") {
                 <input type='hidden' name='action' value='savePost' />
             </fieldset>
             </form>
-        </div></div>";
+        </div></div>
+        ";
         if(!$course_code){
-            $tool_content .= "</div>";
+            $tool_content .= "
+                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                    <div class='col-12 h-100 left-form'></div>
+                </div>
+            </div>";
         }
     } else {
         //Session::Messages($langBlogPostNotAllowedCreate);
@@ -504,9 +507,7 @@ if ($action == "editPost") {
             if(!$course_code){
                 $tool_content .= "
                 <div class='row'>
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
-                    </div>
+                    
                     <div class='col-lg-6 col-12'>
                 ";
             }else{
@@ -568,9 +569,12 @@ if ($action == "editPost") {
                 <input type='hidden' name='pId' value='".$post->getId()."'>
                 </fieldset>
             </form>
-        </div></div>";
+        </div></div>
+       ";
             if(!$course_code){
-                $tool_content .= "</div>";
+                $tool_content .= " <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                <div class='col-12 h-100 left-form'></div>
+            </div></div>";
             }
         } else {
             //Session::Messages($langBlogPostNotAllowedEdit);

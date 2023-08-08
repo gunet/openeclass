@@ -190,9 +190,7 @@ if (isset($_GET['action'])) {
         }
         $tool_content .= "
         <div class='row'>
-            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                <div class='col-12 h-100 left-form'></div>
-            </div>
+           
                         <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
@@ -251,7 +249,10 @@ if (isset($_GET['action'])) {
                             </div>
                             </form>
                             </div>
-                        </div></div>";
+                        </div>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                        <div class='col-12 h-100 left-form'></div>
+                    </div></div>";
     } elseif (($_GET['action'] == 'add_badge') or  ($_GET['action'] == 'edit_badge')) { // add badge icons
         $badge_name = $badge_description = $badge_hidden_id = '';
         if (isset($_GET['bid'])) {
@@ -264,9 +265,7 @@ if (isset($_GET['action'])) {
  
         $tool_content .= "
         <div class='row'>
-            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                <div class='col-12 h-100 left-form'></div>
-            </div>
+            
                     <div class='col-lg-6 col-12'>
                     <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
@@ -317,6 +316,9 @@ if (isset($_GET['action'])) {
                             
                             </form>
                             </div></div>
+                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                <div class='col-12 h-100 left-form'></div>
+                            </div>
                         </div></div>";
     }
 } else { // display available certificates / badges

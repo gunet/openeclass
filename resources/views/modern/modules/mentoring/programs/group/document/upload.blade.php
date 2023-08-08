@@ -93,9 +93,7 @@
                         @if ($can_upload_mentoring or $can_upload_mentoring == $uid)
                             
                             
-                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                                <div class='col-12 h-100 left-form'></div>
-                            </div>
+                            
                             <div class='col-lg-6 col-12'>
                                 <div class='form-wrapper form-edit rounded-2 p-3 solidPanel'>
                                     <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post' enctype='multipart/form-data'>
@@ -235,6 +233,9 @@
                                         {!! generate_csrf_token_form_field() !!}
                                     </form>
                                 </div>
+                            </div>
+                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                                <div class='col-12 h-100 left-form'></div>
                             </div>
                               
                            

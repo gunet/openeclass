@@ -5562,6 +5562,20 @@ Geben Sie die Art des Zugangs zu Ihrem Kurs an. </br></br>";
 
 $langEclassInfo = "Die Open eClass 4.0-Plattform ist ein vollständiges elektronisches Kursverwaltungssystem. Es folgt der Philosophie der Open-Source-Software und unterstützt den asynchronen Fernunterrichtsdienst ohne Einschränkungen und Verpflichtungen.";
 $langSaidForUs = "Sie sagten über uns";
+$langCloseOptions = "Optionen schließen";
+$langOpenOptions = "Offene Optionen";
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

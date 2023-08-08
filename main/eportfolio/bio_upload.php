@@ -94,8 +94,9 @@ $tool_content .=
             'level' => 'primary')));
         
 $tool_content .= 
-    "<div class='col-12'>
-                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
+   "<div class='row'>
+        <div class='col-lg-6 col-12'>
+                <form class='form-wrapper form-edit' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
                     <fieldset>";
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
@@ -107,26 +108,31 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $bio = '';
 }
 $tool_content .= 
-    "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span></div></div>
-        <div class='row'>
-            <label for='bio' class='control-label-notes text-uppercase'>$label</label>
-            <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>
-            <div class='col-12 mt-3'><input type='file' name='bio' class='form-control'></div>
-        </div>
+    "<div class='col-12'>
+        <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span></div></div>
+            <div class='row'>
+                <label for='bio' class='control-label-notes text-uppercase'>$label</label>
+                <div class='d-inline-flex'>$bio" . fileSizeHidenInput() . "</div>
+                <div class='col-12 mt-3'><input type='file' name='bio' class='form-control'></div>
+            </div>
 
 
-    <div class='form-group mt-5'>
-        <div class='col-12 d-flex justify-content-center align-items-center'>
-            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-        </div>
-    </div>";
+            <div class='form-group mt-5'>
+                <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                    <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+                </div>
+            </div>";
 
 $tool_content .= 
                 "</fieldset>
                 ". generate_csrf_token_form_field() ."  
             </form>
         </div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
+    </div>
     ";
             
 draw($tool_content, 1, null, $head_content);

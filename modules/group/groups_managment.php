@@ -280,7 +280,7 @@ if(isset($_POST['group_id'])){
 
 // Display groups by result
 $tool_content .= "<div class='col-12'>
-                    <form id='formId' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
+                    <form id='formId' class='form-wrapper' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 
                             if($num_of_groups > 0){
 

@@ -64,11 +64,11 @@
                             <div class='col-md-8 col-12 ps-3'>
                                 <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-start mb-md-0 mb-3'>
                                     <a class='btn bgEclass btnMyPrograms small-text rounded-2 TextSemiBold text-uppercase d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}modules/mentoring/programs/myprograms.php'>
-                                        <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langMyPrograms') }}</span>
+                                        <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMyPrograms') }}</span>
                                     </a>
                                     @if($is_admin)
                                         <a class='btn bgEclass btnDisablePrograms ms-2 small-text rounded-2 TextSemiBold text-uppercase d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}modules/mentoring/programs/disable_programs.php'>
-                                            <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'><span class='hidden-xs-mentoring hidden-md-mentoring'>&nbsp{{ trans('langShowDisableMentoringProgramms') }}</span>
+                                            <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langShowDisableMentoringProgramms') }}</span>
                                         </a>
                                     @endif
                                 </div>
@@ -84,8 +84,8 @@
                                 or ($userStudent_is_mentor > 0 and get_config('mentoring_mentor_as_tutorProgram')))
                                 <div class='col-md-4 col-12 pe-3'>
                                     <div class='col-12 d-flex justify-content-md-end justify-content-center align-items-start'>
-                                        <a class='btn btn-outline-success btn-sm btnCreateProgram small-text rounded-2 TextSemiBold text-uppercase' href='{{ $urlAppend }}modules/mentoring/programs/create_program.php'>
-                                            <span class='fa fa-plus'></span><span class='hidden-md-mentoring'>&nbsp{{ trans('langAddMentoring') }}</span>
+                                        <a class='btn btn-primary btnCreateProgram' href='{{ $urlAppend }}modules/mentoring/programs/create_program.php'>
+                                            <span class='fa fa-plus'></span><span class='hidden-md-mentoring TextBold'>&nbsp{{ trans('langAddMentoring') }}</span>
                                         </a>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                             @endphp
                             @foreach($all_programs as $mentoring_program)
                                @php $temp_pages++; @endphp
-                                <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3 cardProgram{{ $pagesPag }}'>
+                                <div class='col-xl-4 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3 cardProgram{{ $pagesPag }}'>
                                     <div class="card w-100 card{{ $pagesPag }}">
                                         @if(!empty($mentoring_program->program_image))
                                             <img class="card-img-top cardImages HeightImageCard" alt="..." src="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/image/{{ $mentoring_program->program_image }}">
