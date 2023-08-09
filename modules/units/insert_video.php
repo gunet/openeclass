@@ -39,10 +39,10 @@ function list_videos() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
                     $tool_content .= "<div class='table-responsive'><table class='table-default'>";
                     $tool_content .= "<tr class='list-header'>" .
-                                     "<th style='width: 10px;'>$langChoice</th>" .
-                                     "<th class='text-start'>&nbsp;$langVideo</th>" .
-                                     "<th style='width: 10px;'>$langDate</th>" .
-                                     "</tr>";
+                                     "<thead><th>$langChoice</th>" .
+                                     "<th>$langVideo</th>" .
+                                     "<th>$langDate</th>" .
+                                     "</tr></thead>";
         foreach (array('video', 'videolink') as $table) {
             $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d ORDER BY date DESC", $course_id);
             foreach ($result as $row) {
@@ -55,13 +55,13 @@ function list_videos() {
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
                 }
                 if (!empty($row->description)) {
-                    $description_text = "<div style='margin-top: 10px;'>" .  q($row->description). "</div>";
+                    $description_text = "<div>" .  q($row->description). "</div>";
                 } else {
                     $description_text = '';
                 }
-                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
-                                 "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description_text . "</td>" .
-                                 "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
+                                 "<td>".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description_text . "</td>" .
+                                 "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                                  "</tr>";
             }
         }
@@ -69,10 +69,10 @@ function list_videos() {
         if ($sql) {
             foreach ($sql as $videocat) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>".icon('fa-folder-open')."&nbsp;&nbsp;<strong>" . q($videocat->name) . "</strong>";
                 if (!empty($videocat->description)) {
-                    $videocat_description_text = "<div style='margin-top: 10px;'>" .  q($videocat->description). "</div>";
+                    $videocat_description_text = "<div>" .  q($videocat->description). "</div>";
                 } else {
                     $videocat_description_text = '';
                 }
@@ -82,22 +82,22 @@ function list_videos() {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d ORDER BY date DESC", $videocat->id);
                     foreach ($sql2 as $linkvideocat) {
                         if (!empty($linkvideocat->description)) {
-                            $linkvideocat_description_text = "<div style='margin-top: 10px;'>" .  q($linkvideocat->description). "</div>";
+                            $linkvideocat_description_text = "<div>" .  q($linkvideocat->description). "</div>";
                         } else {
                             $linkvideocat_description_text = '';
                         }
                         $tool_content .= "<tr>";
-                        $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
-                        $tool_content .= "<td>&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                        $tool_content .= "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
+                        $tool_content .= "<td>" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
                         $tool_content .= $linkvideocat_description_text . "</td>";
-                        $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
+                        $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
                         $tool_content .= "</tr>";
                     }
                 }
             }
         }
-        $tool_content .= "</table></div><div class='d-flex justify-content-center mt-3'><input class='btn submitAdminBtn' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
+        $tool_content .= "</table></div><div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoVideo</span></div></div>";

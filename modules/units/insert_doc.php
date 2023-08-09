@@ -104,12 +104,12 @@ function list_docs() {
                 "</tr>" ;
         }
         $tool_content .=
-                "<tr class='list-header'>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-start'>$langName</th>" .
-                "<th class='text-center'>$langSize</th>" .
-                "<th class='text-center'>$langDate</th>" .
-                "</tr>";
+                "<thead><tr class='list-header'>" .
+                "<th>$langChoice</th>" .
+                "<th>$langName</th>" .
+                "<th>$langSize</th>" .
+                "<th>$langDate</th>" .
+                "</tr></thead>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
             foreach ($fileinfo as $entry) {
@@ -139,7 +139,7 @@ function list_docs() {
                     $vis = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */
@@ -155,15 +155,15 @@ function list_docs() {
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = format_locale_date(strtotime($entry['date']), 'short', false);
-                    $tool_content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
+                    $tool_content .= "<td>$size</td><td>$date</td>";
                 }
                 $tool_content .= "</tr>";
                 $counter++;
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
 
     }
 }

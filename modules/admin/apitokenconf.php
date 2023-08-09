@@ -109,9 +109,9 @@ if (count($q) > 0) {
     $tool_content .= "<table class='table-default'>
                 <thead>
                     <tr class='list-header'>
-                        <th class='text-start'>$langExtAppName</th>
-                        <th class='text-center'>Remote IP</th>
-                        <th class='text-center'>" . icon('fa-gears') . "</th>
+                        <th>$langExtAppName</th>
+                        <th>Remote IP</th>
+                        <th class='text-end'>" . icon('fa-gears') . "</th>
                     </tr>
                 </thead>";
 
@@ -131,8 +131,8 @@ if (count($q) > 0) {
         }
         $tool_content .= "<tr class='$class'>";
         $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?edit=$data->id'>$data->name</a> $icon $expired_message<div class='help-block'>$data->comments</div></td>";
-        $tool_content .= "<td class='text-center'>$data->ip</td>";
-        $tool_content .= "<td class='option-btn-cell text-center'>" .
+        $tool_content .= "<td>$data->ip</td>";
+        $tool_content .= "<td class='option-btn-cell text-end'>" .
             action_button(array(
                 array('title' => $langEditChange,
                     'url' => "$_SERVER[SCRIPT_NAME]?edit=$data->id",

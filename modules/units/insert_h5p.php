@@ -22,10 +22,10 @@ function list_h5p() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
-            "<th style='width: 80px;'>$langChoice</th>" .
-            "<th><div class='text-start'>&nbsp;$langH5p</div></th>" .
-            "</tr>";
+            "<thead><tr class='list-header'>" .
+            "<th>$langChoice</th>" .
+            "<th>$langH5p</th>" .
+            "</tr></thead>";
         foreach ($h5pinfo as $entry) {
             $q = Database::get()->querySingle("SELECT machine_name, title, major_version, minor_version
                                             FROM h5p_library WHERE id = ?s", $entry['main_library_id']);
@@ -36,13 +36,13 @@ function list_h5p() {
                 ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
                 : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='h5p[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
-            $tool_content .= "<td>&nbsp;<img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='{$urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='h5p[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='{$urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_h5p' value='$langAddModulesButton'>";
         $tool_content .= "</div>";
         $tool_content .= "</form>";
     }

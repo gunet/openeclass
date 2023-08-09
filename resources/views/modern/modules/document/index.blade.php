@@ -141,7 +141,7 @@
                                             <th>{!! headlink(trans('langDate'), 'date') !!}</th>
 
                                             @unless ($is_in_tinymce)
-                                                <th class='text-center'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
+                                                <th>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -154,7 +154,7 @@
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
 
-                                                <td class='text-start'>
+                                                <td>
                                                     @if($file->visible == 1)
                                                         <span class='visibleFile fa {{ $file->icon }}'></span>
                                                     @else
@@ -220,18 +220,18 @@
                                                 @if ($file->is_dir)
                                                     <td>&nbsp;</td>
                                                     @if($file->visible == 1)
-                                                        <td class='center'>{{ $file->date }}</td>
+                                                        <td>{{ $file->date }}</td>
                                                     @else
-                                                        <td class='center'><span class="opacity-50 text-secondary">{{ $file->date }}</span></td>
+                                                        <td><span class="opacity-50 text-secondary">{{ $file->date }}</span></td>
                                                     @endif
 
                                                 @elseif ($file->format == '.meta')
                                                     @if($file->visible == 1)
                                                         <td>{{ $file->size }}</td>
-                                                        <td class='center'>{{ $file->date }}</td>
+                                                        <td>{{ $file->date }}</td>
                                                     @else
                                                         <td><span class="opacity-50">{{ $file->size }}</span></td>
-                                                        <td class='center'><span class="opacity-50">{{ $file->date }}</span></td>
+                                                        <td><span class="opacity-50">{{ $file->date }}</span></td>
                                                     @endif
 
                                                 @else
@@ -247,7 +247,7 @@
                                                 @endif
                                                 
                                                 @unless ($is_in_tinymce)
-                                                    <td class='text-center {{ $can_upload? 'option-btn-cell': 'text-end'}}'>
+                                                    <td class='{{ $can_upload? 'option-btn-cell': 'text-end'}}'>
                                                         {!! $file->action_button !!}
                                                     </td>
                                                 @endif

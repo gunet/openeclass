@@ -107,8 +107,8 @@ if ($learnPathName) {
                     <table id='lpu_progress' class='table-default' style='table-layout:fixed;width:100%;'>
                     <thead>
                         <tr class='list-header'>
-                            <th class='text-start'>$langStudent</th>
-                            <th class='text-start'>$langEmail</th>
+                            <th>$langStudent</th>
+                            <th>$langEmail</th>
                             <th>$langAttempts</th>
                             <th>$langAttemptStarted</th>
                             <th>$langAttemptAccessed</th>
@@ -148,8 +148,8 @@ if ($learnPathName) {
         $lp_total_started = format_locale_date(strtotime($lpTotalStarted), 'short');
         $lp_total_accessed = format_locale_date(strtotime($lpTotalAccessed), 'short');
 
-        $tool_content .= "<td class='text-start'>" . q($user->email) . "</td>
-                            <td class='text-center'>" . q($lpAttemptsNb) ."</td>  
+        $tool_content .= "<td><div class='text-break'>" . q($user->email) . "</div></td>
+                            <td>" . q($lpAttemptsNb) ."</td>  
                             <td>" . $lp_total_started . "</td>
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>

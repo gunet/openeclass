@@ -168,13 +168,13 @@ if (!$nbrReports) {
 
     $tool_content .= "<div class='table-responsive'><table class='table-default'><tr class='list-header'>";
     $tool_content .= "
-            <th class='ps-2'>$langAbuseReportCat</th>
+            <th>$langAbuseReportCat</th>
             <th>$langMessage</th>
             <th>$langAbuseResourceType</th>
             <th>$langContent</th>
             <th>$langUser</th>
             <th>$langDate</th>
-            <th class='text-center'>".icon('fa-gears')."</th>
+            <th class='text-end'>".icon('fa-gears')."</th>
           </tr>";
 
     foreach ($result as $report) {
@@ -294,7 +294,7 @@ if (!$nbrReports) {
                             <td>".$content."</td>
                             <td>".display_user($report->user_id)."</td>
                             <td>".format_locale_date($report->timestamp, 'short') . "</td>                                    
-                            <td class='option-btn-cell'>".$options."</td>
+                            <td class='option-btn-cell text-end'>".$options."</td>
                           </tr>";
     }
 

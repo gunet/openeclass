@@ -52,9 +52,9 @@
                     @if ($announcements)
                     <div class='col-12'>
                         <div class='table-responsive mt-0'>
-                            <table id='adminAnnouncementsTable' class='announcements_table'>
-                                <tr class='notes_thead'>
-                                    <th style='width: 70%;'>{{ trans('langAnnouncement') }}</th>
+                            <table id='adminAnnouncementsTable' class='table-default'>
+                                <tr class='list-header'>
+                                    <th>{{ trans('langAnnouncement') }}</th>
                                     <th>{{ trans('langDate') }}</th>
                                     <th>{{ trans('langNewBBBSessionStatus') }}</th>
                                     <th class="text-center">{!! icon('fa-gears') !!}</th>
@@ -97,7 +97,7 @@
                                                 </ul>
                                             </div>
                                         </td>
-                                        <td class="option-btn-cell">{!!
+                                        <td class="option-btn-cell text-center">{!!
                                             action_button([
                                                 [
                                                     'title' => trans('langEditChange'),

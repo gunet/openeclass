@@ -110,13 +110,15 @@
                         <div class='col-sm-12'>
                             <div class='table-responsive'>
                                 <table class='table-default nocategory-links'>
-                                    <tr class='list-header'>
-                                        <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
-                                        <th class='text-center'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
-                                        @if (!$is_in_tinymce)
-                                            <th class='text-center'>{!! icon('fa-cogs') !!}</th>
-                                        @endif
-                                    </tr>
+                                    <thead>
+                                        <tr class='list-header'>
+                                            <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
+                                            <th>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
+                                            @if (!$is_in_tinymce)
+                                                <th></th>
+                                            @endif
+                                        </tr>
+                                    </thead>
                                     @include('modules.video.common.videoList')
                                 </table>
                             </div>
@@ -129,19 +131,21 @@
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
-                                        <tr class='list-header'>
-                                            <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
-                                            @if ($expand_all)
-                                                {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
-                                            @else
-                                                {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
-                                            @endif
-                                            </th>
-                                            <th>{{ trans('langDate') }}</th>
-                                            @if (!$is_in_tinymce)
-                                                <th class='text-center'>{!! icon('fa-cogs') !!}</th>
-                                            @endif
-                                        </tr>
+                                        <thead>
+                                            <tr class='list-header'>
+                                                <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
+                                                @if ($expand_all)
+                                                    {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
+                                                @else
+                                                    {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
+                                                @endif
+                                                </th>
+                                                <th>{{ trans('langDate') }}</th>
+                                                @if (!$is_in_tinymce)
+                                                    <th></th>
+                                                @endif
+                                            </tr>
+                                        </thead>
                                     @foreach ($categories as $myrow)
                                         <?php
                                             $description = standard_text_escape($myrow->description);

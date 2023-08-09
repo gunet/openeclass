@@ -3865,7 +3865,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     if($fc){
         $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
     }else{
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-ellipsis-vertical";
     }
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "submitAdminBtn";
     if (count($out_secondary)) {
@@ -3884,7 +3884,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+         "<div class='btn-group btn-group-sm gap-2' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
           </div>" . $primary_form_end;

@@ -51,7 +51,7 @@ $courses = Database::get()->queryArray('SELECT course.id course_id, code, title
 if (count($courses) > 0) {
     $table_content .= "<div class = 'table-responsive'>
             <table class='table-default'>
-            <tr class='list-header'><th>$langCourse</th><th style='text-align:center; width:20%;'>$langResults</th></tr>";
+            <tr class='list-header'><th>$langCourse</th><th>$langResults</th></tr>";
     
     // get completed certificates with public url
     $sql = Database::get()->queryArray("SELECT course_title, cert_title, cert_id, identifier "
@@ -61,7 +61,7 @@ if (count($courses) > 0) {
         foreach ($sql as $data) {
                 $icon_content = "<span style='padding-left: 5px;' class='fa fa-check-circle'></span>";
                 $table_content .= "<tr><td>" . $data->course_title . " ($data->cert_title)</td>
-                    <td style='text-align:center;'>
+                    <td>
                     <a href= '{$urlServer}main/out.php?i=$data->identifier'>" . "100%" . "</a>" . $icon_content . 
                             "</td></tr>";
         }

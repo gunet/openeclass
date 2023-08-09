@@ -325,17 +325,18 @@ if (isset($_GET['action'])) {
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");
     $tool_content .= "<div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='bg-header-table'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableCertTemplates</th></tr>
-                        <tr>
-                            <th class='text-dark'>$langTitle</th>
-                            <th class='text-dark'>$langDescription</th>                            
-                            <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
-                        </tr>";
+                        <thead>
+                            <tr>
+                                <th>$langTitle</th>
+                                <th>$langDescription</th>                            
+                                <th></th>
+                            </tr>
+                        </thead>";
                 foreach ($sql1 as $cert_data) {
                     //$template_link = $urlServer . CERT_TEMPLATE_PATH ."$cert_data->filename";
                     $tool_content .= "<tr><td>$cert_data->name</td>
                                       <td>" . ellipsize_html($cert_data->description, 100) . "</td>";
-                    $tool_content .= "<td class='text-center option-btn-cell'>".
+                    $tool_content .= "<td class='text-end option-btn-cell'>".
                             action_button(array(
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',
@@ -354,21 +355,22 @@ if (isset($_GET['action'])) {
     
     $sql2 = Database::get()->queryArray("SELECT * FROM badge_icon");
     
-    $tool_content .= "<div class='table-responsive'>
+    $tool_content .= "<div class='table-responsive mt-5'>
                         <table class='table-default'>
-                        <tr class='bg-header-table'><th class='text-center text-uppercase text-white' colspan='5'>$langAvailableBadges</th></tr>
+                        <thead>
                         <tr>
-                            <th class='text-dark'>$langTitle</th>
-                            <th class='text-dark'>$langDescription</th>
-                            <th width='70' class='text-center text-dark'>$langIcon</th>
-                            <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
-                        </tr>";
+                            <th>$langTitle</th>
+                            <th>$langDescription</th>
+                            <th>$langIcon</th>
+                            <th></th>
+                        </tr>
+                        </thead>";
                 foreach ($sql2 as $badge_data) {
                     $icon_link = $urlServer . BADGE_TEMPLATE_PATH ."$badge_data->filename";
-                    $tool_content .= "<tr><td width='100'>$badge_data->name</td>
+                    $tool_content .= "<tr><td>$badge_data->name</td>
                                       <td>" . ellipsize_html($badge_data->description, 100) . "</td>
-                                      <td class='text-center'><img src='$icon_link' width='50' height='50'></td>";
-                    $tool_content .= "<td class='text-center option-btn-cell'>".
+                                      <td><img src='$icon_link' width='50' height='50'></td>";
+                    $tool_content .= "<td class='text-end option-btn-cell'>".
                             action_button(array(                                
                                 array('title' => $langEdit,
                                     'icon' => 'fa-edit',

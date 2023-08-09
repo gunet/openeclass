@@ -46,14 +46,14 @@ function display_attendances() {
     } else {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'>
+        $tool_content .= "<thead><tr class='list-header'>
                             <th>$langAvailableAttendances</th>
                             <th>$langStart</th>
                             <th>$langEnd</th>";
         if( $is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
-        $tool_content .= "</tr>";
+        $tool_content .= "</tr></thead>";
         foreach ($result as $a) {
             $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $a->start_date)->format('d-m-Y H:i');
             $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $a->end_date)->format('d-m-Y H:i');
@@ -150,14 +150,15 @@ function register_user_presences($attendance_id, $actID) {
         //table to display the users
         $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' id='user_attendances_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
+        <div class='table-responsive'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
-            <thead class='list-header'>
-                <tr>
-                  <th class='text-center' width='5%'>$langID</th>
-                  <th class='text-center'>$langName $langSurname</th>
-                  <th class='text-center'>$langAmShort</th>
-                  <th class='text-center'>$langRegistrationDateShort</th>
-                  <th class='text-center'>$langAttendanceAbsences</th>
+            <thead>
+                <tr class='list-header'>
+                  <th>$langID</th>
+                  <th>$langName $langSurname</th>
+                  <th>$langAmShort</th>
+                  <th>$langRegistrationDateShort</th>
+                  <th>$langAttendanceAbsences</th>
 
                 </tr>
             </thead>
@@ -171,16 +172,16 @@ function register_user_presences($attendance_id, $actID) {
             }
             $cnt++;
             $tool_content .= "<tr class='$classvis'>
-                <td class='text-center'>$cnt</td>
+                <td>$cnt</td>
                 <td> " . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>";
+                <td>";
                 if (!is_null($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
                 } else {
                     $tool_content .= '';
                 }
-                $tool_content .= "</td><td class='text-center'><label class='label-container'><input type='checkbox' value='1' name='$resultUser->userID'";
+                $tool_content .= "</td><td><label class='label-container'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendance for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                 if(isset($q->attend) && $q->attend == 1) {
@@ -202,7 +203,7 @@ function register_user_presences($attendance_id, $actID) {
                 "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn cancelAdminBtn ms-2'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field() ."</form></div></div>";
-        $tool_content .= "</tbody></table>";
+        $tool_content .= "</tbody></table></div>";
     }
 }
 
@@ -273,17 +274,19 @@ function display_attendance_activities($attendance_id) {
     //get all the available activities
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
     if (count($result) > 0) {
-        $tool_content .= "<div class='table-responsive'>
+        $tool_content .= "
+        <p class='form-label'>$langAttendanceActList</p>
+                        <div class='table-responsive'>
                         <table class='table-default'>
-                        <tr class='list-header'><th class='control-label-notes text-center' colspan='5'>$langAttendanceActList</th></tr>
-                        <tr class=''>
-                            <th class='text-dark'>$langTitle</th>
-                            <th class='text-dark'>$langDate</th>
-                            <th class='text-dark'>$langType</th>
-                            <th class='text-dark'>$langStudents</th>
-                            <th class='text-center text-dark'><i class='fa fa-cogs'></i></th>
+                        <thead>
+                        <tr class='list-hader'>
+                            <th>$langTitle</th>
+                            <th>$langDate</th>
+                            <th>$langType</th>
+                            <th>$langStudents</th>
+                            <th></th>
 
-                        </tr>";
+                        </tr></thead>";
         foreach ($result as $details) {
             $content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td>";
@@ -292,7 +295,7 @@ function display_attendance_activities($attendance_id) {
             } else {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id) . "'>".q($details->title)."</a>";
             }
-            $tool_content .= "</td><td style='text-align:center;'>";
+            $tool_content .= "</td><td>";
              if (!is_null($details->date)) {
                  $tool_content .= format_locale_date(strtotime($details->date), 'short', false);
              } else {
@@ -316,7 +319,7 @@ function display_attendance_activities($attendance_id) {
             }
             $tool_content .= "</td>";
             $tool_content .= "<td>" . userAttendTotalActivityStats($details->id, $participantsNumber, $attendance_id) . "</td>";
-            $tool_content .= "<td class='text-center option-btn-cell text-center'>".
+            $tool_content .= "<td class='option-btn-cell text-center'>".
                     action_button(array(
                                 array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
@@ -352,16 +355,16 @@ function attendance_display_available_exercises($attendance_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th></th>";
+        $tool_content .= "</tr></thead>";
 
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-start'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+            $tool_content .= "<td>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div>";
@@ -393,9 +396,9 @@ function attendance_display_available_assignments($attendance_id) {
     if ($checkForAssNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th></th>";
+        $tool_content .= "</tr></thead>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
             if ($newAssToGradebook->assign_to_specific) {
@@ -410,7 +413,7 @@ function attendance_display_available_assignments($attendance_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
+            $tool_content .= "<td>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
             $tool_content .= "</td></tr>";
         } // end of while
         $tool_content .= "</table></div>";
@@ -442,13 +445,13 @@ function attendance_display_available_tc($attendance_id) {
     if ($checkForTcNumber > 0) {
         $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate</th>";
+        $tool_content .= "<th></th>";
+        $tool_content .= "</tr></thead>";
         foreach ($checkForTc as $data) {
-            $tool_content .= "<tr><td><b>" . q($data->title) . "</b></td>";
+            $tool_content .= "<tr><td>" . q($data->title) . "</td>";
             $tool_content .= "<td>". format_locale_date(strtotime($data->start_date)) . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
+            $tool_content .= "<td>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
         } // end of while
         $tool_content .= "</tr></table></div>";
     } else {
@@ -532,12 +535,12 @@ function add_attendance_other_activity($attendance_id) {
                         </div>";
                     if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto attendance mechanism
                         $tool_content .= "<div class='form-group mt-4'>
-                            <label for='weight' class='col-sm-6 control-label-notes mb-0'>$langAttendanceInsAut</label>
-                                <div class='col-sm-12'><label class='label-container'><input type='checkbox' value='1' name='auto' ";
+                                <div class='col-sm-12'>
+                                    <label class='label-container'><input type='checkbox' value='1' name='auto' ";
                         if ($auto) {
                             $tool_content .= " checked";
                         }
-                        $tool_content .= "/><span class='checkmark'></span></label></div>";
+                        $tool_content .= "/><span class='checkmark'></span>$langAttendanceInsAut</label></div>";
                     }
                     $tool_content .= "
 
@@ -831,9 +834,9 @@ function display_user_presences($attendance_id) {
             $tool_content .= "<h5>". display_user($userID) ."</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
-            $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDate</th><th>$langType</th>";
-            $tool_content .= "<th width='10' class='text-center'>$langAttendanceBooking</th>";
-            $tool_content .= "</tr>";
+            $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDate</th><th>$langType</th>";
+            $tool_content .= "<th>$langAttendanceBooking</th>";
+            $tool_content .= "</tr></thead>";
         } else {
             $tool_content .= "
             <div class='col-12'>
@@ -862,12 +865,12 @@ function display_user_presences($attendance_id) {
                         $userAttend = 0;
                     }
                 }
-                $tool_content .= "<tr><td><b>";
+                $tool_content .= "<tr><td>";
 
                 if (!empty($activity->title)) {
                     $tool_content .= q($activity->title);
                 }
-                $tool_content .= "</b>";
+               
                 $tool_content .= "</td>";
                 if($activity->date){
                     $tool_content .= "<td><div class='smaller'><span class='day'>" . format_locale_date(strtotime($activity->date), 'short', false) . "</div></td>";
@@ -885,7 +888,7 @@ function display_user_presences($attendance_id) {
                 } else {
                     $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                 }
-                $tool_content .= "<td class='text-center'>
+                $tool_content .= "<td>
                 <label class='label-container'><input type='checkbox' value='1' name='" . $activity->id . "'";
                 if(isset($userAttend) && $userAttend) {
                     $tool_content .= " checked";
@@ -927,12 +930,12 @@ function display_all_users_presences($attendance_id) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead class='list-header'>
                 <tr>
-                  <th width='1'>$langID</th>
+                  <th>$langID</th>
                   <th>$langName $langSurname</th>
-                  <th class='text-center'>$langAmShort</th>
-                  <th class='text-center'>$langRegistrationDateShort</th>
-                  <th class='text-center'>$langAttendanceAbsences</th>
-                  <th class='text-center'><i class='fa fa-cogs'></i></th>
+                  <th>$langAmShort</th>
+                  <th>$langRegistrationDateShort</th>
+                  <th>$langAttendanceAbsences</th>
+                  <th></th>
                 </tr>
             </thead>
             <tbody>";
@@ -947,7 +950,7 @@ function display_all_users_presences($attendance_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID) . "</td>
                 <td>$resultUser->am</td>
-                <td class='text-center'>";
+                <td>";
             if (!is_null($resultUser->reg_date)) {
                 $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
             } else {
@@ -955,7 +958,7 @@ function display_all_users_presences($attendance_id) {
             }
 
             $tool_content .= "</td>
-                <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
+                <td>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
                 <td class='option-btn-cell text-center'>"
                    . action_button(array(
                         array('title' => $langAttendanceBook,
@@ -1248,24 +1251,24 @@ function student_view_attendance($attendance_id) {
 
         $tool_content .= " <div class='col-12'>
         <div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th>
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
                               <th>$langDate</th>
                               <th>$langDescription</th>
                               <th>$langAttendanceAbsencesYes</th>
-                          </tr>";
+                          </tr></thead>";
     }
     if ($result) {
         foreach ($result as $details) {
             $content = standard_text_escape($details->description);
-            $tool_content .= "<tr><td><b>";
+            $tool_content .= "<tr><td>";
             if (!empty($details->title)) {
                 $tool_content .= q($details->title);
             }
-            $tool_content .= "</b>";
+            
             $tool_content .= "</td>"
                     . "<td><div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div></td>"
                     . "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>";
+            $tool_content .= "<td>";
             //check user grade for this activity
             $sql = Database::get()->querySingle("SELECT attend FROM attendance_book
                                                             WHERE attendance_activity_id = ?d

@@ -29,10 +29,10 @@ function list_tcs() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
-            "<th style='width: 80px;'>$langChoice</th>" .
-            "<th><div class='text-start'>&nbsp;$langBBB</div></th>" .
-            "</tr>";
+            "<thead><tr class='list-header'>" .
+            "<th>$langChoice</th>" .
+            "<th>$langBBB</th>" .
+            "</tr></thead>";
         foreach ($tcinfo as $entry) {
             if ($entry['visible'] == 0) {
                 $vis = 'not_visible';
@@ -42,17 +42,17 @@ function list_tcs() {
                 $disabled = '';
             }
             if (!empty($entry['description'])) {
-                $description_text = "<div style='margin-top: 10px;' class='text-muted'>" . $entry['description'] . "</div>";
+                $description_text = "<div class='text-muted'>" . $entry['description'] . "</div>";
             } else {
                 $description_text = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='tc[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='tc[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
             $tool_content .= "<td>" . q($entry['name']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_tc' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_tc' value='$langAddModulesButton'></div></form>";
     }
 }

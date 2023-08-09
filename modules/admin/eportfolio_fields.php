@@ -493,11 +493,11 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= action_button($dyntools)."</div></caption>";
 
             $tool_content .= "<thead><tr class='notes_thead'>
-                <td class='bg-header-table TextBold text-white'>$langName</td>
-                <td class='bg-header-table TextBold text-white'>$langCPFShortName</td>
-                <td class='bg-header-table TextBold text-white'>$langDescription</td>
-                <td class='bg-header-table TextBold text-white'>$langCPFFieldDatatype</td>
-                <td class='bg-header-table TextBold text-white'>$langCPFFieldRequired</td>
+                <td class='bg-header-table TextBold'>$langName</td>
+                <td class='bg-header-table TextBold'>$langCPFShortName</td>
+                <td class='bg-header-table TextBold'>$langDescription</td>
+                <td class='bg-header-table TextBold'>$langCPFFieldDatatype</td>
+                <td class='bg-header-table TextBold'>$langCPFFieldRequired</td>
                 <td class='bg-header-table TextBold text-white'>" . icon('fa-gears') . "</td>
 		        </tr></thead>";
 

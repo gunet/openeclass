@@ -301,9 +301,9 @@ if (!$nbrExercises) {
     if ($is_editor) {
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center' width='20%'>$langInfoExercise</th>
-                <th class='text-center' width='15%'>$langResults</th>
-                <th class='text-center' width='42'>".icon('fa-gears')."</th>
+                <th>$langInfoExercise</th>
+                <th>$langResults</th>
+                <th class='text-center'>".icon('fa-gears')."</th>
               </tr>";
     } else { // student view
         load_js('tools.js');
@@ -312,7 +312,7 @@ if (!$nbrExercises) {
         $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center' width='20%'>$langInfoExercise</th>
+                <th>$langInfoExercise</th>
                 $resultsHeader
               </tr>";
     }
@@ -431,14 +431,14 @@ if (!$nbrExercises) {
                 $submissionCount = ($countNumOfResults == 1 ?
                     "1 $langExercisesSubmission":
                     "$countNumOfResults $langExercisesSubmissions");
-                $tool_content .= "<td class='text-center'>"
+                $tool_content .= "<td>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
-                           <button class='d-flex justify-content-center align-items-center m-auto d-block border-0 rounded-pill bgLightBlue pe-none text-white mt-2'>
+                           <button class='d-flex justify-content-start align-items-start border-0 rounded-2 Success-200-bg text-white pe-none mt-2'>
                                 <small>$submissionCount</small>
                            </button>"
                         . "</td>";
             } else {
-                $tool_content .= "<td class='text-center'>  &mdash; </td>";
+                $tool_content .= "<td>  &mdash; </td>";
             }
             $TotalExercises = Database::get()->queryArray("SELECT eurid FROM exercise_user_record WHERE eid = ?d AND attempt_status= " . ATTEMPT_PENDING . "", $row->id);
             $counter1 = count($TotalExercises);

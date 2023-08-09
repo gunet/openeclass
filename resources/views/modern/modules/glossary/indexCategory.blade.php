@@ -69,14 +69,14 @@
                             <div class='col-12'>
                                 <div class='table-responsive'>    
                                     <table class='table-default' id="glossary_table">
-                                            
-                                        <tr class='list-header'>
+                                         <thead>   
+                                            <tr class='list-header'>
                                             <th>{{ trans('langName') }}</th>
-                                            <th>Περιγραφή</th>
+                                            <th>{{ trans('langDescription')}}</th>
                                             @if($is_editor)
-                                                <th class='text-center' scope="col"><span class="notes_th_comment"><i class='fas fa-cogs'></i></span></th>
+                                                <th></th>
                                             @endif
-                                        </tr>
+                                        </tr></thead>
                                         <tbody>
                                             @foreach ($categories as $category)
                                             <tr>

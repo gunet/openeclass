@@ -384,7 +384,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <div class='input-group'>
                             <span class='input-group-addon'>
                                 <label class='label-container'>
-                                    <input type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
+                                    <input class='mt-0' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
                                     <span class='checkmark'></span>
                                 </label>
                             </span>
@@ -400,7 +400,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         <div class='input-group'>
                             <span class='input-group-addon'>
                                 <label class='label-container'>
-                                     <input type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                                     <input class='mt-0' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                                      <span class='checkmark'></span>
                                 </label>
                             </span>

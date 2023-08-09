@@ -163,13 +163,13 @@ if ($total_categories > 0) {
         $tool_content .= "</div></div></caption>";
 
         $tool_content .= "<div class='mt-0 table-responsive'><table class='table-default'>";
-        $tool_content .= "<thead class='list-header'>";
-        $tool_content .= "<tr>
-            <th class='text-start'>$toolName</th>
-            <th class='text-start'>$langTopics</th>
-            <th class='text-start'>$langPosts</th>
-            <th class='text-start'>$langLastPost</th>
-            <th class='text-center'>" . icon('fa-cogs') . "</th>
+        $tool_content .= "<thead>";
+        $tool_content .= "<tr class='list-header'>
+            <th>$toolName</th>
+            <th>$langTopics</th>
+            <th>$langPosts</th>
+            <th>$langLastPost</th>
+            <th></th>
           </tr>";
         $tool_content .= "</thead>";
 
@@ -242,9 +242,9 @@ if ($total_categories > 0) {
                         }
                         $tool_content .= "<div class='smaller'>$desc</div>" .
                             "</td>" .
-                            "<td class='text-start'>$total_topics</td>" .
-                            "<td class='text-start'>$total_posts</td>" .
-                            "<td class='text-start'>";
+                            "<td>$total_topics</td>" .
+                            "<td>$total_posts</td>" .
+                            "<td>";
                         if ($total_topics > 0 && $total_posts > 0) {
                             $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";
                             if ($is_editor or ! $group_id or ($has_forum and $is_member)) {
@@ -260,7 +260,7 @@ if ($total_categories > 0) {
                         } else {
                             $forum_link_notify = toggle_link($forum_action_notify);
                         }
-                        $tool_content .= "<td style='width:30px;'>";
+                        $tool_content .= "<td class='text-center'>";
 
 
                         

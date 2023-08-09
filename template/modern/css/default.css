@@ -1168,6 +1168,11 @@ body .form-action-button-mydropdowns{
   border: solid 1px #E8EDF8;
 }
 
+.menu-popover.submitAdminBtn{
+  border: 0px;
+  color: #9BA9C1;
+}
+
 .menu-popover .hidden-xs{
   padding: 0px;
 }
@@ -2749,16 +2754,14 @@ label:has(input[type="checkbox"]:disabled){
   margin-top:15px; 
 }
 
-.table-default, .announcements_table{ 
+/* .table-default, .announcements_table{ 
   width:100%;
-  /* background: #f5f5f5;  */
-  /* background: #ffffff;  */
   border-collapse: collapse;
   overflow: hidden;
-  border-radius: 4px;
-  border: solid 1px #E8EDF8;
-}
-@media(max-width:1199px){
+  border-radius: 0px;
+  border: 0px;
+} */
+/* @media(max-width:1199px){
   .table-default, .announcements_table{
     overflow:auto !important;
   }
@@ -2767,35 +2770,167 @@ label:has(input[type="checkbox"]:disabled){
   .table-default, .announcements_table{
       overflow:auto !important;
     }
-}
+} */
 
-th, td { 
+/* .table-default a, .announcements_table a{
+  text-decoration: underline;
+} */
+
+/* th, td { 
   padding:10px; 
   border-bottom: solid 1px #E8EDF8;
   border-left: solid 1px #E8EDF8;
   border-right: solid 1px #E8EDF8;
+} */
+
+/* .table-default .list-header{ 
+  background:#ffffff;
+  border: 0px;
+  border-bottom: solid 2px #0073E6; 
 }
 
-.list-header{ background:#2B3944; }
+.table-default .bg-header-table {
+  background:#ffffff !important;
+} */
 
-.bg-header-table {background:#2B3944 !important;}
-
-.table-default .list-header,
+/* .table-default .list-header,
 .announcements_table .list-header,
-.announcements_table .notes_thead{
-  min-height:40px !important;
+.announcements_table .notes_thead,
+.table-default .bg-header-table{
+  min-height:48px !important;
+  background:#ffffff !important;
+  border: 0px;
+  border-bottom: solid 2px #0073E6; 
+
 }
 
 .table-default .list-header th,
 .announcements_table .list-header th, 
 .announcements_table .notes_thead th{ 
-  color:#ffffff; 
+  color:#2B3944; 
   font-size: 14px; 
   font-weight: 700; 
   font-style: normal;
 }
 
-tr.active{ 
+table:has(tbody) tbody{
+  display: block;
+  height: 450px;
+  overflow-y: auto;
+  min-width: 100% !important;
+}
+table:has(tbody) tbody > tr{
+  min-height: 48px !important;
+  border-bottom: solid 1px #E8EDF8;
+} */
+
+
+
+
+
+
+
+
+
+
+
+table ,tr td{
+  border:0px;
+}
+@media(min-width:992px){
+  .table-default tbody {
+    display:block;
+    min-height: 48px;
+    max-height:384px;
+    overflow-y:auto;
+  }
+  .table-default tbody::-webkit-scrollbar {
+    width: 20px;
+  }
+  .table-default tbody::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  .table-default tbody::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+  }
+  .table-default tbody::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+  }
+  .table-default tbody::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+  .table-default thead, .table-default tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+    min-height: 48px;
+  }
+}
+
+
+thead tr th{
+  padding: 10px 0px 10px 0px;
+}
+tbody tr{
+  border-bottom: solid 1px #EFF6FF;
+}
+tbody tr td{
+  padding: 10px 0px 10px 0px;
+}
+thead {
+  width:100%; 
+  border-bottom: solid 2px #0073E6;
+}
+table {
+  width:100%;
+}
+
+th .fa-cogs,
+th .fa-gears{
+  display: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* tr.active{ 
   background: #fafafa; 
 }
 
@@ -2817,7 +2952,7 @@ tr.active th span,strong{
 
 #questions_filter{
   padding-right: 10px;
-}
+} */
 
 /**********************************************************************************************************************/
 /**************************************************** TEMP LABELS *****************************************************/
@@ -3819,7 +3954,7 @@ div[role="progressbar"]::before {
 /*************************************************** NOTES ************************************************************/
 /**********************************************************************************************************************/
 
-.notes_thead{ background:#2B3944;  }
+/* .notes_thead{ background:#2B3944;  } */
 
 .control-label-notes{ 
   font-size:14px; 
@@ -3853,13 +3988,13 @@ div[role="progressbar"]::before {
 /*************************************************** LINKS ************************************************************/
 /**********************************************************************************************************************/
 
-.nocategory-link a, .nocategory-link p{ 
+/* .nocategory-link a, .nocategory-link p{ 
   padding-left:17px ; 
 }
 
 .category-link a{  
   padding-left:15px ; 
-}
+} */
 
 
 /**********************************************************************************************************************/

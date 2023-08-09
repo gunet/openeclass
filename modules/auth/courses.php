@@ -242,12 +242,12 @@ function expanded_faculte($facid, $uid) {
     }, intval($uid));
 
     $retString .= "<div class='table-responsive mt-4'><table class='table-default'>";
-    $retString .= "<tr class='list-header'>";
-    $retString .= "<th width='50' align='center'>$langRegistration</th>";
+    $retString .= "<thead><tr class='list-header'>";
+    $retString .= "<th>$langRegistration</th>";
     $retString .= "<th>$langCourseCode</th>";
-    $retString .= "<th width='220'>$langTeacher</th>";
-    $retString .= "<th width='30' align='center'>$langType</th>";
-    $retString .= "</tr>";
+    $retString .= "<th>$langTeacher</th>";
+    $retString .= "<th class='text-center'>$langType</th>";
+    $retString .= "</tr></thead>";
 
     Database::get()->queryFunc("SELECT
                             course.id cid,
@@ -303,7 +303,7 @@ function expanded_faculte($facid, $uid) {
             $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
         }
 
-        $retString .= "<td class='text-center'>";
+        $retString .= "<td>";
         $requirepassword = '';
         $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {
@@ -314,7 +314,7 @@ function expanded_faculte($facid, $uid) {
                 } else {
                     $requirepassword = '';
                 }
-                $retString .= "<label class='label-container ms-3'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class /><span class='checkmark'></span></label>";
+                $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class /><span class='checkmark'></span></label>";
             } else {
                 $retString .= "<i class='fa fa-user'></i>";
             }
@@ -326,7 +326,7 @@ function expanded_faculte($facid, $uid) {
             }
 
             $disabled = ($mycours->visible == 0) ? 'disabled' : '';
-            $retString .= "<label class='label-container ms-3'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
+            $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>

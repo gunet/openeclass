@@ -271,8 +271,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <table id='tableNotes' class='table-default'>";
     if ($noteNumber > 0) {
         $tool_content .= "<tr class='list-header'>";
-        $tool_content .= "<th class='text-start ps-2'>$langCategoryNotes</th>";
-        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th>$langCategoryNotes</th>";
+        $tool_content .= "<th class='text-end'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
 
@@ -291,7 +291,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
         $tool_content .= "<div class = 'note-content' data-id= '" . getIndirectReference($note->id) . "'>$content</div>";
         $tool_content .= "</td>";
 
-        $tool_content .= "<td class='option-btn-cell text-center'>" .
+        $tool_content .= "<td class='option-btn-cell text-end'>" .
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?modify=" . getIndirectReference($note->id),

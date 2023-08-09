@@ -83,15 +83,15 @@
                                 </caption>            
                                 <thead>
                                     <tr class='list-header'>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langName') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langCPFShortName') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langDescription') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langCPFFieldDatatype') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langCPFFieldRequired') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langCPFFieldRegistration') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langCPFFieldUserType') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{{ trans('langCPFFieldVisibility') }}</td>
-                                        <td class='bg-header-table text-white TextBold'>{!! icon('fa-gears') !!}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langName') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langCPFShortName') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langDescription') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langCPFFieldDatatype') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langCPFFieldRequired') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langCPFFieldRegistration') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langCPFFieldUserType') }}</td>
+                                        <td class='bg-header-table TextBold'>{{ trans('langCPFFieldVisibility') }}</td>
+                                        <td class='bg-header-table TextBold'>{!! icon('fa-gears') !!}</td>
                                     </tr>
                                 </thead>
                             

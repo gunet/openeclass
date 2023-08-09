@@ -352,7 +352,7 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-12 mt-3'><div class='table-responsive'><table class='table-default table-exercise'>";
+        $tool_content .= "<div class='col-12 mb-5'><div class='table-responsive'><table class='table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
@@ -391,14 +391,16 @@ function display_exercise($exercise_id) {
                 $modal_params = '';
             }
             $tool_content .= "
-            <tr class='active'>
-              <td class='bgTheme' colspan='$colspan'>
-                <strong><u>$langQuestion</u>: $i</strong>
-                <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
-                  <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
-                </a>
-                </td>
-            </tr>
+            <thead>
+                <tr class='active'>
+                <td colspan='$colspan'>
+                    <strong><u>$langQuestion</u>: $i</strong>
+                    <a $modal_params href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyAnswers=$qid'>
+                    <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span>
+                    </a>
+                    </td>
+                </tr>
+            </thead>
             <tr>
               <td colspan='$colspan'>";
             $tool_content .= "

@@ -22,21 +22,21 @@ function list_blogs() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
-            "<th width='80'>$langChoice</th>" .
-            "<th><div class='text-start'>&nbsp;$langBlogPosts</div></th>" .
-            "<th><div class='text-start'>$langBlogPostTitle</div></th>" .
-            "</tr>";
+            "<thead><tr class='list-header'>" .
+            "<th>$langChoice</th>" .
+            "<th>$langBlogPosts</th>" .
+            "<th>$langBlogPostTitle</th>" .
+            "</tr></thead>";
 
         foreach ($bloginfo as $entry) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='blog[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='blog[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&action=showPost&pId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td>" . $entry['content'] . "</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_blog' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_blog' value='$langAddModulesButton'></div></form>";
     }
 }

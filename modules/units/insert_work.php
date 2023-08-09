@@ -34,15 +34,15 @@ function list_assignments() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-start'>&nbsp;$langWorks</th>" .
-                "<th width='150'>$langGroupWorkDeadline_of_Submission</th>" .
+                "<thead><tr class='list-header'>" .
+                "<th>$langChoice</th>" .
+                "<th>$langWorks</th>" .
+                "<th>$langGroupWorkDeadline_of_Submission</th>" .
 
-                "</tr>";
+                "</tr></thead>";
         foreach ($result as $row) {
             if ($row->password_lock) {
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langPassCode'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-original-title='$langPassCode'></span>";
             } else {
                 $exclamation_icon = '';
             }
@@ -52,15 +52,15 @@ function list_assignments() {
                 $vis = '';
             }
             $description = empty($row->description) ? '' :
-                    "<div class='margin-top: 10px;'>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
+                    "<div>" . mathfilter($row->description, 12 , "../../courses/mathimg/"). "</div>";
             $tool_content .= "<tr class='$vis'>" .
-                    "<td class='text-center'><label class='label-container'><input name='work[]' value='$row->id' type='checkbox' /><span class='checkmark'></span></label></td>" .
+                    "<td><label class='label-container'><input name='work[]' value='$row->id' type='checkbox' /><span class='checkmark'></span></label></td>" .
                     "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$exclamation_icon $description</td>" .
-                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
+                    "<td>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
                     "</tr>";
         }
         $tool_content .=
                 "</table></div>" .
-                "<div class='d-flex justify-content-center mt-3'><input class='btn submitAdminBtn' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
+                "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }

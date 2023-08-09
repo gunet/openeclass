@@ -121,11 +121,11 @@
                                         <tr class='list-header'>
                                             <th class='text-start'>{!! trans('langCourseCode') !!}</th>
                                         @if (isset($isInOpenCoursesMode))
-                                            <th class='text-start' width='220'>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-start'width='30'>{!! trans('langOpenCoursesLevel') !!}</th>
+                                            <th class='text-start'>{!! trans('langTeacher') !!}</th>
+                                            <th class='text-center'>{!! trans('langOpenCoursesLevel') !!}</th>
                                         @else
-                                            <th class='text-start' width='220'>{!! trans('langTeacher') !!}</th>
-                                            <th width='30'>{!! trans('langType') !!}</th>
+                                            <th class='text-start'>{!! trans('langTeacher') !!}</th>
+                                            <th class='text-center'>{!! trans('langType') !!}</th>
                                         @endif
                                         </tr>
                                     </thead>

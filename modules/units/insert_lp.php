@@ -43,10 +43,10 @@ function list_lps() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th width='80'>$langChoice</th>" .
-                "<th><div class='text-start'>&nbsp;$langLearningPaths</div></th>" .
-                "</tr>";
+                "<thead><tr class='list-header'>" .
+                "<th>$langChoice</th>" .
+                "<th>$langLearningPaths</th>" .
+                "</tr></thead>";
         foreach ($lpinfo as $entry) {
             if ($entry['visible'] == 0) {
                 $vis = 'not_visible';
@@ -60,19 +60,19 @@ function list_lps() {
                                                 $entry['id'], $entry['id']);
             if (($m_id) and $m_id->module_id > 0) {
                 if (!empty($entry['comment'])) {
-                    $comment_text = "<div style='margin-top: 10px;'>" . $entry['comment'] . "</div>";
+                    $comment_text = "<div>" . $entry['comment'] . "</div>";
                 } else {
                     $comment_text = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
-                $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>"
                  . $comment_text . "</td>";
                 $tool_content .= "</tr>";
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
     }
 }

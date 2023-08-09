@@ -103,7 +103,7 @@
                 });
             },
             sPaginationType: 'full_numbers',
-            bSort: false,
+            bSortable: false,
             oLanguage: {
                 sLengthMenu:   '{{ trans('langDisplay') }} _MENU_ {{ trans('langResults2') }}',
                 sZeroRecords:  '{{ trans('langNoResult') }}',
@@ -329,9 +329,9 @@
 
                     <div class='col-12'>
                         <div class="table-responsive">
-                            <table id='ann_table{{ $course_id }}' class='table-default announcements_table'>
+                            <table id='ann_table{{ $course_id }}' class='table-default'>
                                 <thead>
-                                    <tr class='notes_thead'>
+                                    <tr>
                                         <th>{{ trans('langAnnouncement') }}</th>
                                         <th>{{ trans('langDate') }}</th>
                                         @if ($is_editor)
@@ -342,8 +342,11 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
+
+                            
                         </div>
                     </div>
+                
                         
                 </div>
             </div>

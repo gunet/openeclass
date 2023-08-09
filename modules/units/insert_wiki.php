@@ -42,25 +42,26 @@ function list_wikis() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id'>
                 <div class='table-responsive'><table class='table-default'>
+                <thead>
                     <tr class='list-header'>
-                        <th style='width: 80px;'>$langChoice</th>
-                        <th class='text-start'>&nbsp;$langWikis</th>
-                    </tr>";
+                        <th>$langChoice</th>
+                        <th>$langWikis</th>
+                    </tr></thead>";
         foreach ($wikiinfo as $entry) {
             if (!empty($entry['description'])) {
-                $description_text = "<div style='margin-top: 10px;'>" .  $entry['description']. "</div>";
+                $description_text = "<div>" .  $entry['description']. "</div>";
             } else {
                 $description_text = '';
             }
             $tool_content .= "<tr>
-                                <td align='center'><label class='label-container'><input type='checkbox' name='wiki[]' value='$entry[id]'><span class='checkmark'></span></label></td>
+                                <td><label class='label-container'><input type='checkbox' name='wiki[]' value='$entry[id]'><span class='checkmark'></span></label></td>
                                 <td><a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a>
                                 $description_text</td>
                             </tr>";
         }
         $tool_content .= "</table></div>
-                <div class='d-flex justify-content-center mt-3'>
-                    <input class='btn submitAdminBtn' type='submit' name='submit_wiki' value='$langAddModulesButton'>
+                <div class='d-flex justify-content-start mt-4'>
+                    <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_wiki' value='$langAddModulesButton'>
                 </div>
             </form>";
     }

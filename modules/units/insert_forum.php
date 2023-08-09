@@ -35,19 +35,19 @@ function list_forums() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-start'>&nbsp;$langForums</th>" .
-                "</tr>";
+                "<thead><tr class='list-header'>" .
+                "<th>$langChoice</th>" .
+                "<th>$langForums</th>" .
+                "</tr></thead>";
 
         foreach ($foruminfo as $entry) {
             if (!empty($entry->desc)) {
-                $description_text = "<div style='margin-top: 10px;'>" .  q($entry->desc) . "</div>";
+                $description_text = "<div>" .  q($entry->desc) . "</div>";
             } else {
                 $description_text = '';
             }
             $tool_content .= "<tr>
-                <td class='text-center'><label class='label-container'><input type='checkbox' name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
+                <td><label class='label-container'><input type='checkbox' name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
                 <td><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum={$entry->id}'>" . $entry->name . "</a>$description_text</td>
               </tr>";
 
@@ -62,15 +62,15 @@ function list_forums() {
                 }
                 foreach ($topicinfo as $topicentry) {
                     $tool_content .= "<tr>";
-                    $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='forum[]'  value='{$entry->id}:$topicentry[topic_id]'><span class='checkmark'></span></label></td>";
-                    $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
+                    $tool_content .= "<td><label class='label-container'><input type='checkbox' name='forum[]'  value='{$entry->id}:$topicentry[topic_id]'><span class='checkmark'></span></label></td>";
+                    $tool_content .= "<td>".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topicentry[topic_id]&amp;forum={$entry->id}'>" . q($topicentry['topic_title']) . "</a></td>";
                     $tool_content .= "</tr>";
                 }
             }
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>
-                            <input class='btn submitAdminBtn' type='submit' name='submit_forum' value='$langAddModulesButton' />
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>
+                            <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_forum' value='$langAddModulesButton' />
                         </div></form>";
     }
 }

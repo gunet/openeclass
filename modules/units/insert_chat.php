@@ -29,10 +29,10 @@ function list_chats() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
-            "<th style='width: 80px;'>$langChoice</th>" .
-            "<th><div class='text-start'>&nbsp;$langChat</div></th>" .
-            "</tr>";
+            "<thead><tr class='list-header'>" .
+            "<th>$langChoice</th>" .
+            "<th>$langChat</th>" .
+            "</tr></thead>";
         foreach ($chatinfo as $entry) {
             if ($entry['visible'] == 'inactive') {
                 $vis = 'not_visible';
@@ -42,18 +42,18 @@ function list_chats() {
                 $disabled = '';
             }
             if (!empty($entry['description'])) {
-                $description_text = "<div style='margin-top: 10px;'>" .  $entry['description'] . "</div>";
+                $description_text = "<div>" .  $entry['description'] . "</div>";
             } else {
                 $description_text = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
-            $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/chat/chat.php?course=$course_code&amp;conference_id=$entry[id]'>" . q($entry['name']) . "</a>$description_text</td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='chat[]' value='$entry[id]' $disabled><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/chat/chat.php?course=$course_code&amp;conference_id=$entry[id]'>" . q($entry['name']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
-        $tool_content .= "<div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_chat' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_chat' value='$langAddModulesButton'></div></form>";
 
     }
 }

@@ -17,9 +17,9 @@
 
                     <div class='col-12'>
                         <div class='table-responsive'>
-                            <table id='ann_table_admin_logout' class='announcements_table'>
+                            <table id='ann_table_admin_logout' class='table-default'>
                                 <thead>
-                                <tr class='notes_thead'>
+                                <tr class='list-header'>
                                     <th>{{ trans('langAnnouncement') }}</th>
                                     <th>{{ trans('langDate') }}</th>
                                 </tr>

@@ -601,12 +601,12 @@ if ($userdata) {
                                 <table class='table-default'>
                                   <tbody>
                                     <tr class='list-header'>
-                                      <th class='text-start' width='60'>$langType</th>
-                                      <th class='text-start'>$langName</th>
-                                      <th class='text-start'>$langDate</th>
-                                      <th class='text-start'>$langSize</th>";
+                                      <th>$langType</th>
+                                      <th>$langName</th>
+                                      <th>$langDate</th>
+                                      <th>$langSize</th>";
             if ($id == $uid) {
-                $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
+                $tool_content .= "<th class='text-end'>".icon('fa-gears', $langCommands)."</th>";
             }
 
             $tool_content .= "</tr>";
@@ -627,11 +627,11 @@ if ($userdata) {
                     $filesize = format_file_size(filesize($data['file_path']));
                 }
                 $tool_content .= "<tr class='$row_class'>
-                                    <td class='text-center'><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
+                                    <td><span class='fa ".choose_image('.' . $data['format'])."'></span></td>
                                     <td>$file_link</td>
                                     <td>".format_locale_date(strtotime($data['date_modified']), 'short', false)."</td>
                                     <td>$filesize</td>
-                                    <td class='option-btn-cell text-center'>
+                                    <td class='text-end'>
                                        ". action_button(array(
                                                     array(
                                                             'title' => $langePortfolioRemoveResource,

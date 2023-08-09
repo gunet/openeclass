@@ -252,24 +252,29 @@ function tools($id, $vis) {
     if (!$is_editor) {
         return '';
     } else {
-        $content = "<td class='option-btn-cell' style='width: 90px;'>
-               <div class='reorder-btn text-center' style='font-size: 16px; cursor: pointer;'>
-                    <span class='fa fa-arrows' style='cursor: pointer;'></span>
-               </div><div class='text-center mt-3'>";
-        $content .= action_button(array(
-                    array('title' => $langEditChange,
-                          'url' => "edit.php?course=$course_code&amp;id=$id",
-                          'icon' => 'fa-edit'),
-                    array('title' => $vis ? $langViewHide : $langViewShow,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
-                          'icon' => $vis ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
-                          'icon' => 'fa-xmark',
-                          'class' => 'delete',
-                          'confirm' => $langEBookDelConfirm)
-        ));
-        $content .= "</div></td>";
+        $content = "
+            <td class='option-btn-cell '>
+                <div class='d-flex justify-content-center align-items-center gap-2'>
+                    <div class='reorder-btn' style='font-size: 16px; cursor: pointer;'>
+                        <span class='fa fa-arrows' style='cursor: pointer;'></span>
+                    </div>
+                    <div>";
+                $content .= action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => "edit.php?course=$course_code&amp;id=$id",
+                                'icon' => 'fa-edit'),
+                            array('title' => $vis ? $langViewHide : $langViewShow,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
+                                'icon' => $vis ? 'fa-eye-slash' : 'fa-eye'),
+                            array('title' => $langDelete,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langEBookDelConfirm)
+                ));
+        $content .= "</div>
+                 </div>
+            </td>";
         return "$content";
     }
 }

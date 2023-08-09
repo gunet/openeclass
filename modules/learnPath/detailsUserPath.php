@@ -140,6 +140,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 $toolName = uid_to_name($_REQUEST['uInfo']) . ": " . $LPname;
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
+    <thead>
         <tr class='list-header'>
             <th colspan=" . ($maxDeep + 1) . ">$langLearningObjects</th>
             <th>$langAttempt</th>
@@ -149,7 +150,7 @@ $tool_content .= "<div class='table-responsive'>
             <th>$langTotalTimeSpent</th>
             <th>$langLessonStatus</th>
             <th>$langProgress</th>
-        </tr>";
+        </tr></thead>";
 
 $data[] = [ $toolName ];
 $data[] = [];

@@ -715,23 +715,24 @@ function display_my_exercises($dialogBox, $style) {
     if (!empty($exercises)) {
         $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">';
         $output .= "<div class='table-responsive'><table class='table-default'>
+
                     <tr class='list-header'>
-                        <th class='text-start'>
+                        <th>
                             $langExercise
                         </th>
-                        <th class='text-center'>
+                        <th>
                             $langSelection
                         </th>
                     </tr>";
             foreach ($exercises as $exercise) {
-                $output .= "<tr><td class='text-start'>
+                $output .= "<tr><td>
                             <a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$exercise->id&amp;preview=1'>" . q($exercise->title) . "</a>";
                 if (!empty($exercise->description)) {
                     $output .= "<span class='comments'>" . standard_text_escape($exercise->description) . "</span></td>";
                 } else {
                     $output .= "</td>";
                 }
-                $output .= '<td class="text-center">'
+                $output .= '<td>'
                         . '<label class="label-container"><input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" /><span class="checkmark"></span></label>'
                         . '</td></tr>';
             }
@@ -779,10 +780,10 @@ function display_my_documents($dialogBox, $style)
     }
     $content .=
         "<tr class='list-header'>" .
-        "<th class='text-start'>$langName</th>" .
-        "<th class='text-center'>$langSize</th>" .
-        "<th class='text-center'>$langDate</th>" .
-        "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+        "<th>$langName</th>" .
+        "<th>$langSize</th>" .
+        "<th>$langDate</th>" .
+        "<th>$langChoice</th>" .
         "</tr>";
 
     $counter = 0;
@@ -829,9 +830,9 @@ function display_my_documents($dialogBox, $style)
             } else {
                 $size = format_file_size($entry['size']);
                 $date = format_locale_date(strtotime($entry['date']), 'short', false);
-                $content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
+                $content .= "<td>$size</td><td>$date</td>";
             }
-            $content .= "<td class='text-center'>
+            $content .= "<td>
                             <label class='label-container'>
                                 <input type='checkbox' name='document[]' value='$entry[id]' />
                                 <span class='checkmark'></span>

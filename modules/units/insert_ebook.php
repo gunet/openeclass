@@ -34,13 +34,13 @@ function list_ebooks() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-start'>&nbsp;$langEBook</th>" .
-                "</tr>";
+                "<thead><tr class='list-header'>" .
+                "<th>$langChoice</th>" .
+                "<th>$langEBook</th>" .
+                "</tr></thead>";
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'>
+            $tool_content .= "<td>
             <label class='label-container'><input type='checkbox' name='ebook[]' value='$catrow->id' />
                             <span class='checkmark'></span></label>
                             <input type='hidden' name='ebook_title[$catrow->id]'
@@ -50,7 +50,7 @@ function list_ebooks() {
         }
         $tool_content .=
                 "</table></div>
-                <div class='d-flex justify-content-center mt-3'>
-                <input class='btn submitAdminBtn' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
+                <div class='d-flex justify-content-start mt-4'>
+                <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }

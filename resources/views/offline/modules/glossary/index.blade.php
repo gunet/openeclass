@@ -7,13 +7,15 @@
     </div>
     <div class='table-responsive glossary-categories'>
         <table class='table-default'>
+            <thead>
             <tr class='list-header'>
                 <th class='text-start'>{{ trans('langGlossaryTerm') }}</th>
                 <th class='text-start'>{{ trans('langGlossaryDefinition') }}</th>
-            </tr>
+            </tr></thead>
+            <tbody>
             @foreach ($glossary as $data)
                 <tr>
-                    <td width='150'>
+                    <td>
                         <strong>{{ $data->term }}</strong><br>
                         @if (!empty($data->category_id))
                             <span>
@@ -44,6 +46,7 @@
                     </td>
                 </tr>
             @endforeach
+            </tbody>
         </table>
     </div>
 @endsection

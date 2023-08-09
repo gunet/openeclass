@@ -42,10 +42,10 @@ function list_exercises() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "<th class='text-start'>&nbsp;$langExercices</th>" .
-                "</tr>";
+                "<thead><tr class='list-header'>" .
+                "<th>$langChoice</th>" .
+                "<th>$langExercices</th>" .
+                "</tr></thead>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
                 $vis = 'not_visible';
@@ -58,14 +58,14 @@ function list_exercises() {
                 $exclamation_icon = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
-            $tool_content .= "<td class='text-start'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$entry[id]&amp;preview=1'>" . q($entry['name']) . "</a>"
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$entry[id]&amp;preview=1'>" . q($entry['name']) . "</a>"
                 . $exclamation_icon . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>
-                    <div class='d-flex justify-content-center mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_exercise' value='$langAddModulesButton'></div>
+                    <div class='d-flex justify-content-start mt-4'>";
+        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_exercise' value='$langAddModulesButton'></div>
                 </form>";
     }
 }

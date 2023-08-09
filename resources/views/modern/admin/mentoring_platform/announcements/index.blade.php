@@ -47,7 +47,7 @@
                         <div class='table-responsive mt-0'>
                             <table class='mentoring_announcements_table table-default'>
                                 <tr class='list-header'>
-                                    <th style='width: 70%;'>{{ trans('langAnnouncement') }}</th>
+                                    <th>{{ trans('langAnnouncement') }}</th>
                                     <th>{{ trans('langDate') }}</th>
                                     <th>{{ trans('langNewBBBSessionStatus') }}</th>
                                     <th class="text-center">{!! icon('fa-gears') !!}</th>

@@ -131,18 +131,18 @@ if (isset($_GET['add_template'])) {
             $tool_content .= "<div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>
                 <thead>
-                <tr class='list-header'><th class = 'text-center'>$langTitle</th>
-                    <th class = 'text-center'>$langUnitDescr</th>
-                    <th class = 'text-center'>$langLimesurveyEnabled</th>
-                    <th class = 'text-center'>".icon('fa-gears')."</th></tr>
+                <tr class='list-header'><th>$langTitle</th>
+                    <th>$langUnitDescr</th>
+                    <th>$langLimesurveyEnabled</th>
+                    <th class='text-end'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $lti) {
                 $enabled_lti_template = ($lti->enabled == 1)? $langYes : $langNo;
                 $tool_content .= "<tr>" .
                     "<td>$lti->title</td>" .
                     "<td>$lti->description</td>" .
-                    "<td class = 'text-center'>$enabled_lti_template</td>" .
-                    "<td class='option-btn-cell text-center'>" .
+                    "<td>$enabled_lti_template</td>" .
+                    "<td class='option-btn-cell text-end'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?edit_template=" . getIndirectReference($lti->id),

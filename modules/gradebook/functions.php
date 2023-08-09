@@ -54,9 +54,9 @@ function display_user_grades($gradebook_id) {
             $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <div class='table-responsive'><table class='table-default'>";
-            $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>";
-            $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
-            $tool_content .= "</tr>";
+            $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<th>$langGradebookBooking</th>";
+            $tool_content .= "</tr></thead>";
         } else {
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</span></div>\n";
         }
@@ -85,12 +85,12 @@ function display_user_grades($gradebook_id) {
 
                 $content = standard_text_escape($activity->description);
 
-                $tool_content .= "<tr><td><b>";
+                $tool_content .= "<tr><td>";
 
                 if (!empty($activity->title)) {
                     $tool_content .= q($activity->title);
                 }
-                $tool_content .= "</b>";
+                
                 $tool_content .= "</td>";
                 if($activity->date){
                     $tool_content .= "<td><div class='smaller'><span class='day'>" . format_locale_date(strtotime($activity->date), 'short', false) . "</div></td>";
@@ -108,9 +108,9 @@ function display_user_grades($gradebook_id) {
                 } else {
                     $tool_content .= "<td class='smaller'>$langGradebookActAttend</td>";
                 }
-                $tool_content .= "<td width='' class='text-center'>" . $activity->weight . "%</td>";
-                @$tool_content .= "<td class='text-center'>
-                <input style='width:30px' type='text' value='".$userGrade."' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
+                $tool_content .= "<td>" . $activity->weight . "%</td>";
+                @$tool_content .= "<td>
+                <input class='form-control' type='text' value='".$userGrade."' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
                 $tool_content .= ">
                 <input type='hidden' value='" . $gradebook_range . "' name='degreerange'>
                 <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>
@@ -118,7 +118,7 @@ function display_user_grades($gradebook_id) {
             } // end of while
         }
         $tool_content .= "</tr></table></div>";
-        $tool_content .= "<div class='float-end mt-3'><input class='btn submitAdminBtn' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div></form>";
+        $tool_content .= "<div class='float-end mt-3'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div></form>";
 
         if(userGradeTotal($gradebook_id, $userID) > $gradebook_range){
             $tool_content .= "<br>" . $langGradebookOutRange;
@@ -582,12 +582,12 @@ function display_all_users_grades($gradebook_id) {
         $tool_content .= "<div class='table-responsive'><table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                  <th style='width:1%'>$langID</th>
+                  <th>$langID</th>
                   <th>$langName $langSurname</th>
                   <th>$langAm</th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langGradebookGrade</th>
-                  <th class='text-center'>".icon('fa-cogs')."</th>
+                  <th class='text-end'>".icon('fa-cogs')."</th>
                 </tr>
             </thead>
             <tbody>";
@@ -603,19 +603,19 @@ function display_all_users_grades($gradebook_id) {
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>" . $resultUser->am . "</td>
-                <td class='text-center'>";
+                <td>";
                 if (!empty($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
                 } else {
                     $tool_content .= " &mdash; ";
                 }
-                $tool_content .= "<td class='text-center'>";
+                $tool_content .= "<td>";
                 if (weightleft($gradebook_id, 0) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>";
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>" . " (<small>" . $langGradebookGradeAlert . "</small>)";
                 }
-            $tool_content .="</td><td class='option-btn-cell text-center'>".
+            $tool_content .="</td><td class='option-btn-cell text-end'>".
                     action_button(array(
                         array('title' => $langGradebookBook,
                                 'icon' => 'fa-plus',
@@ -685,23 +685,23 @@ function student_view_gradebook($gradebook_id, $uid) {
         }
         $tool_content .= "<div class='badge bgEclass  p-2'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th>
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
                               <th>$langGradebookActivityDate2</th>
                               <th>$langType</th>
                               <th>$langGradebookActivityWeight</th>
                               <th>$langGradebookGrade</th>
                               <th>$langGradebookTotalGrade</th>
-                          </tr>";
+                          </tr></thead>";
     }
     if ($result) {
         foreach ($result as $details) {
             $tool_content .= "
                 <tr>
                     <td>
-                        <strong>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</strong>
+                        " .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "
                     </td>
                     <td>
-                        <div class='text-center'>" . (!is_null($details->date) ? format_locale_date(strtotime($details->date), 'short', false) : " &mdash;") . "</div>
+                        " . (!is_null($details->date) ? format_locale_date(strtotime($details->date), 'short', false) : " &mdash;") . "
                     </td>";
 
             if ($details->module_auto_id) {
@@ -719,7 +719,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                 $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
             }
             $tool_content .= "<td>" . q($details->weight) . "%</td>";
-            $tool_content .= "<td width='70' class='text-center'>";
+            $tool_content .= "<td>";
             //check user grade for this activity
             $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book
                                                             WHERE gradebook_activity_id = ?d
@@ -730,7 +730,7 @@ function student_view_gradebook($gradebook_id, $uid) {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td width='70' class='text-center'>";
+            $tool_content .= "<td>";
             $tool_content .= $sql ? round($sql->grade * $range * $details->weight / 100, 2)." / $range</td>" : "&mdash;";
             $tool_content .= "</td>
             </tr>";
@@ -738,8 +738,8 @@ function student_view_gradebook($gradebook_id, $uid) {
         $s_grade = userGradeTotal($gradebook_id, $uid);
         $tool_content .= "
             <tr>
-                <th colspan='5' class='text-right'>$langGradebookSum:</th>
-                <th class='text-center'>". (($s_grade != "&mdash;") ? $s_grade . " / $range" : "$s_grade"). "</th>
+                <th colspan='5' class='text-right'>$langGradebookSum</th>
+                <th>". (($s_grade != "&mdash;") ? $s_grade . " / $range" : "$s_grade"). "</th>
             </tr>";
     }
     $tool_content .= "</table></div>";
@@ -841,22 +841,20 @@ function display_gradebook($gradebook) {
                             <div class='col-sm-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
+                                    <thead>
                                         <tr class='list-header'>
-                                            <th colspan='7' class='text-center text-white'>$langGradebookActList</th>
-                                        </tr>
-                                        <tr class=''>
-                                            <th class='text-dark'>$langTitle</th>
-                                            <th class='text-dark'>$langGradebookActivityDate2</th>
-                                            <th class='text-dark'>$langType</th><th class='text-dark'>$langGradebookWeight</th>
-                                            <th class='text-center text-dark'>$langViewShow</th>
-                                            <th class='text-center text-dark'>$langScore</th>
-                                            <th class='text-center text-dark'>".icon('fa-cogs')."</i></th>
-                                        </tr>";
+                                            <th>$langTitle</th>
+                                            <th>$langGradebookActivityDate2</th>
+                                            <th>$langType</th><th>$langGradebookWeight</th>
+                                            <th>$langViewShow</th>
+                                            <th>$langScore</th>
+                                            <th class='text-end'>".icon('fa-cogs')."</i></th>
+                                        </tr></thead>";
 
         foreach ($result as $details) {
             $activity_id = getIndirectReference($details->id);
             $content = ellipsize_html($details->description, 50);
-            $tool_content .= "<tr><td><strong>";
+            $tool_content .= "<tr><td>";
             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=$activity_id'>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
             $tool_content .= "<small class='help-block'>";
             switch ($details->activity_type) {
@@ -868,7 +866,6 @@ function display_gradebook($gradebook) {
                  default : $tool_content .= "";
              }
             $tool_content .= "</small";
-            $tool_content .= "</strong>";
             $tool_content .= "</td><td>";
             if (!empty($details->date)) {
                 $tool_content .= "<div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div>";
@@ -897,19 +894,19 @@ function display_gradebook($gradebook) {
             }
 
             if (fmod($details->weight, 1) !== 0.00) { // if number doesn't contain `.00`
-                $tool_content .= "<td class='text-center'>" . $details->weight . "%</td>";
+                $tool_content .= "<td>" . $details->weight . "%</td>";
             } else {
-                $tool_content .= "<td class='text-center'>" . round($details->weight) . "%</td>";
+                $tool_content .= "<td>" . round($details->weight) . "%</td>";
             }
 
-            $tool_content .= "<td width='' class='text-center'>";
+            $tool_content .= "<td>";
             if ($details->visible) {
                 $tool_content .= $langYes;
             } else {
                 $tool_content .= $langNo;
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($details, $gradebook) . "</td>";
+            $tool_content .= "<td>" . userGradebookTotalActivityStats($details, $gradebook) . "</td>";
             if ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
                 $preview_link = "{$urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
             } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
@@ -919,7 +916,7 @@ function display_gradebook($gradebook) {
             } else {
                 $preview_link = '';
             }
-            $tool_content .= "<td class='option-btn-cell text-center'>".
+            $tool_content .= "<td class='option-btn-cell text-end'>".
                 action_button(array(
                             array('title' => $langEditChange,
                                 'icon' => 'fa-edit',
@@ -971,14 +968,15 @@ function display_gradebooks() {
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'>
+        $tool_content .= "<thead><tr class='list-header'>
+        
                             <th>$langAvailableGradebooks</th>
-                            <th style='width: 150px;'>$langStart</th>
-                            <th style='width: 150px;'>$langFinish</th>";
+                            <th>$langStart</th>
+                            <th>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th class='text-end'>" . icon('fa-gears') . "</th>";
         }
-        $tool_content .= "</tr>";
+        $tool_content .= "</tr></thead>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
             $tool_content .= "
@@ -994,7 +992,7 @@ function display_gradebooks() {
                         <td>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
                         ";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-center'>";
+                $tool_content .= "<td class='option-btn-cell text-end'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;editSettings=1",
@@ -1038,16 +1036,16 @@ function display_available_exercises($gradebook_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-end'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "</tr></thead>";
 
         foreach ($checkForExer as $newExerToGradebook) {
             $content = ellipsize_html($newExerToGradebook->description, 50);
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-start'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
+            $tool_content .= "<td class='text-end'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div></div>";
@@ -1077,9 +1075,9 @@ function display_available_assignments($gradebook_id) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                           <table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th class='text-end'><i class='fa fa-cogs'></i></th>";
+        $tool_content .= "</tr></thead>";
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
             if ($newAssToGradebook->assign_to_specific == 1) { // assignment to specific users
@@ -1099,7 +1097,7 @@ function display_available_assignments($gradebook_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
             $tool_content .= "</td></tr>";
         } // end of while
         $tool_content .= "</table></div></div></div>";
@@ -1127,14 +1125,14 @@ function display_available_lps($gradebook_id) {
     if ($checkForLpNumber > 0) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
-        $tool_content .= "<th class='text-center'>$langActions</th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
+        $tool_content .= "<th></th>";
+        $tool_content .= "</tr></thead>";
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
             $tool_content .= "<td>" .q($newExerToGradebook->comment). "</td>";
-            $tool_content .= "<td class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
             $tool_content .= "</tr>";
         } // end of while
         $tool_content .= "</table></div></div>";

@@ -283,14 +283,15 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, t.poster_id AS t
 if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
         <table class='table-default'>
+        <thead>
         <tr class='list-header'>
           <th class='forum_td'>$langTopics</th>
-          <th class='text-center'>$langAnswers</th>
-          <th class='text-center'>$langSender</th>
-          <th class='text-center'>$langSeen</th>
-          <th class='text-center'>$langLastMsg</th>
-          <th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
-        </tr>";
+          <th>$langAnswers</th>
+          <th>$langSender</th>
+          <th>$langSeen</th>
+          <th>$langLastMsg</th>
+          <th></th>
+        </tr></thead>";
     foreach ($result as $myrow) {
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
@@ -326,10 +327,10 @@ if (count($result) > 0) { // topics found
             $pagination .= "&nbsp;</span></strong>";
         }
         $tool_content .= "<td>$image <a href='$topiclink'>" . q($topic_title) . "</a>$pagination</td>";
-        $tool_content .= "<td class='text-center'>$replies</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
-        $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
-        $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "<br />".format_locale_date(strtotime($last_post_datetime), 'short')."</td>";
+        $tool_content .= "<td>$replies</td>";
+        $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
+        $tool_content .= "<td>$myrow->num_views</td>";
+        $tool_content .= "<td>" . q(uid_to_name($myrow->poster_id)) . "<br />".format_locale_date(strtotime($last_post_datetime), 'short')."</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {

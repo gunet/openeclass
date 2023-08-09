@@ -45,10 +45,10 @@ function list_polls($id = NULL) {
         }
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th class='text-start'>&nbsp;$langQuestionnaire</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "</tr>";
+                "<thead><tr class='list-header'>" .
+                "<th>$langQuestionnaire</th>" .
+                "<th></th>" .
+                "</tr></thead>";
         foreach ($pollinfo as $entry) {
             $checked = '';
             if (in_array($entry['id'], $exist_poll)) {
@@ -57,7 +57,7 @@ function list_polls($id = NULL) {
 
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa-question')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a></td>";
-            $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

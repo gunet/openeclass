@@ -45,11 +45,11 @@ function list_exercises($id = NULL) {
         }
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th width='50%' class='text-start'>$langExercices</th>" .
-                "<th class='text-start'>$langDescription</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
-                "</tr>";
+                "<thad><tr class='list-header'>" .
+                "<th>$langExercices</th>" .
+                "<th>$langDescription</th>" .
+                "<th>$langChoice</th>" .
+                "</tr></thead>";
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
                 $vis = 'not_visible';
@@ -61,9 +61,9 @@ function list_exercises($id = NULL) {
                 $checked = 'checked';
             }
             $ret_string .= "<tr class='$vis'>";
-            $ret_string .= "<td class='text-start'><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
-            $ret_string .= "<td class='text-start'>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
-            $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $ret_string .= "<td><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $ret_string .= "<td>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
+            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";
