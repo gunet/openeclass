@@ -40,65 +40,73 @@
                     </div>
                     @endif   
                     
-                    <div class='col-12'>
-                        <div class='col-md-9 col-12 ms-auto me-auto'>{!! $action_bar !!}</div>
-                    </div>
+                    
+                    {!! $action_bar !!}
+                    
 
                     
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit rounded p-3'>
                             <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}">
                                 <div class='form-group'>
-                                    <label class='col-12 mb-2'>{{ trans('langEnableMentoringPlatform') }}</label>
+                                    <label class='col-12 form-label'>{{ trans('langEnableMentoringPlatform') }}</label>
                                     <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input id='enable_mentoring' type='checkbox' name='enable_mentoring' value='1' {!! get_config('mentoring_platform') == 1 ? 'checked' : '' !!}>{{ trans('langActivate') }}
+                                            <label class='label-container'>
+                                                <input id='enable_mentoring' type='checkbox' name='enable_mentoring' value='1' {!! get_config('mentoring_platform') == 1 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langActivate') }}
                                             </label>
-                                            <label class='ms-3'>
-                                                <input id='disable_mentoring' type='checkbox' name='enable_mentoring' value='0' {!! get_config('mentoring_platform') == 0 ? 'checked' : '' !!}>{{ trans('langDeactivate') }}
+                                            <label class='label-container'>
+                                                <input id='disable_mentoring' type='checkbox' name='enable_mentoring' value='0' {!! get_config('mentoring_platform') == 0 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langDeactivate') }}
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label class='col-12 mb-2'>{{ trans('langAlwaysActiveMentoringPlatform') }}</label>
+                                    <label class='col-12 form-label'>{{ trans('langAlwaysActiveMentoringPlatform') }}</label>
                                     <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input id='always_mentoring' type='checkbox' name='always_active_mentoring' value='1' {!! get_config('mentoring_always_active') == 1 ? 'checked' : '' !!}>{{ trans('langYes')}}
+                                        <label class='label-container'>
+                                                <input id='always_mentoring' type='checkbox' name='always_active_mentoring' value='1' {!! get_config('mentoring_always_active') == 1 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langYes')}}
                                             </label>
-                                            <label class='ms-3'>
-                                                <input id='no_always_mentoring' type='checkbox' name='always_active_mentoring' value='0' {!! get_config('mentoring_always_active') == 0 ? 'checked' : '' !!}>{{ trans('langNo')}}
+                                            <label class='label-container'>
+                                                <input id='no_always_mentoring' type='checkbox' name='always_active_mentoring' value='0' {!! get_config('mentoring_always_active') == 0 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langNo')}}
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label class='col-12 mb-2'>{{ trans('langTutorAsMenteeInPlatform') }}</label>
+                                    <label class='col-12 form-label'>{{ trans('langTutorAsMenteeInPlatform') }}</label>
                                     <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input id='yes_tutor_mentee' type='checkbox' name='tutor_as_mentee' value='1' {!! get_config('mentoring_tutor_as_mentee') == 1 ? 'checked' : '' !!}>{{ trans('langYes')}}
+                                        <label class='label-container'>
+                                                <input id='yes_tutor_mentee' type='checkbox' name='tutor_as_mentee' value='1' {!! get_config('mentoring_tutor_as_mentee') == 1 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langYes')}}
                                             </label>
-                                            <label class='ms-3'>
-                                                <input id='no_tutor_mentee' type='checkbox' name='tutor_as_mentee' value='0' {!! get_config('mentoring_tutor_as_mentee') == 0 ? 'checked' : '' !!}>{{ trans('langNo')}}
+                                            <label class='label-container'>
+                                                <input id='no_tutor_mentee' type='checkbox' name='tutor_as_mentee' value='0' {!! get_config('mentoring_tutor_as_mentee') == 0 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langNo')}}
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class='form-group mt-4'>
-                                    <label class='col-12 mb-2'>{{ trans('langMentorAsTutorProgram') }}</label>
+                                    <label class='col-12 form-label'>{{ trans('langMentorAsTutorProgram') }}</label>
                                     <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input id='yes_mentor_tutor' type='checkbox' name='mentor_as_tutorProgram' value='1' {!! get_config('mentoring_mentor_as_tutorProgram') == 1 ? 'checked' : '' !!}>{{ trans('langYes')}}
+                                        <label class='label-container'>
+                                                <input id='yes_mentor_tutor' type='checkbox' name='mentor_as_tutorProgram' value='1' {!! get_config('mentoring_mentor_as_tutorProgram') == 1 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langYes')}}
                                             </label>
-                                            <label class='ms-3'>
-                                                <input id='no_mentor_tutor' type='checkbox' name='mentor_as_tutorProgram' value='0' {!! get_config('mentoring_mentor_as_tutorProgram') == 0 ? 'checked' : '' !!}>{{ trans('langNo')}}
+                                            <label class='label-container'>
+                                                <input id='no_mentor_tutor' type='checkbox' name='mentor_as_tutorProgram' value='0' {!! get_config('mentoring_mentor_as_tutorProgram') == 0 ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>{{ trans('langNo')}}
                                             </label>
                                         </div>
                                     </div>

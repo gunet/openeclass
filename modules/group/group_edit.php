@@ -373,22 +373,24 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
             <label class='col-sm-12 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label>
-                     <input type='checkbox' name='self_reg' $checked[self_reg]>
-                        $langGroupAllowStudentRegistration
+                        <label class='label-container'>
+                            <input type='checkbox' name='self_reg' $checked[self_reg]>
+                            <span class='checkmark'></span>
+                            $langGroupAllowStudentRegistration
                         </label>
-                        </div>
+                    </div>
                 </div>
             </div>
             <div class='form-group mt-4'>
             <label class='col-sm-12 control-label-notes mb-2'>$langGroupAllowUnregister</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label>
-                     <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
-                        $langGroupAllowStudentUnregister
+                        <label class='label-container'>
+                            <input type='checkbox' name='allow_unreg' $checked[allow_unreg]>
+                            <span class='checkmark'></span>
+                            $langGroupAllowStudentUnregister
                         </label>
-                        </div>
+                    </div>
                 </div>
             </div>
             <div class='form-group mt-4'>
@@ -409,47 +411,51 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                 </div>
             </div>
             
-            <div class='form-group mt-4 d-inline-flex flex-wrap'>
-                <label class='col-auto control-label-notes'>$langGroupPublicUserList:</label>
-                <div class='col-auto ms-2'>
+            <div class='form-group mt-4'>
+                <div class='col-12'>
                     <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='public_users_list' $checked[public_users_list]>
-                      </label>
+                        <label class='label-container'>
+                            <input type='checkbox' name='public_users_list' $checked[public_users_list]>
+                            <span class='checkmark'></span>
+                            $langGroupPublicUserList
+                         </label>
                     </div>
                 </div>
-            </div></br>
+            </div>
             
-            <div class='form-group mt-4 d-inline-flex'>
-                <label class='col-auto control-label-notes'>$langGroupForum:</label>
-                <div class='col-auto ms-2'>
+            <div class='form-group mt-4'>
+                <div class='col-12'>
                     <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='forum' $checked[has_forum]>
-                      </label>
+                        <label class='label-container'>
+                            <input type='checkbox' name='forum' $checked[has_forum]>
+                            <span class='checkmark'></span>
+                            $langGroupForum
+                        </label>
                     </div>
                 </div>
-            </div></br>
+            </div>
             
-            <div class='form-group mt-4 d-inline-flex'>
-                <label class='col-auto control-label-notes'>$langDoc:</label>
-                <div class='col-auto ms-2'>
+            <div class='form-group mt-4'>
+                <div class='col-12'>
                     <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='documents' $checked[documents]>
+                        <label class='label-container'>
+                            <input type='checkbox' name='documents' $checked[documents]>
+                            <span class='checkmark'></span>
+                            $langDoc
                       </label>
                     </div>
                 </div>
-            </div></br>
+            </div>
 
 
-            <div class='form-group mt-4 d-inline-flex'>
-            <label class='col-auto control-label-notes'>$langWiki:</label>
-                <div class='col-auto ms-2'>
+            <div class='form-group mt-4'>
+                <div class='col-12'>
                     <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='wiki' $checked[wiki]>
-                      </label>
+                        <label class='label-container'>
+                            <input type='checkbox' name='wiki' $checked[wiki]>
+                            <span class='checkmark'></span>
+                            $langWiki
+                        </label>
                     </div>
                 </div>
             </div>

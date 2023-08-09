@@ -63,7 +63,7 @@ function list_exercises($id = NULL) {
             $ret_string .= "<tr class='$vis'>";
             $ret_string .= "<td class='text-start'><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $ret_string .= "<td class='text-start'>" . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
-            $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'></td>";
+            $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

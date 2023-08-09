@@ -207,7 +207,7 @@ function showmedia() {
                     <td align='text-start'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /></div></td></tr>";
+        $output .= "<td><div align='center'><label class='label-container'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></div></td></tr>";
         $i++;
     }
     foreach ($resultMediaLinks as $myrow) {
@@ -216,7 +216,7 @@ function showmedia() {
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
-        $output .= "<td><div align='center'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow->id . "' /></div></td></tr>";
+        $output .= "<td><div align='center'><label class='label-container'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></div></td></tr>";
         $j++;
     }
 

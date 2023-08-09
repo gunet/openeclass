@@ -113,7 +113,9 @@
                                                     <td>{{ $resource->videoLecture->organization->name }}</td>
                                                     <td>{{ $resource->videoLecture->date }}</td>
                                                     <td class="center" width="10">
-                                                        <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/> {!! $alreadyAdded !!}
+                                                        <label class='label-container'>
+                                                            <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/><span class='checkmark'></span> {!! $alreadyAdded !!}
+                                                        </label>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -153,7 +155,9 @@
                                                         <td>{{ $resource->videoLecture->organization->name }}</td>
                                                         <td>{{ $resource->videoLecture->date }}</td>
                                                         <td class="center" width="10">
-                                                            <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/> {!! $alreadyAdded !!}
+                                                            <label class='label-container'>
+                                                                <input name="delosResources[]" value="{{ $resource->resourceID }}" type="checkbox"/><span class='checkmark'></span> {!! $alreadyAdded !!}
+                                                            </label>
                                                         </td>
                                                     </tr>
                                                 @endforeach

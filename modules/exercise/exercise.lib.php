@@ -149,9 +149,10 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
             $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='checkbox'>
-                          <label>
-                            <input type='checkbox' name='choice[$questionId][$answerId]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
-                            " . standard_text_escape($answer) . "
+                            <label class='label-container'>
+                                <input type='checkbox' name='choice[$questionId][$answerId]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
+                                <span class='checkmark'></span>
+                                " . standard_text_escape($answer) . "
                           </label>
                         </div>";
         }

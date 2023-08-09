@@ -382,21 +382,23 @@ if (isset($_GET['rubric_id'])) {
                         <div class='col-12'>
                             <div class='table-responsive mt-1'>
                             <table class='table-default' id='rubric_opts'> 
-                                <tr class='title1'>
+                                <tr>
                                     <td colspan='2'>
                                         <div class='checkbox'>
-                                            <label>
+                                        <label class='label-container'>
                                                 <input type='checkbox' id='user_button0' name='options0' value='$opt1' $sel_opt1 />
+                                                <span class='checkmark'></span>
                                                 $langRubricOption1
                                             </label>
                                         </div>
                                     </td>
                                 </tr>
-                                <tr class='title1'>
+                                <tr>
                                     <td colspan='2'>
                                         <div class='checkbox'>
-                                            <label>
+                                        <label class='label-container'>
                                                 <input type='checkbox' id='user_button1' name='options1' value='$opt2' $sel_opt2/>
+                                                <span class='checkmark'></span>
                                                 $langRubricOption2
                                             </label>
                                         </div>

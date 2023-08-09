@@ -180,7 +180,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
                                 </div>";
         $checked = $data->enabled == 1 ? "checked" : "";
         $tool_content .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $tool_content .= "<label><input type='checkbox' name='enabled' value='1' $checked>$langCΕnabled</label>";
+        $tool_content .= "<label class='label-container'><input type='checkbox' name='enabled' value='1' $checked><span class='checkmark'></span>$langCΕnabled</label>";
         $tool_content .= "</div></div></div>";
         $tool_content .= "
                     <div class='form-group mt-4'>
@@ -206,7 +206,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         foreach ($app->getParams() as $param) {
             if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
                 $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-                $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' checked>" . $param->display() . "</label>";
+                $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' checked><span class='checkmark'></span>" . $param->display() . "</label>";
                 $boolean_field .= "</div></div></div>";
             } elseif ($param->getType() == ExtParam::TYPE_STRING) {
                 $tool_content .= "<div class='form-group mt-4'>";

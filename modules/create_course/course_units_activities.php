@@ -196,7 +196,7 @@ if(!isset($_POST['final_submit'])){
                     $tool_content .= "<td>$title_home</td>";
                     $newUnitId =$maxUnitId->muid +1;
                     foreach ($_SESSION['units'] as $utitle) {
-                        $tool_content .= "<td><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input></td>";
+                        $tool_content .= "<td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input><span class='checkmark'></span></label></td>";
                         $newUnitId ++;
                         $j++;
 
@@ -227,7 +227,7 @@ if(!isset($_POST['final_submit'])){
                     $newUnitId =$maxUnitId->muid +1;
                     foreach ($_SESSION['units'] as $utitle) {
                         $tool_content .= "
-                            <td><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input></td>";
+                            <td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input><span class='checkmark'></span></label></td>";
                         $newUnitId ++;
                         $k++;
                     }
@@ -258,7 +258,7 @@ if(!isset($_POST['final_submit'])){
                     foreach($_SESSION['units'] as $utitle) {
 
                         $tool_content .= "
-                            <td><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input></td>";
+                            <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input><span class='checkmark'></span></label></td>";
                         $newUnitId++;
                         $z++;
                     }
@@ -387,10 +387,10 @@ if(!isset($_POST['final_submit'])){
 
                 if ($q) {
                     $tool_content .= "
-                        <td ><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></td>";
+                        <td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked><span class='checkmark'></span></label></td>";
                 } else {
                     $tool_content .= "
-                        <td><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></td>";
+                        <td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'><span class='checkmark'></span></label></td>";
                 }
 
                 if ($title_home == $end){
@@ -415,9 +415,9 @@ if(!isset($_POST['final_submit'])){
 
                 if($q) {
                     $tool_content .= "
-                        <td><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>";
+                        <td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input><span class='checkmark'></span></label></td>";
                 } else {
-                    $tool_content .= "<td><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>";
+                    $tool_content .= "<td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input><span class='checkmark'></span></label></td>";
                 }
 
                 if ($title_class == $end) {
@@ -445,10 +445,10 @@ if(!isset($_POST['final_submit'])){
 
                 if($q) {
                     $tool_content .= "
-                        <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input></td>";
+                        <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."' checked></input><span class='checkmark'></span></label></td>";
                 } else {
                     $tool_content .= "
-                        <td><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input></td>";
+                        <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$unit_id."_". $act_id."' value='".$unit_id."_".$act_id."'></input><span class='checkmark'></span></label></td>";
                 }
 
                 if ($title_after_class == $end) {

@@ -111,7 +111,7 @@ a:hover{
 /* for action_bar */
 .btn-group .submitAdminBtn, .btn-group .cancelAdminBtn, .btn-group .deleteAdminBtn,
 .submitAdminBtn, .cancelAdminBtn, .deleteAdminBtn{
-    border-radius: 5px !important;
+    border-radius: 4px !important;
 }
 
 .table-default{

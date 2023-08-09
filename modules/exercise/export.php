@@ -208,8 +208,8 @@ $mpdf->Output("$course_code questions.pdf", 'D'); // 'D' or 'I' for download / i
 function question_html($question, $qid) {
     global $langAnswer, $langScore, $langChoice, $langCorrespondsTo, $langComment;
 
-    $checkbox_checked = '<input type="checkbox" checked="checked">';
-    $checkbox_empty = '<input type="checkbox">';
+    $checkbox_checked = '<label class="label-container"><input type="checkbox" checked="checked"><span class="checkmark"></span></label>';
+    $checkbox_empty = '<label class="label-container"><input type="checkbox"><span class="checkmark"></span></label>';
 
     $answerType = $question->selectType();
     if ($answerType == FREE_TEXT) {

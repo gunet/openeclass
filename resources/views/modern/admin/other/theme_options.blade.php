@@ -219,8 +219,9 @@
                     <label for='loginImg' class='col-sm-3 control-label'>{{ trans('langLoginBanner') }}:</label>
                     <div class='col-sm-9'>
                           <div class='checkbox'>
-                            <label>
+                          <label class='label-container'>
                               <input type='checkbox' name='openeclassBanner' value='1'{{ isset($theme_options_styles['openeclassBanner']) ? ' checked' : '' }}>
+                              <span class='checkmark'></span>
                               {{ trans('langDeactivate') }}
                             </label>
                           </div>                   

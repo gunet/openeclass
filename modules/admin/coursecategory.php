@@ -274,22 +274,31 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategoryMultiple'] . "</label>
         <div class='col-sm-12'>
-            <input type='checkbox' name='multiple' value='1' " . $check_multiple . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategoryMultiple2'] . "</small></span>
+            <label class='label-container'>
+                <input type='checkbox' name='multiple' value='1' " . $check_multiple . ">
+                <span class='checkmark'></span>
+                " . $GLOBALS['langCourseCategoryMultiple2'] . "
+            </label>
         </div>
     </div>
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langCourseCategorySearchable'] . "</label>
         <div class='col-sm-12'>
-            <input type='checkbox' name='searchable' value='1' " . $check_searchable . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategorySearchable2'] . "</small></span>
+            <label class='label-container'>
+                <input type='checkbox' name='searchable' value='1' " . $check_searchable . ">
+                <span class='checkmark'></span>
+                " . $GLOBALS['langCourseCategorySearchable2'] . "
+            </label>
         </div>
     </div>
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</label>
         <div class='col-sm-12'>
-            <input type='checkbox' name='active' value='1' " . $check_active . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategoryActive2'] . "</small></span>
+            <label class='label-container'>
+                <input type='checkbox' name='active' value='1' " . $check_active . ">
+                <span class='checkmark'></span>
+                " . $GLOBALS['langCourseCategoryActive2'] . "
+            </label>
         </div>
     </div>";
 

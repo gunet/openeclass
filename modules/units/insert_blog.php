@@ -30,7 +30,7 @@ function list_blogs() {
 
         foreach ($bloginfo as $entry) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='blog[]' value='$entry[id]'></td>";
+            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='blog[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&action=showPost&pId=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td>" . $entry['content'] . "</td>";
             $tool_content .= "</tr>";

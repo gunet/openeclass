@@ -112,8 +112,9 @@ if (isset($_POST['toReorder'])) {
   
             <div class='form-group mt-4'>
               <div class='col-sm-9 col-sm-offset-3 checkbox'>
-                <label>
-                  <input type='checkbox' name='required' id='required' value='1'$checked>
+                <label class='label-container'>
+                  <input type='checkbox' name='required' id='required' value='1' $checked>
+                  <span class='checkmark'></span>
                   $langCMeta[compulsory]
                 </label>
               </div>

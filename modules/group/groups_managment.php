@@ -417,8 +417,9 @@ $tool_content .= "<div class='col-12'>
                                                                                                 <p class='control-label-notes mb-1'>$langGroupStudentRegistrationType</p>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='checkbox'>
-                                                                                                        <label>
+                                                                                                        <label class='label-container'>
                                                                                                             <input type='checkbox' name='self_reg_$gr->id' $checked[$self_reg]>
+                                                                                                            <span class='checkmark'></span>
                                                                                                             $langGroupAllowStudentRegistration
                                                                                                         </label>
                                                                                                     </div>
@@ -429,8 +430,9 @@ $tool_content .= "<div class='col-12'>
                                                                                                 <p class='control-label-notes mb-1'>$langGroupAllowUnregister</p>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='checkbox'>
-                                                                                                        <label>
+                                                                                                        <label class='label-container'>
                                                                                                             <input type='checkbox' name='allow_unreg_$gr->id' $checked[$allow_unreg]>
+                                                                                                            <span class='checkmark'></span>
                                                                                                             $langGroupAllowStudentUnregister
                                                                                                         </label>
                                                                                                     </div>
@@ -463,8 +465,9 @@ $tool_content .= "<div class='col-12'>
                                                                                                 
                                                                     $tool_content .= "  <div class='col-12 form-group'>
                                                                                             <div class='checkbox'>
-                                                                                                <label>
+                                                                                                <label class='label-container'>
                                                                                                     <input type='checkbox' name='public_users_list_$gr->id' $checked[$public_users_list]>
+                                                                                                    <span class='checkmark'></span>
                                                                                                     $langGroupPublicUserList
                                                                                                 </label>
                                                                                             </div>
@@ -472,8 +475,9 @@ $tool_content .= "<div class='col-12'>
                                                                         
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
-                                                                                                <label>
+                                                                                                <label class='label-container'>
                                                                                                     <input type='checkbox' name='forum_$gr->id' $checked[$has_forum]>
+                                                                                                    <span class='checkmark'></span>
                                                                                                     $langGroupForum
                                                                                                 </label>
                                                                                             </div> 
@@ -481,8 +485,9 @@ $tool_content .= "<div class='col-12'>
                                                                             
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
-                                                                                                <label>
+                                                                                                <label class='label-container'>
                                                                                                     <input type='checkbox' name='documents_$gr->id' $checked[$documents]>
+                                                                                                    <span class='checkmark'></span>
                                                                                                     $langDoc
                                                                                                 </label>
                                                                                             </div>
@@ -490,8 +495,9 @@ $tool_content .= "<div class='col-12'>
                                                                             
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
-                                                                                                <label>
+                                                                                                <label class='label-container'>
                                                                                                     <input type='checkbox' name='wiki_$gr->id' $checked[$wiki]>
+                                                                                                    <span class='checkmark'></span>
                                                                                                     $langWiki
                                                                                                 </label>
                                                                                             </div>

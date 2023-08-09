@@ -74,13 +74,17 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-3'>
-                                    <label class='col-12 control-label-notes mb-1'>{{ trans('langAboutWith') }}:&nbsp</label>
+                                    <label class='col-12 control-label-notes mb-1'>{{ trans('langAboutWith') }}</label>
                                     <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label class='d-flex flex-wrap'>
-                                                &nbsp&nbsp{{ trans('langInsert') }}&nbsp<input name='type' type='checkbox' value='1'>
-                                                &nbsp&nbsp{{ trans('langModify') }}&nbsp<input name='type' type='checkbox' value='2'>
-                                                &nbsp&nbsp{{ trans('langDelete') }}&nbsp<input name='type' type='checkbox' value='3'>
+                                            <label class='label-container'>
+                                                <input name='type' type='checkbox' value='1'><span class='checkmark'></span>{{ trans('langInsert') }}
+                                            </label>
+                                            <label class='label-container'>
+                                                <input name='type' type='checkbox' value='2'><span class='checkmark'></span>{{ trans('langModify') }}
+                                            </label>
+                                            <label class='label-container'>
+                                                <input name='type' type='checkbox' value='3'><span class='checkmark'></span>{{ trans('langDelete') }}
                                             </label>
                                         </div>
                                     </div>

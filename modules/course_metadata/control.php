@@ -229,18 +229,33 @@ $tool_content .= <<<EOF
                                 </li>
                                 <li class='list-group-item'>
                                     <label for='check_AMinus'>$langOpenCoursesType <strong>$langOpenCoursesIsAMinusLevel</strong></label>
-                                    <span class='float-end'><input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/></span>
+                                    <span class='float-end'>
+                                        <label class='label-container'>
+                                            <input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/>
+                                            <span class='checkmark'></span>
+                                        </label>
+                                    </span>
                                 </li>
                                 <li class='list-group-item'>
                                     <label for='check_A'>$langOpenCoursesType <strong>$langOpenCoursesIsALevel</strong></label>
-                                    <span class='float-end'><input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/></span>
+                                    <span class='float-end'>
+                                        <label class='label-container'>
+                                            <input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/>
+                                            <span class='checkmark'></span>
+                                        </label>
+                                    </span>
                                 </li>
                                 <li class='list-group-item' style='border-bottom:none;'>
                                     <label for='check_APlus'>$langOpenCoursesType <strong>$langOpenCoursesIsAPlusLevel</strong></label>
-                                    <span class='float-end'><input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/></span>
+                                    <span class='float-end'>
+                                        <label class='label-container'>
+                                            <input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/>
+                                            <span class='checkmark'></span>
+                                        </label>
+                                    </span>
                                 </li>
                                 <li class='list-group-item' style='border-top:none;'>
-                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                                    <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit' value='$langSubmit'>
                                 </li>
                             </ul>
                         </form>

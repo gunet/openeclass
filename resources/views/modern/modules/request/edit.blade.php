@@ -94,10 +94,10 @@
                             
 
                                 <div class='form-group mt-4'>
-                                    <div class='col-sm-10 col-sm-offset-2'>
+                                    <div class='col-12'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input type='checkbox' name='send_mail' value='on' checked> {{ trans('langSendInfoMail') }}
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='send_mail' value='on' checked> <span class='checkmark'></span>{{ trans('langSendInfoMail') }}
                                             </label>
                                         </div>
                                     </div>

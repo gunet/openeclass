@@ -218,11 +218,12 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             if ($okPicture) {
                 $tool_content .= "
                     <div class='row form-group mt-4'>
-                        <label class='col-12 control-label-notes mb-1'>$langDeletePicture</label>
                         <div class='col-12'>
                             <div class='checkbox'>
-                              <label>
-                                <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
+                                <label class='label-container'>
+                                    <input type='checkbox' name='deletePicture' value='1' ".(isset($_POST['deletePicture'])? "checked":"").">
+                                    <span class='checkmark'></span>
+                                    $langDeletePicture
                               </label>
                             </div>
                         </div>

@@ -49,7 +49,7 @@ function list_links() {
                     $description_text = '';
                 }
                 $tool_content .= "<tr>";
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='catlink[]' value='$catrow->id' /></td>";
+                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='catlink[]' value='$catrow->id' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>&nbsp;&nbsp;<strong>".icon('fa-folder-open')."&nbsp;&nbsp;". q($catrow->name) . "</strong>$description_text</td>";
                 $tool_content .= "</tr>";
                 $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = ?d", $course_id, $catrow->id);
@@ -60,7 +60,7 @@ function list_links() {
                         $cat_description_text = '';
                     }
                     $tool_content .= "<tr>";
-                    $tool_content .= "<td class='text-center'><input type='checkbox' name='link[]' value='$linkcatrow->id'></td>";
+                    $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='link[]' value='$linkcatrow->id'><span class='checkmark'></span></label></td>";
                     $tool_content .= "<td>&nbsp;&nbsp;".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank'>" .
                             q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a>$cat_description_text</td>";
                     $tool_content .= "</tr>";
@@ -85,7 +85,7 @@ function list_links() {
                 } else {
                     $link_description_text = '';
                 }
-                $tool_content .= "<tr><td class='text-center'><input type='checkbox' name='link[]' value='$entry[id]'></td>";
+                $tool_content .= "<tr><td class='text-center'><label class='label-container'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target='_blank'>" . q($entry['title']) . "</a>$link_description_text</td>";
                 $tool_content .= "</tr>";
             }
@@ -109,7 +109,7 @@ function list_links() {
                     } else {
                         $sb_link_description_text = '';
                     }
-                    $tool_content .= "<tr><td class='text-center'><input type='checkbox' name='link[]' value='$entry[id]'></td>";
+                    $tool_content .= "<tr><td class='text-center'><label class='label-container'><input type='checkbox' name='link[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                     $tool_content .= "<td>&nbsp;&nbsp;".icon('fa-link')."&nbsp;&nbsp;<a href='" . q($entry['url']) . "' target=_blank>" . q($entry['title']) . "</a>$sb_link_description_text</td>";
                     $tool_content .= "</tr>";
                 }

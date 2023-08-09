@@ -459,8 +459,9 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         <div class='form-group mt-4'>
             <div class='col-xs-10 col-xs-offset-2'>
                 <div class='checkbox'>
-                  <label>
+                 <label class='label-container'>
                     <input type='checkbox' name='mailing' value='1' checked />
+                    <span class='checkmark'></span>
                     $langMailToUsers
                   </label>
                 </div>

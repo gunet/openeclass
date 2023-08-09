@@ -269,9 +269,10 @@ if (isset($_GET['all'])) {
              <label class='col-sm-6 control-label-notes mb-2'>$langGroupStudentRegistrationType</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label>
-                     <input type='checkbox' name='self_reg' checked>$langGroupAllowStudentRegistration
-                   </label>
+                    <label class='label-container'>
+                        <input type='checkbox' name='self_reg' checked>
+                        <span class='checkmark'></span>$langGroupAllowStudentRegistration
+                    </label>
                  </div>
                 </div>
             </div>
@@ -279,8 +280,9 @@ if (isset($_GET['all'])) {
              <label class='col-sm-6 control-label-notes mb-2'>$langGroupAllowUnregister</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                    <label>
-                     <input type='checkbox' name='allow_unreg'>$langGroupAllowStudentUnregister
+                    <label class='label-container'>
+                     <input type='checkbox' name='allow_unreg'>
+                     <span class='checkmark'></span>$langGroupAllowStudentUnregister
                    </label>
                  </div>
                 </div>
@@ -303,35 +305,40 @@ if (isset($_GET['all'])) {
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='d-inline-flex'>
-                    <label class='pe-2 control-label-notes'>$langGroupForum:</label>
+                <div class='col-12'>
+        
                     
                     <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='forum'>
+                            <span class='checkmark'></span>
+                            $langGroupForum
                         </label>
                     </div>
                     
                 </div>
             </div>
             <div class='form-group mt-4'>
-               <div class='d-inline-flex'>
-                    <label class='control-label-notes pe-2'>$langDoc:</label>
+               <div class='col-12'>
+                    
                 
                     <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='documents'>
+                            <span class='checkmark'></span>
+                            $langDoc
                         </label>
                     </div>
                    
                 </div>
             </div>
             <div class='form-group mt-4'>
-                <div class='d-inline-flex'>
-                    <label class='pe-2 control-label-notes'>$langWiki:</label>
+                <div class='col-12'>
                     <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='wiki'>
+                            <span class='checkmark'></span>
+                            $langWiki
                         </label>
                     </div>
                     

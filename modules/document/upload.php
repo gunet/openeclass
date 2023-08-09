@@ -239,10 +239,11 @@ if ($can_upload) {
         <div class='form-group mt-4'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <div class='checkbox'>
-                    <label>
+                      <label class='label-container'>
                         <input type='checkbox' name='uncompress' value='1'>
+                        <span class='checkmark'></span>
                         <div class='TextRegular Neutral-900-cl'>$langUncompress</div>
-                    </label>
+                      </label>
                 </div>
               </div>
         </div>";
@@ -253,8 +254,9 @@ if ($can_upload) {
       <div class='form-group mt-3'>
         <div class='col-sm-offset-2 col-sm-10'>
             <div class='checkbox'>
-                <label>
+                <label class='label-container'>
                     <input type='checkbox' name='replace' value='1'>
+                    <span class='checkmark'></span>
                     <div class='TextRegular Neutral-900-cl'>$langReplaceSameName</div>
                 </label>
             </div>

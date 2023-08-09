@@ -112,18 +112,26 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label><input type='checkbox' name='delusersinactive'>{{trans('langInactiveUsers')}}</label>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='delusersinactive'>
+                                                <span class='checkmark'></span>
+                                                {{trans('langInactiveUsers')}}
+                                            </label>
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label><input type='checkbox' name='delusersdate'>{{trans('langWithRegistrationDate')}}:</label>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='delusersdate'>
+                                                <span class='checkmark'></span>
+                                                {{trans('langWithRegistrationDate')}}
+                                            </label>
                                         </div>
                                         <div class='row'>
                                             <div class='col-sm-6'>
                                                 {!! selection(array('before' => trans('langBefore'), 'after' => trans('langAfter')), 'reg_flag', $reg_flag) !!}
                                             </div>
-                                            <div class='col-sm-6 mt-md-0 mt-2'>
+                                            <div class='col-sm-6 mt-md-1 mt-3'>
                                                 <div class='input-group'>
                                                     <input class='form-control mt-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
                                                     <div class='input-group-text h-40px input-bg-color input-border-color'>
@@ -135,7 +143,11 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label><input type='checkbox' name='delusersdept'>{{trans('langWho')}}</label>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='delusersdept'>
+                                                <span class='checkmark'></span>
+                                                {{trans('langWho')}}
+                                            </label>
                                         </div>
                                         <div class='row'>
                                             <div class='col-sm-6'>
@@ -148,7 +160,11 @@ $(function() {
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
-                                            <label><input type='checkbox' name='delusersid'>{{trans('langWith')}}</label>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='delusersid'>
+                                                <span class='checkmark'></span>
+                                                {{trans('langWith')}}
+                                            </label>
                                         </div>
                                         <div class='row'>
                                             <div class='col-sm-6'>
@@ -169,7 +185,11 @@ $(function() {
                                                 <div class='form-group mt-4'>
                                                     <label for='delannounces' class='col-sm-6 control-label-notes mb-1'>{{ trans('langAnnouncements') }}</label>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label><input type='checkbox' name='delannounces'> {{ trans('langAnnouncesDel') }}</label>
+                                                        <label class='label-container'>
+                                                            <input type='checkbox' name='delannounces'> 
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langAnnouncesDel') }}
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -179,7 +199,11 @@ $(function() {
                                                 <div class='form-group mt-4'>
                                                     <label for='delagenda' class='col-sm-6 control-label-notes mb-1'>{{ trans('langAgenda') }}</label>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label><input type='checkbox' name='delagenda'> {{ trans('langAgendaDel') }}</label>
+                                                        <label class='label-container'>
+                                                            <input type='checkbox' name='delagenda'>  
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langAgendaDel') }}
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -191,10 +215,10 @@ $(function() {
                                                 <div class='form-group mt-4'>
                                                     <label for='hideworks' class='col-sm-6 control-label-notes mb-1'>{{ trans('langWorks') }}</label>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label><input type='checkbox' name='hideworks'> {{ trans('langHideWork') }}</label>
+                                                        <label class='label-container'><input type='checkbox' name='hideworks'><span class='checkmark'></span> {{ trans('langHideWork') }}</label>
                                                     </div>
                                                     <div class='col-sm-offset-2 col-sm-10 checkbox'>
-                                                        <label><input type='checkbox' name='delworkssubs'> {{ trans('langDelAllWorkSubs') }}</label>
+                                                        <label class='label-container'><input type='checkbox' name='delworkssubs'><span class='checkmark'></span> {{ trans('langDelAllWorkSubs') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -204,7 +228,7 @@ $(function() {
                                                 <div class='form-group mt-4'>
                                                     <label for='purgeexercises' class='col-sm-6 control-label-notes mb-1'>{{ trans('langExercises') }}</label>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label><input type='checkbox' name='purgeexercises'> {{ trans('langPurgeExercisesResults') }}</label>
+                                                        <label class='label-container'><input type='checkbox' name='purgeexercises'><span class='checkmark'></span> {{ trans('langPurgeExercisesResults') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -216,7 +240,7 @@ $(function() {
                                                 <div class='form-group mt-4'>
                                                     <label for='clearstats' class='col-sm-6 control-label-notes mb-1'>{{ trans('langUsage') }}</label>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label><input type='checkbox' name='clearstats'> {{ trans('langClearStats') }}</label>
+                                                        <label class='label-container'><input type='checkbox' name='clearstats'><span class='checkmark'></span> {{ trans('langClearStats') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -226,7 +250,7 @@ $(function() {
                                                 <div class='form-group mt-4'>
                                                     <label for='delblogposts' class='col-sm-6 control-label-notes mb-1'>{{ trans('langBlog') }}</label>
                                                     <div class='col-sm-12 checkbox'>
-                                                        <label><input type='checkbox' name='delblogposts'> {{ trans('langDelBlogPosts') }}</label>
+                                                        <label class='label-container'><input type='checkbox' name='delblogposts'><span class='checkmark'></span> {{ trans('langDelBlogPosts') }}</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -237,7 +261,7 @@ $(function() {
                                         <div class='form-group mt-4'>
                                             <label for='delwallposts' class='col-sm-6 control-label-notes'>{{ trans('langWall') }}</label>
                                             <div class='col-sm-12 checkbox'>
-                                                <label><input type='checkbox' name='delwallposts'> {{ trans('langDelWallPosts') }}</label>
+                                                <label class='label-container'><input type='checkbox' name='delwallposts'><span class='checkmark'></span> {{ trans('langDelWallPosts') }}</label>
                                             </div>
                                         </div>
                                     @endif

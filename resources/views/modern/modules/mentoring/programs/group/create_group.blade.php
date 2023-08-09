@@ -189,8 +189,9 @@
                                 <label class='col-sm-6 control-label-notes mb-2'>{{ trans('langGroupStudentRegistrationType') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label>
-                                            <input id='id_self_reg' type='checkbox' name='self_reg' checked>{{ trans('langGroupAllowMenteeRegistration') }}
+                                        <label class='label-container'>
+                                            <input id='id_self_reg' type='checkbox' name='self_reg' checked>
+                                            <span class='checkmark'></span>{{ trans('langGroupAllowMenteeRegistration') }}
                                         </label>
                                     </div>
                                 </div>
@@ -200,8 +201,9 @@
                                 <label class='col-sm-6 control-label-notes mb-2'>{{ trans('langOpRegReq')}}</label>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label>
-                                            <input id='id_self_request' type='checkbox' name='self_request'>{{ trans('langMenteeCanSendGroupRequest')}}
+                                    <label class='label-container'>
+                                            <input id='id_self_request' type='checkbox' name='self_request'>
+                                            <span class='checkmark'></span>{{ trans('langMenteeCanSendGroupRequest')}}
                                         </label>
                                     </div>
                                 </div>
@@ -211,8 +213,9 @@
                                 <label class='col-sm-6 control-label-notes mb-2'>{{ trans('langGroupAllowUnregister') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='allow_unreg'> {{ trans('langGroupAllowMenteeUnregister') }}
+                                    <label class='label-container'>
+                                            <input type='checkbox' name='allow_unreg'> 
+                                            <span class='checkmark'></span>{{ trans('langGroupAllowMenteeUnregister') }}
                                         </label>
                                     </div>
                                 </div>
@@ -238,55 +241,57 @@
 
 
                             <div class='form-group mt-4'>
-                                <div class='row'>
-                                    <label class='col-auto control-label-notes'>{{ trans('langGroupForum') }}:</label>
-                                    <div class='col-auto pt-1'>
+                                    <div class='col-12'>
                                         <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='forum'>
-                                        </label>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='forum'>
+                                                <span class='checkmark'></span>
+                                                {{ trans('langGroupForum') }}
+                                            </label>
                                         </div>
                                     </div>
-                                </div>
                             </div>
 
-                            <div class='form-group mt-4'>
-                                <div class='row'>
-                                    <label class='col-auto control-label-notes'>{{ trans('langDoc') }}:</label>
-                                    <div class='col-auto pt-1'>
+                            <div class='form-group mt-2'>
+                            
+                                    <div class='col-12'>
                                         <div class='checkbox'>
-                                        <label>
+                                        <label class='label-container'>
                                             <input type='checkbox' name='documents'>
+                                            <span class='checkmark'></span>
+                                            {{ trans('langDoc') }}
                                         </label>
                                         </div>
                                     </div>
-                                </div>
+                               
                             </div>
 
-                            <div class='form-group mt-4'>
-                                <div class='row'>
-                                    <label class='col-auto control-label-notes'>{{ trans('langAnnouncements') }}:</label>
-                                    <div class='col-auto pt-1'>
+                            <div class='form-group mt-2'>
+                               
+                                    <div class='col-12'>
                                         <div class='checkbox'>
-                                        <label>
+                                        <label class='label-container'>
                                             <input type='checkbox' name='announcements'>
+                                            <span class='checkmark'></span>
+                                            {{ trans('langAnnouncements') }}
                                         </label>
                                         </div>
                                     </div>
-                                </div>
+                               
                             </div>
 
-                            <div class='form-group mt-4'>
-                                <div class='row'>
-                                    <label class='col-auto control-label-notes'>{{ trans('langWall') }}:</label>
-                                    <div class='col-auto pt-1'>
+                            <div class='form-group mt-2'>
+                               
+                                    <div class='col-12'>
                                         <div class='checkbox'>
-                                        <label>
-                                            <input type='checkbox' name='wall'>
-                                        </label>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='wall'>
+                                                <span class='checkmark'></span>
+                                                {{ trans('langWall') }}
+                                            </label>
                                         </div>
                                     </div>
-                                </div>
+                                
                             </div>
 
                             <input type='hidden' name='group_quantity' value='1'>

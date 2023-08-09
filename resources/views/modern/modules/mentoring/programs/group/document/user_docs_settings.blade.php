@@ -5,12 +5,18 @@
 
                 {!! $group_hidden_input !!}
 
-                <p class='text-start TextSemiBold fs-6'>{{ trans('langManageDocs')}}<small class='small-text'>{{ trans('langCreateEditDelDoc')}}</small>?</p>
-                <div class='form-group mt-0 d-inline-flex'>
+                <p class='form-label'>{{ trans('langManageDocs')}}<small class='small-text'>{{ trans('langCreateEditDelDoc')}}</small>?</p>
+                <div class='form-group'>
                     <div class='checkbox'>
-                        <label>
-                            <input type='checkbox' id='settingsDocYes' name='settingsDocYes' value="1" {!! $setting_value == 1 ? 'checked' : '' !!}>{{ trans('langYes') }}
-                            <input class='ms-3' id='settingsDocNo' type='checkbox' name='settingsDocNo' value="0" {!! $setting_value == 0 ? 'checked' : '' !!}>{{ trans('langNo')}}
+                        <label class='label-container'>
+                            <input type='checkbox' id='settingsDocYes' name='settingsDocYes' value="1" {!! $setting_value == 1 ? 'checked' : '' !!}>
+                            <span class='checkmark'></span>
+                            {{ trans('langYes') }}
+                        </label>
+                        <label class='label-container'>
+                            <input id='settingsDocNo' type='checkbox' name='settingsDocNo' value="0" {!! $setting_value == 0 ? 'checked' : '' !!}>
+                            <span class='checkmark'></span>
+                            {{ trans('langNo')}}
                         </label>
                     </div>     
                 </div>

@@ -158,8 +158,8 @@
                         <label for='send_mail' class='col-sm-12 control-label-notes mb-1'>{{ trans('langInfoMail') }}</label>
                             <div class='col-sm-12'>
                                 <div class='checkbox'>
-                                    <label>
-                                        <input name='send_mail' id='send_mail' type='checkbox'> {{ trans('langMultiRegSendMail') }}
+                                <label class='label-container'>
+                                        <input name='send_mail' id='send_mail' type='checkbox'><span class='checkmark'></span> {{ trans('langMultiRegSendMail') }}
                                     </label>
                                 </div>            
                             </div>

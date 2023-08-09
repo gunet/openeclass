@@ -82,10 +82,11 @@
                                 <tfoot>
                                     <tr>
                                         <th colspan='5'>
-                                            <div class='d-inline-flex align-items-center'>
-                                                <label class='pe-2'>{{ trans('langShowClosedRequests') }}:</label>
+                                            <label class='label-container'>
                                                 <input type='checkbox' id='closedRequests'>
-                                            </div>
+                                                <span class='checkmark'></span>
+                                                {{ trans('langShowClosedRequests') }}
+                                            </label>
                                         </th>
                                     </tr>
                                 </tfoot>

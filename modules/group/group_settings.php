@@ -96,11 +96,13 @@ if (isset($_POST['submit'])) {
                              </div>
                          </div>
                      </div>
-                    <div class='form-group mt-4'>
+                    <div class='form-group mt-2'>
                          <div class='col-sm-12'>
                             <div class='checkbox'>
-                                  <label>
-                                    <input type='checkbox' name='student_desc' value='1'$checked_student_desc>$langGroupAllowStudentGroupDescription
+                                <label class='label-container'>
+                                    <input type='checkbox' name='student_desc' value='1'$checked_student_desc>
+                                    <span class='checkmark'></span>  
+                                    $langGroupAllowStudentGroupDescription
                                   </label>
                              </div>
                          </div>

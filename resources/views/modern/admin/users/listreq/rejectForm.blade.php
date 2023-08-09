@@ -86,8 +86,12 @@
                                     <tr>
                                         <th class='text-start'>{{ trans('langRequestSendMessage') }}</th>
                                         <td>
-                                            &nbsp;<input type='text' class='auth_input form-control' name='prof_email' value='{!! q($user_request->email) !!}'>
-                                            <input class='mt-2' type='checkbox' name='sendmail' value='1' checked='yes'> <small>{{ trans('langGroupValidate') }}</small>
+                                            <input type='text' class='auth_input form-control' name='prof_email' value='{!! q($user_request->email) !!}'>
+                                            <label class='label-container mt-3'>
+                                                <input type='checkbox' name='sendmail' value='1' checked='yes'> 
+                                                <span class='checkmark'></span>
+                                                {{ trans('langGroupValidate') }}
+                                            </label>
                                         </td>
                                     </tr>
                                     <tr>

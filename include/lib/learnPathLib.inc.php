@@ -732,7 +732,7 @@ function display_my_exercises($dialogBox, $style) {
                     $output .= "</td>";
                 }
                 $output .= '<td class="text-center">'
-                        . '<input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" />'
+                        . '<label class="label-container"><input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" /><span class="checkmark"></span></label>'
                         . '</td></tr>';
             }
         $output .= "</table></div>";
@@ -831,7 +831,12 @@ function display_my_documents($dialogBox, $style)
                 $date = format_locale_date(strtotime($entry['date']), 'short', false);
                 $content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
             }
-            $content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
+            $content .= "<td class='text-center'>
+                            <label class='label-container'>
+                                <input type='checkbox' name='document[]' value='$entry[id]' />
+                                <span class='checkmark'></span>
+                            </label>
+                        </td>";
             $content .= "</tr>";
             $counter++;
         }

@@ -128,9 +128,9 @@
                           
                                 <div class='form-group mt-4'>
                                     <div class='col-sm-12 checkbox mb-1'>
-                                        <label>
+                                    <label class='label-container'>
                                             <input type='checkbox' name='apply' id='apply' value='1' checked='1'>
-                                            {{ trans('langApplyRule') }}
+                                            <span class='checkmark'></span>{{ trans('langApplyRule') }}
                                         </label>
                                     </div>
                                 </div>

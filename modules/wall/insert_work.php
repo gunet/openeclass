@@ -52,7 +52,7 @@ function list_assignments($id = NULL) {
             $ret_string .= "<tr>" .
                     "<td>".q($row->title)."<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>" .
-                    "<td class='text-center'><input type='checkbox' $checked name='assignment[]' value='$row->id' /></td>" .
+                    "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='assignment[]' value='$row->id' /><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
         $ret_string .= "</table></div>";

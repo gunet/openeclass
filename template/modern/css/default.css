@@ -1601,6 +1601,7 @@ body .form-action-button-popover{
   transition: 0.5s;
   line-height: 16px;
   letter-spacing: 0px;
+  cursor: pointer;
 } 
 
 /* this is inputs-radio for course status */
@@ -1647,6 +1648,7 @@ input[type="radio"]{
   letter-spacing: 0px;
   line-height: 16px;
   color: #2B3944;
+  cursor: pointer;
 }
 input[type="radio"]:checked { 
   border: solid 6px #0073E6;
@@ -1661,12 +1663,17 @@ input[type="radio"]:checked {
 }
 
 label:has(input[type="radio"]:disabled){
-  opacity:1;
   font-size: 14px;
-  font-weight: 500; font-style: normal;
+  font-weight: 400; font-style: normal;
   color: #687DA3;
   line-height: 16px;
   letter-spacing: 0px;
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+input[type="radio"]:disabled{
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
@@ -1679,28 +1686,60 @@ label:has(input[type="radio"]:disabled){
 
 /*******************************************************************/
 
-/* this is d-inline-flex between inputs-checkbox and texts */
-.checkbox label{ 
-  display:inline-flex; justify-content: start; align-items:start; 
-  color:#2B3944; font-size: 14px; 
-  font-weight: 400; font-style: normal;
-} 
 
-.checkbox label p{ margin-top:0px; } 
-
-/* this is space between input-checkbox and texts */
-input[type="checkbox"]{
-  margin: 0 10px 0 0px;
-  accent-color: #0073E6;
-  min-width: 24px;
-  min-height: 24px;
-  border-radius:4px;
+.label-container {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 5px;
+  cursor: pointer;
+  position: relative;
+  padding: 5px 0px 5px 0px;
+  color: #2B3944;
 }
 
-.form-wrapper.form-edit label:has(input[type="checkbox"]:checked), .panel .panel-body label:has(input[type="checkbox"]:checked){
-  font-size: 14px;
-  font-weight: 400; font-style: normal;
-  color:#2B3944;
+.label-container > input[type="checkbox"] {
+  height: 24px;
+  min-width: 24px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  border: 1px solid #9BA9C1;
+  border-radius: 4px;
+  outline: none;
+  transition-duration: 0.3s;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.label-container > input[type="checkbox"]:checked {
+  border: 1px solid #0073E6;
+  background-color: #0073E6;
+}
+
+.label-container > input[type="checkbox"]:checked + .checkmark::before {
+  font-family: 'Manrope','FontAwesome';
+  font-size: 17px;
+  content: '\f00c';
+  display: block;
+  text-align: center;
+  color: #ffffff;
+  position: absolute;
+  left: 0.30rem;
+  top: 0.35rem;
+}
+
+.label-container > input[type="checkbox"]:active {
+  border: 1px solid #0073E6;
+}
+
+.label-container:has(input[type="checkbox"]:disabled){
+  cursor:not-allowed;
+  color: #687DA3;
+}
+.label-container > input[type="checkbox"]:disabled {
+  cursor:not-allowed;
 }
 
 

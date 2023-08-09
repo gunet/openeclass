@@ -70,18 +70,18 @@
                               <div class='form-group'>
                                   <div class='col-sm-12'>            
                                       <div class='checkbox'>
-                                        <label>
-                                          <input type='checkbox' name='index' value='yes'{{ $checked_index }}> {{ trans('langGlossaryIndex') }}                               
+                                      <label class='label-container'>
+                                          <input type='checkbox' name='index' value='yes'{{ $checked_index }}><span class='checkmark'></span> {{ trans('langGlossaryIndex') }}                               
                                         </label>
                                       </div>
                                   </div>
                               </div>
 
-                              <div class='form-group mt-4'>
+                              <div class='form-group mt-2'>
                                   <div class='col-sm-12'>            
                                       <div class='checkbox'>
-                                        <label>
-                                          <input type='checkbox' name='expand' value='yes'{{ $checked_expand }}> {{ trans('langGlossaryExpand') }}                               
+                                      <label class='label-container'>
+                                          <input type='checkbox' name='expand' value='yes'{{ $checked_expand }}><span class='checkmark'></span> {{ trans('langGlossaryExpand') }}                               
                                         </label>
                                       </div>
                                   </div>

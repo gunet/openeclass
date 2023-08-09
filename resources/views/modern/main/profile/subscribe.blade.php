@@ -30,7 +30,11 @@
                         @endif
                         @if(isset($mail_notification))
                             <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langEmailUnsubscribeWarning') }}</span></div>
-                            <div class='d-flex align-items-start'><input type='checkbox' id='unsub' name='unsub' value='1'> {{ trans('langEmailFromCourses') }}</div>
+                            <label class='label-container'>
+                                <input type='checkbox' id='unsub' name='unsub' value='1'> 
+                                <span class='checkmark'></span>
+                                {{ trans('langEmailFromCourses') }}
+                            </label>
                         @endif
                         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{!! trans('langInfoUnsubscribe') !!}</span></div>
 
@@ -43,17 +47,21 @@
                                     <div class='form-wrapper form-edit rounded'>
                                         <div id='unsubscontrols'>
                                         @if(isset($_REQUEST['cid']))
-                                        <div class='col-12 mb-3 label d-inline-flex align-items-top'>
-                                            <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>&nbsp;
-                                            @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp {{ $course_title }}<br />
+                                        <label class='label-container'>
+                                            <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>
+                                            @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp 
+                                            <span class='checkmark'></span>
+                                            {{ $course_title }}
                                             <input type='hidden' name='cid' value='{{ $cid }}'>
-                                        </div>
+                                        </label>
                                         @else
                                             @foreach($_SESSION['courses'] as $code => $status)
                                                 @if (course_status(course_code_to_id($code)) != COURSE_INACTIVE)
-                                                <div class='col-12 mb-3 label d-inline-flex align-items-top'>
-                                                    <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>&nbsp;{{ course_code_to_title($code) }}<br>
-                                                </div>
+                                                <label class='label-container'>
+                                                    <input type='checkbox' name='c_unsub[{{ $code }}]' value='1' {{ get_user_email_notification($uid, course_code_to_id($code)) ? 'checked' : '' }}>
+                                                    <span class='checkmark'></span>
+                                                    {{ course_code_to_title($code) }}
+                                                </label>
                                                 @endif
                                             @endforeach
                                         @endif

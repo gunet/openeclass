@@ -58,7 +58,7 @@ function list_exercises() {
                 $exclamation_icon = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
+            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='exercise[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td class='text-start'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$entry[id]&amp;preview=1'>" . q($entry['name']) . "</a>"
                 . $exclamation_icon . mathfilter($entry['comment'], 12 , "../../courses/mathimg/") . "</td>";
             $tool_content .= "</tr>";

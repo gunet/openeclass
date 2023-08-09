@@ -186,9 +186,10 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-offset-2 col-sm-10'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                            <label class='label-container'>
                                                                 <input type='checkbox' name='uncompress' value='1'>
-                                                                <strong class='text-secondary'>{{ trans('langUncompress') }}</strong>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langUncompress') }}
                                                             </label>
                                                         </div>
                                                     </div>
@@ -200,9 +201,10 @@
                                             <div class='form-group'>
                                                 <div class='col-sm-offset-2 col-sm-12'>
                                                     <div class='checkbox'>
-                                                        <label>
+                                                         <label class='label-container'>
                                                             <input type='checkbox' name='replace' value='1'>
-                                                            <strong class='text-secondary'>{{ trans('langReplaceSameName') }}</strong>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langReplaceSameName') }}
                                                         </label>
                                                     </div>
                                                 </div>

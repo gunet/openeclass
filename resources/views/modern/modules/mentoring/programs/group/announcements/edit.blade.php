@@ -60,11 +60,11 @@
                     @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
                         
                         <div class='contentAddAnnounce'>
-                            <form method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?group_id={!! getInDirectReference($group_id) !!}">
-                                <div class="w-100 p-0">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title TextBold" id="AddAnnounceGroupModalLabel">{{ trans('langAddAnn') }}</h5>
+                            <form class='form-wrapper form-edit' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?group_id={!! getInDirectReference($group_id) !!}">
+                                <div class="w-100 p-0 border-0">
+                                    <div class="modal-content border-0">
+                                        <div class="modal-header border-0">
+                                            <h3 class="modal-title TextBold" id="AddAnnounceGroupModalLabel">{{ trans('langAddAnn') }}</h3>
                                      
                                         </div>
                                         <div class="modal-body">
@@ -107,7 +107,11 @@
                                                 <div class='col-md-9 col-12'>
                                                     <div class='input-group'> 
                                                         <span class='input-group-addon'>
-                                                            <input type='checkbox' name='startdate_active' {{ $start_checkbox }}>
+                                                            <label class='label-container'>
+                                                                <input class='mt-0' type='checkbox' name='startdate_active' {{ $start_checkbox }}>
+                                                                <span class='checkmark'></span>
+
+                                                            </label>
                                                         </span>
                                                         <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
                                                     </div>
@@ -120,7 +124,11 @@
                                                 <div class='col-md-9 col-12'>
                                                     <div class='input-group'>
                                                         <span class='input-group-addon'>
-                                                            <input type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
+                                                            <label class='label-container'>
+                                                                <input class='mt-0' type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
+                                                                <span class='checkmark'></span>
+                                                            </label>
+
                                                         </span>
                                                         <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
                                                     </div>
@@ -131,8 +139,8 @@
                                             <div class='row ms-0 mt-4 form-group'>
                                                 <div class='col-md-9 offset-md-3'>
                                                     <div class='checkbox'>
-                                                        <label>
-                                                            <input type='checkbox' name='show_public' {{  $checked_public }}> {{ trans('langViewShow') }}
+                                                        <label class='label-container'>
+                                                            <input type='checkbox' name='show_public' {{  $checked_public }}><span class='checkmark'></span> {{ trans('langViewShow') }}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -143,7 +151,7 @@
                                         <div class="modal-footer">
                                             <input type='hidden' name='id' value='{{ $announce_id }}'>
                                            
-                                            <button type='submit' class="btn btn-outline-success small-text rounded-2" name="submitAnnouncement">
+                                            <button type='submit' class="btn submitAdminBtn submitAdminBtnDefault" name="submitAnnouncement">
                                                 {{ trans('langSubmit') }}
                                             </button>
                                         </div>

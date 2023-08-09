@@ -694,8 +694,9 @@ $tool_content .= "
                 <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginBanner:</label>
                 <div class='col-sm-12'>
                       <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                           <input type='checkbox' name='openeclassBanner' value='1' ".((isset($theme_options_styles['openeclassBanner']))? 'checked' : '').">
+                          <span class='checkmark'></span>
                           $langDeactivate
                         </label>
                       </div>

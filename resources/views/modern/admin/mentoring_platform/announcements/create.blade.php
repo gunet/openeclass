@@ -76,7 +76,10 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input type='checkbox' name='startdate_active'{{ $start_checkbox }}>
+                                                <label class='label-container'>
+                                                    <input class='mt-0' type='checkbox' name='startdate_active'{{ $start_checkbox }}>
+                                                    <span class='checkmark'></span>
+                                                </label>
                                             </span>
                                             <input class='form-control' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
                                         </div>
@@ -87,7 +90,10 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input type='checkbox' name='enddate_active'{{ $end_checkbox }} {{ $end_disabled}}>
+                                                <label class='label-container'>
+                                                    <input class='mt-0' type='checkbox' name='enddate_active'{{ $end_checkbox }} {{ $end_disabled}}>
+                                                    <span class='checkmark'></span>
+                                                </label>
                                             </span>
                                             <input class='form-control' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
                                         </div>
@@ -96,8 +102,10 @@
                                 <div class='mt-4 form-group'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input type='checkbox' name='show_public'{{ $checked_public }}> {{ trans('langVisible') }}
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='show_public'{{ $checked_public }}> 
+                                                <span class='checkmark'></span>
+                                                {{ trans('langVisible') }}
                                             </label>
                                         </div>
                                     </div>

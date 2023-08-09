@@ -180,7 +180,7 @@ foreach ($courses as $course) {
 
             $disabled = ($course->visible == COURSE_CLOSED) ? 'disabled' : '';
             $vis_class = ($course->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
-            $tool_content .= "<td align='center'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class />"
+            $tool_content .= "<td align='center'><label class='label-container'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class /><span class='checkmark'></span></label>"
                     . "<input type='hidden' name='changeCourse[]' value='" . $course->id . "' /></td>";
         }
     }

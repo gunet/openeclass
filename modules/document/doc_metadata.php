@@ -172,13 +172,13 @@ function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = fa
     foreach ($values as $value) {
         $i++;
         $langElement = "langMeta" . ucfirst(str_replace(" ", "", $value));
-        global $$langElement;
+        global $langElement;
 
         $check = (isset($checkMap["$name"]["$value"])) ? " checked='1' " : '';
-        $start = ($twocols && $i % 2 == 0) ? "<td>" : "<tr><td>";
-        $end = ($twocols && $i % 2 != 0 && $i < count($values)) ? "</td>\n" : "</td></tr>\n";
+        $start = ($twocols && $i % 2 == 0) ? "<td><label class='label-container'>" : "<tr><td><label class='label-container'>";
+        $end = ($twocols && $i % 2 != 0 && $i < count($values)) ? "</label></td>\n" : "</label></td></tr>\n";
 
-        $cell .= "$start<input type='checkbox' name='" . $name . "[]' value='$value' $check />" . $$langElement . $end;
+        $cell .= "$start<input type='checkbox' name='" . $name . "[]' value='$value' $check /><span class='checkmark'></span>" . $langElement . $end;
     }
 
     $cell .= "</table>";

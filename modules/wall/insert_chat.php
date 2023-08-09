@@ -59,7 +59,7 @@ function list_chats($id = NULL) {
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa fa-exchange')."&nbsp;&nbsp;<a href='{$urlServer}modules/chat/chat.php?conference_id=$entry[id]'>".q($entry['name'])."</a></td>";
             $ret_string .= "<td>".$entry['description']."</td>";
-            $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='chat[]' value='$entry[id]'></td>";
+            $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='chat[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

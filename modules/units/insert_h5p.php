@@ -36,7 +36,7 @@ function list_h5p() {
                 ? $urlAppend . "courses/h5p/libraries/" . $typeFolder . "/icon.svg"  // expected icon
                 : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='h5p[]' value='$entry[id]'></td>";
+            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='h5p[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td>&nbsp;<img src='$typeIcon' width='30px' height='30px' title='$h5p_content_type_title' alt='$h5p_content_type_title'>&nbsp;&nbsp;<a href='{$urlServer}modules/h5p/view.php?id=$entry[id]&amp;course=$course_code'>" . q($entry['title']) . "</a></td>";
             $tool_content .= "</tr>";
         }

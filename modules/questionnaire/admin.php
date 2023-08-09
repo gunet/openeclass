@@ -401,14 +401,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <label class='col-sm-6 control-label-notes mb-2'>$langResults</label>
                 <div class='col-sm-12'>
                     <div class='checkbox mb-2'>
-                        <label>
+                         <label class='label-container'>
                             <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '').">
+                            <span class='checkmark'></span>
                             $langPollAnonymize
                         </label>
                     </div>
                     <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='PollShowResults' id='PollShowResults' value='1' ".((isset($poll->show_results) && $poll->show_results) ? 'checked' : '').">
+                            <span class='checkmark'></span>
                             $langPollShowResults
                         </label>
                     </div>

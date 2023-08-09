@@ -355,9 +355,9 @@ if (!class_exists('ScormExport')) {
                         $raw = $answer->selectWeighting($answerId);
 
                         $pageBody .= '<tr><td width="5%" align="center">
-                        <input type="checkbox" name="' . $htmlQuestionId . '"
+                        <label class="label-container"><input type="checkbox" name="' . $htmlQuestionId . '"
                         id="scorm_' . $idCounter . '"
-                        value="' . $raw . '"></td>
+                        value="' . $raw . '"><span class="checkmark"></span></label></td>
                     <td width="95%"><label for="scorm_' . $idCounter . '">' . $answerText . '</label>
                     </td></tr>';
 

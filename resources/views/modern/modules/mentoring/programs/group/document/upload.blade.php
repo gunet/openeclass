@@ -196,11 +196,12 @@
 
                                         @unless ($externalFile)
                                             <div class='form-group mt-4'>
-                                                <div class='col-sm-offset-2 col-sm-10'>
+                                                <div class='col-12'>
                                                     <div class='checkbox'>
-                                                        <label>
+                                                        <label class='label-container'>
                                                             <input type='checkbox' name='uncompress' value='1'>
-                                                            <strong>{{ trans('langUncompress') }}</strong>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langUncompress') }}
                                                         </label>
                                                     </div>
                                                 </div>
@@ -208,11 +209,12 @@
                                         @endunless 
 
                                         <div class='form-group mt-4'>
-                                            <div class='col-sm-offset-2 col-sm-10'>
+                                            <div class='col-12'>
                                                 <div class='checkbox'>
-                                                    <label>
+                                                    <label class='label-container'>
                                                         <input type='checkbox' name='replace' value='1'>
-                                                        <strong>{{ trans('langReplaceSameName') }}</strong>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langReplaceSameName') }}
                                                     </label>
                                                 </div>
                                             </div>

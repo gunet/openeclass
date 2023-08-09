@@ -91,64 +91,72 @@ if (empty($search_terms)) {
                 <div class='row'>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                            <label class='label-container'>
                             <input type='checkbox' name='announcements' checked>
+                            <span class='checkmark'></span>
                             $langAnnouncements
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='agenda' checked>
+                            <span class='checkmark'></span>
                             $langAgenda
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='course_units' checked>
+                            <span class='checkmark'></span>
                             $langCourseUnits
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='documents' checked>
+                            <span class='checkmark'></span>
                             $langDoc
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='forums' checked>
+                            <span class='checkmark'></span>
                             $langForums
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='exercises' checked>
+                            <span class='checkmark'></span>
                             $langExercices
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='video' checked>
+                            <span class='checkmark'></span>
                             $langVideo
                           </label>
                         </div>
                     </div>
                     <div class='col-6 col-sm-4'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='links' checked>
+                            <span class='checkmark'></span>
                             $langLinks
                           </label>
                         </div>

@@ -74,7 +74,7 @@
                     
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit rounded-2 p-md-0 p-3 solidPanel'>
+                        <div class='form-wrapper form-edit rounded-2 p-md-0 p-3'>
                           <form id='myForm' class='form-horizontal' role='form' method='post' name='createform' action="{{ $_SERVER['SCRIPT_NAME'] }}" enctype="multipart/form-data">
 
                             <div id="carouselProgramIndicators" class="carousel slide p-md-3" data-bs-ride="carousel" data-bs-interval="false">
@@ -198,11 +198,19 @@
 
                                         
                                         <div class='form-group mt-4'>
-                                            <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAllowUnregMenteeFromProgram') }}</div>
-                                            <div class='col-sm-12 d-flex justify-content-start align-items-center'>
-                                                {{ trans('langYes') }}&nbsp<input id='allow_unreg_mentee_yes' type='checkbox' name='yes_allow_unreg' value='1' {{ $allow_unreg_mentee_from_program == 1 ? 'checked' : '' }}>
-                                                &nbsp&nbsp&nbsp{{ trans('langNo') }}&nbsp<input id='allow_unreg_mentee_no' type='checkbox' name='yes_allow_unreg' value='0' {{ $allow_unreg_mentee_from_program == 0 ? 'checked' : '' }}>
-                                            </div>
+                                                <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAllowUnregMenteeFromProgram') }}</div>
+                                                <label class='label-container'>
+                                                    <input id='allow_unreg_mentee_yes' type='checkbox' name='yes_allow_unreg' value='1' {{ $allow_unreg_mentee_from_program == 1 ? 'checked' : '' }}>
+                                                    <span class='checkmark'></span>
+                                                    {{ trans('langYes') }}
+                                                </label>
+
+                                                <label class='label-container'>
+                                                    <input id='allow_unreg_mentee_no' type='checkbox' name='yes_allow_unreg' value='0' {{ $allow_unreg_mentee_from_program == 0 ? 'checked' : '' }}>
+                                                    <span class='checkmark'></span>
+                                                    {{ trans('langNo') }}
+                                                </label>
+                                            
                                         </div>
 
                                     </div>
@@ -276,12 +284,13 @@
                                                                                                         WHERE specialization_id = ?d)",$tag->id);
                                                                 @endphp
                                                                 @if(count($skills) > 0)
-                                                                    <ul class='p-0' style='list-style-type: none;'>
+                                                                    <div class='col-12'>
                                                                         @foreach($skills as $sk)
                                                                             <input id='loopOneAllTags' type='hidden' name='loopOne[]' value='{{ $sk->id }}'>
-                                                                            <li class='nav-item d-flex justify-content-start align-items-start mb-3 me-3 p-2 rounded-2'>
-                                                                                &nbsp<input id='TheSkillIdS{{ $sk->id }}{{ $tag->id }}' class='tagClick' type='checkbox' value='{{ $sk->id }},{{ $tag->id }}'>
-                                                                                <span class='TextSemiBold small-text'>
+                                                                            <label class='label-container'>
+                                                                                <input id='TheSkillIdS{{ $sk->id }}{{ $tag->id }}' class='tagClick' type='checkbox' value='{{ $sk->id }},{{ $tag->id }}'>
+                                                                                <span class='checkmark'></span>
+                                                                                
                                                                                 @php 
                                                                                     $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
                                                                                                                                                     WHERE skill_id = ?d AND lang = ?s",$sk->id, $language);
@@ -292,10 +301,10 @@
                                                                                 @else
                                                                                     {{ $sk->name }}
                                                                                 @endif
-                                                                                </span>
-                                                                            </li>
+                                                                                
+                                                                            </label>
                                                                         @endforeach
-                                                                    </ul>
+                                                                    </div>
                                                                 @endif
                                                             </div>
                                                         </div>

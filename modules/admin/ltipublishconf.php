@@ -140,7 +140,7 @@ foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "checked" : "";
         $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+        $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == LtiPublishApp::FRAMEANCESTORS) {
         $tool_content .= "<div class='form-group mb-4'>";

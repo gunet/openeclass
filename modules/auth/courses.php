@@ -303,7 +303,7 @@ function expanded_faculte($facid, $uid) {
             $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
         }
 
-        $retString .= "<td align='center'>";
+        $retString .= "<td class='text-center'>";
         $requirepassword = '';
         $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {
@@ -314,7 +314,7 @@ function expanded_faculte($facid, $uid) {
                 } else {
                     $requirepassword = '';
                 }
-                $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
+                $retString .= "<label class='label-container ms-3'><input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class /><span class='checkmark'></span></label>";
             } else {
                 $retString .= "<i class='fa fa-user'></i>";
             }
@@ -326,7 +326,7 @@ function expanded_faculte($facid, $uid) {
             }
 
             $disabled = ($mycours->visible == 0) ? 'disabled' : '';
-            $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
+            $retString .= "<label class='label-container ms-3'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>

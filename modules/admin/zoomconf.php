@@ -127,7 +127,7 @@ foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "checked" : "";
         $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
-        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+        $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == ZoomApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course

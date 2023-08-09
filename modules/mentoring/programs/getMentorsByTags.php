@@ -180,7 +180,7 @@ function initialization_create_edit($user_id,$program,$MentorsSelected){
         }
     }
 
-    $html_string .= "<div class='text-center'><input id='userM$user_id' class='clickerMentor' type='checkbox' value='$user_id' $checked $disabled></div>";
+    $html_string .= "<div class='text-center'><label class='label-container'><input id='userM$user_id' class='clickerMentor' type='checkbox' value='$user_id' $checked $disabled><span class='checkmark'></span></label></div>";
 
     return $html_string;
 }

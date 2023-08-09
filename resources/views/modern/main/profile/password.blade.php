@@ -117,8 +117,12 @@
                                                <input type='submit' class='btn submitAdminBtn' name='submit' value='{{ trans('langModify') }}'>
                                            
                                           
-                                                <a href='display_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
-                                            
+                                                
+                                                @if($showMentoringProfile == 0)
+                                                    <a href='display_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                                @else
+                                                    <a href='{{ $urlAppend }}modules/mentoring/profile/user_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                                @endif
                                      
                                     </div>
                                 </div>

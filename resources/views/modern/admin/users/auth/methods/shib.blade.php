@@ -62,9 +62,9 @@
             <div class='form-group mt-3'>
                <div class='col-12'>
                    <div class='checkbox'>
-                     <label class='col-12 d-inline-flex'>
-                          <input class='col-2' type='checkbox' name='checkseparator' value='on' {!! $checkedshib !!}>
-                          <span class='col-auto control-label-notes'>{{ trans('langCharSeparator') }}:</span>
+                    <label class='label-container mb-3'>
+                          <input type='checkbox' name='checkseparator' value='on' {!! $checkedshib !!}>
+                          <span class='checkmark'></span>{{ trans('langCharSeparator') }}
                      </label>
                    </div> 
                    <input class='form-control' placeholder="{{ trans('langCharSeparator') }}..." name='shibseparator' type='text' size='1' maxlength='2' value='{{ $shibseparator }}' />

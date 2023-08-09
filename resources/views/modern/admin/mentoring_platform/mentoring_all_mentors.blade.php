@@ -80,11 +80,12 @@
                                                                     @foreach($tags as $t)
                                                                        
                                                                         <li class='nav-item p-2'>                           
-                                                                            <div class='d-flex justify-content-start align-items-center bagde bgEclass p-2 rounded-2'>
+                                                                            <label class='label-container'>
                                                                             
-                                                                                <input type='checkbox' name='tags_ids[]' value='{{ $t->id }}' class='me-2'>
-                                                                                <span class='blackBlueText small-text TextBold'>{{ $t->name }}</span>
-                                                                            </div>
+                                                                                <input type='checkbox' name='tags_ids[]' value='{{ $t->id }}'>
+                                                                                <span class='checkmark'></span>
+                                                                                {{ $t->name }}
+                                                                            </label>
 
                                                                         </li>
                                                                     @endforeach

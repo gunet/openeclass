@@ -84,7 +84,9 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input id='startIdCheckbox' type='checkbox' name='startdate_active'{{ $start_checkbox }}>
+                                            <label class='label-container'>
+                                                <input class='mt-0' id='startIdCheckbox' type='checkbox' name='startdate_active'{{ $start_checkbox }}>
+                                                <span class='checkmark'></span></label>
                                             </span>
                                             <span class="add-on1 input-group-text h-40px input-border-color border-end-0"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                             <input class='form-control mt-0 border-start-0' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
@@ -96,7 +98,9 @@
                                     <div class='col-sm-12'>
                                         <div class='input-group'>
                                             <span class='input-group-addon'>
-                                                <input id='endIdCheckbox' type='checkbox' name='enddate_active'{{ $end_checkbox }} >
+                                            <label class='label-container'>
+                                                <input class='mt-0' id='endIdCheckbox' type='checkbox' name='enddate_active'{{ $end_checkbox }} >
+                                                <span class='checkmark'></span></label>
                                             </span>
                                             <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                             <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
@@ -106,8 +110,8 @@
                                 <div class='mt-4 form-group'>
                                     <div class='col-sm-10 col-sm-offset-2'>
                                         <div class='checkbox'>
-                                            <label>
-                                                <input type='checkbox' name='show_public'{{ $checked_public }}> {{ trans('langVisible') }}
+                                        <label class='label-container'>
+                                                <input type='checkbox' name='show_public'{{ $checked_public }}> <span class='checkmark'></span>{{ trans('langVisible') }}
                                             </label>
                                         </div>
                                     </div>

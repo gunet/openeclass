@@ -187,8 +187,9 @@ function show_form($id, $sid, $assign) {
                         <div class='form-group mt-4'>
                             <div class='col-sm-9 col-sm-offset-3'>
                                 <div class='checkbox'>
-                                    <label>
+                                    <label class='label-container'>
                                         <input type='checkbox' value='1' id='email_button' name='email' checked>
+                                        <span class='checkmark'></span>
                                         $m[email_users]
                                     </label>
                                 </div>

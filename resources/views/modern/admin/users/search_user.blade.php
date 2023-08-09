@@ -158,9 +158,9 @@
                             <div class='form-group mt-4'>
                                 <div class='col-sm-10 col-sm-offset-2'>
                                     <div class='checkbox'>
-                                    <label>
+                                    <label class='label-container'>
                                         <input type='checkbox' name='search' value='inactive'{{ $inactive_checked ? " checked" : "" }}>
-                                        {{ trans('langInactiveUsers') }}
+                                        <span class='checkmark'></span>{{ trans('langInactiveUsers') }}
                                     </label>
                                     </div> 
                                 </div>

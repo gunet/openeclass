@@ -90,9 +90,9 @@
                                                 <div class='form-group mt-4'>
                                                     <div class='col-sm-offset-2 col-sm-10'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='{{ $param->name() }}'{!! $param->value() == 1 ? " value='0' checked" : " value='1'" !!}> 
-                                                                {{ $param->display() }}
+                                                                <span class='checkmark'></span>{{ $param->display() }}
                                                             </label>
                                                         </div>
                                                     </div>

@@ -180,13 +180,13 @@ function register_user_presences($attendance_id, $actID) {
                 } else {
                     $tool_content .= '';
                 }
-                $tool_content .= "</td><td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
+                $tool_content .= "</td><td class='text-center'><label class='label-container'><input type='checkbox' value='1' name='$resultUser->userID'";
                 //check if the user has attendance for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                 if(isset($q->attend) && $q->attend == 1) {
                     $tool_content .= " checked";
                 }
-                $tool_content .= "><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'></td>";
+                $tool_content .= "><span class='checkmark'></span></label><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'></td>";
                 $tool_content .= "</tr>";
         }
         $tool_content .= "</tbody></table>";
@@ -532,12 +532,12 @@ function add_attendance_other_activity($attendance_id) {
                         </div>";
                     if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto attendance mechanism
                         $tool_content .= "<div class='form-group mt-4'>
-                            <label for='weight' class='col-sm-6 control-label-notes'>$langAttendanceInsAut</label>
-                                <div class='col-sm-12'><input type='checkbox' value='1' name='auto' ";
+                            <label for='weight' class='col-sm-6 control-label-notes mb-0'>$langAttendanceInsAut</label>
+                                <div class='col-sm-12'><label class='label-container'><input type='checkbox' value='1' name='auto' ";
                         if ($auto) {
                             $tool_content .= " checked";
                         }
-                        $tool_content .= "/></div>";
+                        $tool_content .= "/><span class='checkmark'></span></label></div>";
                     }
                     $tool_content .= "
 
@@ -886,11 +886,11 @@ function display_user_presences($attendance_id) {
                     $tool_content .= "<td class='smaller'>$langAttendanceActAttend</td>";
                 }
                 $tool_content .= "<td class='text-center'>
-                <input type='checkbox' value='1' name='" . $activity->id . "'";
+                <label class='label-container'><input type='checkbox' value='1' name='" . $activity->id . "'";
                 if(isset($userAttend) && $userAttend) {
                     $tool_content .= " checked";
                 }
-                $tool_content .= ">
+                $tool_content .= "><span class='checkmark'></span></label>
                 <input type='hidden' value='" . $userID . "' name='userID'>
                 </td></tr>";
             } // end of while

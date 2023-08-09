@@ -60,11 +60,13 @@
                                 <tfoot>
                                     <tr>
                                         <th colspan='5'>
-                                            <div class='form-inline'>
-                                                <label>{{ trans('langShowClosedRequests') }}:
+                                            <label class='label-container'>
+                                                
                                                     <input type='checkbox' class='form-control' id='closedRequests'>
-                                                </label>
-                                            </div>
+                                                    <span class='checkmark'></span>
+                                                    {{ trans('langShowClosedRequests') }}
+                                                
+                                            </label>
                                         </th>
                                     </tr>
                                 </tfoot>

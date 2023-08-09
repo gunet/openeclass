@@ -7,14 +7,16 @@
 
 <div class='panel panel-admin border-top-1 border-start-1 border-end-1 border-bottom-0 bg-white py-md-3 px-md-3 py-3 px-3 rounded-0 panelSpecialization'>
     <div class='panel-body p-0 rounded-0'>
-        <p class='blackBlueText TextBold fs-6 mb-2'>{{ trans('langAvailability') }}</p>
-        <div class='col-12 mb-3 ps-2 pe-2'>
-            <div class='d-flex justify-content-start align-items-center mt-1'>
-                <input style='width:15px; height:15px;' class='checkAvailable' id='availableId' type='checkbox' value='1' checked><span class='TextRegular small-text'>{{ trans('langAvailabilityMentor') }}</span>
-            </div>
-            <div class='d-flex justify-content-start align-items-center mt-2'>
-                <input style='width:15px; height:15px;' class='checkAvailable' id='unavailableId' type='checkbox' value='0'><span class='TextRegular small-text'>{{ trans('langUnAnavailability') }}</span>
-            </div>
+        <p class='form-label'>{{ trans('langAvailability') }}</p>
+        <div class='col-12 mb-3'>
+            <label class='label-container'>
+                <input class='checkAvailable' id='availableId' type='checkbox' value='1' checked>
+                <span class='checkmark'></span>{{ trans('langAvailabilityMentor') }}
+            </label>
+            <label class='label-container'>
+                <input class='checkAvailable' id='unavailableId' type='checkbox' value='0'>
+                <span class='checkmark'></span>{{ trans('langUnAnavailability') }}
+            </label>
         </div>
     </div>
 </div>
@@ -41,7 +43,7 @@
         
         @foreach($all_specializations as $tag)
             
-            <p class='blackBlueText TextBold fs-6 mb-2'>
+            <p class='form-label'>
                 
                 @php 
                     $checkTranslationSpecialization = Database::get()->querySingle("SELECT *FROM mentoring_specializations_translations
@@ -60,13 +62,14 @@
                                                                     WHERE specialization_id = ?d)",$tag->id);
             @endphp
             @if(count($skills) > 0)
-                <div class='col-12 mb-5 ps-2 pe-2'>
-                    <ul class='p-0' style='list-style-type: none;'>
+                <div class='col-12 mb-5'>
+                    <div class='col-12'>
                        
                         @foreach($skills as $sk)
-                            <li class='d-flex justify-content-start align-items-start mb-2'>
-                                <input id='TheSkill{{ $sk->id }}{{ $tag->id }}' class='tagClick' type='checkbox' value='{{ $sk->id }},{{ $tag->id }}' style='width:15px; height:15px;'>
-                                <span class='TextRegular small-text'>
+                            <label class='label-container'>
+                                <input id='TheSkill{{ $sk->id }}{{ $tag->id }}' class='tagClick' type='checkbox' value='{{ $sk->id }},{{ $tag->id }}'>
+                                <span class='checkmark'></span>
+                                
                                     @php 
                                         $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
                                                                                                         WHERE skill_id = ?d AND lang = ?s",$sk->id, $language);
@@ -77,11 +80,11 @@
                                     @else
                                         {{ $sk->name }}
                                     @endif
-                                </span>
+                                
 
-                            </li>
+                            </label>
                         @endforeach
-                    </ul>
+                    </div>
                 </div>
             @endif    
         @endforeach

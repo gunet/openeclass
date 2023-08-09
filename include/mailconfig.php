@@ -162,14 +162,16 @@ function mail_settings_form() {
                         <div class='form-group'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
-                                    <label>
+                                    <label class='label-container'>
                                         <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>
+                                        <span class='checkmark'></span>
                                         $lang_dont_mail_unverified_mails
                                     </label>
                                 </div>
                                 <div class='checkbox'>
-                                    <label>
+                                    <label class='label-container'>
                                         <input type='checkbox' name='email_from' value='1' $cbox_email_from>
+                                        <span class='checkmark'></span>
                                         $lang_email_from
                                     </label>
                                 </div>

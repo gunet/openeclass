@@ -373,8 +373,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
         } elseif ($answerType == MULTIPLE_ANSWER) { // multiple answers
             echo "
                   <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='choice[$questionId][$answerId]' value='1'>
+                        <span class='checkmark'></span>
                         " . $answer . "
                       </label>
                     </div>";

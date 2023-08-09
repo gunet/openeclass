@@ -53,7 +53,7 @@ function list_wikis() {
                 $description_text = '';
             }
             $tool_content .= "<tr>
-                                <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
+                                <td align='center'><label class='label-container'><input type='checkbox' name='wiki[]' value='$entry[id]'><span class='checkmark'></span></label></td>
                                 <td><a href='{$urlServer}modules/wiki/page.php?course=$course_code&amp;wikiId=$entry[id]&amp;action=show'>$entry[title]</a>
                                 $description_text</td>
                             </tr>";

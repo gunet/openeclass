@@ -78,7 +78,7 @@ function list_videos($id = NULL) {
                 $ret_string .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
                                  "<td>" . q($row->description) . "</td>".
                                  "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
-                                 "<td class='text-center'><input type='checkbox' $checked name='video[]' value='$table:$row->id' /></td>" .
+                                 "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$row->id' /><span class='checkmark'></span></label></td>" .
                                  "</tr>";
             }
         }
@@ -108,7 +108,7 @@ function list_videos($id = NULL) {
                                     q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
                             $ret_string .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
                             $ret_string .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
-                            $ret_string .= "<td class='text-center'><input type='checkbox' $checked name='video[]' value='$table:$linkvideocat->id' /></td>";
+                            $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
                             $ret_string .= "</tr>";
                     }
                 }

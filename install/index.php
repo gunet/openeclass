@@ -179,8 +179,8 @@ function hidden_vars($names) {
 
 function checkbox_input($name) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<input type='checkbox' name='$name' value='1'" .
-            ($GLOBALS[$name] ? ' checked="1"' : '') . ">";
+    return "<label class='label-container'><input type='checkbox' name='$name' value='1'" .
+            ($GLOBALS[$name] ? ' checked="1"' : '') . "><span class='checkmark'></span></label>";
 }
 
 function text_input($name, $size) {

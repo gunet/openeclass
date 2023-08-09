@@ -54,7 +54,7 @@ function list_polls() {
                 $description_text = '';
             }
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
+            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "<td><a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>$description_text</td>";
             $tool_content .= "</tr>";
         }

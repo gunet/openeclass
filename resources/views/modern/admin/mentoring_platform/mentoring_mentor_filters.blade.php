@@ -380,22 +380,23 @@
                                                                         <input type='hidden' name='specialization_id' value='{{ $l->id }}'>
                                                                         @foreach($skills as $s)
                                                                             <li class='mb-2'>
-                                                                                <div class='d-flex justify-content-start align-items-start'>
+                                                                                <label class='label-container'>
                                                                                     <input type='checkbox' name='delSkillsIds[]' value='{{ $s->id }}'>
-                                                                                    <span>
+                                                                                    <span class='checkmark'></span>
+                                                                                   
                                                                                         
-                                                                                        @php 
-                                                                                            $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
-                                                                                                                                                            WHERE skill_id = ?d AND lang = ?s",$s->id, $language);
-                                                                                        @endphp
+                                                                                    @php 
+                                                                                        $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
+                                                                                                                                                        WHERE skill_id = ?d AND lang = ?s",$s->id, $language);
+                                                                                    @endphp
 
-                                                                                        @if($checkTranslationSkill)
-                                                                                            {{ $checkTranslationSkill->name }}
-                                                                                        @else
-                                                                                            {{ $s->name }}
-                                                                                        @endif
-                                                                                    </span>
-                                                                                </div>
+                                                                                    @if($checkTranslationSkill)
+                                                                                        {{ $checkTranslationSkill->name }}
+                                                                                    @else
+                                                                                        {{ $s->name }}
+                                                                                    @endif
+                                                                                    
+                                                                                </label>
                                                                             </li>
                                                                         @endforeach
                                                                         <input class='btn btn-outline-danger btn-sm small-text mt-2' type='submit' name='submitdelSkill' value="{{ trans('langDelete') }}">
@@ -452,10 +453,11 @@
                                                                         <input type='hidden' name='specialization_id' value='{{ $l->id }}'>
                                                                         @foreach($allKeysOfSpacialization as $k)
                                                                             <li class='mb-2'>
-                                                                                <div class='d-flex justify-content-start align-items-start'>
+                                                                                <label class='label-container'>
                                                                                     <input type='checkbox' name='delKeyNames[]' value='{{ $k->name }}'>
-                                                                                    <span>{{ $k->name }}</span>
-                                                                                </div>
+                                                                                    <span class='checkmark'></span>
+                                                                                    {{ $k->name }}
+                                                                                </label>
                                                                             </li>
                                                                         @endforeach
                                                                         <input class='btn btn-outline-danger btn-sm small-text mt-2' type='submit' name='submitDelKey' value="{{ trans('langDelete') }}">

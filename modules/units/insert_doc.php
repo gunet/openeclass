@@ -139,7 +139,7 @@ function list_docs() {
                     $vis = '';
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]'></td>";
+                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */

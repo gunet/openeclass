@@ -491,7 +491,7 @@ if (!isset($_POST['next'])) {
                     foreach ($_SESSION['units'] as $utitle){
                         if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
-                                  <td><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input></td>";
+                                  <td><label class='label-container'><input type='checkbox' name='in_home[]' id='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."' value='".$j."_".$newUnitId."_".array_search($title_home,$mtitles_in_home)."'></input><span class='checkmark'></span></label></td>";
                               $newUnitId ++;
                               $j++;
                         }
@@ -526,7 +526,7 @@ if (!isset($_POST['next'])) {
 
                         if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
-                                    <td><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input></td>";
+                                    <td><label class='label-container'><input type='checkbox' name='in_class[]' id='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."' value='".$k."_".$newUnitId."_".array_search($title_class,$mtitles_in_class)."'></input><span class='checkmark'></span></label></td>";
                              $newUnitId ++;
                                 $k++;
                         }
@@ -564,7 +564,7 @@ if (!isset($_POST['next'])) {
 
                         if(!isset($_SESSION['ids'][$count_ids])){
                              $tool_content .= "
-                                  <td><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input></td>";
+                                  <td><label class='label-container'><input type='checkbox' name='after_class[]' id='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."' value='".$z."_".$newUnitId."_".array_search($title_after_class,$mtitles_after_class)."'></input><span class='checkmark'></span></label></td>";
                               $newUnitId++;
                               $z++;
                         }

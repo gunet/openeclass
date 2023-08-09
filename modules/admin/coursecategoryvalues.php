@@ -261,8 +261,11 @@ function displayForm($id = null, $name = null, $ordering = null, $active = null)
     <div class='form-group mt-4'>
         <label class='col-sm-12 control-label-notes'>" . $GLOBALS['langChatActive'] . "</label>
         <div class='col-sm-12'>
-            <input class='form-check-input' type='checkbox' name='active' value='1' " . $check_active . ">
-            <span class='help-block'><small>" . $GLOBALS['langCourseCategoryValueActive2'] . "</small></span>
+            <label class='label-container'>
+                <input class='form-check-input' type='checkbox' name='active' value='1' " . $check_active . ">
+                <span class='checkmark'></span>
+                " . $GLOBALS['langCourseCategoryValueActive2'] . "
+            </label>
         </div>
     </div>";
 

@@ -185,9 +185,12 @@
                                         
                                     </div>
                                     <div class='form-group mt-4'>
-                                        <label class='col-sm-6 control-label-notes'>{{ trans('langMultiRegType') }}:</label>
                                         <div class='col-sm-12'>
-                                            <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
+                                            <label class='label-container'>
+                                                <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
+                                                <span class='checkmark'></span>
+                                                {{ trans('langMultiRegType') }}
+                                            </label>
                                         </div>
                                     </div>
                                     <div class='form-group mt-5'>

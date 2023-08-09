@@ -41,7 +41,8 @@ function list_ebooks() {
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-center'>
-                            <input type='checkbox' name='ebook[]' value='$catrow->id' />
+            <label class='label-container'><input type='checkbox' name='ebook[]' value='$catrow->id' />
+                            <span class='checkmark'></span></label>
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
             $tool_content .= "<td>" . q($catrow->title) . "</td>";

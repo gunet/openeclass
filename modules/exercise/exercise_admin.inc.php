@@ -383,7 +383,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <div class='col-12'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                                <input style='cursor:pointer;' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
+                                <label class='label-container'>
+                                    <input type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
+                                    <span class='checkmark'></span>
+                                </label>
                             </span>
                             <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                             <input class='form-control mt-0 border-start-0' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableStartDate ? '' : ' disabled').">
@@ -396,7 +399,10 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <div class='col-12'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                              <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                                <label class='label-container'>
+                                     <input type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                                     <span class='checkmark'></span>
+                                </label>
                             </span>
                             <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                             <input class='form-control mt-0 border-start-0' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">
@@ -559,8 +565,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <label class='col-12 control-label-notes mb-1'>$langContinueAttempt</label>
                     <div class='col-12'>
                         <div class='checkbox'>
-                            <label>
+                            <label class='label-container'>
                                 <input id='continueAttempt' name='continueAttempt' type='checkbox' " . ($continueTimeLimit? 'checked' : '') . ">
+                                <span class='checkmark'></span>
                                 $langContinueAttemptExplanation
                             </label>
                         </div>

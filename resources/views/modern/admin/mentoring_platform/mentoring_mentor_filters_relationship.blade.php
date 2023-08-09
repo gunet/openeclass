@@ -240,23 +240,22 @@
                                                                         <ul>
                                                                             
                                                                             @foreach($skills as $s)
-                                                                                <li class='d-flex justify-content-start align-items-start mb-2'>
+                                                                                <label class='label-container'>
                                                                                     
-                                                                                    <div class='ms-2'><input type='checkbox' name='skills[{{ $l->id }}][]' value='{{ $s->id }}'></div>
-                                                                                    <div>
-                                                                                    
-                                                                                        @php 
-                                                                                            $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
-                                                                                                                                                            WHERE skill_id = ?d AND lang = ?s",$s->id, $language);
-                                                                                        @endphp
+                                                                                    <input type='checkbox' name='skills[{{ $l->id }}][]' value='{{ $s->id }}'>
+                                                                                    <span class='checkmark'></span>
+                                                                                    @php 
+                                                                                        $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
+                                                                                                                                                        WHERE skill_id = ?d AND lang = ?s",$s->id, $language);
+                                                                                    @endphp
 
-                                                                                        @if($checkTranslationSkill)
-                                                                                            {{ $checkTranslationSkill->name }}
-                                                                                        @else
-                                                                                            {{ $s->name }}
-                                                                                        @endif
-                                                                                    </div>
-                                                                                </li>
+                                                                                    @if($checkTranslationSkill)
+                                                                                        {{ $checkTranslationSkill->name }}
+                                                                                    @else
+                                                                                        {{ $s->name }}
+                                                                                    @endif
+                                                                                   
+                                                                                </label>
                                                                             @endforeach
                                                                         </ul>
                                                                     @endif

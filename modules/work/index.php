@@ -2160,26 +2160,30 @@ function new_assignment() {
                 <label class='col-sm-12 control-label-notes mb-1'>$langTiiCompareAgainst</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' checked disabled>
+                        <span class='checkmark'></span>
                         $langTiiStudentPaperCheck
                       </label>
                     </div>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' checked disabled>
+                        <span class='checkmark'></span>
                         $langTiiInternetCheck
                       </label>
                     </div>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' checked disabled>
+                        <span class='checkmark'></span>
                         $langTiiJournalCheck
                       </label>
                     </div>
                     <!--<div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' checked disabled>
+                        <span class='checkmark'></span>
                         $langTiiInstitutionCheck
                       </label>
                     </div>-->
@@ -2196,27 +2200,31 @@ function new_assignment() {
                 </div>
                 <div class='col-sm-12 mt-4'>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' disabled>
+                        <span class='checkmark'></span>
                         $langTiiSViewReports
                       </label>
                     </div>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' disabled>
+                        <span class='checkmark'></span>
                         $langTiiExcludeBiblio
                       </label>
                     </div>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' disabled>
-                       $langTiiExcludeQuoted
+                        <span class='checkmark'></span>
+                        $langTiiExcludeQuoted
                       </label>
                     </div>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' disabled>
-                       $langTiiExcludeSmall
+                        <span class='checkmark'></span>
+                        $langTiiExcludeSmall
                       </label>
                     </div>
                 </div>
@@ -2341,8 +2349,10 @@ function new_assignment() {
                     <div class='col-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
-                             <input style='cursor:pointer;' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
-                           </span>
+                            <label class='label-container'>
+                             <input class='mt-0' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
+                             <span class='checkmark'></span></label>
+                             </span>
                            <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                            <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                        </div>
@@ -2356,8 +2366,10 @@ function new_assignment() {
                     <div class='col-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
-                             <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
-                           </span>
+                           <label class='label-container'>
+                             <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
+                             <span class='checkmark'></span></label>
+                             </span>
                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                            <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
                        </div>
@@ -2397,8 +2409,10 @@ function new_assignment() {
                 <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
-                         <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
-                       </span>
+                       <label class='label-container'>
+                         <input class='mt-0' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
+                         <span class='checkmark'></span></label>
+                         </span>
                        <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                        <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
                    </div>
@@ -2410,7 +2424,9 @@ function new_assignment() {
                 <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
-                         <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
+                        <label class='label-container'>  
+                            <input class='mt-0' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
+                        <span class='checkmark'></span></label>
                        </span>
                        <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                        <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
@@ -2425,8 +2441,10 @@ function new_assignment() {
                 <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
-                         <input style='cursor:pointer;' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
-                       </span>
+                       <label class='label-container'>
+                         <input class='mt-0' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
+                         <span class='checkmark'></span></label>
+                         </span>
                        <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                        <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
                    </div>
@@ -2438,8 +2456,9 @@ function new_assignment() {
             <div class='mt-4 form-group ". ($WorkEnd ? "" : "hide")." mt-4' id='late_sub_row'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' id='late_submission' name='late_submission' value='1'>
+                        <span class='checkmark'></span>
                         $m[late_submission_enable]
                       </label>
                     </div>
@@ -2448,8 +2467,9 @@ function new_assignment() {
             <div class='form-group mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
-                      <label>
+                    <label class='label-container'>
                         <input type='checkbox' name='notify_submission' value='1'>
+                        <span class='checkmark'></span>
                         $langNotifyAssignmentSubmission
                       </label>
                     </div>
@@ -2459,7 +2479,7 @@ function new_assignment() {
                 <label class='col-12 control-label-notes mb-1'>$m[group_or_user]</label>
                 <div class='col-12'>
                     <div class='radio'>
-                      <label>
+                    <label class='label-container'>
                         <input type='radio' id='user_button' name='group_submissions' value='0' checked>
                         $m[user_work]
                       </label>
@@ -2533,7 +2553,7 @@ function new_assignment() {
                 <div class='row form-group mt-4'>
                     <label class='col-12 control-label-notes mb-1'>$langAutoJudgeEnable</label>
                     <div class='col-12'>
-                        <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1'></div>
+                        <div class='radio'><label class='label-container'><input type='checkbox' id='auto_judge' name='auto_judge' value='1'><span class='checkmark'></span></label></div>
                         <div class='table-responsive'>
                             <table style='display: none;'>
                                 <thead>
@@ -3228,26 +3248,30 @@ function show_edit_assignment($id) {
                     <label class='col-sm-12 control-label-notes'>$langTiiCompareAgainst</label>
                     <div class='col-sm-12'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_studentpapercheck' id='tii_studentpapercheck' value='1' " . ((($row->tii_studentpapercheck == 1) or ($assignment_type == 0)) ? 'checked' : '') . " $lti_disabled>
+                            <span class='checkmark'></span>
                             $langTiiStudentPaperCheck
                           </label>
                         </div>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_internetcheck' id='tii_internetcheck' value='1' " . ((($row->tii_internetcheck == 1)  or ($assignment_type == 0)) ? 'checked' : '') . " $lti_disabled>
+                            <span class='checkmark'></span>
                             $langTiiInternetCheck
                           </label>
                         </div>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_journalcheck' id='tii_journalcheck' value='1' " . ((($row->tii_journalcheck == 1) or ($assignment_type == 0)) ? 'checked' : '') . " $lti_disabled>
+                            <span class='checkmark'></span>
                             $langTiiJournalCheck
                           </label>
                         </div>
                         <!--<div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_institutioncheck' id='tii_institutioncheck' value='1' " . (($row->tii_institutioncheck == 1) ? 'checked' : '') . " $lti_disabled>
+                            <span class='checkmark'></span>
                             $langTiiInstitutionCheck
                           </label>
                         </div>-->
@@ -3264,27 +3288,31 @@ function show_edit_assignment($id) {
                     </div>
                     <div class='col-sm-12 mt-3'>
                         <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_s_view_reports' id='tii_s_view_reports' value='1' " . (($row->tii_s_view_reports == 1) ? 'checked' : '') . " $lti_disabled>
+                            <span class='checkmark'></span>
                             $langTiiSViewReports
                         </label>
                         </div>
                         <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_use_biblio_exclusion' id='tii_use_biblio_exclusion' value='1' " . (($row->tii_use_biblio_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
+                            <span class='checkmark'></span>
                             $langTiiExcludeBiblio
                         </label>
                         </div>
                         <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_use_quoted_exclusion' id='tii_use_quoted_exclusion' value='1' " . (($row->tii_use_quoted_exclusion == 1) ? 'checked' : '') . " $lti_disabled>
-                        $langTiiExcludeQuoted
+                            <span class='checkmark'></span>
+                            $langTiiExcludeQuoted
                         </label>
                         </div>
                         <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='tii_use_small_exclusion' id='tii_use_small_exclusion' value='1' " . (($row->tii_exclude_type != 'none') ? 'checked' : '') . " $lti_disabled>
-                        $langTiiExcludeSmall
+                            <span class='checkmark'></span>
+                            $langTiiExcludeSmall
                         </label>
                         </div>
                     </div>
@@ -3409,8 +3437,10 @@ function show_edit_assignment($id) {
                         <div class='col-sm-12'>
                            <div class='input-group'>
                                <span class='input-group-addon'>
-                                 <input style='cursor:pointer;' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
-                               </span>
+                               <label class='label-container'>
+                                 <input class='mt-0' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
+                                 <span class='checkmark'></span></label>
+                                 </span>
                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                             </div>
@@ -3423,8 +3453,10 @@ function show_edit_assignment($id) {
                         <div class='col-sm-12'>
                            <div class='input-group'>
                                <span class='input-group-addon'>
-                                 <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
-                               </span>
+                               <label class='label-container'>
+                                 <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
+                                 <span class='checkmark'></span></label>
+                                 </span>
                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
                             </div>
@@ -3467,7 +3499,9 @@ function show_edit_assignment($id) {
                             <div class='col-12'>
                             <div class='input-group'>
                                 <span class='input-group-addon'>
-                                    <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
+                                    <label class='label-container'>
+                                    <input class='mt-0' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
+                                    <span class='checkmark'></span></label>
                                 </span>
                                 <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                 <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
@@ -3481,8 +3515,10 @@ function show_edit_assignment($id) {
                             <div class='col-12'>
                             <div class='input-group'>
                                 <span class='input-group-addon'>
-                                    <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
-                                </span>
+                                <label class='label-container'>
+                                    <input class='mt-0' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
+                                    <span class='checkmark'></span></label>
+                                    </span>
                                 <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                 <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
                             </div>
@@ -3498,8 +3534,10 @@ function show_edit_assignment($id) {
                     <div class='col-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
-                             <input style='cursor:pointer;' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
-                           </span>
+                           <label class='label-container'>
+                             <input class='mt-0' type='checkbox' id='enableWorkFeedbackRelease' name='enableWorkFeedbackRelease' value='1'".($enableWorkFeedbackRelease ? ' checked' : '').">
+                             <span class='checkmark'></span></label>
+                             </span>
                            <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                            <input class='form-control mt-0 border-start-0' name='tii_feedbackreleasedate' id='tii_feedbackreleasedate' type='text' value='$WorkFeedbackRelease'".($enableWorkFeedbackRelease ? '' : ' disabled').">
                        </div>
@@ -3512,8 +3550,9 @@ function show_edit_assignment($id) {
                 <div class='form-group ". ($WorkEnd ? "" : "hide") ." mt-4' id='late_sub_row'>
                     <div class='col-12'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' id='late_submission' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '')."".($grading_type == 3 ? " disabled" : "").">
+                            <span class='checkmark'></span>
                             $m[late_submission_enable]
                           </label>
                         </div>
@@ -3522,9 +3561,10 @@ function show_edit_assignment($id) {
                 <div class='form-group mt-4'>
                     <div class='col-12'>
                         <div class='checkbox'>
-                          <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='notify_submission' value='1' $checked>
-                                $langNotifyAssignmentSubmission
+                            <span class='checkmark'></span>    
+                            $langNotifyAssignmentSubmission
                           </label>
                         </div>
                     </div>
@@ -3605,7 +3645,7 @@ function show_edit_assignment($id) {
                     <div class='row form-group mt-4'>
                     <label class='col-12 control-label-notes'>$langAutoJudgeEnable</label>
                     <div class='col-12'>
-                        <div class='radio'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' ".($auto_judge == true ? "checked='1'" : '')." /></div>
+                        <div class='radio'><label class='label-container'><input type='checkbox' id='auto_judge' name='auto_judge' value='1' ".($auto_judge == true ? "checked='1'" : '')." /><span class='checkmark'></span></label></div>
                         <table>
                             <thead>
                                 <tr>
@@ -4193,8 +4233,8 @@ function show_assignment_review($id, $display_graph_results = false) {
             <div class='form-group'>
               <div class='col-12'>
                  <div class='checkbox'>
-                   <label>
-                     <input type='checkbox' value='1' name='send_email' checked> $m[email_users]
+                 <label class='label-container'>
+                     <input type='checkbox' value='1' name='send_email' checked><span class='checkmark'></span> $m[email_users]
                    </label>
                  </div>
               </div>
@@ -4335,8 +4375,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         <div class='form-group mt-3'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
-                                  <label>
+                                <label class='label-container'>
                                     <input type='checkbox' name='send_email' id='email_button' value='1' checked>
+                                    <span class='checkmark'></span>
                                     $m[email_users]
                                   </label>
                                 </div>
@@ -5248,8 +5289,8 @@ function show_assignment($id, $display_graph_results = false) {
                 <div class='form-group'>
                     <div class='col-12'>
                         <div class='checkbox'>
-                          <label>
-                            <input type='checkbox' value='1' name='send_email' checked> $langMailToUsers
+                        <label class='label-container'>
+                            <input type='checkbox' value='1' name='send_email' checked><span class='checkmark'></span> $langMailToUsers
                           </label>
                         </div>
                     </div>

@@ -4643,6 +4643,7 @@ function get_platform_logo($size='normal') {
     }
 
     $theme_id = get_config('theme_options_id');
+    $bg_color = '#ffffff';
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);

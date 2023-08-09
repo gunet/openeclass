@@ -95,8 +95,9 @@
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowCourse') }}</label>
                                     <div class='col-sm-12 checkbox'>
-                                        <label>
+                                    <label class='label-container'>
                                             <input type='checkbox' name='allow_course' value='1'{!! isset($mynode) && $mynode->allow_course == 1 ? " checked" : '' !!}>
+                                            <span class='checkmark'></span>
                                             {{ trans('langNodeAllowCourse2') }}
                                         </label>
                                         
@@ -105,8 +106,9 @@
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langNodeAllowUser') }}</label>
                                     <div class='col-sm-12 checkbox'>
-                                        <label>
+                                    <label class='label-container'>
                                             <input type='checkbox' name='allow_user' value='1'{!! isset($mynode) && $mynode->allow_user == 1 ? " checked" : '' !!}>
+                                            <span class='checkmark'></span>
                                             {{ trans('langNodeAllowUser2') }}
                                         </label>
                                        

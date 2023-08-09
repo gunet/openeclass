@@ -254,8 +254,9 @@ if (isset($_GET['mid'])) {
                 <div class='form-group mt-4'>
                     <div class='col-sm-10 col-sm-offset-2'>
                             <div class='checkbox'>
-                                <label>
+                                <label class='label-container'>
                                     <input type='checkbox' name='mailing' value='1' checked>
+                                    <span class='checkmark'></span>
                                     " . q($langMailToUsers) . "
                                 </label>
                             </div>
@@ -384,8 +385,9 @@ if (isset($_GET['mid'])) {
                     <div class='form-group mt-4'>
                         <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
-                                    <label>
+                                    <label class='label-container'>
                                         <input type='checkbox' name='mailing' value='1' checked>
+                                        <span class='checkmark'></span>
                                         " . q($langMailToUsers) . "
                                     </label>
                                 </div>

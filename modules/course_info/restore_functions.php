@@ -431,9 +431,12 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     // Hide "Create accounts" option if in course (i.e. clone mode)
                     (isset($GLOBALS['course_code'])? '': "
                     <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langMultiRegType</label>
                         <div class='col-sm-12'>
-                            <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
+                            <label class='label-container'>
+                                <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
+                                <span class='checkmark'></span>
+                                $langMultiRegType
+                            </label>
                         </div>
                     </div>") . "
                     <div class='form-group mt-5 d-flex justify-content-center align-items-center'>

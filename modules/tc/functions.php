@@ -278,7 +278,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             <div class='col-sm-12'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
-                        <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                        <label class='label-container'>
+                        <input class='mt-0' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                        <span class='checkmark'></span></label>
                     </span>
                     <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                     <input class='form-control mt-0 border-start-0' name='BBBEndDate' id='BBBEndDate' type='text' value='$BBBEndDate'".($enableEndDate ? '' : ' disabled').">
@@ -325,8 +327,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langAnnouncements</label>
             <div class='col-sm-12'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='addAnnouncement' value='1'>$langBBBAnnDisplay
+                     <label class='label-container'>
+                        <input type='checkbox' name='addAnnouncement' value='1'><span class='checkmark'></span>$langBBBAnnDisplay
                       </label>
                     </div>
             </div>
@@ -409,8 +411,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='notifyUsers' value='1'>$langBBBNotifyUsers
+                     <label class='label-container'>
+                        <input type='checkbox' name='notifyUsers' value='1'><span class='checkmark'></span>$langBBBNotifyUsers
                       </label>
                     </div>
             </div>
@@ -427,8 +429,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='notifyExternalUsers' value='1'>$langBBBNotifyExternalUsers
+                     <label class='label-container'>
+                        <input type='checkbox' name='notifyExternalUsers' value='1'><span class='checkmark'></span>$langBBBNotifyExternalUsers
                       </label>
                     </div>
             </div>
@@ -446,8 +448,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'>$langBBBmuteOnStart
+                     <label class='label-container'>
+                        <input type='checkbox' name='muteOnStart' $checked_muteOnStart value='1'><span class='checkmark'></span>$langBBBmuteOnStart
                       </label>
                     </div>
             </div>
@@ -455,8 +457,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='lockSettingsDisableMic' $checked_lockSettingsDisableMic value='1'>$langBBBlockSettingsDisableMic
+                     <label class='label-container'>
+                        <input type='checkbox' name='lockSettingsDisableMic' $checked_lockSettingsDisableMic value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableMic
                       </label>
                     </div>
             </div>
@@ -464,8 +466,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='lockSettingsDisableCam' $checked_lockSettingsDisableCam value='1'>$langBBBlockSettingsDisableCam
+                     <label class='label-container'>
+                        <input type='checkbox' name='lockSettingsDisableCam' $checked_lockSettingsDisableCam value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableCam
                       </label>
                     </div>
             </div>
@@ -473,8 +475,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'>$langBBBwebcamsOnlyForModerator
+                     <label class='label-container'>
+                        <input type='checkbox' name='webcamsOnlyForModerator' $checked_webcamsOnlyForModerator value='1'><span class='checkmark'></span>$langBBBwebcamsOnlyForModerator
                       </label>
                     </div>
             </div>
@@ -482,8 +484,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='lockSettingsDisablePrivateChat' $checked_lockSettingsDisablePrivateChat value='1'>$langBBBlockSettingsDisablePrivateChat
+                     <label class='label-container'>
+                        <input type='checkbox' name='lockSettingsDisablePrivateChat' $checked_lockSettingsDisablePrivateChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePrivateChat
                       </label>
                     </div>
             </div>
@@ -491,8 +493,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='lockSettingsDisablePublicChat' $checked_lockSettingsDisablePublicChat value='1'>$langBBBlockSettingsDisablePublicChat
+                     <label class='label-container'>
+                        <input type='checkbox' name='lockSettingsDisablePublicChat' $checked_lockSettingsDisablePublicChat value='1'><span class='checkmark'></span>$langBBBlockSettingsDisablePublicChat
                       </label>
                     </div>
             </div>
@@ -500,8 +502,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='lockSettingsDisableNote' $checked_lockSettingsDisableNote value='1'>$langBBBlockSettingsDisableNote
+                     <label class='label-container'>
+                        <input type='checkbox' name='lockSettingsDisableNote' $checked_lockSettingsDisableNote value='1'><span class='checkmark'></span>$langBBBlockSettingsDisableNote
                       </label>
                     </div>
             </div>
@@ -509,8 +511,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='lockSettingsHideUserList' $checked_lockSettingsHideUserList value='1'>$langBBBlockSettingsHideUserList
+                     <label class='label-container'>
+                        <input type='checkbox' name='lockSettingsHideUserList' $checked_lockSettingsHideUserList value='1'><span class='checkmark'></span>$langBBBlockSettingsHideUserList
                       </label>
                     </div>
             </div>
@@ -518,8 +520,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'>$langBBBHideParticipants
+                     <label class='label-container'>
+                        <input type='checkbox' name='hideParticipants' $checked_hideParticipants value='1'><span class='checkmark'></span>$langBBBHideParticipants
                       </label>
 
                     </div>

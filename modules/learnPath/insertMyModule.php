@@ -145,8 +145,8 @@ foreach ($result as $list) {
     }
     $tool_content .= '</td>'
             . '<td align="center">'
-            . '<input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">' . "\n"
-            . '</td>'
+            . '<label class="label-container"><input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">' . "\n"
+            . '<span class="checkmark"></span></label></td>'
             . '</tr>';
 
     $atleastOne = TRUE;

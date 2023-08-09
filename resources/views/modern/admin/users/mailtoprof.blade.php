@@ -85,20 +85,20 @@
                             <label for='sendTo' class='col-sm-12 control-label-notes mb-1'>{{ trans('langSendMessageTo') }}</label>
                                 <div class='col-sm-12'>
                                     <div class='checkbox'>
-                                        <label class='me-3' >
+                                        <label class='label-container'>
                                             <input type='checkbox' name='send_to_prof' value='1'>
                                             @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
-                                                {{ trans('langProfOnly') }}
+                                            <span class='checkmark'></span>{{ trans('langProfOnly') }}
                                             @else
-                                                {{ trans('langProfTutorMentorOnly') }}
+                                            <span class='checkmark'></span>{{ trans('langProfTutorMentorOnly') }}
                                             @endif
                                         </label>
-                                        <label>
+                                        <label class='label-container'>
                                             <input type='checkbox' name='send_to_users' value='1'>
                                             @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
-                                                {{ trans('langStudentsOnly') }}
+                                            <span class='checkmark'></span>{{ trans('langStudentsOnly') }}
                                             @else
-                                                {{ trans('langMenteesOnly') }}
+                                            <span class='checkmark'></span>{{ trans('langMenteesOnly') }}
                                             @endif
                                         </label>
                                     </div>

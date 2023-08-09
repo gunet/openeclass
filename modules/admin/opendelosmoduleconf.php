@@ -94,7 +94,7 @@ foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "value='0' checked" : "value='1'";
         $boolean_field .= "<div class='form-group mb-4'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
-        $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' $checked>" . $param->display() . "</label>";
+        $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } elseif ($param->getType() == ExtParam::TYPE_MULTILINE) {
         $tool_content .= "<div class='form-group mb-4'>";

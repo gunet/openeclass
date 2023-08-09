@@ -417,9 +417,12 @@ if ($is_editor) {
                                                             <div class='small-text'>$duration</div>
 
                                                             <div class='control-label-notes mt-2'>$langCalculateNewDuration <small>$langInHour</small></div>
-                                                            <div class='d-flex justify-content-start align-items-center'>
+                                                            <div class='d-flex justify-content-start align-items-center gap-2'>
                                                                 <div id='idNewDuration'></div>
-                                                                <input style='height:15px; width:15px;' class='ms-2' type='checkbox' id='OnOffDuration' checked>
+                                                                <label class='label-container'>
+                                                                    <input type='checkbox' id='OnOffDuration' checked>
+                                                                    <span class='checkmark'></span>
+                                                                </label>
                                                             </div>
                                                         </div>
 
@@ -791,9 +794,12 @@ if ($is_editor) {
                                                 <div class='control-label-notes'>$langStartDate</div>
                                                 <div id='from'></div>
                                                 <div class='control-label-notes mt-3'>$langDuration <small>$langInHour</small></div>
-                                                <div class='d-flex justify-content-start align-items-center'>
+                                                <div class='d-flex justify-content-start align-items-center gap-2'>
                                                     <div id='idDuration'></div>
-                                                    <input style='height:15px; width:15px;' class='ms-2' type='checkbox' id='OnOffDuration' checked>
+                                                    <label class='label-container'>
+                                                        <input type='checkbox' id='OnOffDuration' checked>
+                                                        <span class='checkmark'></span>
+                                                    </label>
                                                 </div>
                                             </div>
                                                   

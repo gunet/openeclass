@@ -100,8 +100,10 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' name='status' checked> $langViewShow
+                    <label class='label-container'>
+                        <input type='checkbox' name='status' checked>
+                        <span class='checkmark'></span> 
+                        $langViewShow
                     </label>
                 </div>
             </div>
@@ -110,8 +112,10 @@ if ($is_editor) {
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
-                        <label>
-                            <input type='checkbox' name='chat_activity' > $langChatActivity
+                        <label class='label-container'>
+                            <input type='checkbox' name='chat_activity' >
+                            <span class='checkmark'></span> 
+                            $langChatActivity
                         </label>
                     </div>
                 </div>
@@ -311,8 +315,10 @@ if ($is_editor) {
         $tool_content .= "<div class='form-group mt-4'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' name='status' $checked_status> $langViewShow
+                    <label class='label-container'>
+                        <input type='checkbox' name='status' $checked_status>
+                        <span class='checkmark'></span>
+                        $langViewShow
                     </label>
                 </div>
             </div>
@@ -323,8 +329,10 @@ if ($is_editor) {
             $tool_content .= "<div class='form-group mt-4'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='checkbox'>
-                        <label>
-                            <input type='checkbox' name='chat_activity' $activity_status> $langChatActivity
+                        <label class='label-container'>
+                            <input type='checkbox' name='chat_activity' $activity_status>
+                            <span class='checkmark'></span>
+                            $langChatActivity
                         </label>
                     </div>
                 </div>

@@ -110,9 +110,9 @@
                                                         <label class='col-12 control-label-notes mb-2'>{{ trans('langAbilityRegisterToOneGroup') }}</label>
                                                         <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                                <label class='label-container'>
                                                                     <input id='id_reg_one' type='checkbox' name='reg_one' value='1' {!! $setting_reg == 1 ? 'checked' : '' !!}>
-                                                                    <span class='TextMedium'>{{ trans('langMenteeRegisterToOneGroup') }}</span>
+                                                                    <span class='checkmark'></span>{{ trans('langMenteeRegisterToOneGroup') }}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -122,9 +122,9 @@
                                                         <label class='col-12 control-label-notes mb-2'>{{ trans('langAbilityRegisterToManyGroup') }}</label>
                                                         <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                                <label class='label-container'>
                                                                     <input id='id_reg_many' type='checkbox' name='reg_many' value='0' {!! $setting_reg == 0 ? 'checked' : '' !!}>
-                                                                    <span class='TextMedium'>{{ trans('langMenteeRegisterToManyGroup') }}</span>
+                                                                    <span class='checkmark'></span>{{ trans('langMenteeRegisterToManyGroup') }}
                                                                 </label>
                                                             </div>
                                                         </div>

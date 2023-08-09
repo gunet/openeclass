@@ -64,11 +64,12 @@
                         <div class='col-md-6 col-12'>
                           <div class='form-group mt-3'>
                             <div class='col-12 checkbox'>
-                                <label class='d-inline-flex align-items-top @if(in_array($mid, $disabled)) not_visible @endif'>
+                                <label class='label-container @if(in_array($mid, $disabled)) d-none @endif'>
                                    <input type='checkbox' name='module[{{ $mid }}]' value='1'
                                     @if (in_array($mid, $default)) checked @endif
                                     @if (in_array($mid, $disabled)) disabled @endif>
-                                    <div class='mt-0 me-1'>{!! icon($minfo['image']) !!}</div>
+                                    <span class='checkmark'></span>
+                                    <div class='mt-0 me-0'>{!! icon($minfo['image']) !!}</div>
                                     {{ $minfo['title'] }}
                                 </label>
                             </div>

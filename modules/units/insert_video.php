@@ -59,7 +59,7 @@ function list_videos() {
                 } else {
                     $description_text = '';
                 }
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id'></td>" .
+                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
                                  "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description_text . "</td>" .
                                  "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
                                  "</tr>";
@@ -69,7 +69,7 @@ function list_videos() {
         if ($sql) {
             foreach ($sql as $videocat) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td class='text-center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
+                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "<td>".icon('fa-folder-open')."&nbsp;&nbsp;<strong>" . q($videocat->name) . "</strong>";
                 if (!empty($videocat->description)) {
                     $videocat_description_text = "<div style='margin-top: 10px;'>" .  q($videocat->description). "</div>";
@@ -87,7 +87,7 @@ function list_videos() {
                             $linkvideocat_description_text = '';
                         }
                         $tool_content .= "<tr>";
-                        $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
+                        $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
                         $tool_content .= "<td>&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
                         $tool_content .= $linkvideocat_description_text . "</td>";

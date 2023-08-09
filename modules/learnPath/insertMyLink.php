@@ -194,7 +194,7 @@ function showlinks() {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>";
             }
             $output .= "<br><small class='comments'>" . $myrow->description . "</small></td>";
-            $output .= "<td><div class='text-center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
+            $output .= "<td><label class='label-container'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></td>
             </tr>";
             $i++;
         }

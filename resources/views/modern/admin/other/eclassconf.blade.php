@@ -353,8 +353,9 @@
                                                 <div class='form-group mt-4'>
                                                     <label class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_block_duration_account') }}:</label>
                                                     <div class='checkbox col-sm-12'>
-                                                        <label>
+                                                        <label class='label-container'>
                                                             <input type='checkbox' name='block_duration_account' value='1' {{ $cbox_block_duration_account }}>
+                                                            <span class='checkmark'></span>
                                                             {{ trans('lang_message_block_duration_account') }}
                                                         </label>
                                                     </div>
@@ -365,9 +366,10 @@
                                                 <div class='form-group mt-4'>
                                                     <label class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_block_duration_alt_account') }}:</label>
                                                     <div class='checkbox col-sm-12'>
-                                                    <label>
+                                                    <label class='label-container'>
                                                         <input type='checkbox' name='block_duration_alt_account' value='1' {{ $cbox_block_duration_alt_account }}>
-                                                            {{ trans('lang_message_block_duration_account') }}
+                                                        <span class='checkmark'></span>    
+                                                        {{ trans('lang_message_block_duration_account') }}
                                                     </label>
                                                     </div>
                                                 </div>
@@ -386,8 +388,9 @@
                                                 <div class='form-group mt-4'>
                                                     <label class='col-sm-12 control-label-notes mb-1'>{{ trans('lang_display_captcha_label') }}:</label>
                                                     <div class='checkbox col-sm-12'>
-                                                        <label>
+                                                        <label class='label-container'>
                                                             <input type='checkbox' name='display_captcha' value='1' {{ $cbox_display_captcha }} {{ $disable_display_captcha }}>
+                                                            <span class='checkmark'></span>
                                                             {{ trans('lang_display_captcha') }}
                                                         </label>
                                                         {!! $message_display_captcha !!}
@@ -507,14 +510,16 @@
                                                             <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </label>
                                                             <div class='col-sm-12'>
                                                                     <div class='checkbox'>
-                                                                        <label>
+                                                                    <label class='label-container'>
                                                                             <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' {{ $cbox_dont_display_login_form }}>
+                                                                            <span class='checkmark'></span>
                                                                             {{trans('lang_dont_display_login_form')}}
                                                                         </label>
                                                                     </div>
                                                                     <div class='checkbox'>
-                                                                        <label>
+                                                                    <label class='label-container'>
                                                                             <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' {{ $cbox_hide_login_link }}>
+                                                                            <span class='checkmark'></span>
                                                                             {{trans('lang_hide_login_link')}}
                                                                         </label>
                                                                     </div>
@@ -524,8 +529,9 @@
                                                             <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_testimonials')}}: </label>
                                                             <div class='col-sm-12'>
                                                                 <div class='checkbox'>
-                                                                    <label>
+                                                                <label class='label-container'>
                                                                         <input type='checkbox' name='dont_display_testimonials' value='1' {{ $cbox_dont_display_testimonials }}>
+                                                                        <span class='checkmark'></span>
                                                                         {{trans('lang_dont_display_login_testimonials')}}
                                                                     </label>
                                                                 </div>
@@ -613,14 +619,16 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input type='checkbox' name='dont_mail_unverified_mails' value='1' {!! $cbox_dont_mail_unverified_mails !!}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_dont_mail_unverified_mails') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input type='checkbox' name='email_from' value='1' {!! $cbox_email_from !!}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_email_from') }}
                                                                 </label>
                                                             </div>
@@ -714,38 +722,44 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input type='checkbox' name='course_multidep' value='1' {{ $cbox_course_multidep }}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_course_multidep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input type='checkbox' name='user_multidep' value='1' {{ $cbox_user_multidep }}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_user_multidep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input id='uown' type='checkbox' name='restrict_owndep' value='1' {{ $cbox_restrict_owndep }}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_restrict_owndep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' {{ $town_dis }} {{ $cbox_restrict_teacher_owndep }}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_restrict_teacher_owndep') }}
                                                                 </label>
                                                             </div>
                                                             <div class='checkbox'>
-                                                                <label>
+                                                            <label class='label-container'>
                                                                     <input type='checkbox' name='allow_teacher_clone_course' value='1' {{ $cbox_allow_teacher_clone_course }}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('lang_allow_teacher_clone_course') }}
                                                                 </label>
                                                             </div>
                                                         <div class='checkbox'>
-                                                                <label>
+                                                        <label class='label-container'>
                                                                     <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
+                                                                    <span class='checkmark'></span>
                                                                     {{ trans('langCourseOfflineSettings') }}
                                                                 </label>
                                                             </div>
@@ -770,20 +784,23 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='insert_xml_metadata' value='1' {{ $cbox_insert_xml_metadata }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_insert_xml_metadata') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' id='course_metadata' name='course_metadata' value='1' {{ $cbox_course_metadata }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_course_metadata') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' {{ $cbox_opencourses_enable }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_opencourses_enable') }}
                                                             </label>
                                                         </div>
@@ -807,106 +824,123 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='case_insensitive_usernames' value='1' {{ $cbox_case_insensitive_usernames }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langCaseInsensitiveUsername') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='email_required' value='1' {{ $cbox_email_required }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_email_required') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='email_verification_required' value='1' {{ $cbox_email_verification_required }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_email_verification_required') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='am_required' value='1' {{ $cbox_am_required }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_am_required') }}
                                                             </label>
                                                         </div>
                                                         @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='index_enable' type='checkbox' name='enable_indexing' value='1' {{ $cbox_enable_indexing }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langEnableIndexing') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='search_enable' type='checkbox' name='enable_search' value='1' {{ $cbox_enable_search }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langEnableSearch') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='dropbox_allow_student_to_student' value='1' {{ $cbox_dropbox_allow_student_to_student }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_dropbox_allow_student_to_student') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='dropbox_allow_personal_messages' value='1' {{ $cbox_dropbox_allow_personal_messages }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_dropbox_allow_personal_messages') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='personal_blog_enable' type='checkbox' name='personal_blog' value='1' {{ $cbox_personal_blog }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' {{ $cbox_personal_blog_commenting }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog_commenting') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='personal_blog_rating_enable' type='checkbox' name='personal_blog_rating' value='1' {{ $cbox_personal_blog_rating }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog_rating') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' {{ $cbox_personal_blog_sharing }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_personal_blog_sharing') }}
                                                             </label>
                                                         </div>
                                                         @endif
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_eportfolio_enable') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='block_username_change' value='1' {{ $cbox_block_username_change }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_block_username_change') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input {!! $id_enable_mobileapi !!} type='checkbox' name='enable_mobileapi' value='1' {{ $cbox_enable_mobileapi }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_enable_mobileapi') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' {{ $cbox_enable_social_sharing_links }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langEnableSocialSharingLiks') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='strong_passwords' type='checkbox' name='enable_strong_passwords' value='1' {{ $cbox_enable_strong_passwords }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langEnableStrongPasswords') }}
                                                             </label>
                                                         </div>
@@ -954,14 +988,16 @@
                                                 <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='mydocs_teacher_enable' id='mydocs_teacher_enable_id' value='1' {{ $cbox_mydocs_teacher_enable }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langTeachers') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='mydocs_student_enable' id='mydocs_student_enable_id' value='1' {{ $cbox_mydocs_student_enable }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langStudents') }}
                                                             </label>
                                                         </div>
@@ -993,14 +1029,16 @@
                                                     </div>
                                                 </div>
                                                 <div class='checkbox mt-4'>
-                                                    <label>
+                                                <label class='label-container'>
                                                         <input type='checkbox' name='enable_common_docs' value='1' {{ $cbox_enable_common_docs }}>
+                                                        <span class='checkmark'></span>
                                                         {{ trans('langEnableCommonDocs') }}
                                                     </label>
                                                 </div>
                                                 <div class='checkbox'>
-                                                <label>
+                                                <label class='label-container'>
                                                     <input type='checkbox' name='enable_docs_public_write' value='1' {{ $cbox_enable_docs_public_write }}>
+                                                    <span class='checkmark'></span>
                                                     {{ trans('langEnableDocsPublicWrite') }}
                                                 </label>
                                             </div>
@@ -1087,20 +1125,23 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='disable_log_actions' value='1' {{ $cbox_disable_log_actions }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_log_actions') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='disable_log_course_actions' value='1' {{ $cbox_disable_log_course_actions }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_log_course_actions') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input type='checkbox' name='disable_log_system_actions' value='1' {{ $cbox_disable_log_system_actions }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_log_system_actions') }}
                                                             </label>
                                                         </div>
@@ -1141,8 +1182,9 @@
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' {{ $cbox_login_fail_check }}>
+                                                                <span class='checkmark'></span>
                                                                 {{ trans('langEnableLoginFailCheck') }}
                                                             </label>
                                                         </div>
@@ -1207,16 +1249,18 @@
                                                     <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </label>
                                                     <div class='col-sm-12'>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text'
                                                                     @if (get_config('activate_privacy_policy_text')) checked @endif value='1'>
+                                                                    <span class='checkmark'></span>
                                                                 {{ trans('langDisplayPrivacyPolicyLink') }}
                                                             </label>
                                                         </div>
                                                         <div class='checkbox'>
-                                                            <label>
+                                                        <label class='label-container'>
                                                                 <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent'
                                                                     @if (get_config('activate_privacy_policy_consent')) checked @endif value='1'>
+                                                                    <span class='checkmark'></span>
                                                                 {{ trans('langAskPrivacyPolicyConsent') }}
                                                             </label>
                                                         </div>
