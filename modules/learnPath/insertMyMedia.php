@@ -227,7 +227,7 @@ function showmedia() {
                 <th colspan='3'>
                 <div>
                   <input type='hidden' name='maxMediaForm' value ='" . ($i + $j - 2) . "' />
-                  <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
+                  <input class='btn submitAdminBtn' type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
                 </div></th>
                 </tr>
                 </tfooter>

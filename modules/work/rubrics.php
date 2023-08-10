@@ -159,7 +159,7 @@ if (isset($_GET['rubric_id'])) {
             '                    <tr>'+
             '                        <th style=\'width:47%\'>" . js_escape($langWording). "</th>'+
             '                        <th style=\'width:47%\'>" . js_escape($langValue). "</th>'+
-            '                        <th class=\'text-center option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
+            '                        <th class=\'text-end option-btn-cell\' style=\'width:5%\'><span class=\'fa fa-gears\'></span></th>'+
             '                    </tr>'+
             '                </thead>'+
             '                <tbody>'+

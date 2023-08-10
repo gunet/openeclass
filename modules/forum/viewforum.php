@@ -343,7 +343,7 @@ if (count($result) > 0) { // topics found
             $topic_link_notify = toggle_link($topic_action_notify);
             $topic_icon = toggle_icon($topic_action_notify);
         }
-        $tool_content .= "<td class='text-center option-btn-cell'>";
+        $tool_content .= "<td class='text-end option-btn-cell'>";
         if ($unit) {
             $modify_link = "../forum/forum_admin.php?course=$course_code&amp;forumtopicedit=yes&amp;topic_id=$myrow->id";
             $del_link = "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic_id=$myrow->id&amp;topicdel=yes";

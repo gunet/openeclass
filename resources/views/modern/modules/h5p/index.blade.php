@@ -140,9 +140,9 @@
                                 <table class="table-default">
                                     <thead>
                                         <tr class="list-header">
-                                            <th class="text-start">{{ trans('langH5pInteractiveContent') }}</th>
-                                            <th class='text-center'>{{ trans('langAttendanceType') }} HP5</th>
-                                            <th class="text-center" style="width:109px;">
+                                            <th>{{ trans('langH5pInteractiveContent') }}</th>
+                                            <th>{{ trans('langAttendanceType') }} HP5</th>
+                                            <th style="width:109px;">
                                                 <span class="fa fa-gears"></span>
                                             </th>
                                         </tr>
@@ -154,10 +154,10 @@
                                                 <td>
                                                     <a href='view.php?course={{ $course_code }}&amp;id={{ $item->id }}'>{{ $item->title }}</a>
                                                 </td>
-                                                <td class='text-center'>
+                                                <td>
                                                     <img src='{{$typeIconUrl}}' alt='{{$h5p_content_type_title}}' width='50px' height='50px'> <em>{!! $h5p_content_type_title !!}</em>
                                                 </td>
-                                                <td class='text-center'>
+                                                <td class='text-end'>
                                                     @if ($is_editor)
                                                         {!! action_button([
                                                             [ 'icon' => 'fa-edit',

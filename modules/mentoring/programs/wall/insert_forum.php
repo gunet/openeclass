@@ -50,7 +50,7 @@ function list_forums($id = NULL) {
                 "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
                 "<th>$langComments</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
 
         foreach ($foruminfo as $entry) {
@@ -62,7 +62,7 @@ function list_forums($id = NULL) {
             $ret_string .= "<tr>
                 <td><a href='{$urlServer}modules/mentoring/programs/group/forum_group.php?forum_group_id=".getInDirectReference($program_group_id)."'><b>" . q($entry->name) . "</b></a></td>
                 <td>" . ($entry->desc? q($entry->desc): '&nbsp;') . "</td>
-                <td class='text-center'><label class='label-container'><input type='checkbox' $fchecked name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
+                <td><label class='label-container'><input type='checkbox' $fchecked name='forum[]' value='{$entry->id}'><span class='checkmark'></span></label></td>
               </tr>";
 
             $r = Database::get()->queryArray("SELECT * FROM mentoring_forum_topic WHERE forum_id = ?d", $entry->id);
@@ -83,7 +83,7 @@ function list_forums($id = NULL) {
                     $ret_string .= "<tr>";
                     $ret_string .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/mentoring/programs/group/viewtopic.php?topic_id=".getInDirectReference($topicentry[topic_id])."&amp;forum_id=".getInDirectReference($entry->id)."&amp;group_id=".getInDirectReference($program_group_id)."'>" . q($topicentry['topic_title']) . "</a></td>";
                     $ret_string .= "<td>&nbsp;</td>";
-                    $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $tchecked name='forum[]' value='{$entry->id}:$topicentry[topic_id]'><span class='checkmark'></span></label></td>";
+                    $ret_string .= "<td><label class='label-container'><input type='checkbox' $tchecked name='forum[]' value='{$entry->id}:$topicentry[topic_id]'><span class='checkmark'></span></label></td>";
                     $ret_string .= "</tr>";
                 }
             }

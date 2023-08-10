@@ -61,6 +61,6 @@ function list_assignments() {
         }
         $tool_content .=
                 "</table></div>" .
-                "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
+                "<div class='d-flex justify-content-start mt-4'><input class='btn submitAdminBtn' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }

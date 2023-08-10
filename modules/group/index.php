@@ -507,7 +507,7 @@ if ($is_editor) {
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
                 <tr class='list-header'><th class='text-start list-header'>$langGroupTeam</th>
-                <th class=' option-btn-cell text-center'>" . icon('fa-gears') . "</th>
+                <th class=' option-btn-cell text-end'>" . icon('fa-gears') . "</th>
                 </tr>
                 <tr><td class='not_visible nocategory-link'> - $langNoGroupInCategory - </td>
                 <td></td></tr></table></div></div></div>";
@@ -1083,7 +1083,7 @@ if ($is_editor) {
                 }
 
                 if ($is_editor) {
-                    $tool_content .= "<td class='option-btn-cell text-center'>";
+                    $tool_content .= "<td class='option-btn-cell text-end'>";
                     showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 } else {
@@ -1108,7 +1108,7 @@ if ($is_editor) {
                 }
 
                 if ($is_editor) {
-                    $tool_content .= "<td class='option-btn-cell text-center'>";
+                    $tool_content .= "<td class='option-btn-cell text-end'>";
                     showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }

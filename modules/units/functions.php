@@ -1715,12 +1715,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
             $activity_result = unit_resource_completion($_GET['id'], $resource_id);
             switch ($activity_result) {
                 case 1: $content = "<td class='style='padding: 10px 0; width: 85px;'>
-                                    <span class='fa fa-check-circle text-center' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
+                                    <span class='fa fa-check-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langAlreadyBrowsed'></span>
                                     </td>";
                     break;
                 case 0:
                     $content = "<td class='style='padding: 10px 0; width: 85px;'>
-                                <span class='fa fa-hourglass-2 text-center' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
+                                <span class='fa fa-hourglass-2' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langNeverBrowsed'></span>
                                 </td>";
                     break;
                 default:

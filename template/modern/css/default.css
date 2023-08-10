@@ -970,100 +970,6 @@ body:has(.mce-fullscreen) .navbar-eclass{
   border: 0px;
 }
 
-
-
-
-/**********************************************************************************************************************/
-/************************************************* CONTEXTUAL MENUS ***************************************************/
-/**********************************************************************************************************************/
-
-.contextual-menu{
-  width:270px;
-  list-style-type:none;
-  border: solid 1px #CDD4E0;
-  filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
-}
-
-.contextual-menu-user{
-  width:296px;
-  border: solid 1px #CDD4E0;
-}
-
-@media(min-width:992px){
-  .contextual-menu-user{
-    overflow-y: auto;
-    max-height: calc(100vh - 80px - 80px);
-  }
-  .contextual-menu-user::-webkit-scrollbar {
-    width: 20px;
-  }
-  .contextual-menu-user::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-  }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-  }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-  }
-}
-
-
-.contextual-menu-user.show{
-  top: 90%;
-  
-}
-
-.contextual-menu-user .list-group-item .fa-solid, .contextual-menu-user .list-group-item .fa-regular{
-  width: 16px;
-  height: 16px;
-}
-
-.contextual-menu li{
-  list-style:none !important;
-}
-
-.contextual-menu .list-group-item{
-  border:0px;
-  border-bottom: solid 1px #EFF6FF;
-  font-weight: 700;
-  color: #2B3944;
-  font-size: 14px;
-  letter-spacing: 0px;
-  line-height: 16px;
-}
-
-.contextual-menu li:last-child .list-group-item{
-  border:0px;
-}
-
-.contextual-menu .list-group-item:hover{
-  background-color: #EFF6FF;
-  color:#0073E6;
-  text-decoration: none;
-  cursor:  url(../images/pointer.png), auto;
-}
-
-
-body .form-action-button-mydropdowns{ 
-  display: none; 
-}
-
-
-.contextual-menu .form-action-button-mydropdowns{ 
-  display: block; 
-}
-
-.contextual-border{
-  border: solid 1px #CDD4E0;
-}
 /**********************************************************************************************************************/
 /****************************************************** TABS **********************************************************/
 /**********************************************************************************************************************/
@@ -1134,293 +1040,6 @@ body .form-action-button-mydropdowns{
   transform: rotate(0deg);
   transition: transform .3s ease-in-out;
 }
-
-
-
-
-/**********************************************************************************************************************/
-/***************************************** BOOTBOX - MENUPOPOVER -MODALS **********************************************/
-/**********************************************************************************************************************/
-
-.modal-open{
-  padding-right: 0px !important;
-}
-
-.bootbox.show .modal-footer .submitAdminBtn,
-.modal.show .modal-footer .submitAdminBtn{
-  border-color: #0073E6;
-  background-color: #0073E6;
-  color: #ffffff;
-}
-.bootbox.show .modal-footer .submitAdminBtn:hover,
-.modal.show .modal-footer .submitAdminBtn:hover{
-  border-color: #2546F0;
-  background-color: #2546F0;
-  color: #ffffff;
-}
-
-.bootbox-close-button{ 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-}
-
-.menu-popover{ 
-  background: #FFFFFF; 
-  border-radius: 5px; 
-  text-align: center;
-  border: solid 1px #E8EDF8;
-}
-
-.menu-popover.submitAdminBtn,
-.btn-group-default .submitAdminBtn{
-  border: 0px;
-  color: #9BA9C1;
-  background-color: transparent;
-}
-.menu-popover.submitAdminBtn:hover,
-.btn-group-default .submitAdminBtn:hover{
-  background-color: transparent;
-}
-
-.menu-popover .hidden-xs{
-  padding: 0px;
-}
-
-.menu-popover .list-group-item{ 
-  border: solid thin;
-  border-color: #005ad9;
-  color: #005ad9;
-  font-size: 14px;
-  
-  min-height:30px;
-  font-weight: 700; font-style: normal;
-  border-radius: 4px;
-  display: inline-block;
-  margin: 0 auto;
-  width:100%;
-  margin-bottom: 10px;
-  word-wrap: break-word;
-}
-
-.menu-popover .list-group-item.disabled{ 
-  opacity: 0.4;
-}
-
-.menu-popover .list-group-item:hover{ 
-  background-color: #005ad9;
-  color: #ffffff;
-}
-
-.menu-popover .delete.confirmAction, .menu-popover .delete.delete_btn{
-  background:#ffffff;
-  border: solid thin;
-  border-color: #C44601;
-  color: #C44601;
-  font-size: 14px;
-
-  font-family: 'Manrope' , sans-serif; 
-  font-weight: 700; font-style: normal;
-  border-radius: 4px;
-  height:35px !important;
-  display: inline-block;
-  margin: 0 auto;
-  width:100%;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.menu-popover .delete.confirmAction .fa-times, .menu-popover .delete.delete_btn .fa-times,
-.menu-popover .delete.confirmAction .fa-trash, .menu-popover .delete.delete_btn .fa-trash{ 
-  color: #C44601; 
-}
-
-.menu-popover .delete.confirmAction:hover , .menu-popover .delete.delete_btn:hover{ 
-  background: #C44601; 
-  color:#ffffff;
-}
-
-.menu-popover .delete.confirmAction:hover .fa-times, .menu-popover .delete.confirmAction:hover .fa-trash{ 
-  color:#ffffff;
-}
-
-.menu-popover .delete.delete_btn:hover .fa-times, .menu-popover .delete.delete_btn:hover .fa-trash{ 
-  color:#ffffff;
-}
-
-
-/* after close modal , display none from body and block inside popover for form-action-button */
-body .form-action-button-popover{ 
-  display: none; 
-}
-
-.menu-popover .form-action-button-popover{ 
-  display: block; 
-}
-
-.bootbox.show .modal-content, .modal.show .modal-content{
-  padding: 15px;
-}
-.modal.show .modal-header{
-  border: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-}
-.bootbox.show .modal-header{
-  border: 0;
-  display: block;
-}
-.bootbox.show .modal-header .modal-title, .modal.show .modal-header .modal-title{
-  font-weight: 700;
-  font-style: normal;
-  font-size: 22px;
-  line-height: 24px;
-  letter-spacing: 0px;
-  color: #2B3944;
-}
-.bootbox.show .modal-header .bootbox-close-button, .modal.show .modal-header .close{
-  float: right;
-}
-.bootbox.show .modal-header h4, .modal.show .modal-header .modal-title{
-  float: left;
-}
-.bootbox.show .bootbox-close-button{
-  border:0px;
-  background-color: #ffffff;
-  margin-top: 5px !important;
-  width: 16px;
-  height: 16px;
-  font-size: 32px;
-  color: #687DA3;
-}
-.modal.show .close{
-  border:0px;
-  background-color: #ffffff;
-  margin-top: 0px;
-  width: 16px;
-  height: 16px;
-  margin-top: 3px;
-}
-.modal.show .close span{
-  color: #687DA3;
-}
-.bootbox.show .modal-body, .modal.show .modal-body{
-  border: 0;
-}
-.bootbox.show .bootbox-body, .modal.show .modal-body{
-  font-weight: 400;
-  font-style: normal;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: 0px;
-  color: #2B3944;
-}
-.bootbox.show .modal-footer, .modal.show .modal-footer{
-  border: 0;
-}
-.bootbox.show .modal-body:has(.bootbox-close-button) .bootbox-close-button{
-  margin-bottom: 15px;
-}
-
-.rating{ 
-  margin-bottom: 0px !important; 
-}
-
-.openCourseImg{
-  width: 100%;
-  max-height: 280px;
-  background-size: cover ;
-  background-repeat: no-repeat ;
-  background-position: center ;
-  margin: auto;
-  display: block;
-}
-@media(max-width:767px){
-  .openCourseImg{
-    width:100%;
-  }
-}
-
-.openCourseDes{
-  text-align: justify;
-}
-
-.modal-content-opencourses{
-  position: fixed;
-  float: left;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background:#ffffff ;
-  border-radius: 4px;
-  max-height:80vh;
-  padding: 20px;
-  border: solid 1px #E8EDF8;
-}
-.ClickCourseModalImg{
-  width:16px; height:16px;
-}
-
-@media(max-width:424px){
-  .modal-content-opencourses{
-    width:90vw;
-  }
-}
-@media(min-width:425px) and (max-width:767px){
-  .modal-content-opencourses{
-    width:90vw;
-  }
-}
-@media(min-width:768px) and (max-width:991px){
-  .modal-content-opencourses{
-    width:90vw;
-  }
-}
-@media(min-width:992px) and (max-width:1023px){
-  .modal-content-opencourses{
-    width:90vw;
-  }
-}
-@media(min-width:1024px) and (max-width:1199px){
-  .modal-content-opencourses{
-    width:750px;
-  }
-}
-@media(min-width:1200px){
-  .modal-content-opencourses{
-    width:800px;
-  }
-}
-
-.course-content{
-  max-height: 400px;
-  overflow-y: auto;
-}
-.course-content::-webkit-scrollbar {
-  width: 20px;
-}
-.course-content::-webkit-scrollbar-track {
-  background-color: transparent;
-}
-.course-content::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-}
-.course-content::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-}
-.course-content::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-  border: 6px solid transparent;
-  background-clip: content-box;
-}
-
-.course-professor-code{
-  margin-left: 32px;
-}
-
 
 
 /**********************************************************************************************************************/
@@ -1913,7 +1532,7 @@ label:has(input[type="checkbox"]:disabled){
   z-index: 0 !important;
 }
 
-.submitAdminBtnDefault, input[type="submit"]{
+.submitAdminBtnDefault, input[type="submit"], button[type="submit"]{
   background-color: #0073E6;
   color: #ffffff;
   border: solid thin;
@@ -1929,7 +1548,7 @@ label:has(input[type="checkbox"]:disabled){
   letter-spacing: 0px;
   line-height: 16px;
 }
-.submitAdminBtnDefault:hover, input[type="submit"]:hover {
+.submitAdminBtnDefault:hover, input[type="submit"]:hover, button[type="submit"]:hover {
   background-color: #2546F0;
   color: #ffffff;
   text-decoration: none;
@@ -1937,7 +1556,7 @@ label:has(input[type="checkbox"]:disabled){
 
 .deleteAdminBtn {
   border: solid thin;
-  border-color: #C44601;
+  border-color: #C44601 !important;
   color: #ffffff;
   font-size: 14px;
   height:40px;
@@ -1947,20 +1566,20 @@ label:has(input[type="checkbox"]:disabled){
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #C44601;
+  background-color: #C44601 !important;
   letter-spacing: 0px;
   line-height: 16px;
 }
 
 .deleteAdminBtn:hover {
-  border-color: #B70A0A;
-  background-color: #B70A0A;
+  border-color: #B70A0A !important;
+  background-color: #B70A0A !important;
   color: #ffffff;
 }
 
 .successAdminBtn {
   border: solid thin;
-  border-color: #1E7E0E	;
+  border-color: #1E7E0E	!important;
   color: #ffffff	;
   font-size: 14px;
   height:40px;
@@ -1970,14 +1589,14 @@ label:has(input[type="checkbox"]:disabled){
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1E7E0E;
+  background-color: #1E7E0E !important;
   letter-spacing: 0px;
   line-height: 16px;
 }
 
 .successAdminBtn:hover {
-  background-color: #19680C	;
-  border-color: #19680C;
+  background-color: #19680C	!important;
+  border-color: #19680C !important;
   color: #ffffff;
 }
 
@@ -2126,8 +1745,380 @@ label:has(input[type="checkbox"]:disabled){
 }
 
 /**********************************************************************************************************************/
+/************************************************* CONTEXTUAL MENUS ***************************************************/
+/**********************************************************************************************************************/
+
+.contextual-menu{
+  width:270px;
+  list-style-type:none;
+  border: solid 1px #CDD4E0;
+  filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+}
+
+.contextual-menu-user{
+  width:296px;
+  border: solid 1px #CDD4E0;
+}
+
+@media(min-width:992px){
+  .contextual-menu-user{
+    overflow-y: auto;
+    max-height: calc(100vh - 80px - 80px);
+  }
+  .contextual-menu-user::-webkit-scrollbar {
+    width: 20px;
+  }
+  .contextual-menu-user::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+  .contextual-menu-user::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+  }
+  .contextual-menu-user::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+  }
+  .contextual-menu-user::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+}
+
+
+.contextual-menu-user.show{
+  top: 90%;
+  
+}
+
+.contextual-menu-user .list-group-item .fa-solid, .contextual-menu-user .list-group-item .fa-regular{
+  width: 16px;
+  height: 16px;
+}
+
+.contextual-menu li{
+  list-style:none !important;
+}
+
+.contextual-menu .list-group-item,
+.contextual-menu button[type="submit"],
+.contextual-menu input[type="submit"]{
+  border:0px;
+  border-bottom: solid 1px #EFF6FF;
+  font-weight: 700;
+  color: #2B3944;
+  font-size: 14px;
+  letter-spacing: 0px;
+  line-height: 16px;
+  background-color: #ffffff;
+}
+
+.contextual-menu li:last-child .list-group-item{
+  border:0px;
+}
+
+.contextual-menu .list-group-item:hover,
+.contextual-menu button[type="submit"]:hover
+.contextual-menu input[type="submit"]:hover{
+  background-color: #EFF6FF;
+  color:#0073E6;
+  text-decoration: none;
+  cursor:  url(../images/pointer.png), auto;
+}
+
+
+body .form-action-button-mydropdowns{ 
+  display: none; 
+}
+
+
+.contextual-menu .form-action-button-mydropdowns{ 
+  display: block; 
+}
+
+.contextual-border{
+  border: solid 1px #CDD4E0;
+}
+
+
+
+/**********************************************************************************************************************/
+/***************************************** BOOTBOX - MENUPOPOVER -MODALS **********************************************/
+/**********************************************************************************************************************/
+
+.modal-open{
+  padding-right: 0px !important;
+}
+
+.bootbox.show .modal-footer .submitAdminBtn,
+.modal.show .modal-footer .submitAdminBtn{
+  border-color: #0073E6;
+  background-color: #0073E6;
+  color: #ffffff;
+}
+.bootbox.show .modal-footer .submitAdminBtn:hover,
+.modal.show .modal-footer .submitAdminBtn:hover{
+  border-color: #2546F0;
+  background-color: #2546F0;
+  color: #ffffff;
+}
+
+.bootbox-close-button{ 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.menu-popover{ 
+  background: #FFFFFF; 
+  border-radius: 5px; 
+  border: solid 1px #E8EDF8;
+}
+
+.menu-popover.submitAdminBtn,
+.btn-group-default .submitAdminBtn{
+  border: 0px;
+  color: #9BA9C1;
+  background-color: transparent;
+}
+.menu-popover.submitAdminBtn:hover,
+.btn-group-default .submitAdminBtn:hover{
+  background-color: transparent;
+}
+
+.menu-popover .hidden-xs{
+  padding: 0px;
+}
+
+.menu-popover .list-group-item{ 
+  border-radius: 0px;
+  border: 0px;
+  border-bottom: solid 1px #EFF6FF;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  min-height: 40px;
+  padding: 10px;
+}
+
+.menu-popover .list-group-item:hover{ 
+  background-color: #EFF6FF;
+  color:#0073E6;
+  text-decoration: none;
+  cursor:  url(../images/pointer.png), auto;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.menu-popover .list-group-item.disabled{ 
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.menu-popover .delete.confirmAction, 
+.menu-popover .delete.delete_btn{
+  border-radius: 0px;
+  border: 0px;
+  border-bottom: solid 1px #EFF6FF;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 10px;
+  font-weight: 700;
+  color: #C44601;
+  font-size: 14px;
+  min-height: 40px;
+  padding: 10px;
+}
+
+.menu-popover .delete.confirmAction:hover, 
+.menu-popover .delete.delete_btn:hover{
+  background-color: #EFF6FF;
+  color: #C44601;
+}
+
+/* after close modal , display none from body and block inside popover for form-action-button */
+/* body .form-action-button-popover{ 
+  display: none; 
+}
+
+.menu-popover .form-action-button-popover{ 
+  display: block; 
+} */
+
+.bootbox.show .modal-content, .modal.show .modal-content{
+  padding: 15px;
+}
+.modal.show .modal-header{
+  border: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.bootbox.show .modal-header{
+  border: 0;
+  display: block;
+}
+.bootbox.show .modal-header .modal-title, .modal.show .modal-header .modal-title{
+  font-weight: 700;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #2B3944;
+}
+.bootbox.show .modal-header .bootbox-close-button, .modal.show .modal-header .close{
+  float: right;
+}
+.bootbox.show .modal-header h4, .modal.show .modal-header .modal-title{
+  float: left;
+}
+.bootbox.show .bootbox-close-button{
+  border:0px;
+  background-color: #ffffff;
+  margin-top: 5px !important;
+  width: 16px;
+  height: 16px;
+  font-size: 32px;
+  color: #687DA3;
+}
+.modal.show .close{
+  border:0px;
+  background-color: #ffffff;
+  margin-top: 0px;
+  width: 16px;
+  height: 16px;
+  margin-top: 3px;
+}
+.modal.show .close span{
+  color: #687DA3;
+}
+.bootbox.show .modal-body, .modal.show .modal-body{
+  border: 0;
+}
+.bootbox.show .bootbox-body, .modal.show .modal-body{
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0px;
+  color: #2B3944;
+}
+.bootbox.show .modal-footer, .modal.show .modal-footer{
+  border: 0;
+}
+.bootbox.show .modal-body:has(.bootbox-close-button) .bootbox-close-button{
+  margin-bottom: 15px;
+}
+
+.rating{ 
+  margin-bottom: 0px !important; 
+}
+
+.openCourseImg{
+  width: 100%;
+  max-height: 280px;
+  background-size: cover ;
+  background-repeat: no-repeat ;
+  background-position: center ;
+  margin: auto;
+  display: block;
+}
+@media(max-width:767px){
+  .openCourseImg{
+    width:100%;
+  }
+}
+
+.openCourseDes{
+  text-align: justify;
+}
+
+.modal-content-opencourses{
+  position: fixed;
+  float: left;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background:#ffffff ;
+  border-radius: 4px;
+  max-height:80vh;
+  padding: 20px;
+  border: solid 1px #E8EDF8;
+}
+.ClickCourseModalImg{
+  width:16px; height:16px;
+}
+
+@media(max-width:424px){
+  .modal-content-opencourses{
+    width:90vw;
+  }
+}
+@media(min-width:425px) and (max-width:767px){
+  .modal-content-opencourses{
+    width:90vw;
+  }
+}
+@media(min-width:768px) and (max-width:991px){
+  .modal-content-opencourses{
+    width:90vw;
+  }
+}
+@media(min-width:992px) and (max-width:1023px){
+  .modal-content-opencourses{
+    width:90vw;
+  }
+}
+@media(min-width:1024px) and (max-width:1199px){
+  .modal-content-opencourses{
+    width:750px;
+  }
+}
+@media(min-width:1200px){
+  .modal-content-opencourses{
+    width:800px;
+  }
+}
+
+.course-content{
+  max-height: 400px;
+  overflow-y: auto;
+}
+.course-content::-webkit-scrollbar {
+  width: 20px;
+}
+.course-content::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.course-content::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+}
+.course-content::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+}
+.course-content::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+.course-professor-code{
+  margin-left: 32px;
+}
+
+
+/**********************************************************************************************************************/
 /**************************************************** FORMS ***********************************************************/
 /**********************************************************************************************************************/
+
 /* first choice of inputs forms */
 .form-wrapper.form-edit .control-label-notes{ 
   font-weight: 700; 
@@ -2831,53 +2822,35 @@ tr td{
     word-break: break-word;
   }
 }
-@media(min-width:992px){
-  .table-default tbody {
-    display:block;
-    min-height: 48px;
-    max-height:384px;
-    overflow-y:auto;
-  }
-  .table-default tbody::-webkit-scrollbar {
-    width: 20px;
-  }
-  .table-default tbody::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-  .table-default tbody::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-  }
-  .table-default tbody::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-  }
-  .table-default tbody::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-  }
-  .table-default thead, 
-  .table-default tbody tr {
-    display:table;
-    width:100%;
-    table-layout:fixed;
-    min-height: 48px;
-  }
-}
 
 
 thead tr th, 
 tfoot tr th{
-  padding: 10px 10px 10px 10px;
+  padding: 10px 0px 10px 0px;
 }
 
 tbody tr{
   border-bottom: solid 1px #EFF6FF;
 }
 
+tbody tr:hover{
+  background-color: #EFF6FF;
+}
+
 tbody tr td{
   padding: 10px 10px 10px 10px;
+}
+
+tbody tr td a{
+  text-decoration: underline;
+}
+
+tbody tr td a.menu-popover{
+  text-decoration: none;
+}
+
+tbody tr td a:hover{
+  cursor:  url(../images/pointer.png), auto;
 }
 
 thead, tbody .list-header {
@@ -2896,7 +2869,6 @@ th .fa-gears{
 
 th,td{
   width: auto !important;
-  text-align: left !important;
 }
 
 tr.warning{
@@ -2906,8 +2878,6 @@ tr.warning{
 tr.danger{
   background-color: #FDEFE9;
 }
-
-
 
 
 

@@ -370,12 +370,12 @@ if ($display == TRUE) {
         $tool_content .= "<table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th class='ps-2'>$langChat</th>
-                    <th class = 'text-center' width='150'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='200'>$langStartDate</th>";
+                    <th>$langChat</th>
+                    <th width='150'>$langNewBBBSessionStatus</th>
+                    <th width='200'>$langStartDate</th>";
 
         if($is_editor){
-            $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>";
+            $tool_content .= "<th>".icon('fa-gears')."</th>";
         }
         $tool_content .="</tr></thead>";
         foreach ($q as $conf) {
@@ -407,10 +407,10 @@ if ($display == TRUE) {
             }
             $tool_content .= "<div style='font-size:smaller; padding-top: 10px;'>$conf->conf_description</div>" . $conf_details;
             $tool_content .= "</td>";
-            $tool_content .= "<td class='text-center'>$enabled_conference</td>";
-            $tool_content .= "<td class='text-center'>".format_locale_date(strtotime($conf->start), 'short')."</td>";
+            $tool_content .= "<td>$enabled_conference</td>";
+            $tool_content .= "<td>".format_locale_date(strtotime($conf->start), 'short')."</td>";
             if($is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-center'>".
+                $tool_content .= "<td class='option-btn-cell text-end'>".
                     action_button(array(
                         array('title' => $langEdit,
                               'url' => "$_SERVER[SCRIPT_NAME]?edit_conference=$conf->conf_id&amp;course=$course_code",

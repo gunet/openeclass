@@ -234,7 +234,7 @@
                                                                 <a href='{{ $urlServer }}courses/{{ $logs->code }}/'>{{ $logs->code }}</a>
                                                             </td>
                                                             <td>{{ $logs->title }}</td>
-                                                            <td class='text-center'>
+                                                            <td>
                                                                 @if (!$logs->reg_date)
                                                                     {{ trans('langUnknownDate') }}
                                                                 @else
@@ -242,19 +242,19 @@
                                                                 @endif
                                                             </td>
                                                             @if ($logs->status == USER_TEACHER)
-                                                                <td class='text-center'>
+                                                                <td>
                                                                     {{ trans('langTeacher') }}
                                                                 </td>
-                                                                <td class='text-center'>---</td>
+                                                                <td>---</td>
                                                             @else
-                                                                <td class='text-center'>
+                                                                <td>
                                                                     @if ($logs->status == USER_STUDENT)
                                                                         {{ trans('langStudent') }}
                                                                     @else
                                                                         {{ trans('langVisitor') }}
                                                                     @endif
                                                                 </td>
-                                                                <td class='text-center'>
+                                                                <td>
                                                                     {!! icon('fa-xmark text-danger', trans('langUnregCourse'), "unreguser.php?u=$u&amp;c=$logs->id") !!}
                                                                 </td>
                                                             @endif

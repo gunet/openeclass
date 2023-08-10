@@ -18,7 +18,7 @@
                 </tr>           
                 @if (file_exists($picturePath . '/quiz-' . $question->id))
                     <tr>
-                        <td class='text-center' colspan='{{ $question->colspanByType() }}'>
+                        <td colspan='{{ $question->colspanByType() }}'>
                             <img src='../../{{ $picturePath }}/quiz-{{ $question->id }}'>
                         </td>
                     </tr>

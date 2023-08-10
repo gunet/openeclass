@@ -121,7 +121,7 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 
     $output .= "<tr>
 	    <th></th>
-	    <td class='right'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' value='$langOkComment' /></td>
+	    <td class='right'><input class='btn submitAdminBtn' type='submit' value='$langOkComment' /></td>
 	  </tr>
 	  <tr>
 	    <th></th>

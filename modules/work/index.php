@@ -2594,7 +2594,7 @@ function new_assignment() {
                                       </td>
                                       <td><input type='text' name='auto_judge_scenarios[0][output]' class='auto_judge_output'></td>
                                       <td><input type='text' name='auto_judge_scenarios[0][weight]' class='auto_judge_weight'></td>
-                                      <td class='text-center'>
+                                      <td>
                                           <a href='#' class='autojudge_remove_scenario' style='display: none;'>
                                             <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDelete' data-bs-toggle='tooltip'></span>
                                           </a>
@@ -4144,7 +4144,7 @@ function show_assignment_review($id, $display_graph_results = false) {
         //auta einai ta onomata panw sto pedio tou pinaka bathmos hmeromhnia...
         $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
         sort_link($langGradebookGrade, 'grade');
-        $tool_content .= "<th width='10%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
+        $tool_content .= "<th width='10%'><i class='fa fa-cogs'></i></th></tr>";
         $result = Database :: get()->queryArray("SELECT * from assignment_grading_review WHERE assignment_id = ?d && users_id = ?d",$id, $uid);
         $i = 1;
         $plagiarismlink = '';
@@ -4214,13 +4214,13 @@ function show_assignment_review($id, $display_graph_results = false) {
                 <td class='text-start'>
                   $filelink <br> $plagiarismlink
                 </td>
-                <td width='5' class='text-center'>
+                <td width='5'>
                   <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
                     $grade_field
                     <span class='help-block Accent-200-cl'>".Session::getError("grade.$row->id")."</span>
                   </div>
                 </td>
-                <td class='text-center'>
+                <td>
                   $icon_field
                 </td></tr>";
             $i++;
@@ -5296,7 +5296,7 @@ function show_assignment($id, $display_graph_results = false) {
                     </div>
                 </div>
                 <div class='mt-4'>
-                    <button class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
+                    <button class='btn submitAdminBtn' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
                 </div>
                 </form>";
             } else {
@@ -5519,7 +5519,7 @@ function show_student_assignments() {
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
-            $add_eportfolio_res_th = "<th class='text-center'>".icon('fa-gears')."</th>";
+            $add_eportfolio_res_th = "<th>".icon('fa-gears')."</th>";
         } else {
             $add_eportfolio_res_th = "";
         }
@@ -5532,9 +5532,9 @@ function show_student_assignments() {
                   <thead>
                       <tr class='list-header'>
                           <th style='width:45%'>$langTitle</th>
-                          <th class='text-center' style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
-                          <th class='text-center'>$m[submitted]</th>
-                          <th class='text-center'>$langGradebookGrade</th>
+                          <th style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
+                          <th>$m[submitted]</th>
+                          <th>$langGradebookGrade</th>
                           $add_eportfolio_res_th
                       </tr>
                   </thead>
@@ -5588,7 +5588,7 @@ function show_student_assignments() {
 
             $tool_content .= "<tr class='$class_not_started'>
                                 <td>$link</td>
-                                <td class='text-center' data-sort='$sort_id'>" . $deadline ;
+                                <td data-sort='$sort_id'>" . $deadline ;
 
             if ($not_started) {
                 $tool_content .= "<small><span class='orangeText'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
@@ -5597,7 +5597,7 @@ function show_student_assignments() {
             }   else if($row->deadline) {
                 $tool_content .= "<br>(<small><span class='text-danger'>$langHasExpiredS</span></small>)";
             }
-            $tool_content .= "</td><td class='text-center'>";
+            $tool_content .= "</td><td>";
 
             $eportfolio_action_array = [];
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
@@ -5621,7 +5621,7 @@ function show_student_assignments() {
             } else {
                 $tool_content .= "<i class='fa fa-square'></i><br>";
             }
-            $tool_content .= "</td><td class='text-center'>";
+            $tool_content .= "</td><td>";
             foreach ($submission as $sub) {
                 $grade = submission_grade($sub->id);
                 $tool_content .= '<div>' . ($grade? $grade: '-') . '</div>';
@@ -5630,7 +5630,7 @@ function show_student_assignments() {
 
             if (get_config('eportfolio_enable')) {
                 if ($eportfolio_action_array) {
-                    $tool_content .= "<td class='text-center'>" .
+                    $tool_content .= "<td>" .
                         action_button($eportfolio_action_array) . "</td>";
                 } else {
                     $tool_content .= '<td>&nbsp;</td>';
@@ -5712,10 +5712,10 @@ function show_assignments() {
                     <thead>
                     <tr class='list-header'>
                       <th style='width:45%;'>$langTitle</th>
-                      <th class='text-center'>$m[subm]</th>
-                      <th class='text-center'>$m[nogr]</th>
-                      <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
-                      <th class='text-center'>".icon('fa-gears')."</th>
+                      <th>$m[subm]</th>
+                      <th>$m[nogr]</th>
+                      <th>$langGroupWorkDeadline_of_Submission</th>
+                      <th>".icon('fa-gears')."</th>
                     </tr>
                     </thead>
                     <tbody>";
@@ -5777,9 +5777,9 @@ function show_assignments() {
                                 $turnitin_message
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                                 $assign_to_users_message
-                            <td class='text-center'>$num_submitted</td>
-                            <td class='text-center'>$num_ungraded</td>
-                            <td class='text-center' data-sort='$sort_id'>$deadline";
+                            <td>$num_submitted</td>
+                            <td>$num_ungraded</td>
+                            <td data-sort='$sort_id'>$deadline";
 
             if ($not_started) {
                 $tool_content .= "<small><span class='orangeText'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
@@ -5789,7 +5789,7 @@ function show_assignments() {
                 $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
-              <td class='text-center'>" .
+              <td class='text-end'>" .
               action_button(array(
                     array('title' => $langEditChange,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",

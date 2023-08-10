@@ -363,10 +363,10 @@ function lti_app_details() {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
-                               <th class='text-center'>$langUnitDescr</th>
-                               <th class='text-center'>$langLTIAppActions</th>";
+                               <th>$langUnitDescr</th>
+                               <th>$langLTIAppActions</th>";
         if ($is_editor) {
-            $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+            $headings .= "<th>" . icon('fa-gears') . "</th>";
         }
         $headings .= "</tr>";
 
@@ -401,10 +401,10 @@ function lti_app_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
-                    <td class='text-start'>$title</td>
-                    <td class='text-center'>$desc</td>
-                    <td class='d-flex justify-content-center'>$joinLink</td>
-                    <td class='option-btn-cell text-center'>".
+                    <td>$title</td>
+                    <td>$desc</td>
+                    <td>$joinLink</td>
+                    <td class='option-btn-cell text-end'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
                                     'url' => "../lti_consumer/index.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
@@ -426,9 +426,9 @@ function lti_app_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= "<tr>
-                    <td class='text-center'>$title</td>
+                    <td>$title</td>
                     <td>$desc</td>
-                    <td class='text-center'>$joinLink</td>
+                    <td>$joinLink</td>
                     </tr>";
             }
         }

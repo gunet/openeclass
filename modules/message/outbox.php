@@ -229,7 +229,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "      <th>$langRecipients</th>
                    <th>$langDate</th>
-                   <th class='option-btn-cell text-center'><i class='fa fa-cogs'></i></th>
+                   <th><i class='fa fa-cogs'></i></th>
                  </tr>
                </thead>
                <tbody>
@@ -240,7 +240,7 @@ if (isset($_GET['mid'])) {
                $(document).ready(function() {
 
                  var oTable2 = $('#outbox_table').dataTable({
-                    'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],
+                    'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                     'bStateSave' : true,
                     'bProcessing': true,
                     'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',

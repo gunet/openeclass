@@ -1,3 +1,19 @@
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 18px;
+    border-bottom: 2px solid #0073E6;
+}
+.dataTables_wrapper input[type="search"]{
+    background-color: #ffffff;
+    height: 40px;
+    border-radius: 4px;
+    margin-top: 5px;
+    border:solid 1px #687DA3;
+    color: #687DA3;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
+}
+
 /* -------------------------------------------- BASIC COLOR ----------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -114,9 +130,9 @@ a:hover{
     border-radius: 4px !important;
 }
 
-.table-default{
+/* .table-default{
     border-radius: 2px !important;
-}
+} */
 
 .panel-admin, .panel-default{
     border-radius: 2px;
@@ -1375,3 +1391,6 @@ a:hover{
 .showAnn:hover, .all_announcements:hover{
     color:#0769fc ;
 }
+
+
+

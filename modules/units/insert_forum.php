@@ -70,7 +70,7 @@ function list_forums() {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='d-flex justify-content-start mt-4'>
-                            <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_forum' value='$langAddModulesButton' />
+                            <input class='btn submitAdminBtn' type='submit' name='submit_forum' value='$langAddModulesButton' />
                         </div></form>";
     }
 }

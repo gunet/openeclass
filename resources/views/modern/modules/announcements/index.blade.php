@@ -74,13 +74,14 @@
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-            'aoColumnDefs':[{'sClass':'option-btn-cell text-center',
+            'aoColumnDefs':[{'sClass':'option-btn-cell text-end',
                 'aTargets':[-1]}],
             @endif
             bStateSave: true,
             bProcessing: true,
             bServerSide: true,
             sScrollX: true,
+            fixedHeader: true,
             responsive: true,
             searchDelay: 1000,
             sAjaxSource: '{{ $_SERVER['REQUEST_URI'] }}',

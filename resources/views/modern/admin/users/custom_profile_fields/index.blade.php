@@ -127,7 +127,7 @@
                                 @else
                                     <tbody class='tile__list'>
                                         <tr class='ignore-item'>
-                                            <td colspan='9' class='text-center'>
+                                            <td colspan='9'>
                                                 <span class='not_visible'>{{ trans('langCPFNoFieldinCat') }}</span>
                                             </td>
                                         </tr>

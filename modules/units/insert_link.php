@@ -117,6 +117,6 @@ function list_links() {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='d-flex justify-content-start mt-4'>" .
-                "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
+                "<input class='btn submitAdminBtn' type='submit' name='submit_link' value='$langAddModulesButton'></div></form>";
     }
 }

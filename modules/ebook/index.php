@@ -206,7 +206,7 @@ if (!$q && !isset($_GET['create'])) {
      <tr class='list-header'>
        <th class = 'text-start'>$langEBooks</th>" .
             ($is_editor ?
-                    "<th class='text-center option-btn-cell'>".icon('fa-cogs')."</th>" :
+                    "<th class='text-end option-btn-cell'>".icon('fa-cogs')."</th>" :
                     '') . "
      </tr></thead><tbody id='tosort'>";
     foreach ($q as $r) {

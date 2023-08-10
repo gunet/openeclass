@@ -614,7 +614,7 @@ if (count($exercise_question_ids) > 0) {
 
                 if ($answerType != MATCHING || $answerCorrect) {
                     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                        $tool_content .= "<tr><td width='100' class='text-center'>";
+                        $tool_content .= "<tr><td width='100'>";
                         $answer_icon  = '';
                         if ($studentChoice) {
                             $student_choice_icon = "fa fa-fw fa-square-check";

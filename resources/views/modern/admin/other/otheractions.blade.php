@@ -59,14 +59,14 @@
                                         <th>
                                             {{ trans('langMultipleUsers') }}
                                         </th>
-                                        <th class='text-end'>
+                                        <th>
                                             {{ trans('langResult') }}
                                         </th>
                                     </tr>
                                     @if (count($loginDouble) > 0)
                                         {!! tablize($loginDouble, 'username') !!}
                                         <tr>
-                                            <td class='text-end' colspan='2'>
+                                            <td colspan='2'>
                                                 <b>
                                                     <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
@@ -74,8 +74,8 @@
                                         </tr>
                                     @else
                                         <tr>
-                                            <td class='text-end' colspan='2'>
-                                                <div class='text-center not_visible'> - {{ trans('langNotExist') }} - </div>
+                                            <td colspan='2'>
+                                                <div class='not_visible'> - {{ trans('langNotExist') }} - </div>
                                             </td>
                                         </tr>
                                     @endif
@@ -95,7 +95,7 @@
                                     @if (count($loginDouble) > 0)
                                        {!! tablize($loginDouble,'email') !!}
                                         <tr>
-                                            <td class='text-end' colspan='2'>
+                                            <td colspan='2'>
                                                 <b>
                                                     <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
@@ -103,8 +103,8 @@
                                         </tr>
                                     @else
                                         <tr>
-                                            <td class='text-end' colspan='2'>
-                                                <div class='text-center not_visible'> - {{ trans('langNotExist') }} - </div>
+                                            <td colspan='2'>
+                                                <div class='not_visible'> - {{ trans('langNotExist') }} - </div>
                                             </td>
                                         </tr>
                                     @endif
@@ -135,7 +135,7 @@
                                     @else
                                         <tr>
                                             <td class='text-end' colspan='2'>
-                                                <div class='text-center not_visible'> - {{ trans('langNotExist') }} - </div>
+                                                <div class='not_visible'> - {{ trans('langNotExist') }} - </div>
                                             </td>
                                         </tr>
                                     @endif
@@ -182,14 +182,14 @@
                                 <table class='table-default'>
                                     <tr class='list-header'>
                                         <th>{{ trans('langUsers') }}</th>
-                                        <th class='text-center'>{{ trans('langResult') }}</th>
+                                        <th>{{ trans('langResult') }}</th>
                                     </tr>
                                     @foreach ($q as $data)
                                        <tr>
                                             <td>
                                                 {{ $data->surname }} {{ $data->givenname }} (<a href='{{ $urlServer }}modules/admin/edituser.php?u={{ $data->user_id }}'>{{ $data->username }}</a>)
                                             </td>
-                                            <td class='text-center'>{{ $data->num_of_courses }}</td>
+                                            <td>{{ $data->num_of_courses }}</td>
                                        </tr>
                                     @endforeach
                                 </table>
@@ -200,13 +200,13 @@
                             <div class='table-responsive'>
                                 <table class='table-default'>
                                     <tr class="list-header">
-                                        <th class='list-header'>{{ trans('langPopularCourses') }}</th>
-                                        <th class='list-header text-center'>{{ trans('langUsers') }}</th>
+                                        <th>{{ trans('langPopularCourses') }}</th>
+                                        <th>{{ trans('langUsers') }}</th>
                                     </tr>
                                     @foreach ($popularcourses as $data)
                                         <tr class = '{{ ($data->visible == COURSE_INACTIVE)? 'not_visible': ''  }}'>
                                             <td><a href='{{ $urlServer }}courses/{{ $data->code }}/'>{{ $data->title }}</a> <small>({{ $data->public_code }})</small> <br> <em>{{ $data->prof_names }}</em></td>
-                                            <td class='text-center'>{{ $data->num_of_users }}</td>
+                                            <td>{{ $data->num_of_users }}</td>
                                         </tr>
                                     @endforeach
                                 </table>

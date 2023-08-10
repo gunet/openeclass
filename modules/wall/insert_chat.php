@@ -46,7 +46,7 @@ function list_chats($id = NULL) {
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th><div align='left'>&nbsp;$langChat</div></th>" .
+            "<th><div align='left'>$langChat</div></th>" .
             "<th><div align='left'>$langDescription</div></th>" .
             "<th width='80'>$langChoice</th>" .
             "</tr>";
@@ -59,7 +59,7 @@ function list_chats($id = NULL) {
             $ret_string .= "<tr>";
             $ret_string .= "<td>&nbsp;".icon('fa fa-exchange')."&nbsp;&nbsp;<a href='{$urlServer}modules/chat/chat.php?conference_id=$entry[id]'>".q($entry['name'])."</a></td>";
             $ret_string .= "<td>".$entry['description']."</td>";
-            $ret_string .= "<td class='text-center'><label class='label-container'><input type='checkbox' $checked name='chat[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='chat[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $ret_string .= "</tr>";
         }
         $ret_string .= "</table></div>";

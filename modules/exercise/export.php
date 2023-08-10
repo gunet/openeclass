@@ -264,7 +264,7 @@ function question_html($question, $qid) {
                 }
                 $html .= "
           <tr>
-            <td style='width: 70px;' class='text-center'>$icon_choice</td>
+            <td style='width: 70px;'>$icon_choice</td>
             <td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
             <td style='width: 250px;'>" . $answerComment . "</td>
           </tr>";

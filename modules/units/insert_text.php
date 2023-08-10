@@ -27,7 +27,7 @@ function display_text_form() {
     $tool_content .= "<fieldset>
         " . rich_text_editor('comments', 4, 20, '') . "
 	<br />
-        <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_text' value='$langAdd'>
+        <input class='btn submitAdminBtn' type='submit' name='submit_text' value='$langAdd'>
 	</fieldset>
 	</form></div></div>";
 }

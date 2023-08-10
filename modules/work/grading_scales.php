@@ -82,7 +82,7 @@ if (isset($_GET['scale_id'])) {
                     '<td class=\'form-group\'>'+
                     '<input type=\'number\' name=\'scale_item_value[' + rowCount +']\' class=\'form-control\' value=\'\' min=\'0\' required>'+
                     '</td>'+
-                    '<td class=\'text-center\'>'+
+                    '<td class=\'text-start\'>'+
                     '<a href=\'#\' class=\'removeScale\'><span class=\'fa-solid fa-xmark\' style=\'color:red\'></span></a>'+
                     '</td>'+
                     '</tr>'
@@ -122,7 +122,7 @@ if (isset($_GET['scale_id'])) {
                             <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
                         </td>";
             if (!$scale_used) {
-                    $scale_rows .= "<td class='text-center'>
+                    $scale_rows .= "<td>
                                     <a href='#' class='removeScale'><span class='fa-solid fa-xmark' style='color:red'></span></a>
                                 </td>";
             }
@@ -170,7 +170,7 @@ if (isset($_GET['scale_id'])) {
                                             <tr class='list-header'>
                                                 <th style='width:47%'>$langWording</th>
                                                 <th style='width:47%'>$langValue</th>
-                                                ".(!$scale_used ? "<th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>" : "")."
+                                                ".(!$scale_used ? "<th class='text-end option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>" : "")."
                                             </tr>
                                         </thead>
                                         <tbody>

@@ -56,12 +56,12 @@
                             <table class='table-default'>
                                 <thead>
                                     <tr class='list-header'>
-                                        <th class='text-center'>{{ trans('langOpenMeetingsServer') }}</th>
-                                        <th class='text-center'>{{ trans('langOpenMeetingsPort') }}</th>
-                                        <th class='text-center'>{{ trans('langOpenMeetingsAdminUser') }}</th>
-                                        <th class='text-center'>{{ trans('langOpenMeetingsWebApp') }}</th>
-                                        <th class='text-center'>{{ trans('langBBBEnabled') }}</th>
-                                        <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                                        <th>{{ trans('langOpenMeetingsServer') }}</th>
+                                        <th>{{ trans('langOpenMeetingsPort') }}</th>
+                                        <th>{{ trans('langOpenMeetingsAdminUser') }}</th>
+                                        <th>{{ trans('langOpenMeetingsWebApp') }}</th>
+                                        <th>{{ trans('langBBBEnabled') }}</th>
+                                        <th>{!! icon('fa-gears') !!}</th>
                                     </tr>
                                 </thead>
                         @foreach ($om_servers as $om_server)
@@ -70,8 +70,8 @@
                                 <td>{{ $om_server->port }}</td>
                                 <td>{{ $om_server->username }}</td>                
                                 <td>{{ $om_server->webapp }}</td>               
-                                <td class='text-center'>{{ $om_server->enabled == 'true' ? trans('langYes') : trans('langNo') }}</td>
-                                <td class='option-btn-cell'>
+                                <td>{{ $om_server->enabled == 'true' ? trans('langYes') : trans('langNo') }}</td>
+                                <td class='option-btn-cell text-end'>
                                 {!! action_button([
                                     [
                                         'title' => trans('langEditChange'),

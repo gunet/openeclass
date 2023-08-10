@@ -409,7 +409,7 @@ function display_exercise($exercise_id) {
             </td></tr>";
 
             if (file_exists($picturePath . '/quiz-' . $qid)) {
-                $tool_content .= "<tr><td class='text-center' colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
+                $tool_content .= "<tr><td colspan='$colspan'><img src='../../$picturePath/quiz-" . $qid . "'></td></tr>";
             }
 
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {

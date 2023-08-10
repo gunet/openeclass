@@ -51,7 +51,7 @@ function display_attendances() {
                             <th>$langStart</th>
                             <th>$langEnd</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $a) {
@@ -66,7 +66,7 @@ function display_attendances() {
                         <td>$start_date</td>
                         <td>$end_date</td>";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-center'>";
+                $tool_content .= "<td class='option-btn-cell text-end'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",
@@ -319,7 +319,7 @@ function display_attendance_activities($attendance_id) {
             }
             $tool_content .= "</td>";
             $tool_content .= "<td>" . userAttendTotalActivityStats($details->id, $participantsNumber, $attendance_id) . "</td>";
-            $tool_content .= "<td class='option-btn-cell text-center'>".
+            $tool_content .= "<td class='option-btn-cell text-end'>".
                     action_button(array(
                                 array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
@@ -959,7 +959,7 @@ function display_all_users_presences($attendance_id) {
 
             $tool_content .= "</td>
                 <td>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
-                <td class='option-btn-cell text-center'>"
+                <td class='option-btn-cell text-end'>"
                    . action_button(array(
                         array('title' => $langAttendanceBook,
                             'icon' => 'fa-plus',

@@ -226,8 +226,8 @@ function show_prereqs() {
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr class='list-header'>
-                                      <th class='ps-3'>$langTitle</th>
-                                      <th class='text-center'>".icon('fa-gears')."</th>
+                                      <th>$langTitle</th>
+                                      <th>".icon('fa-gears')."</th>
                                   </tr>";
         foreach ($result as $row) {
 
@@ -236,7 +236,7 @@ function show_prereqs() {
 
             $tool_content .= "<tr>
             <td>$course_title</td>
-            <td class='option-btn-cell text-center'>" . action_button(
+            <td class='option-btn-cell text-end'>" . action_button(
                     array(
                         array(
                             'title' => $langRemovePrerequisite,

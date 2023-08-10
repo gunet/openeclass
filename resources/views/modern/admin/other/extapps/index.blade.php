@@ -63,7 +63,7 @@
                                     <tr>
                                     <!--WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!-->
                                         <td style="width:90px; padding:0px;">
-                                            <div class="text-center" style="padding:10px;">
+                                            <div style="padding:10px;">
                                                 <a href="{{ $urlAppend . $app->getConfigUrl() }}">
                                                 @if ($app->getAppIcon() !== null)
                                                     <img width="89" src="{{ $app->getAppIcon() }}">

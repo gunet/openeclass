@@ -125,11 +125,11 @@ if ($content) {
    $tool_content .= "<div class='col-12 mt-4'><div class='table-responsive'><table class='table-default'>
         <thead>
             <tr class='list-header'>
-                <th class='text-start col-sm-8'>$langH5pInteractiveContent</th>
-                <th class='text-center col-sm-3'>$langTypeH5P</th>";
+                <th>$langH5pInteractiveContent</th>
+                <th>$langTypeH5P</th>";
                 if ($is_editor) {
                     $tool_content .= "
-                        <th class='text-center'>
+                        <th>
                         <span class='fa fa-gears'></span>
                     </th>";
                 }
@@ -152,11 +152,11 @@ if ($content) {
                     <td class='col-sm-8'>
                         <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
                     </td>
-                    <td class='col-sm-3 text-center'>
+                    <td class='col-sm-3'>
                         <img src='$typeIconUrl' alt='$h5p_content_type_title' width='30px' height='30px'> <em>$h5p_content_type_title</em>
                     </td>";
         if ($is_editor) {
-            $tool_content .= "<td class='text-center'>";
+            $tool_content .= "<td class='text-end'>";
             $tool_content .= action_button([[
                 'icon' => 'fa-edit',
                 'title' => $langEditChange,

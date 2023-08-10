@@ -58,7 +58,7 @@
                                 <th width='170'>{{ trans('langUsername') }}</th>
                                 <th>{{ trans('langEmail') }}</th>
                                 <th>{{ trans('langProperty') }}</th>
-                                <th width='130' class='text-center'>{!! icon('fa-gears') !!}</th>
+                                <th width='130'>{!! icon('fa-gears') !!}</th>
                                 </tr>
                             </thead>
                             <!-- DO NOT DELETE THESE EMPTY COLUMNS -->

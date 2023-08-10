@@ -219,7 +219,7 @@
                                                 <div class='col-12 px-3'>
                                                     <div class='form-group mt-5'>
                                                     
-                                                        <input class='btn submitAdminBtnDefault w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
+                                                        <input class='btn w-100' type='submit' name='submit' value='{{ trans('langRegistration') }}'>
                                                     </div>
                                                 </div>
                                             </div>

@@ -142,7 +142,7 @@
                                     <th>{{ trans('langSurnameName') }}</th>
                                     <th>{{ trans('langUsername') }}</th>
                                     <th>{{ trans('langRole') }}</th>
-                                    <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                                    <th>{!! icon('fa-gears') !!}</th>
                                 </tr>
                             
                                 @foreach ($admins as $admin)
@@ -162,7 +162,7 @@
                                             {!! $message !!}
                                         @endif
                                         </td>
-                                        <td class='text-center'>
+                                        <td class='text-end'>
                                         @if ($admin->user_id != 1)
                                             {!! action_button([
                                                     [   'title' => trans('langEditPrivilege'),

@@ -470,9 +470,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='table-responsive'>
                         <table id='assignees_tbl' class='table-default".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
                             <tr class='title1 list-header'>
-                              <td id='assignees'>$langStudents</td>
-                              <td class='text-center'>$langMove</td>
-                              <td>$m[WorkAssignTo]</td>
+                              <td id='assignees' class='form-label'>$langStudents</td>
+                              <td class='text-center form-label'>$langMove</td>
+                              <td class='form-label'>$m[WorkAssignTo]</td>
                             </tr>
                             <tr>
                               <td>

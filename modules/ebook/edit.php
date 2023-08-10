@@ -87,9 +87,9 @@ if (isset($_GET['delete'])) {
         <div class='table-responsive mt-0'>
           <table class='table-default'>
           <tr class='list-header'>
-            <th class='text-start'>$langID</th>
+            <th>$langID</th>
             <th>$langTitle</th>
-            <th width='75' class='text-center'>$langActions</th>
+            <th width='75'>$langActions</th>
           </tr>";
         $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
@@ -137,7 +137,7 @@ if (isset($_GET['delete'])) {
             <tr>
               <td style='width:70px;'>$section_id</td>
               <td>$section_title</td>
-              <td class='text-center'>$section_tools</td>
+              <td>$section_tools</td>
             </tr>";
         }
         $new_section_id = Session::has('new_section_id') ? Session::get('new_section_id') : '';
@@ -393,7 +393,7 @@ if (isset($_GET['delete'])) {
                    $tool_content .= "
                     <tr>
                       <td colspan='3'>&nbsp;</td>
-                      <td><input class='btn submitAdminBtn submitAdminBtnDefault float-end' type='submit' name='submit' value='$langSubmit'></td>
+                      <td><input class='btn submitAdminBtn float-end' type='submit' name='submit' value='$langSubmit'></td>
                     </table></div>
                 </fieldset>
              </form>";

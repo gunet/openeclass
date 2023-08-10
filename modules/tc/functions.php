@@ -50,7 +50,7 @@ function select_tc_server($course_id) {
                 <table class='table-default dataTable no-footer extapp-table mb-3 border-0'>
                   <tr>
                     <td style='width:90px; padding:0px;'>
-                      <div class='text-center' style='padding:10px;'>
+                      <div style='padding:10px;'>
                         <img height='50' width='89' src='{$urlAppend}template/icons/$icon.png' alt=''>
                         $title
                       </div>
@@ -906,11 +906,11 @@ function tc_session_details() {
                          <div class='table-responsive'>
                            <table class='table-default'>
                              <tr class='list-header'>
-                               <th class='ps-3' style='width: 50%'>$langTitle</th>
-                               <th class='text-center'>$langDuration</th>
-                               <th class='text-center'>$langParticipants</th>";
+                               <th style='width: 50%'>$langTitle</th>
+                               <th>$langDuration</th>
+                               <th>$langParticipants</th>";
         if ($is_editor) {
-            $headings .= "<th class='text-center'>".icon('fa-gears')."</th>";
+            $headings .= "<th>".icon('fa-gears')."</th>";
         }
         $headings .= "</tr>";
 
@@ -1021,7 +1021,7 @@ function tc_session_details() {
                             </div>
                         </div>
                     </td>
-                    <td class='text-center'>
+                    <td>
                         <div style='padding-top: 7px;'>
                             <span class='text-success'>$langFrom</span>: ".format_locale_date(strtotime($start_date))."$starttimeLabel<br/>
                         </div>
@@ -1031,7 +1031,7 @@ function tc_session_details() {
                     </td>
 
                     <td style='width: 20%'>$participants</td>
-                    <td class='option-btn-cell text-center'>".
+                    <td class='option-btn-cell text-end'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit&amp;tc_type=$tc_type",
@@ -1090,7 +1090,7 @@ function tc_session_details() {
                             </div>
                         </div>
                     </td>
-                    <td class='text-center'>
+                    <td>
                         <div style='padding-top: 7px;'>
                             <span class='text-success'>$langFrom</span>: ". format_locale_date(strtotime($start_date)) ."$starttimeLabel<br/>
                         </div>

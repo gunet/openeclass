@@ -230,7 +230,7 @@ if (!$num_results == 0) {
         <thead>
             <tr class='list-header'>
                 <th>" . $langLearningObjects . "</th>
-                <th class='text-center'>" . icon('fa-gears') . "</th>
+                <th>" . icon('fa-gears') . "</th>
             </tr></thead>";
 }
 
@@ -250,7 +250,7 @@ foreach ($result as $list) {
         $tool_content .= "<br /><small style='color: #a19b99;'><b>$langComments</b>: " . $list->comment . "</small>";
     }
 
-    $tool_content .= "</td><td class='option-btn-cell text-center'>";
+    $tool_content .= "</td><td class='option-btn-cell text-end'>";
     $tool_content .= action_button(array(
                 array('title' => $langRename,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqRename&amp;module_id=$list->module_id",

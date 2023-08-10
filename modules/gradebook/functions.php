@@ -118,7 +118,7 @@ function display_user_grades($gradebook_id) {
             } // end of while
         }
         $tool_content .= "</tr></table></div>";
-        $tool_content .= "<div class='float-end mt-3'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div></form>";
+        $tool_content .= "<div class='float-end mt-3'><input class='btn submitAdminBtn' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div></form>";
 
         if(userGradeTotal($gradebook_id, $userID) > $gradebook_range){
             $tool_content .= "<br>" . $langGradebookOutRange;
@@ -1182,9 +1182,9 @@ function register_user_grades($gradebook_id, $actID) {
                 <tr class='list-header'>
                     <th width='2'>$langID</th>
                     <th>$langName $langSurname</th>
-                    <th class='text-center'>$langAm</th>
-                    <th class='text-center' width='120'>$langRegistrationDateShort</th>
-                    <th width='50' class='text-center'>$langGradebookGrade</th>
+                    <th>$langAm</th>
+                    <th width='120'>$langRegistrationDateShort</th>
+                    <th width='50'>$langGradebookGrade</th>
                     <th width='50'>$langGradebookTotalGrade</th>
                 </tr>
             </thead>
@@ -1207,13 +1207,13 @@ function register_user_grades($gradebook_id, $actID) {
             <tr class='$classvis'>
                 <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
-                <td>$resultUser->am</td><td class='text-center'>";
+                <td>$resultUser->am</td><td>";
                 if (!empty($resultUser->reg_date)) {
                     $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
                 } else {
                     $tool_content .= " &mdash; ";
                 }
-                $tool_content .= "</td><td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
+                $tool_content .= "</td><td class='form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
                     <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>
                     <input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
                     <span class='help-block Accent-200-cl'>".Session::getError(getIndirectReference($resultUser->userID))."</span>

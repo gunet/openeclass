@@ -128,7 +128,7 @@ if (isset($_GET['rid'])) {
     if ($sql) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<tr class='list-header'>";
-        $tool_content .= "<th width='320' class='ps-3'>$langSurnameName</th><th class='ps-3'>$langComments</th><th width='170'>$langDateRequest</th><th width='80' class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th width='320'>$langSurnameName</th><th>$langComments</th><th width='170'>$langDateRequest</th><th width='80'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
         foreach ($sql as $udata) {
             $am_message = '';
@@ -141,7 +141,7 @@ if (isset($_GET['rid'])) {
             $tool_content .= "<td>" . display_user($udata->uid, false)."<br>&nbsp;&nbsp;<small>$am_message</small></td>";
             $tool_content .= "<td>" . q($udata->comments) . "</td>";
             $tool_content .= "<td>" . format_locale_date(strtotime($udata->ts)) . "</td>";
-            $tool_content .= "<td>".
+            $tool_content .= "<td class='text-end'>".
                             action_button(array(
                                 array('title' => $langRegistration,
                                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$udata->uid&amp;rid=$udata->id&amp;reg=true",

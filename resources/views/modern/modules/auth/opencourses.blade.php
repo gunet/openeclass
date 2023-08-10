@@ -119,13 +119,13 @@
                                 <table class='table-default' id="myopencourses_table">
                                     <thead>
                                         <tr class='list-header'>
-                                            <th class='text-start'>{!! trans('langCourseCode') !!}</th>
+                                            <th>{!! trans('langCourseCode') !!}</th>
                                         @if (isset($isInOpenCoursesMode))
-                                            <th class='text-start'>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-center'>{!! trans('langOpenCoursesLevel') !!}</th>
+                                            <th>{!! trans('langTeacher') !!}</th>
+                                            <th>{!! trans('langOpenCoursesLevel') !!}</th>
                                         @else
-                                            <th class='text-start'>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-center'>{!! trans('langType') !!}</th>
+                                            <th>{!! trans('langTeacher') !!}</th>
+                                            <th class='text-end'>{!! trans('langType') !!}</th>
                                         @endif
                                         </tr>
                                     </thead>
@@ -204,7 +204,7 @@
                                                 <td>
                                                     {!! $mycourse->t !!}
                                                 </td>
-                                                <td class='text-center'>
+                                                <td class='text-end'>
                                                 @if ($isInOpenCoursesMode)
                                                     {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
                                                     <a href='javascript:showMetadata("{!! $mycourse->k !!}");'><img src='{{ $themeimg }}/lom.png'/></a>

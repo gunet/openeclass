@@ -563,7 +563,7 @@ if (isset($_GET['mid'])) {
     }
     $out .= "         <th>$langSender</th>
                       <th>$langDate</th>
-                      <th class='text-center option-btn-cell'><i class='fa fa-cogs'></i></th>
+                      <th class='option-btn-cell'><i class='fa fa-cogs'></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -575,7 +575,7 @@ if (isset($_GET['mid'])) {
                $(document).ready(function() {
 
                  var oTable = $('#inbox_table').dataTable({
-                   'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],
+                   'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                    'bStateSave' : true,
                    'bProcessing': true,
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',

@@ -89,7 +89,7 @@
                                                     {!! $category->description !!}
                                                 </td>
                                                 @if($is_editor)
-                                                <td class='text-center'>
+                                                <td class='text-end'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langCategoryMod'),
                                                             'url' => "$cat_url&amp;edit=" . getIndirectReference($category->id),

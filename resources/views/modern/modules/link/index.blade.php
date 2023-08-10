@@ -75,7 +75,7 @@
                                 <tr class='list-header'>
                                     <th class='text-start'>{{ trans('langNoCategory') }}</th>
                                     @if ($display_tools)
-                                    <th class='text-center'>{!! icon('fa-cogs') !!}</th>
+                                    <th>{!! icon('fa-cogs') !!}</th>
                                     @endif
                                 <tr>
                                 @include('modules.link.common.linkList', ['category' => $general_category])
@@ -106,7 +106,7 @@
                                             @endif
                                         </th>
                                         @if (isset($_SESSION['uid']) && !$is_in_tinymce)
-                                            <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                                            <th>{!! icon('fa-gears') !!}</th>
                                         @endif
                                     </tr>
                                     @if ($socialview)
@@ -146,7 +146,7 @@
                                     @endif
                                     </th>
                                     @if ($categories && $display_tools)
-                                        <th class='text-center' style='width:109px;'>{!! icon('fa-cogs') !!}</th>
+                                        <th style='width:109px;'>{!! icon('fa-cogs') !!}</th>
                                     @endif
                                 </tr>                        
                             @if ($categories)
@@ -167,7 +167,7 @@
                                                 @endif
                                             </th>
                                             @if ($display_tools)
-                                                <td class='option-btn-cell text-center'>
+                                                <td class='option-btn-cell text-end'>
                                                 {!! action_button(array(
                                                         array('title' => trans('langEditChange'),
                                                             'icon' => 'fa-edit',
@@ -214,7 +214,7 @@
                                                 @endif
                                             </th>
                                             @if ($display_tools)
-                                                <td class='option-btn-cell text-center'>
+                                                <td class='option-btn-cell text-end'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langEditChange'),
                                                             'icon' => 'fa-edit',

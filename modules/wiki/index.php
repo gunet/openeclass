@@ -359,16 +359,16 @@ switch ($action) {
                                   <div class='col-sm-12'>
                                   <div class='table-responsive'>
                                   <table class='table-default'>";
-                $tool_content .= "<tr class='list-header'>
-                                    <th class='text-start' style='width: 30%;'>$langTitle</th>
-                                    <th class='text-center'>$langDescription</th>
-                                    <th class='text-center'>$langPages</th>";
+                $tool_content .= "<thead><tr class='list-header'>
+                                    <th style='width: 30%;'>$langTitle</th>
+                                    <th>$langDescription</th>
+                                    <th>$langPages</th>";
                 if ($is_editor) {
-                    $tool_content .= "<th class='text-center'>" .icon('fa-gears'). "</th>";
+                    $tool_content .= "<th>" .icon('fa-gears'). "</th>";
                 } else {
-                    $tool_content .= "<th class='text-center'>$langWikiLastModification</th>";
+                    $tool_content .= "<th>$langWikiLastModification</th>";
                 }
-                $tool_content .= "</tr>";
+                $tool_content .= "</tr></thead>";
 
                 foreach ($wikiList as $entry) {
                     if ($entry->visible == 1) {
@@ -391,20 +391,20 @@ switch ($action) {
                             . $entry->title . '</a>';
                     $tool_content .= '</td>';
 
-                    $tool_content .= '<td class="text-center">';
+                    $tool_content .= '<td>';
                     if (!empty($entry->description)) {
                         $tool_content .= $entry->description;
                     } else {
                         $tool_content .= "<span class='not_visible'>$langWikiNoDescription</span>";
                     }
                     $tool_content .= "  </td>
-                                        <td class='text-center'>
+                                        <td>
                                             <a href='page.php?course=$course_code&amp;wikiId=$entry->id&amp;action=all'>
                                                 " . $wikiStore->getNumberOfPagesInWiki($entry->id) . "
                                             </a>
                                         </td>";
                     if ($is_editor) {
-                        $tool_content.= "<td class='option-btn-cell text-center'>";
+                        $tool_content.= "<td class='option-btn-cell text-end'>";
                         $tool_content .=
                                 action_button(array(
                                     array('title' => $langEditChange,
@@ -429,12 +429,12 @@ switch ($action) {
                     } else { // student view
                         $last_modification = current($wikiStore->loadWiki($entry->id)->recentChanges());
                         if ($last_modification){
-                            $tool_content .= "<td class='text-center'>
+                            $tool_content .= "<td>
                                             " . q(user_get_data($last_modification->editor_id)->givenname) . "<br/>"
                                               . format_locale_date(strtotime($last_modification->last_mtime), 'short')."
                                                 </td>";
                         } else {
-                            $tool_content .= "<td class='text-center not_visible'>$langWikiNoModifications</td>";
+                            $tool_content .= "<td class='not_visible'>$langWikiNoModifications</td>";
                         }
                     }
                     $tool_content .= '</tr>';

@@ -323,16 +323,16 @@ function table_header($addon = FALSE) {
     $string = "<thead>";
     $datestring = '';
     if ($addon == 1) {
-        $datestring = "<th class='text-center'>$langDateClosed</th>";
+        $datestring = "<th>$langDateClosed</th>";
     } else if ($addon == 2) {
-        $datestring = "<th class='text-center'>$langDateReject</th>";
+        $datestring = "<th>$langDateReject</th>";
     }
 
     $string .= "<tr class='list-header'>
-                    <th scope='col'><div class='text-center'>$langSurnameName</div></th>
-                    <th scope='col'><div class='text-center'>$langUsername</div></th>
-                    <th scope='col'><div class='text-center'>$langFaculty</div></th>
-                    <th class='text-center'>$langDateRequest</th>";
+                    <th scope='col'>$langSurnameName</th>
+                    <th scope='col'>$langUsername</th>
+                    <th scope='col'>$langFaculty</th>
+                    <th>$langDateRequest</th>";
     $string .= $datestring;
     $string .= "<th scope='col'>" . icon('fa-gears') . "</th>";
     $string .= "</tr></thead>";

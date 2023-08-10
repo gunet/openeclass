@@ -313,7 +313,7 @@ switch ($cmd) {
                     <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
                     <input class='form-control max-input-width'type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
                     <input type='hidden' name='cmd' value='createLabel' />
-                    <button class='btn submitAdminBtn submitAdminBtnDefault mt-2' type='submit' value='" . $langCreate . "'>$langCreate</button>
+                    <button class='btn submitAdminBtn mt-2' type='submit' value='" . $langCreate . "'>$langCreate</button>
                   </form>
                 </td>
               </tr>";
@@ -429,7 +429,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                                 <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
                                 <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
                                 <div class='d-flex mt-3'>
-                                    <button type=\"submit\" class=\"btn submitAdminBtn submitAdminBtnDefault\" value=\"" . $langSave . "\" >$langSave</button>
+                                    <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
                                     <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
                                 </div>
                             </form>
@@ -632,7 +632,7 @@ foreach ($flatElementList as $module) {
     } else {
         $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveStd);
     }
-    $tool_content .= "<td class='option-btn-cell text-center'>" .
+    $tool_content .= "<td class='option-btn-cell text-end'>" .
             action_button(array(
                 array('title' => $langEditChange, // Modify command / go to other page
                     'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],

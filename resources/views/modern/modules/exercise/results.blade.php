@@ -40,12 +40,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <th class='text-center'>{{ trans('langStart') }}</td>
-                        <th class='text-center'>{{ trans('langExerciseDuration') }}</td>
-                        <th class='text-center'>{{ trans('langTotalScore') }}</td>
-                        <th class='text-center'>{{ trans('langCurrentStatus') }}</th>
+                        <th>{{ trans('langStart') }}</td>
+                        <th>{{ trans('langExerciseDuration') }}</td>
+                        <th>{{ trans('langTotalScore') }}</td>
+                        <th>{{ trans('langCurrentStatus') }}</th>
                         @if($is_editor)
-                            <th class='text-center'>{!! icon('fa-gears') !!}</th>
+                            <th>{!! icon('fa-gears') !!}</th>
                         @endif
                     </tr>
                     @foreach ($user_attempts[$student->id] as $attempt)
@@ -54,13 +54,13 @@
                         @else
                             <tr>
                         @endif
-                            <td class='text-center'> {{ $attempt->record_start_date->format('d/m/Y H:i:s') }}</td>
+                            <td> {{ $attempt->record_start_date->format('d/m/Y H:i:s') }}</td>
                             @if ($attempt->time_duration == '00:00:00' || empty($attempt->time_duration) || $attempt->attempt_status == ATTEMPT_ACTIVE)
-                                <td class='text-center'>{{ trans('langNotRecorded') }}</td>
+                                <td>{{ trans('langNotRecorded') }}</td>
                             @else
-                                <td class='text-center'>{!! format_time_duration($attempt->time_duration) !!}</td>
+                                <td>{!! format_time_duration($attempt->time_duration) !!}</td>
                             @endif
-                            <td class='text-center'>
+                            <td>
                                 @if ($attempt->attempt_status == ATTEMPT_COMPLETED)
                                     <!--I NEED TO ADD SOME LOGIC HERE-->
                                     @if ($showScore)
@@ -84,7 +84,7 @@
                                     {{ $attempt->total_score }} / {{ $attempt->total_weighting }}
                                 @endif
                             </td>
-                            <td class='text-center'>
+                            <td>
                             @if ($attempt->attempt_status == ATTEMPT_COMPLETED)
                                 {{ trans('langAttemptCompleted') }}
                             @elseif ($attempt->attempt_status == ATTEMPT_PAUSED)

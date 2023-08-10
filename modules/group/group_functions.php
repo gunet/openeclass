@@ -253,7 +253,7 @@ function showgroupsofcategory($catid) {
             $rating = new Rating('thumbs_up', 'group', $group_id);
             $tool_content .= $rating->put($is_editor, $uid, $course_id);
         }
-        $tool_content .= "<td class='text-center' width='50'>$member_count</td><td class='text-center' width='50'>" .
+        $tool_content .= "<td width='50'>$member_count</td><td width='50'>" .
                 ($max_members ? $max_members : '-') . "</td>";
         $totalRegistered += $member_count;
 
@@ -267,7 +267,7 @@ function showgroupsofcategory($catid) {
                 $visibility_icom = 'fa-eye';
                 $visibility_url = 'choice=enable';
             }
-            $tool_content .= "<td class='option-btn-cell text-center'>";
+            $tool_content .= "<td class='option-btn-cell text-end'>";
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
@@ -287,7 +287,7 @@ function showgroupsofcategory($catid) {
             $tool_content .= "</td>";
         } else {
             // If self-registration and multi registration allowed by admin and group is not full
-            $tool_content .= "<td class='text-center'>";
+            $tool_content .= "<td>";
             $group_id_indirect = getIndirectReference($group_id);
             $control = '';
 

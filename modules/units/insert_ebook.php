@@ -51,6 +51,6 @@ function list_ebooks() {
         $tool_content .=
                 "</table></div>
                 <div class='d-flex justify-content-start mt-4'>
-                <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
+                <input class='btn submitAdminBtn' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }

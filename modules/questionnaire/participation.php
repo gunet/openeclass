@@ -170,7 +170,7 @@ $tool_content .= "
                     <th>$langEmail</th>
                     <th>$langAm</th>
                     <th>$langDate / $langHour</th>
-                    <th class='text-center'>$m[subm]</th>
+                    <th>$m[subm]</th>
                 </tr>
             </thead>
             <tbody>";
@@ -192,7 +192,7 @@ foreach ($allUsers as $user_id) {
                     <td>" . q(uid_to_email($user_id)) . "</td>
                     <td>" . q(uid_to_am($user_id)) . "</td>
                     <td>$ts</td>
-                    <td class='text-center' data-filter='$key' data-sort='$ok'>$participation_icon</td>
+                    <td data-filter='$key' data-sort='$ok'>$participation_icon</td>
                 </tr>";
 }
 
@@ -205,7 +205,7 @@ foreach ($emailUsers as $mail) {
                     <td>" . ($email) . "</td>
                     <td></td>
                     <td>$ts</td>
-                    <td class='text-center' data-filter='ok' data-sort='1'>$participation_icon</td>
+                    <td data-filter='ok' data-sort='1'>$participation_icon</td>
                 </tr>";
 }
 

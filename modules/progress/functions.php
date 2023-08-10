@@ -539,7 +539,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                         <th>
                                                             $langValue
                                                         </div>
-                                                        <th class='text-center'>
+                                                        <th>
                                                             <i class='fa fa-cogs'></i>
                                                         </th>
                                                     </tr>";
@@ -558,7 +558,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                 }
                                                                 $tool_content .= "$details->threshold</td>";
                                                                 $tool_content .= "<td>";
-                                                                $tool_content .= "<div class='text-center'>".
+                                                                $tool_content .= "<div class='text-end'>".
                                                                     action_button(array(
                                                                         array('title' => $langEditChange,
                                                                             'icon' => 'fa-edit',
@@ -614,7 +614,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                     <th>
                                                                                         $langValue
                                                                                     </th>
-                                                                                    <th class='text-center'>
+                                                                                    <th>
                                                                                         <i class='fa fa-cogs'></i>
                                                                                     </th>
                                                                                 </tr>";
@@ -632,7 +632,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                         $tool_content .= "&mdash;";
                                                                                     }
                                                                                     $tool_content .= "&nbsp;$details->threshold</td>";
-                                                                                    $tool_content .= "<td class='text-center'>".
+                                                                                    $tool_content .= "<td class='text-end'>".
                                                                                         action_button(array(
                                                                                             array('title' => $langEditChange,
                                                                                                 'icon' => 'fa-edit',
@@ -930,21 +930,21 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
                 "<input type='hidden' name = '$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2'>&nbsp;$langTitle</th>" .
+                "<th>&nbsp;$langTitle</th>" .
                 "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langGradebookGrade</th>" .
-                "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:10px;'>$langChoice</th>" .
                 "</tr>";
         foreach ($result as $row) {
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
                     "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>
+                    "<td>".format_locale_date(strtotime($row->submission_date), 'short')."</td>
                     <td>". selection(get_operators(), "operator[$assignment_id]") . "</td>".
-                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
-                    "<td class='text-center'><label class='label-container'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
+                    "<td><label class='label-container'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
         $tool_content .= "</table></div>" .
@@ -1017,16 +1017,16 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
                 "<th class='text-start ps-2'>$langExercices</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langGradebookGrade</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
         foreach ($quizinfo as $entry) {
             $exercise_id = $entry['id'];
             $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='text-start ps-2'><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
+            $tool_content .= "<td><a href='{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$exercise_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$exercise_id]") . "</td>";
-            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='exercise[]' value='$exercise_id'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><input style='width:50px;' type='text' name='threshold[$exercise_id]' value=''></td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='exercise[]' value='$exercise_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div><div class='text-end mt-3'>";
@@ -1143,15 +1143,15 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
         if( !empty($path)) {
         $tool_content .=
                 "<tr>" .
-                "<th colspan='$colspan'><div class='text-start ps-2'>$langDirectory: $dirname$parenthtml</div></th>" .
+                "<th colspan='$colspan'><div>$langDirectory: $dirname$parenthtml</div></th>" .
                 "</tr>" ;
         }
         $tool_content .=
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2'>$langName</th>" .
-                "<th class='text-center'>$langSize</th>" .
-                "<th class='text-center'>$langDate</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th>$langName</th>" .
+                "<th>$langSize</th>" .
+                "<th>$langDate</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
@@ -1197,9 +1197,9 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = format_locale_date(strtotime($entry['date']), 'short', false);
-                    $tool_content .= "<td class='text-end'>$size</td><td class='text-center'>$date</td>";
+                    $tool_content .= "<td class='text-end'>$size</td><td>$date</td>";
                 }
-                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='document[]' value='$entry[id]' /><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
                 $counter++;
             }
@@ -1243,17 +1243,17 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:70%;'>$langTitle</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
 
             $tool_content .= "<tr>" .
                     "<td>$langNumOfBlogs</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
-                    "<td class='text-center'><label class='label-container'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input style='width:30px;' type='text' name='threshold' value=''></td>" .
+                    "<td><label class='label-container'><input name='blog' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
         $tool_content .= "</table></div>" .
@@ -1295,20 +1295,20 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2' style='width:50%;'>&nbsp;$langTitle</th>" .
-                "<th class='text-start ps-2'>&nbsp;$langDate</th>" .
-                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:50%;'>$langTitle</th>" .
+                "<th>$langDate</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
         foreach ($result as $row) {
             $blog_id = $row->id;
             $tool_content .= "<tr>" .
                     "<td><a href='{$urlServer}modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=$blog_id#comments-title'>" . q($row->title) . "</a></td>" .
-                    "<td class='text-center'>" . format_locale_date(strtotime($row->time), 'short') . "</td>
+                    "<td>" . format_locale_date(strtotime($row->time), 'short') . "</td>
                     <td>". selection(get_operators(), "operator[$blog_id]") . "</td>".
-                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
-                    "<td class='text-center'><label class='label-container'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input style='width:50px;' type='text' name='threshold[$blog_id]' value=''></td>" .
+                    "<td><label class='label-container'><input name='blogcomment[]' value='$blog_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
         }
         $tool_content .= "</table></div>" .
@@ -1359,17 +1359,17 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:70%;'>$langTitle</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
 
             $tool_content .= "<tr>" .
                     "<td>$langNumInForum</td>" .
                     "<td>". selection(get_operators(), "operator") . "</td>".
-                    "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
-                    "<td class='text-center'><label class='label-container'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+                    "<td><input style='width:30px;' type='text' name='threshold' value=''></td>" .
+                    "<td><label class='label-container'><input name='forum' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
                     "</tr>";
 
         $tool_content .= "</table></div>" .
@@ -1440,10 +1440,10 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2'>$langTopics</th>" .
+                "<th>$langTopics</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
 
         foreach ($topicinfo as $topicentry) {
@@ -1452,8 +1452,8 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;".icon('fa-comments')."&nbsp;&nbsp;<a href='{$urlServer}modules/forum/viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id'>" . q($topicentry['topic_title']) . "</a></td>";
             $tool_content .= "<td>". selection(get_operators(), "operator[$topic_id]") . "</td>";
-            $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='forumtopic[]' value='$topic_id'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><input style='width:50px;' type='text' name='threshold[$topic_id]' value=''></td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='forumtopic[]' value='$topic_id'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
@@ -1527,10 +1527,10 @@ function display_available_lps($element, $element_id, int $unit_id = 0, $unit_re
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2'>$langLearningPaths</th>" .
+                "<th>$langLearningPaths</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langPercentage</th>" .
-                "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:10px;'>$langChoice</th>" .
                 "</tr>";
         foreach ($lpinfo as $entry) {
             $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d
@@ -1542,8 +1542,8 @@ function display_available_lps($element, $element_id, int $unit_id = 0, $unit_re
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='{$urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a>" . $comments . "</td>";
                 $tool_content .= "<td>". selection(get_operators(), "operator[$lp_id]") . "</td>";
-                $tool_content .= "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$lp_id]' value=''></td>";
-                $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='lp[]' value='$lp_id'><span class='checkmark'></span></label></td>";
+                $tool_content .= "<td><input style='width:50px;' type='text' name='threshold[$lp_id]' value=''></td>";
+                $tool_content .= "<td><label class='label-container'><input type='checkbox' name='lp[]' value='$lp_id'><span class='checkmark'></span></label></td>";
                 $tool_content .= "</tr>";
             }
         }
@@ -1646,8 +1646,8 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                 }
                 $tool_content .= "<tr>".
                     "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . $description . "</td>".
-                    "<td class='text-center'>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
-                    "<td class='text-center'><label class='label-container'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
+                    "<td>" . format_locale_date(strtotime($row->date), 'short', false) . "</td>" .
+                    "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$row->id'><span class='checkmark'></span></label></td>" .
                     "</tr>";
             }
         }
@@ -1672,8 +1672,8 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                         $tool_content .= "<tr>";
                         $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-film') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>" . $linkvideocat_description . "</td>";
-                        $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
-                        $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'><span class='checkmark'></span></label></td>";
+                        $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";
+                        $tool_content .= "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id'><span class='checkmark'></span></label></td>";
                         $tool_content .= "</tr>";
                     }
                 }
@@ -1743,14 +1743,14 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2'>&nbsp;$langEBook</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th>&nbsp;$langEBook</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
             $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
                     q($catrow->title) . "</td>";
-            $tool_content .= "<td class='text-center'>
+            $tool_content .= "<td>
             <label class='label-container'><input type='checkbox' name='ebook[]' value='$catrow->id' /><span class='checkmark'></span></label>
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
@@ -1870,14 +1870,14 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2'>&nbsp;$langQuestionnaire</th>" .
-                "<th style='width:80px;' class='text-center'>$langChoice</th>" .
+                "<th>$langQuestionnaire</th>" .
+                "<th style='width:80px;>$langChoice</th>" .
                 "</tr>";
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;".icon('fa-question-circle')."&nbsp;&nbsp;<a href='{$urlServer}modules/questionnaire/pollresults.php?course=$course_code&amp;pid=$entry[id]'>" . q($entry['title']) . "</a>" . $description ."</td>";
-            $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
+            $tool_content .= "<td><label class='label-container'><input type='checkbox' name='poll[]' value='$entry[id]'><span class='checkmark'></span></label></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div>";
@@ -1918,17 +1918,17 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:70%;'>&nbsp;$langTitle</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
 
         $tool_content .= "<tr>
                             <td>$langWikiPages</td>
                             <td>". selection(get_operators(), "operator") . "</td>
-                            <td class='text-center'><input style='width:50px;' type='text' name='threshold' value=''></td>
-                            <td class='text-center'><label class='label-container'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
+                            <td><input style='width:50px;' type='text' name='threshold' value=''></td>
+                            <td><label class='label-container'><input type='checkbox' name='wiki' value='1'><span class='checkmark'></span></label></td>
                         </tr>";
 
         $tool_content .= "
@@ -1970,16 +1970,16 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<tr class='list-header'>" .
-                "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
-                "<th style='width:5px;'>&nbsp;$langOperator</th>" .
+                "<th style='width:70%;'>$langTitle</th>" .
+                "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langHours</th>" .
-                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;'>$langChoice</th>" .
                 "</tr>";
 
         $tool_content .= "<tr>
                             <td>$langCourseParticipation</td>
                             <td>". selection(get_operators(), "operator") . "</td>
-                            <td class='text-center'><input style='width:50px;' type='text' name='threshold' value=''></td>
+                            <td><input style='width:50px;' type='text' name='threshold' value=''></td>
                             <td align='center'><label class='label-container'><input type='checkbox' name='participation' value='1'><span class='checkmark'></span></label></td>
                         </tr>";
 
@@ -2027,12 +2027,12 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th class='text-start ps-2'>$langAvailableGradebooks</th>" .
+            "<th>$langAvailableGradebooks</th>" .
             "<th style='width:160px;'>$langStart</th>" .
             "<th style='width:160px;'>$langFinish</th>" .
             "<th style='width:5px;'>$langOperator</th>" .
             "<th style='width:50px;'>$langGradebookGrade</th>" .
-            "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+            "<th style='width:10px;'>$langChoice</th>" .
             "</tr>";
 
         foreach ($result as $row) {
@@ -2041,11 +2041,11 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
             $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date)->format('d/m/Y H:i');
             $tool_content .= "<tr>" .
                 "<td><a href ='{$urlServer}modules/gradebook/index.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>" . q($row->title) . "</a></td>" .
-                "<td class='text-center'>" . $start_date . "</td>" .
-                "<td class='text-center'>" . $end_date . "</td>" .
+                "<td>" . $start_date . "</td>" .
+                "<td>" . $end_date . "</td>" .
                 "<td>". selection(get_operators(), "operator[$gradebook_id]") . "</td>".
-                "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$gradebook_id]' value=''></td>" .
-                "<td class='text-center'><label class='label-container'><input name='gradebook[]' value='$gradebook_id' type='checkbox'><span class='checkmark'></span></label></td>" .
+                "<td><input style='width:50px;' type='text' name='threshold[$gradebook_id]' value=''></td>" .
+                "<td><label class='label-container'><input name='gradebook[]' value='$gradebook_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                 "</tr>";
         }
 
@@ -2085,17 +2085,17 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
             "<input type='hidden' name='$element_name' value='$element_id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th class='text-start ps-2' style='width:70%;'>&nbsp;$langTitle</th>" .
-            "<th style='width:5px;'>&nbsp;$langValue</th>" .
+            "<th style='width:70%;'>&nbsp;$langTitle</th>" .
+            "<th style='width:5px;'>$langValue</th>" .
             "<th style='width:30px;'>$langPercentage</th>" .
-            "<th style='width:20px;' class='text-center'>$langChoice</th>" .
+            "<th style='width:20px;'>$langChoice</th>" .
             "</tr>";
 
         $tool_content .= "<tr>" .
             "<td>" . $langCourseCompletion . "</td>" .
             "<td>". selection(get_operators(), "operator") . "</td>".
-            "<td class='text-center'><input style='width:30px;' type='text' name='threshold' value=''></td>" .
-            "<td class='text-center'><label class='label-container'><input name='" . CourseCompletionEvent::ACTIVITY . "' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
+            "<td><input style='width:30px;' type='text' name='threshold' value=''></td>" .
+            "<td><label class='label-container'><input name='" . CourseCompletionEvent::ACTIVITY . "' value='1' type='checkbox'><span class='checkmark'></span></label></td>" .
             "</tr>";
 
         $tool_content .= "</table></div>" .

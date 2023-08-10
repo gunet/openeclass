@@ -71,7 +71,7 @@ function getUserLessonInfo($uid) {
     $student_courses_count = 0;
 
     if ($myCourses) {
-        $lesson_content .= "<table id='portfolio_lessons' class='table table-default portfolio-courses-table'>";
+        $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);

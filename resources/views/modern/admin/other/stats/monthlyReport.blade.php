@@ -29,11 +29,11 @@
                         <div class='table-responsive'>
                             <table class='table-default'>
                                 <tbody>
-                                    <th class='list-header text-white'>{{ trans('langMonth') }}</th>
-                                    <th class='list-header text-center text-white'>{{ trans('langTeachers') }}</th>
-                                    <th class='list-header text-center text-white'>{{ trans('langStudents') }}</th>
-                                    <th class='list-header text-center text-white'>{{ trans('langGuests') }}</th>
-                                    <th class='list-header text-center text-white'>{{ trans('langCourses') }}</th>
+                                    <th>{{ trans('langMonth') }}</th>
+                                    <th>{{ trans('langTeachers') }}</th>
+                                    <th>{{ trans('langStudents') }}</th>
+                                    <th>{{ trans('langGuests') }}</th>
+                                    <th>{{ trans('langCourses') }}</th>
 
                                     @foreach ($monthly_data as $data)
                                         @php
@@ -41,10 +41,10 @@
                                         @endphp
                                         <tr>
                                             <td>{{ $formatted_data }}</td>
-                                            <td class='text-center'>{{ $data[1] }}</td>
-                                            <td class='text-center'>{{ $data[2] }}</td>
-                                            <td class='text-center'>{{ $data[3] }}</td>
-                                            <td class='text-center'>{{ $data[4] }}</td>
+                                            <td>{{ $data[1] }}</td>
+                                            <td>{{ $data[2] }}</td>
+                                            <td>{{ $data[3] }}</td>
+                                            <td>{{ $data[4] }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

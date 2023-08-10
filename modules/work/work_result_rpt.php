@@ -148,8 +148,8 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
                <td style='word-break:break-all;'>".$auto_judge_scenarios_output[$i]['student_output']."</td>
                <td style='word-break:break-all;'>".$langAutoJudgeAssertions[$cur_senarios['assertion']]."</td>
                <td style='word-break:break-all;'>".str_replace(' ', '&nbsp;', $cur_senarios['output'])."</td>
-               <td class='text-center' style='word-break:break-all;'>".$cur_senarios['weight']."/".$max_grade."</td>
-               <td class='text-center'>$icon</td></tr>";
+               <td style='word-break:break-all;'>".$cur_senarios['weight']."/".$max_grade."</td>
+               <td>$icon</td></tr>";
         $i++;
     }
     return $table_content;

@@ -2,7 +2,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $("#course_results_table").DataTable ({
-                'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],
+                'aoColumnDefs':[{'sClass':'option-btn-cell text-end', 'aTargets':[-1]}],
                 "bProcessing": true,
                 "bServerSide": true,
                 "sAjaxSource": "{{ $_SERVER['REQUEST_URI'] }}",
@@ -15,7 +15,7 @@
                 "searchDelay": 1000,
                 "aoColumns": [
                     {"bSortable" : true, "sWidth": "50%" },
-                    {"bSortable" : false, "sClass": "text-center" },
+                    {"bSortable" : false, "sClass": "text-start" },
                     {"bSortable" : false, "sWidth": "25%" },
                     {"bSortable" : false },
                 ],
@@ -108,7 +108,7 @@
                                     <th>{{ trans('langCourseCode') }}</th>
                                     <th>{{ trans('langGroupAccess') }}</th>
                                     <th>{{ trans('langFaculty') }}</th>
-                                    <th class='text-center'>{!! icon('fa-cogs') !!}</th>
+                                    <th>{!! icon('fa-cogs') !!}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

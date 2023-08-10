@@ -324,7 +324,7 @@
                                                     <thead class='list-header'>
                                                         <th>{{ trans('langName') }}</th>
                                                         <th>Email</th>
-                                                        <th class='text-center'>{{ trans('langSelect') }}</th>
+                                                        <th class='text-start'>{{ trans('langSelect') }}</th>
                                                     </thead>
                                                     <tbody></tbody>
                                                 </table>

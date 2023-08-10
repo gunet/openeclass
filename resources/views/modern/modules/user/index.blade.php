@@ -252,7 +252,7 @@
  
                     <div class='col-12'>
                         <div class='table-responsive'>
-                            <table id='users_table_{{ $course_code }}' class='table-default w-100 ms-0'>
+                            <table id='users_table_{{ $course_code }}' class='table-default'>
                                 <thead>
                                     <tr class="list-header">
                                         <th>{{ trans('langSurnameName') }}</th>

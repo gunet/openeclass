@@ -362,15 +362,15 @@ function printPolls() {
               <table id='polls' class='table-default'>
               <thead>
                 <tr class='list-header'>
-                    <th class='ps-2' style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
-                    <th class='text-center'>$langDate</th>";
+                    <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
+                    <th>$langDate</th>";
         if ($is_editor) {
-            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
+            $tool_content .= "<th width='16'>$langAnswers</th>";
         } else {
-            $tool_content .= "<th class='text-center'>$langParticipate</th>";
+            $tool_content .= "<th>$langParticipate</th>";
         }
 
-        $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
+        $tool_content .= "<th>".icon('fa-cogs')."</th>";
         $tool_content .= "</tr></thead><tbody>";
         foreach ($result as $thepoll) {
             if (!$is_editor && !resource_access($thepoll->active, $thepoll->public)) {
@@ -441,15 +441,15 @@ function printPolls() {
                     $sort_date = '';
                 }
                 $tool_content .= "
-                        <td data-sort='$sort_date' class='text-center'>
+                        <td data-sort='$sort_date'>
                             <div style='padding-top: 7px;'><span class='text-success'>$langFrom</span>: &nbsp;" . format_locale_date(strtotime($thepoll->start_date)) . "</div>
                             <div style='padding-top: 7px;'><span class='text-danger'>$langTill</span>: &nbsp;" . format_locale_date(strtotime($thepoll->end_date)) . "</div>
                         </td>";
 
                 if ($is_editor) {
                     $tool_content .= "
-                    <td class='text-center'>$total_participants</td>
-                    <td class='text-center option-btn-cell'>" .
+                    <td>$total_participants</td>
+                    <td class='text-end option-btn-cell'>" .
                     action_button([
                         [ 'title' => $langEditChange,
                           'icon' => 'fa-edit',
@@ -492,7 +492,7 @@ function printPolls() {
                     ]) . "
                     </td></tr>";
                 } else {
-                    $tool_content .= "<td class='text-center'>";
+                    $tool_content .= "<td>";
                     if ($poll_not_started == 1) {
                         $tool_content .= $langSurveyNotStarted;
                     } elseif ($has_participated > 0) {
@@ -504,7 +504,7 @@ function printPolls() {
                     }
                     $tool_content .= "</td>";
                     $line_chart_link = ($has_participated && $thepoll->show_results && $thepoll->type==0)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "&mdash;" ;
-                    $tool_content .= "<td class='text-center option-btn-cell'>
+                    $tool_content .= "<td class='text-end option-btn-cell'>
                                         <div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div>
                                       </td></tr>";
                 }

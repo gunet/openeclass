@@ -1,16 +1,34 @@
-table.dataTable tbody tr{
+/* table.dataTable tbody tr{
     background-color: #ffffff;
 }
 .table-default tr td{
     background-color: #ffffff;
 }
+table.dataTable thead th, table.dataTable thead td {
+    border-bottom: 1px solid #ffffff;
+}
+table.dataTable.no-footer {
+    border-bottom: 1px solid #ffffff;
+}
 .dataTables_wrapper input[type="search"]{
-    background-color: #ffffff !important;
+    background-color: #ffffff;
+    height: 40px;
+    border-radius: 4px;
+    margin-top: 5px;
+    border:solid 1px #687DA3;
+    color: #687DA3;
+    font-size: 14px;
+    font-weight: 400;
+    font-style: normal;
 }
 .dataTables_wrapper select {
     background-color: #ffffff;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current{ background: #ffffff;}
+
+
+
+
 #portfolio_lessons_paginate .paginate_button.current{ background: #E8EDF8;}
 
 #portfolio_lessons_wrapper .dataTables_filter{
@@ -24,13 +42,4 @@ table.dataTable tbody tr{
     #portfolio_lessons_filter input[type="search"]{
         width:350px;
     }
-}
-
-
-#portofolio_lessons .row-course{
-    padding-left: 15px;
-    padding-right: 15px;
-}
-#portofolio_lessons .row-course:hover{
-    background-color: #E8EDF8;
-}
+} */

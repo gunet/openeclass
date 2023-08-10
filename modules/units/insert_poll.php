@@ -60,6 +60,6 @@ function list_polls() {
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='d-flex justify-content-start mt-4'>";
-        $tool_content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_poll' value='$langAddModulesButton'></div></form>";
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='submit_poll' value='$langAddModulesButton'></div></form>";
     }
 }

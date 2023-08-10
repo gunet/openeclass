@@ -254,7 +254,7 @@ function display_analytics_elements($analytics_id) {
                         <th>
                             $langAnalyticsWeight
                         </th>
-                        <th class='text-center'>
+                        <th>
                             <i class='fa fa-cogs'></i>
                         </th>
                     </tr>";
@@ -282,7 +282,7 @@ function display_analytics_elements($analytics_id) {
                         <span class='text-success'>$langAnalyticsAdvancedLevel: $upper_threshold - $max_value</span>
                     </td>
                     <td>$weight</td>
-                    <td class='text-center'>".
+                    <td class='text-end'>".
                         action_button(array(
                             array('title' => $langModify,
                                 'icon' => 'fa-edit',
@@ -445,7 +445,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         $langAnalyticsStatus
                     </th>
                     <th>
-                        <div class='text-center'>
+                        <div>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
                             " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>

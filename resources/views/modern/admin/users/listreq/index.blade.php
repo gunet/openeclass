@@ -62,10 +62,10 @@
                                         <td>{{ $user_request->givenname }} {{ $user_request->surname }}</td>
                                         <td>{{ $user_request->username }}</td>
                                         <td>{!! $tree->getFullPath($user_request->faculty_id) !!}</td>
-                                        <td class='text-center'>
+                                        <td>
                                             <small>{{ format_locale_date(strtotime($user_request->date_open), 'short', false) }}</small>
                                         </td>
-                                        <td class='option_btn_cell'>
+                                        <td class='option_btn_cell text-end'>
                                         @if ($user_request->password == 'pop3')
                                             {!! action_button(array(
                                                 array('title' => trans('langEditChange').' ('. trans('langViaPop').')',

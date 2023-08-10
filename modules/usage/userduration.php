@@ -340,13 +340,13 @@ if (isset($_GET['u'])) { //  stats per user
         <div class='col-sm-12'>
         <div class='table-responsive'>
         <table class='table-default'>
-        <tr class='list-header'>
-          <th class='ps-3'>$langSurnameName</th>
+        <thead><tr class='list-header'>
+          <th>$langSurnameName</th>
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>
-          <th class='text-center'>" . icon('fa-gears') . "</th>
-        </tr>";
+          <th>" . icon('fa-gears') . "</th>
+        </tr></thead>";
     }
 
     $result = user_duration_query($course_id);

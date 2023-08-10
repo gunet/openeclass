@@ -164,7 +164,7 @@ if (!$atleastOne) {
 if ($atleastOne) {
     $tool_content .= '<tr>'
             . '<th colspan="2"><div>' . "\n"
-            . '<button class="btn submitAdminBtn submitAdminBtnDefault" value="' . $langAddOneModuleButton . '" />'.$langAddOneModuleButton.'</button>' . "\n"
+            . '<button class="btn submitAdminBtn" value="' . $langAddOneModuleButton . '" />'.$langAddOneModuleButton.'</button>' . "\n"
             . '<input type="hidden" name="cmdglobal" value="add"></div>' . ""
             . '</th>'
             . '</tr>';

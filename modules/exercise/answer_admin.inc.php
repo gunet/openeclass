@@ -452,24 +452,24 @@ if (isset($_GET['modifyAnswers'])) {
                 <div class='table-responsive'>
                 <table class='table table-striped table-hover'>";
             $tool_content .= "<tr>
-                          <th class='text-end'></th>
-                          <th class='text-center'>$langCorrect</th>
-                          <th class='text-center'>$langAnswer</th>
-                          <th class='text-center'>$langComment</th>
-                          <th class='text-center'>$langScore</th>
+                          <th></th>
+                          <th>$langCorrect</th>
+                          <th>$langAnswer</th>
+                          <th>$langComment</th>
+                          <th>$langScore</th>
                         </tr>";
 
             for ($i = 1; $i <= $nbrAnswers; $i++) {
-                $tool_content .="<tr><td class='text-end' valign='top'>$i.</td>";
+                $tool_content .="<tr><td valign='top'>$i.</td>";
                 if ($answerType == UNIQUE_ANSWER) {
-                    $tool_content .= "<td class='text-center'><input type='radio' value=\"" . $i . "\" name='correct' ";
+                    $tool_content .= "<td><input type='radio' value=\"" . $i . "\" name='correct' ";
                     if ((isset($correct) and $correct == $i) or (isset($_POST['correct']) and ($_POST['correct'] == $i))) {
                         $tool_content .= "checked='checked'></td>";
                     } else {
                         $tool_content .= "></td>";
                     }
                 } else {
-                    $tool_content .= "<td class='text-center'><label class='label-container'><input type='checkbox' value='1' name=\"correct[" . $i . "]\" ";
+                    $tool_content .= "<td><label class='label-container'><input type='checkbox' value='1' name=\"correct[" . $i . "]\" ";
                     if ((isset($correct[$i]) && ($correct[$i]) or (isset($_POST['correct'][$i]) and $_POST['correct'][$i]))) {
                         $tool_content .= "checked='checked'><span class='checkmark'></span></label></td>";
                     } else {
@@ -495,7 +495,7 @@ if (isset($_GET['modifyAnswers'])) {
                 } else {
                     $tool_content .= "<td style='width:42%'>" . rich_text_editor("comment[$i]", 7, 40, $comment[$i], true) . "</td>";
                 }
-                $tool_content .= "<td class='text-center'><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
+                $tool_content .= "<td><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
                     <td class='text-start' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
@@ -603,7 +603,7 @@ if (isset($_GET['modifyAnswers'])) {
          }
 
          $tool_content .= "<tr><td colspan='2'><b>$langDefineOptions</b></td>
-               <td class='text-center' colspan='2'><b>$langMakeCorrespond</b></td>
+               <td colspan='2'><b>$langMakeCorrespond</b></td>
                  </tr>
                  <tr>
                <td>&nbsp;</td>
@@ -696,8 +696,8 @@ if (isset($_GET['modifyAnswers'])) {
              <table class='table'>
              <tr>
                <td colspan='2'><b>$langAnswer</b></td>
-               <td class='text-center'><b>$langComment</b></td>
-               <td class='text-center'><b>$langScore</b></td>
+               <td><b>$langComment</b></td>
+               <td><b>$langScore</b></td>
              </tr>
              <tr>
                <td width='30'>$langTrue</td>

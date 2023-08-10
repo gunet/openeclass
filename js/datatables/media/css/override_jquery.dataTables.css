@@ -6,13 +6,26 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
   table.dataTable thead th, table.dataTable thead td {
-    padding: 10px 10px 10px 10px;
+    padding: 10px 0px 10px 0px;
       border-bottom: 1px solid #ffffff;
+  }
+
+  table.dataTable tbody tr:hover{
+    background-color: #EFF6FF;
   }
 
   table.dataTable tbody tr td{
     padding: 10px 10px 10px 10px;
   }
+
+  table.dataTable tbody tr td a{
+    text-decoration: underline;
+  }
+
+  table.dataTable tbody tr td a.menu-popover{
+    text-decoration: none;
+  }
+  
 
   table.dataTable.no-footer {
       border-bottom: 1px solid #ffffff;
@@ -27,104 +40,34 @@
       border: 0px;
   }
 
-
   th.sorting, th.sorting_desc, th.sorting_asc{
        width: auto !important;
        padding: 10px 10px 10px 10px;
   }
 
   th.sorting_disabled{
-    height:0px !important;
+    height: 0px !important;
   }
 
   .dataTables_wrapper.no-footer .dataTables_scrollBody {
       border-bottom: 1px solid #ffffff;
   }
 
-
-
-
-
-
-
-  /* @media(max-width:1199px){
-    .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
-      overflow:auto !important;
-    }
-  }
-  @media(min-width:1200px){
-      .dataTables_scrollBody, #questions_wrapper, .dataTables_wrapper{
-        overflow:hidden !important;
-      }
-  } */
-
-
-
-
-
-
-
-
-  /* .dataTables_wrapper::-webkit-scrollbar, 
-  .dataTables_scroll::-webkit-scrollbar, 
-  .dataTables_scrollBody::-webkit-scrollbar,
-  .table-responsive::-webkit-scrollbar{
-    height: 4px;
-    width: 4px;
-    background: #e8e8e8;
-  }
-  .dataTables_wrapper::-webkit-scrollbar-thumb:horizontal, 
-  .dataTables_scroll::-webkit-scrollbar-thumb:horizontal, 
-  .dataTables_scrollBody::-webkit-scrollbar-thumb:horizontal,
-  .table-responsive::-webkit-scrollbar-thumb:horizontal{
-    background: #B4BED1;
-    border-radius: 10px;
+  .dataTables_scrollBody thead,
+  .dataTables_scrollBody th.sorting_disabled,
+  .dataTables_scrollBody tfoot{
+    display: none !important;
   }
 
-  table.dataTable{
-    width:100% !important;
-
-    border-collapse: collapse;
-    border-radius: 4px;
-    border: solid 1px #E8EDF8; 
+  table.dataTable tfoot th, table.dataTable tfoot td {
+      padding: 10px 10px 10px 10px;
+      border-top: 2px solid #ffffff;
   }
 
-  table.dataTable tbody tr{
-    background-color: #ffffff;
-  }
 
-  table.dataTable.no-footer {
-    border-bottom: 1px solid #ffffff;
-  }
-
-  table.dataTable th, table.dataTable td{ 
-    padding:10px; 
-    border-bottom: solid 1px #E8EDF8;
-    border-left: solid 1px #E8EDF8;
-    border-right: solid 1px #E8EDF8;
-  } */
-
-  /**************************************************** form-control ************************************************************************/
-  /* .dataTables_wrapper .form-control,  .dataTables_wrapper input[type="search"]{
-    height:40px !important;
-    border-radius: 4px !important;
-    border-color:#687DA3 !important;
-    background-color: #ffffff !important;
-    color: #687DA3;
-    font-size: 14px;
-    font-family: 'Manrope' , sans-serif; font-weight: 400;
-    margin-top: 5px;
-  }
-  .dataTables_wrapper .form-control:focus ,  .dataTables_wrapper input[type="search"]:focus{
-    border-color: #0073E6 !important;
-    outline: 0 none !important;
-    box-shadow: none;
-    background-color: #ffffff;
-    color:#0073E6;
-    font-family: 'Manrope' , sans-serif; font-weight: 400;
-  } */
 
   /********************************************************* form-select **********************************************************************/
+
   .dataTables_wrapper select {
     background-color: #ffffff;
     border-radius: 4px;
@@ -283,8 +226,6 @@
   }
 
 
-
-
   /************************************************** portfolio-table **********************************************************************/
   #portfolio_lessons{
     border: 0px;
@@ -295,41 +236,17 @@
     background-color: #ffffff;
   }
 
- /*************************************************** announcements-table ******************************************************************/
+  #portfolio_lessons_paginate .paginate_button.current{ background: #E8EDF8;}
 
-
-  /* .dataTables_scrollHeadInner .announcements_table{
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+  #portfolio_lessons_wrapper .dataTables_filter{
+       float: left !important;
   }
-  .active-cont .dataTables_scrollHeadInner{
-    width: 100% !important;
+  #portfolio_lessons_filter input[type="search"]{
+      border:solid 1px #687DA3 !important;
+      height:40px !important;
   }
-
-  .dataTables_scrollBody .announcements_table{
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    margin-bottom: 15px;
+  @media(min-width:992px){
+      #portfolio_lessons_filter input[type="search"]{
+          width:350px;
+      }
   }
-
-  .dataTables_wrapper.no-footer .dataTables_scrollBody {
-    border-bottom: 1px solid #ffffff;
-  } */
-
-  /**************************************************** requests-table *************************************************************************/
-  /* .dataTables_scrollHeadInner .table-default{
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-  }
-  .dataTables_scrollBody .table-default{
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    margin-bottom: 15px;
-  }
-
-  .dataTables_scrollFootInner{
-     margin-top: 14px;
-  }
-  .active-cont .dataTables_scrollFootInner{
-    width: 100% !important;
-  } */

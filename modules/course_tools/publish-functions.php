@@ -276,9 +276,9 @@ function lti_provider_details() {
                            <table class='table-default'>
                              <tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
-                               <th class='text-center'>$langNewLTIAppSessionDesc</th>";
+                               <th>$langNewLTIAppSessionDesc</th>";
         if ($is_editor) {
-            $headings .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+            $headings .= "<th>" . icon('fa-gears') . "</th>";
         }
         $headings .= "</tr>";
 
@@ -297,7 +297,7 @@ function lti_provider_details() {
                 $tool_content .= '<tr' . ($row->enabled? '': " class='not_visible'") . ">
                     <td class='text-start'><a href='$showUrl'>$title</</td>
                     <td>$desc</td>
-                    <td class='option-btn-cell text-center'>".
+                    <td class='option-btn-cell text-end'>".
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "editpublish.php?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
@@ -322,7 +322,7 @@ function lti_provider_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= "<tr>
-                    <td class='text-center'>$title</td>
+                    <td>$title</td>
                     <td>$desc</td>
                     </tr>";
             }

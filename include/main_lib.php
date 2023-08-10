@@ -3830,10 +3830,10 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
                 $primary_form_begin = $form_begin;
                 $primary_form_end = $form_end;
                 $form_begin = $form_end = '';
-                $primary_icon_class = " confirmAction text-wrap' data-title='$title' data-message='" .
+                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
                     q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='deleteAdminBtn'";
             } else {
-                $icon_class .= " confirmAction text-wrap' data-title='$title' data-message='" .
+                $icon_class .= " confirmAction' data-title='$title' data-message='" .
                     q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='deleteAdminBtn'";
                 $primary_icon_class = '';
             }

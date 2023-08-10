@@ -259,7 +259,7 @@
                                     @empty
                                         <tr>
                                             <td colspan='5'>
-                                                <p class='not_visible text-center'> - {{ trans('langNoDocuments') }} - </p>
+                                                <p class='not_visible'> - {{ trans('langNoDocuments') }} - </p>
                                             </td>
                                         </tr>
 

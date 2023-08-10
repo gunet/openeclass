@@ -55,22 +55,22 @@
                             <table class='table-default'>
                                 <thead>
                                 <tr class='list-header'>
-                                    <th class = 'text-center'>API URL</th>
-                                    <th class = 'text-center'>{{ trans('langBBBEnabled') }}</th>
-                                    <th class = 'text-center'>{{ trans('langOnlineUsers') }}</th>
-                                    <th class = 'text-center'>{{ trans('langMaxRooms') }}</th>
-                                    <th class = 'text-center'>{{ trans('langBBBServerOrderP') }}</th>
-                                    <th class = 'text-center'>{!! icon('fa-gears') !!}</th>
+                                    <th>API URL</th>
+                                    <th>{{ trans('langBBBEnabled') }}</th>
+                                    <th>{{ trans('langOnlineUsers') }}</th>
+                                    <th>{{ trans('langMaxRooms') }}</th>
+                                    <th>{{ trans('langBBBServerOrderP') }}</th>
+                                    <th>{!! icon('fa-gears') !!}</th>
                                 </tr>
                                 </thead>
                         @foreach ($bbb_servers as $bbb_server)
                             <tr>
                                 <td>{{ $bbb_server->api_url }}</td>
-                                <td class='text-center'>{{ $bbb_server->enabled == 'true' ? trans('langYes') : trans('langNo') }}</td>
-                                <td class='text-center'>{{ get_connected_users($bbb_server->server_key, $bbb_server->api_url, $bbb_server->ip) }}</td>
-                                <td class='text-center'>{{ $bbb_server->max_rooms }}</td>
-                                <td class='text-center'>{{ $bbb_server->weight }}</td>
-                                <td class='option-btn-cell'>
+                                <td>{{ $bbb_server->enabled == 'true' ? trans('langYes') : trans('langNo') }}</td>
+                                <td>{{ get_connected_users($bbb_server->server_key, $bbb_server->api_url, $bbb_server->ip) }}</td>
+                                <td>{{ $bbb_server->max_rooms }}</td>
+                                <td>{{ $bbb_server->weight }}</td>
+                                <td class='option-btn-cell text-end'>
                                 {!! action_button([
                                     [
                                         'title' => trans('langEditChange'),

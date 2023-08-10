@@ -273,8 +273,8 @@ if (!$conference_activity) {
                     <th style='width:5%'>$langID</th>
                     <th>$langColmoocModerator</th>
                     <th>$langColmoocPartner</th>
-                    <th class='text-center' width='250'>$langNewBBBSessionStatus</th>
-                    <th class='text-center' width='200'>$langDate</th>";
+                    <th width='250'>$langNewBBBSessionStatus</th>
+                    <th width='200'>$langDate</th>";
         $tool_content .="</tr></thead>";
 
         $cnt = 1;
@@ -283,8 +283,8 @@ if (!$conference_activity) {
             $tool_content .= "<td>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cpl->moderator_id) . "</td>";
             $tool_content .= "<td>" . display_user($cpl->partner_id) . "</td>";
-            $tool_content .= "<td class='text-center'>" . display_session_status($cpl->session_status) . "</td>";
-            $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($cpl->created), 'short') . "</td>";
+            $tool_content .= "<td'>" . display_session_status($cpl->session_status) . "</td>";
+            $tool_content .= "<td>" . format_locale_date(strtotime($cpl->created), 'short') . "</td>";
             $tool_content .= "</tr>";
         }
 
@@ -309,9 +309,9 @@ if (!$conference_activity) {
                 <tr class='list-header'>
                     <th style='width:5%'>$langID</th>
                     <th>$langSurname $langName</th>
-                    <th class='text-center' width='250'>$langNewBBBSessionStatus</th>
-                    <th class='text-center' width='200'>$langDate</th>
-                    <th class='text-center'>$langColMoocCompletions</th>";
+                    <th width='250'>$langNewBBBSessionStatus</th>
+                    <th width='200'>$langDate</th>
+                    <th>$langColMoocCompletions</th>";
         $tool_content .="</tr></thead>";
 
         $cnt = 1;
@@ -319,18 +319,18 @@ if (!$conference_activity) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
-            $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
-            $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
-            $tool_content .= "<td class='text-center'>" . display_finished_count($cus->user_id) . "</td>";
+            $tool_content .= "<td>" . display_session_status($cus->session_status) . "</td>";
+            $tool_content .= "<td>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
+            $tool_content .= "<td'>" . display_finished_count($cus->user_id) . "</td>";
             $tool_content .= "</tr>";
         }
         foreach ($q2 as $cus) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
-            $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
-            $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
-            $tool_content .= "<td class='text-center'>" . display_finished_count($cus->user_id) . "</td>";
+            $tool_content .= "<td>" . display_session_status($cus->session_status) . "</td>";
+            $tool_content .= "<td>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
+            $tool_content .= "<td>" . display_finished_count($cus->user_id) . "</td>";
             $tool_content .= "</tr>";
         }
 
@@ -362,13 +362,13 @@ if (!$conference_activity) {
             <thead>
                 <tr class='list-header'>
                     <th>$langName $langSurname</th>
-                    <th class = 'text-center' width='250'>$langNewBBBSessionStatus</th>
-                    <th class = 'text-center' width='200'>$langDate</th>";
+                    <th width='250'>$langNewBBBSessionStatus</th>
+                    <th width='200'>$langDate</th>";
                 $tool_content .= "</tr></thead>";
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
-                $tool_content .= "<td class='text-center'>" . display_session_status($cus->session_status) . "</td>";
-                $tool_content .= "<td class='text-center'>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
+                $tool_content .= "<td>" . display_session_status($cus->session_status) . "</td>";
+                $tool_content .= "<td>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
                 $tool_content .= "</tr>";
                 $tool_content .= "</table></div>";
             }

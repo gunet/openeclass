@@ -86,7 +86,7 @@
                             <table class='table-default'>
                                 <thead class='list-header'>
                                     <th>{{ trans('langAllAuthTypes') }}</th>
-                                    <th class='text-center'>{!! icon('fa-gears', trans('langActions')) !!}</th>
+                                    <th>{!! icon('fa-gears', trans('langActions')) !!}</th>
                                 </thead>
                                 <tbody>
                                 @foreach ($authMethods as $authMethod)
@@ -100,7 +100,7 @@
                                                 </small>
                                             @endif
                                         </td>
-                                        <td class='option-btn-cell text-center'>
+                                        <td class='option-btn-cell text-end'>
                                             {!! action_button(
                                             [
                                                 [

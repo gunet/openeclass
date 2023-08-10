@@ -132,9 +132,9 @@ if (isset($_GET['group_as'])) {
                 <table class='table-default'>
                 <tr class='list-header'>
                   <th style='width:45%;'>$langTitle</th>
-                  <th class='text-center'>$m[subm]</th>
-                  <th class='text-center'>$m[nogr]</th>
-                  <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
+                  <th>$m[subm]</th>
+                  <th>$m[nogr]</th>
+                  <th>$langGroupWorkDeadline_of_Submission</th>
                 </tr>";
         foreach ($result as $row) {
             // Check if assignment contains submissions
@@ -154,9 +154,9 @@ if (isset($_GET['group_as'])) {
                                 <a href='../work/index.php?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
-                            <td class='text-center'>$num_submitted</td>
-                            <td class='text-center'>$num_ungraded</td>
-                            <td class='text-center'>$deadline";
+                            <td>$num_submitted</td>
+                            <td>$num_ungraded</td>
+                            <td>$deadline";
             if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){

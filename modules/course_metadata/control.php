@@ -255,7 +255,7 @@ $tool_content .= <<<EOF
                                     </span>
                                 </li>
                                 <li class='list-group-item' style='border-top:none;'>
-                                    <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit' value='$langSubmit'>
+                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                                 </li>
                             </ul>
                         </form>

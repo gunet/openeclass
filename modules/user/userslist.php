@@ -152,7 +152,7 @@ $tool_content .= "
         <thead>
             <tr class='list-header'>
               <th>$langSurnameName</th>
-              <th class='text-center'>$langRole</th>
+              <th>$langRole</th>
             </tr>
         </thead>
         <tbody>

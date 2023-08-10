@@ -78,9 +78,9 @@ $tool_content .= "
         <div class='table-responsive mt-0'>
             <table class='table-default'>
                 <tr class='list-header'>
-                    <th width='45%' class='text-center'>" . $langInactiveCourseCategories . "</th>
-                    <th width='10%' class='text-center'>" . $langMove . "</th>
-                    <th width='45%' class='text-center'>" . $langActiveCourseCategories . "</th>
+                    <th width='45%'>" . $langInactiveCourseCategories . "</th>
+                    <th width='10%'>" . $langMove . "</th>
+                    <th width='45%'>" . $langActiveCourseCategories . "</th>
                 </tr>";
 
 $submitOnClick = '';
@@ -131,14 +131,14 @@ foreach ($categories as $category) {
 
         $tool_content .= "
                 <tr>
-                    <td class='text-center'>
+                    <td>
                         <select class='form-select h-100 rounded-0' name='" . $selectInactive . "' id='" . $idInactive . "' size='17' multiple>" . $inactiveOpts . "</select>
                     </td>
                     <td>
                         <button type='button' class='btn submitAdminBtn m-auto d-block' onClick=\"move('" . $idInactive . "','" . $idActive . "')\"><span class='fa fa-arrow-right'></span></button><br><br>
                         <button type='button' class='btn submitAdminBtn m-auto d-block' onClick=\"move('" . $idActive . "','" . $idInactive . "')\"><span class='fa fa-arrow-left'></span></button>
                     </td>
-                    <td class='text-center'>
+                    <td>
                         <select class='form-select h-100 rounded-0' name='" . $selectActive . "' id='" . $idActive . "' size='17' multiple>" . $activeOpts . "</select>
                     </td>
                 </tr>";

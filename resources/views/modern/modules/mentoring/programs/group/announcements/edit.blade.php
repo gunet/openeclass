@@ -151,7 +151,7 @@
                                         <div class="modal-footer">
                                             <input type='hidden' name='id' value='{{ $announce_id }}'>
                                            
-                                            <button type='submit' class="btn submitAdminBtn submitAdminBtnDefault" name="submitAnnouncement">
+                                            <button type='submit' class="btn submitAdminBtn" name="submitAnnouncement">
                                                 {{ trans('langSubmit') }}
                                             </button>
                                         </div>

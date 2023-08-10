@@ -20,17 +20,17 @@ $tool_content .= action_bar(array(
 
 $tool_content .= "<div class='table-responsive'>
                     <table class='table-default'>            
-                    <tr class='list-header'>
-                        <th class='text-white'>$langFaculties</th>
-                        <th class='text-white'>$langTeachers</th>
-                        <th class='text-white'>$langStudents</th>                
-                        <th class='text-white'>$langCourses</th>
-                        <th class='text-white'>$langAnnouncements</th>
-                        <th class='text-white'>$langMessages</th>
-                        <th class='text-white'>$langDoc</th>
-                        <th class='text-white'>$langExercises</th>
-                        <th class='text-white'>$langWorks</th>
-                    </tr>";
+                    <thead><tr class='list-header'>
+                        <th>$langFaculties</th>
+                        <th>$langTeachers</th>
+                        <th>$langStudents</th>                
+                        <th>$langCourses</th>
+                        <th>$langAnnouncements</th>
+                        <th>$langMessages</th>
+                        <th>$langDoc</th>
+                        <th>$langExercises</th>
+                        <th>$langWorks</th>
+                    </tr></thead>";
 
 $r = $tree->buildRootIdsArray();
 
@@ -46,7 +46,7 @@ foreach ($r as $data) {
             $tool_content .= "<td>" . $tree->getNodeName($dep_id). "</td>";
             $stats = faculty_stats($dep_id);
             foreach ($stats as $data) {
-                $tool_content .= "<td class='text-center'>$data</td>";
+                $tool_content .= "<td>$data</td>";
             }
             $tool_content .= "</tr>";
         }

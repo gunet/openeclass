@@ -504,7 +504,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $q = Database::get()->queryArray("SELECT * FROM eportfolio_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $res->id);
             if (count($q) == 0) {
                 $tool_content .= "<tbody class='tile__list'>";
-                $tool_content .= "<tr class='ignore-item'><td colspan='9' class='text-center'><span class='not_visible'>".$langCPFNoFieldinCat."</td></tr>";
+                $tool_content .= "<tr class='ignore-item'><td colspan='9'><span class='not_visible'>".$langCPFNoFieldinCat."</td></tr>";
                 $tool_content .= "</tbody>";
             } else {
 

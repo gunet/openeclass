@@ -46,7 +46,7 @@
                                     <tr>
                                         <th class='text-start'>{{ trans('langName') }}</th>
                                         <th class='text-start'>{{ trans('langDeleteTagsFromMentor') }}</th>
-                                        <th class='text-center'>{{ trans('langAvailabilityMentor') }}</th>
+                                        <th class='text-start'>{{ trans('langAvailabilityMentor') }}</th>
                                     </tr>
                                 </head>
                                 <tbody>

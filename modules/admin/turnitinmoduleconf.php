@@ -141,7 +141,7 @@ if (isset($_GET['add_template'])) {
                     "<td>$lti->title</td>" .
                     "<td>$lti->description</td>" .
                     "<td>$enabled_lti_template</td>" .
-                    "<td class='option-btn-cell text-center'>" .
+                    "<td class='option-btn-cell text-end'>" .
                     action_button(array(
                         array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?edit_template=" . getIndirectReference($lti->id),

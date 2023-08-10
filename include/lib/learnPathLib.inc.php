@@ -140,7 +140,7 @@ function commentBox($type, $mode) {
             $output .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <textarea class='form-control' name='insertCommentBox' rows='3'>$oldComment</textarea><br>
                 <input type='hidden' name='cmd' value='update$col_name' />
-                <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' value=$langSubmit /></form>";
+                <input class='btn submitAdminBtn' type='submit' value=$langSubmit /></form>";
         }
     }
 
@@ -253,7 +253,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
             if ($formlabel != FALSE) {
                 $output .= '<div class="col-12"><div class="d-flex justify-content-start align-items-center gap-2">'
                         . '<input class="form-control max-input-width mt-0" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
-                        . '<button class="btn submitAdminBtn submitAdminBtnDefault" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
+                        . '<button class="btn submitAdminBtn" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
                         . '</div></div>'
                         . '<input type="hidden" name="cmd" value="updateName" />' . ""
                         . '</form>';
@@ -845,7 +845,7 @@ function display_my_documents($dialogBox, $style)
     }
     $content .= "</table></div>";
     $content .= "<div class='mt-4'>";
-    $content .= "<input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
+    $content .= "<input class='btn submitAdminBtn' type='submit' name='submitInsertedDocument' value='$langAddModulesButton'>";
     $content .= "</div>";
 
     return $content;

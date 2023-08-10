@@ -260,7 +260,7 @@ if ($total_categories > 0) {
                         } else {
                             $forum_link_notify = toggle_link($forum_action_notify);
                         }
-                        $tool_content .= "<td class='text-center'>";
+                        $tool_content .= "<td class='text-end'>";
 
 
                         
@@ -299,7 +299,7 @@ if ($total_categories > 0) {
                 }
             }
         } else {
-            $tool_content .= "<tr><td colspan='8' class='text-center'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
+            $tool_content .= "<tr><td colspan='8'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
         }
         $tool_content .= "</tbody></table></div></div>";
 
