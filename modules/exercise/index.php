@@ -303,13 +303,13 @@ if (!$nbrExercises) {
                 <th>$langExerciseName</th>
                 <th>$langInfoExercise</th>
                 <th>$langResults</th>
-                <th class='text-center'>".icon('fa-gears')."</th>
+                <th></th>
               </tr>";
     } else { // student view
         load_js('tools.js');
         enable_password_bootbox();
         $previousResultsAllowed = !(course_status($course_id) == COURSE_OPEN && $uid ==0);
-        $resultsHeader = $previousResultsAllowed ? "<th class='text-center'>$langResults</th>" : "";
+        $resultsHeader = $previousResultsAllowed ? "<th>$langResults</th>" : "";
         $tool_content .= "
                 <th>$langExerciseName</th>
                 <th>$langInfoExercise</th>
@@ -446,7 +446,7 @@ if (!$nbrExercises) {
             $langConfirmYourChoice_temp = addslashes(htmlspecialchars($langConfirmYourChoice));
             $langDelete_temp = htmlspecialchars($langDelete);
 
-            $tool_content .= "<td class='text-center'>".action_button(array(
+            $tool_content .= "<td class='text-end'>".action_button(array(
                     array('title' => $langEditChange,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
@@ -567,13 +567,13 @@ if (!$nbrExercises) {
                                                 AND eid = ?d", $uid, $row->id)->count;
                     if ($attempts > 0) {
                         $eid = getIndirectReference($row->id);
-                        $tool_content .= "<td class='text-center'><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></td>";
+                        $tool_content .= "<td><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></td>";
                     } else {
-                        $tool_content .= "<td class='text-center''>&dash;</td>";
+                        $tool_content .= "<td>&dash;</td>";
                     }
                     $tool_content .= "</tr>";
                 } else {
-                    $tool_content .= "<td class='text-center'>$langNotAvailable</td>";
+                    $tool_content .= "<td>$langNotAvailable</td>";
                 }
             }
         }

@@ -204,7 +204,7 @@ foreach ($flatElementList as $module) {
     $tool_content .= "</td>";
 
     //-- attempt
-    $tool_content .= "<td class='text-center'>" . q($module['attempt']) . "</td>";
+    $tool_content .= "<td>" . q($module['attempt']) . "</td>";
     //-- started
     $tool_content .= "<td>" . format_locale_date(strtotime($module['started']), 'short') . "</td>";
     //-- accessed
@@ -260,7 +260,7 @@ foreach ($flatElementList as $module) {
 }
 
 if ($moduleNbT == 0) {
-    $tool_content .= "<tr><td class='text-center' colspan='9'>$langNoModule</td></tr>";
+    $tool_content .= "<tr><td colspan='9'>$langNoModule</td></tr>";
 } elseif ($moduleNbT > 0) {
     $bestAttempt = 1; // discover best attempt
     for ($i = 1; $i <= $maxAttempt; $i++) {

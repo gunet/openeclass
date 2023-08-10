@@ -53,12 +53,14 @@ $editUrl = $urlAppend . "modules/exercise/admin.php?course=$course_code&amp;modi
 $picturePath = "courses/$course_code/image/quiz-$qid";
 $tool_content .= "<div class='table-responsive'>
     <table class = 'table-default'>
-      <tr class='active'>
-        <td colspan='$colspan'>
-          <strong><u>$langQuestion</u>:</strong>
-          <a target='_blank' href='$editUrl'><span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span></a>
-        </td>
-      </tr>
+      <thead>
+        <tr class='active'>
+          <td colspan='$colspan'>
+            <strong><u>$langQuestion</u>:</strong>
+            <a target='_blank' href='$editUrl'><span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-original-title='$langModify'></span></a>
+          </td>
+        </tr>
+      </thead>
       <tr>
         <td colspan='$colspan'>
           <strong>" . q_math($questionName) . "</strong><br>" .
@@ -67,13 +69,14 @@ $tool_content .= "<div class='table-responsive'>
       </tr>";
 
 if (file_exists($picturePath)) {
-    $tool_content .= "<tr><td class='text-center' colspan='$colspan'><img class='img-responsive' src='{$urlAppend}$picturePath' alt=''></td></tr>";
+    $tool_content .= "<tr><td colspan='$colspan'><img class='img-responsive' src='{$urlAppend}$picturePath' alt=''></td></tr>";
 }
 
 if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
     $tool_content .= "
       <tr>
-        <td colspan='2'><strong>$langAnswer</strong></td>
+        <td>#</td>
+        <td><strong>$langAnswer</strong></td>
         <td><strong>$langComment</strong></td>
       </tr>";
 } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
@@ -117,9 +120,9 @@ if ($answerType != FREE_TEXT) {
                 }
                 $tool_content .= "
                   <tr>
-                    <td style='width: 70px;' class='text-center'>$icon_choice</td>
-                    <td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
-                    <td style='width: 250px;'>" . $answerComment . "</td>
+                    <td>$icon_choice</td>
+                    <td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                    <td>" . $answerComment . "</td>
                   </tr>";
             } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                 $tool_content .= "
@@ -153,7 +156,7 @@ if ($answerType != FREE_TEXT) {
             } else {
                 $tool_content .= "
                   <tr>
-                    <td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>
+                    <td>" . standard_text_escape($answerTitle) . "</td>
                     <td>{$answer->answer[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>
                   </tr>";
             }
@@ -169,7 +172,7 @@ if (!is_null($questionFeedback)) {
 $tool_content .= "
       <tr class='active'>
         <th colspan='$colspan'>
-          <span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>
+          <span>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>
         </th>
       </tr>
     </table></div>";

@@ -306,13 +306,14 @@ switch ($cmd) {
         } else {  // create form requested
             $displayCreateLabelForm = true; // the form code comes after name and comment boxes section
             $createLabelHTML = " <tr>
-                <th width='200'>$langLabel:</th>
+               
                 <td>
+                  <p class='form-label'>$langLabel</p>
                   <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
                     <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
-                    <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
+                    <input class='form-control max-input-width'type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
                     <input type='hidden' name='cmd' value='createLabel' />
-                    <button class='btn submitAdminBtn' type='submit' value='" . $langCreate . "'>$langCreate</button>
+                    <button class='btn submitAdminBtn submitAdminBtnDefault mt-2' type='submit' value='" . $langCreate . "'>$langCreate</button>
                   </form>
                 </td>
               </tr>";
@@ -380,11 +381,11 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='col-sm-12'>
-                    <div class='panel panel-admin'>
+                    <div class='panel panel-primary'>
                     <div class='panel-heading'>
                         <span class='panel-title'>$langLearningPathData</span>
                     </div>";
-$tool_content .= "<table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>";
+$tool_content .= "<div class='panel-body'><div class='table-responsive mt-0'><table class='table-default'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="<tr><th width='70'>$langTitle:</th>";
@@ -410,7 +411,7 @@ if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td></tr></table></div></div>";
+$tool_content .= "</td></tr></table></div></div></div></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
@@ -428,7 +429,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                                 <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
                                 <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
                                 <div class='d-flex mt-3'>
-                                    <button type=\"submit\" class=\"btn submitAdminBtn\" value=\"" . $langSave . "\" >$langSave</button>
+                                    <button type=\"submit\" class=\"btn submitAdminBtn submitAdminBtnDefault\" value=\"" . $langSave . "\" >$langSave</button>
                                     <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn cancelAdminBtn ms-2\" value=\"" . $langCancel . "\" >$langCancel</a>
                                 </div>
                             </form>
@@ -572,7 +573,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .= "<table class='table-default'>";
+$tool_content .= "<div class='table-responsive'><table class='table-default'>";
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
     $tool_content .= $createLabelHTML;
@@ -667,5 +668,5 @@ foreach ($flatElementList as $module) {
     $tool_content .= "</tr>";
 } // end of foreach
 
-$tool_content .= "</table></div></div></div>";
+$tool_content .= "</table></div></div></div></div>";
 draw($tool_content, 2, null, $head_content, $body_action);

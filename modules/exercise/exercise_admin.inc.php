@@ -536,22 +536,27 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <div class='col-12'>
                         <div class='table-responsive mt-0'>
                             <table id='assignees_tbl' class='table-default".(in_array($exerciseAssignToSpecific, [1, 2]) ? '' : ' hide')."'>
-                                <tr class='title1'>
-                                  <td id='assignees'>$langStudents</td>
-                                  <td class='text-center'>$langMove</td>
-                                  <td>$m[WorkAssignTo]</td>
-                                </tr>
+                                <thead>
+                                    <tr class='title1'>
+                                        <td class='form-label' id='assignees'>$langStudents</td>
+                                        <td class='form-label text-center'>$langMove</td>
+                                        <td class='form-label'>$m[WorkAssignTo]</td>
+                                    </tr>
+                                </thead>
                                 <tr>
                                   <td>
-                                    <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
+                                    <select class='form-select h-100' id='assign_box' size='10' multiple>
                                     ".((isset($unassigned_options)) ? $unassigned_options : '')."
                                     </select>
                                   </td>
-                                  <td class='text-center'>
-                                    <input class='btn btn-sm btn-outline-primary rounded-2 h-40px' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary btn-sm rounded-2 h-40px mt-2' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                  <td>
+                                    <div class='d-flex align-items-center flex-column gap-2'>
+                                        <input class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' />
+                                        <input class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                    </div>
                                   </td>
-                                  <td width='40%'>
-                                    <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                  <td>
+                                    <select class='form-select h-100' id='assignee_box' name='ingroup[]' size='10' multiple>
                                     ".((isset($assignee_options)) ? $assignee_options : '')."
                                     </select>
                                   </td>

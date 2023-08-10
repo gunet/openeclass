@@ -106,7 +106,8 @@ if (!isset($_GET['pdf'])) {
 
 // table header
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                    <tr class='list-header text-start'>
+                    <thead>
+                    <tr class='list-header'>
                         <th>$langLearnPath</th>
                         <th>$langAttempts</th>
                         <th>$langAttemptStarted</th>
@@ -114,10 +115,10 @@ $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <th>$langTotalTimeSpent</th>
                         <th>$langLessonStatus</th>
                         <th>$langProgress</th>
-                    </tr>";
+                    </tr></thead>";
 
 if (count($lpList) == 0) {
-    $tool_content .= "<tr><td colspan='7' class='text-center'>$langNoLearningPath</td></tr>";
+    $tool_content .= "<tr><td colspan='7'>$langNoLearningPath</td></tr>";
 } else {
     $totalProgress = 0;
     $totalTimeSpent = "0000:00:00";

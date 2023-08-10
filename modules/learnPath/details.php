@@ -104,7 +104,7 @@ if ($learnPathName) {
     }
 
     $tool_content .= "<div class='table-responsive'>
-                    <table id='lpu_progress' class='table-default' style='table-layout:fixed;width:100%;'>
+                    <table id='lpu_progress' class='table-default'>
                     <thead>
                         <tr class='list-header'>
                             <th>$langStudent</th>

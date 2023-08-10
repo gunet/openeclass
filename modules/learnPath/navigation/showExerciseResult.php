@@ -125,7 +125,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     $iplus = $i + 1;
     echo "<br>
         <table class='table-default graded'>
-        <tr class='odd list-header text-white'>
+        <tr class='odd list-header'>
             <td colspan='$colspan'><b><u>$langQuestion</u>: $iplus</b></td>
         </tr>
         <tr>
@@ -140,8 +140,8 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     if ($displayResults == 1) {
         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
             echo "<tr>
-                        <td width='50' valign='top'><b>$langChoice</b></td>
-                        <td width='50' class='center' valign='top'><b>$langExpectedChoice</b></td>
+                        <td valign='top'><b>$langChoice</b></td>
+                        <td valign='top'><b>$langExpectedChoice</b></td>
                         <td valign='top'><b>$langAnswer</b></td>
                         <td valign='top'><b>$langComment</b></td>
                         </tr>";
@@ -318,14 +318,14 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
         if ($displayResults == 1) {
             if ($answerType != MATCHING || $answerCorrect) {
                 if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                    echo "<tr><td><div class='text-center'>";
+                    echo "<tr><td><div>";
                     if ($studentChoice) {
                         $icon_choice= "fa-square-check";
                     } else {
                         $icon_choice = "fa-square";
                     }
                     echo icon($icon_choice);
-                    echo "</div></div></td><td><div align='center'>";
+                    echo "</div></div></td><td><div>";
                     if ($answerCorrect) {
                         $icon_choice= "fa-square-check";
                     } else {
@@ -356,7 +356,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     } // end for()
     if ($displayScore == 1) {
         echo "<tr>
-              <th colspan='$colspan'><div class='text-end'>
+              <th colspan='$colspan'><div>
                         $langQuestionScore: <strong>" . round($questionScore, 2) . " / $questionWeighting</strong></div>
               </th>
             </tr>";
@@ -380,7 +380,7 @@ if ($displayScore == 1) {
     echo "<br>
         <table class='table-default'>
             <tr>
-                <td class='right'>$langTotalScore: <strong>" . round($totalScore, 2) . "/$totalWeighting</strong></td>
+                <td>$langTotalScore: <strong>" . round($totalScore, 2) . "/$totalWeighting</strong></td>
             </tr>
         </table>";
 }

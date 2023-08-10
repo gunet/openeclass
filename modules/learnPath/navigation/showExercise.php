@@ -229,7 +229,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <div id='content' style='padding:20px;'>";
 
 echo "<div class='panel panel-primary mb-4'>
-    <div class='panel-heading bgTheme'>
+    <div class='panel-heading'>
         <div class='panel-title'>" . q_math($exerciseTitle) . "</div>
     </div>";
 if (!empty($exerciseDescription_temp)) {
@@ -273,7 +273,7 @@ foreach ($questionList as $questionId) {
 
     // shows the question and its answers
     echo "<div class='panel panel-default'>
-            <div class='panel-heading bgTheme'>
+            <div class='panel-heading'>
                 <div class='panel-title'>" . $langQuestion . ": " . $i .
                ($exerciseType == 2 ?  " / $nbrQuestions" : '') .
             "</div></div>" .

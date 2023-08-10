@@ -485,8 +485,9 @@ if ($nbrQuestions) {
         <table class='table-default'>
         <thead class='list-header'>        
             <tr>
-                 <th colspan='2' class='text-start'>$langQuestionList $info_random_text</th>
-                 <th class='text-center'>".icon('fa-cogs', $langActions)."</th>
+                <th>#</th>
+                 <th>$langQuestionList $info_random_text</th>
+                 <th></th>
             </tr>
         </thead>
         <tbody id='q_sort'>";
@@ -549,14 +550,16 @@ if ($nbrQuestions) {
         }
 
         $tool_content .= "<tr data-id='$ewq_id'>
-            <td style='text-align: right;' width='1'>" . $i . ".</td>
+            <td>" . $i . ".</td>
             <td>" . $legend . "</td>";
-        $tool_content .= "<td class='option-btn-cell text-center' style='width: 85px;'>";
-        $tool_content .= "<div class='reorder-btn text-center'>
-                            <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-titile='$langReorder'></span>
-                        </div>";
+        $tool_content .= "<td class='option-btn-cell'>";
+        $tool_content .= "
+        <div class='d-flex justify-content-end align-items-center gap-2'>
+            <div class='reorder-btn'>
+                <span class='fa fa-arrows' style='cursor: pointer;' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-titile='$langReorder'></span>
+            </div>";
 
-        $tool_content .= "<div class='text-center mt-2'>";
+        $tool_content .= "<div>";
         if (!is_array($id)) {
             if ($objQuestionTmp->hasAnswered($exerciseId)) {
                 $warning_message = $langWarnAboutAnsweredQuestion;
@@ -589,7 +592,7 @@ if ($nbrQuestions) {
                         'show' => !isset($fromExercise))
                 ));
         }
-        $tool_content .= "</div>";
+        $tool_content .= "</div></div>";
         $tool_content .= "</td>";
         $tool_content .= "</tr>";
         if (isset($number) and $number > 0) {

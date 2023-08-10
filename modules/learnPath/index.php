@@ -406,15 +406,15 @@ $tool_content .= "
     <table class='table-default'>
     <thead class='list-header'>
     <tr>
-      <th><div class='text-start'>$langLearningPaths</div></th>";
+      <th>$langLearningPaths</th>";
 
 if ($is_editor) {
     // Titles for teachers
-    $tool_content .= "<th><div class='text-center'>" . icon('fa-gears') . "</div></th>";
+    $tool_content .= "<th></th>";
 } elseif ($uid) {
     // display progression only if user is not teacher && not anonymous
-    $tool_content .= "<th class='text-center'>$langTotalTimeSpent</th>
-                      <th class='text-center'>$langProgress</></th>";
+    $tool_content .= "<th>$langTotalTimeSpent</th>
+                      <th>$langProgress</></th>";
 }
 // close title line
 $tool_content .= "</tr></thead><tbody id='tosort'>";
@@ -507,8 +507,8 @@ foreach ($result as $list) { // while ... learning path list
 
         $tool_content .= "
             <td>
-                <div>$play_url<span class='float-end' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>                
-                <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
+                <div>$play_url<span class='ps-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span></div>                
+                <div>$list->lp_comment</div>
             </td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
@@ -620,12 +620,16 @@ foreach ($result as $list) { // while ... learning path list
                 'class' => 'delete',
                 'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name) . "\"" : $langDelete);
 
-        $tool_content .= "<td class='option-btn-cell text-center' style='width: 90px;'>
-                <div class='reorder-btn text-center'>
-                    <span class='fa fa-arrows' style='cursor: pointer;'></span>
-                </div><div class='text-center mt-3'>" .
-                action_button($lp_menu) .
-                "</div></td>";
+        $tool_content .= "<td class='option-btn-cell text-end'>
+                            <div class='d-flex justify-content-end align-items-center gap-2'>
+                                <div class='reorder-btn'>
+                                    <span class='fa fa-arrows' style='cursor: pointer;'></span>
+                                </div>
+                                <div>" .
+                                    action_button($lp_menu) .
+                                "</div>
+                            </div>
+                        </td>";
     } elseif ($uid) {
         list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($list->learnPath_id, $uid);
         // time
@@ -634,8 +638,8 @@ foreach ($result as $list) { // while ... learning path list
         }
         // % progress
         $prog = get_learnPath_progress($list->learnPath_id, $uid);
-        $tool_content .= "<td class='text-center'>$lpTotalTime</td>";
-        $tool_content .= "<td class='text-end' width='120'>" . disp_progress_bar($lpProgress, 1) . "</td>";
+        $tool_content .= "<td>$lpTotalTime</td>";
+        $tool_content .= "<td>" . disp_progress_bar($lpProgress, 1) . "</td>";
     }
 
     $tool_content .= "</tr>";

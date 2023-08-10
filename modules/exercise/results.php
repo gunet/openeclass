@@ -192,31 +192,31 @@ foreach ($result as $row) {
                 ORDER BY a.record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr><td class='text-center' style='background:#f5f5f5' colspan='".($is_editor ? 5 : 4)."'>";
+        $tool_content .= "<div class='table-responsive mt-5'><table class='table-default'>";
+        $tool_content .= "<thead><tr><tdcolspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
             $user_group = $studentam = '';
             $ug = user_groups($course_id, $sid, 'txt');
             if ($ug != '-') {
-                $user_group = "<span class='fw-bold normalColorBlueText'>$langGroup</span>: $ug";
+                $user_group = "<p class='form-label mt-4 mb-1'>$langGroup</p>$ug";
             }
             if (uid_to_am($sid) != '') {
-                $studentam = "<span class='fw-bold normalColorBlueText'>$langAmShort</span>: " . uid_to_am($sid);
+                $studentam = "<p class='form-label mt-4 mb-1'>$langAmShort</p>" . uid_to_am($sid);
             }
-            $tool_content .= "<strong class='normalColorBlueText'>$langUser:</strong> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
-                            <div>$studentam<span style='padding-left: 10px;'>$user_group</span></div>";
+            $tool_content .= "<p class='form-label mb-1'>$langUser</p> " . uid_to_name($sid,'surname'). " " . uid_to_name($sid, 'givenname') . "
+                            <div>$studentam<span>$user_group</span></div>";
         }
         $tool_content .= "</td>
                 </tr>
-                <tr class=''>
-                  <th class='text-center normalColorBlueText'>" . $langStart . "</th>
-                  <th class='text-center normalColorBlueText'>" . $langExerciseDuration . "</th>
-                  <th class='text-center normalColorBlueText'>" . $langTotalScore . "</th>
-                  <th class='text-center normalColorBlueText'>" . $langCurrentStatus. "</th>
-                  ". ($is_editor ? "<th class='text-center normalColorBlueText'>" . icon('fa-gears'). "</th>" : "") ."
-                </tr>";
+                <tr class='list-header'>
+                  <th>" . $langStart . "</th>
+                  <th>" . $langExerciseDuration . "</th>
+                  <th>" . $langTotalScore . "</th>
+                  <th>" . $langCurrentStatus. "</th>
+                  ". ($is_editor ? "<th>" . icon('fa-gears'). "</th>" : "") ."
+                </tr></thead>";
 
         $k = 0;
         foreach ($result2 as $row2) {
@@ -286,17 +286,17 @@ foreach ($result as $row) {
                 $row_class = " class='danger' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptCanceled''";
             }
 
-            $tool_content .= "<tr$row_class><td class='text-center'>" . q($row2->record_start_date) . "</td>";
+            $tool_content .= "<tr$row_class><td>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' || empty($row2->time_duration) || $row2->attempt_status == ATTEMPT_ACTIVE) { // for compatibility
-                $tool_content .= "<td class='text-center'>$langNotRecorded</td>";
+                $tool_content .= "<td>$langNotRecorded</td>";
             } else {
-                $tool_content .= "<td class='text-center'>" . format_time_duration($row2->time_duration) . "</td>";
+                $tool_content .= "<td>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td class='text-center'>$results_link</td>
-                              <td class='text-center'>$status</td>";
+            $tool_content .= "<td>$results_link</td>
+                              <td>$status</td>";
             if ($is_editor) {
                 $tool_content .= "
-                    <td class='option-btn-cell text-center'>" . action_button(array(
+                    <td class='option-btn-cell text-end'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",

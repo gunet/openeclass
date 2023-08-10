@@ -305,6 +305,8 @@ function view($view_file, $view_data = array()) {
                 display: none;
             }
 
+            .inputSearch{ height: 33px !important; margin-top: 0px !important;}
+
         "
         ;
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {

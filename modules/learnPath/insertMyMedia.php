@@ -181,7 +181,7 @@ function showmedia() {
                <thead>
                <tr class='list-header'>
                <th>$langName</th>
-               <th width='50'>$langSelection</th>
+               <th>$langSelection</th>
                </tr>
                </thead>
                <tbody>";
@@ -194,7 +194,7 @@ function showmedia() {
     if (empty($resultMedia) && empty($resultMediaLinks)){
         $output .= "
             <tr>
-                <td class='text-grey' align='center'>$langNoVideo</td>
+                <td>$langNoVideo</td>
                 <td></td>
             </tr>
         ";
@@ -204,7 +204,7 @@ function showmedia() {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>
-                    <td align='text-start'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
+                    <td>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
         $output .= "<td><div align='center'><label class='label-container'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></div></td></tr>";
@@ -213,7 +213,7 @@ function showmedia() {
     foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>
-                    <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
+                    <td valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
         $output .= "<td><div align='center'><label class='label-container'><input type='checkbox' name='insertMediaLink_" . $j . "' id='insertMediaLink_" . $j . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></div></td></tr>";
@@ -225,9 +225,9 @@ function showmedia() {
                 <tfooter>
                 <tr>
                 <th colspan='3'>
-                <div align='right'>
+                <div>
                   <input type='hidden' name='maxMediaForm' value ='" . ($i + $j - 2) . "' />
-                  <input class='btn submitAdminBtn' type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
+                  <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
                 </div></th>
                 </tr>
                 </tfooter>

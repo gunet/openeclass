@@ -34,12 +34,13 @@
             <div class='col-md-12'>
                 <div class='table-responsive'>
                     <table class='table-default'>
+                        <thead>
                         <tr class='list-header'>
-                            <th class='text-start' width='60'>{!! trans('langType') !!}</th>
-                            <th class='text-start'>{!! trans('langName') !!}</th>
-                            <th class='text-start'>{{ trans('langSize') }}</th>
-                            <th class='text-start'>{!! trans('langDate') !!}</th>
-                        </tr>
+                            <th>{!! trans('langType') !!}</th>
+                            <th>{!! trans('langName') !!}</th>
+                            <th>{{ trans('langSize') }}</th>
+                            <th>{!! trans('langDate') !!}</th>
+                        </tr></thead>
 
                         @forelse ($fileInfo as $file)
                         
@@ -90,13 +91,13 @@
                                 </td>
                                 @if ($file->is_dir)
                                     <td>&nbsp;</td>
-                                    <td class='center'>{{ $file->date }}</td>
+                                    <td>{{ $file->date }}</td>
                                 @elseif ($file->format == '.meta')
                                     <td>{{ $file->size }}</td>
-                                    <td class='center'>{{ $file->date }}</td>
+                                    <td>{{ $file->date }}</td>
                                 @else
                                     <td>{{ $file->size }}</td>
-                                    <td title='{{ $file->date_time }}' class='center'>{{ $file->date }}</td>
+                                    <td title='{{ $file->date_time }}'>{{ $file->date }}</td>
                                 @endif
                             </tr>
                         @empty

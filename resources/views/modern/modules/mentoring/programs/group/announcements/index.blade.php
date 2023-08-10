@@ -192,8 +192,8 @@
                                             <th>{{ trans('langDate') }}</th>
                                             <th>{{ trans('langFrom') }}</th>
                                             <th>{{ trans('langUntil') }}</th>
-                                            <th class='text-center'>{{ trans('langVisible')}}</th>
-                                            <th class='text-center'><span class='fa fa-cogs'></span></th>
+                                            <th>{{ trans('langVisible')}}</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -213,14 +213,14 @@
                                                 <td>
                                                     {!! format_locale_date(strtotime($a->stop_display ?? '')) !!}
                                                 </td>
-                                                <td class='text-center'>
+                                                <td>
                                                     @if($a->visible == 1)
                                                         <span class='fa fa-check fs-6 text-success'></span>
                                                     @else
                                                         <span class='fa fa-times fs-6 text-danger'></span>
                                                     @endif
                                                 </td>
-                                                <td class='d-flex justify-content-center'>
+                                                <td class='d-flex justify-content-center gap-2'>
                                                     <a id='showEdit' href='{{ $urlAppend }}modules/mentoring/programs/group/announcements/index.php?group_id={!! getInDirectReference($group_id) !!}&modify={!! getInDirectReference($a->id) !!}'>
                                                         <span class='fa fa-edit fs-6' data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
                                                     </a>
@@ -260,7 +260,7 @@
                             </div>
                         @else
                             <div class='col-12'>
-                                <table class='table-default rounded-2' id='table_announcements'>
+                                <table class='table-default' id='table_announcements'>
                                     <thead class='list-header'>
                                         <tr>
                                             <th>{{ trans('langTitle') }}</th>

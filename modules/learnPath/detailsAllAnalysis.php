@@ -134,10 +134,10 @@ foreach ($usersList as $user) {
         }
         $lp_content .= "<tr>";
         $lp_content .= "<td></td>";
-        $lp_content .= "<td class='text-start'>" . q($learningPath->name) . "</td>";
-        $lp_content .= "<td class='text-end'>" . q($lpAttemptsNb) . "</td>";
-        $lp_content .= "<td class='text-end'>" . q($lpTotalTime) . "</td>";
-        $lp_content .= "<td class='text-end'>" . disp_progress_bar($prog, 1) . "</td>";
+        $lp_content .= "<td>" . q($learningPath->name) . "</td>";
+        $lp_content .= "<td>" . q($lpAttemptsNb) . "</td>";
+        $lp_content .= "<td>" . q($lpTotalTime) . "</td>";
+        $lp_content .= "<td>" . disp_progress_bar($prog, 1) . "</td>";
         $lp_content .= "</tr>";
         $iterator++;
     }

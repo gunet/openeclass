@@ -81,11 +81,11 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  <input type='hidden' name='meta_filename' value='$oldFilename' />
 	  <input type='hidden' name='meta_mimetype' value='" . get_mime_type($oldFilename) . "' />
 	  $group_hidden_input
-	  <legend class='control-label-notes text-center'>$langAddMetadata</legend>
+	  <h3>$langAddMetadata</h3>
       <div class='table-responsive pt-0'>
 	  <table class='table-default'>
 	  <tr>
-	    <th class='lightColor ps-2 text-secondary'>$langWorkFile:</th>
+	    <th>$langWorkFile:</th>
 	    <td>$oldFilename</td>
 	  </tr>";
 
@@ -120,11 +120,11 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
     $output .= metaCheckBoxRow($langIntentedEndUserRole, "meta_intendedenduserrole", $userRoles, $checkMap, $langIntentedEndUserRoleHelp);
 
     $output .= "<tr>
-	    <th class='lightColor ps-2 text-secondary'>&nbsp;</th>
-	    <td class='right'><input class='btn submitAdminBtn' type='submit' value='$langOkComment' /></td>
+	    <th></th>
+	    <td class='right'><input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' value='$langOkComment' /></td>
 	  </tr>
 	  <tr>
-	    <th class='lightColor ps-2 text-secondary'>&nbsp;</th>
+	    <th></th>
 	    <td class='right'>$langNotRequired</td>
 	  </tr>
 	  </table>
@@ -156,7 +156,7 @@ function metaBuildCheckMap($values, $group) {
 
 function metaFormRow($title, $cell, $help) {
     return "<tr>
-	    <th class='lightColor ps-2 text-secondary' rowspan='2'>$title:</th>
+	    <th rowspan='2'>$title:</th>
 	    <td>$cell</td>
 	  </tr><tr><td>$help</td></tr>";
 }
@@ -172,13 +172,13 @@ function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = fa
     foreach ($values as $value) {
         $i++;
         $langElement = "langMeta" . ucfirst(str_replace(" ", "", $value));
-        global $langElement;
+        global $$langElement;
 
         $check = (isset($checkMap["$name"]["$value"])) ? " checked='1' " : '';
         $start = ($twocols && $i % 2 == 0) ? "<td><label class='label-container'>" : "<tr><td><label class='label-container'>";
         $end = ($twocols && $i % 2 != 0 && $i < count($values)) ? "</label></td>\n" : "</label></td></tr>\n";
 
-        $cell .= "$start<input type='checkbox' name='" . $name . "[]' value='$value' $check /><span class='checkmark'></span>" . $langElement . $end;
+        $cell .= "$start<input type='checkbox' name='" . $name . "[]' value='$value' $check /><span class='checkmark'></span>" . $$langElement . $end;
     }
 
     $cell .= "</table>";
@@ -191,7 +191,7 @@ function metaCheckBoxRow($title, $name, $values, $checkMap, $help, $twocols = fa
  */
 
 function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
-    return metaFormRow($title, "<textarea cols='68' rows='$rows' name='$name'>$value</textarea>", $help);
+    return metaFormRow($title, "<textarea class='form-control' cols='68' rows='$rows' name='$name'>$value</textarea>", $help);
 }
 
 /*
@@ -199,7 +199,7 @@ function metaTextAreaRow($title, $name, $value, $help, $rows = 2) {
  */
 
 function metaCommaTextAreaRow($title, $name, $values, $help, $rows = 2, $element = null) {
-    $cell = "<textarea cols='68' rows='$rows' name='$name'>";
+    $cell = "<textarea c cols='68' rows='$rows' name='$name'>";
 
     if (!empty($values)) {
         $i = 0;
@@ -222,7 +222,7 @@ function metaCommaTextAreaRow($title, $name, $values, $help, $rows = 2, $element
  */
 
 function metaInputTextRow($title, $name, $value, $help) {
-    return metaFormRow($title, "<input type='text' size='60' name='$name' value='" . htmlspecialchars($value, ENT_QUOTES, 'utf-8') . "' />", $help);
+    return metaFormRow($title, "<input class='form-control' type='text' size='60' name='$name' value='" . htmlspecialchars($value, ENT_QUOTES, 'utf-8') . "' />", $help);
 }
 
 /*
@@ -230,7 +230,7 @@ function metaInputTextRow($title, $name, $value, $help) {
  */
 
 function metaCommaInputTextRow($title, $name, $values, $help, $element = null) {
-    $cell = "<input type='text' size='60' name='$name' value='";
+    $cell = "<input class='form-control' type='text' size='60' name='$name' value='";
 
     if (!empty($values)) {
         $i = 0;

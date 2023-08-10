@@ -175,19 +175,19 @@ function showlinks() {
                       <table class='table-default'>
                       <thead><tr class='list-header'>
                         <th>$langName</th>
-                        <th width='50'>$langSelection</th>
+                        <th>$langSelection</th>
                       </tr></thead>
                       <tbody>";
 
     $i = 1;
 
     if (empty($result)) {
-        $output .= "<tr><td class='text-grey text-center'>$langNoLinksExist</td><td></td></tr>";
+        $output .= "<tr><td>$langNoLinksExist</td><td></td></tr>";
     } else {
         foreach ($result as $myrow) {
             $output .= "
             <tr>                
-            <td class='text-start'>";
+            <td>";
             if (empty($myrow->title)) {
                 $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->url) . "</a>";
             } else {
@@ -203,9 +203,9 @@ function showlinks() {
         <tfooter>
         <tr>
             <th colspan='2'>
-                <div class='float-end'>
-                <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
-                <input class='btn submitAdminBtn' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
+                <div>
+                    <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
+                    <input class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
                 </div>
             </th>
         </tr>

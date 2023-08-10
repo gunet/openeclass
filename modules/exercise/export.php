@@ -300,7 +300,7 @@ function question_html($question, $qid) {
             } else {
                 $html .= "
           <tr>
-            <td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>
+            <td>" . standard_text_escape($answerTitle) . "</td>
             <td>{$answer->answer[$answerCorrect]}&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>
           </tr>";
             }

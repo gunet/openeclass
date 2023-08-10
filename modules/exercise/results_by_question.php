@@ -63,7 +63,7 @@ $pageName = q_math($exerciseTitle) ;
 $questionList = $objExercise->selectQuestionList();
 //display exercise description if there is one
 if($exerciseDescription) {
-    $tool_content .= "<h4><strong>$langExerciseDescription</strong></h4>
+    $tool_content .= "<h3>$langExerciseDescription</h3>
         <div class='table-responsive'>
             <table class='table-default'>
                 <tr>

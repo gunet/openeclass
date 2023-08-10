@@ -139,7 +139,7 @@
                                             <th>{{ trans('langDate') }}</th>
                                             
                                             @unless ($is_in_tinymce)
-                                                <th class='text-center'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
+                                                <th>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -207,25 +207,6 @@
                                             </td>
 
 
-                                            {{--            
-                                            <td>
-                                                @if($file->updated_message)
-                                                    @if($file->visible == 1)
-                                                        <button class="btn btn-success btn-sm UpdateMessage">{{ $file->updated_message }}</button>
-                                                    @else
-                                                        <button class="btn btn-secondary btn-sm UpdatedMessage">{{ $file->updated_message }}</button>
-                                                    @endif
-                                                @else
-                                                    @if($file->visible == 1)
-                                                        <button class="btn btn-secondary btn-sm DocVisible">{{trans('langDocument')}}</button>
-                                                    @else
-                                                        <button class="btn btn-secondary btn-sm DocInvisible">{{trans('langDocument')}}</button>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            --}}
-
-
 
                                             @if ($file->is_dir)
                                                 <td>&nbsp;</td>
@@ -257,7 +238,7 @@
                                             @endif
                                            
                                             @unless ($is_in_tinymce)
-                                                <td class='text-center {{ $can_upload_mentoring? 'option-btn-cell': 'text-end'}}'>
+                                                <td class='text-end {{ $can_upload_mentoring? 'option-btn-cell': '' }}'>
                                                     {!! $file->action_button !!}
                                                 </td>
                                             @endif

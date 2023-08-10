@@ -4713,17 +4713,17 @@ function assignment_details($id, $row, $x =false) {
     $moduleTag = new ModuleElement($id);
     $tool_content .= "
     <div class='col-12'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
-        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-            <h3>
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            <h5 class='mb-0 text-white'>
                 $m[WorkInfo] &nbsp;
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
                     <span class='fa fa-edit' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
-            </h3>
+            </h5>
         </div>
-        <div class='card-body'>
+        <div class='panel-body'>
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-4'>
                     <strong class='control-label-notes'>$langTitle:</strong>
@@ -4920,15 +4920,15 @@ function show_assignment($id, $display_graph_results = false) {
         });
     </script>";
 
-    $head_content .= '
-    <style>
-        .count-col { width: 3em; }
-        .user-col { width: 40%; }
-        .tools-col { width: 5em; }
-        .date-col, .grade-col { width: 7em; }
-        .filename-col { min-width: 4em; max-width: 20%; overflow-wrap: break-word; }
-        td pre { overflow: scroll; }
-    </style>';
+    // $head_content .= '
+    // <style>
+    //     .count-col { width: 3em; }
+    //     .user-col { width: 40%; }
+    //     .tools-col { width: 5em; }
+    //     .date-col, .grade-col { width: 7em; }
+    //     .filename-col { min-width: 4em; max-width: 20%; overflow-wrap: break-word; }
+    //     td pre { overflow: scroll; }
+    // </style>';
 
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
                                                         CAST(UNIX_TIMESTAMP(start_date_review)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time_start,
@@ -5009,8 +5009,8 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
                 <input type='hidden' name='grades_id' value='$id' />
                 <br>
-                <div class='margin-bottom-thin lightColor Borders p-2 text-center'>
-                    <strong class='fw-bold normalColorBlueText'>$langSubmissions:</strong>&nbsp; $count_of_assignments";
+                <div class='margin-bottom-thin Success-100-bg p-2 rounded-2'>
+                    <strong>$langSubmissions:</strong>&nbsp; $count_of_assignments";
                 // button for transferring student peer review grades to teacher grades
                 if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0)) {
                     $tool_content .= "<div class='text-end' style='margin-bottom: 15px;'><a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code' id='transfer_grades'>$langTransferGrades</a></div>";
@@ -5020,16 +5020,16 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "
                 <div class='table-responsive mt-3'>
                 <table class='table table-default'>
-                <tbody>
-                <tr class='list-header'>
-                <th class='count-col'>&nbsp;</th>";
+                
+                <thead><tr class='list-header'>
+                <th class='count-col'>#</th>";
                 sort_link($langSurnameName, 'username', 'class="user-col"');
                 if ($assign->submission_type == 1)  {
-                    $tool_content .= "<th class='text-center'>$langWorkOnlineText</th>";
+                    $tool_content .= "<th>$langWorkOnlineText</th>";
                 } elseif ($assign->submission_type == 2) {
-                    $tool_content .= "<th class='text-center'>$langOpenCoursesFiles</th>";
+                    $tool_content .= "<th>$langOpenCoursesFiles</th>";
                 } else {
-                    $tool_content .= "<th class='text-center'>$langFileName</th>";
+                    $tool_content .= "<th>$langFileName</th>";
                 }
 
                 sort_link($m['sub_date'], 'date', 'class="date-col"');
@@ -5037,7 +5037,7 @@ function show_assignment($id, $display_graph_results = false) {
                     sort_link($langPeerReviewGrade, '');
                 }
                 sort_link($langGradebookGrade, 'grade', 'class="grade-col"');
-                $tool_content .= "<th class='text-center tools-col'><i class='fa fa-cogs'></i></th></tr>";
+                $tool_content .= "<th class='tools-col'></th></tr></thead><tbody>";
                 $i = 1;
                 $plagiarismlink = '';
                 $seen = [];
@@ -5204,7 +5204,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $am_field = "<span>$langAmShort: " . q($stud_am) . "</span>";
                 }
                 $tool_content .= "<tr>
-                                <td class='text-end count-col'>$i.</td>
+                                <td class='count-col'>$i.</td>
                                 <td class='user-col'>$name $am_field $mess";
 
                 // student comment
@@ -5251,25 +5251,25 @@ function show_assignment($id, $display_graph_results = false) {
                         $plagiarismlink = "<span class='small'><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;chk=$row->id'>$langPlagiarismCheck</a></span>";
                     }
                 }
-                $tool_content .= "<td class='text-center filename-col' class='col-md-2'>$filelink <br> $plagiarismlink</td>";
+                $tool_content .= "<td class='filename-col'>$filelink <br> $plagiarismlink</td>";
 
-                $tool_content .= "<td class='col-md-2'>" . format_locale_date(strtotime($row->submission_date)) .$late_sub_text. "</td>";
+                $tool_content .= "<td>" . format_locale_date(strtotime($row->submission_date)) .$late_sub_text. "</td>";
 
 				if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE) {
-					$tool_content .="<td class='col-md-1' class='text-center'>
+					$tool_content .="<td>
 										<div class='form-group'>
                                             $grade_review_field
 											$condition
 										</div>
 									</td>";
 				}
-                $tool_content.="<td class='col-md-1' class='text-center'>
+                $tool_content.="<td>
 									<div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
 										$grade_field
 										<span class='help-block Accent-200-cl'>".Session::getError("grade.$row->id")."</span>
 									</div>
 								</td>
-								<td class='text-center'>
+								<td class='text-end'>
                                         $icon_field
                                     <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
                                         <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
@@ -5295,8 +5295,8 @@ function show_assignment($id, $display_graph_results = false) {
                         </div>
                     </div>
                 </div>
-                <div class='float-end'>
-                    <button class='btn submitAdminBtn' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
+                <div class='mt-4'>
+                    <button class='btn submitAdminBtn submitAdminBtnDefault' type='submit' name='submit_grades' $disabled_submit>$langGradeOk</button>
                 </div>
                 </form>";
             } else {
@@ -5420,16 +5420,16 @@ function show_non_submitted($id) {
                 $num_of_submissions = sprintf("$m[more_non_submissions]", $num_results);
             }
                 $tool_content .= "
-                            <p><div class='sub_title1 bg-light p-2 text-center fw-bold Borders normalColorBlueText'>$m[WorkUserNoSubmission]:</div><p>
-                            <p class='text-center'>$num_of_submissions</p>
+                            <p><div class='sub_title1 Warning-100-bg p-2 mt-4 rounded-2'>$m[WorkUserNoSubmission]:</div><p>
+                            <p class='text-start form-label py-3'>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive mt-0'>
                             <table class='table-default'>
-                            <tr class='list-header'>
-                          <th width='3'>&nbsp;</th>";
+                            <thead><tr class='list-header'>
+                          <th width='3'>#</th>";
                 sort_link($m['username'], 'username');
                 sort_link($m['am'], 'am');
-                $tool_content .= "</tr>";
+                $tool_content .= "</tr></thead>";
                 $i=1;
                 foreach ($users as $row => $value){
                     $tool_content .= "<tr>

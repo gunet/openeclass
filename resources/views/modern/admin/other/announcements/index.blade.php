@@ -52,13 +52,13 @@
                     @if ($announcements)
                     <div class='col-12'>
                         <div class='table-responsive mt-0'>
-                            <table id='adminAnnouncementsTable' class='table-default'>
+                            <table id='adminAnnouncementsTable' class='table-default'><thead>
                                 <tr class='list-header'>
                                     <th>{{ trans('langAnnouncement') }}</th>
                                     <th>{{ trans('langDate') }}</th>
                                     <th>{{ trans('langNewBBBSessionStatus') }}</th>
-                                    <th class="text-center">{!! icon('fa-gears') !!}</th>
-                                </tr>
+                                    <th></th>
+                                </tr></thead>
                                 @foreach ($announcements as $announcement)
                                     <tr{!! !$announcement->visible
                                         || !is_null($announcement->end) && $announcement->end <= date("Y-m-d H:i:s")
@@ -97,7 +97,7 @@
                                                 </ul>
                                             </div>
                                         </td>
-                                        <td class="option-btn-cell text-center">{!!
+                                        <td class="option-btn-cell text-end">{!!
                                             action_button([
                                                 [
                                                     'title' => trans('langEditChange'),

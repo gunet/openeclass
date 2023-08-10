@@ -80,9 +80,9 @@ if (isset($_GET['delete'])) {
         // Form #2 - edit sections
         $tool_content .= "
         
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+        <form class='border-card py-3 px-4 rounded-2 mt-4'method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
-        <h5 class='control-label-notes mt-3'>$langSections</h5>
+        <h3>$langSections</h3>
         <input type='hidden' name='id' value='$ebook_id' />
         <div class='table-responsive mt-0'>
           <table class='table-default'>
@@ -276,15 +276,15 @@ if (isset($_GET['delete'])) {
                         ));
         $tool_content .= "
         <div class='col-sm-12 mb-3'>
-            <div class='panel panel-default'>
-                <div class='panel-heading bgTheme'>
+            <div class='panel panel-primary'>
+                <div class='panel-heading'>
                     <div class='panel-title'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
                             <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
                         </a>
                     </div>
                 </div>
-                <div class='panel-body ps-1 pb-1 panel-body-electronicBook'>
+                <div class='panel-body panel-body-electronicBook'>
                     <div class='row p-2 margin-bottom-fat'>
                         <div class='col-sm-2'>
                             <strong class='control-label-notes'>$langTitle:</strong>
@@ -348,12 +348,12 @@ if (isset($_GET['delete'])) {
                 <fieldset>
                 <div class='table-responsive mt-0'>
                     <table class='table-default'>
-                    <tr class='list-header'>
+                    <thead><tr class='list-header'>
                       <th>$langFileName</th>
                       <th>$langTitle</th>
                       <th>$langSection</th>
                       <th>$langReorder</th>
-                    </tr>";
+                    </tr></thead>";
                    foreach ($q as $r) {
                        $file_id = $r->file_id;
                        $display_id = $r->sid . ',' . $r->ssid;
@@ -367,7 +367,7 @@ if (isset($_GET['delete'])) {
                        $tool_content .= "
                             <tr>
                                 <td class='smaller'><a href='show.php?$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
-                                <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
+                                <td><input class='form-control' type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
                                 <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
                                 <td class='center' style='width: 50px;'>
                                     <input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
@@ -393,7 +393,7 @@ if (isset($_GET['delete'])) {
                    $tool_content .= "
                     <tr>
                       <td colspan='3'>&nbsp;</td>
-                      <td><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></td>
+                      <td><input class='btn submitAdminBtn submitAdminBtnDefault float-end' type='submit' name='submit' value='$langSubmit'></td>
                     </table></div>
                 </fieldset>
              </form>";

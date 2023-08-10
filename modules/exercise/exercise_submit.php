@@ -620,7 +620,7 @@ if (isset($timeleft)) { // time remaining
         $timeleft = 1;
     }
     $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>";
-    $tool_content .= "<div class='col-sm-12'><h4 class='text-center text-dark mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
+    $tool_content .= "<div class='col-sm-12'><h4 class='d-flex align-items-center gap-2 text-white mb-0'>$langRemainingTime: <span id='progresstime'>$timeleft</span></h4></div>";
     $tool_content .= "</span></div>";
 }
 

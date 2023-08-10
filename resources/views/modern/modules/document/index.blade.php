@@ -247,7 +247,7 @@
                                                 @endif
                                                 
                                                 @unless ($is_in_tinymce)
-                                                    <td class='{{ $can_upload? 'option-btn-cell': 'text-end'}}'>
+                                                    <td class='text-end {{ $can_upload? 'option-btn-cell': '' }}'>
                                                         {!! $file->action_button !!}
                                                     </td>
                                                 @endif

@@ -460,7 +460,7 @@ function user_gradebook_settings() {
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook->id) . "&editUsers=1'>
                     <div class='form-group'>
-                        <label class='col-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
+                        <h3>$langGradebookInfoForUsers</h3>
                     </div>
                     <div class='form-group mt-4'>
                     <label class='col-sm-6 control-label-notes mb-2'>$langUserDuration</label>
@@ -511,21 +511,25 @@ function user_gradebook_settings() {
                         <div class='col-sm-12 col-sm-offset-2'>
                             <div class='table-responsive'>
                                 <table id='participants_tbl' class='table-default hide'>
-                                    <tr class='title1 list-header'>
-                                      <td id='users'>$langStudents</td>
-                                      <td class='text-center'>$langMove</td>
-                                      <td>$langParticipate</td>
-                                    </tr>
+                                    <thead>
+                                        <tr class='title1 list-header'>
+                                            <td id='users' class='form-label'>$langStudents</td>
+                                            <td class='form-label text-center'>$langMove</td>
+                                            <td class='form-label'>$langParticipate</td>
+                                        </tr>
+                                    </thead>
                                     <tr>
                                       <td>
-                                        <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
+                                        <select class='form-select h-100' id='users_box' size='10' multiple></select>
                                       </td>
-                                      <td class='text-center'>
-                                        <input class='btn btn-outline-primary rounded-pill' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
-                                        <input class='btn btn-outline-primary rounded-pill mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                      <td>
+                                        <div class='d-flex align-items-center flex-column gap-2'>
+                                            <input class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' />
+                                            <input class='btn submitAdminBtn submitAdminBtnClassic' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                        </div>
                                       </td>
                                       <td width='40%'>
-                                        <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
+                                        <select class='form-select h-100' id='participants_box' name='specific[]' size='10' multiple></select>
                                       </td>
                                     </tr>
                                 </table>
@@ -683,7 +687,7 @@ function student_view_gradebook($gradebook_id, $uid) {
         if(weightleft($gradebook_id, 0) != 0) {
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGradebookAlertToChange</span></div>";
         }
-        $tool_content .= "<div class='badge bgEclass  p-2'>" . display_user($uid, false, false) . "</div>";
+        $tool_content .= "<div class='badge Primary-200-bg p-2'>" . display_user($uid, false, false) . "</div>";
         $tool_content .= "<div class='table-responsive'><table class='table-default' >";
         $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
                               <th>$langGradebookActivityDate2</th>

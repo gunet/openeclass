@@ -200,30 +200,30 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   ================================================================ */
 
 // comment
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-admin'>
+$tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
                     <div class='panel-heading'>
                         <span class='panel-title'>$langLearningPathData</span>
                     </div>";
-$tool_content .= "<table class='table-default' style='border-radius:0px; border-bottom-left-radius:15px; border-bottom-right-radius:15px;'>";
+$tool_content .= "<div class='panel-body'><table class='table-default'>";
 $tool_content .= "<tr><th width='70'>$langTitle:</th>";
 $tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= "<tr><th width='90'>$langDescription:</th>";
     $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 }
-$tool_content .= "</table></div></div>";
+$tool_content .= "</table></div></div></div>";
 
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<tr class='list-header'><th colspan='" . ($maxDeep + 2) . "'><div class='align-left'>&nbsp;&nbsp;<strong>" . $langLearningPathStructure . "</strong></div></th>";
+$tool_content .= "<thead><tr class='list-header'><th colspan='" . ($maxDeep + 2) . "'><div class='align-left'><strong>" . $langLearningPathStructure . "</strong></div></th>";
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= "<th class='text-center'><strong>$langProgress</strong></th>";
+    $tool_content .= "<th><strong>$langProgress</strong></th>";
 }
 
-$tool_content .= "</tr>";
+$tool_content .= "</tr></thead>";
 
 // ------------------ module table list display -----------------------------------
 if (!isset($globalProg)) {
@@ -261,7 +261,7 @@ foreach ($flatElementList as $module) {
     }
     $colspan = ($maxDeep - $module['children'] + 1)+1;
     $tool_content .= "<tr>" . $spacingString . "
-      <td class='text-left' colspan='" . $colspan . "'>";
+      <td colspan='" . $colspan . "'>";
 
     //-- if chapter head
     if ($module['contentType'] == CTLABEL_) {
@@ -328,7 +328,7 @@ foreach ($flatElementList as $module) {
 //            $first_blocked = true;
 //        }
         // display the progress value for current module
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($progress, 1) . "</td>";
+        $tool_content .= "<td>" . disp_progress_bar($progress, 1) . "</td>";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
         $tool_content .= '<td>&nbsp;</td>' . "\n";
@@ -345,8 +345,8 @@ foreach ($flatElementList as $module) {
 
 if ($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= "<tr><th colspan='" . ($maxDeep + 2) . "' class='text-right'>$langGlobalProgress</th> 
-                          <th class='text-right'>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</th> 
+    $tool_content .= "<tr><th colspan='" . ($maxDeep + 2) . "'>$langGlobalProgress</th> 
+                          <th>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</th> 
                       </tr>";
 }
 $tool_content .= "</table></div>";

@@ -143,8 +143,8 @@ if (isset($_POST['submitCat'])) {
                 <table class='table-default'>
                     <tbody>
                         <tr class='list-header'>
-                            <th class='ps-3'>$langTitle</th>
-                            <th class='text-center'>".icon('fa-gears')."</th>
+                            <th>$langTitle</th>
+                            <th></th>
                         </tr> 
                     ";
         foreach ($q_cats as $q_cat) {
@@ -165,7 +165,7 @@ if (isset($_POST['submitCat'])) {
             $tool_content .= "
                         <tr>
                             <td>$q_cat->question_cat_name</td>
-                            <td class='option-btn-cell text-center'>$action_button</td>
+                            <td class='option-btn-cell text-end'>$action_button</td>
                         </tr>";
         }
         $tool_content .= "                

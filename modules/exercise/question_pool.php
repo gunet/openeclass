@@ -288,7 +288,7 @@ foreach ($q_cats as $q_cat) {
     $q_cat_options .= "<option value='" . $q_cat->question_cat_id . "' ".(isset($categoryId) && $categoryId == $q_cat->question_cat_id ? "selected":"").">$q_cat->question_cat_name</option>\n";
 }
 //Start of filtering Component
-$tool_content .= "<div class='form-wrapper'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
+$tool_content .= "<div class='form-wrapper mb-4'><form class='form-inline' role='form' name='qfilter' method='get' action='$_SERVER[REQUEST_URI]'><input type='hidden' name='course' value='$course_code'>
                     ".($fromExercise? "<input type='hidden' name='fromExercise' value='$fromExercise'>" : "")."
                     <div class='form-group'>
                         <select onChange = 'document.qfilter.submit();' name='exerciseId' class='form-select'>
@@ -319,7 +319,7 @@ if ($fromExercise) {
     $tool_content .= "<input type='hidden' name='fromExercise' value='$fromExercise'>";
 }
 
-$tool_content .= "<div class='table-responsive'><table class='table-default' id='questions'>";
+$tool_content .= "<table class='table-default' id='questions'>";
 
 //START OF BUILDING QUERIES AND QUERY VARS
 if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercise
@@ -392,7 +392,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     $tool_content .= "<thead>
     <tr class='list-header'>
       <th>$langQuesList</th>
-      <th class='text-center'>".icon('fa-gears')."</th>
+      <th></th>
     </tr></thead><tbody>";
     foreach ($result as $row) {
         $question_temp = new Question();
@@ -424,7 +424,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
             } else {
                 $warning_message = $langConfirmYourChoice;
             }
-            $tool_content .= "<td class='option-btn-cell text-center'>" .
+            $tool_content .= "<td class='option-btn-cell text-end'>" .
                 action_button([
                     [ 'title' => $langEditChange,
                       'url' => "admin.php?course=$course_code&amp;modifyAnswers=" . $row->id,
@@ -449,7 +449,7 @@ if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
         }
         unset($question_temp);
     }
-    $tool_content .= "</tbody></table></div>";
+    $tool_content .= "</tbody></table>";
 }
 
 $tool_content .= "

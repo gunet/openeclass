@@ -278,7 +278,7 @@ if ($exerciseRange > 0) { // exercise grade range (if any)
 }
 
 if ($showScore) {
-    $tool_content .= "<p class='panel-title'>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</p>";
+    $tool_content .= "<p>$langTotalScore: $canonicalized_message_range&nbsp;&nbsp;$message_range</p>";
 }
 $tool_content .= "
     <p>$langStart: <em>" . format_locale_date(strtotime($exercise_user_record->record_start_date), 'short') . "</em>
@@ -303,7 +303,7 @@ $tool_content .= "<div class='row margin-bottom-fat mt-3'>
     <div class='col-12 d-flex justify-content-center align-items-center'>";
 if ($is_editor && $exercise_user_record->attempt_status == ATTEMPT_PENDING) {
     $tool_content .= "
-            <div class='btn-group btn-group-sm' style='float:right;'>
+            <div class='btn-group btn-group-sm'>
                 <a class='btn submitAdminBtn' id='all'>$langAllExercises</a>
                 <a class='btn cancelAdminBtn ms-1' id='ungraded'>$langAttemptPending</a>
             </div>";
@@ -353,9 +353,9 @@ if (count($exercise_question_ids) > 0) {
         
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "
-            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise mb-3'>
-            <tr class='active'>
-              <td class='bgTheme' colspan='2'>
+            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise mb-4'>
+            <thead><tr class='active'>
+              <td class='px-0'>
                 <strong><u>$langQuestion</u>: $i</strong>";
 
         if ($answerType == FREE_TEXT) {
@@ -380,10 +380,10 @@ if (count($exercise_question_ids) > 0) {
              }
         }
         $tool_content .= "<small>($questionType)</small>"; // question type
-        $tool_content .= "</td></tr>";
+        $tool_content .= "</td></tr></thead>";
 
-        $tool_content .= "<tr><td colspan='2'>";
-        $tool_content .= "<strong>" . q_math($questionName) . "</strong><br>" . standard_text_escape($questionDescription);
+        $tool_content .= "<tr><td class='px-0'>";
+        $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
             $tool_content .= "<div style='padding: 20px;' class='text-center'>
                                 <img src='../../$picturePath/quiz-" . $row->question_id . "'>
@@ -393,7 +393,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "</td></tr>";
 
         if (!is_null($choice)) {
-            $tool_content .= "<tr class='active'><th colspan='2'><u>$langAnswer</u></th></tr>";
+            $tool_content .= "<tr class='active'><th class='px-0'><u>$langAnswer</u></th></tr>";
         }
 
         $questionScore = 0;
@@ -665,7 +665,7 @@ if (count($exercise_question_ids) > 0) {
         }
 
         if (!is_null($questionFeedback)) {
-            $tool_content .= "<tr style='background-color:#fffbe3'><td colspan='2'>";
+            $tool_content .= "<tr><td class='px-0'>";
             $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }
@@ -679,8 +679,8 @@ if (count($exercise_question_ids) > 0) {
                         $value = round($questionScore, 2);
                     }
                     $tool_content .= "<tr><th colspan='2'>";
-                    $tool_content .= "<span style='float:right;'>
-                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='6' size='6' name='questionScore[$row->question_id]' value='$value'>
+                    $tool_content .= "<span>
+                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox form-control' maxlength='6' size='6' name='questionScore[$row->question_id]' value='$value'>
                                    <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
                                    <strong>/$questionWeighting</strong>
                                     </span>";
@@ -790,7 +790,7 @@ if ($checking) {
 }
 
 if (!isset($_GET['pdf']) and $is_editor) {
-    $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center mt-5'><a class='btn submitAdminBtn' href='index.php' id='submitButton'><span id='text_submit' class='vsmall-text'>$langSubmit</span></a></div>";
+    $tool_content .= "<div class='col-12 d-flex justify-content-start align-items-center mt-5'><a class='btn submitAdminBtn submitAdminBtnDefault' href='index.php' id='submitButton'><span id='text_submit' class='TextBold'>$langSubmit</span></a></div>";
 }
 
 if (isset($_GET['pdf'])) {

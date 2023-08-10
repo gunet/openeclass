@@ -110,7 +110,7 @@ $tool_content .= "<div class='table-responsive'>
             <tr class='list-header'>
                 <th>$langStudent</th>
                 <th>$langEmail</th>
-                <th width='120'>$langAm</th>
+                <th>$langAm</th>
                 <th>$langGroup</th>
                 <th>$langTotalTimeSpent</th>
                 <th>$langProgress</th>
@@ -157,15 +157,15 @@ foreach ($usersList as $user) {
     } else {
         $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
     }
-    $tool_content .= "<td class='text-start'>" . q($user->email). "</td>
-                      <td class='text-center'>" . q($user->am) . "</td>";
+    $tool_content .= "<td>" . q($user->email). "</td>
+                      <td>" . q($user->am) . "</td>";
     if (!isset($_GET['pdf'])) {
-        $tool_content .= "<td class='text-start' > " . user_groups($course_id, $user->id) . "</td>";
+        $tool_content .= "<td> " . user_groups($course_id, $user->id) . "</td>";
     } else {
-        $tool_content .= "<td class='text-start' > " . user_groups($course_id, $user->id, false) . "</td>";
+        $tool_content .= "<td> " . user_groups($course_id, $user->id, false) . "</td>";
     }
-    $tool_content .= "<td class='text-end'>" . q($globaltime) . "</td>
-            <td class='text-end' width='120'>"
+    $tool_content .= "<td>" . q($globaltime) . "</td>
+            <td>"
             . disp_progress_bar($total, 1) . "
             </td>";
     $tool_content .= "</tr>";

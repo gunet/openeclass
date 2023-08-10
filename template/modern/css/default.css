@@ -219,6 +219,10 @@ img {
   height: 16px;
 }
 
+.max-input-width{
+  max-width: 255px;
+}
+
   
 /**********************************************************************************************************************/
 /************************************************* COLORS *************************************************************/
@@ -1168,9 +1172,15 @@ body .form-action-button-mydropdowns{
   border: solid 1px #E8EDF8;
 }
 
-.menu-popover.submitAdminBtn{
+.menu-popover.submitAdminBtn,
+.btn-group-default .submitAdminBtn{
   border: 0px;
   color: #9BA9C1;
+  background-color: transparent;
+}
+.menu-popover.submitAdminBtn:hover,
+.btn-group-default .submitAdminBtn:hover{
+  background-color: transparent;
 }
 
 .menu-popover .hidden-xs{
@@ -1597,7 +1607,6 @@ body .form-action-button-popover{
 /****************************************** CHECKBOXES - RADIOS - INPUT IN FORMS **************************************/
 /**********************************************************************************************************************/
 
-/* this is d-inline-flex between inputs-radio and texts */
 .radio label{ 
   display:inline-flex; justify-content: center; align-items:center ; 
   color:#2B3944; font-size: 14px; 
@@ -1609,7 +1618,6 @@ body .form-action-button-popover{
   cursor: pointer;
 } 
 
-/* this is inputs-radio for course status */
 .radio label .fa {
   font-size: 14px;
   position: absolute;
@@ -1622,23 +1630,11 @@ body .form-action-button-popover{
   margin-top:0px; 
 } 
 
-/* .radio .help-block{
-  margin-top: -10px;
-} */
-
-/* .radio:has(input[type='radio']:checked) .help-block{
-  font-size: 12px;
-  font-weight: 600; font-style: normal;
-  color:#2B3944;
-} */
 .radio .help-block{
   margin-left: 34px;
   margin-top: -10px;
 }
 
-/**************************************************************/
-
-/* this is space between input-radio and texts */
 input[type="radio"]{
   margin: 0 10px 0 0px;
   appearance: none;
@@ -1680,6 +1676,7 @@ input[type="radio"]:disabled{
   cursor: not-allowed;
   opacity: 0.4;
 }
+
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
@@ -1690,7 +1687,6 @@ input[type="radio"]:disabled{
 }
 
 /*******************************************************************/
-
 
 .label-container {
   display: flex;
@@ -1769,10 +1765,8 @@ input:-webkit-autofill:active {
   background: url(../img/form-image.png);
   background-size: cover;
   background-repeat: no-repeat;
-  
 }
 
-/* dates checkboxes inside form-wrapper */
 .form-wrapper.form-edit .input-group-addon input[type=checkbox]{ 
   margin-top:10px; 
 }
@@ -1783,18 +1777,11 @@ input:-webkit-autofill:active {
   background-color: #ffffff;
 }
 
-.form-wrapper input[type=text], 
-.form-wrapper input[type=password], 
-.form-wrapper input[type=number],
-.forms-panels-admin input[type=text], 
-.forms-panels-admin input[type=password], 
-.forms-panels-admin input[type=number],
-.table-default input[type=text], 
-.table-default input[type=password], 
-.table-default input[type=number],
-.panel input[type=text], 
-.panel input[type=password], 
-.panel input[type=number]{
+input[type=text], 
+input[type=password], 
+input[type=number],
+input[type=search],
+input[type=text]{
   height:40px;
   border-radius: 4px;
   margin-top: 5px;
@@ -1804,7 +1791,8 @@ input:-webkit-autofill:active {
   font-size: 14px;
   font-weight: 400; font-style: normal;
 }
-.form-wrapper textarea, .forms-panels-admin textarea{
+
+textarea{
   min-height:106px;
   border-radius: 4px;
   margin-top: 5px;
@@ -1812,20 +1800,20 @@ input:-webkit-autofill:active {
   background-color: white;
 }
 
-.form-wrapper input[type="text"]:focus, .forms-panels-admin input[type="text"]:focus,.table-default input[type="text"]:focus, .panel input[type="text"]:focus,
-.form-wrapper input[type="datetime"]:focus, .forms-panels-admin input[type="datetime"]:focus, .table-default input[type="datetime"]:focus, .panel input[type="datetime"]:focus,
-.form-wrapper input[type="datetime-local"]:focus, .forms-panels-admin input[type="datetime-local"]:focus, .table-default input[type="datetime-local"]:focus, .panel input[type="datetime-local"]:focus,
-.form-wrapper input[type="date"]:focus, .forms-panels-admin input[type="date"]:focus, .table-default input[type="date"]:focus, .panel input[type="date"]:focus,
-.form-wrapper input[type="month"]:focus, .forms-panels-admin input[type="month"]:focus, .table-default input[type="month"]:focus, .panel input[type="month"]:focus,
-.form-wrapper input[type="time"]:focus, .forms-panels-admin input[type="time"]:focus, .table-default input[type="time"]:focus, .panel input[type="time"]:focus,
-.form-wrapper input[type="week"]:focus, .forms-panels-admin input[type="week"]:focus, .table-default input[type="week"]:focus, .panel input[type="week"]:focus,
-.form-wrapper input[type="number"]:focus, .forms-panels-admin input[type="number"]:focus, .table-default input[type="number"]:focus, .panel input[type="number"]:focus,
-.form-wrapper input[type="email"]:focus, .forms-panels-admin input[type="email"]:focus, .table-default input[type="email"]:focus, .panel input[type="email"]:focus,
-.form-wrapper input[type="url"]:focus, .forms-panels-admin input[type="url"]:focus, .table-default input[type="url"]:focus, .panel input[type="url"]:focus,
-.form-wrapper input[type="search"]:focus, .forms-panels-admin input[type="search"]:focus, .table-default input[type="search"]:focus, .panel input[type="search"]:focus,
-.form-wrapper input[type="tel"]:focus, .forms-panels-admin input[type="tel"]:focus, .table-default input[type="tel"]:focus, .panel input[type="tel"]:focus,
-.form-wrapper input[type="color"]:focus, .forms-panels-admin input[type="color"]:focus, .table-default input[type="color"]:focus, .panel input[type="color"]:focus,
-.form-wrapper .form-control:focus, .forms-panels-admin .form-control:focus, .table-default .form-control:focus, .panel .form-control:focus,
+input[type="text"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.form-control:focus,
 .uneditable-input:focus {   
   border-color: #0073E6;
   box-shadow: none !important;
@@ -1834,16 +1822,16 @@ input:-webkit-autofill:active {
   color:#687DA3;
   font-weight: 400; font-style: normal;
 }
-.form-wrapper textarea:focus, .panel textarea:focus, .table-default textarea:focus{
+
+textarea:focus{
   background-color: #ffffff !important;
 }
 
-.form-wrapper .form-control:disabled, .table-default .form-control:disabled, .panel .form-control:disabled{
+.form-control:disabled{
   border-color: #687DA3;
   background-color: #E8EDF8 ;
 }
 
-/* select in form-wrapper */
 select.form-select {
   background-color: #ffffff;
   border-radius: 4px;
@@ -1868,7 +1856,7 @@ select.form-select option{
   font-style: normal;
 }
 
-.form-wrapper .form-select:disabled, .table-default .form-select:disabled, .panel .form-select:disabled{
+select.form-select:disabled{
   opacity: 0.4;
   border-bottom: solid 2px #f9f8fa;
   border-image: none;
@@ -1925,7 +1913,7 @@ label:has(input[type="checkbox"]:disabled){
   z-index: 0 !important;
 }
 
-.submitAdminBtnDefault{
+.submitAdminBtnDefault, input[type="submit"]{
   background-color: #0073E6;
   color: #ffffff;
   border: solid thin;
@@ -1941,7 +1929,7 @@ label:has(input[type="checkbox"]:disabled){
   letter-spacing: 0px;
   line-height: 16px;
 }
-.submitAdminBtnDefault:hover {
+.submitAdminBtnDefault:hover, input[type="submit"]:hover {
   background-color: #2546F0;
   color: #ffffff;
   text-decoration: none;
@@ -2405,7 +2393,7 @@ label:has(input[type="checkbox"]:disabled){
   border: solid 1px #E8EDF8;
 }
 .panel-default .panel-heading, .panel-action-btn-default .panel-heading {
-  background: #63717c;
+  background: #4F6893;
   border-color: #f2f2f2;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -2834,8 +2822,14 @@ table:has(tbody) tbody > tr{
 
 
 
-table ,tr td{
+table ,
+tr td{
   border:0px;
+}
+@media(min-width:992px){
+  tbody tr td{
+    word-break: break-word;
+  }
 }
 @media(min-width:992px){
   .table-default tbody {
@@ -2863,7 +2857,8 @@ table ,tr td{
     border: 6px solid transparent;
     background-clip: content-box;
   }
-  .table-default thead, .table-default tbody tr {
+  .table-default thead, 
+  .table-default tbody tr {
     display:table;
     width:100%;
     table-layout:fixed;
@@ -2872,19 +2867,24 @@ table ,tr td{
 }
 
 
-thead tr th{
-  padding: 10px 0px 10px 0px;
+thead tr th, 
+tfoot tr th{
+  padding: 10px 10px 10px 10px;
 }
+
 tbody tr{
   border-bottom: solid 1px #EFF6FF;
 }
+
 tbody tr td{
-  padding: 10px 0px 10px 0px;
+  padding: 10px 10px 10px 10px;
 }
-thead {
+
+thead, tbody .list-header {
   width:100%; 
   border-bottom: solid 2px #0073E6;
 }
+
 table {
   width:100%;
 }
@@ -2894,9 +2894,18 @@ th .fa-gears{
   display: none;
 }
 
+th,td{
+  width: auto !important;
+  text-align: left !important;
+}
 
+tr.warning{
+  background-color: #FFF4D1;
+}
 
-
+tr.danger{
+  background-color: #FDEFE9;
+}
 
 
 
@@ -3916,12 +3925,12 @@ div[role="progressbar"]::before {
 }
 
 .title1{ 
-  background-color: #0073E6; 
+  background-color: #ffffff; 
 }
 
-.title1 td{ 
+/* .title1 td{ 
   color:white; 
-}
+} */
 
 
 /**********************************************************************************************************************/

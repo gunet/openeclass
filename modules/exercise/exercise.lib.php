@@ -54,15 +54,15 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $qNumber = "$question_number / $nbrQuestions";
     }
     $tool_content .= "
-            <div class='panel panel-default qPanel mt-3' id='qPanel$questionId'>
-              <div class='panel-heading bgTheme'>
+            <div class='panel panel-primary qPanel mt-3' id='qPanel$questionId'>
+              <div class='panel-heading'>
                 <div class='panel-title'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
                 </div>
             </div>
             <div class='panel-body'>
-                <h6 class='mb-2'>" . q_math($questionName) . "</h6>
+                <h4 class='mb-2'>" . q_math($questionName) . "</h4>
                 <div class='mb-2'>$questionDescription</div>
                 <div class='text-center'>" .
                     (file_exists($picturePath . '/quiz-' . $questionId) ?
@@ -86,11 +86,11 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $cpt2 = 1;
         $Select = array();
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                            <tr class='list-header'>
+                            <thead><tr class='list-header'>
                               <th>$langColumnA</th>
                               <th>$langMakeCorrespond</th>
                               <th>$langColumnB</th>
-                            </tr>";
+                            </tr></thead>";
     }
 
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) {
@@ -112,7 +112,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                     static $id = 0;
                     $id++;
                     $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
-                    return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
+                    return "<input class='form-control' type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
             $tool_content .= $answer;
@@ -167,7 +167,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                 $tool_content .= "<tr>
                                   <td><strong>$cpt2.</strong> " . q($answer) . "</td>
                                   <td><div class='text-start'>
-                                   <select name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
+                                   <select class='form-select w-50' name='choice[$questionId][$answerId]' onChange='questionUpdateListener($question_number, $questionId);'>
                                      <option value='0'>--</option>";
 
                 // fills the list-box
@@ -175,7 +175,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                     $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
                     $tool_content .= "<option value=\"" . q($key) . "\" $selected>{$val['Lettre']}</option>";
                 }
-                $tool_content .= "</select></div></td><td width='200'>";
+                $tool_content .= "</select></div></td><td>";
                 if (isset($Select[$cpt2])) {
                     $tool_content .= '<strong>' . q($Select[$cpt2]['Lettre']) . '.</strong> ' . q($Select[$cpt2]['Reponse']);
                 } else {
@@ -459,8 +459,8 @@ function display_exercise($exercise_id) {
                                 $icon_choice = "fa-square";
                             }
                             $tool_content .= icon($icon_choice) . "</div>";
-                            $tool_content .= "</td><td style='width: 500px;'>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
-                                               <td style='width: 250px;'>" . $answerComment . "</td>
+                            $tool_content .= "</td><td>" . standard_text_escape($answerTitle) . " <strong><small>($langScore: $answerWeighting)</small></strong></td>
+                                               <td>" . $answerComment . "</td>
                                         </tr>";
                         } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                             $tool_content .= "<tr><td>" . standard_text_escape(nl2br($answerTitle)) . " <strong><small>($langScore: " . preg_replace('/,/', ' : ', "$answerWeighting") . ")</small></strong>
@@ -488,7 +488,7 @@ function display_exercise($exercise_id) {
                             $tool_content .= "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answer_weight)</small></strong>";
                             $tool_content .= "</td></tr>";
                         } else {
-                            $tool_content .= "<tr><td style='width: 450px;'>" . standard_text_escape($answerTitle) . "</td>";
+                            $tool_content .= "<tr><td>" . standard_text_escape($answerTitle) . "</td>";
                             $tool_content .= "<td>" . $answer->answer[$answerCorrect] . "&nbsp;&nbsp;&nbsp;<strong><small>($langScore: $answerWeighting)</small></strong></td>";
                             $tool_content .= "</tr>";
                         }
@@ -502,7 +502,7 @@ function display_exercise($exercise_id) {
             }
 
             $tool_content .= "<tr class='active'><th colspan='$colspan'>";
-            $tool_content .= "<span style='float:right;'>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
+            $tool_content .= "<span>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
             $tool_content .= "</th></tr>";
         }
         $tool_content .= "</table></div></div>";

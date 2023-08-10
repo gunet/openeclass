@@ -107,12 +107,12 @@ $result = Database::get()->queryArray(buildRequestModules());
 
 $tool_content .= '<form name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n\n";
 $tool_content .= '<table class="table-default">'
-        . '<tr class="list-header">'
-        . '<th class="text-start">'.$langLearningModule.'</th>'
-        . '<th width="10"><div align="center">'
+        . '<thead><tr class="list-header">'
+        . '<th>'.$langLearningModule.'</th>'
+        . '<th>'
         . $langSelection
-        . '</div></th>'
-        . '</tr>';
+        . '</th>'
+        . '</tr></thead>';
 
 // Display available modules
 $atleastOne = FALSE;
@@ -163,8 +163,8 @@ if (!$atleastOne) {
 // Display button to add selected modules
 if ($atleastOne) {
     $tool_content .= '<tr>'
-            . '<th colspan="2"><div align="right">' . "\n"
-            . '<button class="btn submitAdminBtn" value="' . $langAddOneModuleButton . '" />'.$langAddOneModuleButton.'</button>' . "\n"
+            . '<th colspan="2"><div>' . "\n"
+            . '<button class="btn submitAdminBtn submitAdminBtnDefault" value="' . $langAddOneModuleButton . '" />'.$langAddOneModuleButton.'</button>' . "\n"
             . '<input type="hidden" name="cmdglobal" value="add"></div>' . ""
             . '</th>'
             . '</tr>';

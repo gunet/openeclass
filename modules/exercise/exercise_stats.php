@@ -75,7 +75,7 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th colspan='4' class='text-center'>$langAttempts</th>
+                    <th>$langAttempts</th>
                 </tr>
             </thead>
             <tbody>
@@ -93,9 +93,9 @@ $tool_content .= "
                 </tr>
             </tbody>
             <tfoot>
-                <tr class='active'>
-                    <th class='bg-light ps-3 text-start control-label-notes' colspan='3'>$langTotal:</th>
-                    <th class='bg-light ps-4 text-start fw-bold text-dark' colspan='1'>$total_attempts</th>
+                <tr class='active badge Primary-200-bg mt-2'>
+                    <th class='form-label'>$langTotal:</th>
+                    <th class='form-label'>$total_attempts</th>
                 </tr>            
             </tfoot>
         </table>
@@ -104,7 +104,7 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th colspan='2' class='text-center'>$langScore</th>
+                    <th>$langScore</th>
                 </tr>
             </thead>
             <tbody>
@@ -127,7 +127,7 @@ $tool_content .= "
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th colspan='2' class='text-center'>$langStudents</th>
+                    <th>$langStudents</th>
                 </tr>
             </thead>
             <tbody>
@@ -145,17 +145,19 @@ $tool_content .= "
 //Questions Table
 $questionList = $objExercise->selectQuestionList();
 $tool_content .= "
-    <div class='col-sm-12 mt-4'>
-        <div class='form-wrapper form-edit p-2 rounded'>
-            <h4 class='text-center control-label-notes pt-2'>$langQuestions</h4>
-        </div>
-    </div>
-    <div class='table-responsive'>
+
+
+    <div class='col-12 mt-5'>
+    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'><h3>$langQuestions</h3></div>
+    <div class='card-body'>
+
+    <div class='table-responsive mt-0'>
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th class='ps-2'>$langTitle</th>
-                    <th class='ps-2'>$langSuccessPercentage</th>
+                    <th>$langTitle</th>
+                    <th>$langSuccessPercentage</th>
                 </tr>
             </thead>
             <tbody>";
@@ -216,5 +218,6 @@ foreach($questionList as $id) {
 $tool_content .= "
             </tbody>
         </table>
-    </div>";
+    </div>
+    </div></div></div>";
 draw($tool_content, 2, null, $head_content);

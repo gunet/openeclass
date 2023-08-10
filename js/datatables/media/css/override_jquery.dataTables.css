@@ -6,8 +6,12 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
   table.dataTable thead th, table.dataTable thead td {
-      padding: 10px;
+    padding: 10px 10px 10px 10px;
       border-bottom: 1px solid #ffffff;
+  }
+
+  table.dataTable tbody tr td{
+    padding: 10px 10px 10px 10px;
   }
 
   table.dataTable.no-footer {
@@ -26,6 +30,7 @@
 
   th.sorting, th.sorting_desc, th.sorting_asc{
        width: auto !important;
+       padding: 10px 10px 10px 10px;
   }
 
   th.sorting_disabled{
@@ -100,7 +105,7 @@
   } */
 
   /**************************************************** form-control ************************************************************************/
-  .dataTables_wrapper .form-control,  .dataTables_wrapper input[type="search"]{
+  /* .dataTables_wrapper .form-control,  .dataTables_wrapper input[type="search"]{
     height:40px !important;
     border-radius: 4px !important;
     border-color:#687DA3 !important;
@@ -117,7 +122,7 @@
     background-color: #ffffff;
     color:#0073E6;
     font-family: 'Manrope' , sans-serif; font-weight: 400;
-  }
+  } */
 
   /********************************************************* form-select **********************************************************************/
   .dataTables_wrapper select {
@@ -146,6 +151,7 @@
     align-items: center;
     height: 30px;
     padding: 15px;
+    padding-top: 0.755em !important;
   }
 
   .dataTables_paginate.paging_simple_numbers span,  .dataTables_paginate.paging_full_numbers span{

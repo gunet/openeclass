@@ -3884,7 +3884,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     }
 
     return $primary_form_begin .
-         "<div class='btn-group btn-group-sm gap-2' role='group' aria-label='...'>
+         "<div class='btn-group btn-group-sm btn-group-default gap-2' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
           </div>" . $primary_form_end;

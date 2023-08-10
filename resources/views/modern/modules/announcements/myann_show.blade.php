@@ -14,7 +14,7 @@
                             <th>{{ trans('langDate') }}</th>
                             @if ($is_editor)
                                 <th>{{ trans('langNewBBBSessionStatus') }}</th>
-                                <th class='text-center'><i class='fa fa-cogs'></i></th>
+                                <th></th>
                             @endif
                         </tr>
                     </thead>

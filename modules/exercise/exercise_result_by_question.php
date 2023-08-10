@@ -178,12 +178,12 @@ if (count($exercise_question_ids) > 0) {
         }
         $tool_content .= "</td></tr>";
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-            $tool_content .= "<tr><td class='text-center'><img src='../../$picturePath/quiz-" . $row->question_id . "'></td></tr>";
+            $tool_content .= "<tr><td><img src='../../$picturePath/quiz-" . $row->question_id . "'></td></tr>";
         }
         $tool_content .= "<br>
             <table class='table-default'>
             <tr>
-                <td class='text-end'><b>$langTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b></td>
+                <td><b>$langTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b></td>
             </tr>
             </table>";
 
@@ -208,18 +208,18 @@ if (count($exercise_question_ids) > 0) {
             if (isset($question_graded) && !$question_graded) {
              //show input field
                 $action_url = "exercise_result_by_question.php?exerciseId={$exerciseIdIndirect}";
-                $tool_content .= "<form id='grade_form' method='POST' action='$action_url'> <span style='float:right;'>
-                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox' maxlength='3' size='3' name='questionScore'>
+                $tool_content .= "<form id='grade_form' method='POST' action='$action_url'> <span>
+                                   $langQuestionScore: <input style='display:inline-block;width:auto;' type='text' class='questionGradeBox form-control' maxlength='3' size='3' name='questionScore'>
                                    <input type='hidden' name='question_id' value='{$row->question_id}'>
                                    <input type='hidden' name='questionMaxGrade' value='$questionWeighting'>
                                    <input type='hidden' name='eurId' value='{$exercise_user_record->eurid}'>";
                                    $tool_content .= "<b>/$questionWeighting</b></span> </form>";
             } else {
-                $tool_content .= "<span style='float:right;'>
+                $tool_content .= "<span>
                                 $langQuestionScore: <b>".round($questionScore, 2). " / $questionWeighting</b></span>";
             }
         } else {
-            $tool_content .= "<span style='float:right;'>$langQuestionScore: <b>$question_weight</b></span>";
+            $tool_content .= "<span>$langQuestionScore: <b>$question_weight</b></span>";
         }
 
         $tool_content .= "</th></tr></table>";
