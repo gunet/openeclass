@@ -39,11 +39,11 @@ function list_links($id = NULL) {
         }
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
+            "<thead><tr class='list-header'>" .
             "<th style='width:'>$langLinks</th>" .
             "<th>$langDescription</th>" .
             "<th width='10'>$langChoice</th>" .
-            "</tr>";
+            "</tr></thead>";
         $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d", $course_id);
         if (count($sql) > 0) {
             foreach ($sql as $catrow) {

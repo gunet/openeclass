@@ -23,7 +23,7 @@
 @section('content')
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if($showMentoringProfile == 0)
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])

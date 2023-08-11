@@ -361,14 +361,14 @@ function lti_app_details() {
                        <div class='col-sm-12'>
                          <div class='table-responsive'>
                            <table class='table-default'>
-                             <tr class='list-header'>
+                             <thead><tr class='list-header'>
                                <th style='width:30%'>$langTitle</th>
                                <th>$langUnitDescr</th>
                                <th>$langLTIAppActions</th>";
         if ($is_editor) {
             $headings .= "<th>" . icon('fa-gears') . "</th>";
         }
-        $headings .= "</tr>";
+        $headings .= "</tr></thead>";
 
         foreach ($result as $row) {
             $id = $row->id;

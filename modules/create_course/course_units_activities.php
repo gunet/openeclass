@@ -355,24 +355,24 @@ if(!isset($_POST['final_submit'])){
         $tool_content .= "<div class='form-wrapper'><fieldset>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
                 <div class='card border-0 mb-3'>
-                    <div class='card-header bg-white border-0 text-center'>
-                        <div class='TextBold text-uppercase p-2'>
+                    <div class='card-header bg-white border-0 px-0'>
+                        <h3'>
                             $langActSelect
-                        </div>
+                        </h3>
                     </div>
                 </div>
 
                 <fieldset>
                     <div class='table-responsive mt-0'>
                     <table class='table table-default'>
-                        <tr class='list-header'>
-                        <td style='background: #2B3944;'></td>
-                        <th scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
+                        <thead><tr class='list-header'>
+                        <td class='px-0' style='background: #ffffff;'></td>
+                        <th class='px-0' scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>";
             $i=1;
 
-            $tool_content .= "<th scope='col'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
+            $tool_content .= "<th class='px-0' scope='col'> <label for='title' class='col-md-10' title='$unit_title->title'>".ellipsize($unit_title->title,20).":</label></th>";
             $tool_content .= "
-                            </tr>
+                            </tr></thead>
                             <tr>
                                 <th scope='row' style='color:#31708f;'>$langActInHome:</th>";
 
@@ -394,13 +394,13 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_home == $end){
-                    $tool_content .= "</tr><tr><td style='background-color:#ffffff;'></td>";
+                    $tool_content .= "</tr><tr><td style='background-color:#EFF6FF;'></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
             }
-            $tool_content .="<td style='background-color:#ffffff;'></td>";
-            $tool_content .="<td style='background-color:#ffffff;'></td>";
+            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
+            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
             $tool_content .= "
                 </tr>
                 <tr>
@@ -421,14 +421,14 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_class == $end) {
-                    $tool_content .= "</tr><tr><td style='background-color:#ffffff;'></td>";
+                    $tool_content .= "</tr><tr><td style='background-color:#EFF6FF;'></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
             }
 
-            $tool_content .="<td style='background-color:#ffffff;'></td>";
-            $tool_content .="<td style='background-color:#ffffff;'></td>";
+            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
+            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
             $tool_content .= "
             </tr>
             <tr>

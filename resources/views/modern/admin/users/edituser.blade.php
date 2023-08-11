@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -214,16 +214,16 @@
                             @if (count($sql) > 0)
                                 <div class='col-12 mt-3'>
                                     <div class='shadow-sm p-3 rounded'>
-                                        <h6 class='text-center text-uppercase lightBlueText fw-bold w-auto p-2 bg-light'>{{ trans('langStudentParticipation') }}</h6>
+                                        <h3>{{ trans('langStudentParticipation') }}</h3>
                                         <div class='table-responsive'>
                                             <table class='table-default'>
-                                                <tr class='list-header'>
+                                                <thead><tr class='list-header'>
                                                     <th>{{ trans('langCode') }}</th>
                                                     <th>{{ trans('langLessonName') }}</th>
                                                     <th>{{ trans('langCourseRegistrationDate') }}</th>
                                                     <th>{{ trans('langProperty') }}</th>
                                                     <th>{{ trans('langActions') }}</th>
-                                                </tr>
+                                                </tr></thead>
                                                 @foreach ($sql as $logs)
                                                     @if ($logs->visible == COURSE_INACTIVE)
                                                         <tr class='not_visible'>

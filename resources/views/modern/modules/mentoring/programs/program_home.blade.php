@@ -6,7 +6,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
                     <div class='col-12 ps-4 pe-4'>
@@ -240,7 +240,7 @@
                                                                                 <span class='fa fa-comment'></span>&nbsp<span class='small-text'>{{ trans('langMentoringGroupSpace' )}}</span>
                                                                             </a>--}}
                                                                             <a class="btn viewOptionToolBtn mt-3 text-uppercase TextBold rounded-2 d-flex justify-content-center align-items-center w-75 ms-auto me-auto" href="{{ $urlAppend }}modules/mentoring/programs/group/select_group.php">
-                                                                                <span class='fa fa-comment'></span>&nbsp<span class='small-text'>{{ trans('langMentoringGroupSpace' )}}</span>
+                                                                                <span class='fa fa-comment'></span>&nbsp<span class='small-text hidden-xs'>{{ trans('langMentoringGroupSpace' )}}</span>
                                                                             </a>
                                                                         @endif
                                                                     </p>

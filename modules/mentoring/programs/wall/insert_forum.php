@@ -47,11 +47,11 @@ function list_forums($id = NULL) {
         $ret_string .= "<form action='insert.php?program=$mentoring_program_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>$langForums</th>" .
                 "<th>$langComments</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
 
         foreach ($foruminfo as $entry) {
             $fchecked = '';

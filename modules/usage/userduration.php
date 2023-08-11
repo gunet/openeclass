@@ -150,10 +150,10 @@ if (isset($_GET['u'])) { //  stats per user
         <div class='col-sm-12'>
         <div class='table-responsive'>
             <table class='table-default'>
-            <tr class='list-header'>
+            <thead><tr class='list-header'>
               <th>$langModule</th>
               <th>$langDuration</th>
-            </tr>";
+            </tr></thead>";
         foreach ($user_actions as $ua) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>" . which_module($ua->module_id) . "</td>";
@@ -173,9 +173,9 @@ if (isset($_GET['u'])) { //  stats per user
 
         if (count($user_logins) > 0) {
             $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
-            <tr class='list-header'>
+            <thead><tr class='list-header'>
                 <th>$langLastUserVisits</th>
-            </tr>";
+            </tr></thead>";
             foreach ($user_logins as $ul) {
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>" . format_locale_date(strtotime($ul->last_update)) . "</td>";
@@ -261,13 +261,13 @@ if (isset($_GET['u'])) { //  stats per user
         <div class='col-sm-12'>
         <div class='table-responsive'>
             <table class='table-default'>
-            <tr class='list-header'>
+            <thead><tr class='list-header'>
                 <th classs='ps-3'>$langUser</th>
                 <th>$langGroup</th>
 
                 <th>$langAm</th>
                 <th>$langDuration</th>
-            </tr>";
+            </tr></thead>";
         foreach ($user_actions as $um) {
             if (!isset($_GET['format'])) {
                 $grp_name = user_groups($course_id, $um->user_id);

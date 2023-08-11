@@ -270,10 +270,10 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='table-responsive'>
                 <table id='tableNotes' class='table-default'>";
     if ($noteNumber > 0) {
-        $tool_content .= "<tr class='list-header'>";
+        $tool_content .= "<thead><tr class='list-header'>";
         $tool_content .= "<th>$langCategoryNotes</th>";
         $tool_content .= "<th class='text-end'>".icon('fa-gears')."</th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "</tr></thead>";
     }
 
     foreach ($notelist as $note) {

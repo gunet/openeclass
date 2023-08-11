@@ -5,7 +5,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if($isCommonGroup == 1)
                         <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -121,27 +121,27 @@
 
                                             <div class="form-group mt-4">
                                                 <label class="control-label-notes">{{trans('langType')}}:(<span class='text-danger'>*</span>)</label>
-                                                <div class='col-12 d-inline-flex'>
+                                                <div class='col-12'>
                                                     <select name='tc_type' class='form-select' id='tc_type_id'>
                                                         <option value='0'>-- {{ trans('langWelcomeSelect') }} --</option>
                                                         <option value='1'>Google Meeting</option>
                                                         <option value='2'>Zoom Meeting</option>
                                                         <option value='3'>Skype Meeting</option>
                                                     </select>
-                                                    <a id='google_meet_id' class='btn btn-success btn-sm small-text rounded-pill w-50 mt-2' href='https://meet.google.com/' target="_blank">
+                                                    <a id='google_meet_id' class='btn submitAdminBtn mt-2' href='https://meet.google.com/' target="_blank">
                                                         Google Meeting
                                                     </a>
-                                                    <a id='zoom_meet_id' class='btn btn-info btn-sm small-text rounded-pill w-50 mt-2' href='https://zoom.us/signin#/login' target="_blank">
+                                                    <a id='zoom_meet_id' class='btn submitAdminBtn mt-2' href='https://zoom.us/signin#/login' target="_blank">
                                                         Zoom Meeting
                                                     </a>
-                                                    <a id='skype_meet_id' class='btn btn-primary btn-sm small-text rounded-pill w-50 mt-2' href='https://www.skype.com/el/' target="_blank">
+                                                    <a id='skype_meet_id' class='btn submitAdminBtn mt-2' href='https://www.skype.com/el/' target="_blank">
                                                         Skype Meeting
                                                     </a>
                                                 </div>
 
                                                 <div class="form-group mt-4" id='url_form'>
                                                     <label class="control-label-notes" for="url">URL:(<span class='text-danger'>*</span>)</label>
-                                                    <input class='form-control rounded-pill h-30px bgEclass' id="url" name="url" type="url">
+                                                    <input class='form-control h-30px bgEclass' id="url" name="url" type="url">
                                                 </div>
 
                                                 <div class="form-group mt-4" id='meeting_id_form'>

@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
 
                     @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
@@ -137,13 +137,13 @@
                     <div class='col-12 mt-3'>
                         <div class='table-responsive'>
                             <table class='table-default'>
-                                <tr class='list-header'>
+                                <thead><tr class='list-header'>
                                     <th class='center'>ID</th>
                                     <th>{{ trans('langSurnameName') }}</th>
                                     <th>{{ trans('langUsername') }}</th>
                                     <th>{{ trans('langRole') }}</th>
                                     <th>{!! icon('fa-gears') !!}</th>
-                                </tr>
+                                </tr></thead>
                             
                                 @foreach ($admins as $admin)
                                     <tr>

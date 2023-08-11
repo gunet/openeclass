@@ -256,9 +256,9 @@
                                 <thead>
                                     <tr class="list-header">
                                         <th>{{ trans('langSurnameName') }}</th>
-                                        <th class='text-center'>{{ trans('langRole') }}</th>
-                                        <th class='text-center'>{{ trans('langGroup') }}</th>
-                                        <th class='text-center' width='80'>{{ trans('langRegistrationDate') }}</th>
+                                        <th>{{ trans('langRole') }}</th>
+                                        <th>{{ trans('langGroup') }}</th>
+                                        <th width='80'>{{ trans('langRegistrationDate') }}</th>
                                         <th class='text-center'>{!! icon('fa-cogs') !!}</th>
                                     </tr>
                                 </thead>

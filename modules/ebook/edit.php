@@ -86,11 +86,12 @@ if (isset($_GET['delete'])) {
         <input type='hidden' name='id' value='$ebook_id' />
         <div class='table-responsive mt-0'>
           <table class='table-default'>
+          <thead>
           <tr class='list-header'>
             <th>$langID</th>
             <th>$langTitle</th>
             <th width='75'>$langActions</th>
-          </tr>";
+          </tr></thead>";
         $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);

@@ -254,7 +254,7 @@ function display_course_completion() {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-success'>
-                        <div class='panel-heading bgTheme'>
+                        <div class='panel-heading'>
                             <div class='row'>
                                 <div class='col-sm-7 text-md-start text-center'>
                                     $langCourseCompletion
@@ -528,7 +528,7 @@ function display_activities($element, $id, $unit_id = 0) {
                             $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
                         } else {
                           $tool_content .= "<div class='table-responsive mt-0'>
-                                                <table class='table-default'>
+                                                <table class='table-default'><thead>
                                                     <tr class='list-header'>
                                                         <th>
                                                             $langTitle
@@ -542,7 +542,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                         <th>
                                                             <i class='fa fa-cogs'></i>
                                                         </th>
-                                                    </tr>";
+                                                    </tr></thead>";
                                                     foreach ($result as $details) {
                                                         $resource_data = get_resource_details($element, $details->id);
                                                         $tool_content .= "
@@ -603,7 +603,7 @@ function display_activities($element, $id, $unit_id = 0) {
 
                                                 $tool_content .= " <div class='res-table-wrapper'>
                                                                         <div class='table-responsive'>
-                                                                            <table class='table-default'>
+                                                                            <table class='table-default'><thead>
                                                                                 <tr class='list-header'>
                                                                                     <th>
                                                                                         $langTitle
@@ -617,7 +617,7 @@ function display_activities($element, $id, $unit_id = 0) {
                                                                                     <th>
                                                                                         <i class='fa fa-cogs'></i>
                                                                                     </th>
-                                                                                </tr>";
+                                                                                </tr></thead>";
                                                                                 foreach ($result as $details) {
                                                                                     $resource_data = get_resource_details($element, $details->id, $unit_id);
                                                                                     $tool_content .= "
@@ -929,13 +929,13 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name = '$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>&nbsp;$langTitle</th>" .
                 "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langGradebookGrade</th>" .
                 "<th style='width:10px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         foreach ($result as $row) {
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
@@ -1013,12 +1013,12 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th class='text-start ps-2'>$langExercices</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langGradebookGrade</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         foreach ($quizinfo as $entry) {
             $exercise_id = $entry['id'];
             $comments = empty($entry['comment']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['comment']. "</div>";
@@ -1147,12 +1147,12 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
                 "</tr>" ;
         }
         $tool_content .=
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>$langName</th>" .
                 "<th>$langSize</th>" .
                 "<th>$langDate</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
             foreach ($fileinfo as $entry) {
@@ -1242,12 +1242,12 @@ function display_available_blogs($element, $element_id, $unit_id = 0) {
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
 
             $tool_content .= "<tr>" .
                     "<td>$langNumOfBlogs</td>" .
@@ -1294,13 +1294,13 @@ function display_available_blogcomments($element, $element_id, $unit_id = 0) {
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th style='width:50%;'>$langTitle</th>" .
                 "<th>$langDate</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         foreach ($result as $row) {
             $blog_id = $row->id;
             $tool_content .= "<tr>" .
@@ -1358,12 +1358,12 @@ function display_available_forums($element, $element_id, $unit_id = 0) {
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
 
             $tool_content .= "<tr>" .
                     "<td>$langNumInForum</td>" .
@@ -1439,12 +1439,12 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>$langTopics</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langValue</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
 
         foreach ($topicinfo as $topicentry) {
             $topic_id = $topicentry['topic_id'];
@@ -1526,12 +1526,12 @@ function display_available_lps($element, $element_id, int $unit_id = 0, $unit_re
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>$langLearningPaths</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:50px;'>$langPercentage</th>" .
                 "<th style='width:10px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         foreach ($lpinfo as $entry) {
             $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d
                                                     AND `rank` = (SELECT MIN(`rank`) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)",
@@ -1594,11 +1594,11 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
         $tool_content .= "<form action=$action method='post'>" .
                          "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'>" .
+        $tool_content .= "<thead><tr class='list-header'>" .
                          "<th class='text-start ps-2'>&nbsp;$langTitle</th>" .
                          "<th width='100'>$langDate</th>" .
                          "<th width='80'>$langChoice</th>" .
-                         "</tr>";
+                         "</tr></thead>";
 
         foreach (array('video', 'videolink') as $table) {
             if ($unit_id > 0) {
@@ -1742,10 +1742,10 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>&nbsp;$langEBook</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         foreach ($result as $catrow) {
             $tool_content .= "<tr>";
             $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
@@ -1869,10 +1869,10 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>$langQuestionnaire</th>" .
                 "<th style='width:80px;>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
             $tool_content .= "<tr>";
@@ -1917,12 +1917,12 @@ function display_available_wiki($element, $element_id, $unit_id = 0) {
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>&nbsp;$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langValue</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
 
         $tool_content .= "<tr>
                             <td>$langWikiPages</td>
@@ -1969,12 +1969,12 @@ function display_available_participation($element, $element_id, $unit_id = 0) {
         $tool_content .= "<form action=$action method='post'>" .
                 "<input type='hidden' name='$element_name' value='$element_id'>" .
                 "<div class='table-responsive'><table class='table-default'>" .
-                "<tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th style='width:70%;'>$langTitle</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
                 "<th style='width:30px;'>$langHours</th>" .
                 "<th style='width:20px;'>$langChoice</th>" .
-                "</tr>";
+                "</tr></thead>";
 
         $tool_content .= "<tr>
                             <td>$langCourseParticipation</td>
@@ -2026,14 +2026,14 @@ function display_available_gradebooks($element, $element_id, $unit_id = 0) {
         $tool_content .= "<form action=$action method='post'>" .
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
+            "<thead><tr class='list-header'>" .
             "<th>$langAvailableGradebooks</th>" .
             "<th style='width:160px;'>$langStart</th>" .
             "<th style='width:160px;'>$langFinish</th>" .
             "<th style='width:5px;'>$langOperator</th>" .
             "<th style='width:50px;'>$langGradebookGrade</th>" .
             "<th style='width:10px;'>$langChoice</th>" .
-            "</tr>";
+            "</tr></thead>";
 
         foreach ($result as $row) {
             $gradebook_id = $row->id;
@@ -2084,12 +2084,12 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
         $tool_content .= "<form action=$action method='post'>" .
             "<input type='hidden' name='$element_name' value='$element_id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
-            "<tr class='list-header'>" .
+            "<thead><tr class='list-header'>" .
             "<th style='width:70%;'>&nbsp;$langTitle</th>" .
             "<th style='width:5px;'>$langValue</th>" .
             "<th style='width:30px;'>$langPercentage</th>" .
             "<th style='width:20px;'>$langChoice</th>" .
-            "</tr>";
+            "</tr></thead>";
 
         $tool_content .= "<tr>" .
             "<td>" . $langCourseCompletion . "</td>" .
@@ -2431,7 +2431,7 @@ function student_view_progress() {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='panel panel-success'>
-                        <div class='panel-heading bgTheme'>
+                        <div class='panel-heading'>
                             $langCourseCompletion
                         </div>
                         <div class='panel-body'>
@@ -2643,9 +2643,9 @@ function display_users_progress($element, $element_id) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
                         <tr class='list-header'>
-                          <th class='ps-2' style='width:5%'>$langID</th>
-                          <th class='ps-2'>$langSurnameName</th>
-                          <th class='ps-2' style='width: 20%;'>$langProgress</th>
+                          <th style='width:5%'>$langID</th>
+                          <th>$langSurnameName</th>
+                          <th style='width: 20%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";

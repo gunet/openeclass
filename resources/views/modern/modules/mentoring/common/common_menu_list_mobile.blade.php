@@ -5,10 +5,10 @@
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class='offcanvas-body'>
-            <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
+            <div class='col-12 d-flex justify-content-center align-items-center mt-0'>
                 <a class='backToEclass'><img class="mentoring_logo_img" src="{{ $logo_img }}"/></a>
             </div>
-            <div class='col-12 d-flex justify-content-center align-items-center mt-5'>
+            <div class='col-12 d-flex justify-content-center align-items-center mt-0'>
                 <ul class="mobileMenuUl list-group rounded-0">
                     
                     @if (isset($_SESSION['uid']))

@@ -178,7 +178,7 @@ $tool_content .= "
     <div class='oc-metedata-list'>
         <div class='col-12'>
             <ul class='list-group'>
-                <li class='list-group-item bgTheme notes_thead'>
+                <li class='list-group-item  notes_thead'>
                     <span class='text-white'>$langOpenCoursesCharacteristics</span>
                 </li>
                 <li class='list-group-item'>
@@ -219,12 +219,12 @@ $tool_content .= "
         ";
 
 $tool_content .= "
-                    <div class='col-12 mt-3'>
+                    <div class='col-12 mt-4'>
                         <div class='list-group'>
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF
                             <ul class='list-group'>
-                                <li class='list-group-item bgTheme'>
+                                <li class='list-group-item Primary-600-bg'>
                                     <span class='text-white'>$langOpenCoursesCharacter</span>
                                 </li>
                                 <li class='list-group-item'>

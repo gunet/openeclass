@@ -5,7 +5,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -55,11 +55,11 @@
                     <form name='mail_verification' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}'>
                         <div class='table-responsive'>
                     <table class='table-default'>
-                        <tr class='list-header'>
-                                    <td class='text-start text-white bgTheme' colspan='3'>
+                        <thead><tr class='list-header'>
+                                    <td class='text-start form-label py-2' colspan='3'>
                                         {{ trans('langMailVerificationSettings') }}
                                     </td>
-                                </tr>
+                        </tr></thead>
                         <tr>
                                     <td class='text-start' colspan='2'>{{ trans('lang_email_required') }}:</td>
                                     <td class='text-center'>{{ $mr }}</td>

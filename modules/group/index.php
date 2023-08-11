@@ -1040,16 +1040,16 @@ if ($is_editor) {
         $aantalcategories = count($cat);
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         if($cat){
-           $tool_content .= "<div class='margin-bottom-thin bgTheme ps-3 pt-2 pb-2 pe-3'>";
+           $tool_content .= "<div class='margin-bottom-thin border-bottom-table-head py-2'>";
         }else{
-            $tool_content .= "<div class='margin-bottom-thin fs-6 p-2'>";
+            $tool_content .= "<div class='margin-bottom-thin border-bottom-table-head py-2'>";
         }
         if ($aantalcategories > 0) {
-            $tool_content .= "<span class='text-white'>$langCategorisedGroups</span>&nbsp;";
+            $tool_content .= "<span class='form-label'>$langCategorisedGroups</span>&nbsp;";
             if (isset($urlview) and abs(intval($urlview)) == 0) {
-                $tool_content .= "&nbsp;&nbsp;<a class='text-white' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-plus-square', $langViewShow)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a class='text-white' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-minus-square', $langViewHide)."</a>";
             }
         }
         $tool_content .= "</div>            
@@ -1075,9 +1075,9 @@ if ($is_editor) {
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'>
                                     <th class = 'text-start category-link' colspan='4'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-minus-square-o', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-solid fa-minus-square', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description ps-4 pt-4'>$description</span></th>";
+                    $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
                     $tool_content .= "</th>";
                 }
@@ -1102,7 +1102,7 @@ if ($is_editor) {
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {
-                    $tool_content .= "<br><span class='link-description ps-4 pt-4'>$description</span</th>";
+                    $tool_content .= "<br><span class='link-description'>$description</span</th>";
                 } else {
                     $tool_content .= "</th>";
                 }

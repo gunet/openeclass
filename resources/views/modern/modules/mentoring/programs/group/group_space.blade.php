@@ -6,7 +6,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if($isCommonGroup == 1)
                         <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -84,7 +84,7 @@
                         </a>
                         <div class='SidebarToolsGroup'>
                             <a id='closeSidebarToolsGroup' class='btn float-end mb-3 d-block d-lg-none'><span class='fa fa-times fs-3 text-danger'></span></a>
-                            <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                            <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white mt-5 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
                                     <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langToolsGroup') }}</span>
                                 </div>

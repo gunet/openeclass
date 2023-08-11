@@ -45,7 +45,7 @@ function list_exercises($id = NULL) {
         }
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
-                "<thad><tr class='list-header'>" .
+                "<thead><tr class='list-header'>" .
                 "<th>$langExercices</th>" .
                 "<th>$langDescription</th>" .
                 "<th>$langChoice</th>" .

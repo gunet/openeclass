@@ -73,12 +73,12 @@
 </head>
 <body class='p-5'>
     <div class="container">
-        <div class="row rowMargin" id="Frame">
+        <div class="row m-auto" id="Frame">
             <div id="leftnav" class="col-2 sidebar embeded bg-white pt-5">
                 <div class="panel-group accordion mt-1" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
-                            <div id="collapse{{ $key }}" class="panel-collapse bgTheme list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
+                            <div id="collapse{{ $key }}" class="panel-collapse Primary-600-bg list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
                                 @foreach ($tool_group[1] as $key2 => $tool)
                                     <a href="{{ $tool_group[2][$key2] }}" class="leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
                                         <span class="toolSidebarTxt">{!! $tool !!}</span>

@@ -6,7 +6,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     <div class='col-12 ps-4 pe-4'>
                         <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -81,7 +81,7 @@
                                     </div>
                                     <div class="card-footer text-center">
                                         <small class="text-muted">
-                                            <a class='btn viewProgram bgEclass TextBold small-text rounded-2 text-uppercase d-flex justify-content-center aling-items-center' href="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php">
+                                            <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php">
                                                 <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
                                             </a>
                                         </small>

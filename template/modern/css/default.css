@@ -54,11 +54,11 @@ body{
   }
 }
   
-@media (max-width:1023px){ 
+/* @media (max-width:1023px){ 
   select{ 
     overflow-y:auto !important; 
   } 
-}
+} */
   
 textarea {
   width:100%;
@@ -71,6 +71,11 @@ textarea {
 img { 
   max-width: 100%; 
   height: auto; 
+}
+
+.min-img-size{
+  min-width:24px; 
+  min-height:24px;
 }
 
 /* .form-image{
@@ -132,6 +137,10 @@ img {
   border-left: none;
   border-right: none;
   border-bottom: solid 1px #E8EDF8;
+}
+
+.border-bottom-table-head{
+  border-bottom: solid 2px #0073E6;
 }
   
 .li-unstyled{
@@ -365,9 +374,9 @@ img {
   color: #687DA3;
 }
 
-.bgTheme{
+/* .bgTheme{
   background-color: #2546F0 !important;
-}
+} */
 
 .orangeText{ 
   color: #F57600; 
@@ -697,12 +706,13 @@ body:has(.mce-fullscreen) .navbar-eclass{
   transition: all .5s;
   outline:0 ;
   box-shadow: none;
+  margin-top: 0px !important;
 }
 
 .inputSearch:active,
 .inputSearch:focus,
 .inputSearch:hover { 
-  box-shadow: none !important;
+  box-shadow: none ;
 }
 
 .inputSearch:focus{
@@ -1380,7 +1390,7 @@ input:-webkit-autofill:active {
 
 .left-form{
   min-height: 450px;
-  max-height: 500px;
+  max-height: 650px;
   background: url(../img/form-image.png);
   background-size: cover;
   background-repeat: no-repeat;
@@ -1396,11 +1406,12 @@ input:-webkit-autofill:active {
   background-color: #ffffff;
 }
 
-input[type=text], 
-input[type=password], 
-input[type=number],
-input[type=search],
-input[type=text]{
+input[type="text"], 
+input[type="password"], 
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="email"]{
   height:40px;
   border-radius: 4px;
   margin-top: 5px;
@@ -1411,12 +1422,16 @@ input[type=text]{
   font-weight: 400; font-style: normal;
 }
 
-textarea{
+textarea,
+textarea.form-control{
   min-height:106px;
   border-radius: 4px;
   margin-top: 5px;
-  border: solid 1px #687DA3;
-  background-color: white;
+  border-color: #687DA3;
+  background-color: #ffffff;
+  color: #687DA3;
+  font-size: 14px;
+  font-weight: 400; font-style: normal;
 }
 
 input[type="text"]:focus,
@@ -1433,17 +1448,14 @@ input[type="search"]:focus,
 input[type="tel"]:focus,
 input[type="color"]:focus,
 .form-control:focus,
-.uneditable-input:focus {   
+.uneditable-input:focus,
+textarea:focus {   
   border-color: #0073E6;
-  box-shadow: none !important;
+  box-shadow: none;
   outline: 0 none;
   background-color: #ffffff;
   color:#687DA3;
   font-weight: 400; font-style: normal;
-}
-
-textarea:focus{
-  background-color: #ffffff !important;
 }
 
 .form-control:disabled{
@@ -1464,7 +1476,7 @@ select.form-select {
 }
 
 select.form-select:focus {
-  box-shadow: none !important;
+  box-shadow: none;
   outline: none;
   background-color: #ffffff;
 }
@@ -1511,7 +1523,7 @@ label:has(input[type="checkbox"]:disabled){
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1541,7 +1553,7 @@ label:has(input[type="checkbox"]:disabled){
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1554,49 +1566,57 @@ label:has(input[type="checkbox"]:disabled){
   text-decoration: none;
 }
 
-.deleteAdminBtn {
+.deleteAdminBtn, 
+button[type="submit"].deleteAdminBtn,
+input[type="submit"].deleteAdminBtn {
   border: solid thin;
-  border-color: #C44601 !important;
+  border-color: #C44601;
   color: #ffffff;
   font-size: 14px;
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #C44601 !important;
+  background-color: #C44601;
   letter-spacing: 0px;
   line-height: 16px;
 }
 
-.deleteAdminBtn:hover {
-  border-color: #B70A0A !important;
-  background-color: #B70A0A !important;
+.deleteAdminBtn:hover,
+button[type="submit"].deleteAdminBtn:hover,
+input[type="submit"].deleteAdminBtn:hover {
+  border-color: #B70A0A;
+  background-color: #B70A0A;
   color: #ffffff;
 }
 
-.successAdminBtn {
+.successAdminBtn,
+button[type="submit"].successAdminBtn,
+input[type="submit"].successAdminBtn {
   border: solid thin;
-  border-color: #1E7E0E	!important;
+  border-color: #1E7E0E;
   color: #ffffff	;
   font-size: 14px;
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #1E7E0E !important;
+  background-color: #1E7E0E;
   letter-spacing: 0px;
   line-height: 16px;
 }
 
-.successAdminBtn:hover {
-  background-color: #19680C	!important;
-  border-color: #19680C !important;
+.successAdminBtn:hover,
+button[type="submit"].successAdminBtn:hover,
+input[type="submit"].successAdminBtn:hover {
+  background-color: #19680C;
+  border-color: #19680C;
   color: #ffffff;
 }
 
@@ -1631,7 +1651,7 @@ label:has(input[type="checkbox"]:disabled){
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1653,7 +1673,7 @@ label:has(input[type="checkbox"]:disabled){
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1677,7 +1697,7 @@ label:has(input[type="checkbox"]:disabled){
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1702,7 +1722,7 @@ label:has(input[type="checkbox"]:disabled){
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px ;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1716,22 +1736,28 @@ label:has(input[type="checkbox"]:disabled){
   background-color: #19680C;
 }
 
-.btn.btn-outline-secondary{
+.btn-outline-secondary{
   border: solid thin;
-  border-color: #2B3944;
-  color: #ffffff;
+  border-color: #0073E6;
+  color: #0073E6;
   font-size: 14px;
   height:40px;
   min-width: 40px;
   font-weight: 700; font-style: normal;
-  border-radius: 4px !important;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2B3944;
+  background-color: #ffffff;
   letter-spacing: 0px;
   line-height: 16px;
 }
+.btn-outline-secondary:hover{
+  background-color: #ffffff;
+  border-color: #2546F0;
+  color: #2546F0;
+}
+
 
 .btn.btn-secondary{
   backface-visibility: hidden;
@@ -1769,7 +1795,7 @@ label:has(input[type="checkbox"]:disabled){
     width: 20px;
   }
   .contextual-menu-user::-webkit-scrollbar-track {
-    background-color: transparent;
+    background-color: #ffffff;
   }
   .contextual-menu-user::-webkit-scrollbar-thumb {
     background-color: #B4BED1;
@@ -1887,22 +1913,38 @@ body .form-action-button-mydropdowns{
   background-color: transparent;
 }
 
+.btn-group-default .deleteAdminBtn{
+  border: 0px;
+  color: #B70A0A;
+  background-color: transparent;
+  text-decoration: none;
+}
+.btn-group-default .deleteAdminBtn:hover{
+  background-color: transparent;
+}
+
 .menu-popover .hidden-xs{
   padding: 0px;
 }
 
 .menu-popover .list-group-item{ 
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
   border-radius: 0px;
   border: 0px;
   border-bottom: solid 1px #EFF6FF;
   display: flex;
   justify-content: start;
   align-items: start;
-  gap: 10px;
-  font-weight: 700;
+  gap: 8px;
   font-size: 14px;
   min-height: 40px;
   padding: 10px;
+}
+
+.menu-popover .list-group-item .fa{
+  width: 16px;
+  height: 16px;
 }
 
 .menu-popover .list-group-item:hover{ 
@@ -1921,6 +1963,8 @@ body .form-action-button-mydropdowns{
 
 .menu-popover .delete.confirmAction, 
 .menu-popover .delete.delete_btn{
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
   border-radius: 0px;
   border: 0px;
   border-bottom: solid 1px #EFF6FF;
@@ -1929,11 +1973,11 @@ body .form-action-button-mydropdowns{
   justify-content: start;
   align-items: start;
   gap: 10px;
-  font-weight: 700;
   color: #C44601;
   font-size: 14px;
   min-height: 40px;
   padding: 10px;
+  height: auto;
 }
 
 .menu-popover .delete.confirmAction:hover, 
@@ -1941,6 +1985,8 @@ body .form-action-button-mydropdowns{
   background-color: #EFF6FF;
   color: #C44601;
 }
+
+
 
 /* after close modal , display none from body and block inside popover for form-action-button */
 /* body .form-action-button-popover{ 
@@ -2094,7 +2140,7 @@ body .form-action-button-mydropdowns{
   width: 20px;
 }
 .course-content::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: #ffffff;
 }
 .course-content::-webkit-scrollbar-thumb {
   background-color: #B4BED1;
@@ -2269,7 +2315,7 @@ body .form-action-button-mydropdowns{
   border: solid 1px #E8EDF8;
 }
 .panel-primary .panel-heading, .panel-action-btn-primary .panel-heading{
-  background: #3d80d0;
+  background: #0073E6;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
@@ -2322,7 +2368,7 @@ body .form-action-button-mydropdowns{
   border: solid 1px #E8EDF8;
 }
 .panel-success .panel-heading{
-  background: #22b473;
+  background: #1E7E0E;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
@@ -2442,7 +2488,7 @@ body .form-action-button-mydropdowns{
   border:solid 1px #e8e8e8;
 }
 .panel-info>.panel-heading{
-  background: #00b2ca;
+  background: #B3D1FF;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#fafafa;
@@ -2482,7 +2528,7 @@ body .form-action-button-mydropdowns{
   border:solid 1px #e8e8e8;
 }
 .panel-danger .panel-heading{
-  background: #C44601;
+  background:#C44601;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
@@ -2824,6 +2870,52 @@ tr td{
 }
 
 
+
+@media(min-width:992px){
+  .table-default tbody,
+  .table-default tfoot {
+    display:block;
+    min-height: 48px;
+    max-height: 450px;
+    overflow: auto;
+  }
+
+  .table-default tbody::-webkit-scrollbar {
+    width: 20px;
+  }
+  .table-default tbody::-webkit-scrollbar-track {
+    background-color: #ffffff;
+  }
+  .table-default tbody::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+  }
+  .table-default tbody::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+  }
+  .table-default tbody::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  }
+  
+
+  
+  .table-default thead, 
+  .table-default tfoot tr, 
+  .table-default tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+  }
+}
+
+
+
+
+
+
 thead tr th, 
 tfoot tr th{
   padding: 10px 0px 10px 0px;
@@ -2833,9 +2925,12 @@ tbody tr{
   border-bottom: solid 1px #EFF6FF;
 }
 
-tbody tr:hover{
-  background-color: #EFF6FF;
+@media(min-width:992px){
+  tbody tr:hover{
+    background-color: #EFF6FF;
+  }
 }
+
 
 tbody tr td{
   padding: 10px 10px 10px 10px;
@@ -2867,7 +2962,7 @@ th .fa-gears{
   display: none;
 }
 
-th,td{
+.table-default th, .table-default {
   width: auto !important;
 }
 
@@ -3326,7 +3421,7 @@ body .delThemeBtn{
 
 .login-input:focus {
   border-color: #0073E6;
-  box-shadow: none !important;
+  box-shadow: none;
   outline: 0 none;
   background-color: #ffffff;
   color:#687DA3;
@@ -3484,7 +3579,7 @@ body .delThemeBtn{
   width: 20px;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: #ffffff;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-thumb {
   background-color: #d1d6e1;
@@ -4121,7 +4216,7 @@ div[role="progressbar"]::before {
 
 
 .embed-responsive-item{ 
-  height:500px; 
+  height:450px; 
   width:100%;
 }
 
@@ -4130,7 +4225,7 @@ div[role="progressbar"]::before {
 }
 
 .bodyChat::-webkit-scrollbar-track {
-  background-color: #e8e8e8;
+  background-color: #ffffff;
 }
 
 .bodyChat::-webkit-scrollbar-thumb {
@@ -4177,9 +4272,6 @@ div[role="progressbar"]::before {
 /*************************************************** EXERCISE *********************************************************/
 /**********************************************************************************************************************/
 
-.table-exercise .bgTheme{
-  color: #ffffff;
-}
 .table-exercise td, .table-exercise th{
   background-color: #ffffff;
   padding: 10px 15px;
@@ -4566,9 +4658,5 @@ div[role="progressbar"]::before {
   select,.dataTables_wrapper{ 
     overflow-y: auto !important; 
   }
-
-  /* .ColumnCalendarAnnounceMessagePortfolio{
-    background-color: white;
-  } */
 
 }

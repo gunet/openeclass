@@ -5,7 +5,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -28,13 +28,13 @@
                     <div class='col-12'>
                         <div class='table-responsive'>
                             <table class='table-default'>
-                                <tbody>
+                                <thead><tr>
                                     <th>{{ trans('langMonth') }}</th>
                                     <th>{{ trans('langTeachers') }}</th>
                                     <th>{{ trans('langStudents') }}</th>
                                     <th>{{ trans('langGuests') }}</th>
-                                    <th>{{ trans('langCourses') }}</th>
-
+                                    <th>{{ trans('langCourses') }}</th></tr></thead>
+                                <tbody>
                                     @foreach ($monthly_data as $data)
                                         @php
                                             $formatted_data = date_format(date_create($data[0]), "n / Y")

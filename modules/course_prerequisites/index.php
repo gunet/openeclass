@@ -225,10 +225,10 @@ function show_prereqs() {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
-                                  <tr class='list-header'>
+                                  <thead><tr class='list-header'>
                                       <th>$langTitle</th>
                                       <th>".icon('fa-gears')."</th>
-                                  </tr>";
+                                  </tr></thead>";
         foreach ($result as $row) {
 
             $cid = intval($row->id);

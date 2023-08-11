@@ -82,11 +82,11 @@
                                 <form name="courseTools" action="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}" method="post" enctype="multipart/form-data">
                                     <div class="table-responsive mt-0">
                                         <table class="table-default rounded-2">
-                                            <tr class='list-header'>
+                                            <thead><tr class='list-header'>
                                             <th width="45%" class="text-center">{{ trans('langInactiveTools') }}</th>
                                             <th width="10%" class="text-center">{{ trans('langMove') }}</th>
                                             <th width="45%" class="text-center">{{ trans('langActiveTools') }}</th>
-                                            </tr>
+                                            </tr></thead>
                                             <tr>
                                                 <td class="text-center">
                                                     <select class="form-select h-100 rounded-0" name="toolStatInactive[]" id='inactive_box' size='17' multiple>
@@ -185,14 +185,14 @@
                                 @if($result)
                                         <div class='table-responsive mt-0'>
                                             <table class='table-default rounded-2'>
-                                                <tr class='list-header'>
+                                                <thead><tr class='list-header'>
                                                     <th style='width:30%'>{{ trans('langTitle') }}</th>
                                                     <th class='text-start'>{{ trans('langUnitDescr') }}</th>
                                                     <th class='text-start'>{{ trans('langLTIAppActions') }}</th>
                                                     @if ($is_editor)
                                                         <th class='text-center'>{!! icon('fa-gears') !!}</th>
                                                     @endif
-                                                </tr>
+                                                </tr></thead>
 
                                                 @foreach ($result as $row)
                                                         @php 

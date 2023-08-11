@@ -453,18 +453,19 @@ if (!isset($_POST['next'])) {
             $tool_content .= " <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">        
                 <div class='card border-0'>
-                    <div class='card-header bg-white border-0 text-center'>
-                        <div class='TextBold text-uppercase p-2'>
+                    <div class='card-header bg-white border-0 px-0'>
+                        <h3>
                             $langActSelect
-                        </div>
+                        </h3>
                     </div>
                 </div>    
                
                 <fieldset>
                     <div class='table-responsive mt-0'>
                         <table class='table table-default'>
+                        <thead>
                         <tr class='list-header'><td></td>
-                        <th scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>
+                        <th class='px-0' scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
             $i=1;
 
@@ -474,13 +475,13 @@ if (!isset($_POST['next'])) {
                 if(!isset($_SESSION['ids'][$count_ids])){
 
                     $tool_content .= "
-                        <th scope='col'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
+                        <th class='px-0' scope='col'><label for='title' class='col-md-10' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
                     $i++;
                 }
                 $count_ids += 1;
             }
 
-            $tool_content .= "</tr><tr><th scope='row' style='color:#31708f;'>$langActInHome:</th>";
+            $tool_content .= "</tr></thead><tr><th scope='row' style='color:#31708f;'>$langActInHome:</th>";
 
                 $end=end($mtitles_in_home);
                 foreach($mtitles_in_home as $title_home) {

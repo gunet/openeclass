@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -58,6 +58,7 @@
                     <div class='col-sm-12'>
                         <div class='table-responsive'>
                             <table class='table-default'>
+                                <thead>
                                 <tr class='list-header'>
                                     <th>{{ trans('langSurname') }}</th>
                                     <th>{{ trans('langName') }}</th>
@@ -66,7 +67,7 @@
                                     <th>{{ trans('langAm') }}</th>
                                     <th>username</th>
                                     <th>password</th>
-                                </tr>
+                                </tr></thead>
                                 @foreach ($new_users_info as $n)
                                     <tr>
                                         <td>{{ $n[1] }}</td>

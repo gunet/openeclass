@@ -3938,7 +3938,7 @@ function setOpenCoursesExtraHTML() {
             <div class='col-xl-8 col-12 ms-auto me-auto banner_openCourses'>
                 <div class='card border-card h-100'>
                     <div class='card-body card-body d-flex justify-content-center align-items-center'>
-                        <div class='row rowMargin w-100 ms-0'>
+                        <div class='row m-auto w-100 ms-0'>
 
                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                 <img class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>

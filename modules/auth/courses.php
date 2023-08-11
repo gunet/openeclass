@@ -124,7 +124,7 @@ if (isset($_POST['submit'])) {
                             ),false);
 
         $tool_content .= "<div class='col-12 mt-4'>
-                            <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
+                            <div class='row row-cols-1 row-cols-lg-2 g-5'>
                                 <div class='col-lg-6 col-12'>
                                     <div class='col-12'>
                                         <div class='card border-card h-100 Borders border-0'>

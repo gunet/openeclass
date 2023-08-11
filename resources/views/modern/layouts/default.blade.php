@@ -49,8 +49,10 @@
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache"/>
 
     @if((get_config('mentoring_platform') and $mentoring_platform) or (get_config('mentoring_always_active')))
+        <link rel='stylesheet' type='text/css' href="{{ $urlAppend }}js/datatables/media/css/override_jquery.dataTables.css" />
         <link rel='stylesheet' type='text/css' href="{{ $urlAppend }}template/modern/css/mentoringCss.css" />
         <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/mentoringCss.css?donotcache">
+        
     @endif
 
     <!-- if change eclass theme then put styles css of this theme -->

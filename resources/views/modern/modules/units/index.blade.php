@@ -702,7 +702,7 @@
                     {{--
                     <div class='col-12 mt-4'>
                         <div class='panel panel-default'>
-                            <div class='panel-heading bgTheme'>{{ trans('langCourseUnits') }}</div>
+                            <div class='panel-heading Primary-600-bg'>{{ trans('langCourseUnits') }}</div>
                             <div class='panel-body'>
                                 <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                                     <input type='hidden' name='course' value='{{ $course_code }}'>

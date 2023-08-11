@@ -105,7 +105,7 @@
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
                             <div class='panel smallRadius'>
                                 <div class='panel-body docPanel smallRadius @if(isset($course_code) and $course_code) bg-light @else bg-white @endif'>
-                                    <div class='row rowMargin'>
+                                    <div class='row'>
                                         <div class='col-9 d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
@@ -118,7 +118,7 @@
                                         <div class='col-3 d-flex justify-content-end align-items-center flex-wrap'>
                                             @if ($curDirName)
                                                 <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
-                                                    <span class='fa fa-level-up'></span>&nbsp{{ trans('langUp') }}
+                                                    <span class='fa fa-level-up'></span><span class='hidden-xs TextBold'>{{ trans('langUp') }}</span>
                                                 </a>
                                             @endif
                                         </div>

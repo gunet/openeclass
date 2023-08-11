@@ -381,9 +381,9 @@ function view($view_file, $view_data = array()) {
                     --bg: #e8e8e8;
                 }
 
-                .bgTheme{
-                    background-color: $theme_options_styles[bgColorHeader] !important;
-                }
+                // .bgTheme{
+                //     background-color: $theme_options_styles[bgColorHeader] !important;
+                // }
 
                 .nav-link-adminTools.normalColorBlueText.active{
                     background-color: $theme_options_styles[bgColorHeader];
@@ -469,27 +469,28 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['buttonBgWhiteColor'])) {
             $styles_str .= "
-                .submitAdminBtn, .opencourses_btn {
-                    border-color: $theme_options_styles[buttonBgWhiteColor];
-                    color: $theme_options_styles[buttonBgWhiteColor];
-                }
+                // .submitAdminBtn, .opencourses_btn {
+                //     border-color: $theme_options_styles[buttonBgWhiteColor];
+                //     color: $theme_options_styles[buttonBgWhiteColor];
+                // }
 
             ";
         }
   
         if (!empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn, .opencourses_btn, .searchGroupBtn {
-                    border-color: $theme_options_styles[whiteButtonTextColor];
-                    color: $theme_options_styles[whiteButtonTextColor];
-                    background-color: #ffffff;
-                }
+                // .submitAdminBtn, .opencourses_btn, .searchGroupBtn {
+                //     border-color: $theme_options_styles[whiteButtonTextColor];
+                //     color: $theme_options_styles[whiteButtonTextColor];
+                //     background-color: #ffffff;
+                // }
+                
 
-                .menu-popover .list-group-item{
-                    border-color: $theme_options_styles[whiteButtonTextColor];
-                    color: $theme_options_styles[whiteButtonTextColor];
-                    background-color: #ffffff;
-                }
+                // .menu-popover .list-group-item{
+                //     border-color: $theme_options_styles[whiteButtonTextColor];
+                //     color: $theme_options_styles[whiteButtonTextColor];
+                //     background-color: #ffffff;
+                // }
 
 
             ";
@@ -497,20 +498,20 @@ function view($view_file, $view_data = array()) {
         
         if (!empty($theme_options_styles['whiteButtonHoveredTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
-                .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
-                    color: $theme_options_styles[whiteButtonHoveredTextColor];
-                }
+                // .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
+                // .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
+                //     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                //     color: $theme_options_styles[whiteButtonHoveredTextColor];
+                // }
 
-                .menu-popover:focus{
-                    color: $theme_options_styles[whiteButtonHoveredTextColor];
-                }
+                // .menu-popover:focus{
+                //     color: $theme_options_styles[whiteButtonHoveredTextColor];
+                // }
 
-                .menu-popover .list-group-item:hover{
-                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
-                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
-                }
+                // .menu-popover .list-group-item:hover{
+                //     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                //     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                // }
 
 
             ";
@@ -518,18 +519,18 @@ function view($view_file, $view_data = array()) {
         
         if (!empty($theme_options_styles['whiteButtonHoveredBgColor'])) {
             $styles_str .= "
-                .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
-                .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
-                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                }
+                // .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
+                // .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
+                //     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                // }
 
-                .menu-popover:focus{
-                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                }
+                // .menu-popover:focus{
+                //     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                // }
 
-                .menu-popover .list-group-item:hover{
-                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                }
+                // .menu-popover .list-group-item:hover{
+                //     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                // }
 
             ";
         }
@@ -538,37 +539,37 @@ function view($view_file, $view_data = array()) {
       
         if (!empty($theme_options_styles['buttonBgColor'])) {
             $styles_str .= "
-                .submitAdminBtn.active, submitAdminBtn.active:hover{
-                    background-color: $theme_options_styles[buttonBgColor];
-                    z-index: 0 !important;
-                }
+                // .submitAdminBtn.active, submitAdminBtn.active:hover{
+                //     background-color: $theme_options_styles[buttonBgColor];
+                //     z-index: 0 !important;
+                // }
 
-                .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
-                    border-color: $theme_options_styles[buttonBgColor];
-                    background-color: $theme_options_styles[buttonBgColor];
-                }
+                // .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
+                //     border-color: $theme_options_styles[buttonBgColor];
+                //     background-color: $theme_options_styles[buttonBgColor];
+                // }
 
-                .login-form-submit, .login-form-submit:hover {
-                    border-color: $theme_options_styles[buttonBgColor];
-                    background-color: $theme_options_styles[buttonBgColor];
-                }
+                // .login-form-submit, .login-form-submit:hover {
+                //     border-color: $theme_options_styles[buttonBgColor];
+                //     background-color: $theme_options_styles[buttonBgColor];
+                // }
 
             ";
         }
 
         if (!empty($theme_options_styles['buttonTextColor'])) {
             $styles_str .= "
-                .submitAdminBtn.active, .submitAdminBtn.active:hover{
-                    color: $theme_options_styles[buttonTextColor];
-                }
+                // .submitAdminBtn.active, .submitAdminBtn.active:hover{
+                //     color: $theme_options_styles[buttonTextColor];
+                // }
 
-                .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
-                    color: $theme_options_styles[buttonTextColor];
-                }
+                // .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
+                //     color: $theme_options_styles[buttonTextColor];
+                // }
 
-                .login-form-submit, .login-form-submit:hover{
-                    color: $theme_options_styles[buttonTextColor];
-                }
+                // .login-form-submit, .login-form-submit:hover{
+                //     color: $theme_options_styles[buttonTextColor];
+                // }
 
             ";
         }
@@ -587,9 +588,9 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
-                .left-form{ 
-                    background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
-                }
+                // .left-form{ 
+                //     background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
+                // }
 
                 .pagination-glossary .page-item.active .page-link{
                     background-color: $theme_options_styles[leftNavBgColor];

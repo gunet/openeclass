@@ -492,7 +492,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
             $tool_content .= action_button($dyntools)."</div></caption>";
 
-            $tool_content .= "<thead><tr class='notes_thead'>
+            $tool_content .= "<thead><tr class='list-header'>
                 <td class='bg-header-table TextBold'>$langName</td>
                 <td class='bg-header-table TextBold'>$langCPFShortName</td>
                 <td class='bg-header-table TextBold'>$langDescription</td>

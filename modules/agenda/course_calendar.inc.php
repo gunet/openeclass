@@ -582,11 +582,11 @@ require_once 'include/lib/references.class.php';
             if ($barMonth != date("m", $d)) {
                 $barMonth = date("m", $d);
                 $barYear = date("Y", $d);
-                $eventlist .= "<tr>";
-                $eventlist .= "<td colspan='2' class='monthLabel bgTheme'>";
-                $eventlist .= "<div class='text-center text-white'><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
+                $eventlist .= "<thead><tr>";
+                $eventlist .= "<td colspan='2' class='monthLabel'>";
+                $eventlist .= "<div><strong>" . $langMonths[$barMonth] . "&nbsp;" . $barYear . "</strong></div>";
                 $eventlist .= "</td>";
-                $eventlist .= "</tr>";
+                $eventlist .= "</tr></thead>";
             }
             $classvis = '';
             if ($is_editor) {

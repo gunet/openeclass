@@ -5,7 +5,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                         <ol class="breadcrumb">
@@ -101,7 +101,7 @@
                                         <div class="modal-dialog modal-md modal-primary">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="SettingsRegistrationModalLabel"><span class='fa fa-cogs'></span>&nbsp{{ trans('langSettingsRegistrationOfGroup') }}</h5>
+                                                    <h5 class="modal-title" id="SettingsRegistrationModalLabel">{{ trans('langSettingsRegistrationOfGroup') }}</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                     </button>
                                                 </div>
@@ -148,7 +148,7 @@
                                         <div class="modal-dialog modal-md modal-danger">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="DeleteAllGroupsModalLabel"><span class='fa fa-trash'></span>&nbsp{{ trans('langDeleteAllMentoringGroups') }}</h5>
+                                                    <h5 class="modal-title" id="DeleteAllGroupsModalLabel">{{ trans('langDeleteAllMentoringGroups') }}</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                                     </button>
                                                 </div>

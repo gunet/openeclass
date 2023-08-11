@@ -5,7 +5,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
                         <div class='col-12 ps-lg-3 pe-lg-3 ps-4 pe-4'>

@@ -72,17 +72,17 @@
                         <div class='table-responsive mb-4'>
                             <table class='table-default nocategory-links'>
                             @if (count($general_category->links) > 0)
-                                <tr class='list-header'>
+                                <thead><tr class='list-header'>
                                     <th class='text-start'>{{ trans('langNoCategory') }}</th>
                                     @if ($display_tools)
                                     <th>{!! icon('fa-cogs') !!}</th>
                                     @endif
-                                <tr>
+                                <tr></thead>
                                 @include('modules.link.common.linkList', ['category' => $general_category])
                             @else
-                                <tr class='list-header'>
+                                <thead><tr class='list-header'>
                                     <th class='text-start'>{{ trans('langNoCategory') }}</th>
-                                </tr>
+                                </tr></thead>
                                 <tr>
                                     <td class='text-dark text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                 </tr>
@@ -95,7 +95,7 @@
                         <div class='col-sm-12'>
                             <div class='table-responsive mb-4'>
                                 <table class='table-default nocategory-links'>
-                                @if (count($social_category->links) > 0)
+                                @if (count($social_category->links) > 0)<thead>
                                     <tr class='list-header'>
                                         <th class='text-start'>
                                             {{ trans('langSocialCategory')."   " }}
@@ -108,16 +108,16 @@
                                         @if (isset($_SESSION['uid']) && !$is_in_tinymce)
                                             <th>{!! icon('fa-gears') !!}</th>
                                         @endif
-                                    </tr>
+                                    </tr></thead>
                                     @if ($socialview)
                                         @include('modules.link.common.linkList', ['category' => $social_category])
                                     @endif
                                 @else
-                                    <tr class='list-header'>
+                                    <thead><tr class='list-header'>
                                         <th class='text-start'>
                                             {{ trans('langSocialCategory') }}
                                         </th>
-                                    </tr>
+                                    </tr></thead>
                                     <tr>
                                         <td class='not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                     </tr>
@@ -131,7 +131,7 @@
                     <div class='col-sm-12'>
                         <div class='table-responsive mb-4'>
                             <table class='table-default category-links'>
-                            <tr class='list-header'>
+                            <thead><tr class='list-header'>
                                     <th>{{ trans('langCategorisedLinks').'   ' }}
                                     @if ($categories)    
                                         @if (isset($urlview) && abs($urlview) == 0)
@@ -148,7 +148,7 @@
                                     @if ($categories && $display_tools)
                                         <th style='width:109px;'>{!! icon('fa-cogs') !!}</th>
                                     @endif
-                                </tr>                        
+                                </tr></thead>                    
                             @if ($categories)
                                 @foreach ($categories as $key => $category)
                                     @if ((isset($urlview[$key]) and $urlview[$key] == '1'))

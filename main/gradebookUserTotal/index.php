@@ -54,7 +54,7 @@ array('title' => $langBack,
     
 if (count($courses) > 0) {
     $grade_content .= "<div class ='table-responsive'>
-            <table class='table-default'><tr class='list-header'><th>$langCourse</th><th>$langGradebookGrade</th></tr>";
+            <table class='table-default'><thead><tr class='list-header'><th>$langCourse</th><th>$langGradebookGrade</th></tr></thead>";
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
         $code = $course1->code;

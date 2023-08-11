@@ -166,7 +166,7 @@ if (!$nbrReports) {
         }
     }
 
-    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr class='list-header'>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'><thead><tr class='list-header'>";
     $tool_content .= "
             <th>$langAbuseReportCat</th>
             <th>$langMessage</th>
@@ -175,7 +175,7 @@ if (!$nbrReports) {
             <th>$langUser</th>
             <th>$langDate</th>
             <th class='text-end'>".icon('fa-gears')."</th>
-          </tr>";
+          </tr></thead>";
 
     foreach ($result as $report) {
 

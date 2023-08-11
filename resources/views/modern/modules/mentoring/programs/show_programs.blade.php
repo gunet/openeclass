@@ -6,7 +6,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
                         <div class='col-12 ps-4 pe-4'>
@@ -129,7 +129,7 @@
                                         </div>
                                         <div class="card-footer text-center">
                                             <small class="text-muted">
-                                                <a class='btn viewProgram bgEclass TextBold text-uppercase small-text rounded-2 d-flex justify-content-center aling-items-center' href="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php">
+                                                <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php">
                                                     <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
                                                 </a>
                                             </small>

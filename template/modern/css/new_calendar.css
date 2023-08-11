@@ -7,27 +7,46 @@
   background-color: #2B3944;
 }
 
-#cal-header{ border-top-left-radius: 4px; border-top-right-radius:4px ;}
+#cal-header{ 
+  border-top-left-radius: 4px; 
+  border-top-right-radius:4px ;
+}
 
-@media (max-width: 991px){ #cal-header{  margin-left:0px;  margin-right:0px; } }
+@media (max-width: 991px){ 
+  #cal-header{  
+    margin-left:0px;  
+    margin-right:0px; 
+  } 
+}
 
-#current-month{  color:white; }
+#current-month{  
+  color:#ffffff; 
+}
 
-#cal-header .fa-chevron-left{ color:white; }
+#cal-header .fa-chevron-left{ 
+  color:#ffffff; 
+}
 
-#cal-header .fa-chevron-right{ color:white; }
+#cal-header .fa-chevron-right{ 
+  color:#ffffff; 
+}
 
-.number-day-cal{ font-size: 14px; color: #687DA3;}
+.number-day-cal{ 
+  font-size: 14px; 
+  color: #687DA3;
+}
 
-.cal-day-outmonth > .number-day-cal {opacity: 0.2;}
+.cal-day-outmonth > .number-day-cal {
+  opacity: 0.2;
+}
 
 /* .cal-day-today > .number-day-cal{ color:white; padding:3px 6px 2px 6px; border-radius: 50%; background-color: #005ad9;} */
-.cal-day-today > .number-day-cal{  border-radius: 4px; }
+.cal-day-today > .number-day-cal{  
+  border-radius: 4px; 
+}
 
 .btn-calendar-prev, .btn-calendar-next{
   height:25px; width:25px; 
-  /* border-radius:50%; 
-  border:solid 1px #ffffff;  */
   font-size:11px;
 }
 
@@ -36,19 +55,22 @@
   box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) !important;
   background: #ffffff !important;
 }
+
 #cal-slide-content a.event-item {
   color: #005ad9;
   font-weight: normal;
   line-height: 22px;
 }
+
 #cal-slide-content .event{
   width: 100%;
   height:5px;
 }
+
 .cal-day-today.cal-day-holiday .number-day-cal {
   background-color: #0073E6;
   padding: 1px 6px 1px 6px;
-  border-radius: 2% !important;
+  border-radius: 2% ;
   color: #ffffff;
 }
 
@@ -61,9 +83,13 @@
   z-index: 0;
 }
 
+.myPersonalCalendar tbody tr:hover{
+  background-color: transparent;
+}
+
 @media(max-width:991px){
   .myPersonalCalendar,.personal-calendar-header{
-    min-width:500px !important;
+    min-width:500px ;
   }
 }
 
@@ -79,8 +105,8 @@
   font-size: 15px;
 }
 .personal-calendar-header .btn-group .btn.active{
-  background: #005ad9 !important;
-  border-radius: 4px !important;
+  background: #005ad9 ;
+  border-radius: 4px ;
   z-index: 0;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head{
@@ -101,23 +127,28 @@
 }
 .myPersonalCalendar .number-day-cal{
   color: #003e87;
-  font-size: 17px !important;
+  font-size: 17px ;
 }
 .myPersonalCalendar .cal-day-today .number-day-cal{
-  color: #ffffff !important;
+  color: #ffffff ;
 }
 .myPersonalCalendar .cal-cell{
-  border: solid 0.5px #f5f4f4 !important;
+  border: solid 0.5px #f5f4f4 ;
 }
 .myPersonalCalendar .fc-time-grid-event{
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  display: flex ;
+  justify-content: center ;
+  align-items: center ;
 }
 
+
+
+.myCalendarEvents tbody tr:hover{
+  background-color: transparent;
+}
 @media(max-width:991px){
   .myCalendarEvents{
-    min-width:500px !important;
+    min-width:500px ;
   }
 }
 .myCalendarEvents .fc-header-toolbar{
@@ -177,7 +208,7 @@
   box-shadow: none;
 }
 .myCalendarEvents .fc-header-toolbar .fc-center h2{
-  font-size: 15px !important;
+  font-size: 15px ;
   color: #ffffff;
   padding: 8px;
   border-radius:4px;
@@ -192,7 +223,7 @@
   box-shadow: none;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
-  background: #005ad9 !important;
+  background: #005ad9 ;
   border-radius: 4px;
   color: #ffffff;
   text-shadow: none;
@@ -209,7 +240,7 @@
   box-shadow: none;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active{
-  background: #005ad9 !important;
+  background: #005ad9 ;
   border-radius: 4px;
   color: #ffffff;
   text-shadow: none;
@@ -231,13 +262,13 @@
 }
 .myCalendarEvents .fc-widget-content table tbody td{
   height:70px;
-  border: solid 1px #f5f4f4 !important;
+  border: solid 1px #f5f4f4 ;
   
 }
 .myCalendarEvents .fc-time-grid-event{
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  display: flex ;
+  justify-content: center ;
+  align-items: center ;
 }
 
 
@@ -247,6 +278,8 @@
 /****************************************************************************************************/
 
  .datetimepicker .table-condensed{ width:240px; }
+
+ .datetimepicker .table-condensed thead{ border-bottom: 0px;}
 
  .datetimepicker .table-condensed th,.datetimepicker .table-condensed td { padding: 4px 15px; }
 
@@ -273,6 +306,8 @@
 /****************************************************************************************************/
 
 .datepicker-days .table-condensed{ width:240px; }
+
+.datepicker-days .table-condensed thead{ border-bottom: 0px;}
 
 .datepicker-days .table-condensed th,.datepicker-days .table-condensed td { padding: 4px 15px; }
 

@@ -5,7 +5,7 @@
 <div class='{{ $container }}'>
     
 
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                 <div class='col-12'>
                         <h1>{{ trans('langPrivacyPolicy') }}</h1>

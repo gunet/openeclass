@@ -35,81 +35,81 @@
 
                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownMenuButton1">
                         <ul class="list-group list-group-flush dropdown_menu_user">
-                            <li>
-                                <a class='list-group-item d-flex justify-content-center align-items-center py-3'><span class='normalBlueText fs-6 fw-bold'>{{ $_SESSION['uname'] }}</span></a>
+                            <li class='pe-none'>
+                                <a class='list-group-item d-flex justify-content-center align-items-center py-3'><h4 class='mb-0'>{{ $_SESSION['uname'] }}</h4></a>
                             </li>
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or
                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                 (isset($is_departmentmanage_user) and $is_departmentmanage_user))
                                 <li>
-                                    <a id="AdminToolBtn" type="button" class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/admin/index.php"><i class="fas fa-wrench pe-2"></i>{{trans('langAdminTool')}}</a>
+                                    <a id="AdminToolBtn" type="button" class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/admin/index.php"><i class="fa-solid fa-gear settings-icons"></i>{{trans('langAdminTool')}}</a>
                                 </li>
                             @endif
                             @if(get_config('mentoring_platform'))
                             <li>
-                                <a id="goToMentoringMobile" class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php">
-                                    <i class="fa fa-comment pe-2"></i>
+                                <a id="goToMentoringMobile" class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php">
+                                    <i class="fa-solid fa-wand-magic settings-icons"></i>
                                     {{trans('langMentoringPlatform')}}     
                                 </a>
                             </li>
                             @endif
                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
-                                <li><a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fas fa-plus-circle pe-2"></i>{{ trans('langCourseCreate') }}</a></li>
+                                <li><a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fa-solid fa-circle-plus settings-icons"></i>{{ trans('langCourseCreate') }}</a></li>
                             @endif
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/portfolio.php"><i class="fa fa-home pe-2"></i>{{ trans('langMyPortfolio') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/portfolio.php"><i class="fa-solid fa-house settings-icons"></i>{{ trans('langMyPortfolio') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/my_courses.php"><i class="fas fa-graduation-cap pe-2"></i>{{trans('langMyCoursesSide')}}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_courses.php"><i class="fa-solid fa-book-open settings-icons"></i>{{trans('langMyCoursesSide')}}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fas fa-bell pe-2"></i>{{ trans('langMyAnnouncements') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/announcements/myannouncements.php"><i class="fa-regular fa-bell settings-icons"></i>{{ trans('langMyAnnouncements') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/notes/index.php"><i class="fas fa-sticky-note pe-2"></i>{{ trans('langNotes') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/notes/index.php"><i class="fa-regular fa-file-lines settings-icons"></i>{{ trans('langNotes') }}</a>
                             </li>
                             @if (get_config('eportfolio_enable'))
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fas fa-briefcase pe-2"></i>{{ trans('langMyePortfolio') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}"><i class="fa-regular fa-address-card settings-icons"></i>{{ trans('langMyePortfolio') }}</a>
                             </li>
                             @endif
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fas fa-chart-bar pe-2"></i>{{ trans('langMyStats') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/usage/index.php?t=u"><i class="fa-solid fa-chart-line settings-icons"></i>{{ trans('langMyStats') }}</a>
                             </li>
                             @if (get_config('personal_blog'))
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fas fa-location-arrow pe-2"></i>{{ trans('langMyBlog') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/blog/index.php?user_id={{$uid}}&token={{ token_generate('personal_blog'.$uid) }}"><i class="fa-solid fa-globe settings-icons"></i>{{ trans('langMyBlog') }}</a>
                             </li>
                             @endif
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}modules/message/index.php"><i class="fas fa-envelope pe-2"></i>{{ trans('langMyDropBox') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/message/index.php"><i class="fa-regular fa-envelope settings-icons"></i>{{ trans('langMyDropBox') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/personal_calendar/index.php"><i class="fas fa-bell pe-2"></i>{{ trans('langMyAgenda') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/personal_calendar/index.php"><i class="fa-regular fa-calendar settings-icons"></i>{{ trans('langMyAgenda') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fas fa-user pe-2"></i> {{ trans('langMyProfile') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/profile/display_profile.php"><i class="fa-solid fa-user settings-icons"></i> {{ trans('langMyProfile') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa fa-magic fa-fw pe-2"></i> {{ trans('langMyWidgets') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/my_widgets.php"><i class="fa-solid fa-layer-group settings-icons"></i> {{ trans('langMyWidgets') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa fa-sort-numeric-desc fa-fw pe-2"></i> {{ trans('langGradeTotal') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/gradebookUserTotal/index.php"><i class="fa-solid fa-a settings-icons"></i> {{ trans('langGradeTotal') }}</a>
                             </li>
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa fa-trophy fa-fw pe-2"></i> {{ trans('langMyCertificates') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mycertificates.php"><i class="fa-solid fa-award settings-icons"></i> {{ trans('langMyCertificates') }}</a>
                             </li>
                             @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start py-3" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fas fa-folder pe-2"></i> {{ trans('langMyDocs') }}</a>
+                                <a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}main/mydocs/index.php"><i class="fa-regular fa-file settings-icons"></i> {{ trans('langMyDocs') }}</a>
                             </li>
                             @endif
                             <li>
                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                    <button type='submit' class='list-group-item d-flex justify-content-end align-items-center py-3 w-100 text-end' name='submit'><i class="fa-solid fa-right-from-bracket pe-2 Primary-600-cl"></i>
-                                        {{ trans('langLogout') }}
+                                    <button type='submit' class='list-group-item d-flex justify-content-end align-items-center py-3 w-100 text-end gap-2' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
+                                    <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                     </button>
                                 </form>
                             </li>

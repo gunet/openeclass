@@ -29,7 +29,7 @@
                                 <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
                                     {!! icon('fa-folder-open', $GLOBALS['langViewShow']) !!}
                                 </th>
-                                <th class='text-center' style='width:100px;'>{{ trans('langDate') }}</th>
+                                <th style='width:100px;'>{{ trans('langDate') }}</th>
                             </tr>
                         @foreach ($categories as $myrow)
                             <?php

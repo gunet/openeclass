@@ -51,12 +51,12 @@ function list_videos($id = NULL) {
 
         $video_found = TRUE;
         $ret_string .= "<div class='table-responsive'><table class='table-default'>";
-        $ret_string .= "<tr class='list-header'>" .
+        $ret_string .= "<thead><tr class='list-header'>" .
                          "<th width='200' class='text-start'>&nbsp;$langTitle</th>" .
                          "<th class='text-start'>$langDescription</th>" .
                          "<th class='pe-2' width='100'>$langDate</th>" .
                          "<th class='pe-2' width='80'>$langChoice</th>" .
-                         "</tr>";
+                         "</tr></thead>";
         foreach (array('video', 'videolink') as $table) {
             $result = Database::get()->queryArray("SELECT * FROM $table WHERE (category IS NULL OR category = 0) AND course_id = ?d AND visible = ?d", $course_id, 1);
             foreach ($result as $row) {

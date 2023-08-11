@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(!isset($mentoring_platform) and !$mentoring_platform)
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])

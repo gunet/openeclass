@@ -9,12 +9,12 @@
                     @if(get_config('enable_search'))
                         <div class='col-12 mt-5 d-flex justify-content-center align-items-center px-4'>
                             @if(isset($course_code) and $course_code)
-                                <form action="{{ $urlAppend }}modules/search/search_incourse.php?all=true" class='d-flex justify-content-center align-items-end w-100'>
+                                <form action="{{ $urlAppend }}modules/search/search_incourse.php?all=true" class='d-flex justify-content-center align-items-end w-100 gap-2'>
                             @else
-                                <form action="{{ $urlAppend }}modules/search/search.php" class='d-flex justify-content-center align-items-end w-100'>
+                                <form action="{{ $urlAppend }}modules/search/search.php" class='d-flex justify-content-center align-items-end w-100 gap-2'>
                             @endif
                                     <input type="text" class="inputMobileSearch w-100 basic-value-cl" placeholder="{{ trans('langSearch')}}..." name="search_terms">
-                                    <button class="btn submitMobileSearch rounded-0 d-flex justify-content-center align-items-center" type="submit" name="quickSearch">
+                                    <button class="btn d-flex justify-content-center align-items-center" type="submit" name="quickSearch">
                                         <i class='fa fa-search small-text'></i>
                                     </button>
                                 </form>

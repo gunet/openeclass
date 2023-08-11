@@ -124,7 +124,7 @@ if (isset($_POST['search_terms'])) {
 }
 $tool_content .= "<br><small>" . count($courses) . " $langResults2</small></span></div></div>
     <div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
-    <tr class='list-header'>";
+    <thead><tr class='list-header'>";
 if ($uid > 0) {
     $tool_content .= "<th width='50' align='center'>$langRegistration</th>";
 }
@@ -132,7 +132,7 @@ $tool_content .= "<th class='text-start ps-1'>" . $langCourse . " ($langCode)</t
       <th class='text-start'>$langTeacher</th>
       <th class='text-start'>$langKeywords</th>
       <th class='text-start'>$langType</th>
-    </tr>";
+    </tr></thead>";
 
 foreach ($courses as $course) {
     $courseHref = "../../courses/" . q($course->code) . "/";

@@ -25,6 +25,16 @@
                         @if(!$mentoring_platform)
                              @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                         @endif
+                    @else
+                        @if(!$mentoring_platform)
+                            @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']))
+                                <nav class="me-lg-0 me-2">
+                                    <a class="btn d-lg-none p-0" type="button" data-bs-toggle="offcanvas" href="#collapseTools" role="button" aria-controls="collapseTools">
+                                        <img src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' />
+                                    </a>
+                                </nav>
+                            @endif
+                        @endif
                     @endif
 
                     @if($course_code and $currentCourseName)

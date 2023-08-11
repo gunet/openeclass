@@ -4,7 +4,7 @@
 
         <div class="col-12 main-section">
             <div class='{{ $container }}'>
-                <div class="row rowMargin">
+                <div class="row m-auto">
                     @include('layouts.partials.all_my_courses_view',['myCourses' => $myCourses])
                 </div>
             </div>

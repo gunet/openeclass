@@ -127,9 +127,9 @@ if (isset($_GET['rid'])) {
     $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments, ts FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);
     if ($sql) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr class='list-header'>";
+        $tool_content .= "<thead><tr class='list-header'>";
         $tool_content .= "<th width='320'>$langSurnameName</th><th>$langComments</th><th width='170'>$langDateRequest</th><th width='80'>".icon('fa-gears')."</th>";
-        $tool_content .= "</tr>";
+        $tool_content .= "</tr></thead>";
         foreach ($sql as $udata) {
             $am_message = '';
             $user_am = uid_to_am($udata->uid);

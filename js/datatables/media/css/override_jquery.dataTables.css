@@ -5,13 +5,63 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
+
+  .dataTables_wrapper input[type="text"],
+  .dataTables_wrapper input[type="password"],
+  .dataTables_wrapper input[type="email"],
+  .dataTables_wrapper input[type="number"],
+  .dataTables_wrapper input[type="url"],
+  .dataTables_wrapper input[type="search"]{
+      background-color: #ffffff;
+      height: 40px;
+      border-radius: 4px;
+      margin-top: 5px;
+      border:solid 1px #687DA3;
+      color: #687DA3;
+      font-size: 14px;
+      font-weight: 400;
+      font-style: normal;
+  }
+
+  .dataTables_wrapper input[type="text"]:focus,
+  .dataTables_wrapper input[type="number"]:focus,
+  .dataTables_wrapper input[type="email"]:focus,
+  .dataTables_wrapper input[type="url"]:focus,
+  .dataTables_wrapper input[type="search"]:focus,
+  .dataTables_wrapper .form-control:focus,
+  .dataTables_wrapper .uneditable-input:focus {   
+    border-color: #0073E6;
+    box-shadow: none ;
+    outline: 0 none;
+    background-color: #ffffff;
+    color:#687DA3;
+    font-weight: 400; font-style: normal;
+  }
+
+
+
+  table.dataTable.display tbody tr.odd,
+  table.dataTable.display tbody tr.odd > .sorting_1, 
+  table.dataTable.order-column.stripe tbody tr.odd > .sorting_1,
+  table.dataTable.display tbody tr.even > .sorting_1, 
+  table.dataTable.order-column.stripe tbody tr.even > .sorting_1{
+    background-color: #ffffff;
+    border-bottom: solid 1px #EFF6FF;
+  }
+
   table.dataTable thead th, table.dataTable thead td {
     padding: 10px 0px 10px 0px;
       border-bottom: 1px solid #ffffff;
   }
 
-  table.dataTable tbody tr:hover{
-    background-color: #EFF6FF;
+  table.dataTable tbody td{
+    border-bottom: solid 1px #EFF6FF;
+  }
+
+  @media(min-width:992px){
+    table.dataTable tbody tr:hover{
+      background-color: #EFF6FF;
+    }
   }
 
   table.dataTable tbody tr td{
@@ -46,7 +96,7 @@
   }
 
   th.sorting_disabled{
-    height: 0px !important;
+    height: 0px;
   }
 
   .dataTables_wrapper.no-footer .dataTables_scrollBody {
@@ -62,6 +112,16 @@
   table.dataTable tfoot th, table.dataTable tfoot td {
       padding: 10px 10px 10px 10px;
       border-top: 2px solid #ffffff;
+  }
+
+  /* head-tfoot in announcements,requests tables */
+  .dataTables_scrollHeadInner,
+  .dataTables_scrollFootInner{
+    width: 100% !important;
+    padding-right: 0px;
+  }
+  .dataTables_scrollFootInner tfoot tr th{
+    border: 0px;
   }
 
 
@@ -94,7 +154,7 @@
     align-items: center;
     height: 30px;
     padding: 15px;
-    padding-top: 0.755em !important;
+    margin-top: 0.755em ;
   }
 
   .dataTables_paginate.paging_simple_numbers span,  .dataTables_paginate.paging_full_numbers span{
@@ -236,14 +296,25 @@
     background-color: #ffffff;
   }
 
-  #portfolio_lessons_paginate .paginate_button.current{ background: #E8EDF8;}
+  #portfolio_lessons_paginate .paginate_button.current{ 
+    background: #E8EDF8;
+  }
 
   #portfolio_lessons_wrapper .dataTables_filter{
-       float: left !important;
+    float: left;
   }
   #portfolio_lessons_filter input[type="search"]{
-      border:solid 1px #687DA3 !important;
-      height:40px !important;
+      border-color: #687DA3;
+      height:40px;
+  }
+  #portfolio_lessons_filter input[type="search"]:focus {   
+      border-color: #0073E6;
+      box-shadow: none;
+      outline: 0 none;
+      background-color: #ffffff;
+      color:#687DA3;
+      font-weight: 400; 
+      font-style: normal;
   }
   @media(min-width:992px){
       #portfolio_lessons_filter input[type="search"]{

@@ -183,14 +183,14 @@ if (isset($_GET['add'])) {
                                                 c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
             $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
-                                <tr class='list-header'>
+                                <thead><tr class='list-header'>
                                   <th>$langID</th>
                                   <th>$langName</th>
                                   <th>$langSurname</th>
                                   <th>$langUsername</th>
                                   <th>$langFaculty</th>
                                   <th>$langActions</th>
-                                </tr>";
+                                </tr></thead>";
             $i = 1;
             foreach ($result as $myrow) {
                 $departments = $user->getDepartmentIds($myrow->id);

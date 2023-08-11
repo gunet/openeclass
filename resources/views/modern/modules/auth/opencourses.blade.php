@@ -29,7 +29,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -71,7 +71,7 @@
                         <h1>{{ trans('langCourses') }}</h1>
                     </div>
                     <div class='col-12 mt-4'>
-                        <div class='row rowMargin row-cols-1 row-cols-lg-2 g-5'>
+                        <div class='row row-cols-1 row-cols-lg-2 g-5'>
                             <div class='col-lg-6 col-12'>
                                 <div class='col-12'>
                                     <div class="card border-card h-100 Borders border-0 bg-transparent">
@@ -122,10 +122,10 @@
                                             <th>{!! trans('langCourseCode') !!}</th>
                                         @if (isset($isInOpenCoursesMode))
                                             <th>{!! trans('langTeacher') !!}</th>
-                                            <th>{!! trans('langOpenCoursesLevel') !!}</th>
+                                            <th class='text-center'>{!! trans('langOpenCoursesLevel') !!}</th>
                                         @else
                                             <th>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-end'>{!! trans('langType') !!}</th>
+                                            <th class='text-center'>{!! trans('langType') !!}</th>
                                         @endif
                                         </tr>
                                     </thead>
@@ -204,7 +204,7 @@
                                                 <td>
                                                     {!! $mycourse->t !!}
                                                 </td>
-                                                <td class='text-end'>
+                                                <td class='text-center'>
                                                 @if ($isInOpenCoursesMode)
                                                     {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
                                                     <a href='javascript:showMetadata("{!! $mycourse->k !!}");'><img src='{{ $themeimg }}/lom.png'/></a>

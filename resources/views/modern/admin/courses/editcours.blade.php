@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
@@ -52,7 +52,7 @@
                 <div class='col-12'>
                     <div class='table-responsive'>
                         <table class='table-default'>
-                            <th class='list-header text-white' colspan='2'>{{ trans('langCourseInfo') }}{!! icon('fa-gear orangeText ps-2',trans('langModify'), "infocours.php?c=".$c) !!}</th>
+                            <thead><th class='list-header' colspan='2'>{{ trans('langCourseInfo') }}{!! icon('fa-gear orangeText ps-2',trans('langModify'), "infocours.php?c=".$c) !!}</th></thead>
                             <tr>
                                 <th width='250'>{{ trans('langFaculty') }}</th>
                                 <td>
@@ -86,7 +86,7 @@
                 <div class='col-12'>
                     <div class='table-responsive mt-4'>
                         <table class='table-default'>
-                            <th class='list-header text-white' colspan='2'>{{ trans('langQuota') }}  {!! icon('fa-gear orangeText ps-2', trans('langModify'), "quotacours.php?c=".$c) !!}</th>
+                            <thead><th class='list-header' colspan='2'>{{ trans('langQuota') }}  {!! icon('fa-gear orangeText ps-2', trans('langModify'), "quotacours.php?c=".$c) !!}</th></thead>
                             <tr>
                                 <td colspan='2'>
                                     <div class='sub_title1'>{{ trans('langTheCourse') }} {{ $course->title }}  {{ trans('langMaxQuota') }}</div>
@@ -116,9 +116,9 @@
                 <div class='col-12'>
                     <div class='table-responsive mt-4'>
                         <table class='table-default'>
-                            <th class='list-header text-white' colspan='2'>
+                            <thead><th class='list-header' colspan='2'>
                                 {{ trans('langCourseStatus') }} {!! icon('fa-gear orangeText ps-2', trans('langModify'), "statuscours.php?c=".$c) !!}
-                            </th>
+                            </th></thead>
                             <tr>
                                 <th width='250'>{{ trans('langCurrentStatus') }}:</th>
                                 <td>{{ course_status_message($cId) }}</td>
@@ -132,7 +132,7 @@
                 <div class='col-12'>
                     <div class='table-responsive mt-4'>
                         <table class='table-default'>
-                            <th class='list-header text-white' colspan='2'>{{ trans('langOtherActions') }}</th>
+                            <thead><th class='list-header' colspan='2'>{{ trans('langOtherActions') }}</th></thead>
                             <!--Users list-->
                             <tr>
                                 <td>

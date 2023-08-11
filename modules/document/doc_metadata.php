@@ -84,10 +84,11 @@ function metaCreateForm($metadata, $oldFilename, $real_filename) {
 	  <h3>$langAddMetadata</h3>
       <div class='table-responsive pt-0'>
 	  <table class='table-default'>
+      <thead>
 	  <tr>
 	    <th>$langWorkFile:</th>
 	    <td>$oldFilename</td>
-	  </tr>";
+	  </tr></thead>";
 
     $output .= metaTextAreaRow($langTitle, "meta_title", $metaTitle, $langTitleHelp)
             . metaTextAreaRow($langDescription, "meta_description", $metaDescription, $langDescriptionHelp, 4)

@@ -130,12 +130,13 @@ if (isset($_GET['group_as'])) {
             <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default'>
+                <thead>
                 <tr class='list-header'>
                   <th style='width:45%;'>$langTitle</th>
                   <th>$m[subm]</th>
                   <th>$m[nogr]</th>
                   <th>$langGroupWorkDeadline_of_Submission</th>
-                </tr>";
+                </tr></thead>";
         foreach ($result as $row) {
             // Check if assignment contains submissions
             $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;

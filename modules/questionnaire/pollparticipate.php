@@ -256,7 +256,7 @@ function printPollForm() {
                
                 <div class='$columnPanel'>
                     <div class='panel panel-success h-100'>
-                        <div class='panel-heading bgTheme'>
+                        <div class='panel-heading'>
                             $langQuestion $i
                         </div>
                         <div class='panel-body panel-body-questionaire'>

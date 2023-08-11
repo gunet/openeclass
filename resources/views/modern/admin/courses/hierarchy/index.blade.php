@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-    <div class="row rowMargin">
+    <div class="row m-auto">
 
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -51,11 +51,11 @@
                     <div class='col-12'>
                         <div class='table-responsive'>
                             <table class='table-default'>
-                                <tr class='list-header'>
-                                    <td colspan='{{ $maxdepth + 4 }}' class='right'>
+                                <thead><tr class='list-header'>
+                                    <th colspan='{{ $maxdepth + 4 }}' class='right'>
                                             {{ trans('langThereAre') }}: <b>{{ $nodesCount }}</b> {{ trans('langFaculties') }}
-                                    </td>
-                                </tr>
+                                    </th>
+                                </tr></thead>
                                 <tr>
                                     <td colspan='{{ $maxdepth + 4 }}'>
                                         <div id='js-tree'></div>

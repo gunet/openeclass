@@ -77,11 +77,12 @@ $tool_content .= "
     <form name='courseCategories' action='" . $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "' method='post' enctype='multipart/form-data'>
         <div class='table-responsive mt-0'>
             <table class='table-default'>
+            <thead>
                 <tr class='list-header'>
                     <th width='45%'>" . $langInactiveCourseCategories . "</th>
                     <th width='10%'>" . $langMove . "</th>
                     <th width='45%'>" . $langActiveCourseCategories . "</th>
-                </tr>";
+                </tr></thead>";
 
 $submitOnClick = '';
 $catIndex = 1;

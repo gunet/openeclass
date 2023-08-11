@@ -242,10 +242,10 @@ if ($PollType == POLL_NORMAL) {
 
                 $answers_table = "
                     <table class='table-default'>
-                        <tr class='list-header'>
+                        <thead><tr class='list-header'>
                             <th>$langAnswer</th>
                             <th>$langSurveyTotalAnswers</th>
-                            <th>$langPercentage</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";
+                            <th>$langPercentage</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr></thead>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     if (isset($answer->answer_text)) {
@@ -332,10 +332,10 @@ if ($PollType == POLL_NORMAL) {
 
                 $answers_table = "
                     <table class='table-default'>
-                        <tr class='list-header'>
+                        <thead><tr class='list-header'>
                             <th>$langAnswer</th>
                             <th>$langSurveyTotalAnswers</th>
-                            <th>$langPercentage</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";
+                            <th>$langPercentage</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr></thead>";
                 foreach ($answers as $answer) {
                     $percentage = round(100 * ($answer->count / $answer_total),2);
                     $this_chart_data['percentage'][array_search($answer->answer_text,$this_chart_data['answer'])] = $percentage;

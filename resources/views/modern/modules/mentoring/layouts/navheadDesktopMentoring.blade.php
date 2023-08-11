@@ -33,6 +33,15 @@
                                     
                                     <ul class="list-group list-group-flush">
 
+                                        @if(isset($mentoring_platform) and $mentoring_platform and !get_config('mentoring_always_active'))
+                                            <li>
+                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}?goToMentoring=false">
+                                                    <i class="fa-solid fa-reply settings-icons"></i>
+                                                    Open Eclass
+                                                </a>
+                                            </li>
+                                        @endif
+
                                         @if ((isset($is_admin) and $is_admin) or
                                             (isset($is_power_user) and $is_power_user) or
                                             (isset($is_usermanage_user) and ($is_usermanage_user)) or
@@ -49,7 +58,7 @@
                                         @if (get_config('eportfolio_enable'))
                                             <li>
                                                 <a id='goToEportfolioHeaderMentoring' class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}&fromMentoring=true">
-                                                    <span class="fas fa-briefcase pt-1"></span>
+                                                    <i class="fas fa-briefcase settings-icons"></i>
                                                     {{ trans('langMyePortfolio') }}
                                                 </a>
                                             </li>
@@ -58,7 +67,7 @@
                                         <li>
                                             <a id="goToMyProgramHeaderMentoring" class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/myprograms.php">
                                              
-                                                <span class="fas fa-tasks pt-1"></span>
+                                                <i class="fas fa-tasks settings-icons"></i>
                                                 {{ trans('langMyPrograms') }}
 
                                             </a>
@@ -66,7 +75,7 @@
 
                                         <li>
                                             <a id="goToMyProfileHeaderMentoring" class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/profile/user_profile.php">
-                                                <span class="fas fa-user pt-1"></span>
+                                                <i class="fas fa-user settings-icons"></i>
                                                 {{ trans('langMyProfile') }}
                                                         
                                                
@@ -77,7 +86,7 @@
                                         @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
                                             <li>
                                                 <a id="goToMyDocsHeaderMentoring" class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/group/document/mydoc.php?mydocs=true">
-                                                   <span class="fas fa-folder pt-1"></span>
+                                                   <i class="fas fa-folder settings-icons"></i>
                                                     {{ trans('langMyDocs') }}
                                                          
                                                    

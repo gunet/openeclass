@@ -4,7 +4,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -55,14 +55,14 @@
                         <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
-                                    <tr class='list-header'>
+                                    <thead><tr class='list-header'>
                                         <th>
                                             {{ trans('langMultipleUsers') }}
                                         </th>
                                         <th>
                                             {{ trans('langResult') }}
                                         </th>
-                                    </tr>
+                                    </tr></thead>
                                     @if (count($loginDouble) > 0)
                                         {!! tablize($loginDouble, 'username') !!}
                                         <tr>
@@ -86,12 +86,12 @@
                         <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
-                                    <tr class='list-header'>
+                                    <thead><tr class='list-header'>
                                         <th>{{ trans('langMultipleAddr') }} e-mail</th>
                                         <th class='right'>
                                             {{ trans('langResult') }}
                                         </th>
-                                    </tr>
+                                    </tr></thead>
                                     @if (count($loginDouble) > 0)
                                        {!! tablize($loginDouble,'email') !!}
                                         <tr>
@@ -115,14 +115,14 @@
                         <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
-                                    <tr class='list-header'>
+                                    <thead><tr class='list-header'>
                                         <th>
                                             {{ trans('langMultiplePairs') }} LOGIN - PASS
                                         </th>
                                         <th class='text-end'>
                                             {{ trans('langResult') }}
                                         </th>
-                                    </tr>
+                                    </tr></thead>
                                     @if (count($loginDouble) > 0)
                                         {!! tablize($loginDouble) !!}
                                         <tr>
@@ -180,10 +180,10 @@
                         <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
-                                    <tr class='list-header'>
+                                    <thead><tr class='list-header'>
                                         <th>{{ trans('langUsers') }}</th>
                                         <th>{{ trans('langResult') }}</th>
-                                    </tr>
+                                    </tr></thead>
                                     @foreach ($q as $data)
                                        <tr>
                                             <td>
@@ -199,10 +199,10 @@
                         <div class='col-12'>
                             <div class='table-responsive'>
                                 <table class='table-default'>
-                                    <tr class="list-header">
+                                    <thead><tr class="list-header">
                                         <th>{{ trans('langPopularCourses') }}</th>
                                         <th>{{ trans('langUsers') }}</th>
-                                    </tr>
+                                    </tr></thead>
                                     @foreach ($popularcourses as $data)
                                         <tr class = '{{ ($data->visible == COURSE_INACTIVE)? 'not_visible': ''  }}'>
                                             <td><a href='{{ $urlServer }}courses/{{ $data->code }}/'>{{ $data->title }}</a> <small>({{ $data->public_code }})</small> <br> <em>{{ $data->prof_names }}</em></td>

@@ -25,7 +25,7 @@
 
 <div class="col-12 main-section">
 <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     <div class='col-12 mb-4'>
                         <h1>{{ trans('lang_remind_pass') }}</h1>

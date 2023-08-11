@@ -52,7 +52,7 @@ if (get_config('personal_blog_commenting')) {
                                 ".$post_actions."
                             </div>
                             <div class='card-body'>
-                                <span class='badge bgTheme'>".format_locale_date(strtotime($comment->getTime())).'</span>'.
+                                <span class='badge Primary-200-bg form-label vsmall-text'>".format_locale_date(strtotime($comment->getTime())).'</span>'.
                                 "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>
                                 <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                             </div>

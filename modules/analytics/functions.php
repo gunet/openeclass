@@ -241,7 +241,7 @@ function display_analytics_elements($analytics_id) {
         $results = "<p class='text-center text-muted'>$langAnalyticsNoElements</p>";
     } else {
         $results ="<div class='col-12'><div class='table-responsive'><table class='table-default'>
-                    <tr class='list-header'>
+                    <thead><tr class='list-header'>
                         <th>
                             $langAnalyticsType
                         </th>
@@ -257,7 +257,7 @@ function display_analytics_elements($analytics_id) {
                         <th>
                             <i class='fa fa-cogs'></i>
                         </th>
-                    </tr>";
+                    </tr></thead>";
         foreach ($sql_data as $result) {
             $id = $result->id;
             $lower_threshold = $result->lower_threshold;
@@ -433,6 +433,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
         $results = "
         <div class='table-responsive mt-0'>
             <table class='table-default'>
+            <thead>
                 <tr class='list-header'>
                     
                     <th>
@@ -452,7 +453,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         </div>
                     </th>
                    
-                </tr>";
+                </tr></thead>";
 
         $peruserarray = array();
 
@@ -582,6 +583,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
     $results = "
     <div class='table-responsive mt-0'>
         <table class='table-default'>
+        </thead>
             <tr class='list-header'>
                 <th>
                    $langType 
@@ -594,7 +596,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
                         . format_locale_date(strtotime($start), 'short', false) . " &mdash; " . format_locale_date(strtotime($end), 'short', false) .
                         "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;user_id=$userid&amp;period=$next'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>
                 </th>
-            </tr>";
+            </tr></thead>";
 
     $elements_data = Database::get()->queryArray("SELECT id, module_id, resource, upper_threshold, lower_threshold, max_value, min_value 
                                             FROM analytics_element

@@ -67,6 +67,7 @@
     border-radius: 0px; 
     padding: 64px 32px 64px 32px;
     min-height: calc(100vh - 80px - 80px);
+    flex: 1;
   }
   
 }
@@ -83,6 +84,12 @@
   background: #ffffff;
   border-radius: 0px;
   border: 0px;
+}
+@media(max-width:991px){
+  .course-wrapper{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 @media(min-width:992px){
   .course-wrapper:not(:has(.active-cont)) .ContentLeftNav{

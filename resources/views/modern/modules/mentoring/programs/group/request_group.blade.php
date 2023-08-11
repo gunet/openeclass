@@ -6,7 +6,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
-        <div class="row rowMargin">
+        <div class="row m-auto">
 
                     @if($isCommonGroup == 1)
                         <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
@@ -148,10 +148,11 @@
                            <p class='text-center TextSemiBold fs-6 mb-2'>{{ trans('langRequestsHasDenied') }}</p>
                            <div class='table-responsive mt-0'>
                                <table class='table-default rounded-2'>
-                                    <tr class='list-header'>
-                                        <th>{{ trans('langName') }}</th>
-                                        <th class='text-end'><span class='fa fa-cogs'></span></th>
-                                    </tr>
+                                    <thead>
+                                        <tr class='list-header'>
+                                            <th>{{ trans('langName') }}</th>
+                                            <th class='text-end'><span class='fa fa-cogs'></span></th>
+                                        </tr></thead>
                                     @foreach($all_denied_requests as $r)
                                         <tr>
                                             <td class='d-flex justify-content-start align-items-center'>

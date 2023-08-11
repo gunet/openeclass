@@ -905,14 +905,14 @@ function tc_session_details() {
                        <div class='col-sm-12'>
                          <div class='table-responsive'>
                            <table class='table-default'>
-                             <tr class='list-header'>
+                             <thead><tr class='list-header'>
                                <th style='width: 50%'>$langTitle</th>
                                <th>$langDuration</th>
                                <th>$langParticipants</th>";
         if ($is_editor) {
             $headings .= "<th>".icon('fa-gears')."</th>";
         }
-        $headings .= "</tr>";
+        $headings .= "</tr></thead>";
 
         foreach ($result as $row) {
             if (!is_null($row->options)) {

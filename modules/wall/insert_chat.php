@@ -46,10 +46,10 @@ function list_chats($id = NULL) {
 
         $ret_string .= "<div class='table-responsive'><table class='table-default'>" .
             "<tr class='list-header'>" .
-            "<th><div align='left'>$langChat</div></th>" .
+            "<thead><th><div align='left'>$langChat</div></th>" .
             "<th><div align='left'>$langDescription</div></th>" .
             "<th width='80'>$langChoice</th>" .
-            "</tr>";
+            "</tr></thead>";
         foreach ($chatinfo as $entry) {
             $checked = '';
             if (in_array($entry['id'], $exist_chat)) {
