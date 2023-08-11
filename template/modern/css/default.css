@@ -2962,9 +2962,17 @@ th .fa-gears{
   display: none;
 }
 
-.table-default th, .table-default {
-  width: auto !important;
+@media(min-width:992px){
+  .table-default th, .table-default {
+    width: auto !important;
+  }
 }
+@media(max-width:991px){
+  .table-default th, .table-default {
+    width: 100% !important;
+  }
+}
+
 
 tr.warning{
   background-color: #FFF4D1;
