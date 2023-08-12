@@ -9,7 +9,7 @@
         <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
-                        <div class='col-12 ps-4 pe-4'>
+                        <div class='col-12'>
                             <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="@if(!isset($_SESSION['uid'])) no_uid_menu @endif TextSemiBold" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php"><span class='fa fa-home'></span>&nbsp{{ trans('langHomeMentoringPlatform') }}</a></li>
@@ -23,7 +23,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoProgramsText')!!}</p>
                         </div>
                     </div>
@@ -60,15 +60,15 @@
                     @endif
 
                     @if (isset($_SESSION['uid']))
-                        <div class='row ms-0'>
-                            <div class='col-md-8 col-12 ps-3'>
-                                <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-start mb-md-0 mb-3'>
-                                    <a class='btn bgEclass btnMyPrograms small-text rounded-2 TextSemiBold text-uppercase d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}modules/mentoring/programs/myprograms.php'>
-                                        <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMyPrograms') }}</span>
+                        
+                            <div class='col-md-8 col-12'>
+                                <div class='col-12 d-flex justify-content-md-start justify-content-center align-items-start gap-2'>
+                                    <a class='btn submitAdminBtn btnMyPrograms gap-2' href='{{ $urlAppend }}modules/mentoring/programs/myprograms.php'>
+                                        <i class="fa-solid fa-eye"></i><span class='hidden-xs TextBold'>{{ trans('langMyPrograms') }}</span>
                                     </a>
                                     @if($is_admin)
-                                        <a class='btn bgEclass btnDisablePrograms ms-2 small-text rounded-2 TextSemiBold text-uppercase d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}modules/mentoring/programs/disable_programs.php'>
-                                            <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langShowDisableMentoringProgramms') }}</span>
+                                        <a class='btn submitAdminBtn btnDisablePrograms gap-2' href='{{ $urlAppend }}modules/mentoring/programs/disable_programs.php'>
+                                            <i class="fa-solid fa-eye-slash"></i><span class='hidden-xs TextBold'>{{ trans('langShowDisableMentoringProgramms') }}</span>
                                         </a>
                                     @endif
                                 </div>
@@ -82,15 +82,15 @@
                                 or ($is_editor_mentoring and !get_config('mentoring_mentor_as_tutorProgram') and $is_only_tutor == 0)
                                 or $is_admin
                                 or ($userStudent_is_mentor > 0 and get_config('mentoring_mentor_as_tutorProgram')))
-                                <div class='col-md-4 col-12 pe-3'>
+                                <div class='col-md-4 col-12 mt-md-0 mt-3'>
                                     <div class='col-12 d-flex justify-content-md-end justify-content-center align-items-start'>
-                                        <a class='btn btn-primary btnCreateProgram' href='{{ $urlAppend }}modules/mentoring/programs/create_program.php'>
-                                            <span class='fa fa-plus'></span><span class='hidden-md-mentoring TextBold'>&nbsp{{ trans('langAddMentoring') }}</span>
+                                        <a class='btn submitAdminBtnDefault btnCreateProgram gap-2' href='{{ $urlAppend }}modules/mentoring/programs/create_program.php'>
+                                            <span class='fa-solid fa-circle-plus'></span><span class='hidden-md-mentoring TextBold'>{{ trans('langAddMentoring') }}</span>
                                         </a>
                                     </div>
                                 </div>
                             @endif
-                        </div>
+                        
                     @endif
 
                     <!-- all programs -->
@@ -100,124 +100,126 @@
                             $allPrograms = 0;
                             $temp_pages = 0;
                         @endphp
-                        <div class="card-group">
-                            @php
-                                $countCards = 1;
-                                if($countCards == 1){
-                                    $pagesPag++;
-                                }
-                            @endphp
-                            @foreach($all_programs as $mentoring_program)
-                               @php $temp_pages++; @endphp
-                                <div class='col-xl-4 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3 cardProgram{{ $pagesPag }}'>
-                                    <div class="card w-100 card{{ $pagesPag }}">
-                                        @if(!empty($mentoring_program->program_image))
-                                            <img class="card-img-top cardImages HeightImageCard" alt="..." src="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/image/{{ $mentoring_program->program_image }}">
-                                        @else
-                                            <img class="card-img-top cardImages HeightImageCard" alt="..." src="{{ $urlAppend }}template/modern/images/nocontentyet.jpg">
-                                        @endif
-                                        <div class="card-body">
-                                            <p class="card-title TextBold fs-5 blackBlueText text-center">{{ $mentoring_program->title }}</p>
-                                            <p class="card-text text-center">
-                                                @php
-                                                    $tutor = show_mentoring_program_tutor($mentoring_program->id);
-                                                @endphp
-                                                @foreach($tutor as $t)
-                                                    &nbsp<span class='TextMedium blackBlueText'>{{ $t->givenname }}&nbsp{{ $t->surname }}</span>
-                                                @endforeach
-                                            </p>
-                                        </div>
-                                        <div class="card-footer text-center">
-                                            <small class="text-muted">
-                                                <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php">
-                                                    <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
-                                                </a>
-                                            </small>
+                        <div class='col-12 mt-4'>
+                            <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+                                @php
+                                    $countCards = 1;
+                                    if($countCards == 1){
+                                        $pagesPag++;
+                                    }
+                                @endphp
+                                @foreach($all_programs as $mentoring_program)
+                                @php $temp_pages++; @endphp
+                                    <div class='col cardProgram{{ $pagesPag }}'>
+                                        <div class="card h-100 w-100 card{{ $pagesPag }}">
+                                            @if(!empty($mentoring_program->program_image))
+                                                <img class="card-img-top cardImages HeightImageCard" alt="..." src="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/image/{{ $mentoring_program->program_image }}">
+                                            @else
+                                                <img class="card-img-top cardImages HeightImageCard" alt="..." src="{{ $urlAppend }}template/modern/images/nocontentyet.jpg">
+                                            @endif
+                                            <div class="card-body">
+                                                <p class="card-title TextBold fs-5 blackBlueText text-center">{{ $mentoring_program->title }}</p>
+                                                <p class="card-text text-center">
+                                                    @php
+                                                        $tutor = show_mentoring_program_tutor($mentoring_program->id);
+                                                    @endphp
+                                                    @foreach($tutor as $t)
+                                                        &nbsp<span class='TextMedium blackBlueText'>{{ $t->givenname }}&nbsp{{ $t->surname }}</span>
+                                                    @endforeach
+                                                </p>
+                                            </div>
+                                            <div class="card-footer d-inline-flex justify-content-center bg-white border-0">
+                                               
+                                                    <a class='btn submitAdminBtn viewProgram' href="{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php">
+                                                        {{ trans('langViewMentoringProgram') }}
+                                                    </a>
+                                               
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                @php
-                                    if($countCards == 8 and $temp_pages < count($all_programs)){
-                                        $pagesPag++;
-                                        $countCards = 0;
-                                    }
-                                    $countCards++;
-                                    $allPrograms++;
+                                    @php
+                                        if($countCards == 8 and $temp_pages < count($all_programs)){
+                                            $pagesPag++;
+                                            $countCards = 0;
+                                        }
+                                        $countCards++;
+                                        $allPrograms++;
 
-                                @endphp
-                            @endforeach
+                                    @endphp
+                                @endforeach
 
-                            @if($pagesPag > 0)
+                                @if($pagesPag > 0)
 
-                                <input type='hidden' id='KeyallPrograms' value='{{ $allPrograms }}'>
-                                <input type='hidden' id='KeypagesProgram' value='{{ $pagesPag }}'>
-                                <div class='col-12 ps-lg-3 pe-lg-3 d-flex justify-content-center align-items-center mt-3'>
-                                    <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-white border-card'>
-                                        <nav aria-label='Page navigation example w-100'>
-                                            <ul class='pagination mentors-pagination w-100 mb-0'>
-                                                <li class='page-item page-item-previous'>
-                                                    <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
-                                                </li>
-                                                @if($pagesPag >=12 )
-                                                    @for($i=1; $i<=$pagesPag; $i++)
-                                                    
-                                                        @if($i>=1 && $i<=5)
-                                                            @if($i==1)
-                                                                <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages'>
-                                                                    <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
-                                                                </li>
-
-                                                                <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
-                                                                    <a>...</a>
-                                                                </li>
-                                                            @else
-                                                                @if($i<$pagesPag)
+                                    <input type='hidden' id='KeyallPrograms' value='{{ $allPrograms }}'>
+                                    <input type='hidden' id='KeypagesProgram' value='{{ $pagesPag }}'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center mt-5'>
+                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-white'>
+                                            <nav aria-label='Page navigation example w-100'>
+                                                <ul class='pagination mentors-pagination w-100 mb-0'>
+                                                    <li class='page-item page-item-previous'>
+                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
+                                                    </li>
+                                                    @if($pagesPag >=12 )
+                                                        @for($i=1; $i<=$pagesPag; $i++)
+                                                        
+                                                            @if($i>=1 && $i<=5)
+                                                                @if($i==1)
                                                                     <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages'>
                                                                         <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
                                                                     </li>
+
+                                                                    <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
+                                                                        <a>...</a>
+                                                                    </li>
+                                                                @else
+                                                                    @if($i<$pagesPag)
+                                                                        <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages'>
+                                                                            <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
+                                                                        </li>
+                                                                    @endif
                                                                 @endif
                                                             @endif
-                                                        @endif
 
-                                                        @if($i>=6 && $i<=$pagesPag-1)
-                                                            <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages d-none'>
-                                                                <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
-                                                            </li>
+                                                            @if($i>=6 && $i<=$pagesPag-1)
+                                                                <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages d-none'>
+                                                                    <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
+                                                                </li>
 
-                                                            @if($i==$pagesPag-1)
-                                                                <li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
-                                                                    <a>...</a>
+                                                                @if($i==$pagesPag-1)
+                                                                    <li id='KeycloseLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-block'>
+                                                                        <a>...</a>
+                                                                    </li>
+                                                                @endif
+                                                            @endif
+
+                                                            @if($i==$pagesPag)
+                                                                <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages'>
+                                                                    <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
                                                                 </li>
                                                             @endif
-                                                        @endif
-
-                                                        @if($i==$pagesPag)
+                                                        @endfor
+                                                    
+                                                    @else
+                                                        @for($i=1; $i<=$pagesPag; $i++)
                                                             <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages'>
                                                                 <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
                                                             </li>
-                                                        @endif
-                                                    @endfor
-                                                
-                                                @else
-                                                    @for($i=1; $i<=$pagesPag; $i++)
-                                                        <li id='KeypageCenter{{ $i }}' class='page-item page-item-pages'>
-                                                            <a id='Keypage{{ $i }}' class='page-link' href='#'>{{ $i }}</a>
-                                                        </li>
-                                                    @endfor
-                                                @endif
+                                                        @endfor
+                                                    @endif
 
-                                                <li class='page-item page-item-next'>
-                                                    <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
-                                                </li>
-                                            </ul>
-                                        </nav>
+                                                    <li class='page-item page-item-next'>
+                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     @else
-                        <div class='col-12 mt-3 ps-4 pe-4'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{trans('langNoMentoringPrograms')}}</div></div>
+                        <div class='col-12 mt-4'>
+                            <div class='alert alert-warning'>{{trans('langNoMentoringPrograms')}}</div>
                         </div>
                     @endif
                     

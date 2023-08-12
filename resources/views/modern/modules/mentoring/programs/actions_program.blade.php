@@ -68,8 +68,9 @@
                                     <label for='startdate' class='col-12 control-label-notes mb-1'>{{ trans('langStartDate') }}<span class='small-text'>({{ trans('langUntilNow') }})</span></label>
                                     <div class='col-12'>
                                         <div class='input-group'>
-                                            <input class='form-control mt-0' name='startdate' id='startdate' type='text' required>
-                                            <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-calendar'></span></div>
+                                            <span class="add-on input-group-text h-40px bg-white input-border-color border-end-0"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                            <input class='form-control border-start-0 mt-0' name='startdate' id='startdate' type='text' required>
+                                           
                                         </div>
                                     </div>
                                 </div>

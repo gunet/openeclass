@@ -52,112 +52,116 @@
                     </div>
                     @endif
                    
-                    <div class='col-3'>
+                    <div class='col-12'>
                         {!! $action_bar !!}
                     </div>
                     
                    
                     @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
-                        
-                        <div class='contentAddAnnounce'>
-                            <form class='form-wrapper form-edit' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?group_id={!! getInDirectReference($group_id) !!}">
-                                <div class="w-100 p-0 border-0">
-                                    <div class="modal-content border-0">
-                                        <div class="modal-header border-0">
-                                            <h3 class="modal-title TextBold" id="AddAnnounceGroupModalLabel">{{ trans('langAddAnn') }}</h3>
-                                     
-                                        </div>
-                                        <div class="modal-body">
-
-                                            <div class="row ms-0 mt-4 form-group {{ $antitle_error }}">
-                                                <label class="col-md-3 col-12 control-label-notes">{{ trans('langAnnTitle') }}:</label>
-                                                <div class="col-md-9 col-12 ">
-                                                    <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
-                                                    <span class='help-block'>{{ Session::getError('antitle') }}</span>
-                                                </div>
-                                            </div>
-
-                                            <div class='row ms-0 mt-4 form-groum'>
-                                                <label class='col-md-3 col-12 control-label-notes'>{{ trans('langAnnBody') }}:</label>
-                                                <div class='col-md-9 col-12'>{!! $contentToModify !!}</div>
-                                            </div>
-
-                                            <div class='row ms-0 mt-4 form-group'>
-                                                <label class='col-md-3 col-12 control-label-notes'>{{ trans('langEmailOption') }}:</label>
-                                                <div class='col-md-9 col-12'>
-                                                    @php 
-                                                        $arrayRecievers = array();
-                                                        foreach($allRecievers as $r){
-                                                            $arrayRecievers[] = $r->toUser;
-                                                        }
-                                                    @endphp
-                                                    <select class='form-select' name='recipients[]' multiple='multiple' id='select-users'>
-                                                        <option value='-1' {{ (in_array('-1',$arrayRecievers)) ? 'selected' : ''}}>{{ trans('langAllUsers') }}</option>
-                                                        
-                                                        @foreach ($group_users as $cu)
-                                                            <option value='{{ $cu->user_id }}' {{ (in_array($cu->user_id,$arrayRecievers)) ? 'selected' : ''}}>{{$cu->name}} ({{$cu->email}})</option>
-                                                        @endforeach
-                                                    </select>
-                                                    <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
-                                                </div>
-                                            </div>
-                                                
-                                            <div class='row ms-0 mt-4 form-group {{ $startdate_error }}'>
-                                                <label for='startdate' class='col-md-3 col-12 control-label-notes'>{{ trans('langStartDate') }} :</label>
-                                                <div class='col-md-9 col-12'>
-                                                    <div class='input-group'> 
-                                                        <span class='input-group-addon'>
-                                                            <label class='label-container'>
-                                                                <input class='mt-0' type='checkbox' name='startdate_active' {{ $start_checkbox }}>
-                                                                <span class='checkmark'></span>
-
-                                                            </label>
-                                                        </span>
-                                                        <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
-                                                    </div>
-                                                    <span class='help-block'>{{ $startdate_error }}</span>
-                                                </div>
-                                            </div>
+                        <div class='col-lg-6 col-12'>
+                            <div class='contentAddAnnounce'>
+                                <form class='form-wrapper form-edit' method="post" action="{{ $_SERVER['SCRIPT_NAME'] }}?group_id={!! getInDirectReference($group_id) !!}">
+                                    <div class="w-100 p-0 border-0">
+                                        <div class="modal-content border-0">
+                                            <div class="modal-header border-0">
+                                                <h3 class="modal-title TextBold" id="AddAnnounceGroupModalLabel">{{ trans('langAddAnn') }}</h3>
                                         
-                                            <div class='row ms-0 mt-4 form-group {{ $enddate_error }}'>
-                                                <label for='enddate' class='col-md-3 col-12 control-label-notes'>{{ trans('langEndDate') }} :</label>
-                                                <div class='col-md-9 col-12'>
-                                                    <div class='input-group'>
-                                                        <span class='input-group-addon'>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="row mt-4 form-group {{ $antitle_error }}">
+                                                    <label class="col-12 control-label-notes">{{ trans('langAnnTitle') }}</label>
+                                                    <div class="col-12 ">
+                                                        <input class="form-control" placeholder="{{ trans('langAnnTitle') }}..." type="text" name="antitle" value="{{ $titleToModify }}"/>
+                                                        <span class='help-block'>{{ Session::getError('antitle') }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class='row mt-4 form-groum'>
+                                                    <label class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
+                                                    <div class='col-12'>{!! $contentToModify !!}</div>
+                                                </div>
+
+                                                <div class='row mt-4 form-group'>
+                                                    <label class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
+                                                    <div class='col-12'>
+                                                        @php 
+                                                            $arrayRecievers = array();
+                                                            foreach($allRecievers as $r){
+                                                                $arrayRecievers[] = $r->toUser;
+                                                            }
+                                                        @endphp
+                                                        <select class='form-select' name='recipients[]' multiple='multiple' id='select-users'>
+                                                            <option value='-1' {{ (in_array('-1',$arrayRecievers)) ? 'selected' : ''}}>{{ trans('langAllUsers') }}</option>
+                                                            
+                                                            @foreach ($group_users as $cu)
+                                                                <option value='{{ $cu->user_id }}' {{ (in_array($cu->user_id,$arrayRecievers)) ? 'selected' : ''}}>{{$cu->name}} ({{$cu->email}})</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
+                                                    </div>
+                                                </div>
+                                                    
+                                                <div class='row mt-4 form-group {{ $startdate_error }}'>
+                                                    <label for='startdate' class='col-12 control-label-notes'>{{ trans('langStartDate') }} </label>
+                                                    <div class='col-12'>
+                                                        <div class='input-group'> 
+                                                            <span class='input-group-addon'>
+                                                                <label class='label-container'>
+                                                                    <input class='mt-0' type='checkbox' name='startdate_active' {{ $start_checkbox }}>
+                                                                    <span class='checkmark'></span>
+
+                                                                </label>
+                                                            </span>
+                                                            <input class='form-control' name='startdate' id='startdate' type='text' value = '{{ $showFrom }}'>
+                                                        </div>
+                                                        <span class='help-block'>{{ $startdate_error }}</span>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class='row mt-4 form-group {{ $enddate_error }}'>
+                                                    <label for='enddate' class='col-12 control-label-notes'>{{ trans('langEndDate') }}</label>
+                                                    <div class='col-12'>
+                                                        <div class='input-group'>
+                                                            <span class='input-group-addon'>
+                                                                <label class='label-container'>
+                                                                    <input class='mt-0' type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
+                                                                    <span class='checkmark'></span>
+                                                                </label>
+
+                                                            </span>
+                                                            <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
+                                                        </div>
+                                                        <span class='help-block'>{{ $enddate_error }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class='row mt-4 form-group'>
+                                                    <div class='col-12'>
+                                                        <div class='checkbox'>
                                                             <label class='label-container'>
-                                                                <input class='mt-0' type='checkbox' name='enddate_active' {{ $end_checkbox}} {{ $end_disabled}}>
-                                                                <span class='checkmark'></span>
+                                                                <input type='checkbox' name='show_public' {{  $checked_public }}><span class='checkmark'></span> {{ trans('langViewShow') }}
                                                             </label>
-
-                                                        </span>
-                                                        <input class='form-control' name='enddate' id='enddate' type='text' value = '{{ $showUntil }}'>
-                                                    </div>
-                                                    <span class='help-block'>{{ $enddate_error }}</span>
-                                                </div>
-                                            </div>
-
-                                            <div class='row ms-0 mt-4 form-group'>
-                                                <div class='col-md-9 offset-md-3'>
-                                                    <div class='checkbox'>
-                                                        <label class='label-container'>
-                                                            <input type='checkbox' name='show_public' {{  $checked_public }}><span class='checkmark'></span> {{ trans('langViewShow') }}
-                                                        </label>
+                                                        </div>
                                                     </div>
                                                 </div>
+
                                             </div>
 
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <input type='hidden' name='id' value='{{ $announce_id }}'>
-                                           
-                                            <button type='submit' class="btn submitAdminBtn" name="submitAnnouncement">
-                                                {{ trans('langSubmit') }}
-                                            </button>
+                                            <div class="modal-footer">
+                                                <input type='hidden' name='id' value='{{ $announce_id }}'>
+                                            
+                                                <button type='submit' class="btn submitAdminBtn" name="submitAnnouncement">
+                                                    {{ trans('langSubmit') }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
+                            </div>
+                        </div>
+                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+                            <div class='col-12 h-100 left-form'></div>
                         </div>
                     @endif
                    

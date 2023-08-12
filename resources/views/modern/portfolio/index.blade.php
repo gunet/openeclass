@@ -77,7 +77,7 @@
     <div class='{{ $container }}'>
         <div class='row m-auto'>
             <div class='col-12'>
-                <div class='row row-cols-1 row-cols-lg-2 g-5'>
+                <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                     <div class='col-lg-8 col-12'>
                         <div class='card border-0'>
                             <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-white border-0'>

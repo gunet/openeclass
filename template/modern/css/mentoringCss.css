@@ -242,7 +242,7 @@ a:hover{
         display: block;
     }
 
-    .programTools{
+    /* .programTools{
         width: 220px;
     }
     .programTools .dropdown-item{
@@ -253,7 +253,7 @@ a:hover{
     }
     .programTools .dropdown-item span{
         margin-top: 2px;
-    }
+    } */
     
     .MobileButton{
         margin: auto;
@@ -322,11 +322,6 @@ a:hover{
     background-size: 100% 100%;
 }
 
-
-.viewProgram:hover, .btnMyPrograms:hover, .btnDisablePrograms:hover, .showMentorsBtnHome:hover, .showProgramsBtnHome:hover{
-    background-color: #003e87;
-    color: white;
-}
 
 .availableBtn{
     background-color: #003e87;
@@ -642,21 +637,24 @@ a:hover{
     color: #ffffff;
 }
 
+.size-tab{
+    font-size: 16px;
+}
 .mentoring_program_nav_item_nav_link.active{
-    border-bottom: solid 2px #0d6efd !important;
-    color:#ffffff !important;
+    border-bottom: solid 2px #0073E6 !important;
+    color:#0073E6 !important;
 }
 
 .mentoring_program_nav_item_nav_linkProgram{
-    font-size: 15px;
-    color: slategrey !important;
-    font-weight: 600;
+    font-size: 16px;
+    color: #4F6893 !important;
+    font-weight: 700;
 }
 .mentoring_program_nav_item_nav_linkProgram.active{
     background-color: transparent !important;
-    border-bottom: solid 3px #003e87;
-    color:#003e87 !important;
-    font-size: 15px;
+    border-bottom: solid 2px #0073E6;
+    color:#0073E6 !important;
+    font-size: 16px;
 }
 
 .mentor_eportfolio .panel-default{
@@ -1184,15 +1182,13 @@ a:hover{
 }
 .backButtonMentoring span{
     font-size: 14px;
-    color: #003e87;
+    color: #2B3944;
 }
 
 .backButtonMentoring:hover{
-   background-color: #003e87;
+   background-color: #EFF2FB;
 }
-.backButtonMentoring:hover span{
-    color: #ffffff;
- }
+
 
  .viewProgramWidth{
     width: 200px;

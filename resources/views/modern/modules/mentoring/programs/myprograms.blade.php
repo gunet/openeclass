@@ -8,7 +8,7 @@
     <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    <div class='col-12 ps-4 pe-4'>
+                    <div class='col-12'>
                         <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class='TextSemiBold' href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php"><span class='fa fa-home'></span>&nbsp{{ trans('langHomeMentoringPlatform') }}</a></li>
@@ -21,7 +21,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoMyProgramsText')!!}</p>
                         </div>
                     </div>
@@ -61,12 +61,13 @@
                     @if($is_editor_mentoring or $user_student_is_mentor)
                         <div class='col-12'>
                             @if(count($mentoring_programs_as_tutor_or_mentor) > 0 or count($no_available_mentoring_programs) > 0 or count($tutor_mentor_as_mentee) > 0) 
-                                <div class='card-group'>
+                                <div class='col-12 mt-4'>
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                                     @if(count($mentoring_programs_as_tutor_or_mentor) > 0)
                                         @foreach($mentoring_programs_as_tutor_or_mentor as $mentoring_program)
                                             @php $Name_tutors = show_mentoring_program_tutor($mentoring_program->id); @endphp
-                                            <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3'>
-                                                <div class='card w-100'>
+                                            <div class='col'>
+                                                <div class='card w-100 h-100'>
                                                     @if(!empty($mentoring_program->program_image))
                                                         <img class="card-img-top cardImages HeightImageCard" alt="..." src='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/image/{{ $mentoring_program->program_image }}'>
                                                     @else
@@ -75,7 +76,7 @@
                                                     <div class='card-body'>
                                                         <span class='badge bg-success text-white TextSemiBold text-capitalize mb-3'>{{ trans('langActive') }}</span>
                                                         <div class='col-12'>
-                                                            <div class='row ms-0'>
+                                                            <div class='row'>
                                                                 <div class='col-12'>
                                                                     <p class='card-title TextBold fs-5 blackBlueText text-center'>{{ $mentoring_program->title }}</p>
                                                                 </div>
@@ -105,9 +106,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class='card-footer'>
-                                                        <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php'>
-                                                            <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
+                                                    <div class='card-footer d-inline-flex justify-content-center bg-white border-0'>
+                                                        <a class='btn submitAdminBtn viewProgram' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php'>
+                                                            {{ trans('langViewMentoringProgram') }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -118,8 +119,8 @@
                                     @if(count($no_available_mentoring_programs) > 0)
                                         @foreach($no_available_mentoring_programs as $mentoring_program)
                                             @php $Name_tutors = show_mentoring_program_tutor($mentoring_program->id); @endphp
-                                            <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3'>
-                                                <div class='card w-100'>
+                                            <div class='col'>
+                                                <div class='card w-100 h-100'>
                                                     @if(!empty($mentoring_program->program_image))
                                                         <div class='col-12 d-flex justify-content-center aling-items-center'>
                                                             <img class="card-img-top cardImages HeightImageCard" alt="..." src='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/image/{{ $mentoring_program->program_image }}'>
@@ -134,7 +135,7 @@
                                                     <div class='card-body'>
                                                         <span class='badge bg-danger text-white TextSemiBold mb-3'>{{ trans('langHasExpired') }}</span>
                                                         <div class='col-12'>
-                                                            <div class='row ms-0'>
+                                                            <div class='row'>
                                                                 <div class='col-12'>
                                                                     <p class='card-title TextBold fs-5 blackBlueText text-center'>{{ $mentoring_program->title }}</p>
                                                                 </div>
@@ -165,9 +166,9 @@
                                                         </div>
                                         
                                                     </div>
-                                                    <div class='card-footer'>
-                                                        <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php'>
-                                                            <img class='img-info-programs' alt="..." src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
+                                                    <div class='card-footer d-inline-flex justify-content-center bg-white border-0'>
+                                                        <a class='btn submitAdminBtn viewProgram' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php'>
+                                                            {{ trans('langViewMentoringProgram') }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -178,8 +179,8 @@
                                     @if(count($tutor_mentor_as_mentee) > 0)
                                         @foreach($tutor_mentor_as_mentee as $mentoring_program)
                                             @php $Name_tutors = show_mentoring_program_tutor($mentoring_program->id); @endphp
-                                            <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3'>
-                                                <div class='card w-100'>
+                                            <div class='col'>
+                                                <div class='card w-100 h-100'>
                                                     @if(!empty($mentoring_program->program_image))
                                                         <img class="card-img-top cardImages HeightImageCard" alt="..." src='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/image/{{ $mentoring_program->program_image }}'>
                                                     @else
@@ -188,7 +189,7 @@
                                                     <div class='card-body'>
                                                         <span class='badge bg-success text-white TextSemiBold text-capitalize mb-3'>{{ trans('langActive') }}</span>
                                                         <div class='col-12'>
-                                                            <div class='row ms-0'>
+                                                            <div class='row'>
                                                                 <div class='col-12'>
                                                                     <p class='card-title TextBold fs-5 blackBlueText text-center'>{{ $mentoring_program->title }}</p>
                                                                 </div>
@@ -256,9 +257,9 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class='card-footer'>
-                                                        <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php'>
-                                                            <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
+                                                    <div class='card-footer d-inline-flex justify-content-center bg-white border-0'>
+                                                        <a class='btn submitAdminBtn viewProgram' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program->code }}/index.php'>
+                                                            {{ trans('langViewMentoringProgram') }}
                                                         </a>
                                                     </div>
                                                 </div>
@@ -266,9 +267,10 @@
                                         @endforeach   
                                     @endif
                                 </div>
+                                </div>
                             @else
-                                <div class='col-12'>
-                                    <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{trans('langNoMentoringPrograms')}}</div></div>
+                                <div class='col-12 mt-4'>
+                                    <div class='alert alert-warning'>{{trans('langNoMentoringPrograms')}}</div>
                                 </div>
                             @endif
                         </div>
@@ -278,11 +280,11 @@
                     @if(!$is_editor_mentoring)
                         <div class='col-12'>
                             @if(count($programs_as_guided) > 0)
-                                <div class="card-group mt-3">
+                                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                                     @foreach($programs_as_guided as $program)
                                         @php $Name_tutors = show_mentoring_program_tutor($program->id); @endphp
-                                        <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3'>
-                                            <div class='card w-100'>
+                                        <div class='col'>
+                                            <div class='card w-100 h-100'>
                                                 @if(!empty($program->program_image))
                                                     <div class='col-12 d-flex justify-content-center align-items-center'>
                                                         <img class="card-img-top cardImages HeightImageCard" alt="..." src='{{ $urlAppend }}mentoring_programs/{{ $program->code }}/image/{{ $program->program_image }}'>
@@ -316,9 +318,9 @@
                                                     </div>
 
                                                     @if($program->allow_unreg_mentee == 1)
-                                                        <div class='col-12 mt-3'>
+                                                        <div class='col-12 d-flex justify-content-center mt-3'>
                                                         
-                                                            <button class="btn btn-outline-danger btn-sm small-text m-auto d-block rounded-2"
+                                                            <button class="btn deleteAdminBtn"
                                                                 data-bs-toggle="modal" data-bs-target="#UnregProgramModal{{ $program->code }}" >
                                                                 {{ trans('langUnregProgramMentee')}}
                                                             </button>
@@ -354,9 +356,9 @@
                                                     @endif
                                                     
                                                 </div>
-                                                <div class='card-footer'>
-                                                    <a class='btn viewProgram bgEclass TextBold rounded-2 d-flex justify-content-center aling-items-center' href='{{ $urlAppend }}mentoring_programs/{{ $program->code }}/index.php'>
-                                                        <img class='img-info-programs' src='{{ $urlAppend }}template/modern/img/info_a.svg'>&nbsp{{ trans('langViewMentoringProgram') }}
+                                                <div class='card-footer d-inline-flex justify-content-center bg-white border-0'>
+                                                    <a class='btn submitAdminBtn viewProgram' href='{{ $urlAppend }}mentoring_programs/{{ $program->code }}/index.php'>
+                                                        {{ trans('langViewMentoringProgram') }}
                                                     </a>
                                                 </div>
                                             </div>
@@ -365,8 +367,8 @@
                                     @endforeach
                                 </div>
                             @else
-                                <div class='col-12'>
-                                    <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{trans('langNoMentoringProgramsAsMentee')}}</div></div>
+                                <div class='col-12 mt-4'>
+                                    <div class='alert alert-warning'>{{trans('langNoMentoringProgramsAsMentee')}}</div>
                                 </div>
                             @endif
                         </div>

@@ -9,7 +9,7 @@
         <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
-                    <div class='col-12 ps-4 pe-4'>
+                    <div class='col-12'>
                         <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a class='TextSemiBold' href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php"><span class='fa fa-home'></span>&nbsp{{ trans('langHomeMentoringPlatform') }}</a></li>
@@ -65,10 +65,10 @@
                     @endphp
 
                     @if(count($mentee_denied) > 0)
-                        <div class='col-12 ps-4 pe-4'>
+                        <div class='col-12'>
                             @foreach($mentee_denied as $m)
                                @if($m->guided_id == $uid)
-                                    <div class='alert alert-info rounded-2'>{{ trans('langTutotHasDeniedRequest') }}</div>
+                                    <div class='alert alert-info'>{{ trans('langTutotHasDeniedRequest') }}</div>
                                @endif
                             @endforeach
                         </div>
@@ -148,18 +148,18 @@
                         @endforeach
                     </div>
 
-                    <div class='col-12 d-flex justify-content-center align-items-center mt-3'>
+                    <div class='col-12 d-flex justify-content-center align-items-center mt-4'>
                         <ul class="nav nav-pills mb-3 mentoring_program_ul p-2 rounded-2" id="ex1" role="tablist">
 
                             <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
-                                <a class="nav-link mentoring_program_nav_item_nav_linkProgram active TextSemiBold rounded-0" id="info_mentoring" data-bs-toggle="tab" href="#info_mentoring_program" role="tab" aria-controls="info_mentoring_program" aria-selected="true">
-                                    <span class='fa fa-info'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMentoringInfo')}}</span>
+                                <a class="nav-link mentoring_program_nav_item_nav_linkProgram active rounded-0" id="info_mentoring" data-bs-toggle="tab" href="#info_mentoring_program" role="tab" aria-controls="info_mentoring_program" aria-selected="true">
+                                    <span class='fa fa-info size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langMentoringInfo')}}</span>
                                 </a>
                             </li>
 
                             <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
-                                <a class="nav-link mentoring_program_nav_item_nav_linkProgram TextMedium rounded-0" id="mentor_mentoring" data-bs-toggle="tab" href="#mentors_mentoring_program" role="tab" aria-controls="mentors_mentoring_program" aria-selected="false">
-                                    <span class='fa fa-user'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMentoringMentorss') }}</span>
+                                <a class="nav-link mentoring_program_nav_item_nav_linkProgram rounded-0" id="mentor_mentoring" data-bs-toggle="tab" href="#mentors_mentoring_program" role="tab" aria-controls="mentors_mentoring_program" aria-selected="false">
+                                    <span class='fa fa-user size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langMentoringMentorss') }}</span>
                                 </a>
                             </li>
                            
@@ -169,8 +169,8 @@
                                                       WHERE mentoring_program_id = ?d AND status_request = ?d", $mentoring_program_id, 0)->ri;
                                 @endphp
                                 <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
-                                    <a class="nav-link mentoring_program_nav_item_nav_linkProgram TextMedium rounded-0" id="request_mentoring" data-bs-toggle="tab" href="#requests_mentoring_program" role="tab" aria-controls="requests_mentoring_program" aria-selected="false">
-                                        <span class='fa-solid fa-paper-plane'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langRequestsPrograms')}}</span>
+                                    <a class="nav-link mentoring_program_nav_item_nav_linkProgram rounded-0" id="request_mentoring" data-bs-toggle="tab" href="#requests_mentoring_program" role="tab" aria-controls="requests_mentoring_program" aria-selected="false">
+                                        <span class='fa-solid fa-paper-plane size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langRequestsPrograms')}}</span>
                                         @if($sum_requests > 0)&nbsp<span class='badge bg-primary text-white'>{{ $sum_requests }}</span>@endif
                                     </a>
                                 </li>
@@ -179,15 +179,18 @@
                             
                             @if($is_editor_mentoring_program or $is_admin)
                                 <li class="nav-item mentoring_program_nav_item dropdown rounded-pill" role="presentation">
-                                    <a class="nav-link mentoring_program_nav_item_nav_linkProgram dropdown-toggle TextMedium rounded-pill" data-bs-display='static' data-bs-toggle="dropdown" role="button" aria-expanded="false">
-                                        <span class='fa fa-cogs'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold'>&nbsp{{ trans('langMoreChoices') }}</span>
+                                    <a id="dropdownProgramToolsCourse" class="nav-link mentoring_program_nav_item_nav_linkProgram dropdown-toggle rounded-pill" href="#" role="button" data-bs-display='static' data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class='fa fa-cogs size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langMoreChoices') }}</span>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-end programTools">
-                                        <li><a class="dropdown-item" href="{{ $urlAppend }}modules/mentoring/programs/actions_program.php?program_id={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-tasks pe-2'></span>{{ trans('langMentoringAction' )}}</a></li>
-                                        <li><a class="dropdown-item" href="{{ $urlAppend }}modules/mentoring/programs/users/index.php"><span class='fa fa-user pe-2'></span>{{ trans('langProgramUsers' )}}</a></li>
-                                        <li><a class="dropdown-item" href="{{ $urlAppend }}modules/mentoring/programs/edit_delete_program.php?edit={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-edit pe-2'></span>{{ trans('langMentoringEdit' )}}</a></li>
-                                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#del_mentoring_program" href="#"><span class='fa fa-times pe-2 text-danger'></span>{{ trans('langDelete') }}</a></li>
-                                    </ul>
+                                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownProgramToolsCourse">
+                                        <ul class="list-group list-group-flush">
+                                            
+                                            <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/actions_program.php?program_id={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-tasks'></span>{{ trans('langMentoringAction' )}}</a></li>
+                                            <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/users/index.php"><span class='fa fa-user'></span>{{ trans('langProgramUsers' )}}</a></li>
+                                            <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/edit_delete_program.php?edit={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-edit'></span>{{ trans('langMentoringEdit' )}}</a></li>
+                                            <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" data-bs-toggle="modal" data-bs-target="#del_mentoring_program" href="#"><span class='fa fa-times Accent-200-cl mt-1'></span><span class='Accent-200-cl TextBold'>{{ trans('langDelete') }}</span></a></li>
+                                        </ul>
+                                    </div>
                                 </li>
                             @endif
                         </ul>
@@ -205,9 +208,9 @@
                         @endforeach
                         <div class='row'>
                             <div class='col-12'>
-                                <div class="tab-content p- rounded-2" id="ex1-content">
+                                <div class="tab-content rounded-2" id="ex1-content">
 
-                                    <div class="tab-pane fade show active p-3" id="info_mentoring_program" role="tabpanel" aria-labelledby="info_mentoring">
+                                    <div class="tab-pane fade show active" id="info_mentoring_program" role="tabpanel" aria-labelledby="info_mentoring">
             
                                         @if(count($mentoring_program_details) > 0)
                                             @foreach($mentoring_program_details as $detail)
@@ -266,11 +269,11 @@
                                         @php $mentors_of_program = show_mentoring_program_mentors($mentoring_program_id); @endphp
                                         @if(count($mentors_of_program)>0)
                                             <div class='col-12'>
-                                                <div class='row ms-0'>     
-                                                    <div class='card-group p-0 d-md-flex justify-content-md-center'>  
+                                                <div class='row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4'>     
+                                                     
                                                         @foreach($mentors_of_program as $mentor) 
-                                                            <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech p-3'>
-                                                                <div class="card MentorCard w-100">
+                                                            <div class='col'>
+                                                                <div class="card MentorCard w-100 h-100">
                                                                     <a class='MentorCardBtn' href='{{ $urlAppend }}modules/mentoring/mentors/profile_mentor.php?mentor={!! getIndirectReference($mentor->id) !!}'>
                                                                         
                                                                         <div class="card-body">
@@ -308,7 +311,7 @@
                                                                 </div> 
                                                             </div>
                                                         @endforeach
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                         @else
@@ -319,7 +322,7 @@
                                     </div>
 
                                     @if($is_editor_mentoring_program or $is_admin)
-                                        <div class="tab-pane fade p-3" id="requests_mentoring_program" role="tabpanel" aria-labelledby="request_mentoring">
+                                        <div class="tab-pane fade" id="requests_mentoring_program" role="tabpanel" aria-labelledby="request_mentoring">
 
                                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                                 <div class='panel-heading bg-body p-0'>
@@ -328,7 +331,7 @@
                                                 <div class='panel-body p-0 rounded-2'>
                                                     @if(count($mentoring_program_requests) > 0)
                                                             @php $counterPadding = 0; @endphp
-                                                        <div class='row ms-0'>
+                                                        <div class='row m-auto'>
                                                             @foreach($mentoring_program_requests as $r)
                                                                 <div class='col-lg-6 col-12 @if($counterPadding % 2 == 1) ps-lg-2 pe-lg-0 pe-0 ps-0 @else ps-lg-0 pe-lg-2 pe-0 ps-0 @endif'>
                                                                     <div class='panel panel-default rounded-0 mb-3 bg-light'>
@@ -351,7 +354,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class='panel-footer rounded-0'>
-                                                                            <button class="btn btn-outline-primary small-text rounded-2"
+                                                                            <button class="btn submitAdminBtn"
                                                                                     data-bs-toggle="modal" data-bs-target="#AcceptRequestModal{{ $r->id }}" >
                                                                                     {{ trans('langEditRequest') }}
                                                                             </button>
@@ -379,7 +382,7 @@
                                                                                     <button type='submit' class="btn btn-primary small-text rounded-2" name="action_request" value="accepted">
                                                                                         {{ trans('langAcceptRequest') }}
                                                                                     </button>
-                                                                                    <button type='submit' class="btn btn-warning small-text rounded-2" name="action_request" value="denied">
+                                                                                    <button type='submit' class="btn btn-warning warningAdminBtn small-text rounded-2" name="action_request" value="denied">
                                                                                         {{ trans('langDenyRequest') }}
                                                                                     </button>
                                                                                     <button type='submit' class="btn btn-danger small-text rounded-2" name="action_request" value="deleted">
@@ -413,7 +416,7 @@
                                                             <thead>
                                                                 <tr class='list-header'>
                                                                     <th>{{ trans('langName') }}</th>
-                                                                    <th class='text-center'><span class='fa fa-cogs'></span></th>
+                                                                    <th><span class='fa fa-cogs'></span></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -430,12 +433,12 @@
                                                                             @endforeach
                                                                         </span>
                                                                     </td>
-                                                                    <td class='text-center'>
+                                                                    <td>
                                                                         <form id='reset_{{ $de->id }}' method='post' action='{{ $urlAppend }}modules/mentoring/programs/program_request.php'>
                                                                             <input type='hidden' name='key_id' value='{{ $de->id }}'>
                                                                             <input type='hidden' name='mentoring_program_id' value='{{ $de->mentoring_program_id }}'>
                                                                             <input type='hidden' name='guided_id' value='{{ $de->guided_id }}'>
-                                                                            <button class='btn btn-outline-primary btn-sm small-text rounded-2' type='submit' name='action_request' value='reset'>{{ trans('langRequestReset') }}</button>
+                                                                            <button class='btn btn-outline-primary btn-sm small-text rounded-2 float-end' type='submit' name='action_request' value='reset'>{{ trans('langRequestReset') }}</button>
                                                                         </form>
                                                                     </td>
                                                                 </tr>

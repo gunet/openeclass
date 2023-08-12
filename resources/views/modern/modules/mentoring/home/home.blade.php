@@ -7,7 +7,7 @@
     <div class='{{ $container }}'>
         <div class="row m-auto">
                     
-                    <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto mb-4 ps-3 pe-3'><p class='TextMedium text-justify text-center'>{{ trans('langInfoHomeText')}}</p></div>
+                    <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto mb-4'><p class='TextMedium text-justify text-center'>{{ trans('langInfoHomeText')}}</p></div>
 
                     <div class="card-group mb-md-5 mb-2">
                         <div class="card me-md-4">
@@ -15,7 +15,7 @@
                             <div class="card-body">
                                 <h5 class="card-title TextSemiBold">{{ trans('langMentoringPrograms') }}</h5>
                                 <p class="card-text TextRegular">{{ trans('langInfoPrograms') }}</p>
-                                <p class="card-text"><a class="btn bgEclass small-text TextSemiBold showProgramsBtnHome mt-3" href='{{ $urlAppend }}modules/mentoring/programs/show_programs.php'>{{ trans('langGoToPrograms')}}</a></p>
+                                <p class="card-text"><a class="btn submitAdminBtn d-inline-flex showProgramsBtnHome mt-3" href='{{ $urlAppend }}modules/mentoring/programs/show_programs.php'>{{ trans('langGoToPrograms')}}</a></p>
                             </div>
                         </div>
                         <div class="card mt-md-0 mt-4 ms-md-4 solidPanel">
@@ -23,7 +23,7 @@
                             <div class="card-body">
                                 <h5 class="card-title TextSemiBold">{{ trans('langTotalMentors') }}</h5>
                                 <p class="card-text TextRegular">{{ trans('langInfoMentors') }}</p>
-                                <p class="card-text"><a class="btn bgEclass TextSemiBold small-text showMentorsBtnHome mt-3" href='{{ $urlAppend }}modules/mentoring/mentors/all_mentors.php'>{{ trans('langGoToMentors')}}</a></p>
+                                <p class="card-text"><a class="btn submitAdminBtn d-inline-flex showMentorsBtnHome mt-3" href='{{ $urlAppend }}modules/mentoring/mentors/all_mentors.php'>{{ trans('langGoToMentors')}}</a></p>
                             </div>
                         </div>
                     </div>

@@ -33,7 +33,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoEditProgramText')!!}</p>
                         </div>
                     </div>
@@ -165,8 +165,9 @@
                                             <label for='startdate' class='col-sm-12 control-label-notes'>{{ trans('langStartDate') }}</label>
                                             <div class='col-sm-12'>
                                                 <div class='input-group'>
-                                                    <input class='form-control mt-0' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
-                                                    <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-calendar'></span></div>
+                                                    <span class="add-on input-group-text h-40px bg-white input-border-color border-end-0"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                    <input class='form-control border-start-0 mt-0' name='startdate' id='startdate' type='text' value='{{ $startdate }}'>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -175,8 +176,9 @@
                                             <label for='enddate' class='col-sm-12 control-label-notes'>{{ trans('langEndDate') }}</label>
                                             <div class='col-sm-12'>
                                                 <div class='input-group'>
-                                                    <input class='form-control mt-0' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
-                                                    <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-calendar'></span></div>
+                                                    <span class="add-on input-group-text h-40px bg-white input-border-color border-end-0"><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                    <input class='form-control border-start-0 mt-0' name='enddate' id='enddate' type='text' value='{{ $enddate }}'>
+                                                   
                                                 </div>
                                             </div>
                                         </div>
@@ -199,17 +201,19 @@
                                         
                                         <div class='form-group mt-4'>
                                                 <div class='col-sm-12 control-label-notes mb-2'>{{ trans('langAllowUnregMenteeFromProgram') }}</div>
-                                                <label class='label-container'>
-                                                    <input id='allow_unreg_mentee_yes' type='checkbox' name='yes_allow_unreg' value='1' {{ $allow_unreg_mentee_from_program == 1 ? 'checked' : '' }}>
-                                                    <span class='checkmark'></span>
-                                                    {{ trans('langYes') }}
-                                                </label>
+                                                <div class='col-sm-12 d-flex gap-3'>
+                                                    <label class='label-container'>
+                                                        <input id='allow_unreg_mentee_yes' type='checkbox' name='yes_allow_unreg' value='1' {{ $allow_unreg_mentee_from_program == 1 ? 'checked' : '' }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langYes') }}
+                                                    </label>
 
-                                                <label class='label-container'>
-                                                    <input id='allow_unreg_mentee_no' type='checkbox' name='yes_allow_unreg' value='0' {{ $allow_unreg_mentee_from_program == 0 ? 'checked' : '' }}>
-                                                    <span class='checkmark'></span>
-                                                    {{ trans('langNo') }}
-                                                </label>
+                                                    <label class='label-container'>
+                                                        <input id='allow_unreg_mentee_no' type='checkbox' name='yes_allow_unreg' value='0' {{ $allow_unreg_mentee_from_program == 0 ? 'checked' : '' }}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langNo') }}
+                                                    </label>
+                                                </div>
                                             
                                         </div>
 
@@ -256,67 +260,71 @@
                                             </select>
                                            
 
-                                            <div class="accordion accordion-flush specializationsAccordion" id="accordionSpeciliazations">
-                                                @foreach($all_specializations as $tag)
-                                                    <div class="accordion-item border-0 bg-transparent">
-                                                        <h2 class="accordion-header" id="heading{{ $tag->id }}">
-                                                            <button class="accordion-button ps-2 pe-2 text-uppercase" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ $tag->id }}" aria-expanded="true" aria-controls="collapse{{ $tag->id }}">
+                                            <div class="panel-group group-section mt-4" id="accordionSpeciliazations">
+                                                <ul class="list-group list-group-flush">
+                                                    @foreach($all_specializations as $tag)
+                                                        
+                                                            <li class="list-group-item px-0 mb-4 bg-transparent">
                                                                 
-                                                                @php 
-                                                                    $checkTranslationSpecialization = Database::get()->querySingle("SELECT *FROM mentoring_specializations_translations
-                                                                                                                                    WHERE specialization_id = ?d AND lang = ?s",$tag->id, $language);
-                                                                @endphp
+                                                                <a class="accordion-btn d-flex justify-content-start align-items-start" role="button" data-bs-toggle="collapse" href="#collapse{{ $tag->id }}" aria-expanded="false" aria-controls="collapse{{ $tag->id }}">
+                                                                    <span class='fa-solid fa-chevron-down'></span>
+                                                                    @php 
+                                                                        $checkTranslationSpecialization = Database::get()->querySingle("SELECT *FROM mentoring_specializations_translations
+                                                                                                                                        WHERE specialization_id = ?d AND lang = ?s",$tag->id, $language);
+                                                                    @endphp
 
-                                                                @if($checkTranslationSpecialization)
-                                                                    {{ $checkTranslationSpecialization->name }}
-                                                                @else
-                                                                    {{ $tag->name }}
-                                                                @endif
-                                                            </button>
-                                                        </h2>
-                                                        <div id="collapse{{ $tag->id }}" class="accordion-collapse collapse show" aria-labelledby="heading{{ $tag->id }}" data-bs-parent="#accordionSpeciliazations">
-                                                            <div class="accordion-body">
-                                                                @php 
+                                                                    @if($checkTranslationSpecialization)
+                                                                        {{ $checkTranslationSpecialization->name }}
+                                                                    @else
+                                                                        {{ $tag->name }}
+                                                                    @endif
+                                                                </a>
+                                                                
+                                                                <div id="collapse{{ $tag->id }}" class="panel-collapse accordion-collapse collapse" aria-labelledby="heading{{ $tag->id }}" data-bs-parent="#accordionSpeciliazations">
                                                                     
+                                                                        @php 
+                                                                            
 
-                                                                    $skills = Database::get()->queryArray("SELECT *FROM mentoring_skills 
-                                                                                            WHERE id IN (SELECT skill_id FROM mentoring_specializations_skills 
-                                                                                                        WHERE specialization_id = ?d)",$tag->id);
-                                                                @endphp
-                                                                @if(count($skills) > 0)
-                                                                    <div class='col-12'>
-                                                                        @foreach($skills as $sk)
-                                                                            <input id='loopOneAllTags' type='hidden' name='loopOne[]' value='{{ $sk->id }}'>
-                                                                            <label class='label-container'>
-                                                                                <input id='TheSkillIdS{{ $sk->id }}{{ $tag->id }}' class='tagClick' type='checkbox' value='{{ $sk->id }},{{ $tag->id }}'>
-                                                                                <span class='checkmark'></span>
-                                                                                
-                                                                                @php 
-                                                                                    $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
-                                                                                                                                                    WHERE skill_id = ?d AND lang = ?s",$sk->id, $language);
-                                                                                @endphp
+                                                                            $skills = Database::get()->queryArray("SELECT *FROM mentoring_skills 
+                                                                                                    WHERE id IN (SELECT skill_id FROM mentoring_specializations_skills 
+                                                                                                                WHERE specialization_id = ?d)",$tag->id);
+                                                                        @endphp
+                                                                        @if(count($skills) > 0)
+                                                                            <div class='col-12 px-2 py-3'>
+                                                                                @foreach($skills as $sk)
+                                                                                    <input id='loopOneAllTags' type='hidden' name='loopOne[]' value='{{ $sk->id }}'>
+                                                                                    <label class='label-container'>
+                                                                                        <input id='TheSkillIdS{{ $sk->id }}{{ $tag->id }}' class='tagClick' type='checkbox' value='{{ $sk->id }},{{ $tag->id }}'>
+                                                                                        <span class='checkmark'></span>
+                                                                                        
+                                                                                        @php 
+                                                                                            $checkTranslationSkill = Database::get()->querySingle("SELECT *FROM mentoring_skills_translations
+                                                                                                                                                            WHERE skill_id = ?d AND lang = ?s",$sk->id, $language);
+                                                                                        @endphp
 
-                                                                                @if($checkTranslationSkill)
-                                                                                    {{ $checkTranslationSkill->name }}
-                                                                                @else
-                                                                                    {{ $sk->name }}
-                                                                                @endif
-                                                                                
-                                                                            </label>
-                                                                        @endforeach
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @endforeach
+                                                                                        @if($checkTranslationSkill)
+                                                                                            {{ $checkTranslationSkill->name }}
+                                                                                        @else
+                                                                                            {{ $sk->name }}
+                                                                                        @endif
+                                                                                        
+                                                                                    </label>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        @endif
+                                                                    
+                                                                </div>
+                                                            </li>
+                                                       
+                                                    @endforeach
+                                                </ul>
                                             </div>
 
-                                            <div class='col-12 d-flex justify-content-center align-items-center mt-3 mb-3'>
-                                                <button id='SearchMentors' type='button' class='btn btn-outline-primary clickSearchMentors small-text'>
-                                                    <span class='fa fa-search'></span>&nbsp{{ trans('langSearch')}}
+                                            <div class='col-12 d-flex justify-content-center align-items-center mt-3 gap-3'>
+                                                <button id='SearchMentors' type='button' class='btn submitAdminBtnDefault clickSearchMentors'>
+                                                    <i class="fa-solid fa-magnifying-glass"></i>&nbsp{{ trans('langSearch')}}
                                                 </button>
-                                                <button class='btn btn-outline-danger uncheckBtn ms-2 small-text' type='button'><span class='fa fa-times'></span></button>
+                                                <button class='btn deleteAdminBtn uncheckBtn' type='button'><span class='fa fa-times'></span></button>
                                             </div>
                                            
                                             <div class='col-12 mt-3 colMentorsChoosing'>

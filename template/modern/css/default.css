@@ -53,6 +53,11 @@ body{
     padding: 32px 24px 32px 24px;
   }
 }
+@media(max-width:991px){
+  .container, .container-fluid{
+    padding: 24px 8px 24px 8px;
+  }
+}
   
 /* @media (max-width:1023px){ 
   select{ 
@@ -396,6 +401,10 @@ img {
 
 .bgBlackBlue { 
   background-color: #2B3944;
+}
+
+.bgNormalBlueText{
+  background-color: #2546F0;
 }
 
 .normalBlueText { 
@@ -1617,6 +1626,33 @@ button[type="submit"].successAdminBtn:hover,
 input[type="submit"].successAdminBtn:hover {
   background-color: #19680C;
   border-color: #19680C;
+  color: #ffffff;
+}
+
+.warningAdminBtn,
+button[type="submit"].warningAdminBtn,
+input[type="submit"].warningAdminBtn {
+  border: solid thin;
+  border-color: #FFF4D1;
+  color: #2B3944	;
+  font-size: 14px;
+  height:40px;
+  min-width: 40px;
+  font-weight: 700; font-style: normal;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFF4D1;
+  letter-spacing: 0px;
+  line-height: 16px;
+}
+
+.warningAdminBtn:hover,
+button[type="submit"].warningAdminBtn:hover,
+input[type="submit"].warningAdminBtn:hover {
+  background-color: #F57600;
+  border-color: #F57600;
   color: #ffffff;
 }
 
@@ -3587,7 +3623,7 @@ body .delThemeBtn{
   width: 20px;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-track {
-  background-color: #ffffff;
+  background-color: transparent;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-thumb {
   background-color: #d1d6e1;

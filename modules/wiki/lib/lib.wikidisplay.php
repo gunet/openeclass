@@ -77,7 +77,7 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
             </div>";
     //end notes
 
-    $out .= '<div class="d-flex" style="padding:10px;">' . "\n";
+    $out .= '<div class="d-flex gap-2 mt-4">' . "\n";
 
     $out .= '<input type="hidden" name="wikiId" value="'
             . $wikiId

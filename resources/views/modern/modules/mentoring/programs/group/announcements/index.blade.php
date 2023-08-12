@@ -37,8 +37,8 @@
 
                     @include('modules.mentoring.common.common_current_title')
 
-                    <div class='col-12 mb-4 ps-3 pe-3'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                    <div class='col-12 mb-4'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoGroupAnnouncementText')!!}</p>
                         </div>
                     </div>

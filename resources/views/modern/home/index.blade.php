@@ -30,7 +30,7 @@
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
                     <div class='col-12'>
-                        <div class='row row-cols-1 row-cols-lg-2 g-lg-5'>
+                        <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                             <div class='col-xxl-6 col-lg-5 col-12 @if($PositionFormLogin) ms-auto me-auto @endif'>
                                 <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
                                 <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
@@ -86,7 +86,7 @@
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
                     <div class='col-12'>
-                        <div class="row row-cols-1 g-5">
+                        <div class="row row-cols-1 g-lg-5 g-4">
                             @if(get_config('homepage_title') or get_config('homepage_intro'))
                                 <div class='col'>
                                     <div class='card border-0 bg-transparent'>
@@ -122,7 +122,7 @@
         <div class='{{ $container }}'>
             <div class='row m-auto'>
                 <div class='col-12'>
-                    <div class='row row-cols-1 row-cols-lg-2 g-5'>
+                    <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                         <div class='col-lg-6 col-12'>
                             <div class='card bg-transparent border-0'>
                                 <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
@@ -225,7 +225,7 @@
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
                     <div class='col-12'>
-                        <div class='row row-cols-1 row-cols-lg-2 g-5'>
+                        <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                             @if(!get_config('dont_display_testimonials'))
                                 <div class='col-lg-6 col-12'>
                                     <div class='card bg-transparent border-0'>
@@ -349,7 +349,7 @@
                                         </div>
                                     </div>
                                     <div class='card-body px-0 py-0'>
-                                        <div class='row rowMargin row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-5'>
+                                        <div class='row rowMargin row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-5 g-4'>
                                             @foreach ($popular_courses as $pop_course)
                                                 <div class="col mb-lg-0 mb-4">
                                                     <div class='card border-card h-100'>
@@ -390,7 +390,7 @@
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
                     <div class='col-12'>
-                        <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-5">
+                        <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-lg-5 g-4">
                             @foreach($texts as $text)
                                 <div class='col'>
                                     <div class='card bg-transparent border-0'>

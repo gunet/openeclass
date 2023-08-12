@@ -20,8 +20,8 @@
 
                     @include('modules.mentoring.common.common_current_title')
 
-                    <div class='col-12 mb-4 ps-3 pe-3'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                    <div class='col-12 mb-4'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoUserProgramsText')!!}</p>
                         </div>
                     </div>
@@ -57,9 +57,9 @@
                     </div>
                     @endif
 
-                    <div class='col-12 ps-4 pe-4'>{!! $action_bar !!}</div>
+                    <div class='col-12'>{!! $action_bar !!}</div>
                    
-                    <div class='col-12 ps-4 pe-4'>
+                    <div class='col-12'>
                         <!-- accepted requests show -->
                                                        
                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white py-md-4 px-md-4 py-3 px-3 shadow-none'>

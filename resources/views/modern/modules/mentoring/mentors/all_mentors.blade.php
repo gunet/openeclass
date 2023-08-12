@@ -8,7 +8,7 @@
         <div class="row m-auto">
 
                     @if(isset($_SESSION['uid']))
-                        <div class='col-12 ps-lg-3 pe-lg-3 ps-4 pe-4'>
+                        <div class='col-12'>
                             <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a class="@if(!isset($_SESSION['uid'])) no_uid_menu @endif TextSemiBold" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php"><span class='fa fa-home'></span>&nbsp{{ trans('langHomeMentoringPlatform') }}</a></li>
@@ -21,7 +21,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto '>
                             <p class='TextMedium text-center text-justify'>{{ trans('langInfoMentorsText')}}</p>
                         </div>
                     </div>
@@ -79,10 +79,10 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class='col-lg-3 ps-lg-0 pe-lg-0 SidebarSpecializations'>
+                            <div class='col-lg-3 px-0 SidebarSpecializations'>
                                 @include('modules.mentoring.mentors.searchMentorByTags',['all_specializations' => $all_specializations])
                             </div>
-                            <div class='col-lg-9 col-12 ps-lg-0 pe-lg-0'>
+                            <div class='col-lg-9 col-12 px-0'>
                                 <div class='col-12 ps-lg-3'>
                                     <div class='col-12 ps-2 pe-2'>
                                         <div class="input-group mb-3 searchMentorsByKeys shadow-sm">

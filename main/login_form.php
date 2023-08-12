@@ -85,7 +85,7 @@ $tool_content .= "<div class='col-12'>
                   </div>";
 
 $tool_content .= "<div class='col-12 mt-5'>";
-  $tool_content .= "<div class='row row-cols-1 row-cols-lg-2 g-5'>";
+  $tool_content .= "<div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>";
     $tool_content .= "<div class='col'>";
                           $counter = 0;
                           $active = '';
