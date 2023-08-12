@@ -189,8 +189,8 @@
                                 
                                 
                                     <div class="modal-footer">
-                                        <button class="btn btn-outline-secondary small-text rounded-2" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
-                                        <button type="submit" class="btn btn-success small-text rounded-2" id="submitButton">{{trans('langSubmit')}}</button>
+                                        <button class="btn cancelAdminBtn" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
+                                        <button type="submit" class="btn successAdminBtn" id="submitButton">{{trans('langSubmit')}}</button>
                                     </div>
                                 </div>
 
@@ -213,8 +213,8 @@
                                 
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-outline-secondary small-text rounded-2" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
-                                <button type="submit" class="btn btn-danger small-text rounded-2" id="deleteButton">{{trans('langDelete')}}</button>
+                                <button class="btn cancelAdminBtn" data-bs-dismiss="modal" aria-hidden="true">{{trans('langCancel')}}</button>
+                                <button type="submit" class="btn deleteAdminBtn" id="deleteButton">{{trans('langDelete')}}</button>
                             </div>
                             </div>
 

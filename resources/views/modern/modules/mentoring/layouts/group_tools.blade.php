@@ -1,7 +1,8 @@
    
-<ul class='tools-menu-group p-0'>
-    <li class='p-0'>
-        <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/members.php?group_id={!! getInDirectReference($group_id) !!}">
+<div class="m-0 contextual-menu contextual-menu-group-tools contextual-border w-auto border-0">
+<ul class='list-group list-group-flush'>
+    <li>
+        <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/members.php?group_id={!! getInDirectReference($group_id) !!}">
             <span class='fa fa-user'></span>&nbsp{{ trans('langGroupMembers')}}
         </a>
     </li>
@@ -13,8 +14,8 @@
     @endphp
 
     @if($announcements == 1)
-    <li class='p-0'>
-        <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/announcements/index.php?group_id={!! getInDirectReference($group_id) !!}">
+    <li>
+        <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/announcements/index.php?group_id={!! getInDirectReference($group_id) !!}">
             <span class='fa fa-bullhorn fa-fw'></span>&nbsp{{ trans('langAnnouncements')}}
         </a>
     </li>
@@ -27,8 +28,8 @@
     @endphp
 
     @if($wall == 1)
-    <li class='p-0'>
-        <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/wall/my_doc_wall.php?group_id={!! getInDirectReference($group_id) !!}&wall">
+    <li>
+        <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/wall/my_doc_wall.php?group_id={!! getInDirectReference($group_id) !!}&wall">
             <span class='fa fa-list'></span>&nbsp{{ trans('langWall')}}
         </a>
     </li>
@@ -40,8 +41,8 @@
                                                     AND group_id = ?d",$mentoring_program_id,$group_id)->documents; 
     @endphp
     @if($documents == 1)
-    <li class='p-0'>
-        <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/document/mydoc.php?group_id={!! getInDirectReference($group_id) !!}">
+    <li>
+        <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/document/mydoc.php?group_id={!! getInDirectReference($group_id) !!}">
             <span class='fa fa-file'></span>&nbsp{{ trans('langDocsMentoringGroups')}}
         </a>
     </li>
@@ -55,8 +56,8 @@
                                                     AND group_id = ?d",$mentoring_program_id,$group_id)->forum; 
     @endphp
     @if($forum == 1)
-    <li class='p-0'>
-        <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/forum_group.php?forum_group_id={!! getInDirectReference($group_id) !!}">
+    <li>
+        <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/forum_group.php?forum_group_id={!! getInDirectReference($group_id) !!}">
             <span class='fa fa-comment'></span>&nbsp{{ trans('langForumMentoringGroups')}}
         </a>
     </li>
@@ -64,8 +65,8 @@
     
 
     @if($isCommonGroup != 1)
-        <li class='p-0'>
-            <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/meeting_space.php?group_id={!! getInDirectReference($group_id) !!}">
+        <li>
+            <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/meeting_space.php?group_id={!! getInDirectReference($group_id) !!}">
                 @php 
                     if($is_admin or $is_tutor_of_mentoring_program){
                         $totalMeetings = Database::get()->querySingle("SELECT COUNT(*) as total FROM mentoring_rentezvous
@@ -92,8 +93,8 @@
             </a>
         </li>
 
-        <li class='p-0'>
-            <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/bookingsMentee/mybookings.php?space_group_id={!! getInDirectReference($group_id) !!}">
+        <li>
+            <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/bookingsMentee/mybookings.php?space_group_id={!! getInDirectReference($group_id) !!}">
                 @php 
                     if($is_admin or $is_tutor_of_mentoring_program){
                         $totalBookings = Database::get()->querySingle("SELECT COUNT(*) as total FROM mentoring_booking
@@ -127,12 +128,12 @@
     @endphp
     @if($self_request == 1)
         @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
-            <li class='p-0'>
+            <li>
                 @php 
                     $countRequestsReg = Database::get()->querySingle("SELECT COUNT(group_id) AS gi FROM mentoring_group_members 
                                                                     WHERE group_id = ?d AND is_tutor = ?d AND status_request = ?d", $group_id, 0, 0)->gi;
                 @endphp
-                <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href="{{ $urlAppend }}modules/mentoring/programs/group/request_group.php?group_id={!! getInDirectReference($group_id) !!}">
+                <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href="{{ $urlAppend }}modules/mentoring/programs/group/request_group.php?group_id={!! getInDirectReference($group_id) !!}">
                     <span class='fa fa-registered'></span>&nbsp{{ trans('langRequestsRegisterGroups')}}
                     @if($countRequestsReg > 0)
                         &nbsp<span class='badge bg-primary'>{{ $countRequestsReg }}</span>
@@ -144,20 +145,21 @@
     
 
     @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
-        <li class='p-0'>
-            <a class='btn normalBlueText small-text textSemiBold text-start p-0 w-100 mb-2' href='{{ $urlAppend }}modules/mentoring/programs/group/edit_group.php?edit_group=1&group_id={!! getIndirectReference($group_id) !!}'>
+        <li>
+            <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='{{ $urlAppend }}modules/mentoring/programs/group/edit_group.php?edit_group=1&group_id={!! getIndirectReference($group_id) !!}'>
                 <span class='fa fa-edit'></span>&nbsp{{ trans('langEditGroupMentoring') }}
             </a>
         </li>
             
         @if($isCommonGroup == 0)
-            <li class='p-0'>
-                <button class="btn text-danger small-text p-0 mb-2 mt-1"
+            <li>
+                <button class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 w-100"
                     data-bs-toggle="modal" data-bs-target="#DeleteGroupModal" >
-                    <span class='fa fa-times'></span>&nbsp{{ trans('langDeleteMentoringGroup') }}
+                    <span class='fa-solid fa-trash-can Accent-200-cl mt-1'></span><span class='Accent-200-cl TextBold'>{{ trans('langDeleteMentoringGroup') }}</span>
                 </button>
             </li>
         @endif
     @endif
     
 </ul>
+</div>

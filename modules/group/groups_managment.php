@@ -24,9 +24,7 @@
  * @file groups_managment.php
  * @brief Page in order to manage groups
  */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 $require_login = true;
 $require_current_course = true;
 $require_help = true;

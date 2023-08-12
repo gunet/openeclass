@@ -4,7 +4,7 @@
 require_once '../../../include/baseTheme.php';
 require_once 'modules/mentoring/functions.php';
 
-//after_reconnect_go_to_mentoring_homepage();
+after_reconnect_go_to_mentoring_homepage();
 if(get_config('mentoring_always_active') ){
     if ($language != get_config('default_language') && isset($_SESSION['uid'])) {
         $language = get_config('default_language');
@@ -31,6 +31,11 @@ unset($_SESSION['mentoring_group_id']);
 unset($mentoring_program_code);
 unset($mentoring_program_id);
 unset($is_editor_mentoring_program);
+
+if(!isset($mentoring_platform) and !$mentoring_platform){
+    header("Location: {$urlServer}modules/mentoring/mentoring_platform_home.php");
+    exit;
+}
 
 $data['is_editor_mentoring'] = is_editor_mentoring($uid);
 

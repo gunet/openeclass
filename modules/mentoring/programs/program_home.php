@@ -7,7 +7,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/mentoring/mentoring_log.class.php';
 require_once 'modules/mentoring/functions.php';
 
-//after_reconnect_go_to_mentoring_homepage();
+after_reconnect_go_to_mentoring_homepage();
 if(!isset($mentoring_program_id) or !$mentoring_program_id){
   redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
 }

@@ -1,7 +1,7 @@
 
 <div class='panel panel-admin border-0 bg-white p-0 rounded-0 d-block d-lg-none'>
     <div class='panel-body p-0 rounded-0'>
-        <a id='closeSidebarSpecializations' class='btn float-end'><span class='fa fa-times fs-3 text-danger'></span></a>
+        <a id='closeSidebarSpecializations' class='btn float-end'><span class='fa-solid fa-trash-can fs-3 text-danger'></span></a>
     </div>
 </div>
 
@@ -94,7 +94,7 @@
             <span class='fa fa-search fs-5 normalBlueText'></span>
         </a>
         <a class='uncheckBtn btn btn-sm small-text shadow-sm search_clear_filter ms-2 w-50 solidPanel'>
-            <span class='fa fa-trash fs-5 text-danger'></span>
+            <span class='fa-solid fa-trash-can fs-5 text-danger'></span>
         </a>
     </div>
 </div>

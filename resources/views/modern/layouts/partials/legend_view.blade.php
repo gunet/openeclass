@@ -212,7 +212,7 @@
                     <div class='col-12'>
                         
                             <table class='table mb-0 ps-0 pe-0'>
-                                <thead>
+                                <thead class='border-0'>
                                 
                                 
                                     <tr class='border-0 ps-0'>

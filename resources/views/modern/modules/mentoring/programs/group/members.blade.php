@@ -38,7 +38,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoUserGroupText')!!}</p>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                                     <tr class='list-header'>
                                         <th>{{ trans('langSurnameName') }}</th>
                                         <th>Email</th>
-                                        @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)<th class='text-center'>{{ trans('langDeleteMenteeFromGroup')}}</th>@endif
+                                        @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)<th>{{ trans('langDeleteMenteeFromGroup')}}</th>@endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -105,10 +105,10 @@
                                             @endif
                                         </td>
                                         @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
-                                            <td class='text-center'>
-                                                <button class="btn btn-outline-danger btn-sm small-text ms-2 rounded-2"
+                                            <td>
+                                                <button class="btn deleteAdminBtn ms-2 rounded-2"
                                                     data-bs-toggle="modal" data-bs-target="#DeleteMenteeModal{{ $mentee->id }}" >
-                                                    <span class='fa fa-trash'></span>
+                                                    <span class='fa-solid fa-trash-can'></span>
                                                 </button>
 
                                                 <div class="modal fade" id="DeleteMenteeModal{{ $mentee->id }}" tabindex="-1" aria-labelledby="DeleteMenteeModalLabel{{ $mentee->id }}" aria-hidden="true">
@@ -126,8 +126,8 @@
                                                                     <input type='hidden' name='del_user_id' value='{{ $mentee->id }}'>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                    <button type='submit' class="btn btn-danger small-text rounded-2" name="delete_mentee_from_group">
+                                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                    <button type='submit' class="btn deleteAdminBtn" name="delete_mentee_from_group">
                                                                         {{ trans('langDelete') }}
                                                                     </button>
 
@@ -143,7 +143,10 @@
                                 </tbody>
                             </table>
                         @else
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{ trans('langNoMenteesExistInGroup') }}</div></div>
+                            <div class='col-12 mt-4'>
+                                <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoMenteesExistInGroup') }}</span></div></div>
                         @endif
                     </div>
 

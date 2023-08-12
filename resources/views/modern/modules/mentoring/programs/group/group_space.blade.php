@@ -35,8 +35,8 @@
 
                     @include('modules.mentoring.common.common_current_title')
 
-                    <div class='col-12 mb-4 ps-3 pe-3'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                    <div class='col-12 mb-4'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             @if($isCommonGroup == 1)
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoWallGroupSpaceText')!!}</p>
                             @else
@@ -83,10 +83,10 @@
                             <span class='fa fa-bars fs-5'></span>
                         </a>
                         <div class='SidebarToolsGroup'>
-                            <a id='closeSidebarToolsGroup' class='btn float-end mb-3 d-block d-lg-none'><span class='fa fa-times fs-3 text-danger'></span></a>
+                            <a id='closeSidebarToolsGroup' class='btn float-end mb-3 d-block d-lg-none'><span class='fa-solid fa-xmark fs-3 text-danger'></span></a>
                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white mt-5 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langToolsGroup') }}</span>
+                                    <h3>{{ trans('langToolsGroup') }}</h3>
                                 </div>
                                 <div class='panel-body p-0 rounded-2'>
                                     <div class='col-12'>
@@ -103,7 +103,7 @@
                         <div class='col-12 mb-0'>
                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langDescription') }}</span>
+                                    <h3>{{ trans('langDescription') }}</h3>
                                 </div>
                                 <div class='panel-body p-0 rounded-2'>
                                     <div class='col-12'>
@@ -123,7 +123,7 @@
                         <div class='col-xl-9 col-lg-8 col-12 pe-lg-3 d-lg-flex align-items-lg-strech'>
                             <div class='panel panel-admin w-100 rounded-2 border-1 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langContact') }}</span>
+                                    <h3>{{ trans('langContact') }}</h3>
                                 </div>
                                 <div class='panel-body p-0 rounded-2'>
                                     <div class='col-12'>
@@ -157,12 +157,12 @@
                                                                                 
                                                                                 @if(($is_editor_current_group and $uid == $editor->id) or $is_tutor_of_mentoring_program or $is_admin)
                                                                                     <p class='card-text blackBlueText text-md-start text-center mb-1'>{!! trans('langCreateMeeting') !!}</p>
-                                                                                    <a class='btn btn-sm viewProgramWidth text-uppercase small-text TextBold rounded-2 MobileButton' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program_code }}/index.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
-                                                                                        {{ trans('langCreate') }}
+                                                                                    <a class='btn submitAdminBtnDefault d-inline-flex justify-content-md-start justify-content-center gap-2' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program_code }}/index.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
+                                                                                        <i class="fa-regular fa-handshake"></i>{{ trans('langCreate') }}
                                                                                     </a>
                                                                                     <p class='card-text blackBlueText text-md-start text-center mt-3 mb-1'>{!! trans('langAddAvailableDateHour') !!}</p>
-                                                                                    <a class='btn btn-sm viewProgramWidth text-uppercase small-text TextBold rounded-2 MobileButton' href='{{ $urlAppend }}modules/mentoring/programs/group/datesMentor/add_date_by_mentor.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
-                                                                                        {!! trans('langAdd') !!}
+                                                                                    <a class='btn submitAdminBtnDefault d-inline-flex justify-content-md-start justify-content-center gap-2' href='{{ $urlAppend }}modules/mentoring/programs/group/datesMentor/add_date_by_mentor.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
+                                                                                        <i class="fa-solid fa-circle-plus"></i>{!! trans('langAdd') !!}
                                                                                     </a>
                                                                                 @endif
 
@@ -191,7 +191,7 @@
                                                                     @if(count($dates_availability_for_current_mentor) > 0)
                                                                     <div class='card-footer border-0 p-0 bg-white' style=' z-index: 0 !important;'>
                                                                         <div class='col-12 overflow-auto mt-3 mb-0'>
-                                                                            <p class='fs-6 normalBlueText text-center TextBold'>{{ trans('langDatesHourTutorAvailability')}}</p>
+                                                                            <h3>{{ trans('langDatesHourTutorAvailability')}}</h3>
                                                                             @include('modules.mentoring.common.viewDatesOfEditorGroup',['editorId' => $editor->id, 'group_id' => $group_id])
                                                                         </div>
                                                                     </div>
@@ -216,7 +216,7 @@
                         <div class='col-xl-9 col-lg-8 col-12 pe-lg-1 d-lg-flex align-items-lg-strech'>
                             <div class='panel panel-admin rounded-2 border-1 w-100 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langWall') }}</span>
+                                    <h3>{{ trans('langWall') }}</h3>
                                 </div>
                                 <div class='panel-body p-0 rounded-2'>
                                     @include('modules.mentoring.layouts.group_wall_function',['is_editor_wall_common_group' => $is_editor_wall_common_group , 'group_id' => $group_id])
@@ -229,7 +229,7 @@
                     <div class='col-xl-3 col-lg-4 @if($isCommonGroup == 0) ps-lg-0 @endif mt-lg-0 d-none d-lg-block'>
                         <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                             <div class='panel-heading bg-body p-0'>
-                                <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langToolsGroup') }}</span>
+                                <h3>{{ trans('langToolsGroup') }}</h3>
                             </div>
                             <div class='panel-body p-0 rounded-2'>
                                 <div class='col-12'>
@@ -248,7 +248,7 @@
                         <div class='col-xl-9 col-lg-8 col-12 pe-lg-1'>
                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langPostWall') }}</span>
+                                    <h3>{{ trans('langPostWall') }}</h3>
                                 </div>
                                 <div class='panel-body p-0 rounded-2'>
                                     @if (count($posts) == 0)
@@ -275,8 +275,8 @@
 
                                     </div>
                                     <div class="modal-footer">
-                                        <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                        <button type='submit' class="btn btn-danger small-text rounded-2" name="delete_group">
+                                        <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                        <button type='submit' class="btn deleteAdminBtn" name="delete_group">
                                             {{ trans('langDelete') }}
                                         </button>
 

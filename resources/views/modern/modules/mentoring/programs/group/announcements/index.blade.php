@@ -81,7 +81,7 @@
                    
                     @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
                         <div class='col-9 d-flex justify-content-end align-items-start'>
-                            <button class="btn btn-outline-success small-text" id='addannouncement'>
+                            <button class="btn submitAdminBtnDefault" id='addannouncement'>
                                 <span class='fa fa-plus'></span>&nbsp{{ trans('langAddAnn') }}
                             </button>
                         </div>
@@ -169,7 +169,7 @@
                                         <div class="modal-footer">
                                             <input type='hidden' name='id' value=''>
                                             
-                                            <button type='submit' class="btn btn-outline-success small-text rounded-2" name="submitAnnouncement">
+                                            <button type='submit' class="btn successAdminBtn" name="submitAnnouncement">
                                                 {{ trans('langSubmit') }}
                                             </button>
                                         </div>
@@ -215,19 +215,24 @@
                                                 </td>
                                                 <td>
                                                     @if($a->visible == 1)
-                                                        <span class='fa fa-check fs-6 text-success'></span>
+                                                        
+                                                        <i class="fa-solid fa-check Success-200-cl fa-lg"></i>
                                                     @else
-                                                        <span class='fa fa-times fs-6 text-danger'></span>
+                                                        
+                                                        <i class="fa-solid fa-eye-slash Accent-200-cl fa-lg"></i>
                                                     @endif
                                                 </td>
-                                                <td class='d-flex justify-content-center gap-2'>
-                                                    <a id='showEdit' href='{{ $urlAppend }}modules/mentoring/programs/group/announcements/index.php?group_id={!! getInDirectReference($group_id) !!}&modify={!! getInDirectReference($a->id) !!}'>
-                                                        <span class='fa fa-edit fs-6' data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
-                                                    </a>
-                                                    <button class="btn text-danger small-text ms-2 p-0"
-                                                        data-bs-toggle="modal" data-bs-target="#DeleteAnnouncementModal{{ $a->id }}" >
-                                                        <span class='fa fa-trash fs-6'></span>
-                                                    </button>
+                                                <td>
+                                                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                                                        <a id='showEdit' href='{{ $urlAppend }}modules/mentoring/programs/group/announcements/index.php?group_id={!! getInDirectReference($group_id) !!}&modify={!! getInDirectReference($a->id) !!}'>
+                                                            <span class='fa-solid fa-edit Primary-500-cl fa-lg' data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                                        </a>
+                                                        <button class="btn"
+                                                            data-bs-toggle="modal" data-bs-target="#DeleteAnnouncementModal{{ $a->id }}" >
+                                                            <span class='fa-solid fa-xmark Accent-200-cl fa-lg'></span>
+                                                        </button>
+                                                    </div>
+
                                                 </td>
                                             </tr>
                                             <div class="modal fade" id="DeleteAnnouncementModal{{ $a->id }}" tabindex="-1" aria-labelledby="DeleteAnnouncementModalLABEL{{ $a->id }}" aria-hidden="true">
@@ -244,8 +249,8 @@
 
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                <button type='submit' class="btn btn-danger small-text rounded-2" name="delete_announce">
+                                                                <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                <button type='submit' class="btn deleteAdminBtn" name="delete_announce">
                                                                     {{ trans('langDelete') }}
                                                                 </button>
 
@@ -285,10 +290,12 @@
                             </div>
                         @endif
                     @else
-                        <div class='col-12'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'>
-                                <div class='alert alert-warning rounded-2'>{{ trans('langNoExistAnnGroup')}}</div>
-                            </div>
+                        <div class='col-12 mt-4'>
+                           
+                                <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoExistAnnGroup')}}</span></div>
+                            
                         </div>
                     @endif
 

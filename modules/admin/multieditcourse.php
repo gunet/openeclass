@@ -19,9 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
 require_once 'include/lib/course.class.php';

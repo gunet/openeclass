@@ -324,7 +324,7 @@
                                                 <button id='SearchMentors' type='button' class='btn submitAdminBtnDefault clickSearchMentors'>
                                                     <i class="fa-solid fa-magnifying-glass"></i>&nbsp{{ trans('langSearch')}}
                                                 </button>
-                                                <button class='btn deleteAdminBtn uncheckBtn' type='button'><span class='fa fa-times'></span></button>
+                                                <button class='btn deleteAdminBtn uncheckBtn' type='button'><span class='fa-solid fa-trash-can'></span></button>
                                             </div>
                                            
                                             <div class='col-12 mt-3 colMentorsChoosing'>

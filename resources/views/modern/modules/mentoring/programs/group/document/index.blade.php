@@ -47,8 +47,8 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     @if(!isset($_GET['mydocs']) and !isset($_GET['common_docs']))
-                    <div class='col-12 mb-4 ps-3 pe-3'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                    <div class='col-12 mb-4'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoGroupDocsText')!!}</p>
                         </div>
                     </div>
@@ -102,8 +102,8 @@
 
                     @if (count($fileInfo) or $curDirName)
                         <div class='col-12  @if($dialogBox or $metaDataBox) mt-3 @endif'>
-                            <div class='panel rounded-2 solidPanel'>
-                                <div class='panel-body docPanel rounded-2 bg-white'>
+                            <div class='panel rounded-2'>
+                                <div class='col-12 Neutral-200-bg p-3 rounded-2'>
                                     <div class='row'>
                                         <div class='col-9 d-md-flex justify-content-md-start align-items-md-center'>
                                             {!! make_clickable_path($curDirPath) !!}
@@ -116,8 +116,8 @@
                                         </div>
                                         <div class='col-3 d-flex justify-content-end align-items-center'>
                                             @if ($curDirName)
-                                                <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
-                                                    <span class='fa fa-level-up'></span>&nbsp;{{ trans('langUp') }}
+                                                <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn gap-2'>
+                                                    <span class='fa fa-level-up'></span><span class='hidden-xs-mentoring'>{{ trans('langUp') }}<span>
                                                 </a>
                                             @endif
                                         </div>
@@ -261,9 +261,11 @@
 
                     @else
                         <div class='col-12'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'>
-                                <div class='alert alert-warning rounded-2'>{{ trans('langNoDocuments') }}</div>
-                            </div>
+                            
+                                <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoDocuments') }}</span></div>
+                            
                         </div>
                     @endif
                 

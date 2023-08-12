@@ -35,7 +35,7 @@
                                     @foreach ($texts as $text)
                                         @if(!empty($text->title))
                                             <li class="list-group-item px-0 mb-4 bg-transparent">
-                                                <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#faq-{{ $text->id }}' aria-expanded='false' aria-controls='#{{ $text->id }}'>
+                                                <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#faq-{{ $text->id }}' aria-expanded='false' aria-controls='#faq-{{ $text->id }}'>
                                                     <span class='fa-solid fa-chevron-down'></span>
                                                     {!! $text->title !!}
                                                     

@@ -64,7 +64,7 @@
                                                        
                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langRequestsHasAccepted') }}&nbsp--&nbsp{{ trans('langMembersProgram') }}</span>
+                                    <h3>{{ trans('langRequestsHasAccepted') }}&nbsp--&nbsp{{ trans('langMembersProgram') }}</h3>
                                 </div>
                                 <div class="panel-body p-md-1 p-0 rounded-2">
                                     @if(count($users_program) > 0)
@@ -72,7 +72,7 @@
                                             <thead>
                                                 <tr class='list-header'>
                                                     <th>{{ trans('langGuidedProgramParticipate') }}</th>
-                                                    <th class='text-center'>{{ trans('langRemoveFromProgram') }}</th>
+                                                    <th>{{ trans('langRemoveFromProgram') }}</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -89,10 +89,10 @@
                                                             @endforeach
                                                         </span>
                                                     </td>
-                                                    <td class='text-center'>
-                                                        <button class="btn btn-outline-danger btn-sm small-text ms-2 rounded-2"
+                                                    <td>
+                                                        <button class="btn deleteAdminBtn"
                                                             data-bs-toggle="modal" data-bs-target="#DeleteUserModal{{ $ac->guided_id }}" >
-                                                            <span class='fa fa-trash'></span>
+                                                            <span class='fa-solid fa-trash-can'></span>
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -109,8 +109,8 @@
                                                                     <input type='hidden' name='guided_id' value="{{ $ac->guided_id }}">
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                    <button type='submit' class="btn btn-danger small-text rounded-2" name="action_del_guided" value="delete">
+                                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                    <button type='submit' class="btn deleteAdminBtn" name="action_del_guided" value="delete">
                                                                         {{ trans('langDelete') }}
                                                                     </button>
 

@@ -94,7 +94,7 @@
                                                 @else
                                                     <div class='col-12 d-flex justify-content-center align-items-center mb-3'>
                                                         <p class="badge bg-danger text-white small-text rounded-pill px-3 py-2">
-                                                                <span class='fa fa-times pe-1'></span>{{ trans('langNoAvailableMentorProfile') }}
+                                                                <span class='fa-solid fa-trash-can pe-1'></span>{{ trans('langNoAvailableMentorProfile') }}
                                                         </p>
                                                     </div>
                                                    
@@ -157,11 +157,14 @@
                            
                         </div>
                     @else
-                       <div class='col-lg-9 col-12 ms-auto me-auto mt-5'>
-                        <div class='col-12 p-3 bg-white rounded-2 solidPanel'>
-                          <div class='alert alert-warning rounded-2'>{{ trans('langNoExistMentorInProgram') }}</div>
+                       
+                        <div class='col-12 mt-4'>
+                          <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoExistMentorInProgram') }}</span>
+                            </div>
                         </div>
-                       </div>
+                      
                     @endif
                     
                 

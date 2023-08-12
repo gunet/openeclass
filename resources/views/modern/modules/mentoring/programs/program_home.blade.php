@@ -68,7 +68,7 @@
                         <div class='col-12'>
                             @foreach($mentee_denied as $m)
                                @if($m->guided_id == $uid)
-                                    <div class='alert alert-info'>{{ trans('langTutotHasDeniedRequest') }}</div>
+                                    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langTutotHasDeniedRequest') }}</span></div>
                                @endif
                             @endforeach
                         </div>
@@ -104,7 +104,7 @@
                                         @endif
                                     @endif
                                     @if($if_accepted_request != 1 and $if_accepted_request != 2)
-                                        <button class="btn {{ $check_if_send_request ? 'btn-outline-danger' : 'bgEclass blackBlueText TextBold text-uppercase sendingRequestMentee' }} small-text rounded-2 cancelRequestProgram"
+                                        <button class="btn {{ $check_if_send_request ? 'deleteAdminBtn' : 'submitAdminBtnDefault sendingRequestMentee gap-2' }} small-text rounded-2 cancelRequestProgram"
                                                 data-bs-toggle="modal" data-bs-target="#RequestModal{{ $mentoring_program_id }}" >
                                                 {{ $check_if_send_request ? trans('langCancelRequest') : trans('langRequestMentoring') }}
                                                 @if(!$check_if_send_request)
@@ -132,8 +132,8 @@
                                                     @endif
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                    <button type='submit' class="btn {{ $check_if_send_request ? 'btn-danger' : 'btn-primary'}} small-text rounded-2" 
+                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                    <button type='submit' class="btn {{ $check_if_send_request ? 'deleteAdminBtn' : 'submitAdminBtnDefault'}} small-text rounded-2" 
                                                             name="{{ $check_if_send_request ? 'cancel_request' : 'request_submit' }}">
                                                             {{ $check_if_send_request ? trans('langCancelRequest') : trans('langSubmit') }}
                                                     </button>
@@ -149,16 +149,16 @@
                     </div>
 
                     <div class='col-12 d-flex justify-content-center align-items-center mt-4'>
-                        <ul class="nav nav-pills mb-3 mentoring_program_ul p-2 rounded-2" id="ex1" role="tablist">
+                        <ul class="nav nav-tabs" id="ex1" role="tablist">
 
-                            <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
-                                <a class="nav-link mentoring_program_nav_item_nav_linkProgram active rounded-0" id="info_mentoring" data-bs-toggle="tab" href="#info_mentoring_program" role="tab" aria-controls="info_mentoring_program" aria-selected="true">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link active" id="info_mentoring" data-bs-toggle="tab" href="#info_mentoring_program" role="tab" aria-controls="info_mentoring_program" aria-selected="true">
                                     <span class='fa fa-info size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langMentoringInfo')}}</span>
                                 </a>
                             </li>
 
-                            <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
-                                <a class="nav-link mentoring_program_nav_item_nav_linkProgram rounded-0" id="mentor_mentoring" data-bs-toggle="tab" href="#mentors_mentoring_program" role="tab" aria-controls="mentors_mentoring_program" aria-selected="false">
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link" id="mentor_mentoring" data-bs-toggle="tab" href="#mentors_mentoring_program" role="tab" aria-controls="mentors_mentoring_program" aria-selected="false">
                                     <span class='fa fa-user size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langMentoringMentorss') }}</span>
                                 </a>
                             </li>
@@ -168,8 +168,8 @@
                                     $sum_requests = Database::get()->querySingle("SELECT COUNT(id) AS ri FROM mentoring_programs_requests 
                                                       WHERE mentoring_program_id = ?d AND status_request = ?d", $mentoring_program_id, 0)->ri;
                                 @endphp
-                                <li class="nav-item mentoring_program_nav_item rounded-0" role="presentation">
-                                    <a class="nav-link mentoring_program_nav_item_nav_linkProgram rounded-0" id="request_mentoring" data-bs-toggle="tab" href="#requests_mentoring_program" role="tab" aria-controls="requests_mentoring_program" aria-selected="false">
+                                <li class="nav-item" role="presentation">
+                                    <a class="nav-link" id="request_mentoring" data-bs-toggle="tab" href="#requests_mentoring_program" role="tab" aria-controls="requests_mentoring_program" aria-selected="false">
                                         <span class='fa-solid fa-paper-plane size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langRequestsPrograms')}}</span>
                                         @if($sum_requests > 0)&nbsp<span class='badge bg-primary text-white'>{{ $sum_requests }}</span>@endif
                                     </a>
@@ -178,8 +178,8 @@
 
                             
                             @if($is_editor_mentoring_program or $is_admin)
-                                <li class="nav-item mentoring_program_nav_item dropdown rounded-pill" role="presentation">
-                                    <a id="dropdownProgramToolsCourse" class="nav-link mentoring_program_nav_item_nav_linkProgram dropdown-toggle rounded-pill" href="#" role="button" data-bs-display='static' data-bs-toggle="dropdown" aria-expanded="false">
+                                <li class="nav-item dropdown" role="presentation">
+                                    <a id="dropdownProgramToolsCourse" class="nav-link dropdown-toggle" href="#" role="button" data-bs-display='static' data-bs-toggle="dropdown" aria-expanded="false">
                                         <span class='fa fa-cogs size-tab'></span><span class='hidden-xs-mentoring hidden-md-mentoring TextBold size-tab'>&nbsp{{ trans('langMoreChoices') }}</span>
                                     </a>
                                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownProgramToolsCourse">
@@ -188,7 +188,7 @@
                                             <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/actions_program.php?program_id={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-tasks'></span>{{ trans('langMentoringAction' )}}</a></li>
                                             <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/users/index.php"><span class='fa fa-user'></span>{{ trans('langProgramUsers' )}}</a></li>
                                             <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/programs/edit_delete_program.php?edit={!! getInDirectReference($mentoring_program_id) !!}"><span class='fa fa-edit'></span>{{ trans('langMentoringEdit' )}}</a></li>
-                                            <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" data-bs-toggle="modal" data-bs-target="#del_mentoring_program" href="#"><span class='fa fa-times Accent-200-cl mt-1'></span><span class='Accent-200-cl TextBold'>{{ trans('langDelete') }}</span></a></li>
+                                            <li><a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3" data-bs-toggle="modal" data-bs-target="#del_mentoring_program" href="#"><span class='fa-solid fa-trash-can Accent-200-cl mt-1'></span><span class='Accent-200-cl TextBold'>{{ trans('langDelete') }}</span></a></li>
                                         </ul>
                                     </div>
                                 </li>
@@ -239,11 +239,8 @@
                                                                     <p class='text-center mb-0'>
                                                                         <!-- uid has access in program -->
                                                                         @if($is_access_user)
-                                                                            {{--<a class="btn btn-sm viewOptionToolBtn rounded-2" href="{{ $urlAppend }}modules/mentoring/programs/group/index.php?commonGroupView=1">
-                                                                                <span class='fa fa-comment'></span>&nbsp<span class='small-text'>{{ trans('langMentoringGroupSpace' )}}</span>
-                                                                            </a>--}}
-                                                                            <a class="btn viewOptionToolBtn mt-3 text-uppercase TextBold rounded-2 d-flex justify-content-center align-items-center w-75 ms-auto me-auto" href="{{ $urlAppend }}modules/mentoring/programs/group/select_group.php">
-                                                                                <span class='fa fa-comment'></span>&nbsp<span class='small-text hidden-xs'>{{ trans('langMentoringGroupSpace' )}}</span>
+                                                                            <a class="btn submitAdminBtnDefault mt-3 d-inline-flex justify-content-center align-items-center gap-2" href="{{ $urlAppend }}modules/mentoring/programs/group/select_group.php">
+                                                                                <span class='fa-solid fa-comment'></span><span class='hidden-xs TextBold'>{{ trans('langMentoringGroupSpace' )}}</span>
                                                                             </a>
                                                                         @endif
                                                                     </p>
@@ -315,8 +312,11 @@
                                                 </div>
                                             </div>
                                         @else
-                                            <div class='col-12'>
-                                                <div class='alert alert-warning'>{{ trans('langNoAvailableMentoringMentors') }}</div>
+                                            <div class='col-12 mt-4'>
+                                                <div class='alert alert-warning'>
+                                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                    
+                                                <span>{{ trans('langNoAvailableMentoringMentors') }}</span></div>
                                             </div>
                                         @endif
                                     </div>
@@ -326,7 +326,7 @@
 
                                             <div class='panel panel-admin rounded-2 border-1 BorderSolid bg-white py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                                 <div class='panel-heading bg-body p-0'>
-                                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langRequestsExist')}}</span>
+                                                    <h3>{{ trans('langRequestsExist')}}</h3>
                                                 </div>
                                                 <div class='panel-body p-0 rounded-2'>
                                                     @if(count($mentoring_program_requests) > 0)
@@ -348,7 +348,7 @@
                                                                                     <span class='TextSemiBold fs-6'>{{ $n->givenname }}&nbsp{{ $n->surname }}</span></br>
                                                                                     <p class='mt-3 small-text'><strong>Email:</strong> {{ $n->email }}</p>
                                                                                     <p class='mt-3 small-text'><strong>{{ trans('langProfileMemberSince' )}}:</strong> {{ $n->registered_at }}</p>
-                                                                                    {{-- <p class='mt-3 small-text help-block'>{!! $n->description !!}</p> --}}
+                                                                                   
                                                                                     @endforeach
                                                                                 </div>
                                                                             </div>
@@ -378,14 +378,14 @@
                                                                                     
                                                                                 </div>
                                                                                 <div class="modal-footer">
-                                                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                                    <button type='submit' class="btn btn-primary small-text rounded-2" name="action_request" value="accepted">
+                                                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                                    <button type='submit' class="btn submitAdminBtnDefault" name="action_request" value="accepted">
                                                                                         {{ trans('langAcceptRequest') }}
                                                                                     </button>
-                                                                                    <button type='submit' class="btn btn-warning warningAdminBtn small-text rounded-2" name="action_request" value="denied">
+                                                                                    <button type='submit' class="btn warningAdminBtn" name="action_request" value="denied">
                                                                                         {{ trans('langDenyRequest') }}
                                                                                     </button>
-                                                                                    <button type='submit' class="btn btn-danger small-text rounded-2" name="action_request" value="deleted">
+                                                                                    <button type='submit' class="btn deleteAdminBtn" name="action_request" value="deleted">
                                                                                         {{ trans('langDeleteRequest') }}
                                                                                     </button>
                                                                                 </div>
@@ -407,7 +407,7 @@
                                             <!-- accepted requests show -->
                                             <div class="panel panel-admin rounded-2 border-1 BorderSolid bg-white mt-lg-4 mt-4 py-md-4 px-md-4 py-3 px-3 shadow-none">
                                                 <div class='panel-heading bg-body p-0'>
-                                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ trans('langRequestsHasDenied') }}</span>
+                                                    <h3>{{ trans('langRequestsHasDenied') }}</h3>
                                                 </div>
                                                 
                                                 <div class="panel-body p-md-1 p-0 rounded-2">
@@ -438,7 +438,7 @@
                                                                             <input type='hidden' name='key_id' value='{{ $de->id }}'>
                                                                             <input type='hidden' name='mentoring_program_id' value='{{ $de->mentoring_program_id }}'>
                                                                             <input type='hidden' name='guided_id' value='{{ $de->guided_id }}'>
-                                                                            <button class='btn btn-outline-primary btn-sm small-text rounded-2 float-end' type='submit' name='action_request' value='reset'>{{ trans('langRequestReset') }}</button>
+                                                                            <button class='btn submitAdminBtn float-end' type='submit' name='action_request' value='reset'>{{ trans('langRequestReset') }}</button>
                                                                         </form>
                                                                     </td>
                                                                 </tr>
@@ -472,8 +472,8 @@
                                         {{ trans('langDoDeleteMentoringProgram') }} {{ $mentoring_program_code }};
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-outline-secondary small-text rounded-2" data-bs-dismiss="modal">{{ trans('langCancel')}}</button>
-                                        <button type="submit" name="delete_mentoring_program" class="btn btn-danger small-text rounded-2">{{ trans('langDelete') }}</button>
+                                        <button type="button" class="btn cancelAdminBtn" data-bs-dismiss="modal">{{ trans('langCancel')}}</button>
+                                        <button type="submit" name="delete_mentoring_program" class="btn deleteAdminBtn">{{ trans('langDelete') }}</button>
                                     </div>
                                 </div>
                             </div>

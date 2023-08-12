@@ -332,7 +332,7 @@ function TitleBooking($bookingMentorStart,$bookingMentorEnd,$mentor_id,$group_id
                 if($b->accepted == 1){
                     $html_bookingTitle .= "<p class='text-center TextBold smallText mt-1'>$langAcceptBooking: <span class='fa fa-check text-white TextBold'></span></p>";
                 }else{
-                    $html_bookingTitle .= "<p class='text-center TextBold smallText mt-1'>$langAcceptBooking: <span class='fa fa-times text-danger TextBold'></span></p>";
+                    $html_bookingTitle .= "<p class='text-center TextBold smallText mt-1'>$langAcceptBooking: <span class='fa-solid fa-trash-can text-danger TextBold'></span></p>";
                 }
             }
         }else{

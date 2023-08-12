@@ -291,6 +291,14 @@ img {
   color: #E8EDF8;
 }
 
+.Neutral-200-bg{
+  background-color: #EFF2FB;
+}
+.Neutral-200-cl{
+  color:#EFF2FB;
+}
+
+
 .Primary-600-bg{
   background-color: #2546F0;
 }

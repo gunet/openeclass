@@ -183,7 +183,7 @@ class Mentoring_Log {
             $tool_content .= "</tbody>";
             $tool_content .= "</table>";
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'>$langNoUsersLog</div></div>";
+            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoUsersLog</span></div></div>";
         }
         return $tool_content;
     }

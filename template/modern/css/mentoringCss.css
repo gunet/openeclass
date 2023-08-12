@@ -236,6 +236,12 @@ a:hover{
     }
 }
 
+.contextual-menu-group-tools .fa,
+.contextual-menu-group-tools .fa-solid{
+    width: 16px;
+    height: 16px;
+}
+
 @media(max-width:767px){
     .cancelRequestProgram{
         margin: auto;
@@ -255,10 +261,7 @@ a:hover{
         margin-top: 2px;
     } */
     
-    .MobileButton{
-        margin: auto;
-        display: block;
-    }
+
 
 }
 
@@ -323,19 +326,17 @@ a:hover{
 }
 
 
-.availableBtn{
-    background-color: #003e87;
-    color: white;
+.hidden-md-mentoring{
+    font-weight: 700;
 }
-.availableBtn:hover{
-    opacity: 0.8;
-    color:white;
-}
-
 @media(min-width:768px) and (max-width:991px){
     .hidden-md-mentoring{
         display: none;
     }
+}
+
+.hidden-lg-mentoring{
+    font-weight: 700;
 }
 @media(min-width:992px){
     .hidden-lg-mentoring{
@@ -354,15 +355,6 @@ a:hover{
 
 .pageWall{
     background: linear-gradient(90deg, rgb(72, 107, 120) 0%, rgb(117, 117, 176) 35%, rgb(54, 117, 130) 100%);
-}
-
-.tools-menu-group{
-    list-style-type: none;
-}
-
-.tools-menu-group li a:hover{
-    color:#0d6efd;
-    font-weight: 700;
 }
 
 .btnSubmitWallPost{
@@ -610,9 +602,6 @@ a:hover{
     }
 }
     
-.mentoring_program_ul{
-    background: transparent;
-}
 
 .image_mentoring_program{
     width:80%;
@@ -632,28 +621,8 @@ a:hover{
     width:15px ;
 }
 
-.sendingRequestMentee:hover{
-    background-color: #001146;
-    color: #ffffff;
-}
 
 .size-tab{
-    font-size: 16px;
-}
-.mentoring_program_nav_item_nav_link.active{
-    border-bottom: solid 2px #0073E6 !important;
-    color:#0073E6 !important;
-}
-
-.mentoring_program_nav_item_nav_linkProgram{
-    font-size: 16px;
-    color: #4F6893 !important;
-    font-weight: 700;
-}
-.mentoring_program_nav_item_nav_linkProgram.active{
-    background-color: transparent !important;
-    border-bottom: solid 2px #0073E6;
-    color:#0073E6 !important;
     font-size: 16px;
 }
 
@@ -728,6 +697,9 @@ a:hover{
     opacity:0.6;
 }
 
+.hidden-xs-mentoring{
+    font-weight: 700;
+}
 @media (max-width:767px){
     .hidden-xs-mentoring{
         display: none;
@@ -775,18 +747,6 @@ a:hover{
 
 .popover{
     border: solid 2px #e8e8e8;
-}
-
-.GroupsToolsMentoringDropdown{
-    width: 270px;
-}
-.GroupsToolsMentoringDropdown li .list-group-item:hover{
-    background-color: #0d6efd !important;
-    color: #ffffff;
-}
-.GroupsToolsMentoringDropdown li .list-group-item.deleteGroups:hover{
-    background-color: red !important;
-    color: #ffffff;
 }
 
 .solidPanel{
@@ -1012,7 +972,12 @@ a:hover{
 
 
 /********************************************* DATES MENTOR CALENDAR VIEW **********************************************/
-
+.fc-unthemed .fc-content, .fc-unthemed .fc-divider, .fc-unthemed .fc-list-heading td, .fc-unthemed .fc-list-view, .fc-unthemed .fc-popover, .fc-unthemed .fc-row, .fc-unthemed tbody, .fc-unthemed td, .fc-unthemed th, .fc-unthemed thead {
+    border-color: #EFF6FF;
+}
+.calendarViewDatesTutorGroup tbody tr:hover{
+    background-color: transparent;
+}
 .calendarViewDatesTutorGroup .fc-header-toolbar {
     margin-bottom: 0px;
     padding-top: 10px;
@@ -1063,7 +1028,7 @@ a:hover{
 .calendarViewDatesTutorGroup .fc-day-header.fc-widget-header span{
     font-size: 15px;
     color: #001146;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
@@ -1071,8 +1036,8 @@ a:hover{
 
 .calendarViewDatesTutorGroup .fc-day-number{
     float: none;
-    font-size: 14px;
-    color: #003e87;
+    font-size: 16px;
+    color: #687DA3;
     font-weight: 700;
 }
 
@@ -1178,7 +1143,11 @@ a:hover{
 
 
 .backButtonMentoring{
+    min-height: 40px;
     border: solid 2px #EFF6FF;
+    display: flex;
+    justify-content: start;
+    align-items: center;
 }
 .backButtonMentoring span{
     font-size: 14px;
@@ -1196,16 +1165,6 @@ a:hover{
     color: #ffffff;
  }
  .viewProgramWidth:hover{
-    color: #ffffff;
-    background-color: #003e87;
- }
-
- .viewOptionToolBtn{
-    width: auto;
-    background-color:#2673ca;
-    color: #ffffff;
- }
- .viewOptionToolBtn:hover{
     color: #ffffff;
     background-color: #003e87;
  }

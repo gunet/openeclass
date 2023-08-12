@@ -21,7 +21,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoActionProgramText')!!}</p>
                         </div>
                     </div>
@@ -107,7 +107,9 @@
                         @if(!empty($logs))
                             <div class='col-12 mt-4'>{!! $logs !!}</div>
                         @else
-                            <div class='col-12 mt-4'><div class='alert alert-warning rounded-2'>{{ trans('langNoActionsExists')}}</div></div>
+                            <div class='col-12 mt-4'><div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoActionsExists')}}</span></div></div>
                         @endif
                     @endif
                

@@ -2092,9 +2092,13 @@ function mentoring_program_access() {
 function after_reconnect_go_to_mentoring_homepage(){
     global $mentoring_platform;
 
-    if(!isset($mentoring_platform) or !$mentoring_platform or get_config('mentoring_always_active')){
+    if(!isset($mentoring_platform) and !$mentoring_platform){
         redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
     }
+
+    // if(!isset($mentoring_platform) or !$mentoring_platform or get_config('mentoring_always_active')){
+    //     redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+    // }
 }
 
 function getNextMeetingForMentee($menteeId,$g_id,$mp_id){ 
@@ -2260,7 +2264,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                     if($uid_is_member_of_group == 0){// uid isnt member of group so can register alone
                         if($check_if_uid_has_sent_request == 0 and $check_if_request_has_denied_from_tutor == 0){// uid hasnt sent request so can send request
                             if(($check_if_uid_is_member_in_other_groups == 0 and $one_or_many_group_register == 1) or $one_or_many_group_register == 0){// uid not in member in other group so can register in current group
-                                $html_group .= "<button class='btn btn-outline-primary small-text' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                                $html_group .= "<button class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                             $langSendGroupRequest
                                                     </button>";
                             }else{
@@ -2271,9 +2275,9 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                 $html_group .= "<div class='d-flex flex-wrap justify-content-start align-items-center'><span class='small-text me-2'>$langHasSendRequestGroupMentoring</span>
                                                 <span class='fa fa-spinner'></span>
                                                 <span class='pe-2 TextBold blackBlueText'>$langStandByState</span>
-                                                <button class='btn btn-outline-danger btn-sm small-text mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
+                                                <button class='btn deleteAdminBtn mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
                                                         data-bs-toggle='modal' data-bs-target='#CancelRequestModal$g_id'>
-                                                        <span class='fa fa-times'></span>
+                                                        <span class='fa-solid fa-trash-can'></span>
                                                 </button></div>";
                             }else{// uid cant cancel request because his request has denied from tutor
                                 $html_group .= "<p class='text-warning small-text mt-1 TextSemiBold'>$langReqDeniedFromTutor</p>";
@@ -2288,7 +2292,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                     if($uid_is_member_of_group == 0){// uid isnt member of group so can register alone
                         if($check_if_uid_has_sent_request == 0 and $check_if_request_has_denied_from_tutor == 0){// uid hasnt sent request so can send request
                             if(($check_if_uid_is_member_in_other_groups == 0 and $one_or_many_group_register == 1) or $one_or_many_group_register == 0){// uid not in member in other group so can register in current group
-                                $html_group .= "<button class='btn btn-outline-primary small-text' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                                $html_group .= "<button class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                             $langSendGroupRequest
                                                     </button>";
                             }else{
@@ -2299,9 +2303,9 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                 $html_group .= "<div class='d-flex flex-wrap justify-content-start align-items-center'><span class='small-text me-2'>$langHasSendRequestGroupMentoring</span>
                                                 <span class='fa fa-spinner'></span>
                                                 <span class='pe-2 TextBold blackBlueText'>$langStandByState</span>
-                                                <button class='btn btn-outline-danger btn-sm small-text mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
+                                                <button class='btn deleteAdminBtn mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
                                                         data-bs-toggle='modal' data-bs-target='#CancelRequestModal$g_id'>
-                                                        <span class='fa fa-times'></span>
+                                                        <span class='fa-solid fa-trash-can'></span>
                                                 </button></div>";
                             }else{// uid cant cancel request because his request has denied from tutor
                                 $html_group .= "<p class='text-warning small-text mt-1 TextSemiBold'>$langReqDeniedFromTutor</p>";
@@ -2326,7 +2330,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                                 </a>";
                             }
                             if($p->self_registration == 0 and $p->self_request == 1){
-                                $html_group .= "<button class='btn btn-outline-primary small-text opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                                $html_group .= "<button class='btn submitAdminBtn opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                                 $langSendGroupRequest
                                                 </button>";
                             }
@@ -2340,7 +2344,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                                     </a>";
                                 }
                                 if($p->self_registration == 0 and $p->self_request == 1){
-                                    $html_group .= "<button class='btn btn-outline-primary small-text opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                                    $html_group .= "<button class='btn submitAdminBtn opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                                     $langSendGroupRequest
                                                     </button>";
                                 }
@@ -2395,7 +2399,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                 }elseif($p->self_registration == 0 and $p->allow_unregister == 1 and $p->self_request == 1){// send request and can unreg
                     if($uid_is_member_of_common_group == 0){// uid isnt member of common group so can register alone
                         if($check_if_uid_has_sent_request == 0 and $check_if_request_has_denied_from_tutor == 0){// uid hasnt sent request so can send request
-                            $html_group .= "<button class='btn btn-outline-primary small-text $clickerBtn' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                            $html_group .= "<button class='btn submitAdminBtn $clickerBtn' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                         $langSendGroupRequest
                                                 </button>";
                         }else{// uid has sent request so can cancel request if request not denied by tutor
@@ -2403,9 +2407,9 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                 $html_group .= "<div class='d-flex flex-wrap justify-content-start align-items-center'><span class='small-text me-2'>$langHasSendRequestGroupMentoring</span>
                                                 <span class='fa fa-spinner'></span>
                                                 <span class='pe-2 TextBold blackBlueText'>$langStandByState</span>
-                                                <button class='btn btn-outline-danger btn-sm small-text mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
+                                                <button class='btn deleteAdminBtn mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
                                                         data-bs-toggle='modal' data-bs-target='#CancelRequestModal$g_id'>
-                                                        <span class='fa fa-times'></span>
+                                                        <span class='fa-solid fa-trash-can'></span>
                                                 </button></div>";
                             }else{// uid cant cancel request because his request has denied from tutor
                                 $html_group .= "<p class='text-warning small-text mt-1 TextSemiBold'>$langReqDeniedFromTutor</p>";
@@ -2419,7 +2423,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                 }elseif($p->self_registration == 0 and $p->allow_unregister == 0 and $p->self_request == 1){// send request and cant unreg
                     if($uid_is_member_of_common_group == 0){// uid isnt member of common group so can register alone
                         if($check_if_uid_has_sent_request == 0 and $check_if_request_has_denied_from_tutor == 0){// uid hasnt sent request so can send request
-                            $html_group .= "<button class='btn btn-outline-primary small-text $clickerBtn' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                            $html_group .= "<button class='btn submitAdminBtn $clickerBtn' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                             $langSendGroupRequest
                                                     </button>";
                         }else{// uid has sent request so can cancel request if request not denied by tutor
@@ -2427,9 +2431,9 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                 $html_group .= "<div class='d-flex flex-wrap justify-content-start align-items-center'><span class='small-text me-2'>$langHasSendRequestGroupMentoring</span>
                                                 <span class='fa fa-spinner'></span>
                                                 <span class='pe-2 TextBold blackBlueText'>$langStandByState</span>
-                                                <button class='btn btn-outline-danger btn-sm small-text mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
+                                                <button class='btn deleteAdminBtn mt-0 pt-0 pb-0 ps-1 pe-1 rounded-2'
                                                         data-bs-toggle='modal' data-bs-target='#CancelRequestModal$g_id'>
-                                                        <span class='fa fa-times'></span>
+                                                        <span class='fa-solid fa-trash-can'></span>
                                                 </button></div>";
                             }else{// uid cant cancel request because his request has denied from tutor
                                 $html_group .= "<p class='text-warning small-text mt-1 TextSemiBold'>$langReqDeniedFromTutor</p>";
@@ -2454,7 +2458,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                                 </a>";
                             }
                             if($p->self_registration == 0 and $p->self_request == 1){
-                                $html_group .= "<button class='btn btn-outline-primary small-text opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                                $html_group .= "<button class='btn submitAdminBtn opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                                 $langSendGroupRequest
                                                 </button>";
                             }
@@ -2468,7 +2472,7 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                                     </a>";
                                 }
                                 if($p->self_registration == 0 and $p->self_request == 1){
-                                    $html_group .= "<button class='btn btn-outline-primary small-text opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
+                                    $html_group .= "<button class='btn submitAdminBtn opacity-help pe-none' data-bs-toggle='modal' data-bs-target='#SendRequestModal$g_id'>
                                                                     $langSendGroupRequest
                                                     </button>";
                                 }
@@ -2501,8 +2505,8 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                         
                                     </div>
                                     <div class='modal-footer'>
-                                        <a class='btn btn-outline-secondary small-text rounded-2' href='' data-bs-dismiss='modal'>$langCancel</a>
-                                        <button type='submit' class='btn btn-primary small-text rounded-2' name='action_send_request' value='send_request'>
+                                        <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
+                                        <button type='submit' class='btn submitAdminBtnDefault' name='action_send_request' value='send_request'>
                                             $langSend
                                         </button>
                                         
@@ -2529,8 +2533,8 @@ function register_in_group_by_settings($g_id,$mp_id,$code){
                                         
                                     </div>
                                     <div class='modal-footer'>
-                                        <a class='btn btn-outline-secondary small-text rounded-2' href='' data-bs-dismiss='modal'>$langCancel</a>
-                                        <button type='submit' class='btn btn-danger small-text rounded-2' name='action_cancel_request' value='cancel_request'>
+                                        <a class='btn cancelAdminBtn' href='' data-bs-dismiss='modal'>$langCancel</a>
+                                        <button type='submit' class='btn deleteAdminBtn' name='action_cancel_request' value='cancel_request'>
                                             $langCancelSendRequest
                                         </button>
                                     </div>

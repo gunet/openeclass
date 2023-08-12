@@ -176,24 +176,24 @@ function generate_single_post_html($post) {
                               });
                           });
                       </script>';
-        $post_actions = '<div class="action-btns float-end mt-2">';
+        $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
         $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
-                          <span class="fa-solid fa-xmark fa-fw text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                          <span class="fa-solid fa-xmark fa-lg text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
         if ($is_editor) { //add link for pin post
             $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
             if ($pinned == 0) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             } elseif ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack text-danger float-end" data-bs-original-title="'.$langWallUnPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg text-danger float-end" data-bs-original-title="'.$langWallUnPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
         }
         if (!$is_editor) {
             if ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
         }
         $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
-                          <span class="fa fa-fw fa-edit text-primary float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                          <span class="fa fa-edit fa-lg text-primary float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
 
         if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
             $head_content .= abuse_report_add_js();
@@ -201,7 +201,7 @@ function generate_single_post_html($post) {
         }
         $post_actions .= '</div>';
     } else {
-        $post_actions = '<div class="action-btns float-end mt-2">';
+        $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
         if ($pinned == 1) {
             $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
         }
@@ -301,7 +301,7 @@ function generate_infinite_container_html($posts, $next_page) {
 
 
         if (allow_to_edit($id, $uid, $is_editor)) {
-            $post_actions = '<div class="action-btns float-end mt-2">';
+            $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
             $post_actions .= '<a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                               <span class="fa fa-fw fa-xmark text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
             if ($is_editor) { //add link for pin post
@@ -327,9 +327,9 @@ function generate_infinite_container_html($posts, $next_page) {
             }
             $post_actions .= '</div>';
         } else {
-            $post_actions = '<div class="action-btns float-end mt-2">';
+            $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
             if ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
                 //if ($next_page == 2) { //needed only for the first page and not for dynamically added content

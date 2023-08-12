@@ -242,7 +242,11 @@
                               
                            
                         @else
-                            <div class='alert alert-warning'>{{ trans('langNotAllowed') }}</div>
+                        <div class='col-12 mt-4'>
+                            <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>{{ trans('langNotAllowed') }}</span></div>
+                        </div>
                         @endif
 
 

@@ -31,6 +31,11 @@ unset($mentoring_program_code);
 unset($mentoring_program_id);
 unset($is_editor_mentoring_program);
 
+if(!isset($mentoring_platform) and !$mentoring_platform){
+    header("Location: {$urlServer}modules/mentoring/mentoring_platform_home.php");
+    exit;
+}
+
 $data['result_mentors'] = array();
 $selectedTags = array();
 $selectedSpecialization = array();
@@ -136,7 +141,7 @@ if(isset($_POST['dataa'])){
                                         if($checking_availability){
                                             $html .= "<div class='col-12 text-center'><span class='badge badge-mentor text-white rounded-pill pt-1 pb-1 ps-2 pe-2 mb-3'><span class='fa fa-check pe-1'></span>$langAvailableMentorProfile</span></div>";
                                         }else{
-                                            $html .= "<div class='col-12 text-center'><span class='badge badge-mentor bgDangerMentor text-white rounded-pill pt-1 pb-1 ps-2 pe-2 mb-3'><span class='fa fa-times pe-1'></span>$langNoAvailableMentorProfile</span></div>";
+                                            $html .= "<div class='col-12 text-center'><span class='badge badge-mentor bgDangerMentor text-white rounded-pill pt-1 pb-1 ps-2 pe-2 mb-3'><span class='fa-solid fa-trash-can pe-1'></span>$langNoAvailableMentorProfile</span></div>";
                                         }
                                         $profile_img = profile_image($mentor->id, IMAGESIZE_LARGE, 'img-responsive p-0 rounded-2 img-profile MentorImage');
                                         $html .= "$profile_img";
@@ -208,7 +213,7 @@ if(isset($_GET['term'])){
                                             if($checking_availability){
                                                 $html .= "<div class='col-12 text-center'><span class='badge badge-mentor text-white rounded-pill pt-1 pb-1 ps-2 pe-2 mb-3'><span class='fa fa-check pe-1'></span>$langAvailableMentorProfile</span></div>";
                                             }else{
-                                                $html .= "<div class='col-12 text-center'><span class='badge badge-mentor bgDangerMentor text-white rounded-pill pt-1 pb-1 ps-2 pe-2 mb-3'><span class='fa fa-times pe-1'></span>$langNoAvailableMentorProfile</span></div>";
+                                                $html .= "<div class='col-12 text-center'><span class='badge badge-mentor bgDangerMentor text-white rounded-pill pt-1 pb-1 ps-2 pe-2 mb-3'><span class='fa-solid fa-trash-can pe-1'></span>$langNoAvailableMentorProfile</span></div>";
                                             }
                                             $profile_img = profile_image($mentor->id, IMAGESIZE_LARGE, 'img-responsive p-0 rounded-2 img-profile MentorImage');
                                             $html .= "$profile_img";

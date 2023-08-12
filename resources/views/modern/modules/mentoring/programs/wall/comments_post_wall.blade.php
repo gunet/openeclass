@@ -39,8 +39,8 @@
 
                     @include('modules.mentoring.common.common_current_title')
 
-                    <div class='col-12 mb-4 ps-3 pe-3'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                    <div class='col-12 mb-4'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoGroupWallCommentsText')!!}</p>
                         </div>
                     </div>
@@ -137,13 +137,13 @@
 
                                                             @if($c->user_id == $uid)
                                                             <button class='btn ms-e rounded-2'
-                                                                data-bs-toggle='modal' data-bs-target='#UpdateComment{{ $c->id }}'><span class='fa fa-edit blackBlueText fs-5'></span>
+                                                                data-bs-toggle='modal' data-bs-target='#UpdateComment{{ $c->id }}'><span class='fa-solid fa-edit Primary-500-cl fa-lg'></span>
                                                             </button>
                                                             @endif
 
 
                                                             <button class='btn rounded-2'
-                                                                data-bs-toggle='modal' data-bs-target='#DeleteComment{{ $c->id }}'><span class='fa fa-trash fs-5 text-danger'></span>
+                                                                data-bs-toggle='modal' data-bs-target='#DeleteComment{{ $c->id }}'><span class='fa-solid fa-xmark Accent-200-cl fa-lg'></span>
                                                             </button>
                                                             
 
@@ -157,15 +157,15 @@
                                                                             </div>
                                                                             <div class="modal-body">
                                                                                 <label class='control-label-notes'>{{ trans('langComment')}}</label>
-                                                                                <input type='text' style='height:25px;' class='w-100 p-3 mb-2 rounded-2' name='contentComment' value='{{ $c->content }}' required>
+                                                                                <input type='text' class='form-control' name='contentComment' value='{{ $c->content }}' required>
                                                                                 <input type='hidden' name='comment_id' value='{{ $c->id }}'>
                                                                                 <input type='hidden' name='fromUser' value='{{ $c->user_id }}'>
 
 
                                                                             </div>
                                                                             <div class="modal-footer">
-                                                                                <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                                <button type='submit' class="btn btn-primary small-text rounded-2" name="updateComment">
+                                                                                <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                                <button type='submit' class="btn submitAdminBtn" name="updateComment">
                                                                                     {{ trans('langSubmit') }}
                                                                                 </button>
                                                                             </div>
@@ -188,8 +188,8 @@
 
                                                                             </div>
                                                                             <div class="modal-footer">
-                                                                                <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                                <button type='submit' class="btn btn-danger small-text rounded-2" name="deleteComment">
+                                                                                <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                                <button type='submit' class="btn deleteAdminBtn" name="deleteComment">
                                                                                     {{ trans('langSubmit') }}
                                                                                 </button>
                                                                             </div>

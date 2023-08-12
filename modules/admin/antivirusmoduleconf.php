@@ -23,9 +23,7 @@
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';

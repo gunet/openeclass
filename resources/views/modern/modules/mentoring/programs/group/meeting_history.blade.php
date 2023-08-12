@@ -39,7 +39,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoHistoryMeetingsText')!!}</p>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
                                                         @if($is_editor_current_group or $is_tutor_of_mentoring_program or $is_admin)
                                                             &nbsp
                                                             <a href="{{ $urlAppend }}modules/mentoring/programs/group/meeting_space.php?group_id={!! getInDirectReference($group_id) !!}&del_meeting_id={!! getInDirectReference($r->id) !!}&show_history">
-                                                                <span class="fa fa-trash text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDelete') }}"></span>
+                                                                <span class="fa-solid fa-trash-can text-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDelete') }}"></span>
                                                             </a>
                                                         @endif
                                                     </div>
@@ -139,8 +139,10 @@
                             </table>
                         </div>
                     @else
-                        <div class='col-12'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{ trans('langNoExistHistoryRentezvous')}}</div></div>
+                        <div class='col-12 mt-4'>
+                            <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>{{ trans('langNoExistHistoryRentezvous')}}</span></div>
                         </div>
                     @endif
 

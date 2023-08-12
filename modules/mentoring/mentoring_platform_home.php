@@ -7,10 +7,12 @@ $require_login = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/mentoring/functions.php';
 
-//after_reconnect_go_to_mentoring_homepage();
+
 if(!get_config('mentoring_platform')){
     redirect_to_home_page("main/portfolio.php");
 }
+
+after_reconnect_go_to_mentoring_homepage();
 
 if(get_config('mentoring_always_active') ){
     if ($language != get_config('default_language')) {

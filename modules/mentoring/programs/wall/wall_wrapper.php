@@ -43,7 +43,7 @@ function show_post_form() {
                             <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
-            $docs_li = '<li><a id="nav_docs" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li class="nav-item"><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -54,7 +54,7 @@ function show_post_form() {
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                               '.list_docs(NULL,'mydocs').'
                           </div>';
-            $mydocs_li = '<li><a id="nav_mydocs" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li class="nav-item"><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -65,7 +65,7 @@ function show_post_form() {
             $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_forums" style="padding:10px">
                               '.list_forums().'
                           </div>';
-            $forums_li = '<li><a id="nav_forums" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li class="nav-item"><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -87,8 +87,8 @@ function show_post_form() {
                             </div>
                             <div id="resources_panel" class="panel panel-default collapse mt-3 rounded-2 border-0">
                                 <div class="panel-body rounded-2">
-                                    <ul class="nav nav-pills mb-3 mentoring_program_ul rounded-0">
-                                        <li class="nav-item"><a id="nav_extvideo" class="mentoring_program_nav_item_nav_linkProgram nav-link active rounded-0" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                    <ul class="nav nav-tabs mb-3">
+                                        <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
                                         '.$docs_li.'
                                         '.$mydocs_li.'
                                         '.$forums_li.'
@@ -134,7 +134,7 @@ function show_wall_posts() {
     //show wall posts
     $posts = Database::get()->queryArray("SELECT id, user_id, content, extvideo, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM mentoring_wall_post WHERE mentoring_program_id = ?d AND group_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $mentoring_program_id, $program_group_id, $posts_per_page);
     if (count($posts) == 0) {
-        $tool_content .= '<div class="col-12 mt-3"><div class="col-12 p-3 rounded-2 solidPanel bg-white"><div class="alert alert-warning rounded-2">'.$langNoWallPostsMentoring.'</div></div></div>';
+        $tool_content .= '<div class="col-12 mt-4"><div class="alert alert-warning rounded-2"><i class="fa-solid fa-triangle-exclamation fa-lg"></i><span>'.$langNoWallPostsMentoring.'</span></div></div>';
     } else {
         $tool_content .= generate_infinite_container_html($posts, $posts_per_page, 2);
 
@@ -277,31 +277,31 @@ function generate_single_post_html($post) {
                               });
                           });
                       </script>';
-        $post_actions = '<div class="action-btns float-end mt-2">';
+        $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
         $post_actions .= '<a class="link" href="'.$urlServer.'modules/mentoring/programs/wall/index.php?group_id='.getInDirectReference($program_group_id).'&amp;delete='.$id.'">
-                          <span class="fa fa-fw fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                          <span class="fa fa-times fa-lg text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
         if ($is_editor_wall) { //add link for pin post
             $post_actions .= '<a href="'.$urlServer.'modules/mentoring/programs/wall/index.php?group_id='.getInDirectReference($program_group_id).'&amp;pin='.$id.'">';
             if ($pinned == 0) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             } elseif ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack text-danger float-end" data-bs-original-title="'.$langWallUnPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg text-danger float-end" data-bs-original-title="'.$langWallUnPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
         }
         if (!$is_editor_wall) {
             if ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
         }
         $post_actions .= '<a href="'.$urlServer.'modules/mentoring/programs/wall/index.php?group_id='.getInDirectReference($program_group_id).'&amp;edit='.$id.'">
-                          <span class="fa fa-fw fa-edit float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                          <span class="f fa-edit fa-lg float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
 
        
         $post_actions .= '</div>';
     } else {
-        $post_actions = '<div class="action-btns float-end mt-2">';
+        $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
         if ($pinned == 1) {
-            $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+            $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
         }
        
         $post_actions .= '</div>';

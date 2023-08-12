@@ -28,17 +28,17 @@
                     </div>
                     <div id="resources_panel" class="panel panel-default collapse mt-3 rounded-2 border-0">
                         <div class="panel-body rounded-2">
-                            <ul class="nav nav-pills mb-3 mentoring_program_ul rounded-0">
-                                <li class="nav-item"><a id="nav_extvideo" class="mentoring_program_nav_item_nav_linkProgram nav-link active rounded-0" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
+                            <ul class="nav nav-tabs mb-3">
+                                <li class="nav-item"><a id="nav_extvideo" class="nav-link active" data-bs-toggle="tab" href="#extvideo_video_div">{{ trans('langWallExtVideo') }}</a></li>
                                 @if ($is_editor_wall_common_group || visible_module(MODULE_ID_DOCS))
-                                    <li><a id="nav_docs" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#docs_div">{{ trans('langDoc') }}</a></li>
+                                    <li class="nav-item"><a id="nav_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">{{ trans('langDoc') }}</a></li>
                                 @endif
                                 @if (($is_editor_wall_common_group && get_config('mydocs_teacher_enable')) || (!$is_editor_wall_common_group && get_config('mydocs_student_enable')))
-                                    <li><a id="nav_mydocs" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#mydocs_div">{{ trans('langMyDocs') }}</a></li>
+                                    <li class="nav-item"><a id="nav_mydocs" class="nav-link" data-bs-toggle="tab" href="#mydocs_div">{{ trans('langMyDocs') }}</a></li>
                                 @endif
                                 
                                 @if ($is_editor_wall_common_group || visible_module(MODULE_ID_FORUM))
-                                    <li><a id="nav_forums" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#forums_div">{{ trans('langForum') }}</a></li>
+                                    <li class="nav-item"><a id="nav_forums" class="nav-link" data-bs-toggle="tab" href="#forums_div">{{ trans('langForum') }}</a></li>
                                 @endif
                             </ul>
                             <div class="tab-content">

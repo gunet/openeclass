@@ -31,6 +31,9 @@ function mentoring_doc_init() {
         $group_hidden_input, $basedir, $uid, $session, $pageName, $is_editor_mentoring_program, $is_editor_mentoring_group, $is_editor_wall;
 
         //after login timeout then recconect and get the last values from session table
+        if(!isset($mentoring_platform) and !$mentoring_platform){
+            after_reconnect_go_to_mentoring_homepage();
+        }
         if(isset($_GET['group_id']) and intval(getDirectReference($_GET['group_id'])) == 0 and !isset($_SESSION['mentoring_group_id'])
            and defined('MENTORING_GROUP_DOCUMENTS')){
             after_reconnect_go_to_mentoring_homepage();

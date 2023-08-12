@@ -221,7 +221,7 @@
                                                                 </div>
                                                                 @if($mentoring_program->allow_unreg_mentee == 1)
                                                                     <div class='col-12 mt-3'>
-                                                                        <button class="btn btn-outline-danger btn-sm small-text m-auto d-block rounded-2"
+                                                                        <button class="btn deleteAdminBtn m-auto d-block rounded-2"
                                                                             data-bs-toggle="modal" data-bs-target="#UnregTeacherProgramModal{{ $mentoring_program->code }}" >
                                                                             {{ trans('langUnregProgramMentee')}}
                                                                         </button>
@@ -242,8 +242,8 @@
                                                                                             <input type='hidden' name='del_mentee_id' value='{{ $uid }}'>
                                                                                         </div>
                                                                                         <div class="modal-footer">
-                                                                                            <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                                            <button type='submit' class="btn btn-danger small-text rounded-2" name="unreg_mentee_from_program">
+                                                                                            <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                                            <button type='submit' class="btn deleteAdminBtn" name="unreg_mentee_from_program">
                                                                                                 {{ trans('langSubmit') }}
                                                                                             </button>
 
@@ -270,7 +270,9 @@
                                 </div>
                             @else
                                 <div class='col-12 mt-4'>
-                                    <div class='alert alert-warning'>{{trans('langNoMentoringPrograms')}}</div>
+                                    <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>    
+                                    <span>{{trans('langNoMentoringPrograms')}}</span></div>
                                 </div>
                             @endif
                         </div>
@@ -341,8 +343,8 @@
                                                                                 <input type='hidden' name='del_mentee_id' value='{{ $uid }}'>
                                                                             </div>
                                                                             <div class="modal-footer">
-                                                                                <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                                <button type='submit' class="btn btn-danger small-text rounded-2" name="unreg_mentee_from_program">
+                                                                                <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                                <button type='submit' class="btn deleteAdminBtn" name="unreg_mentee_from_program">
                                                                                     {{ trans('langSubmit') }}
                                                                                 </button>
 
@@ -368,7 +370,9 @@
                                 </div>
                             @else
                                 <div class='col-12 mt-4'>
-                                    <div class='alert alert-warning'>{{trans('langNoMentoringProgramsAsMentee')}}</div>
+                                    <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>    
+                                    <span>{{trans('langNoMentoringProgramsAsMentee')}}</span></div>
                                 </div>
                             @endif
                         </div>

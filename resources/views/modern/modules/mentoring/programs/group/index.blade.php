@@ -20,8 +20,8 @@
                     
                     @include('modules.mentoring.common.common_current_title')
 
-                    <div class='col-12 mb-4 ps-3 pe-3'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                    <div class='col-12 mb-4'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoDivGroupSpaceText')!!}</p>
                         </div>
                     </div>
@@ -70,29 +70,31 @@
 
                             <div class='col-9 d-flex justify-content-end align-items-start'>
                                 <div class="dropdown">
-                                    <button class="btn submitAdminBtn dropdown-toggle manageGroupButton" type="button" id="dropdownToolsGroupTutorOfProgram" data-bs-display='static' data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button class="btn submitAdminBtn dropdown-toggle" type="button" id="dropdownToolsGroupTutorOfProgram" data-bs-display='static' data-bs-toggle="dropdown" aria-expanded="false">
                                         {{ trans('langManageGroup')}}
                                     </button>
-                                    <ul class="dropdown-menu dropdown-menu-end m-0 p-0 GroupsToolsMentoringDropdown" aria-labelledby="dropdownToolsGroupTutorOfProgram">
-                                        <li>
-                                            <a href='{{ $urlAppend }}modules/mentoring/programs/group/create_group.php' class='list-group-item border-bottom-0 small-text TextSemiBold text-start w-100'>
-                                                <span class='fa fa-plus'></span>&nbsp
-                                                {{ trans('langCreateMentoringGroup') }}
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <button class="list-group-item border-bottom-0 small-text TextSemiBold text-start w-100"
-                                                data-bs-toggle="modal" data-bs-target="#SettingsRegistrationModal" >
-                                                <span class='fa fa-cogs'></span>&nbsp{{ trans('langSettingsRegistrationOfGroup2') }}
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button class="list-group-item deleteGroups border-bottom-0 small-text TextSemiBold text-start w-100"
-                                                data-bs-toggle="modal" data-bs-target="#DeleteAllGroupsModal" >
-                                                <span class='fa fa-times'></span>&nbsp{{ trans('langDeleteAllMentoringGroups') }}
-                                            </button>
-                                        </li>
-                                    </ul>
+                                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsGroupTutorOfProgram">
+                                        <ul class="list-group list-group-flush" aria-labelledby="dropdownToolsGroupTutorOfProgram">
+                                            <li>
+                                                <a href='{{ $urlAppend }}modules/mentoring/programs/group/create_group.php' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                    <span class='fa-solid fa-plus'></span>
+                                                    {{ trans('langCreateMentoringGroup') }}
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <button class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 w-100 text-start"
+                                                    data-bs-toggle="modal" data-bs-target="#SettingsRegistrationModal" >
+                                                    <span class='fa-solid fa-cogs'></span>{{ trans('langSettingsRegistrationOfGroup2') }}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 w-100 text-start"
+                                                    data-bs-toggle="modal" data-bs-target="#DeleteAllGroupsModal" >
+                                                    <span class='fa-solid fa-times Accent-200-cl mt-1'></span><span class='Accent-200-cl TextBold'>{{ trans('langDeleteAllMentoringGroups') }}</span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
 
 
@@ -132,8 +134,8 @@
                                                     
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                    <button type='submit' class="btn btn-primary small-text rounded-2" name="action_settings_registration_of_mentee_to_group" value="settings">
+                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                    <button type='submit' class="btn submitAdminBtnDefault" name="action_settings_registration_of_mentee_to_group" value="settings">
                                                         {{ trans('langSubmit') }}
                                                     </button>
                                                     
@@ -160,8 +162,8 @@
                                                     @endif
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                    <button type='submit' class="btn btn-danger small-text @if(count($groups) == 0) pe-none opacity-help @endif rounded-2" name="deleteAllGroups" value="deleteGroups">
+                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                    <button type='submit' class="btn deleteAdminBtn @if(count($groups) == 0) pe-none opacity-help @endif" name="deleteAllGroups" value="deleteGroups">
                                                         {{ trans('langDelete') }}
                                                     </button>
                                                     
@@ -276,8 +278,10 @@
                            </div>
                        </div>
                     @else
-                        <div class='col-12'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{ trans('langNoGroupMentees') }}</div></div>
+                        <div class='col-12 mt-4'>
+                            <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                            <span>{{ trans('langNoGroupMentees') }}</span></div>
                         </div>
                     @endif
                   

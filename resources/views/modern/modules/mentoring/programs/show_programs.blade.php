@@ -219,7 +219,9 @@
                         </div>
                     @else
                         <div class='col-12 mt-4'>
-                            <div class='alert alert-warning'>{{trans('langNoMentoringPrograms')}}</div>
+                            <div class='alert alert-warning'>
+                            <i class='fa-solid fa-triangle-exclamation fa-lg'></i>    
+                            <span>{{trans('langNoMentoringPrograms')}}</span></div>
                         </div>
                     @endif
                     

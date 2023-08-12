@@ -194,7 +194,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <input type="hidden" name="doc_ids" id="docs">
                                 '.list_docs($id, NULL, TRUE).'
                             </div>';
-            $docs_li = '<li><a id="nav_edit_docs" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
+            $docs_li = '<li class="nav-item"><a id="nav_edit_docs" class="nav-link" data-bs-toggle="tab" href="#docs_div">'.$langDoc.'</a></li>';
         } else {
             $docs_div = '';
             $docs_li = '';
@@ -207,7 +207,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <input type="hidden" name="mydoc_ids" id="mydocs">
                                 '.list_docs($id,'mydocs', TRUE).'
                             </div>';
-            $mydocs_li = '<li><a id="nav_edit_mydocs" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
+            $mydocs_li = '<li class="nav-item"><a id="nav_edit_mydocs" class="nav-link rounded-0" data-bs-toggle="tab" href="#mydocs_div">'.$langMyDocs.'</a></li>';
         } else {
             $mydocs_div = '';
             $mydocs_li = '';
@@ -217,7 +217,7 @@ if (isset($_GET['showPost'])) { //show comments case
             $forums_div = '<div class="form-group tab-pane fade" id="forums_div" role="tabpanel" aria-labelledby="nav_edit_forums" style="padding:10px">
                                 '.list_forums($id).'
                             </div>';
-            $forums_li = '<li><a id="nav_edit_forums" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
+            $forums_li = '<li class="nav-item"><a id="nav_edit_forums" class="nav-link rounded-0" data-bs-toggle="tab" href="#forums_div">'.$langForum.'</a></li>';
         } else {
             $forums_div = '';
             $forums_li = '';
@@ -234,8 +234,8 @@ if (isset($_GET['showPost'])) { //show comments case
                             </div>
                             <div class="panel panel-default mt-3 rounded-2 border-0">
                                 <div class="panel-body rounded-2">
-                                    <ul class="nav nav-pills mb-3 mentoring_program_ul rounded-0">
-                                        <li class="active"><a id="nav_edit_extvideo" class="mentoring_program_nav_item_nav_linkProgram nav-link rounded-0" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
+                                    <ul class="nav nav-tabs mb-3">
+                                        <li class="nav-item active"><a id="nav_edit_extvideo" class="nav-link" data-bs-toggle="tab" href="#extvideo_video_div">'.$langWallExtVideo.'</a></li>
 
                                         '.$docs_li.'
                                         '.$mydocs_li.'
@@ -244,7 +244,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     <div class="tab-content">
                                         <div class="form-group tab-pane fade show active" id="extvideo_video_div" role="tabpanel" aria-labelledby="nav_edit_extvideo" style="padding:10px">
                                             <label class="control-label-notes" for="extvideo_video">'.$langWallExtVideoLink.'</label>
-                                            <input class="form-control rounded-pill bgEclass" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
+                                            <input class="form-control" type="url" name="extvideo" id="extvideo_video" value="'.$extvideo.'">
                                         </div>
                                         
                                         '.$docs_div.'

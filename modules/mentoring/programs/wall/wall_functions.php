@@ -198,8 +198,8 @@ function show_resources($post_id) {
     $req = Database::get()->queryArray("SELECT * FROM mentoring_wall_post_resources WHERE post_id = ?d", $post_id);
     if (count($req) > 0) {
         $ret_str .= '<div class="table-responsive">';
-        $ret_str .= '<table class="table">';
-        $ret_str .= '<thead><tr><th colspan="2"><span style="font-size:12px">'.$langWallAttachedResources.'</span></th></tr></thead>';
+        $ret_str .= '<table class="table table-default">';
+        $ret_str .= '<thead><tr><th colspan="2"><span>'.$langWallAttachedResources.'</span></th></tr></thead>';
         foreach ($req as $info) {
             $ret_str .= show_resource($info);
         }
@@ -367,30 +367,30 @@ function generate_infinite_container_html($posts, $next_page) {
         
 
         if (allow_to_edit($id, $uid, $is_editor_wall)) {
-            $post_actions = '<div class="action-btns float-end mt-2">';
+            $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
             $post_actions .= '<a class="link" href="'.$urlServer.'modules/mentoring/programs/wall/index.php?group_id='.getInDirectReference($program_group_id).'&amp;delete='.$id.'">
-                              <span class="fa fa-fw fa-times text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                              <span class="fa fa-times fa-lg text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
             if ($is_editor_wall) { //add link for pin post
                 $post_actions .= '<a href="'.$urlServer.'modules/mentoring/programs/wall/index.php?group_id='.getInDirectReference($program_group_id).'&amp;pin='.$id.'">';
                 if ($pinned == 0) {
-                    $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                    $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
                 } elseif ($pinned == 1) {
-                    $post_actions .= '<span class="fa fa-fw fa-thumb-tack text-danger float-end" data-bs-original-title="'.$langWallUnPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                    $post_actions .= '<span class="fafa-thumb-tack fa-lg text-danger float-end" data-bs-original-title="'.$langWallUnPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
                 }
             }
             if (!$is_editor_wall) {
                 if ($pinned == 1) {
-                    $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                    $post_actions .= '<span class="fa fa-thumb-tack fa-lg loat-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
                 }
             }
             $post_actions .= '<a href="'.$urlServer.'modules/mentoring/programs/wall/index.php?group_id='.getInDirectReference($program_group_id).'&amp;edit='.$id.'">
-                              <span class="fa fa-fw fa-edit text-warning float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                              <span class="fa fa-edit text-primary fa-lg float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
            
             $post_actions .= '</div>';
         } else {
-            $post_actions = '<div class="action-btns float-end mt-2">';
+            $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
             if ($pinned == 1) {
-                $post_actions .= '<span class="fa fa-fw fa-thumb-tack float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-thumb-tack fa-lg float-end" data-bs-original-title="'.$langWallPinPost.'" title="" data-bs-toggle="tooltip"></span></a>';
             }
          
             $post_actions .= '</div>';

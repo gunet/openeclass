@@ -60,7 +60,7 @@
                         <div class='col-12'>
                             <div class="panel panel-admin rounded-2 border-1 BorderSolid bg-white py-md-4 px-md-4 py-3 px-3 shadow-none">
                                 <div class='panel-heading bg-body p-0'>
-                                    <span class='text-uppercase blackBlueText TextBold fs-6'>{{ $a->title }}</span>
+                                    <h3>{{ $a->title }}</h3>
                                 </div>
                                 <div class="panel-body ps-0 pe-0 pt-0 pb-0 rounded-2">
                                     <p class='TextBold small-text mb-3'><span class='small-text TextRegular'>{{ trans('langSent')}}</span>&nbsp--{!! format_locale_date(strtotime($a->date ?? '')) !!}&nbsp--</p>

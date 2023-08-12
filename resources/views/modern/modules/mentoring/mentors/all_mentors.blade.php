@@ -97,8 +97,11 @@
                             </div>
                         </div>
                     @else
-                        <div class='col-12 ps-3 pe-3'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'><div class='alert alert-warning rounded-2'>{{ trans('langNoAvailableMentoringMentors') }}</div></div>
+                        <div class='col-12 mt-4'>
+                            <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langNoAvailableMentoringMentors') }}</span>
+                            </div>
                         </div>
                     @endif
                        

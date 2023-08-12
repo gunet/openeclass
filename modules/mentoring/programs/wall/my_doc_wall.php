@@ -24,9 +24,7 @@
  * @brief Admin form for uploading common documents (e.g. shared docs among all courses)
  */
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 
 if(isset($_GET['wall'])){
     define('MENTORING_GROUP_DOCUMENTS',TRUE);

@@ -94,7 +94,7 @@
                                             </div>
                                         </div>
                                         <div class='panel-footer bg-light d-flex justify-content-center align-items-center rounded-2'>
-                                            <button class="btn btn-outline-primary small-text rounded-2"
+                                            <button class="btn submitAdminBtn rounded-2"
                                                 data-bs-toggle="modal" data-bs-target="#AcceptRequestModal{{ $r->id }}" >
                                                 <span class='fa fa-edit'></span><span class='hidden-xs-mentoring'>&nbsp{{ trans('langEditRequest') }}</span>
                                             </button>
@@ -113,14 +113,14 @@
 
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                <button type='submit' class="btn btn-warning small-text rounded-2" name="accept_group_request" value="deny">
+                                                                <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                <button type='submit' class="btn warningAdminBtn" name="accept_group_request" value="deny">
                                                                     {{ trans('langRejectRequest') }}
                                                                 </button>
-                                                                <button type='submit' class="btn btn-danger small-text rounded-2" name="accept_group_request" value="delete">
+                                                                <button type='submit' class="btn deleteAdminBtn" name="accept_group_request" value="delete">
                                                                     {{ trans('langDelete') }}
                                                                 </button>
-                                                                <button type='submit' class="btn btn-success small-text rounded-2" name="accept_group_request" value="accept">
+                                                                <button type='submit' class="btn successAdminBtn" name="accept_group_request" value="accept">
                                                                     {{ trans('langAccept') }}
                                                                 </button>
 
@@ -136,10 +136,12 @@
                             
                         </div>
                     @else
-                        <div class='col-12'>
-                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'>
-                                <div class='alert alert-warning rounded-2'>{{ trans('langRequestsRegisterGroupsNoExists') }}</div>
-                            </div>
+                        <div class='col-12 mt-4'>
+                            
+                                <div class='alert alert-warning'>
+                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                <span>{{ trans('langRequestsRegisterGroupsNoExists') }}</span></div>
+                            
                         </div>
                     @endif
 
@@ -161,7 +163,7 @@
                                                 {{ $r->givenname }}&nbsp{{ $r->surname }}
                                             </td>
                                             <td class='text-end'>
-                                                <a class='btn btn-outline-primary small-text rounded-2' 
+                                                <a class='btn submitAdminBtn rounded-2' 
                                                 href="{{ $_SERVER['SCRIPT_NAME']}}?group_id={!! getIndirectReference($group_id) !!}&user={!! getIndirectReference($r->id) !!}&restore">{{ trans('langRestore')}}</a>
                                             </td>
                                         </tr>

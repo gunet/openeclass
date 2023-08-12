@@ -130,7 +130,7 @@ function getUnvailableMentorOfProgram($user_id){
    $checkUserHasExpired = Database::get()->queryArray("SELECT *FROM mentoring_mentor_availability WHERE end < NOW() AND user_id = ?d",$user_id);
    $checkUserExist = Database::get()->querySingle("SELECT COUNT(*) as total FROM mentoring_mentor_availability WHERE user_id = ?d",$user_id)->total;
    if(count($checkUserHasExpired) > 0 or $checkUserExist == 0){
-        $html_user .= "<button style='width:10px; height:20px;' type='button' class='btn btn-danger d-flex justify-content-center align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUnvailableMentor'>
+        $html_user .= "<button style='width:10px; height:20px;' type='button' class='btn deleteAdminBtn d-flex justify-content-center align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUnvailableMentor'>
                             <span class='fa fa-info'></span>
                         </button>";
    }

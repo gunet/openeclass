@@ -3761,7 +3761,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>";
             }else{
 
-                return "<div class='col-12 mt-3 mb-3 MentoringActionBar'>
+                return "<div class='col-12 mb-3 MentoringActionBar'>
                         <div class='col-12 action_bar d-flex justify-content-start'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print'>
                                 <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>

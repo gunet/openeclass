@@ -37,7 +37,7 @@
                     @include('modules.mentoring.common.common_current_title')
 
                     <div class='col-12 mb-4'>
-                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto ps-3 pe-3'>
+                        <div class='col-lg-7 col-md-9 col-12 ms-auto me-auto'>
                             <p class='TextMedium text-center text-justify'>{!! trans('langInfoMeetingsText')!!}</p>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
                         {!! $action_bar !!}
                     </div>
                     <div class='col-6 d-flex justify-content-end align-items-start'>
-                        <a class='btn btn-outline-primary btn-sm small-text rounded-2 TextSemiBold text-uppercase' 
+                        <a class='btn submitAdminBtn rounded-2' 
                             href='{{ $urlAppend }}modules/mentoring/programs/group/meeting_space.php?group_id={!! getIndirectReference($group_id) !!}&show_history'>
                             <span class='fa fa-history'></span><span class='hidden-xs-mentoring'>&nbsp{{ trans('langHistoryRentezvous') }}</span>
                         </a>
@@ -195,7 +195,7 @@
                                                                                                         <span class='badge bg-danger'>{{ trans('langMeetingIsDeactivate') }}</span>
                                                                                                         
                                                                                                         <a href="{{ $urlAppend }}modules/mentoring/programs/group/meeting_space.php?group_id={!! getInDirectReference($group_id) !!}&del_meeting_id={!! getInDirectReference($a->id) !!}" class='ms-3'>
-                                                                                                            <span class="fa fa-trash text-danger fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDelete') }}"></span>
+                                                                                                            <span class="fa-solid fa-trash-can text-danger fs-5" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDelete') }}"></span>
                                                                                                         </a>
                                                                                                     @else
                                                                                                         <span class='badge bg-secondary'>{{ trans('langMeetingNotStartedYet') }}</span>
@@ -238,7 +238,7 @@
                                                                                                 <div class='col-12 mt-3'>
                                                                                                     <p class='blackBlueText fs-5 TextBold'>{{ trans('langStartDate') }}</p>
                                                                                                     @if($now == $old_now and $now_time > $old_time)
-                                                                                                        <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($a->start)) !!}&nbsp<span class='fa fa-times'></span></p>
+                                                                                                        <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($a->start)) !!}&nbsp<span class='fa-solid fa-trash-can'></span></p>
                                                                                                     @else
                                                                                                         <p class='text-success TextMedium'>
                                                                                                             {!! format_locale_date(strtotime($a->start)) !!}&nbsp<span class='fa fa-check'></span></span>
@@ -249,7 +249,7 @@
                                                                                                 <div class='col-12 mt-3'>
                                                                                                     <p class='blackBlueText fs-5 TextBold'>{{ trans('langEndDate') }}</p>
                                                                                                     @if($now == $old_now and $now_time > $old_time)
-                                                                                                        <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($a->end)) !!}&nbsp<span class='fa fa-times'></span></p>
+                                                                                                        <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($a->end)) !!}&nbsp<span class='fa-solid fa-trash-can'></span></p>
                                                                                                     @else
                                                                                                         <p class='text-success TextMedium'>
                                                                                                             {!! format_locale_date(strtotime($a->end)) !!}&nbsp<span class='fa fa-check'></span></span>
@@ -413,7 +413,7 @@
                                                                             <p class='blackBlueText fs-5 TextBold'>{{ trans('langStartDate') }}</p>
                                                                         
                                                                             @if($now == $old_now and $now_time > $old_time)
-                                                                                <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($r->start)) !!}&nbsp<span class='fa fa-times'></span></p>
+                                                                                <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($r->start)) !!}&nbsp<span class='fa-solid fa-trash-can'></span></p>
                                                                             @else
                                                                                 <p class='text-success TextMedium'>
                                                                                     {!! format_locale_date(strtotime($r->start)) !!}&nbsp<span class='fa fa-check'></span></span>
@@ -425,7 +425,7 @@
                                                                             <p class='blackBlueText fs-5 TextBold'>{{ trans('langEndDate') }}</p>
 
                                                                             @if($now == $old_now and $now_time > $old_time)
-                                                                                <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($r->end)) !!}&nbsp<span class='fa fa-times'></span></p>
+                                                                                <p class='text-danger TextMedium'>{!! format_locale_date(strtotime($r->end)) !!}&nbsp<span class='fa-solid fa-trash-can'></span></p>
                                                                             @else
                                                                                 <p class='text-success TextMedium'>
                                                                                     {!! format_locale_date(strtotime($r->end)) !!}&nbsp<span class='fa fa-check'></span></span>
@@ -451,10 +451,10 @@
                                                                         </div>
 
                                                                         <div class='col-12 mt-3'>
-                                                                            <button class='btn btn-outline-danger small-text rounded-2'
+                                                                            <button class='btn deleteAdminBtn rounded-2'
                                                                                     data-bs-toggle="modal" data-bs-target="#WithDrawAlModal{{ $r->id }}">
                                                                                     {{ trans('langWithDrawAlForMentee') }}
-                                                                                    @if($now == $old_now and $now_time > $old_time)&nbsp--&nbsp{{ trans('langDelete') }}&nbsp<span class='fa fa-trash'></span> @endif
+                                                                                    @if($now == $old_now and $now_time > $old_time)&nbsp--&nbsp{{ trans('langDelete') }}&nbsp<span class='fa-solid fa-trash-can'></span> @endif
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -477,8 +477,8 @@
 
                                                                                 </div>
                                                                                 <div class="modal-footer">
-                                                                                    <a class="btn btn-outline-secondary small-text rounded-2" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                                    <button type='submit' class="btn btn-danger small-text rounded-2" name="withDrawAlMentee">
+                                                                                    <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
+                                                                                    <button type='submit' class="btn deleteAdminBtn" name="withDrawAlMentee">
                                                                                         {{ trans('langSubmit') }}
                                                                                     </button>
 
@@ -495,10 +495,12 @@
                                                 </div>
                                             </div>
                                         @else
-                                        <div class='col-12 p-0'>
-                                            <div class='col-12 bg-white p-3 rounded-2 solidPanel'>
-                                                <div class='alert alert-warning rounded-2'>{{ trans('langNoExistMeetings')}}</div>
-                                            </div>
+                                        <div class='col-12 mt-4'>
+                                            
+                                                <div class='alert alert-warning'>
+                                                <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                                <span>{{ trans('langNoExistMeetings')}}</span></div>
+                                            
                                         </div>
                                         @endif
                                     </div>
