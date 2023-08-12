@@ -72,13 +72,25 @@
                     
                     
                     @if(count($all_requests) > 0)
-                        <div class="card-group">
+                        <div class="card-group gap-4">
                             
                             @foreach($all_requests as $r)
                                 <div class='col-xl-3 col-lg-4 col-md-6 col-12 d-flex align-items-strech ps-md-0 pe-md-0 mb-3'>
                                     <div class="card w-100">
                                         @php $profile_img = profile_image($r->id, IMAGESIZE_LARGE, 'img-responsive img-circle img-profile card-img-top requestCardImage'); @endphp
                                         {!! $profile_img !!}
+
+                                        @php 
+                                            $exist_user_in_program = Database::get()->queryArray("SELECT *FROM mentoring_programs_user
+                                                                                                    WHERE mentoring_program_id = ?d
+                                                                                                    AND user_id = ?d
+                                                                                                    AND is_guided = ?d",$mentoring_program_id,$r->id,1);
+
+                                            $disableBtn = '';
+                                            if(count($exist_user_in_program) == 0){
+                                                $disableBtn = 'pe-none opacity-help';
+                                            }
+                                        @endphp
 
                                         <div class='card-body'>
                                             <div class='col-12 d-flex justify-content-center align-items-center fs-6 TextBold'>
@@ -90,6 +102,10 @@
                                                     {!! $details_user['panels'] !!}
                                                 @else
                                                     <p class='blackBlueText TextSemiBold text-center mt-3'>{{ trans('langNoInfoForMentees')}}</p>
+                                                @endif
+
+                                                @if(count($exist_user_in_program) == 0)
+                                                    {!! trans('langTheUserHasDeleted') !!}
                                                 @endif
                                             </div>
                                         </div>
@@ -114,13 +130,13 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{ trans('langCancel') }}</a>
-                                                                <button type='submit' class="btn warningAdminBtn" name="accept_group_request" value="deny">
+                                                                <button type='submit' class="btn warningAdminBtn {{ $disableBtn }}" name="accept_group_request" value="deny">
                                                                     {{ trans('langRejectRequest') }}
                                                                 </button>
                                                                 <button type='submit' class="btn deleteAdminBtn" name="accept_group_request" value="delete">
                                                                     {{ trans('langDelete') }}
                                                                 </button>
-                                                                <button type='submit' class="btn successAdminBtn" name="accept_group_request" value="accept">
+                                                                <button type='submit' class="btn successAdminBtn {{ $disableBtn }}" name="accept_group_request" value="accept">
                                                                     {{ trans('langAccept') }}
                                                                 </button>
 

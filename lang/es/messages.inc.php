@@ -6383,3 +6383,4 @@ $langOnlyNumbersLetters = "The code must contain only letters and numbers.";
 $langListPrograms = "Programs list";
 $langDeleteProgramFromPlatform = "If you delete that program, all users participating in it will also be removed.</br>
 Do you want to continue?";
+$langTheUserHasDeleted = "<p class='text-danger text-center'>The user has deleted from program.</p><p class='text-center'>You could delete the current request.</p>";

@@ -6887,3 +6887,4 @@ $langOnlyNumbersLetters = "Ο κωδικός πρέπει να περιέχει 
 $langListPrograms = "Λίστα προγραμμάτων";
 $langDeleteProgramFromPlatform = "Αν διαγράψετε το συγκεκρίμενο πρόγραμμα, θα αφαιρεθούν και όλοι οι χρήστες που συμμετέχουν σε αυτό.</br>
                                     Θέλετε να συνεχίσετε;";
+                                    $langTheUserHasDeleted = "<p class='text-danger text-center'>Ο χρήστης έχει αφαιρεθεί από το πρόγραμμα.</p><p class='text-center'>Μπορείτε να διαγράψετε το αίτημα.</p>";

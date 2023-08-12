@@ -25,37 +25,57 @@
  */
 
 function mentoring_doc_init() {
-    global $urlAppend,$urlServer, $mentoring_program_id, $mentoring_program_code, $webDir, $can_upload_mentoring, $group_name, 
+    global $urlAppend,$urlServer, $mentoring_program_id,$mentoring_platform, $mentoring_program_code, $webDir, $can_upload_mentoring, $group_name, 
         $is_admin, $navigation, $subsystem, $subsystem_id, $secret_directory,
         $program_group_id, $groupset, $base_url, $group_name, $upload_target_url, $group_sql, $is_member,
         $group_hidden_input, $basedir, $uid, $session, $pageName, $is_editor_mentoring_program, $is_editor_mentoring_group, $is_editor_wall;
 
         //after login timeout then recconect and get the last values from session table
-        if(!isset($mentoring_platform) and !$mentoring_platform){
-            after_reconnect_go_to_mentoring_homepage();
+        if(!get_config('mentoring_always_active')){
+            if(isset($_GET['editPath']) and isset($_GET['editPathMydoc'])){
+                if(!isset($mentoring_platform) and !$mentoring_platform){
+                    redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+                }
+            }
+            if(isset($_GET['upload']) and isset($_GET['uploadPath'])){
+                if(!isset($mentoring_platform) and !$mentoring_platform){
+                    redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+                }
+            }
+            if(isset($_GET['new']) and isset($_GET['uploadPath'])){
+                if(!isset($mentoring_platform) and !$mentoring_platform){
+                    redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+                }
+            }
+            if(isset($_GET['showQuota'])){
+                if(!isset($mentoring_platform) and !$mentoring_platform){
+                    redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
+                }
+            }
         }
+        
         if(isset($_GET['group_id']) and intval(getDirectReference($_GET['group_id'])) == 0 and !isset($_SESSION['mentoring_group_id'])
            and defined('MENTORING_GROUP_DOCUMENTS')){
-            after_reconnect_go_to_mentoring_homepage();
+            redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
         }
         if(isset($_GET['comment']) and (defined('MENTORING_COMMON_DOCUMENTS') or defined('MENTORING_MYDOCS'))){
             if(empty(getDirectReference($_GET['comment']))){
-                after_reconnect_go_to_mentoring_homepage();
+                redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
             }
         }
         if(isset($_GET['move']) and (defined('MENTORING_COMMON_DOCUMENTS') or defined('MENTORING_MYDOCS'))){
             if(empty(getDirectReference($_GET['move']))){
-                after_reconnect_go_to_mentoring_homepage();
+                redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
             }
         }
         if(isset($_GET['rename']) and (defined('MENTORING_COMMON_DOCUMENTS') or defined('MENTORING_MYDOCS'))){
             if(empty(getDirectReference($_GET['rename']))){
-                after_reconnect_go_to_mentoring_homepage();
+                redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
             }
         }
         if(isset($_GET['replace']) and (defined('MENTORING_COMMON_DOCUMENTS') or defined('MENTORING_MYDOCS'))){
             if(empty(getDirectReference($_GET['replace']))){
-                after_reconnect_go_to_mentoring_homepage();
+                redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
             }
         }
 
