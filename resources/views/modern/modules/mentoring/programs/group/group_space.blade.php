@@ -79,7 +79,7 @@
                    <div class='col-lg-12 col-6'>{!! $action_bar !!}</div>
                    <div class='col-6 d-block d-lg-none'>
                         <!-- TOOLS OF GROUP MOBILE-->
-                        <a class="ShowSidebarToolsGroup btn btn-sm bgEclass blackBlueText float-end mb-3">
+                        <a class="ShowSidebarToolsGroup btn h-40px bgEclass blackBlueText float-end mb-1">
                             <span class='fa fa-bars fs-5'></span>
                         </a>
                         <div class='SidebarToolsGroup'>
@@ -157,13 +157,17 @@
                                                                                 
                                                                                 @if(($is_editor_current_group and $uid == $editor->id) or $is_tutor_of_mentoring_program or $is_admin)
                                                                                     <p class='card-text blackBlueText text-md-start text-center mb-1'>{!! trans('langCreateMeeting') !!}</p>
-                                                                                    <a class='btn submitAdminBtnDefault d-inline-flex justify-content-md-start justify-content-center gap-2' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program_code }}/index.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
-                                                                                        <i class="fa-regular fa-handshake"></i>{{ trans('langCreate') }}
-                                                                                    </a>
+                                                                                    <div class='text-md-start text-center'>
+                                                                                        <a class='btn submitAdminBtnDefault d-inline-flex justify-content-md-start justify-content-center gap-2' href='{{ $urlAppend }}mentoring_programs/{{ $mentoring_program_code }}/index.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
+                                                                                            <i class="fa-regular fa-handshake"></i>{{ trans('langCreate') }}
+                                                                                        </a>
+                                                                                    </div>
                                                                                     <p class='card-text blackBlueText text-md-start text-center mt-3 mb-1'>{!! trans('langAddAvailableDateHour') !!}</p>
-                                                                                    <a class='btn submitAdminBtnDefault d-inline-flex justify-content-md-start justify-content-center gap-2' href='{{ $urlAppend }}modules/mentoring/programs/group/datesMentor/add_date_by_mentor.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
-                                                                                        <i class="fa-solid fa-circle-plus"></i>{!! trans('langAdd') !!}
-                                                                                    </a>
+                                                                                    <div class='text-md-start text-center'>
+                                                                                        <a class='btn submitAdminBtnDefault d-inline-flex justify-content-md-start justify-content-center gap-2' href='{{ $urlAppend }}modules/mentoring/programs/group/datesMentor/add_date_by_mentor.php?showcal={!! getIndirectReference($editor->id) !!}&group_id={!! getIndirectReference($group_id) !!}'>
+                                                                                            <i class="fa-solid fa-circle-plus"></i>{!! trans('langAdd') !!}
+                                                                                        </a>
+                                                                                    </div>
                                                                                 @endif
 
                                                                                 <!-- if is mentee of group then create booking for current editor of group -->

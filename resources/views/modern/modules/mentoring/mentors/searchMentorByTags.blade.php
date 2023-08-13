@@ -1,7 +1,7 @@
 
 <div class='panel panel-admin border-0 bg-white p-0 rounded-0 d-block d-lg-none'>
     <div class='panel-body p-0 rounded-0'>
-        <a id='closeSidebarSpecializations' class='btn float-end'><span class='fa-solid fa-trash-can fs-3 text-danger'></span></a>
+        <a id='closeSidebarSpecializations' class='btn float-end'><span class='fa-solid fa-xmark fa-lg text-danger'></span></a>
     </div>
 </div>
 
@@ -89,12 +89,12 @@
             @endif    
         @endforeach
     </div>
-    <div class='panel-footer rounded-0 d-flex justify-content-center align-items-center mt-0 p-0'>
-        <a id='SearchMentors' href='#' type='button' class='btn btn-sm small-text shadow-sm search_clear_filter w-50 solidPanel'>
-            <span class='fa fa-search fs-5 normalBlueText'></span>
+    <div class='panel-footer rounded-0 d-flex justify-content-center align-items-center mt-0 p-0 gap-2'>
+        <a id='SearchMentors' href='#' type='button' class='btn submitAdminBtnDefault search_clear_filter gap-1'>
+            <span class='fa-solid fa-search'></span>{{ trans('langSearch')}}
         </a>
-        <a class='uncheckBtn btn btn-sm small-text shadow-sm search_clear_filter ms-2 w-50 solidPanel'>
-            <span class='fa-solid fa-trash-can fs-5 text-danger'></span>
+        <a class='uncheckBtn btn deleteAdminBtn search_clear_filter gap-1'>
+            <span class='fa-solid fa-xmark'></span>{{ trans('langWash')}}
         </a>
     </div>
 </div>
