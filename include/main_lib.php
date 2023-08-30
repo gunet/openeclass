@@ -1472,7 +1472,7 @@ function append_units($amount, $singular, $plural) {
 }
 
 // Convert $sec to days, hours, minutes, seconds;
-function format_time_duration($sec, $hourLimit = 24) {
+function format_time_duration($sec, $hourLimit = 24, $display_days = true) {
     global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours, $langDay, $langDays;
 
     if ($sec < 60) {
@@ -1496,11 +1496,17 @@ function format_time_duration($sec, $hourLimit = 24) {
         return append_units($hour, $langhour, $langhours) .
                 (($min == 0) ? '' : (' ' . append_units($min, $langminute, $langminutes)));
     }
-    $day = floor($hour / 24);
-    $hour = $hour % 24;
-    return (($day == 0) ? '' : (' ' . append_units($day, $langDay, $langDays))) .
+
+    if ($display_days) {
+        $day = floor($hour / 24);
+        $hour = $hour % 24;
+        return (($day == 0) ? '' : (' ' . append_units($day, $langDay, $langDays))) .
             (($hour == 0) ? '' : (' ' . append_units($hour, $langhour, $langhours))) .
             (($min == 0) ? '' : (' ' . append_units($min, $langminute, $langminutes)));
+    } else {
+        return (($hour == 0) ? '' : (' ' . append_units($hour, $langhour, $langhours))) .
+            (($min == 0) ? '' : (' ' . append_units($min, $langminute, $langminutes)));
+    }
 }
 
 // Move entry $id in $table to $direction 'up' or 'down', where

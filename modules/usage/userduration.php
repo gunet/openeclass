@@ -52,7 +52,7 @@ if (isset($_GET['u'])) { //  stats per user
     }
     $grp_name = user_groups($course_id, $_GET['u'], false);
     if ($grp_name != '-') {
-        $grp_legend = "<div><small>$langGroup: " . $grp_name . "</small></div>"; // user group
+        $grp_legend = "<span><small>$langGroup: " . $grp_name . "</small></span>"; // user group
         $xls_grp_legend = "$langGroup: $grp_name";
     }
 
@@ -90,7 +90,7 @@ if (isset($_GET['u'])) { //  stats per user
         $data[] = [ $langModule, $langDuration ];
         foreach ($user_actions as $ua) {
             $mod = which_module($ua->module_id);
-            $dur = format_time_duration(0 + $ua->duration);
+            $dur = format_time_duration(0 + $ua->duration, 24, false);
             $data[] = [ $mod, $dur ];
         }
 
@@ -134,28 +134,30 @@ if (isset($_GET['u'])) { //  stats per user
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
             ), false);
-            $tool_content .= "<div class='alert alert-info text-center'><span class='panel-title'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</span>";
-            $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h5><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h5>";
+            $tool_content .= "<div class='panel panel-default'>";
+            $tool_content .= "<div class='panel-heading'><strong>"  . uid_to_name($_GET['u']) . "</strong> $am_legend $grp_legend</div>";
+            $tool_content .= "<div class='panel-body'>";
             $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
-            $tool_content .= "</div>";
+            $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "<h6><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h6>";
+            $tool_content .= "</div></div>";
         } else {
             $tool_content .= "<h3>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</h3>";
+            $tool_content .= "<h3><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h3>";
             $tool_content .= "<h6><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</h6>";
-            $tool_content .= "<h5><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h5>";
-            $tool_content .= "<h5><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</h5>";
+            $tool_content .= "<h6><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</h6>";
         }
 
         $tool_content .= "
             <table class='table-default'>
-            <tr>
+            <tr class='list-header'>
               <th>$langModule</th>
               <th>$langDuration</th>
             </tr>";
         foreach ($user_actions as $ua) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>" . which_module($ua->module_id) . "</td>";
-            $tool_content .= "<td>" . format_time_duration(0 + $ua->duration) . "</td>";
+            $tool_content .= "<td>" . format_time_duration(0 + $ua->duration, 24, false) . "</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
@@ -171,7 +173,7 @@ if (isset($_GET['u'])) { //  stats per user
 
         if (count($user_logins) > 0) {
             $tool_content .= "<table class='table-default'>
-            <tr>
+            <tr class='list-header'>
                 <th>$langLastUserVisits</th>
             </tr>";
             foreach ($user_logins as $ul) {
@@ -214,7 +216,7 @@ if (isset($_GET['u'])) { //  stats per user
             $grp_name = user_groups($course_id, $um->user_id, false);
             $user_am = uid_to_am($um->user_id);
             $user_details = uid_to_name($um->user_id);
-            $data[] = [ $user_details, $grp_name, $user_am, format_time_duration(0 + $um->duration) ];
+            $data[] = [ $user_details, $grp_name, $user_am, format_time_duration(0 + $um->duration, 24, false) ];
         }
 
         $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
@@ -279,7 +281,7 @@ if (isset($_GET['u'])) { //  stats per user
             }
             $tool_content .= "<td>" . $grp_name . "</td>";
             $tool_content .= "<td>" . $user_am . "</td>";
-            $tool_content .= "<td>" . format_time_duration(0 + $um->duration) . "</td>";
+            $tool_content .= "<td>" . format_time_duration(0 + $um->duration, 24, false) . "</td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</table>";
@@ -351,7 +353,7 @@ if (isset($_GET['u'])) { //  stats per user
                 $grp_name = user_groups($course_id, $row->id, false);
             }
             if (isset($_GET['format']) and $_GET['format'] == 'xls') {
-                $data[] = [ $row->surname, $row->givenname, $row->am, $grp_name, format_time_duration(0 + $row->duration) ];
+                $data[] = [ $row->surname, $row->givenname, $row->am, $grp_name, format_time_duration(0 + $row->duration, 24, false) ];
             } else {
                 $tool_content .= "<tr>";
                 if (!isset($_GET['format'])) {
@@ -361,7 +363,7 @@ if (isset($_GET['u'])) { //  stats per user
                 }
                 $tool_content .= "<td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>
-                                <td class='center'>" . format_time_duration(0 + $row->duration) . "</td>";
+                                <td class='center'>" . format_time_duration(0 + $row->duration, 24, false) . "</td>";
                 if (!isset($_GET['format'])) {
                     $tool_content .= "<td class='center'>" . icon('fa-line-chart', $langDetails, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$row->id") . "</td>";
                 }
