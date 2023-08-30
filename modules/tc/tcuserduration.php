@@ -42,10 +42,6 @@ if (isset($_GET['id'])) {
     $meetingid = get_tc_meeting_id($_GET['id']);
     if (!isset($_GET['pdf'])) {
         $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "index.php?course = $course_code",
-                'icon' => 'fa-reply',
-                'level' => 'primary'),
             array('title' => "$langExport",
                 'url' => "dumptcuserduration.php?course=$course_code&amp;meeting_id=$meetingid",
                 'icon' => 'fa-file-zipper',
@@ -57,22 +53,28 @@ if (isset($_GET['id'])) {
                 'icon' => 'fa-file-pdf',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
-                'show' => $is_editor)
-            
+                'show' => $is_editor),
+            array('title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
         ));
     }
 } else {
     if (!isset($_GET['pdf'])) {
         if (isset($_GET['per_user'])) {
-            $url = "tcuserduration.php?per_user=true&pdf=true";
+            $url = "tcuserduration.php?course=$course_code&per_user=true&pdf=true";
+            $back_url = "index.php?course=$course_code";
         } else if (isset($_GET['u'])) {
-            $url = "tcuserduration.php?u=$_GET[u]&pdf=true";
+            $url = "tcuserduration.php?course=$course_code&u=$_GET[u]&pdf=true";
+            $back_url = "tcuserduration.php?course=$course_code&per_user=true";
         } else {
-            $url = "tcuserduration.php?pdf=true";
+            $url = "tcuserduration.php?course=$course_code&pdf=true";
+            $back_url = "index.php?course=$course_code";
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "index.php?course = $course_code",
+                'url' => "$back_url",
                 'icon' => 'fa-reply',
                 'level' => 'primary'),
             array('title' => $langDumpPDF,
@@ -81,7 +83,7 @@ if (isset($_GET['id'])) {
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
                 'show' => $is_editor)
-            
+
         ));
     }
 }
@@ -90,62 +92,85 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
     if (!$is_editor and isset($_GET['per_user'])) { // security check
         redirect_to_home_page();
     }
-    $tool_content .= "<table class='table-default'>";
     if (isset($_GET['u']) and $_GET['u']) { // participation for specific user
-        if (!$is_editor and $_GET['u'] != $_SESSION['uid']) { // secuity check
+        if (!$is_editor and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
         }
         $u = $_GET['u'];
-        $name = $_SESSION['uname'];
-        $user_obj = (object) array('id' => $u, 'surname' => uid_to_name($u, 'surname'), 'givenname' => uid_to_name($u, 'givenname'));
-        $users[] = $user_obj;
+        $bbb_name = uid_to_name($u, 'username');
+        $result = Database::get()->queryArray("SELECT title, start_date, meetingid, bbbuserid, totaltime, date FROM tc_attendance, tc_session 
+                                            WHERE tc_attendance.meetingid = tc_session.meeting_id
+                                            AND tc_session.course_id = ?d 
+                                            AND tc_attendance.bbbuserid = ?s
+                                            ORDER BY date DESC", $course_id, $bbb_name);
+
+        $total_time = Database::get()->querySingle("SELECT SUM(totaltime) AS totaltime FROM tc_attendance, tc_session 
+                                                    WHERE tc_attendance.meetingid = tc_session.meeting_id
+                                                    AND tc_session.course_id = ?d 
+                                                    AND tc_attendance.bbbuserid = ?s", $course_id, $bbb_name)->totaltime;
+        if (count($result) > 0) {
+            $tool_content .= "<div class='panel panel-default'>";
+            $tool_content .= "<div class='panel-heading'><strong>" . uid_to_name($u, 'surname') . " " . uid_to_name($u, 'givenname') . "</strong></div>";
+            $tool_content .= "<div class='panel-body'><em>$langTotalDuration:</em> <strong>" . format_time_duration(0 + 60 * $total_time, 24, false) . "</strong></span></div><br>";
+            $tool_content .= "</div>";
+            $tool_content .= "<table class='table-default'>";
+            $tool_content .= "<tr class='list-header'>                                  
+                              <th>$langBBB</th>
+                              <th>$langLogIn</th>
+                              <th>$langDuration</th>
+                           </tr>";
+            foreach ($result as $row) {
+                $tool_content .= "<tr>                            
+                        <td>$row->title</td>
+                        <td>" . format_locale_date(strtotime($row->date), 'full') . "</td>
+                        <td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
+                    </tr>";
+            }
+            $tool_content .= "</table>";
+        } else {
+            $tool_content .= "<div class='alert alert-warning text-center'>$langBBBNoParticipation</div>";
+        }
     } else { // all users
-        $users = Database::get()->queryArray("SELECT user.id, surname, givenname                           
+        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "
+                    <tr>
+                      <th>$langSurnameName</th>
+                      <th>$langAm</th>
+                      <th>$langGroup</th>
+                      <th>$langTotalDuration</th>
+                      <th class='text-center'>" . icon('fa-gears') . "</th>
+                    </tr>";
+
+        $users = Database::get()->queryArray("SELECT user.id, surname, givenname, am                           
                                 FROM course_user, user
                                 WHERE user.id = course_user.user_id
                                 AND course_user.course_id = ?d 
                                 ORDER BY surname, givenname",
-            $course_id);
-    }
-
-    $first = true;
-    foreach ($users as $user) {
-        $bbb_name = uid_to_name($user->id, 'username');
-        $result = Database::get()->queryArray("SELECT title, start_date, meetingid, bbbuserid, totaltime, date FROM tc_attendance, tc_session 
-                                                WHERE tc_attendance.meetingid = tc_session.meeting_id
-                                                AND tc_session.course_id = ?d 
-                                                AND tc_attendance.bbbuserid = ?s
-                                                ORDER BY date DESC", $course_id, $bbb_name);
-        if (count($result) > 0) {
-            if (!$first) {
-                $tool_content .= "<tr><td colspan='3'><hr></td></tr>"; // blank line
-            }
-            $first = false;
+                $course_id);
+        foreach ($users as $user) {
+            $bbb_name = uid_to_name($user->id, 'username');
+            $result = Database::get()->querySingle("SELECT SUM(totaltime) AS totaltime FROM tc_attendance, tc_session 
+                                                    WHERE tc_attendance.meetingid = tc_session.meeting_id
+                                                    AND tc_session.course_id = ?d 
+                                                    AND tc_attendance.bbbuserid = ?s", $course_id, $bbb_name);
             if (isset($_GET['pdf'])) {
                 $link_to_user = "$user->surname" . " " . "$user->givenname";
+                $grp_name = user_groups($course_id, $user->id, false);
             } else {
-               $link_to_user = "<a href='$_SERVER[SCRIPT_NAME]?u=$user->id'>" . "$user->surname" . " " . "$user->givenname</a>";
+                $link_to_user = "$_SERVER[SCRIPT_NAME]?course=$course_code&u=$user->id";
+                $grp_name = user_groups($course_id, $user->id);
             }
 
-            $tool_content .= "<tr><td colspan='3' class='list-header text-left'><strong>" . "$link_to_user" . "</strong></td></tr>";
-            $tool_content .= "<tr class='list-header'>                                  
-                                  <th>$langBBB</th>
-                                  <th>$langLogIn</th>
-                                  <th>$langTotalDuration</th>
-                               </tr>";
-            foreach ($result as $row) {
-                $tool_content .= "<tr>                            
-                            <td>$row->title</td>
-                            <td>" . format_locale_date(strtotime($row->date), 'full') . "</td>
-                            <td>" . format_time_duration(0 + 60 * $row->totaltime) . "</td>
-                        </tr>";
-            }
+            $tool_content .= "<tr>                            
+                        <td>$user->surname $user->givenname</td>
+                        <td>$user->am</td>
+                        <td>" . $grp_name . "</td>                            
+                        <td>" . format_time_duration(0 + 60 * $result->totaltime, 24, false) . "</td>
+                        <td>" . icon('fa-line-chart', $langDetails, $link_to_user) . "</td>
+                    </tr>";
         }
+        $tool_content .= "</table>";
     }
-    if ($first) {
-        $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBNoParticipation</span></div>";
-    }
-    $tool_content .= "</table>";
 } else {
     $result = [];
     if (isset($meetingid)) { // specific course meeting
@@ -191,7 +216,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
             $tool_content .= "<tr><td>$user_full_name</td>                            
                             <td>$row->title</td>
                             <td>" . format_locale_date(strtotime($row->date), 'full') . "</td>
-                            <td>" . format_time_duration(0 + 60 * $row->totaltime) . "</td>
+                            <td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
                             </tr>";
         }
         $tool_content .= "</table>";
@@ -222,8 +247,7 @@ if (isset($_GET['pdf']) and $is_editor) {
           </style>
         </head>
         <body>" . get_platform_logo() .
-        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
-        <h2> " . q($langParticipate) . "</h2>";
+        "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . " - " . q($langParticipate) . "</h2><p></p>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";

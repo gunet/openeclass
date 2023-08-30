@@ -924,7 +924,7 @@ function user_duration_course($u) {
                             $course_id, $u);
 
     if ($q) {
-        $totalDuration = format_time_duration(0 + $q->duration);
+        $totalDuration = format_time_duration(0 + $q->duration, 24, false);
     }
     return $totalDuration;
 }
