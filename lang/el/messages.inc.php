@@ -3999,7 +3999,7 @@ $langCheckUserRegistration = "<strong>Η ενέργεια που προσπαθ�
 
 $langUserPortfolio = "Χαρτοφυλάκιο χρήστη";
 $langPortfolio = "Χαρτοφυλάκιο";
-$langMyPortfolio = "Το χαρτοφυλάκιο μου";
+$langMyPortfolio = "Το χαρτοφυλάκιό μου";
 $langAdvancedSearch = "Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";
