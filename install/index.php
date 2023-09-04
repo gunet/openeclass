@@ -594,10 +594,6 @@ elseif (isset($_POST['install1'])) {
     touch_try('courses/eportfolio/work_submissions/index.php');
     mkdir_try('courses/eportfolio/mydocs');
     touch_try('courses/eportfolio/mydocs/index.php');
-    mkdir_try('mentoring_programs');
-    mkdir_try('mentoring_programs/commondocs');
-    mkdir_try('mentoring_programs/mydocs');
-    mkdir_try('mentoring_programs/temp');
     // mkdir_try('storage');
     // mkdir_try('storage/views');
     if ($configErrorExists) {

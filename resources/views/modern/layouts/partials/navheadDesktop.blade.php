@@ -5,7 +5,7 @@
 
         <div class='d-flex justify-content-start align-items-center h-100'>
 
-            <a class='ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}?goToMentoring=false">
+            <a class='ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
                 <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
             </a>
 
