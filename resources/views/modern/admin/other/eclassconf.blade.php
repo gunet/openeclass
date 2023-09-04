@@ -930,7 +930,7 @@
                                                         </div>
                                                         <div class='checkbox'>
                                                             <label class='label-container'>
-                                                                <input type='checkbox' name='disable_email_change' value='1' {{ $cbox_disable_email_change> }}>
+                                                                <input type='checkbox' name='disable_email_change' value='1' {{ $cbox_disable_email_change }}>
                                                                 <span class='checkmark'></span>
                                                                 {{ trans('lang_disable_email_change') }}
                                                             </label>
