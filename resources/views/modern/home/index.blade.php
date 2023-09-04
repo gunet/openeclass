@@ -300,40 +300,6 @@
         @endif
 
 
-        @if(get_config('mentoring_platform'))
-            <div class='{{ $container }}'>
-                <div class='row m-auto'>
-                    <div class='col-12'>
-                        <div class="row row-cols-lg-2">
-                            <div class='col-lg-6'>
-                                <div class='card border-card bg-transparent'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-3 py-2 mb-0'>
-                                        <div class='d-flex justify-content-start align-items-center'>
-                                            <h3>
-                                                {{trans('langMentoringPlatform')}}
-                                            </h3>
-                                        </div>
-                                    </div>
-                                    <div class='card-body px-3'>
-                                        <div class="col-12 mt-0">
-                                            {!! trans('MentoringEnableHomepageEclass') !!}
-                                        
-                                            <a id='goToMentoringPlatformBtn' class='btn submitAdminBtn w-auto float-end mt-3' 
-                                                href='{{ $urlAppend }}?goToMentoring=true'>
-                                                {{ trans('langPlatformMentoring') }}<span class="fa fa-chevron-right ms-2"></span>
-                                            </a>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-
-
         @if($popular_courses)
             <div class='{{ $container }}'>
                 <div class='row m-auto'>

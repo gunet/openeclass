@@ -194,56 +194,94 @@
 
                     <div class='col-xl-7 col-12 mt-0'>
                         <div class='card panelCard border-0'>
-                            <div class='card-header px-0 py-0 border-0 bg-white d-md-flex justify-content-md-between align-items-md-center'>
+                            <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
 
-                                <div class='d-flex'>
+                                <div>
                                     <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
-                                    @if ($is_editor)
-                                        @php
-                                            warnCourseInvalidDepartment(true);
-                                        @endphp
-                                        <a class='mt-2 ms-2' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
-                                            <span class='fa fa-pencil' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEditMeta') }}'></span>
-                                        </a>
-                                    @endif
                                 </div>
 
-                                <div class='mt-md-0 mt-3'>
-                                    {!! $email_notify_icon !!}
-                                    <a href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation' class='float-end mt-2'>
-                                        <span class='fa fa-paperclip fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langCitation') }}"></span>
-                                    </a>
-                                    @if($uid)
-                                        @if ($is_course_admin)
-                                            <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}" class='float-end me-2 mt-2'>
-                                                <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
-                                            </a>
-                                        @else
-                                            @if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1)
-                                                <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
-                                                    <span class="fa fa-users fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ $numUsers }}&nbsp;{{ trans('langRegistered') }}"></span>
-                                                </a>
+                                <div>
+                                    <button class="btn submitAdminBtn" type="button" id="dropdownToolsCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+
+                                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsCourse" style='z-index:1;'>
+                                        <ul class="list-group list-group-flush">
+                                            @if ($is_editor)
+                                                @php
+                                                    warnCourseInvalidDepartment(true);
+                                                @endphp
+                                                <li>
+                                                    <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
+                                                        <i class="fa-solid fa-pen-to-square settings-icons"></i>
+                                                        {{ trans('langEditMeta') }}
+                                                    </a>
+                                                </li>
                                             @endif
-                                        @endif
-                                        @if ($is_editor)
-                                                <a href = "{{ $urlAppend  }}modules/usage/index.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
-                                                <span class="fa fa-area-chart fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langUsage') }}"></span>
-                                            </a>
-                                        @else
-                                            <a href = "{{ $urlAppend }}modules/usage/userduration.php?course={{ $course_code }}&u={{ $uid }}" class='float-end me-2 mt-2'>
-                                                <span class="fa fa-area-chart fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langCourseParticipation') }}"></span>
-                                            </a>
-                                        @endif
-                                    @endif
-                                    @if ($offline_course)
-                                        <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='float-end me-2 mt-2'>
-                                            <span class="fa fa-download fa-fw" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langDownloadCourse') }}"></span>
-                                        </a>
-                                    @endif
+
+
+                                            <li>{!! $email_notify_icon !!}</li>
+
+
+                                            <li>
+                                                <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'>
+                                                    <i class="fa-solid fa-link settings-icons"></i>
+                                                    {{ trans('langCitation') }}
+                                                </a>
+                                            </li>
+
+
+                                            @if($uid)
+                                                @if ($is_course_admin)
+                                                    <li>
+                                                        <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class="fa-solid fa-users settings-icons"></i>
+                                                            {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}
+                                                        </a>
+                                                    </li>
+                                                @else
+                                                    @if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1)
+                                                        <li>
+                                                            <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class="fa-solid fa-users settings-icons"></i>
+                                                                {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endif
+                                                @if ($is_editor)
+                                                    <li>
+                                                        <a href = "{{ $urlAppend  }}modules/usage/index.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class="fa-solid fa-chart-line settings-icons"></i>
+                                                            {{ trans('langUsage') }}
+                                                        </a>
+                                                    </li>
+                                                @else
+                                                    <li>
+                                                        <a href = "{{ $urlAppend }}modules/usage/userduration.php?course={{ $course_code }}&u={{ $uid }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class="fa-solid fa-chart-line settings-icons"></i>
+                                                            {{ trans('langCourseParticipation') }}
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                            @endif
+
+
+                                            @if ($offline_course)
+                                                <li>
+                                                    <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                        <i class="fa-solid fa-download settings-icons"></i>
+                                                        {{ trans('langDownloadCourse') }}
+                                                    </a>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+
                                 </div>
 
                             </div>
-                            <div class='card-body'>
+                            <div class='card-body pb-0'>
                                 <div class='row'>
                                     @if($course_info->home_layout == 1)
                                         <div class='col-12 px-0'>
@@ -257,7 +295,7 @@
                                                 </picture>
                                             </figure>
                                         </div>
-                                        <div class='col-12 mt-3 mb-3 px-0'>
+                                        <div class='col-12 mt-1 mb-3 px-0'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
                                                         {!! $course_info->description !!}
@@ -279,56 +317,9 @@
                                     @endif
 
                                 </div>
-
-                                @if ((!$is_editor) and (!$courseDescriptionVisible))
-                                    @if ($course_info->course_license)
-                                        <div class='row'>
-                                            <div class='col-12 d-flex justify-content-end px-0'>{!! copyright_info($course_id) !!}</div>
-                                        </div>
-                                    @endif
-                                @else
-                                    <div class='row'>
-                                        <div class='col-12 course-below-wrapper mt-2 px-0'>
-                                            <div class='row text-muted course-below-info'>
-
-                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 d-flex justify-content-md-start justify-content-center">
-                                                    <a role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                                        <span class='fa-solid fa-chevron-right fa-fw'></span>
-                                                        <span class='TextBold ps-1'>{{ trans('langCourseDescription') }}</span>
-                                                    </a>
-                                                    @if($is_editor)
-                                                        <span class='ps-2'>{!! $edit_course_desc_link !!}</span>
-                                                    @endif
-                                                </div>
-
-
-
-                                                @if ($course_info->course_license)
-                                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mt-md-0 mt-2 d-flex justify-content-end">{!! copyright_info($course_id) !!}</div>
-                                                @endif
-                                                <div class='col-12'>
-                                                    <div class='collapse p-0' id='collapseDescription'>
-                                                        <div class='col-12 p-0 bg-white'>
-                                                            @foreach ($course_descriptions as $row)
-                                                                <div class='row mb-3'>
-                                                                    <div class='col-12'>
-                                                                        <p class='form-label text-start'>{{$row->title}}</p>
-                                                                    </div>
-                                                                    <div class='col-12 desCourse'>
-                                                                        {!! standard_text_escape($row->comments) !!}
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
 
-                            @if(isset($rating_content) || isset($social_content) || isset($comment_content))
+                            @if(isset($rating_content) || isset($comment_content))
                                 <div class='card-footer d-md-flex justify-content-md-between align-items-md-start bg-white border-0 mt-0 mb-0 p-0'>
                                     @if(isset($rating_content))
                                         <div class='d-flex justify-content-md-start justify-content-center align-items-center'>
@@ -340,18 +331,57 @@
                                             <div class='ps-3 pt-2 pb-2 pe-2'>{!! $comment_content !!}</div>
                                         </div>
                                     @endif
-                                    @if(isset($social_content))
-                                        <div class='d-flex justify-content-md-start justify-content-center align-items-center'>
-                                            <div class='ps-3 pt-2 pb-2 pe-md-0'>{!! $social_content !!}</div>
-                                        </div>
-                                    @endif
+
                                 </div>
                             @endif
 
                         </div>
 
+
+                        @if(isset($social_content) || $course_info->course_license)
+                            <div class='col-12 d-flex justify-content-between align-items-start mt-4'>
+                                <div>{!! copyright_info($course_id) !!}</div>
+                                <div>{!! $social_content !!}</div>
+                            </div>
+                        @endif
+
+
+                        <div class='col-12 mt-4'>
+                            <div class='row'>
+                                <div class='panel'>
+                                    <div class='panel-group group-section mt-2 px-0' id='accordionDes'>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item px-0 mb-4 bg-transparent">
+
+                                                <div class='d-flex justify-content-between' style='border-bottom: solid 1px #E8EDF8;'>
+                                                    <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
+                                                        <i class='fa-solid fa-chevron-down settings-icon'></i>
+                                                        {{ trans('langCourseDescription') }}
+                                                        
+                                                    </a>
+                                                    @if($is_editor)
+                                                        {!! $edit_course_desc_link !!}
+                                                    @endif
+                                                </div>
+                                            
+                                                <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
+                                                    @foreach ($course_descriptions as $row)
+                                                        <div class='col-12 mb-4'>
+                                                            <p class='form-label text-start'>{{$row->title}}</p>
+                                                            {!! standard_text_escape($row->comments) !!}
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+
                         @if($course_info->view_type == 'units')
-                            <div class='card panelCard px-lg-4 py-lg-3 mt-5'>
+                            <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
 
                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                     <h3>

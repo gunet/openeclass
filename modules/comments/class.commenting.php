@@ -81,7 +81,13 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            $comments_title = "<span class='fa fa-comments'></span>&nbsp;&nbsp;<a class='course_commenting TextBold' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'><span class='TextBold' id='commentsNum-$this->rid'>$commentsNum</span> $langComments</a>";
+            $comments_title = "<i class='fa-regular fa-comment-dots Primary-500-cl'></i>
+                                &nbsp;|&nbsp;
+                                <a class='course_commenting vsmall-text text-decoration-underline' data-bs-toggle='modal' data-bs-target='#commentArea-$this->rid'>
+                                    $langComments
+                                    <span id='commentsNum-$this->rid'>($commentsNum)</span> 
+                                    
+                                </a>";
             $out = "$comments_title
                     <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog'>
@@ -95,7 +101,7 @@ Class Commenting {
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h5 id='comments_title' class='badge Primary-200-bg TextBold form-label'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
+            $comments_title = "<h5 id='comments_title' class='badge Primary-200-bg'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>

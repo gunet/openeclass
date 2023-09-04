@@ -206,8 +206,6 @@ define('GROUP', 1);
 define('EBOOK', 2);
 define('COMMON', 3);
 define('MYDOCS', 4);
-define('MENTORING_GROUP', 5);
-define('MENTORING_COMMON', 6);
 
 // path for certificates / badges templates
 define('CERT_TEMPLATE_PATH', "/courses/user_progress_data/cert_templates/");
@@ -215,13 +213,5 @@ define('BADGE_TEMPLATE_PATH', "/courses/user_progress_data/badge_templates/");
 
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
-
-// mentoring program modules
-define('MENTORING_MODULE_ID_DOCS', 1);
-define('MENTORING_MODULE_ID_FORUM', 2);
-define('MENTORING_MODULE_ID_MEETING', 3);
-define('MENTORING_MODULE_ID_GROUP', 4);
-define('MENTORING_MODULE_ID_REQUESTS', 5);
-define('MENTORING_MODULE_ID_PROGRAM', 6);
 
 define('JQUERY_VERSION', '-3.6.0');

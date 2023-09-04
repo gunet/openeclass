@@ -113,12 +113,12 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
             $tool_content .= "<div class='panel-heading'><strong>" . uid_to_name($u, 'surname') . " " . uid_to_name($u, 'givenname') . "</strong></div>";
             $tool_content .= "<div class='panel-body'><em>$langTotalDuration:</em> <strong>" . format_time_duration(0 + 60 * $total_time, 24, false) . "</strong></span></div><br>";
             $tool_content .= "</div>";
-            $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr class='list-header'>                                  
+            $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+            $tool_content .= "<thead><tr class='list-header'>                                  
                               <th>$langBBB</th>
                               <th>$langLogIn</th>
                               <th>$langDuration</th>
-                           </tr>";
+                           </tr></thead>";
             foreach ($result as $row) {
                 $tool_content .= "<tr>                            
                         <td>$row->title</td>
@@ -126,20 +126,20 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                         <td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
                     </tr>";
             }
-            $tool_content .= "</table>";
+            $tool_content .= "</table></div>";
         } else {
-            $tool_content .= "<div class='alert alert-warning text-center'>$langBBBNoParticipation</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBNoParticipation</span></div>";
         }
     } else { // all users
-        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
         $tool_content .= "
-                    <tr>
+                    <thead><tr>
                       <th>$langSurnameName</th>
                       <th>$langAm</th>
                       <th>$langGroup</th>
                       <th>$langTotalDuration</th>
                       <th class='text-center'>" . icon('fa-gears') . "</th>
-                    </tr>";
+                    </tr></thead>";
 
         $users = Database::get()->queryArray("SELECT user.id, surname, givenname, am                           
                                 FROM course_user, user
@@ -169,7 +169,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                         <td>" . icon('fa-line-chart', $langDetails, $link_to_user) . "</td>
                     </tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     }
 } else {
     $result = [];
@@ -192,7 +192,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
 
     // display results
     if (count($result) > 0) {
-        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>";
 
         $temp_date = null;
         $first = true;
@@ -202,12 +202,12 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                     $tool_content .= "<tr><td colspan='4'><hr></td></tr>"; // blank line
                 }
                 $tool_content .= "<tr><td colspan='4' class='list-header text-left'><strong>$row->title</strong></td></tr>";
-                $tool_content .= "<tr class='list-header'>
+                $tool_content .= "<thead><tr class='list-header'>
                                   <th class='ps-3'>$langSurnameName</th>
                                   <th>$langBBB</th>
                                   <th>$langLogIn</th>
                                   <th>$langTotalDuration</th>
-                               </tr>";
+                               </tr></thead>";
                 $temp_date = $row->start_date;
                 $first = false;
             }
@@ -219,7 +219,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                             <td>" . format_time_duration(0 + 60 * $row->totaltime, 24, false) . "</td>
                             </tr>";
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     } else {
         $tool_content .= "<div class='col-sm-12 alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langBBBNoParticipation</span></div>";
     }

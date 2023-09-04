@@ -63,19 +63,33 @@ $pageName = q_math($exerciseTitle) ;
 $questionList = $objExercise->selectQuestionList();
 //display exercise description if there is one
 if($exerciseDescription) {
-    $tool_content .= "<h3>$langExerciseDescription</h3>
-        <div class='table-responsive'>
-            <table class='table-default'>
-                <tr>
-                    <td>" . standard_text_escape($exerciseDescription) . "</td>
-                </tr>
-            </table>
-        </div>";
+    // $tool_content .= "<h3>$langExerciseDescription</h3>
+    //     <div class='table-responsive'>
+    //         <table class='table-default'>
+    //             <tr>
+    //                 <td>" . standard_text_escape($exerciseDescription) . "</td>
+    //             </tr>
+    //         </table>
+    //     </div>";
+
+    $tool_content .= "<div class='panel panel-default mb-4'>
+                        <div class='panel-heading'>
+                            <h3 class='mb-0'>$langExerciseDescription</h3>
+                        </div>
+                        <div class='panel-body'>
+                            " . standard_text_escape($exerciseDescription) . "
+                        </div>
+                      </div>";
 }
 
 $tool_content .= "
-    <h4>$langTableFreeText</h4>
-    <div class='table-responsive'>
+   
+    <div class='panel panel-default'>
+    <div class='panel-heading'>
+        <h3 class='mb-0'>$langTableFreeText</h3>
+    </div>
+    <div class='panel-body'>
+    <div class='table-responsive mt-0'>
         <table class='table-default'>
             <thead>
                 <tr>
@@ -113,9 +127,9 @@ foreach($questionList as $id) {
 $tool_content .= "
             </tbody>
         </table>
-    </div>";
+    </div></div></div>";
 
-$tool_content .= "<div class='panel panel-primary mt-3'>
+$tool_content .= "<div class='panel panel-primary mt-4'>
   <div class='panel-heading'>
     <div class='panel-title'>" . $langOpenQuestionPageTitle . "</div>
   </div>

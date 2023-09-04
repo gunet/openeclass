@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -40,25 +40,9 @@ require_once 'modules/auth/methods/hybridauth/config.php';
 check_uid();
 check_guest();
 
-if(isset($_GET['fromMentoring']) and $_GET['fromMentoring'] == 'true'){
-    if(isset($mentoring_platform) and $mentoring_platform){
-        $data['showMentoringProfile'] = $showMentoringProfile = 1;
-    }else{
-        redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
-    }
-}else{
-    $data['showMentoringProfile'] = $showMentoringProfile = 0;
-}
-
 $toolName = $langMyProfile;
 $pageName = $langModifyProfile;
-
-if($showMentoringProfile == 1){
-    $navigation[] = array('url' => 'modules/mentoring/profile/user_profile.php', 'name' => $langMyProfile);
-}else{
-    $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
-}
-
+$navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 
 $tree = new Hierarchy();
 $userObj = new User();
@@ -161,12 +145,8 @@ if (isset($_POST['submit'])) {
             $all_ok = false;
         } else {
             $departments = $_POST['department'];
-            if(get_config('mentoring_always_active')){
-                $departments = null;
-            }
         }
     }
-
 
     // upload user picture
     if (isset($_FILES['userimage']) && is_uploaded_file($_FILES['userimage']['tmp_name'])) {
@@ -180,20 +160,12 @@ if (isset($_POST['submit'])) {
         if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_base . IMAGESIZE_LARGE . '.jpg')) {
             Session::flash('message',$langInvalidPicture);
             Session::flash('alert-class', 'alert-warning');
-            if($showMentoringProfile == 1){
-                redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-            }else{
-                redirect_to_home_page("main/profile/profile.php");
-            }
+            redirect_to_home_page("main/profile/profile.php");
         }
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_base . IMAGESIZE_SMALL . '.jpg')) {
             Session::flash('message',$langInvalidPicture);
             Session::flash('alert-class', 'alert-warning');
-            if($showMentoringProfile == 1){
-                redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-            }else{
-                redirect_to_home_page("main/profile/profile.php");
-            }
+            redirect_to_home_page("main/profile/profile.php");
         }
         Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
@@ -206,22 +178,14 @@ if (isset($_POST['submit'])) {
     if (!empty($email_form) and !valid_email($email_form)) {
         Session::flash('message',$langEmailWrong);
         Session::flash('alert-class', 'alert-warning');
-        if($showMentoringProfile == 1){
-            redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-        }else{
-            redirect_to_home_page("main/profile/profile.php");
-        }
+        redirect_to_home_page("main/profile/profile.php");
     }
 
     // check if there are empty fields
     if (!$all_ok) {
         Session::flash('message',$langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
-        if($showMentoringProfile == 1){
-            redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-        }else{
-            redirect_to_home_page("main/profile/profile.php");
-        }
+        redirect_to_home_page("main/profile/profile.php");
     }
 
     if (!$allow_username_change) {
@@ -240,6 +204,7 @@ if (isset($_POST['submit'])) {
     if (!$allow_email_change) {
         $email_form = $myrow->email;
     }
+
     $username_form = canonicalize_whitespace($username_form);
         // check if username exists
     if ($username_form != $_SESSION['uname']) {
@@ -247,11 +212,7 @@ if (isset($_POST['submit'])) {
         if ($username_check) {
             Session::flash('message',$langUserFree);
             Session::flash('alert-class', 'alert-warning');
-            if($showMentoringProfile == 1){
-                redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-            }else{
-                redirect_to_home_page("main/profile/profile.php");
-            }
+            redirect_to_home_page("main/profile/profile.php");
         }
     }
 
@@ -265,11 +226,7 @@ if (isset($_POST['submit'])) {
         }
         Session::flash('message',$cpf_error_str);
         Session::flash('alert-class', 'alert-warning');
-        if($showMentoringProfile == 1){
-            redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-        }else{
-            redirect_to_home_page("main/profile/profile.php");
-        }
+        redirect_to_home_page("main/profile/profile.php");
     }
 
     $need_email_verification = false;
@@ -324,22 +281,13 @@ if (isset($_POST['submit'])) {
         } else {
             Session::flash('message',$langProfileReg);
             Session::flash('alert-class', 'alert-success');
-            if($showMentoringProfile == 1){
-                redirect_to_home_page("modules/mentoring/profile/user_profile.php");
-            }else{
-                redirect_to_home_page("main/profile/display_profile.php");
-            }
+            redirect_to_home_page("main/profile/display_profile.php");
         }
     }
     if ($old_language != $language) {
         Session::flash('message',$langProfileReg);
         Session::flash('alert-class', 'alert-success');
-        if($showMentoringProfile == 1){
-            redirect_to_home_page("modules/mentoring/profile/user_profile.php");
-        }else{
-            redirect_to_home_page("main/profile/display_profile.php");
-        }
-
+        redirect_to_home_page("main/profile/display_profile.php");
     }
 }
 
@@ -355,15 +303,9 @@ if (isset($_GET['provider'])) {
             if ($auth_id and
                 Database::get()->query('DELETE FROM user_ext_uid
                     WHERE user_id = ?d AND auth_id = ?d', $uid, $auth_id)) {
-                //Session::Messages($langProfileReg, 'alert-success');
                 Session::flash('message',$langProfileReg);
                 Session::flash('alert-class', 'alert-success');
-                //redirect_to_home_page('main/profile/profile.php');
-                if($showMentoringProfile == 1){
-                    redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-                }else{
-                    redirect_to_home_page("main/profile/profile.php");
-                }
+                redirect_to_home_page('main/profile/profile.php');
             }
         } elseif ($_GET['action'] == 'connect') {
             // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
@@ -432,28 +374,20 @@ if (isset($_GET['provider'])) {
                                 // HybridAuth provider uid is already in the db!
                                 // (which means the user tried to authenticate a second
                                 // eClass account with the same facebook etc. account)
-                                //Session::Messages($langProviderIdAlreadyExists, 'alert-warning');
                                 Session::flash('message',$langProviderIdAlreadyExists);
                                 Session::flash('alert-class', 'alert-warning');
                             } else {
                                 Database::get()->querySingle('INSERT INTO user_ext_uid
                                     SET user_id = ?d, auth_id = ?d, uid = ?s',
                                     $uid, $providerAuthId, $user_data->identifier);
-                                //Session::Messages($langProfileReg, 'alert-success');
-                                Session::flash('message',$langProfileReg);
-                                Session::flash('alert-class', 'alert-success');
+                                    Session::flash('message',$langProfileReg);
+                                    Session::flash('alert-class', 'alert-success');
                             }
                     } else {
-                        //Session::Messages($langProviderError, 'alert-danger');
                         Session::flash('message',$langProviderError);
                         Session::flash('alert-class', 'alert-danger');
                     }
-                    //redirect_to_home_page('main/profile/profile.php');
-                    if($showMentoringProfile == 1){
-                        redirect_to_home_page("main/profile/profile.php?fromMentoring=true");
-                    }else{
-                        redirect_to_home_page("main/profile/profile.php");
-                    }
+                    redirect_to_home_page('main/profile/profile.php');
                 } catch (Exception $e) {
                     // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
                     // let hybridauth forget all about the user so we can try to authenticate again.
@@ -462,43 +396,35 @@ if (isset($_GET['provider'])) {
                     // to know more please refer to Exceptions handling section on the userguide
                     switch($e->getCode()) {
                         case 0:
-                            //Session::Messages($langProviderError1, 'alert-danger');
                             Session::flash('message',$langProviderError1);
                             Session::flash('alert-class', 'alert-danger');
                             break;
                         case 1:
-                            //Session::Messages($langProviderError2, 'alert-danger');
                             Session::flash('message',$langProviderError2);
                             Session::flash('alert-class', 'alert-danger');
                             break;
                         case 2:
-                            //Session::Messages($langProviderError3, 'alert-danger');
                             Session::flash('message',$langProviderError3);
                             Session::flash('alert-class', 'alert-danger');
                             break;
                         case 3:
-                            //Session::Messages($langProviderError4, 'alert-danger');
                             Session::flash('message',$langProviderError4);
                             Session::flash('alert-class', 'alert-danger');
                             break;
                         case 4:
-                           // Session::Messages($langProviderError5, 'alert-danger');
                             Session::flash('message',$langProviderError5);
                             Session::flash('alert-class', 'alert-danger');
                             break;
                         case 5:
-                           // Session::Messages($langProviderError6, 'alert-danger');
                             Session::flash('message',$langProviderError6);
                             Session::flash('alert-class', 'alert-danger');
                             break;
                         case 6:
-                            //Session::Messages($langProviderError7, 'alert-danger');
                             Session::flash('message',$langProviderError7);
                             Session::flash('alert-class', 'alert-danger');
                             $adapter->disconnect();
                             break;
                         case 7:
-                            //Session::Messages($langProviderError8, 'alert-danger');
                             Session::flash('message',$langProviderError8);
                             Session::flash('alert-class', 'alert-danger');
                             $adapter->disconnect();
@@ -577,38 +503,18 @@ if ($myrow->pic_public) {
     $data['pic_public_selected'] = 'checked';
 }
 
-if($showMentoringProfile == 1){
-    $data['sec'] = $urlServer . 'main/profile/profile.php?fromMentoring=true';
-}else{
-    $data['sec'] = $urlServer . 'main/profile/profile.php';
-}
-
+$data['sec'] = $urlServer . 'main/profile/profile.php';
 $passurl = $urlServer . 'main/profile/password.php';
 
-if($showMentoringProfile == 1){
-    $data['action_bar'] =
-    action_bar(
-    [
-        ['title' => $langBack,
-            'url' => $urlServer."modules/mentoring/profile/user_profile.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        ]
-    ]);
-}else{
-    $data['action_bar'] =
-    action_bar(
-    [
-        ['title' => $langBack,
-            'url' => "display_profile.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
-        ]
-    ]);
-}
-
-
-
+$data['action_bar'] =
+        action_bar(
+        [
+            ['title' => $langBack,
+                'url' => "display_profile.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            ]
+        ]);
 
 if (get_user_email_notification_from_courses($uid)) {
     $data['selectedyes'] = 'checked';
@@ -617,6 +523,7 @@ if (get_user_email_notification_from_courses($uid)) {
     $data['selectedyes'] = '';
     $data['selectedno'] = 'checked';
 }
+
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);
@@ -691,4 +598,3 @@ $data['allProviders'] = $allProviders;
 
 $data['menuTypeID'] = 1;
 view('main.profile.edit', $data);
-

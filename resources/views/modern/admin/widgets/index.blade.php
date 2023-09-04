@@ -106,9 +106,9 @@
                                 @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
                                     <div class="panel panel-default panel-default-admin mt-3">
                                         <div class="panel-heading">                   
-                                            <span class="text-white TextMedium">
+                                            <h3 class='mb-0'>
                                                 {{ $uninstalled_widget->getName() }}
-                                            </span>
+                                            </h3>
 
                                         </div>
                                         <div class="panel-body">
@@ -122,7 +122,7 @@
                                                     <input type="hidden" name='widgetClassName' value='{{ get_class($uninstalled_widget) }}'>
                                                     <input type="hidden" name='widgetAction' value='install'>
                                                 </form>
-                                                <a class='btn submitAdminBtn' href="#" onclick="$('#installForm{{ $key }}').submit();">
+                                                <a class='btn submitAdminBtn submitAdminBtnDefault' href="#" onclick="$('#installForm{{ $key }}').submit();">
                                                     {{ trans('langWidgetInstall') }}
                                                 </a>                               
                                             </div>

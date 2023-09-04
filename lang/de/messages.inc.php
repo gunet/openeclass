@@ -6229,12 +6229,6 @@ $langInfoGroupWallCommentsText = "You can now add a comment to a user's post.</b
 $langInfoGroupDocsText = "All documents in the group are displayed in the table below.</br>Try to download a document as well.";
 $langInfoGroupBookingsText= "The list of your reservations is shown below.</br>If you want to cancel a reservation, you can do so by clicking the cancel button.";
 $langAddMentors = "Add a mentor to the platform";
-if (file_exists('config/config.php')) {
-    if(get_config('mentoring_always_active')){
-        $langUserAccount = "Mentor Account Platform Certification";
-        $langProfAccount = "Coordinator account";
-    }
-}
 $langTutorAsMenteeInPlatform = "Can a user with a coordinator or mentor status participate as a mentee in a program?";
 $langSelectAtLeastOneTutor= "Please select at least one coordinator";
 $langKeyWord1 = "KeyWord";

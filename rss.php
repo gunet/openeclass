@@ -25,17 +25,12 @@
 
 require_once 'include/init.php';
 
-if(!get_config('mentoring_always_active') and !isset($mentoring_platform)){
-    $result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-		FROM admin_announcement
-		WHERE visible = 1 AND lang = ?s
-		ORDER BY `date` DESC", $language);
-}else{
-    $result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-		FROM mentoring_admin_announcement
-		WHERE visible = 1 AND lang = ?s
-		ORDER BY `date` DESC", $language);
-}
+
+$result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+    FROM admin_announcement
+    WHERE visible = 1 AND lang = ?s
+    ORDER BY `date` DESC", $language);
+
 
 if ($result) {
     $lastbuilddate = $result->dateformat;
@@ -54,38 +49,21 @@ echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>" . $language . "</language>";
 
-if(!get_config('mentoring_always_active') and !isset($mentoring_platform)){
-    $sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-            FROM admin_announcement
-            WHERE visible = 1 AND lang = ?s
-            ORDER BY `date` DESC", $language);
-}else{
-    $sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-            FROM mentoring_admin_announcement
-            WHERE visible = 1 AND lang = ?s
-            ORDER BY `date` DESC", $language);
-}
+
+$sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
+        FROM admin_announcement
+        WHERE visible = 1 AND lang = ?s
+        ORDER BY `date` DESC", $language);
+
 if ($sql) {
-    if(!get_config('mentoring_always_active') and !isset($mentoring_platform)){
-        foreach ($sql as $r) {
-            echo "<item>";
-            echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-            echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r->id . "</link>";
-            echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
-            echo "<pubDate>" . $r->dateformat . "</pubDate>";
-            echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
-            echo "</item>";
-        }
-    }else{
-        foreach ($sql as $r) {
-            echo "<item>";
-            echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-            echo "<link>" . $urlServer . "modules/mentoring/announcements/main_ann.php?aid=" . $r->id . "</link>";
-            echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
-            echo "<pubDate>" . $r->dateformat . "</pubDate>";
-            echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
-            echo "</item>";
-        }
+    foreach ($sql as $r) {
+        echo "<item>";
+        echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
+        echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r->id . "</link>";
+        echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
+        echo "<pubDate>" . $r->dateformat . "</pubDate>";
+        echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
+        echo "</item>";
     }
 }
 echo "</channel></rss>";

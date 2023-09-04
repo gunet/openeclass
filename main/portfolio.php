@@ -37,10 +37,6 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'perso.php';
 
-if(isset($mentoring_platform) and $mentoring_platform){
-    redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
-}
-
 $data['tree'] = new Hierarchy();
 $user = new User();
 

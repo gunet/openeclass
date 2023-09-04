@@ -7,9 +7,8 @@
 <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    @endif
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -87,19 +86,15 @@
                                     <div class='checkbox'>
                                         <label class='label-container'>
                                             <input type='checkbox' name='send_to_prof' value='1'>
-                                            @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                            
                                             <span class='checkmark'></span>{{ trans('langProfOnly') }}
-                                            @else
-                                            <span class='checkmark'></span>{{ trans('langProfTutorMentorOnly') }}
-                                            @endif
+                                            
                                         </label>
                                         <label class='label-container'>
                                             <input type='checkbox' name='send_to_users' value='1'>
-                                            @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                            
                                             <span class='checkmark'></span>{{ trans('langStudentsOnly') }}
-                                            @else
-                                            <span class='checkmark'></span>{{ trans('langMenteesOnly') }}
-                                            @endif
+                                            
                                         </label>
                                     </div>
                                 </div>

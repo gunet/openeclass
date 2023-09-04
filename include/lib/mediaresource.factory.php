@@ -25,17 +25,10 @@ require_once 'modules/video/delos_functions.php';
 class MediaResourceFactory {
 
     public static function initFromDocument($queryItem) {
-        global $urlServer, $course_code, $mentoring_program_code;
-        if(isset($mentoring_program_code)){
-            return new MediaResource(
-                $queryItem->id, $queryItem->mentoring_program_id, empty($queryItem->title) ? $queryItem->filename : $queryItem->title, // Override title member
-                $queryItem->path, null, $urlServer . 'modules/mentoring/programs/group/document/mediafile.php?program=' . $mentoring_program_code . '&amp;id=' . intval($queryItem->id), $urlServer . 'modules/mentoring/programs/group/document/play.php?program=' . $mentoring_program_code . '&amp;id=' . intval($queryItem->id));
-        }else{
-            return new MediaResource(
+        global $urlServer, $course_code;
+        return new MediaResource(
                 $queryItem->id, $queryItem->course_id, empty($queryItem->title) ? $queryItem->filename : $queryItem->title, // Override title member
                 $queryItem->path, null, $urlServer . 'modules/document/mediafile.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id), $urlServer . 'modules/document/play.php?course=' . $course_code . '&amp;id=' . intval($queryItem->id));
-        }
-        
     }
 
     public static function initFromVideo($queryItem) {

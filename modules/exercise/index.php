@@ -262,7 +262,7 @@ if ($is_editor) {
         $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langPendingExercise:";
         $tool_content .= "<ul style='margin-top: 10px;'>";
         foreach ($pending_exercises as $row) {
-            $tool_content .= "<li>" . q($row->title) . " (<a href='results.php?course=$course_code&exerciseId=".getIndirectReference($row->eid)."&status=2'>$langViewShow</a>)</li>";
+            $tool_content .= "<li>" . q($row->title) . " (<a class='Primary-400-cl' href='results.php?course=$course_code&exerciseId=".getIndirectReference($row->eid)."&status=2'>$langViewShow</a>)</li>";
         }
         $tool_content .= "</ul>";
         $tool_content .= "</span></div>";

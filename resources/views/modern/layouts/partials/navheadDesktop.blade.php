@@ -106,15 +106,6 @@
                                                 </li>
                                             @endif
 
-                                            @if(get_config('mentoring_platform'))
-                                            <li>
-                                                <a id="goToMentoring" class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php">
-                                                   <i class="fa-solid fa-wand-magic settings-icons"></i>
-                                                   {{trans('langMentoringPlatform')}}
-                                                </a>
-                                            </li>
-                                            @endif
-
 
                                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                             <li>

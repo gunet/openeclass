@@ -6,9 +6,8 @@
 <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    @endif
+                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
                     

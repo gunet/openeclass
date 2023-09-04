@@ -227,9 +227,9 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
         }
 
         if (get_user_email_notification($uid, $course_id)) {
-            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='float-end ps-2 mt-2'><span class='fa fa-envelope fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'><i class='fa fa-envelope settings-icons'></i>" . q($langUserEmailNotification) . "</a>";
         } else {
-            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='float-end ps-2 mt-2'><span class='fa fa-envelope-open fa-fw' data-bs-toggle='tooltip' data-bs-placement='bottom' title='" . q($langNoUserEmailNotification) . "'></span></a>";
+            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'><i class='fa fa-envelope-open settings-icons'></i>" . q($langNoUserEmailNotification) . "</a>";
         }
     }
 }

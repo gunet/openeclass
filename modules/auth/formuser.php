@@ -33,11 +33,7 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langRegistration);
 
 $prof = isset($_REQUEST['p']) ? intval($_REQUEST['p']) : 0;
 $am = !empty($_REQUEST['am']) ? intval($_REQUEST['am']) : '';
-if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-    $pageName = $prof ? $langReqRegProf : $langUserRequest;
-}else{
-    $pageName = $prof ? $langReqRegTutorMentor : $langUserMenteeRequest;
-}
+$pageName = $prof ? $langReqRegProf : $langUserRequest;
 
 $user_registration = get_config('user_registration');
 $eclass_prof_reg = get_config('eclass_prof_reg');
@@ -67,21 +63,7 @@ $am_required = !$prof && get_config('am_required');
 $errors = array();
 $registration_errors = [];
 
-if(get_config('mentoring_always_active')){
-    $var_arr = array('usercomment' => true,
-                'givenname' => true,
-                'surname' => true,
-                'username' => true,
-                'userphone' => $prof,
-                'usermail' => true,
-                'am' => $am_required,
-                'department' => false,
-                'captcha_code' => false,
-                'provider' => false,
-                'provider_name' => false,
-                'provider_id' => false);
-}else{
-    $var_arr = array('usercomment' => true,
+$var_arr = array('usercomment' => true,
                 'givenname' => true,
                 'surname' => true,
                 'username' => true,
@@ -93,8 +75,6 @@ if(get_config('mentoring_always_active')){
                 'provider' => false,
                 'provider_name' => false,
                 'provider_id' => false);
-}
-
 
 //add custom profile fields required variables
 augment_registered_posted_variables_arr($var_arr);
@@ -486,7 +466,7 @@ $tool_content .= "
                 </div>
             </div>
             <div class='row'>";
-            if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
+            
 $tool_content .= "<div class='col-lg-6 col-12 px-3'>
                     <div class='form-group mt-4'>
                         <label for='ProfComments' class='col-sm-12 control-label-notes'>$langFaculty</label>
@@ -497,7 +477,7 @@ $tool_content .= "<div class='col-lg-6 col-12 px-3'>
       $tool_content .= "</div>
                     </div>
                 </div>";
-            }
+            
 $tool_content .= "
                 <div class='col-lg-6 col-12 px-3'>
                     <div class='form-group mt-4'>

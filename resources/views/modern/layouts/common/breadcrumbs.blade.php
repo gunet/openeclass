@@ -14,22 +14,22 @@
 
         @if (!empty($breadcrumbs))
             @if($course_code)
-                <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" class="d-flex justify-content-start breadcrumb-content" aria-label="breadcrumb">
+                <nav style="--bs-breadcrumb-divider: '>';" class="d-flex justify-content-start breadcrumb-content" aria-label="breadcrumb">
             @else
                 <div class='col-12'>
-                <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" class="w-auto h-auto" aria-label="breadcrumb">
+                <nav style="--bs-breadcrumb-divider: '>';" class="w-auto h-auto" aria-label="breadcrumb">
             @endif
                 <ol class="breadcrumb mb-0 @if(!$course_code) py-1 @endif">
                     @foreach ($breadcrumbs as $key => $item)
                     @if (isset($item['bread_href']))
                             <li class="breadcrumb-item d-flex justify-content-center align-items-center">
-                                <a class='text-wrap text-capitalize TextMedium' href='{{ $item['bread_href'] }}'>
-                                    {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<span class="fa fa-home"></span> ' : "" !!}
+                                <a class='text-wrap text-decoration-underline vsmall-text' href='{{ $item['bread_href'] }}'>
+                                    {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<i class="fa-solid fa-house pe-1"></i> ' : "" !!}
                                     {!! $item['bread_text'] !!}
                                 </a>
                             </li>
                         @else
-                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><a class='pe-none text-secondary text-lowercase'>{!! $item['bread_text'] !!}</a></li>
+                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><a class='pe-none Neutral-900-cl vsmall-text'>{!! $item['bread_text'] !!}</a></li>
                         @endif
                     @endforeach
                 </ol>

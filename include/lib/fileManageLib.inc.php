@@ -48,8 +48,8 @@
  *
  */
 
- function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
-    global $course_id, $group_sql, $subsystem, $mentoring_program_code;
+function update_db_info($dbTable, $action, $oldPath, $filename, $newPath = "") {
+    global $course_id, $group_sql, $subsystem;
 
     if ($action == "delete") {
         Database::get()->query("DELETE FROM `$dbTable`
@@ -60,11 +60,8 @@
             Database::get()->query("DELETE FROM `$dbTable`
                                          WHERE extra_path LIKE ?s", ('common:' . $oldPath . '%'));
         }
-        if(!isset($mentoring_program_code)){
-            Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
-            'filename' => $filename));
-        }
-        
+        Log::record($course_id, MODULE_ID_DOCS, LOG_DELETE, array('path' => $oldPath,
+                                                                  'filename' => $filename));
     } elseif ($action == "update") {
         Database::get()->query("UPDATE `$dbTable`
                                  SET path = CONCAT('$newPath', SUBSTRING(path, LENGTH('$oldPath')+1))
@@ -83,13 +80,10 @@
         if ($newpath) {
             $newpath = $newpath->filename;
         }
-        if(!isset($mentoring_program_code)){
-            Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
-            'newencpath' => $newPath,
-            'newpath' => $newpath,
-            'filename' => $filename));
-        }
-        
+        Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldencpath' => $oldPath,
+                                                                  'newencpath' => $newPath,
+                                                                  'newpath' => $newpath,
+                                                                  'filename' => $filename));
     }
 }
 
@@ -254,16 +248,11 @@ function copyDirTo($origDirPath, $destination) {
 
 // Return a list of all directories
 function directory_list() {
-    global $group_sql,$mentoring_program_code;
+    global $group_sql;
 
     $sortedDirs = $dirArray = array();
 
-    if(isset($mentoring_program_code)){
-        $r = Database::get()->queryArray("SELECT filename, path FROM mentoring_document WHERE $group_sql AND format = '.dir'");
-    }else{
-        $r = Database::get()->queryArray("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir'");
-    }
-   
+    $r = Database::get()->queryArray("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir'");
     foreach ($r as $row) {
         $dirArray[] = array($row->path, $row->filename,
             public_file_path($row->path, $row->filename));
@@ -359,59 +348,34 @@ function zip_documents_directory($zip_filename, $downloadDir, $include_invisible
 /**
  * @brief Creates mapping between encoded filenames and real filenames
  * @global type $group_sql
- * @global type $mentoring_program_code
- * @global type $mentoring_platform
  * @param type $downloadDir
  * @param type $include_invisible
  */
 function create_map_to_real_filename($downloadDir, $include_invisible) {
 
-    global $group_sql, $mentoring_program_code, $mentoring_platform;
+    global $group_sql;
 
     $prefix = strlen(preg_replace('|[^/]*$|', '', $downloadDir)) - 1;
     $encoded_filenames = $decoded_filenames = $filename = array();
 
     $hidden_dirs = array();
-    if(isset($mentoring_program_code) or isset($mentoring_platform)){ 
-        $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM mentoring_document
-        WHERE $group_sql AND
-              path LIKE '$downloadDir%'");
-    }else{
-        $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM document
-        WHERE $group_sql AND
-              path LIKE '$downloadDir%'");
-    }
-    
+    $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM document
+                                WHERE $group_sql AND
+                                      path LIKE '$downloadDir%'");
     foreach ($sql as $files) {
         if ($cpath = common_doc_path($files->extra_path, true)) {
             if ($GLOBALS['common_doc_visible'] and ($include_invisible or $files->visible == 1)) {
                 $GLOBALS['common_docs'][$files->path] = $cpath;
             }
         }
-        if(isset($mentoring_program_code) or isset($mentoring_platform)){ 
-            $GLOBALS['path_visibility'][$files->path] = ($include_invisible or mentoring_resource_access($files->visible, $files->public));
-        }else{
-            $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));
-        }
-       
+        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));
         array_push($encoded_filenames, $files->path);
         array_push($filename, str_replace(['/', '\\'], '_', $files->filename));
-
-        if(isset($mentoring_program_code) or isset($mentoring_platform)){
-            if (!$include_invisible and $files->format == '.dir' and !mentoring_resource_access($files->visible, $files->public)) {
-                $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
-                // Don't need to check lower-level hidden dir if parent is there
-                if (array_search($parentdir, $hidden_dirs) === false) {
-                    array_push($hidden_dirs, $files->path);
-                }
-            }
-        }else{
-            if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
-                $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
-                // Don't need to check lower-level hidden dir if parent is there
-                if (array_search($parentdir, $hidden_dirs) === false) {
-                    array_push($hidden_dirs, $files->path);
-                }
+        if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
+            $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
+            // Don't need to check lower-level hidden dir if parent is there
+            if (array_search($parentdir, $hidden_dirs) === false) {
+                array_push($hidden_dirs, $files->path);
             }
         }
     }
@@ -448,39 +412,24 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
  * Sets global $common_doc_visible = false if file pointed to is invisible
  *
  * @global string $webDir
- * @global type $mentoring_program_code
- * @global type $mentoring_platform
  * @global bool $common_doc_visible
  * @param string $extra_path
  * @param bool $full Return full on-disk path
  * @return string|boolean
  */
 function common_doc_path($extra_path, $full = false) {
-    global $webDir, $common_doc_visible, $mentoring_program_code, $mentoring_platform;
+    global $webDir, $common_doc_visible;
     if (!is_null($extra_path) and preg_match('#^common:(/.*)$#', $extra_path, $matches)) {
         $cpath = $matches[1];
-        if(isset($mentoring_program_code) or isset($mentoring_platform)){
-            $q = Database::get()->querySingle("SELECT visible FROM mentoring_document
-            WHERE path = ?s AND
-                  subsystem = " . MENTORING_COMMON, $cpath);
-        }else{
-            $q = Database::get()->querySingle("SELECT visible FROM document
-            WHERE path = ?s AND
-                  subsystem = " . COMMON, $cpath);
-        }
-        
+        $q = Database::get()->querySingle("SELECT visible FROM document
+                                      WHERE path = ?s AND
+                                            subsystem = " . COMMON, $cpath);
         if ($q and $q->visible) {
             $common_doc_visible = true;
         } else {
             $common_doc_visible = false;
         }
-
-        if(isset($mentoring_program_code) or isset($mentoring_platform)){
-            return ($full ? $webDir : '') . '/mentoring_programs/commondocs' . $cpath;
-        }else{
-            return ($full ? $webDir : '') . '/courses/commondocs' . $cpath;
-        }
-        
+        return ($full ? $webDir : '') . '/courses/commondocs' . $cpath;
     } else {
         return false;
     }

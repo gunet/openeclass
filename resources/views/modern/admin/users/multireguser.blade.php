@@ -101,18 +101,14 @@
                     <div class='col-sm-12'>
                         <select class='form-select' name='type' id='type'>
                             <option value='stud'>
-                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                
                                     {{ trans('langsOfStudents') }}
-                                @else
-                                    {{ trans('langsOfMentee') }}
-                                @endif
+                                
                             </option>
                             <option value='prof'>
-                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                
                                     {{ trans('langOfTeachers') }}
-                                @else
-                                    {{ trans('langsOfTutorMentor') }}
-                                @endif
+                                
                             </option>
                         </select>
                     </div>
@@ -150,12 +146,12 @@
                     <div class='col-sm-12'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                 </div>
 
-                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                
                 <div class='form-group mt-4'>
                 <label for='am_public' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                     <div class='col-sm-12'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                 </div>
-                @endif
+                
 
                 <div class='form-group mt-4'>
                 <label for='phone_public' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>

@@ -108,7 +108,7 @@ $langEnableStrongPasswords = "Δημιουργία 'δύσκολων' συνθη
  * admin.php
  * ************************************************** */
 // index
-$langComments = "Σχόλια";
+$langComments = "Δες τα σχόλια";
 $langCommentsUser = "Σχόλια χρηστών";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
 $langState = "Διαχείριση εξυπηρετητή";

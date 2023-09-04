@@ -6,9 +6,8 @@
 <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    @endif
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -155,7 +154,7 @@
                             </div>
                             @if ($pstatus == 5)
                                 <!--only for students-->
-                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                
                                 <div class="form-group{{ Session::hasError('am_form') ? ' has-error' : '' }} mt-4">
                                     <label for="am_form" class="col-sm-12 control-label-notes">{{ trans('langAm') }}</label>
                                     <div class="col-sm-12">
@@ -165,7 +164,7 @@
                                         @endif
                                     </div>                
                                 </div>   
-                                @endif             
+                                        
                             @endif
                             @if (get_config('block_duration_account'))
                             

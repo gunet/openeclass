@@ -78,59 +78,57 @@ function getSideMenu($menuTypeID, $rich=true) {
  * @see function lessonToolsMenu
  */
 function getToolsArray($cat) {
-    global $course_code, $mentoring_platform;
+    global $course_code;
 
-    if(!isset($mentoring_platform) or !$mentoring_platform){
-        $cid = course_code_to_id($course_code);
+    $cid = course_code_to_id($course_code);
 
-        switch ($cat) {
-            case 'Public':
-                $sql = "SELECT * FROM course_module
+    switch ($cat) {
+        case 'Public':
+            $sql = "SELECT * FROM course_module
+                        WHERE visible = 1 AND
+                        course_id = $cid AND
+                        module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                          " . MODULE_ID_ASSIGN . ",
+                                          " . MODULE_ID_MESSAGE . ",
+                                          " . MODULE_ID_FORUM . ",
+                                          " . MODULE_ID_GROUPS . ",
+                                          " . MODULE_ID_ATTENDANCE . ",
+                                          " . MODULE_ID_GRADEBOOK . ",
+                                          " . MODULE_ID_MINDMAP . ",
+                                          " . MODULE_ID_REQUEST . ",
+                                          " . MODULE_ID_PROGRESS . ",
+                                          " . MODULE_ID_LP . ",
+                                          " . MODULE_ID_TC . ") AND
+                        module_id NOT IN (SELECT module_id FROM module_disable)";
+            if (!check_guest()) {
+                if (isset($_SESSION['uid']) and $_SESSION['uid']) {
+                    $result = Database::get()->queryArray("SELECT * FROM course_module
                             WHERE visible = 1 AND
-                            course_id = $cid AND
-                            module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                            " . MODULE_ID_ASSIGN . ",
-                                            " . MODULE_ID_MESSAGE . ",
-                                            " . MODULE_ID_FORUM . ",
-                                            " . MODULE_ID_GROUPS . ",
-                                            " . MODULE_ID_ATTENDANCE . ",
-                                            " . MODULE_ID_GRADEBOOK . ",
-                                            " . MODULE_ID_MINDMAP . ",
-                                            " . MODULE_ID_REQUEST . ",
-                                            " . MODULE_ID_PROGRESS . ",
-                                            " . MODULE_ID_LP . ",
-                                            " . MODULE_ID_TC . ") AND
-                            module_id NOT IN (SELECT module_id FROM module_disable)";
-                if (!check_guest()) {
-                    if (isset($_SESSION['uid']) and $_SESSION['uid']) {
-                        $result = Database::get()->queryArray("SELECT * FROM course_module
-                                WHERE visible = 1 AND
-                                    module_id NOT IN (SELECT module_id FROM module_disable) AND
-                                course_id = ?d", $cid);
-                    } else {
-                        $result = Database::get()->queryArray($sql);
-                    }
+                                  module_id NOT IN (SELECT module_id FROM module_disable) AND
+                            course_id = ?d", $cid);
                 } else {
                     $result = Database::get()->queryArray($sql);
                 }
-                break;
-            case 'PublicButHide':
-                $result = Database::get()->queryArray("SELECT * FROM course_module
-                                            WHERE visible = 0 AND
-                                                module_id NOT IN (SELECT module_id FROM module_disable) AND
-                                            course_id = ?d", $cid);
-                break;
-        }
-        // Ignore items not listed in $modules array
-        // (for development, when moving to a branch with fewer modules)
-        return array_filter($result, function ($item) {
-            global $course_view_type;
-            if ($item->module_id == MODULE_ID_WALL and $course_view_type == 'wall') {
-                return false;
+            } else {
+                $result = Database::get()->queryArray($sql);
             }
-            return isset($GLOBALS['modules'][$item->module_id]);
-        });
+            break;
+        case 'PublicButHide':
+            $result = Database::get()->queryArray("SELECT * FROM course_module
+                                         WHERE visible = 0 AND
+                                               module_id NOT IN (SELECT module_id FROM module_disable) AND
+                                         course_id = ?d", $cid);
+            break;
     }
+    // Ignore items not listed in $modules array
+    // (for development, when moving to a branch with fewer modules)
+    return array_filter($result, function ($item) {
+        global $course_view_type;
+        if ($item->module_id == MODULE_ID_WALL and $course_view_type == 'wall') {
+            return false;
+        }
+        return isset($GLOBALS['modules'][$item->module_id]);
+    });
 }
 
 
@@ -141,17 +139,15 @@ function getToolsArray($cat) {
  */
 function getExternalLinks() {
 
-    global $course_id, $mentoring_platform;
+    global $course_id;
 
-    if(!isset($mentoring_platform) or !$mentoring_platform){
-        $result = Database::get()->queryArray("SELECT url, title FROM link
-                                                WHERE category = -1 AND
-                                            course_id = ?d", $course_id);
-        if ($result) {
-            return $result;
-        } else {
-            return false;
-        }
+    $result = Database::get()->queryArray("SELECT url, title FROM link
+                                            WHERE category = -1 AND
+                                        course_id = ?d", $course_id);
+    if ($result) {
+        return $result;
+    } else {
+        return false;
     }
 }
 
@@ -434,7 +430,7 @@ function loggedOutMenu() {
 function adminMenu() {
 
     global $language, $urlServer;
-    global $is_admin, $is_power_user, $is_departmentmanage_user, $mentoring_platform;
+    global $is_admin, $is_power_user, $is_departmentmanage_user;
 
     $sideMenuGroup = array();
 
@@ -456,30 +452,18 @@ function adminMenu() {
 
     // link to prof requests if enabled, else directly to new prof page
     if (get_config('eclass_prof_reg') == 1 or get_config('alt_auth_prof_reg') == 1) {
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langProfOpen']);
-        }else{
-            array_push($sideMenuText, $GLOBALS['langProfRegTutorMentor']);
-        }
+        array_push($sideMenuText, $GLOBALS['langProfOpen']);
         array_push($sideMenuLink, '../admin/listreq.php');
         array_push($sideMenuImg, 'fa-caret-right');
     } else {
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langProfReg']);
-        }else{
-            array_push($sideMenuText, $GLOBALS['langProfRegTutorMentor']);
-        }
+        array_push($sideMenuText, $GLOBALS['langProfReg']);
         array_push($sideMenuLink, '../admin/newuseradmin.php');
         array_push($sideMenuImg, 'fa-caret-right');
     }
 
     // link to user requests if enabled, else directly to new user page
     if (get_config('eclass_stud_reg') == 1 or get_config('alt_auth_stud_reg') == 1) {
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langUserOpen']);
-        }else{
-            array_push($sideMenuText, $GLOBALS['langUserOpenMentee']);
-        }
+        array_push($sideMenuText, $GLOBALS['langUserOpen']);
         array_push($sideMenuLink, '../admin/listreq.php?type=user');
         array_push($sideMenuImg, 'fa-caret-right');
     } else {
@@ -501,28 +485,22 @@ function adminMenu() {
         array_push($sideMenuLink, '../admin/change_user.php');
         array_push($sideMenuImg, 'fa-caret-right');
 
-        //if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
-            array_push($sideMenuLink, '../admin/custom_profile_fields.php');
-            array_push($sideMenuImg, 'fa-caret-right');
-        //}
+        array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
+        array_push($sideMenuLink, '../admin/custom_profile_fields.php');
+        array_push($sideMenuImg, 'fa-caret-right');
 
         array_push($sideMenuText, $GLOBALS['langEPFAdminSideMenuLink']);
         array_push($sideMenuLink, '../admin/eportfolio_fields.php');
         array_push($sideMenuImg, 'fa-caret-right');
     }
 
-    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-        array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
-        array_push($sideMenuLink, '../admin/multireguser.php');
-        array_push($sideMenuImg, 'fa-caret-right');
-    }
+    array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
+    array_push($sideMenuLink, '../admin/multireguser.php');
+    array_push($sideMenuImg, 'fa-caret-right');
 
-    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-        array_push($sideMenuText, $GLOBALS['langMultiRegCourseUser']);
-        array_push($sideMenuLink, '../admin/multicourseuser.php');
-        array_push($sideMenuImg, 'fa-caret-right');
-    }
+    array_push($sideMenuText, $GLOBALS['langMultiRegCourseUser']);
+    array_push($sideMenuLink, '../admin/multicourseuser.php');
+    array_push($sideMenuImg, 'fa-caret-right');
 
     array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
     array_push($sideMenuLink, '../admin/multiedituser.php');
@@ -547,71 +525,69 @@ function adminMenu() {
     array_push($sideMenuSubGroup, $sideMenuImg);
     array_push($sideMenuGroup, $sideMenuSubGroup);
 
-    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-        if ($is_power_user or $is_departmentmanage_user) {
-            // lesson administration
-            // reset sub-arrays so that we do not have duplicate entries
-            $sideMenuSubGroup = array();
-            $sideMenuText = array();
-            $sideMenuLink = array();
-            $sideMenuImg = array();
+    if ($is_power_user or $is_departmentmanage_user) {
+        // lesson administration
+        // reset sub-arrays so that we do not have duplicate entries
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
 
-            array_push($sideMenuSubGroup, array(
-                'type' => 'text',
-                'text' => $GLOBALS['langAdminCours'],
-                'class' => 'course_admin'));
+        array_push($sideMenuSubGroup, array(
+            'type' => 'text',
+            'text' => $GLOBALS['langAdminCours'],
+            'class' => 'course_admin'));
 
-            array_push($sideMenuText, $GLOBALS['langSearchCourse']);
-            array_push($sideMenuLink, '../admin/searchcours.php');
+        array_push($sideMenuText, $GLOBALS['langSearchCourse']);
+        array_push($sideMenuLink, '../admin/searchcours.php');
+        array_push($sideMenuImg, 'fa-caret-right');
+
+        array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
+        array_push($sideMenuLink, '../course_info/restore_course.php');
+        array_push($sideMenuImg, 'fa-caret-right');
+
+        // if ($is_admin) {
+        //     array_push($sideMenuText, $GLOBALS['langHierarchy']);
+        //     array_push($sideMenuLink, '../admin/hierarchy.php');
+        //     array_push($sideMenuImg, 'fa-caret-right');
+        // }
+
+        array_push($sideMenuText, $GLOBALS['langMultiCourse']);
+        array_push($sideMenuLink, '../admin/multicourse.php');
+        array_push($sideMenuImg, 'fa-caret-right');
+
+        if ($is_admin) {
+            array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
+            array_push($sideMenuLink, '../admin/autoenroll.php');
             array_push($sideMenuImg, 'fa-caret-right');
 
-            array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
-            array_push($sideMenuLink, '../course_info/restore_course.php');
+            array_push($sideMenuText, $GLOBALS['langDisableModules']);
+            array_push($sideMenuLink, "../admin/modules.php");
+            array_push($sideMenuImg, "fa-caret-right");
+
+            array_push($sideMenuText, $GLOBALS['langCertBadge']);
+            array_push($sideMenuLink, '../admin/certbadge.php');
             array_push($sideMenuImg, 'fa-caret-right');
 
-            // if ($is_admin) {
-            //     array_push($sideMenuText, $GLOBALS['langHierarchy']);
-            //     array_push($sideMenuLink, '../admin/hierarchy.php');
-            //     array_push($sideMenuImg, 'fa-caret-right');
-            // }
-
-            array_push($sideMenuText, $GLOBALS['langMultiCourse']);
-            array_push($sideMenuLink, '../admin/multicourse.php');
+            array_push($sideMenuText, $GLOBALS['langActivityCourse']);
+            array_push($sideMenuLink, '../admin/activity.php');
             array_push($sideMenuImg, 'fa-caret-right');
 
-            if ($is_admin) {
-                array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
-                array_push($sideMenuLink, '../admin/autoenroll.php');
-                array_push($sideMenuImg, 'fa-caret-right');
-
-                array_push($sideMenuText, $GLOBALS['langDisableModules']);
-                array_push($sideMenuLink, "../admin/modules.php");
-                array_push($sideMenuImg, "fa-caret-right");
-
-                array_push($sideMenuText, $GLOBALS['langCertBadge']);
-                array_push($sideMenuLink, '../admin/certbadge.php');
-                array_push($sideMenuImg, 'fa-caret-right');
-
-                array_push($sideMenuText, $GLOBALS['langActivityCourse']);
-                array_push($sideMenuLink, '../admin/activity.php');
-                array_push($sideMenuImg, 'fa-caret-right');
-
-                // array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
-                // array_push($sideMenuLink, '../admin/coursecategory.php');
-                // array_push($sideMenuImg, 'arrow.png');
-            }
-
-            foreach ($sideMenuLink as $module_link) {
-                if ($current_module_dir == module_path($module_link)) {
-                    $sideMenuSubGroup[0]['class'] = ' in';
-                }
-            }
-
-            array_push($sideMenuSubGroup, $sideMenuText);
-            array_push($sideMenuSubGroup, $sideMenuLink);
-            array_push($sideMenuSubGroup, $sideMenuImg);
-            array_push($sideMenuGroup, $sideMenuSubGroup);
+            // array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
+            // array_push($sideMenuLink, '../admin/coursecategory.php');
+            // array_push($sideMenuImg, 'arrow.png');
         }
+
+        foreach ($sideMenuLink as $module_link) {
+            if ($current_module_dir == module_path($module_link)) {
+                $sideMenuSubGroup[0]['class'] = ' in';
+            }
+        }
+
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
     }
 
     // server administration
@@ -640,11 +616,9 @@ function adminMenu() {
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "fa-caret-right");
 
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langWidgets']);
-            array_push($sideMenuLink, "../admin/widgets.php");
-            array_push($sideMenuImg, "fa-caret-right");
-        }
+        array_push($sideMenuText, $GLOBALS['langWidgets']);
+        array_push($sideMenuLink, "../admin/widgets.php");
+        array_push($sideMenuImg, "fa-caret-right");
 
         if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
@@ -656,40 +630,26 @@ function adminMenu() {
         array_push($sideMenuLink, $urlServer . "upgrade/index.php");
         array_push($sideMenuImg, "fa-caret-right");
 
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langUsage']);
-            array_push($sideMenuLink, "../../modules/usage/index.php?t=a");
-            array_push($sideMenuImg, "fa-caret-right");
-        }
+        array_push($sideMenuText, $GLOBALS['langUsage']);
+        array_push($sideMenuLink, "../../modules/usage/index.php?t=a");
+        array_push($sideMenuImg, "fa-caret-right");
 
         // array_push($sideMenuText, $GLOBALS['langAdminAn']);
         // array_push($sideMenuLink, "../admin/adminannouncements.php");
         // array_push($sideMenuImg, "fa-caret-right");
 
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
-            array_push($sideMenuLink, "../admin/faq_create.php");
-            array_push($sideMenuImg, "fa-caret-right");
-        }
+        array_push($sideMenuText, $GLOBALS['langAdminCreateFaq']);
+        array_push($sideMenuLink, "../admin/faq_create.php");
+        array_push($sideMenuImg, "fa-caret-right");
 
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-            array_push($sideMenuText, $GLOBALS['langAdminCreateHomeTexts']);
-            array_push($sideMenuLink, "../admin/homepageTexts_create.php");
-            array_push($sideMenuImg, "fa-caret-right");
-        }
+        array_push($sideMenuText, $GLOBALS['langAdminCreateHomeTexts']);
+        array_push($sideMenuLink, "../admin/homepageTexts_create.php");
+        array_push($sideMenuImg, "fa-caret-right");
 
-        if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){// common for open eclass platform
-            if (get_config('enable_common_docs')) {
-                array_push($sideMenuText, $GLOBALS['langCommonDocs']);
-                array_push($sideMenuLink, "../admin/commondocs.php");
-                array_push($sideMenuImg, "fa-caret-right");
-            }
-        }else{
-            if (get_config('enable_common_docs') and ((get_config('mentoring_platform') and get_config('mentoring_always_active')) or isset($mentoring_platform))) {//common for mentoring platform
-                array_push($sideMenuText, $GLOBALS['langCommonDocs']);
-                array_push($sideMenuLink, "../mentoring/programs/group/document/mydoc.php?common_docs=true");
-                array_push($sideMenuImg, "fa-caret-right");
-            }
+        if (get_config('enable_common_docs')) {
+            array_push($sideMenuText, $GLOBALS['langCommonDocs']);
+            array_push($sideMenuLink, "../admin/commondocs.php");
+            array_push($sideMenuImg, "fa-caret-right");
         }
 
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
@@ -737,165 +697,162 @@ function adminMenu() {
 function lessonToolsMenu($rich=true) {
     global $uid, $is_editor, $is_course_admin, $courses,
            $course_code, $langAdministrationTools,
-           $modules, $admin_modules, $urlAppend, $status, $course_id, $mentoring_platform;
+           $modules, $admin_modules, $urlAppend, $status, $course_id;
 
-    if(!isset($mentoring_platform) or !$mentoring_platform){
+    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
-        $current_module_dir = module_path($_SERVER['REQUEST_URI']);
+    $sideMenuGroup = array();
+    $arrMenuType = array();
+    $arrMenuType['type'] = 'none';
 
-        $sideMenuGroup = array();
-        $arrMenuType = array();
-        $arrMenuType['type'] = 'none';
+    if ($is_editor || $is_course_admin) {
+        $tools_sections =
+            array(array('type' => 'Public',
+                        'title' => $GLOBALS['langActiveTools'],
+                        'class' => 'active'),
+                  array('type' => 'PublicButHide',
+                        'title' => $GLOBALS['langInactiveTools'],
+                        'class' => 'inactive'));
+    } else {
+        $tools_sections =
+            array(array('type' => 'Public',
+                        'title' => $GLOBALS['langCourseOptions'],
+                        'class' => 'active'));
+    }
 
-        if ($is_editor || $is_course_admin) {
-            $tools_sections =
-                array(array('type' => 'Public',
-                            'title' => $GLOBALS['langActiveTools'],
-                            'class' => 'active'),
-                    array('type' => 'PublicButHide',
-                            'title' => $GLOBALS['langInactiveTools'],
-                            'class' => 'inactive'));
-        } else {
-            $tools_sections =
-                array(array('type' => 'Public',
-                            'title' => $GLOBALS['langCourseOptions'],
-                            'class' => 'active'));
+    foreach ($tools_sections as $section) {
+
+        $result = getToolsArray($section['type']);
+
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+        $sideMenuID = array();
+        $mail_status = '';
+        $arrMenuType = array('type' => 'text',
+                             'text' => $section['title'],
+                             'class' => $section['class']);
+        if ($current_module_dir == 'course_home' && $section['class'] == 'active') {
+            $arrMenuType['class'] = ' in';
         }
 
-        foreach ($tools_sections as $section) {
+        array_push($sideMenuSubGroup, $arrMenuType);
 
-            $result = getToolsArray($section['type']);
+        setlocale(LC_COLLATE, $GLOBALS['langLocale']);
+        usort($result, function ($a, $b) {
+            global $modules;
+            return strcoll($modules[$a->module_id]['title'], $modules[$b->module_id]['title']);
+        });
 
-            $sideMenuSubGroup = array();
-            $sideMenuText = array();
-            $sideMenuLink = array();
-            $sideMenuImg = array();
-            $sideMenuID = array();
-            $mail_status = '';
-            $arrMenuType = array('type' => 'text',
-                                'text' => $section['title'],
-                                'class' => $section['class']);
-            if ($current_module_dir == 'course_home' && $section['class'] == 'active') {
-                $arrMenuType['class'] = ' in';
+        // check if we have define mail address and want to receive messages
+        if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+            $mail_status = '&nbsp;' . icon('fa-exclamation-triangle');
+        }
+
+        foreach ($result as $toolsRow) {
+            $mid = $toolsRow->module_id;
+
+            // hide groups for unregistered users
+            if ($mid == MODULE_ID_GROUPS and !$courses[$course_code]) {
+                continue;
             }
 
-            array_push($sideMenuSubGroup, $arrMenuType);
-
-            setlocale(LC_COLLATE, $GLOBALS['langLocale']);
-            usort($result, function ($a, $b) {
-                global $modules;
-                return strcoll($modules[$a->module_id]['title'], $modules[$b->module_id]['title']);
-            });
-
-            // check if we have define mail address and want to receive messages
-            if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
-                $mail_status = '&nbsp;' . icon('fa-exclamation-triangle');
+            // hide teleconference when no tc servers are enabled
+            if ($mid == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
+                continue;
             }
 
-            foreach ($result as $toolsRow) {
-                $mid = $toolsRow->module_id;
-
-                // hide groups for unregistered users
-                if ($mid == MODULE_ID_GROUPS and !$courses[$course_code]) {
-                    continue;
-                }
-
-                // hide teleconference when no tc servers are enabled
-                if ($mid == MODULE_ID_TC and count(get_enabled_tc_services()) == 0) {
-                    continue;
-                }
-
-                // if we are in messages or announcements add (if needed) mail address status
-                if ($rich and ($mid == MODULE_ID_MESSAGE or $mid == MODULE_ID_ANNOUNCE)) {
-                    if ($mid == MODULE_ID_MESSAGE) {
-                        $mbox = new Mailbox($uid, course_code_to_id($course_code));
-                        $new_msgs = $mbox->unreadMsgsNumber();
-                        if ($new_msgs != 0) {
-                            array_push($sideMenuText, '<b class="pe-2">' . q($modules[$mid]['title']) .
-                                " $mail_status<span class='badge rounded-pill bgLightBlue text-white TextExtraBold float-end d-flex justify-content-center align-items-center' style='height:25px width:25px; font-size:12px;'>$new_msgs</span></b>");
-                        } else {
-                            array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
-                        }
+            // if we are in messages or announcements add (if needed) mail address status
+            if ($rich and ($mid == MODULE_ID_MESSAGE or $mid == MODULE_ID_ANNOUNCE)) {
+                if ($mid == MODULE_ID_MESSAGE) {
+                    $mbox = new Mailbox($uid, course_code_to_id($course_code));
+                    $new_msgs = $mbox->unreadMsgsNumber();
+                    if ($new_msgs != 0) {
+                        array_push($sideMenuText, '<b class="pe-2">' . q($modules[$mid]['title']) .
+                            " $mail_status<span class='badge rounded-pill bgLightBlue text-white TextExtraBold float-end d-flex justify-content-center align-items-center' style='height:25px width:25px; font-size:12px;'>$new_msgs</span></b>");
                     } else {
                         array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                     }
-                } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
-                    array_push($sideMenuText, '<b class=>' . q($modules[$mid]['title']) .
-                        "<button class='badge rounded-pill bgLightBlue ms-2 text-white TextExtraBold float-end border-0 d-flex justify-content-center align-items-center' style='height:25px width:25px; font-size:12px;'>$new_docs</button></b>");
                 } else {
-                    array_push($sideMenuText, q($modules[$mid]['title']));
+                    array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                 }
-                $module_link = $urlAppend . 'modules/' . $modules[$mid]['link'] .
-                                '/index.php?course=' . $course_code;
-                if (module_path($module_link) == $current_module_dir) {
-                    $sideMenuSubGroup[0]['class'] = ' in';
-                }
-                array_push($sideMenuLink, q($module_link));
-                array_push($sideMenuImg, $modules[$mid]['image']);
-                array_push($sideMenuID, $mid);
+            } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
+                array_push($sideMenuText, '<b class=>' . q($modules[$mid]['title']) .
+                    "<button class='badge rounded-pill bgLightBlue ms-2 text-white TextExtraBold float-end border-0 d-flex justify-content-center align-items-center' style='height:25px width:25px; font-size:12px;'>$new_docs</button></b>");
+            } else {
+                array_push($sideMenuText, q($modules[$mid]['title']));
             }
-
-            if ($section['type'] == 'Public') {
-                $result2 = getExternalLinks();
-                if ($result2) { // display external links (if any)
-                    foreach ($result2 as $ex_link) {
-                        array_push($sideMenuText, q($ex_link->title));
-                        array_push($sideMenuLink, q($ex_link->url));
-                        array_push($sideMenuImg, 'fa-external-link');
-                        array_push($sideMenuID, -1);
-                    }
-                }
+            $module_link = $urlAppend . 'modules/' . $modules[$mid]['link'] .
+                            '/index.php?course=' . $course_code;
+            if (module_path($module_link) == $current_module_dir) {
+                $sideMenuSubGroup[0]['class'] = ' in';
             }
-
-            if ($section['type'] == 'Public') {
-                $result3 = getLTILinksForTools();
-                if ($result3) { // display lti apps as links (if any)
-                    foreach ($result3 as $lti_link) {
-                        array_push($sideMenuText, q($lti_link->title));
-                        array_push($sideMenuLink, q($lti_link->url));
-                        array_push($sideMenuImg, q($lti_link->menulink));
-                        array_push($sideMenuID, -1);
-                    }
-                }
-            }
-
-            array_push($sideMenuSubGroup, $sideMenuText);
-            array_push($sideMenuSubGroup, $sideMenuLink);
-            array_push($sideMenuSubGroup, $sideMenuImg);
-            array_push($sideMenuSubGroup, $sideMenuID);
-            array_push($sideMenuGroup, $sideMenuSubGroup);
+            array_push($sideMenuLink, q($module_link));
+            array_push($sideMenuImg, $modules[$mid]['image']);
+            array_push($sideMenuID, $mid);
         }
 
-        /*if ($is_course_admin) {  // display course admin tools
-            $sideMenuSubGroup = array();
-            $sideMenuText = array();
-            $sideMenuLink = array();
-            $sideMenuImg = array();
-            $sideMenuID = array();
-            $arrMenuType = array('type' => 'text',
-                                'text' => $langAdministrationTools,
-                                'class' => 'course_admin');
-            array_push($sideMenuSubGroup, $arrMenuType);
-
-            foreach ($admin_modules as $adm_mod) {
-                $module_link = $urlAppend . 'modules/' . $adm_mod['link'] .
-                                '/index.php?course=' . $course_code;
-                if (module_path($module_link) == $current_module_dir) {
-                    $sideMenuSubGroup[0]['class'] = ' in';
+        if ($section['type'] == 'Public') {
+            $result2 = getExternalLinks();
+            if ($result2) { // display external links (if any)
+                foreach ($result2 as $ex_link) {
+                    array_push($sideMenuText, q($ex_link->title));
+                    array_push($sideMenuLink, q($ex_link->url));
+                    array_push($sideMenuImg, 'fa-external-link');
+                    array_push($sideMenuID, -1);
                 }
-                array_push($sideMenuText, $adm_mod['title']);
-                array_push($sideMenuLink, q($module_link));
-                array_push($sideMenuImg, $adm_mod['image']);
             }
+        }
 
-            array_push($sideMenuSubGroup, $sideMenuText);
-            array_push($sideMenuSubGroup, $sideMenuLink);
-            array_push($sideMenuSubGroup, $sideMenuImg);
-            array_push($sideMenuSubGroup, $sideMenuID);
-            array_push($sideMenuGroup, $sideMenuSubGroup);
-        }*/
-        return $sideMenuGroup;
+        if ($section['type'] == 'Public') {
+            $result3 = getLTILinksForTools();
+            if ($result3) { // display lti apps as links (if any)
+                foreach ($result3 as $lti_link) {
+                    array_push($sideMenuText, q($lti_link->title));
+                    array_push($sideMenuLink, q($lti_link->url));
+                    array_push($sideMenuImg, q($lti_link->menulink));
+                    array_push($sideMenuID, -1);
+                }
+            }
+        }
+
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuSubGroup, $sideMenuID);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
     }
+
+    /*if ($is_course_admin) {  // display course admin tools
+        $sideMenuSubGroup = array();
+        $sideMenuText = array();
+        $sideMenuLink = array();
+        $sideMenuImg = array();
+        $sideMenuID = array();
+        $arrMenuType = array('type' => 'text',
+                             'text' => $langAdministrationTools,
+                             'class' => 'course_admin');
+        array_push($sideMenuSubGroup, $arrMenuType);
+
+        foreach ($admin_modules as $adm_mod) {
+            $module_link = $urlAppend . 'modules/' . $adm_mod['link'] .
+                            '/index.php?course=' . $course_code;
+            if (module_path($module_link) == $current_module_dir) {
+                $sideMenuSubGroup[0]['class'] = ' in';
+            }
+            array_push($sideMenuText, $adm_mod['title']);
+            array_push($sideMenuLink, q($module_link));
+            array_push($sideMenuImg, $adm_mod['image']);
+        }
+
+        array_push($sideMenuSubGroup, $sideMenuText);
+        array_push($sideMenuSubGroup, $sideMenuLink);
+        array_push($sideMenuSubGroup, $sideMenuImg);
+        array_push($sideMenuSubGroup, $sideMenuID);
+        array_push($sideMenuGroup, $sideMenuSubGroup);
+    }*/
+    return $sideMenuGroup;
 }
 
 /**

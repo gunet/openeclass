@@ -46,14 +46,7 @@
                                     <a id="AdminToolBtn" type="button" class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/admin/index.php"><i class="fa-solid fa-gear settings-icons"></i>{{trans('langAdminTool')}}</a>
                                 </li>
                             @endif
-                            @if(get_config('mentoring_platform'))
-                            <li>
-                                <a id="goToMentoringMobile" class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home.php">
-                                    <i class="fa-solid fa-wand-magic settings-icons"></i>
-                                    {{trans('langMentoringPlatform')}}     
-                                </a>
-                            </li>
-                            @endif
+
                             @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                 <li><a class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/create_course/create_course.php"><i class="fa-solid fa-circle-plus settings-icons"></i>{{ trans('langCourseCreate') }}</a></li>
                             @endif

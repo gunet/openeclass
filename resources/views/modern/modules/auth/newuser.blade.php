@@ -136,7 +136,7 @@
 
                                             
                                             <div class='row'>
-                                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                                
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserAm' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
@@ -145,7 +145,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @endif
+                                                
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                         <label for='UserPhone' class='col-sm-6 control-label-notes'>{{ trans('langPhone') }}</label>
@@ -158,7 +158,7 @@
 
                                         
                                             <div class='row'>
-                                                @if(!get_config('mentoring_always_active'))
+                                                
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>
                                                     <label for='UserFac' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
@@ -167,9 +167,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                @else
-                                                    <input type='hidden' name='department[]'>
-                                                @endif
+                                               
 
                                                 <div class='col-lg-6 col-12 px-3'>
                                                     <div class='form-group mt-4'>

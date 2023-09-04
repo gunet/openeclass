@@ -6,9 +6,8 @@
 <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    @endif
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    
                     
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -87,14 +86,14 @@
                                 </div>
                             </div>  
                      
-                            @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                            
                             <div class='form-group mt-4'>
                                 <label for='am' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                 <div class='col-sm-12'>
                                     <input class='form-control' placeholder="{{ trans('langAm') }}" type='text' name='am' id='am' value='{{ $am }}'>
                                 </div>
                             </div>
-                            @endif
+                            
                       
                             <div class='form-group mt-4'>
                                 <label class='col-sm-12 control-label-notes'>{{ trans('langUserType') }}</label>

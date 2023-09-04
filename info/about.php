@@ -27,24 +27,6 @@
 
 require_once '../include/baseTheme.php';
 
-if(get_config('mentoring_always_active') ){
-    if ($language != get_config('default_language') && isset($_SESSION['uid'])) {
-        $language = get_config('default_language');
-        // include_messages
-        include "lang/$language/common.inc.php";
-        $extra_messages = "config/{$language_codes[$language]}.inc.php";
-        if (file_exists($extra_messages)) {
-            include $extra_messages;
-        } else {
-            $extra_messages = false;
-        }
-        include "lang/$language/messages.inc.php";
-        if ($extra_messages) {
-            include $extra_messages;
-        }
-    }
-}
-
 $toolName = $langInfo;
 
 $data['course_inactive'] = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
@@ -80,16 +62,5 @@ $data['action_bar'] = action_bar(
                                     ]
                                 ], false);
 $data['menuTypeID'] = isset($uid) && $uid ? 1 : 0 ;
-
-if(isset($mentoring_platform) and $mentoring_platform){
-    $data['programs_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM mentoring_programs")->total;
-    $data['programs_active_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM mentoring_programs WHERE finish_date > NOW() OR `finish_date` IS NULL")->total;
-    $data['programs_deactive_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM mentoring_programs WHERE finish_date < NOW()")->total;
-    $data['users_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM user")->total;
-    $data['mentors_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM user WHERE is_mentor = ?d",1)->total;
-    $data['mentees_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM user WHERE status = ?d",USER_STUDENT)->total;
-    //$data['tutors_total'] = Database::get()->querySingle("SELECT COUNT(*) as total FROM user WHERE status = ?d AND is_mentor = ?d",USER_TEACHER,0)->total;
-    $data['tutors_total'] = $data['users_total'] -  $data['mentors_total'] - $data['mentees_total'];
-}
 
 view('info.about', $data);

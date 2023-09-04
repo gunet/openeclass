@@ -17,17 +17,7 @@
 <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    @if($showMentoringProfile == 0)
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    @else
-                        <nav class='breadcrumb_mentoring' style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a class='TextSemiBold' href="{{ $urlAppend }}modules/mentoring/mentoring_platform_home"><span class='fa fa-home'></span>&nbsp{{ trans('langHomeMentoringPlatform') }}</a></li>
-                                <li class="breadcrumb-item"><a class='TextSemiBold' href="{{ $urlAppend }}modules/mentoring/profile/user_profile.php">{{ trans('langMyProfile') }}</a></li>
-                                <li class="breadcrumb-item active TextMedium" aria-current="page">{{ trans('langEditProfile') }}</li>
-                            </ol>
-                        </nav>
-                    @endif
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -66,7 +56,7 @@
 
 
                     <div class='col-lg-6 col-12'>
-                    <div class='form-wrapper form-edit @if($showMentoringProfile == 1) rounded-2 p-3 solidPanel @else rounded @endif'>
+                    <div class='form-wrapper form-edit rounded'>
                         <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='{{ $sec }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                                 <div class='form-group'>
@@ -108,7 +98,7 @@
                                 <div class='form-group mt-4'>
                                     <label for='email_form' class='col-sm-12 control-label-notes'>{{ trans('langEmail') }}</label>
                                     <div class='row'>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-122'>
                                             @if ($allow_email_change)
                                                 <input class='form-control' type='text' name='email_form' id='email_form' value='{{ $email_form }}'>
                                             @else
@@ -122,7 +112,7 @@
                                 <div class='form-group mt-4'>
                                     <label for='am_form' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                     <div class='row'>
-                                        <div class='col-sm-6'>
+                                        <div class='col-sm-12'>
                                             @if ($allow_am_change)
                                                 <input type='text' class='form-control' name='am_form' id='am_form' value='{{ $am_form }}'>
                                             @else
@@ -136,13 +126,13 @@
                                 <div class='form-group mt-4'>
                                     <label for='phone_form' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
                                     <div class='row'>
-                                        <div class='@if($showMentoringProfile == 0) col-sm-6 @else col-sm-12 @endif'>
+                                        <div class='col-sm-12'>
                                             <input type='text' class='form-control' name='phone_form' id='phone_form' value='{{$phone_form }}'>
                                         </div>
                                     </div>
                                 </div>
 
-                                @if($showMentoringProfile == 0)
+                                
                                     <div class='form-group mt-4'>
                                         <label for='emailfromcourses' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmailFromCourses') }}</label>
                                         <div class='col-sm-12 d-inline-flex'>
@@ -158,7 +148,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                @endif
+                               
 
                                 @if (get_config('email_verification_required'))
 
@@ -170,16 +160,14 @@
 
 
                                 @if (!get_config('restrict_owndep'))
-                                    @if(!get_config('mentoring_always_active'))
+                                    
                                         <div class='form-group mt-4'>
                                             <label for='faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                             <div class='col-sm-12 form-control-static'>
                                                     {!! $html !!}
                                             </div>
                                         </div>
-                                    @else
-                                        <input type='hidden' name='department[]'>
-                                    @endif
+                                    
                                 @endif
 
 
@@ -238,11 +226,7 @@
                                 {{ $SecFactorChallenge }}
                                 <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                    @if($showMentoringProfile == 0)
                                         <a href='display_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
-                                    @else
-                                        <a href='{{ $urlAppend }}modules/mentoring/profile/user_profile.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
-                                    @endif
                                 </div>
 
                         </fieldset>

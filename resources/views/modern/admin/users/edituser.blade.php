@@ -6,9 +6,8 @@
 <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    @if(!get_config('mentoring_always_active') and !get_config('mentoring_platform'))
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    @endif
+                    @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
+                    
 
                     @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
 
@@ -97,44 +96,39 @@
                                                 {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'") !!}
                                             </div>
                                         </div>
-                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                       
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='am' value='{{ $info->am }}'>
                                             </div>
                                         </div>
-                                        @endif
+                                        
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langTel') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='phone' value='{{ $info->phone }}'>
                                             </div>
                                         </div>
-                                        @if(!get_config('mentoring_always_active'))
+                                        
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $html !!}
                                             </div>
                                         </div>
-                                        @else
-                                            <input type='hidden' name='department[]'>
-                                        @endif
+                                        
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>
                                             <div class='col-sm-12'>
-                                                @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                               
                                                     @if ($info->status == USER_GUEST)
                                                         {!! selection(array(USER_GUEST => trans('langGuest')), 'newstatus', intval($info->status), "class='form-control'") !!}
                                                     @else
                                                         {!! selection(array(USER_TEACHER => trans('langTeacher'),
                                                             USER_STUDENT => trans('langStudent')), 'newstatus', intval($info->status), "class='form-control'") !!}
                                                     @endif
-                                                @else
-                                                    {!! selection(array(USER_TEACHER => trans('langTutorMentor'),
-                                                            USER_STUDENT => trans('langMentee')), 'newstatus', intval($info->status), "class='form-control'") !!}
-                                                @endif
+                                                
                                             </div>
                                         </div>
                                         <div class='form-group mt-4'>
@@ -159,14 +153,14 @@
                                                 <p class='form-control-static'>{{ $u }}</p>
                                             </div>
                                         </div>
-                                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                                       
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langUserWhitelist') }}</label>
                                             <div class='col-sm-12'>
                                                 <textarea class='w-100' rows='6' name='user_upload_whitelist'>{{ $info->whitelist }}</textarea>
                                             </div>
                                         </div>
-                                        @endif
+                                        
                                         @if ($ext_uid)
                                             <div class='form-group mt-4'>
                                                 <label class='col-sm-12 control-label-notes'>{{trans('langProviderConnectWith')}}</label>
@@ -210,7 +204,7 @@
                         </div>
 
                         <!--user is registered to courses-->
-                        @if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform')))
+                        
                             @if (count($sql) > 0)
                                 <div class='col-12 mt-3'>
                                     <div class='shadow-sm p-3 rounded'>
@@ -267,7 +261,7 @@
                             @else
                             <div class='col-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
                             @endif
-                        @endif
+                        
 
                 
         </div>

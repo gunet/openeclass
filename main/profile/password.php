@@ -33,34 +33,15 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/log.class.php';
 
-if(isset($_GET['fromMentoring']) and $_GET['fromMentoring'] == 'true'){
-    if(isset($mentoring_platform) and $mentoring_platform){
-       $data['showMentoringProfile'] = $showMentoringProfile = 1; 
-    }else{
-        redirect_to_home_page("modules/mentoring/mentoring_platform_home.php");
-    }
-}else{
-    $data['showMentoringProfile'] = $showMentoringProfile = 0;
-}
-
 $toolName = $langMyProfile;
 $pageName = $langChangePass;
-
-if($showMentoringProfile == 1){
-    $navigation[] = array('url' => 'modules/mentoring/profile/user_profile.php', 'name' => $langMyProfile);
-}else{
-    $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
-    $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
-}
-
+$navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
+$navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
 
 check_uid();
 
-if($showMentoringProfile == 1){
-    $data['passUrl'] = $urlServer . 'main/profile/password.php?fromMentoring=true';
-}else{
-    $data['passUrl'] = $urlServer . 'main/profile/password.php';
-}
+
+$data['passUrl'] = $urlServer . 'main/profile/password.php';
 $data['passLocation'] = 'Location: ' . $data['passUrl'];
 
 if (isset($_POST['submit'])) {
@@ -89,48 +70,24 @@ if (isset($_POST['submit'])) {
             //Session::Messages($langPassChanged, 'alert-success');
             Session::flash('message',$langPassChanged);
             Session::flash('alert-class', 'alert-success');
-            //redirect_to_home_page('main/profile/display_profile.php');
-            if($showMentoringProfile == 1){
-                redirect_to_home_page('modules/mentoring/profile/user_profile.php');
-            }else{
-                redirect_to_home_page('main/profile/display_profile.php');
-            }
+            redirect_to_home_page('main/profile/display_profile.php');
         } else {
             //Session::Messages($langPassOldWrong);
             Session::flash('message',$langPassOldWrong);
             Session::flash('alert-class', 'alert-warning');
-            //redirect_to_home_page('main/profile/password.php');
-            if($showMentoringProfile == 1){
-                redirect_to_home_page('main/profile/password.php?fromMentoring=true');
-            }else{
-                redirect_to_home_page('main/profile/password.php');
-            }
+            redirect_to_home_page('main/profile/password.php');
         }
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        //redirect_to_home_page('main/profile/password.php');
-        if($showMentoringProfile == 1){
-            redirect_to_home_page('main/profile/password.php?fromMentoring=true');
-        }else{
-            redirect_to_home_page('main/profile/password.php');
-        }
+        redirect_to_home_page('main/profile/password.php');
     }
 }
 
-if($showMentoringProfile == 1){
-    $data['action_bar'] = action_bar(array(
-        array('title' => $langBack,
-              'url' => $urlServer.'modules/mentoring/profile/user_profile.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
-}else{
-    $data['action_bar'] = action_bar(array(
+$data['action_bar'] = action_bar(array(
     array('title' => $langBack,
           'url' => 'display_profile.php',
           'icon' => 'fa-reply',
           'level' => 'primary')));
-}
-
 
 if (!isset($_POST['changePass'])) {
     $data['old_pass_error'] = Session::getError('old_pass');

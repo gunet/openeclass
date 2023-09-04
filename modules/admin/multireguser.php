@@ -62,7 +62,7 @@ if (isset($_POST['submit'])) {
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
             //Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
-            Session::flash('message',"$langMultiRegFieldError <b>$field)</b>");
+            Session::flash('message',"$langMultiRegFieldError <b>$field)</b>"); 
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/multireguser.php');
             exit;
@@ -88,7 +88,7 @@ if (isset($_POST['submit'])) {
 
                 if ($info['email'] and !valid_email($info['email'])) {
                     //Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
-                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email']));
+                    Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email'])); 
                     Session::flash('alert-class', 'alert-danger');
                     $info['email'] = '';
                 }
@@ -134,13 +134,8 @@ if (isset($_POST['submit'])) {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
     });
-    if((get_config('mentoring_platform') and !get_config('mentoring_always_active')) or (!get_config('mentoring_platform'))){
-        $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
-                                        ACCESS_USERS => $langProfileInfoUsers);
-    }else{
-        $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoTutors,
-                                        ACCESS_USERS => $langProfileInfoUsers);
-    }
+    $data['access_options'] = array(ACCESS_PROFS => $langProfileInfoProfs,
+                                    ACCESS_USERS => $langProfileInfoUsers);
     $data['action_bar'] = action_bar(array(
                 array('title' => $langBack,
                     'url' => "index.php",
