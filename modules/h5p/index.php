@@ -149,10 +149,10 @@ if ($content) {
             : $urlAppend . "js/h5p-core/images/h5p_library.svg"; // fallback icon
 
         $tool_content .= "<tr" . ($item->enabled ? '' : " class='not_visible'") . ">
-                    <td class='col-sm-8'>
+                    <td>
                         <a href='view.php?course=$course_code&amp;id=$item->id'>$item->title</a>
                     </td>
-                    <td class='col-sm-3'>
+                    <td>
                         <img src='$typeIconUrl' alt='$h5p_content_type_title' width='30px' height='30px'> <em>$h5p_content_type_title</em>
                     </td>";
         if ($is_editor) {

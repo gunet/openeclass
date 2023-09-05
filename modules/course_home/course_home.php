@@ -350,9 +350,9 @@ $data['courseDescriptionVisible'] = $courseDescriptionVisible = count($res);
 $data['edit_course_desc_link'] = '';
 if ($is_editor) {
     if ($courseDescriptionVisible > 0) {
-        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-pencil', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-pen-to-square settings-icon mt-2', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
     } else {
-        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-plus', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-circle-plus settings-icon mt-2', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
     }
 }
 
@@ -643,15 +643,16 @@ if ($total_cunits > 0) {
                 $cunits_content .= "</div>";
             }
 
-            $cunits_content .= "<hr>
+            $cunits_content .= "
+                        <div style='height:1px;' class='Neutral-300-bg mt-1 mb-3'></div>
                         <div class='col-sm-12 bg-transparent'>
 
                             <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
-                                <span class='d-flex justify-content-center align-items-center fa fa-arrow-left lightBlueText'></span>
+                                <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
                             </button>";
 
             $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
-                                    <span class='d-flex justify-content-center align-items-center fa fa-arrow-right lightBlueText'></span>
+                                    <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
                             </button>
 
                         </div>";

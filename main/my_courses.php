@@ -57,15 +57,15 @@ $data['action_bar']  = action_bar([
       'url' => 'portfolio.php' ],
     [ 'title' => $langRegCourses,
       'url' => $urlAppend . 'modules/auth/courses.php',
-      'icon' => 'fa-check',
+      'icon' => 'fa-pen-to-square',
       'level' => 'primary-label',
-      'button-class' => 'btn-success' ],
+      'button-class' => 'submitAdminBtn' ],
     [ 'title' => $langCourseCreate,
       'url' => $urlAppend . 'modules/create_course/create_course.php',
       'show' => $_SESSION['status'] == USER_TEACHER,
       'icon' => 'fa-plus-circle',
       'level' => 'primary-label',
-      'button-class' => 'btn-success' ]
+      'button-class' => 'submitAdminBtnDefault' ]
     
 ], false);
 

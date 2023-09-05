@@ -5,6 +5,16 @@
         $visible_module = $m->visible;
     }
     $go_back_url = $_SERVER['REQUEST_URI'];
+
+    $courseLicense = 0;
+    $courseInfo = Database::get()->queryArray("SELECT *FROM course WHERE id = ?d",$course_id);
+    if(count($courseInfo) > 0){
+        foreach($courseInfo as $c){
+            if($c->course_license > 0){
+                $courseLicense = $c->course_license;
+            }
+        }
+    }
 @endphp
 
 
@@ -67,8 +77,15 @@
                             </div>
                         @else
                             <div class='col-12'>
+                                
                                 <h2 class='mb-0'>{{$currentCourseName}}</h2>
-                                <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p> 
+                                
+                                <div class='d-flex justify-content-start align-items-center gap-2'>
+                                    <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p> 
+                                    @if($courseLicense > 0)
+                                        <div class='copyright-img'>{!! copyright_info($course_id) !!}</div>
+                                    @endif
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -109,7 +126,12 @@
                         @else
                             <div class='col-12'>
                                 <h2 class='mb-0'>{{$currentCourseName}}</h2>
-                                <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p>
+                                <div class='d-flex justify-content-start align-items-center gap-2'>
+                                    <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p>
+                                    @if($courseLicense > 0)
+                                        <div class='copyright-img'>{!! copyright_info($course_id) !!}</div>
+                                    @endif
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -144,6 +166,9 @@
                                             <span class='text-secondary'>
                                                 {{course_id_to_prof($course_id)}}
                                             </span>
+                                            @if($courseLicense > 0)
+                                                <div class='copyright-img'>{!! copyright_info($course_id) !!}</div>
+                                            @endif
                                         </th>
                                     </tr>
 
@@ -226,6 +251,9 @@
                                             <span class='text-secondary'>
                                                 {{course_id_to_prof($course_id)}}
                                             </span>
+                                            @if($courseLicense > 0)
+                                                <div class='copyright-img'>{!! copyright_info($course_id) !!}</div>
+                                            @endif
                                         </th>
                                     </tr>
 

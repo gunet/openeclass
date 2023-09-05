@@ -50,7 +50,7 @@
                         @foreach($myCourses as $course)
                             @php $temp_pages++; @endphp
                             <div class="col cardCourse{{ $pagesPag }}">
-                                <div class="card h-100 card{{ $pagesPag }} Borders border-card">
+                                <div class="card h-100 card{{ $pagesPag }} Borders border-card px-2 py-3">
                                     @php 
                                         $courseImage = ''; 
                                         if(!empty($course->course_image)){
@@ -59,39 +59,43 @@
                                             $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
                                         }
                                     @endphp 
-                                    <img src="{{ $courseImage }}" class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" alt="course image">
-                                    <div class="card-body">
-                                        <div class="card-title d-flex justify-content-between align-items-start">
-                                            <a class='@if($course->visible == 3) InvisibleCourse @endif TextBold pe-2' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
+                                    <div class='card-header border-0 bg-white'>
+                                        <div class="card-title d-flex justify-content-start align-items-start gap-2 mb-0">
                                             @if($course->visible == 1) 
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
-                                                    <span class='fa fa-lock text-secondary'></span>
+                                                    <i class="fa-solid fa-square-pen Neutral-600-cl settings-icons"></i>
                                                 </button>
                                             @endif
                                             @if($course->visible == 2) 
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langOpenCourse')}}">
-                                                    <span class='fa fa-unlock text-success'></span>
+                                                    <i class="fa-solid fa-lock-open Neutral-600-cl settings-icons"></i>
                                                 </button>
                                             @endif
                                             @if($course->visible == 0) 
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langClosedCourse')}}">
-                                                    <span class='fa fa-lock orangeText'></span>
+                                                    <i class="fa-solid fa-lock Neutral-600-cl settings-icons"></i>
                                                 </button>
                                             @endif
                                             @if($course->visible == 3) 
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langInactiveCourse')}}">
-                                                    <span class='fa fa-exclamation-triangle text-danger InvisibleCourse'></span>
+                                                    <i class="fa-solid fa-triangle-exclamation Neutral-600-cl settings-icons"></i>
                                                 </button>
-                                            @endif
+                                            @endif 
+                                            <a class='@if($course->visible == 3) InvisibleCourse @endif TextBold mt-1' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
                                         </div>
-                                        <p class="card-text">
-                                            <p class='form-label @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langCode') }}</p>
-                                            <p class=" @if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->public_code) }}</p>
-                                        </p>
-                                        <p class="card-text">
-                                            <p class='form-label @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}</p>
-                                            <p class="@if($course->visible == 3) InvisibleCourse @endif small-text">{{ q($course->professor) }}</p>
-                                        </p>
+                                    </div>
+
+                                    
+                                    <div class="card-body pt-0">
+                                        <img src="{{ $courseImage }}" class="card-img-top cardImgCourse rounded-0 @if($course->visible == 3) InvisibleCourse @endif" alt="course image">
+                                        <div class="card-text mt-3">
+                                            <p class="d-inline form-value @if($course->visible == 3) InvisibleCourse @endif mb-0 vsmall-text">{{ trans('langCode') }}:</p>
+                                            &nbsp<p class="d-inline form-value @if($course->visible == 3) InvisibleCourse @endif vsmall-text">{{ q($course->public_code) }}</p>
+                                        </div>
+                                        <div class="card-text">
+                                            <p class='d-inline form-value @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}:</p>
+                                            &nbsp<p class="d-inline form-value @if($course->visible == 3) InvisibleCourse @endif vsmall-text">{{ q($course->professor) }}</p>
+                                        </div>
                                         
                                     </div>
                                     <div class='card-footer d-flex justify-content-center align-items-center bg-white border-0 mb-2'>
@@ -101,11 +105,13 @@
                                         <!------------------------------------------------->
                                         <!------------------------------------------------->
                                         @if($_SESSION['status'] == USER_TEACHER and $is_course_teacher and $course->status == 1)
-                                            <a class='btn submitAdminBtn' href="{{$urlServer}}modules/course_info/index.php?from_home=true&amp;course={{$course->code}}">
+                                            <a class='btn submitAdminBtn w-100 gap-1' href="{{$urlServer}}modules/course_info/index.php?from_home=true&amp;course={{$course->code}}">
+                                                <i class="fa-solid fa-gear settings-icons"></i>
                                                 {{trans('langAdm') }}
                                             </a>
                                         @else
-                                            <button class='btn deleteAdminBtn' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                            <button class='btn deleteAdminBtn w-100 gap-1' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                                <i class="fa-solid fa-circle-xmark settings-icons"></i>
                                                 {{ trans('langUnregCourse') }}
                                             </button>
                                         @endif

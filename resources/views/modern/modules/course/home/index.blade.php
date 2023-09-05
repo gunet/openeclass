@@ -112,7 +112,7 @@
         width: 130px;
         height: 130px;
         border-radius: 50%;
-        background: conic-gradient(red var(--progress), #E8EDF8 0deg);
+        background: conic-gradient(#0073E6 var(--progress), #E8EDF8 0deg);
         font-size: 0;
     }
     #progress_circle::after {
@@ -322,14 +322,10 @@
                             @if(isset($rating_content) || isset($comment_content))
                                 <div class='card-footer d-md-flex justify-content-md-between align-items-md-start bg-white border-0 mt-0 mb-0 p-0'>
                                     @if(isset($rating_content))
-                                        <div class='d-flex justify-content-md-start justify-content-center align-items-center'>
-                                            <div class='ps-md-0 pt-2 pb-2 pe-2'>{!! $rating_content !!}</div>
-                                        </div>
+                                        <div>{!! $rating_content !!}</div>
                                     @endif
                                     @if(isset($comment_content))
-                                        <div class='d-flex justify-content-md-start justify-content-center align-items-center'>
-                                            <div class='ps-3 pt-2 pb-2 pe-2'>{!! $comment_content !!}</div>
-                                        </div>
+                                        <div class='mt-md-0 mt-3'>{!! $comment_content !!}</div>
                                     @endif
 
                                 </div>
@@ -338,9 +334,8 @@
                         </div>
 
 
-                        @if(isset($social_content) || $course_info->course_license)
-                            <div class='col-12 d-flex justify-content-between align-items-start mt-4'>
-                                <div>{!! copyright_info($course_id) !!}</div>
+                        @if(isset($social_content))
+                            <div class='col-12 d-flex justify-content-end align-items-start mt-4'>
                                 <div>{!! $social_content !!}</div>
                             </div>
                         @endif
@@ -365,12 +360,18 @@
                                                 </div>
                                             
                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
-                                                    @foreach ($course_descriptions as $row)
+                                                    @if(count($course_descriptions) == 0)
                                                         <div class='col-12 mb-4'>
-                                                            <p class='form-label text-start'>{{$row->title}}</p>
-                                                            {!! standard_text_escape($row->comments) !!}
+                                                            <p>{{ trans('langNoInfoAvailable')}}</p>
                                                         </div>
-                                                    @endforeach
+                                                    @else
+                                                        @foreach ($course_descriptions as $row)
+                                                            <div class='col-12 mb-4'>
+                                                                <p class='form-label text-start'>{{ $row->title }}</p>
+                                                                {!! standard_text_escape($row->comments) !!}
+                                                            </div>
+                                                        @endforeach
+                                                    @endif
                                                 </div>
                                             </li>
                                         </ul>
@@ -381,38 +382,61 @@
                         
 
                         @if($course_info->view_type == 'units')
-                            <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+                            <div class='card panelCard px-0 py-0 mt-4 border-0'>
 
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
                                     <h3>
-                                        {{ trans('langCourseUnits') }}
+                                        <div class='d-flex gap-2'>
+                                            {{ trans('langCourseUnits') }}
+                                            <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                                <i class="fa-solid fa-circle-info settings-icon Neutral-600-cl pt-1"></i>
+                                            </a>
+                                        </div>
                                     </h3>
-                                    <div class='d-flex'>
-                                        @if ($is_editor)
-                                            <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='add-unit-btn mt-0 float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langAddUnit') }}">
-                                                <span class='fa fa-plus-circle'></span>
-                                            </a>
-                                            @if($course_info->flipped_flag == 2)
-                                                <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='add-unit-btn mt-0 float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langFlippedEdit') }}">
-                                                    <span class='fa fa-pencil'></span>
-                                                </a>
-                                            @endif
-                                        @endif
-                                        @if($total_cunits > 0 and $is_editor)
-                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='add-unit-btn mt-0 float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitCarousel') }}">
-                                                <span class='fa fa-columns'></span>
-                                            </a>
-                                            <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='add-unit-btn mt-0 float-end pe-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langShowUnitRow') }}">
-                                                <span class='fa fa-list mb-0'></span>
-                                            </a>
-                                        @endif
-                                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn mt-0 float-end' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                                            <span class='fa fa-question-circle'></span>
-                                        </a>
-                                    </div>
+
+                                    @if($is_editor)
+                                        <button class="btn submitAdminBtn" type="button" id="dropdownToolsUnit" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                        </button>
+
+                                        <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsUnit" style='z-index:1;'>
+                                            <ul class="list-group list-group-flush">
+                                                @if ($is_editor)
+                                                    <li>
+                                                        <a href='{{ $urlServer }}modules/units/info.php?course={{ $course_code }}' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class='fa-solid fa-plus settings-icon'></i>
+                                                            {{ trans('langAddUnit') }}
+                                                        </a>
+                                                    </li>
+                                                    @if($course_info->flipped_flag == 2)
+                                                        <li>
+                                                            <a href='{{ $urlServer }}modules/create_course/edit_flipped_classroom.php?course={{ $course_code }}&fromFlipped=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                                <i class='fa-solid fa-pen-to-square settings-icon'></i>
+                                                                {{ trans('langFlippedEdit') }}
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endif
+                                                @if($total_cunits > 0 and $is_editor)
+                                                    <li>
+                                                        <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=0' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class="fa-solid fa-table-cells-large settings-icon"></i>
+                                                            {{ trans('langShowUnitCarousel') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href='{{ $urlServer }}modules/course_home/course_home.php?course={{ $course_code }}&viewUnit=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
+                                                            <i class="fa-solid fa-table-list settings-icon"></i>
+                                                            {{ trans('langShowUnitRow') }}
+                                                        </a>
+                                                    </li>
+                                                @endif 
+                                            </ul>
+                                        </div>
+                                    @endif
                                 </div>
 
-                                <div class='card-body' id='boxlistSort'>
+                                <div class='card-body px-0 pt-0' id='boxlistSort'>
                                     {!! $cunits_content !!}
                                 </div>
 
@@ -555,17 +579,29 @@
                                         <div class='text-center'>
                                             <div class='col-12 h-100'>
                                                 @if ($is_editor)
-                                                    <i class="fa-solid fa-award" style='transform: scale(10,10); margin-top:80px;'></i>
+                                                    <div class='card statistics-card border-default-card drop-shadow'>
+                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                            <div>
+                                                                <div class='d-flex justify-content-center'>
+                                                                    <img src='{{ $urlAppend }}template/modern/images/Icons_user.svg'>
+                                                                    <h1 class='mb-0 ms-2'>{{ $certified_users}}/{{ $studentUsers }}</h1>
+                                                                </div>
+                                                                <p class='form-label text-center mt-3'>{{trans('langUsers')}}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                         
                                                 @else
-                                                    <div class="center-block d-inline-block">
-                                                        <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
-                                                            @if ($percentage == '100')
-                                                                <i class='fa fa-check-circle fa-5x state_success'></i>
-                                                            @else
-                                                                <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
-                                                            @endif
-                                                        </a>
+                                                    <div class='card statistics-card border-default-card drop-shadow'>
+                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                            <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
+                                                                @if ($percentage == '100')
+                                                                    <i class='fa fa-check-circle fa-5x state_success'></i>
+                                                                @else
+                                                                    <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
+                                                                @endif
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 @endif
                                             </div>
@@ -576,7 +612,7 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='card panelCard border-0' style='margin-top:100px;'>
+                            <div class='card panelCard border-0 mt-5'>
                                 <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langOpenCourseShort') }}</h3>
                                 </div>
@@ -590,7 +626,7 @@
                         @endif
 
                         @if($course_home_main_area_widgets)
-                            <div class='card panelCard border-0' style='margin-top:100px;'>
+                            <div class='card panelCard border-0 mt-5'>
                                 <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langWidgets') }}</h3>
                                 </div>

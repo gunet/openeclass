@@ -126,6 +126,13 @@ img {
 .border-custom{
   border: solid 1px #EFF2FB;
 }
+
+.border-bottom-custom{
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #EFF2FB;
+}
   
 .border-bottom-card-header{
   border-top: none;
@@ -148,6 +155,13 @@ img {
   border-bottom: solid 1px #E8EDF8;
 }
 
+.border-card-left-default{
+  border-top: none;
+  border-left: solid 3px #EFF2FB;
+  border-right: none;
+  border-bottom: none;
+}
+
 .border-bottom-table-head{
   border-bottom: solid 2px #0073E6;
 }
@@ -166,6 +180,10 @@ img {
 
 .h-30px{
   height: 30px;
+}
+
+.h-1px{
+  height: 1px;
 }
 
 @media(min-width:992px){
@@ -235,6 +253,11 @@ img {
 .settings-icons{
   width: 16px;
   height: 16px;
+}
+
+.settings-icons-lg::before{
+  width: 24px;
+  height: 24px;
 }
 
 .max-input-width{
@@ -2041,13 +2064,13 @@ body .form-action-button-mydropdowns{
 
 
 /* after close modal , display none from body and block inside popover for form-action-button */
-/* body .form-action-button-popover{ 
+body .form-action-button-popover{ 
   display: none; 
 }
 
 .menu-popover .form-action-button-popover{ 
   display: block; 
-} */
+}
 
 .bootbox.show .modal-content, .modal.show .modal-content{
   padding: 15px;
@@ -2966,7 +2989,12 @@ tr td{
 
 
 
-
+thead tr th{
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 thead tr th, 
 tfoot tr th{
@@ -3230,6 +3258,17 @@ body .delThemeBtn{
 .form-wrapper .delThemeBtn{
   display: block;
   line-height: 25px;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** PORTFOLIO ********************************************************/
+/**********************************************************************************************************************/
+.profile-pers-info-row{
+  border-bottom: solid 1px #EFF2FB;
+}
+
+.profile-pers-info:last-child .profile-pers-info-row{
+  border-bottom: none;
 }
 
 
@@ -3895,13 +3934,12 @@ div[role="progressbar"]::before {
 
 .state_success { color: #22b473; }
 
-.carousel-indicators>button:not(:has(.active)) {background-color: #000000; height:10px;}
+.carousel-indicators>button:not(:has(.active)) {background-color: #CDD4E0; height:4px;}
 .carousel-indicators>button.active {background-color: #0d6efd;}
 .carousel-prev-btn,.carousel-next-btn{
-  width:30px;
-  height:30px;
-  border-radius: 50%;
   border:0px;
+  padding: 0;
+  background-color: transparent;
 }
 
 .descCoursePanel{ 
@@ -3921,6 +3959,10 @@ div[role="progressbar"]::before {
   }
 }
 
+.copyright-img{
+  width: 40px;
+}
+
 
 
 /**********************************************************************************************************************/
@@ -3933,7 +3975,7 @@ div[role="progressbar"]::before {
 
 .panelCard{
   border-radius: 4px ;
-  border: solid 1px #E8EDF8;
+  border: solid 1px#EFF2FB;
   /* filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)) !important; */
 }
 
@@ -3948,6 +3990,10 @@ div[role="progressbar"]::before {
 .panelCard .card-footer{
   border-bottom-left-radius: 4px ;
   border-bottom-right-radius: 4px ;
+}
+
+.panelCard.border-card-left-default{
+  border-left: solid 7px #EFF2FB;
 }
 
 .searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
@@ -4238,6 +4284,7 @@ div[role="progressbar"]::before {
 
 .commentPress:hover{
   color: #0d6efd;
+  text-decoration: none;
 }
 
 
@@ -4449,6 +4496,31 @@ div[role="progressbar"]::before {
   color: #ffffff;
 }
 
+/**********************************************************************************************************************/
+/*************************************************** ADMIN ************************************************************/
+/**********************************************************************************************************************/
+
+.quickLink{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 200px;
+  height: 88px;
+  border: solid 1px #E8EDF8;
+  background-color: #ffffff;
+  text-decoration: none;
+  color: #2B3944;
+  font-weight: 700;
+}
+
+.quickLink:hover{
+  border: solid 1px #B3D1FF;
+  background-color: #EFF6FF;
+  text-decoration: none;
+  color: #0073E6;
+}
 
 
 

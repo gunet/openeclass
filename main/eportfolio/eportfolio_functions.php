@@ -59,11 +59,11 @@ function render_eportfolio_fields_content($uid) {
     
             $cat_return_string['panels'] .= '
             <div class="col-lg-6 col-12">
-            <div class="card panelCard px-lg-4 py-lg-3 h-100" id="IndexPortfolio'.$c->id.'">
-                                                <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
+            <div class="card panelCard border-card-left-default px-3 py-2 h-100" id="IndexPortfolio'.$c->id.'">
+                                                <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center px-0">
                                                     <h3>'.$c->name.'</h3>
                                                 </div>
-                                                 <div class="card-body">
+                                                 <div class="card-body px-0 py-0">
                                                      
                                                      <fieldset class="row p-2 fieldset-eportfolio">';
             if ($j == 0) {
@@ -89,8 +89,8 @@ function render_eportfolio_fields_content($uid) {
                     $showCat = true;
                     $showAll = true;
                     $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
-                    $cat_return_string['panels'] .= '<div class="row p-2"><div class="col-12"><span class="tag"><div class="form-label">'.q($f->name).': </div></span></div>';
-                    $cat_return_string['panels'] .= '<div class="col-12"><span>';
+                    $cat_return_string['panels'] .= '<div class="row p-2 profile-pers-info-row"><div class="col-lg-6 col-12 px-0"><span class="tag"><div class="form-label mb-0 mt-1">'.q($f->name).': </div></span></div>';
+                    $cat_return_string['panels'] .= '<div class="col-lg-6 col-12 px-0"><span>';
                     
                     switch ($f->datatype) {
                         case EPF_TEXTBOX:

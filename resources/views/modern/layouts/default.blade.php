@@ -112,11 +112,6 @@
 
     @stack('head_scripts')
 
-    @if(!isset($course_code) && !$course_code)
-        <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/outsideFromCourse.css"/>
-        <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/outsideFromCourse.css?donotcache">
-    @endif
-
 </head>
 
 <body>

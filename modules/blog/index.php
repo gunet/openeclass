@@ -839,8 +839,10 @@ if ($action == "showBlog") {
                 //$comment_content = "<a class='btn submitAdminBtn float-end mt-3' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
                 
 
-                $comment_content = "<a class='commentPress TextBold float-end mt-3 pe-0' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>
-                                        <span class='fa fa-comments'></span>&nbsp;$langComments (".$comm->getCommentsNum().")
+                $comment_content = "<a class='commentPress float-end mt-3 pe-0' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>
+                                            <i class='fa-regular fa-comment-dots'></i>
+                                            &nbsp|&nbsp;
+                                            <span class='vsmall-text text-decoration-underline'>$langComments (".$comm->getCommentsNum().")</span>
                                     </a>";
 
 
