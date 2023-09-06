@@ -66,6 +66,7 @@ $tool_content .= action_bar([
 ], false);
 
 if ($myCourses) {
+    $action_button = '';
     $tool_content .= "
         <div class='table-responsive'>
             <table class='table-default'>
@@ -86,7 +87,9 @@ if ($myCourses) {
         }
         $favorite_button = icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=" . $fav_status. "&amp;from_ext_view=1");
         if ($course->status == USER_STUDENT) {
-            $action_button = icon('fa-minus-circle', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
+            if (get_config('disable_student_unregister_cours') == 0) {
+                $action_button = icon('fa-minus-circle', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid");
+            }
         } elseif ($course->status == USER_TEACHER) {
             $action_button = icon('fa-wrench', $langAdm, "{$urlServer}modules/course_info/?from_home=true&amp;course=" . $course->code);
         }
