@@ -3,11 +3,11 @@
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
             {!! $action_bar !!}
-           
+
             @if(Session::has('message'))
             <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -19,7 +19,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -29,7 +29,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -51,41 +51,41 @@
                             @php $temp_pages++; @endphp
                             <div class="col cardCourse{{ $pagesPag }}">
                                 <div class="card h-100 card{{ $pagesPag }} Borders border-card px-2 py-3">
-                                    @php 
-                                        $courseImage = ''; 
+                                    @php
+                                        $courseImage = '';
                                         if(!empty($course->course_image)){
                                             $courseImage = "{$urlServer}courses/$course->code/image/$course->course_image";
                                         }else{
                                             $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
                                         }
-                                    @endphp 
+                                    @endphp
                                     <div class='card-header border-0 bg-white'>
                                         <div class="card-title d-flex justify-content-start align-items-start gap-2 mb-0">
-                                            @if($course->visible == 1) 
+                                            @if($course->visible == 1)
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langRegCourse')}}">
                                                     <i class="fa-solid fa-square-pen Neutral-600-cl settings-icons"></i>
                                                 </button>
                                             @endif
-                                            @if($course->visible == 2) 
+                                            @if($course->visible == 2)
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langOpenCourse')}}">
                                                     <i class="fa-solid fa-lock-open Neutral-600-cl settings-icons"></i>
                                                 </button>
                                             @endif
-                                            @if($course->visible == 0) 
+                                            @if($course->visible == 0)
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langClosedCourse')}}">
                                                     <i class="fa-solid fa-lock Neutral-600-cl settings-icons"></i>
                                                 </button>
                                             @endif
-                                            @if($course->visible == 3) 
+                                            @if($course->visible == 3)
                                                 <button type="button" class="btn btn-transparent p-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{trans('langInactiveCourse')}}">
                                                     <i class="fa-solid fa-triangle-exclamation Neutral-600-cl settings-icons"></i>
                                                 </button>
-                                            @endif 
+                                            @endif
                                             <a class='@if($course->visible == 3) InvisibleCourse @endif TextBold mt-1' href="{{ $urlServer }}courses/{{ $course->code }}/index.php">{{ q($course->title) }}</a>
                                         </div>
                                     </div>
 
-                                    
+
                                     <div class="card-body pt-0">
                                         <img src="{{ $courseImage }}" class="card-img-top cardImgCourse rounded-0 @if($course->visible == 3) InvisibleCourse @endif" alt="course image">
                                         <div class="card-text mt-3">
@@ -96,24 +96,26 @@
                                             <p class='d-inline form-value @if($course->visible == 3) InvisibleCourse @endif mb-0'>{{ trans('langTeacher') }}:</p>
                                             &nbsp<p class="d-inline form-value @if($course->visible == 3) InvisibleCourse @endif vsmall-text">{{ q($course->professor) }}</p>
                                         </div>
-                                        
+
                                     </div>
                                     <div class='card-footer d-flex justify-content-center align-items-center bg-white border-0 mb-2'>
                                         <!-- check if uid is editor of course or student -->
                                         <!------------------------------------------------->
-                                        @php $is_course_teacher = check_editor($uid,$course->course_id); @endphp 
+                                        @php $is_course_teacher = check_editor($uid,$course->course_id); @endphp
                                         <!------------------------------------------------->
                                         <!------------------------------------------------->
                                         @if($_SESSION['status'] == USER_TEACHER and $is_course_teacher and $course->status == 1)
                                             <a class='btn submitAdminBtn w-100 gap-1' href="{{$urlServer}}modules/course_info/index.php?from_home=true&amp;course={{$course->code}}">
                                                 <i class="fa-solid fa-gear settings-icons"></i>
-                                                {{trans('langAdm') }}
+                                                {{ trans('langAdm') }}
                                             </a>
                                         @else
-                                            <button class='btn deleteAdminBtn w-100 gap-1' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
-                                                <i class="fa-solid fa-circle-xmark settings-icons"></i>
-                                                {{ trans('langUnregCourse') }}
-                                            </button>
+                                            @if (get_config('disable_student_unregister_cours') == 0)
+                                                <button class='btn deleteAdminBtn w-100 gap-1' data-bs-toggle="modal" data-bs-target="#exampleModal{{$course->course_id}}" >
+                                                    <i class="fa-solid fa-circle-xmark settings-icons"></i>
+                                                    {{ trans('langUnregCourse') }}
+                                                </button>
+                                            @endif
                                         @endif
                                     </div>
                                 </div>
@@ -159,7 +161,7 @@
 
                     <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
                     <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
-                    
+
                     <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-white solidPanel mt-4'>
                         <nav aria-label='Page navigation example w-100'>
                             <ul class='pagination mycourses-pagination w-100 mb-0'>
@@ -168,7 +170,7 @@
                                 </li>
                                 @if($pagesPag >=12 )
                                     @for($i=1; $i<=$pagesPag; $i++)
-                                    
+
                                         @if($i>=1 && $i<=5)
                                             @if($i==1)
                                                 <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
@@ -205,7 +207,7 @@
                                             </li>
                                         @endif
                                     @endfor
-                                
+
                                 @else
                                     @for($i=1; $i<=$pagesPag; $i++)
                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
@@ -220,16 +222,15 @@
                             </ul>
                         </nav>
                     </div>
-        
+
 
                 </div>
             @else
                 <div class='col-12'>
                     <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses') }}</span></div>
-                </div> 
+                </div>
             @endif
 
-        
 
 
 
@@ -238,6 +239,7 @@
 
 
 
-    
+
+
 
 
