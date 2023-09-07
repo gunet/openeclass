@@ -23,6 +23,8 @@
 
 require_once 'bbb-api.php';
 
+
+
 /**
  * @brief choose tc server for session
  * @return string
@@ -90,7 +92,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
         $langBBBMaxPartPerRoom, $langBBBHideParticipants,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
-        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText, $langGoToWebexLink;
+        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText, $langGoToWebexLink, $urlServer;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -159,7 +161,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $submit_name = 'update_tc_session';
         $submit_id = "<input type=hidden name = 'id' value=" . getIndirectReference($session_id) . ">";
         $value_message = $langModify;
+        $meeting_id_input = $row->meeting_id;
     } else { // new TC meeting
+        $meeting_id_input = '';
         $status = 1;
         $unlock_interval = '10';
         $r_group = array();
@@ -175,6 +179,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         } else {
             $value_session_users = $c;
         }
+        $data_external_users = '';
         $submit_name = 'new_tc_session';
         $submit_id = '';
         $google_meet_link = $zoom_link = $webex_link = '';
@@ -416,13 +421,68 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         </div>";
 
         $tool_content .= "
+        
         <div class='form-group'>
-            <label for='tags_1' class='col-sm-2 control-label'>$langBBBExternalUsers:</label>
+            <label for='user-list' class='col-sm-2 control-label'>$langBBBExternalUsers:</label>
             <div class='col-sm-10'>
-                <select id='tags_1' class='form-control' name='external_users[]' multiple></select>
-                <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
+                <table id='user-list' class='table'>
+                    <thead>
+                        <tr>
+                            <th  class='col-sm-1'>Επιλογή</th>
+                            <th  class='col-sm-5'>email</th>
+                            <th  class='col-sm-4'>Όνομα</th>
+                            <th  class='col-sm-1'>Σύνδεσμος</th>
+                            <th  class='col-sm-1'>Διαγραφή</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <input id='external_users' name='external_users[]' type='hidden' value=''>
+                <input id='mailinglist' name='mailinglist[]' type='hidden' value=''>
+                <input id='meeting_id_input' name='meeting_id_input' type='hidden' value='$meeting_id_input'>
             </div>
+            
         </div>
+        
+        <div class='form-group'>
+            <div class='col-sm-2'>
+                <label>Εισαγωγή χρήστη:</label>
+            </div>
+            
+            <div class='col-sm-10'>
+                <div class='form-group'>
+                    <div class='col-sm-2'>
+                        <label for='newExtEmail' class='control-label'>Email:</label>
+                    </div>
+                    
+                    <div class='col-sm-4'>
+                        <input class='form-control' type='text' name='newExtEmail' id='newExtEmail' size='10'>
+                    </div>
+                </div>
+                
+                <div class='form-group'>
+                    <div class='col-sm-2'>
+                        <label for='newExtName' class='control-label'>Name:</label>
+                    </div>
+                    <div class='col-sm-4'>
+                        <input class='form-control' type='text' name='newExtName' id='newExtName' size='10'>
+                    </div>
+                </div>
+            
+                <div class='form-group'>
+                    <div class='col-sm-10'>
+                        <div class='btn btn-primary newExtUserAdd'>
+                            Εισαγωγή χρήστη
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+        
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                      <div class='checkbox'>
@@ -542,14 +602,177 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             chkValidator.addValidation('title', 'req', '".js_escape($langBBBAlertTitle)."');
             chkValidator.addValidation('sessionUsers', 'req', '".js_escape($langBBBAlertMaxParticipants)."');
             chkValidator.addValidation('sessionUsers', 'numeric', '".js_escape($langBBBAlertMaxParticipants)."');
+            
+            
+            //set ipnut with id #external_users with user data from sql
+            let usrData = '$data_external_users';
+                       
+            if (usrData.length > 0) {
+                if (!isValidJson(usrData)) {
+                    let emails = usrData.split(',');
+                    usrData = emails.map(email => [email, '']);
+                    usrData = JSON.stringify(usrData)
+                }
+                $('#external_users').val(usrData);
+            }
+            
+            let usrDataArray = [];
+            
+            if (usrData.length > 0) {
+                usrDataArray = JSON.parse(usrData);
+            } 
+            
+            //function delete row and remove from usrDataArray on click
+            function deleteUserRow(spanElement) {
+                let email = spanElement.getAttribute('data-email')
+                usrDataArray = usrDataArray.filter(subarray => subarray[0] !== email);
+                $('#external_users').val(JSON.stringify(usrDataArray));
+                $(spanElement).closest('tr').remove();
+            }
+            
+            //function check if mail is valid
+            function isValidEmail(email) {
+                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+                return emailPattern.test(email);
+            }
+                
+            //function check if string is json valid
+            function isValidJson(str) {
+              try {
+                JSON.parse(str);
+                return true;
+              } catch (error) {
+                return false;
+              }
+            }
+            
+            //function for creating url and copy to clipboard
+            function copyLinkToClipboard(element) {
+                let meeting_id = $('#meeting_id_input').val();
+                
+                if (meeting_id.length > 0) {
+                    let usermailElement = $(element).closest('tr').find('.usermail');
+                    let email = usermailElement.text();
+                    let urlServer = '$urlServer';
+                    let course_code = '$course_code';
+                    let copyUrl = urlServer +'modules/tc/ext.php?course='+course_code+'&meeting_id='+meeting_id+ '&username='+email;
+
+                    var tempInput = $('<input>');
+                    $('body').append(tempInput);
+                    tempInput.val(copyUrl).select();
+                    document.execCommand('copy');
+                    tempInput.remove();
+                    alert('URL copied to clipboard')
+                } else {
+                    alert('Save first');
+                }
+
+            } 
+            
+            //function for adding/removing to mail list
+            function mailList(checkbox) {
+
+              let email = $(checkbox).closest('tr').find('.usermail').text().trim();
+              let mailingListInput = $('#mailinglist');
+              
+              let currentEmails = mailingListInput.val().split(',');
+              let index = currentEmails.indexOf(email);
+            
+              if (checkbox.checked) {
+                // Add email
+                if (index === -1) {
+                  currentEmails.push(email);
+                }
+              } else {
+                // Remove email
+                if (index !== -1) {
+                  currentEmails.splice(index, 1);
+                }
+              }
+            
+              mailingListInput.val(currentEmails.filter(email => email !== '').join(','));
+            }
+            
             $(function () {
-                $('#tags_1').select2({
-                    $init_external_users
-                    tags: true,
-                    tokenSeparators: [',', ' '],
-                    width: '100%',
-                    selectOnClose: true});
+           
+                $('#newExtEmail, #newExtName').on('keypress', function(event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        $('.newExtUserAdd').click();
+                    }
                 });
+
+                let userData = [];
+                
+                $('.newExtUserAdd').click(function() {
+                     
+                    let userEmail = $('#newExtEmail').val();
+                    let userName = $('#newExtName').val();
+                                        
+                    if (userEmail !== '') {
+                        let emailExists = false;
+                        $('#user-list tbody tr').each(function() {
+                            let existingEmail = $(this).find('.usermail').text();
+                            if (existingEmail === userEmail) {
+                              emailExists = true;
+                              return false;
+                            }
+                        });
+                        
+                        if (emailExists) {
+                            alert('Email already exists.');
+                        } else {
+                            if (isValidEmail(userEmail)) {
+                              
+                                //push new mail and name to usrDataArray, then change #external_users
+                                usrDataArray.push([userEmail, userName])
+                                $('#external_users').val(JSON.stringify(usrDataArray));
+                               
+                                let lastRow = $('#user-list tbody tr:last-child');
+                                let lastRowId = lastRow.data('id');
+                                let newId = lastRowId + 1;
+                                
+                                let newRow = $('<tr data-id=\"'+newId+'\">');
+                                
+                                let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + newId + '\">');
+                                let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">' + userEmail + '</strong>');
+                                let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">' + userName + '</strong>');
+                                let copyCell = $('<td class=\"col-sm-4\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$course_code\"></i>');
+                                let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+userEmail+'\" class=\"fa fa-times\"></i></span>');
+                                
+                                newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
+                                $('#user-list tbody').append(newRow);
+                                $('#newExtEmail').val('');
+                                $('#newExtName').val('');
+                                
+                            } else {
+                              alert('email \"' + userEmail + '\" is not valid');
+                            }
+                        }
+                    } else {
+                        alert('Email is required');
+                    }
+                });
+                
+                
+                if (usrData.length > 0) {
+                    if (isValidJson(usrData)) {
+                        usrDataArray.forEach((element, index) => {
+                            let newRow = $('<tr data-id=\"'+index+'\">');
+                            let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + index + '\">');
+                            let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">'+element[0]+'</strong>');
+                            let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">'+element[1]+'</strong>');
+                            let copyCell = $('<td class=\"col-sm-1\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$urlServer\"></i>'); 
+                            let deleteCell = $('<td class=\"col-sm-1\">').html('<span><i onclick=\"deleteUserRow(this)\" data-email=\"'+element[0]+'\" class=\"fa fa-times\"></i></span>');
+                    
+                            newRow.append(checkboxCell, emailCell, nameCell, copyCell, deleteCell);
+                            $('#user-list').append(newRow);
+                        });
+                    } 
+                }
+                                
+            });
+            
         //]]></script>";
 }
 
@@ -566,14 +789,16 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
  * @param type $addAnnouncement
  * @param type $minutes_before
  * @param type $external_users
+ * @param type $mailinglist
  * @param type $record
  * @param type $sessionUsers
  * @param type $options
  * @param type $update // true == add, false == update
  * @param type $session
  */
-function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $record, $sessionUsers, $options, $update, $session_id = '')
+function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndDate, $status, $notifyUsers, $notifyExternalUsers, $addAnnouncement, $minutes_before, $external_users, $mailinglist, $record, $sessionUsers, $options, $update, $session_id = '')
 {
+//    die($mailinglist);
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
         $langDescription, $course_code, $course_id, $urlServer;
@@ -593,6 +818,8 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
         $r_group = '0';
     }
     if (isset($update) and $update) { // update existing BBB session
+//        die('die update');
+//        die($external_users);
         Database::get()->querySingle("UPDATE tc_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
                                         participants=?s, record=?s, sessionUsers=?d, options=?s WHERE id=?d",
@@ -822,8 +1049,9 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
     // Notify external users for new tc session
     if ($notifyExternalUsers == "1") {
-        if (isset($external_users)) {
-            $recipients = explode(',', $external_users);
+//        die($mailinglist);
+        if (isset($mailinglist)) {
+            $recipients = explode(',', $mailinglist);
             $emailsubject = $langBBBScheduledSession;
             $emailheader = "
                     <div id='mail-header'>

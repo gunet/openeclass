@@ -271,6 +271,11 @@ elseif(isset($_POST['update_tc_session'])) { // update existing BBB session
     } else {
         $ext_users = null;
     }
+    if (isset($_POST['mailinglist']) && is_array($_POST['mailinglist'])) {
+        $mailinglist = implode(',', $_POST['mailinglist']);
+    } else {
+        $mailinglist = null;
+    }
 
     $options_arr = array();
     if (isset($_POST['muteOnStart']) and $_POST['muteOnStart']) {
@@ -313,7 +318,7 @@ elseif(isset($_POST['update_tc_session'])) { // update existing BBB session
     }
 
     // update existing BBB session
-    add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
+    add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $ext_users, $mailinglist, $record, $sessionUsers, $options, true, getDirectReference($_POST['id']));
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect("index.php?course=$course_code");
 }
@@ -428,6 +433,11 @@ elseif(isset($_GET['choice']))
     } else {
         $external_users = NULL;
     }
+    if (isset($_POST['mailinglist']) && is_array($_POST['mailinglist'])) {
+        $mailinglist = implode(',', $_POST['mailinglist']);
+    } else {
+        $mailinglist = null;
+    }
 
     $options_arr = array();
     if (isset($_POST['muteOnStart']) and $_POST['muteOnStart']) {
@@ -478,7 +488,7 @@ elseif(isset($_GET['choice']))
     }
 
     // new TC session
-    add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $record, $sessionUsers, $options, false);
+    add_update_tc_session($tc_type, $_POST['title'], $_POST['desc'], $start, $end, $_POST['status'], $notifyUsers, $notifyExternalUsers, $addAnnouncement, $_POST['minutes_before'], $external_users, $mailinglist, $record, $sessionUsers, $options, false);
 
     Session::Messages($langBBBAddSuccessful, 'alert-success');
     redirect_to_home_page("modules/tc/index.php?course=$course_code");
