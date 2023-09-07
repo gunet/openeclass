@@ -91,6 +91,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
         $langBBBMaxPartPerRoom, $langBBBHideParticipants,
+        $langInsertUserInfo, $langSurnameName, $langProfEmail, $langSelect, $langLink, $langDelete,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText, $langGoToWebexLink, $urlServer;
 
@@ -428,11 +429,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 <table id='user-list' class='table'>
                     <thead>
                         <tr>
-                            <th  class='col-sm-1'>Επιλογή</th>
-                            <th  class='col-sm-5'>email</th>
-                            <th  class='col-sm-4'>Όνομα</th>
-                            <th  class='col-sm-1'>Σύνδεσμος</th>
-                            <th  class='col-sm-1'>Διαγραφή</th>
+                            <th  class='col-sm-1'>$langSelect</th>
+                            <th  class='col-sm-5'>$langProfEmail</th>
+                            <th  class='col-sm-4'>$langSurnameName</th>
+                            <th  class='col-sm-1'>$langLink</th>
+                            <th  class='col-sm-1'>$langDelete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -447,14 +448,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         </div>
         
         <div class='form-group'>
-            <div class='col-sm-2'>
-                <label>Εισαγωγή χρήστη:</label>
-            </div>
+            <div class='col-sm-2'></div>
             
             <div class='col-sm-10'>
                 <div class='form-group'>
                     <div class='col-sm-2'>
-                        <label for='newExtEmail' class='control-label'>Email:</label>
+                        <label for='newExtEmail' class='control-label'>$langProfEmail:</label>
                     </div>
                     
                     <div class='col-sm-4'>
@@ -464,7 +463,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 
                 <div class='form-group'>
                     <div class='col-sm-2'>
-                        <label for='newExtName' class='control-label'>Name:</label>
+                        <label for='newExtName' class='control-label'>$langSurnameName:</label>
                     </div>
                     <div class='col-sm-4'>
                         <input class='form-control' type='text' name='newExtName' id='newExtName' size='10'>
@@ -474,7 +473,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                 <div class='form-group'>
                     <div class='col-sm-10'>
                         <div class='btn btn-primary newExtUserAdd'>
-                            Εισαγωγή χρήστη
+                            $langInsertUserInfo
                         </div>
                     </div>
                 </div>
