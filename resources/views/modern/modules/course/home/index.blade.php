@@ -190,9 +190,10 @@
 
                 </div>
 
-                <div class='row g-lg-5 mt-4'>
+                <div class='d-xl-flex gap-4 mt-4'>
 
-                    <div class='col-xl-7 col-12 mt-0'>
+                    {{--<div class='col-xl-7 col-12 mt-0'>--}}
+                    <div class='flex-grow-1'>
                         <div class='card panelCard border-0'>
                             <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
 
@@ -522,8 +523,9 @@
                     </div>
 
 
-                    <div class='col-xl-5 col-12 mt-xl-0 mt-5'>
-                        <div class="panel panel-admin panel-admin-calendar p-0 border-0">
+                    {{--<div class='col-xl-5 col-12 mt-xl-0 mt-5 sticky-column-course-home'>--}}
+                    <div>
+                        <div class="panel panel-admin panel-admin-calendar p-0 border-0 sticky-column-course-home">
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
                                 <div class='d-flex align-items-center px-2 py-1'>
@@ -545,12 +547,10 @@
                             </div>
                         </div>
 
-                        <div class="card panelCard border-0 mt-5">
+                        <div class="card panelCard border-0 mt-5 sticky-column-course-home">
                             <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                 <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
-                                <div class='text-end'>
-                                    <a class='TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
-                                </div>
+                                <a class='Course-home-ellipsis-announcements TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
                             </div>
                             <div class='card-body px-0 py-0'>
                                 <ul class='list-group list-group-flush mt-3'>
@@ -562,15 +562,15 @@
 
                         @if ($uid)
                             @if(isset($course_completion_id) and $course_completion_id > 0)
-                                <div class="card panelCard border-0 mt-5">
+                                <div class="card panelCard border-0 mt-5 sticky-column-course-home">
                                     <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                         <h3 class='mb-0'>{{ trans('langCourseCompletion') }}</h3>
                                         @if ($is_editor)
-                                            <a class='TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
+                                            <a class='Course-home-ellipsis TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
                                                 {{ $certified_users}}/{{ $studentUsers }} {{ trans('langUsersS') }}...
                                             </a>
                                         @else
-                                            <a class='TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&u={{ $uid }}'>
+                                            <a class='Course-home-ellipsis TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&u={{ $uid }}'>
                                                 {{ trans('langDetail') }}...
                                             </a>
                                         @endif
@@ -612,7 +612,7 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='card panelCard border-0 mt-5'>
+                            <div class='card panelCard border-0 mt-5 sticky-column-course-home'>
                                 <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langOpenCourseShort') }}</h3>
                                 </div>
@@ -626,7 +626,7 @@
                         @endif
 
                         @if($course_home_main_area_widgets)
-                            <div class='card panelCard border-0 mt-5'>
+                            <div class='card panelCard border-0 mt-5 sticky-column-course-home'>
                                 <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langWidgets') }}</h3>
                                 </div>

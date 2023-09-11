@@ -2339,10 +2339,48 @@ body .form-action-button-popover{
   border-bottom-right-radius: 0px;
 }
 
+@media(max-width:767px){
+  .sticky-column-course-home{
+    width: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media(min-width:768px) and (max-width:1199px){
+  .sticky-column-course-home{
+    width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+@media(min-width:1200px) and (max-width:1399px){
+  .sticky-column-course-home{
+    width: 280px;
+  }
+
+  .Course-home-ellipsis-announcements{
+    width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .Course-home-ellipsis{
+    width: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media(min-width:1400px){
+  .sticky-column-course-home{
+    width: 320px;
+  }
+}
+
 .panel-admin-calendar{
   border-radius:4px;
   border: solid 1px #E8EDF8;
-  max-width: 296px;
+  max-width: auto;
   margin-left: auto;
   margin-right: auto;
 }
@@ -3821,6 +3859,13 @@ body .delThemeBtn{
   }
 }
 
+@media(max-width:991px){
+  .user-info-card{
+    max-width:320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 @media(min-width:992px) and (max-width:1199px){
   .user-info-card{
     padding:30px;
@@ -3851,7 +3896,7 @@ body .delThemeBtn{
 }
 
 .portfolio-tools{
-  display: none;
+  display: block;
 }
 .row-course:hover .portfolio-tools{
   display: block;
