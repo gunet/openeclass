@@ -29,17 +29,17 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
+$require_login = true;
 $require_help = true;
 $helpTopic = 'course_stats';
 $helpSubTopic = 'users_participation';
-$require_login = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
 
 if (isset($_GET['u'])) { //  stats per user
-    if ($_SESSION['uid'] != $_GET['u'] and !$is_editor) { // security check
+    if ($_SESSION['uid'] != $_GET['u'] and !$is_course_reviewer) { // security check
         Session::Messages($langCheckCourseAdmin, 'alert-danger');
         redirect_to_home_page("courses/$course_code/");
     }
@@ -109,14 +109,14 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
 
     } else { // html + pdf output
-        if ($is_editor) {
+        if ($is_course_reviewer) {
             $back_url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
         } else {
             $back_url = "{$urlAppend}courses/$course_code/";
         }
         if (!isset($_GET['format'])) {
             $toolName = "$langParticipate $langOfUser";
-            if ($is_editor) {
+            if ($is_course_reviewer) {
                 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
                 $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
             }
@@ -190,7 +190,7 @@ if (isset($_GET['u'])) { //  stats per user
     } else {
         draw($tool_content, 2);
     }
-} else if ($is_editor and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
+} else if ($is_course_reviewer and isset($_GET['m']) and $_GET['m'] != -1) { // stats per module
     $module = $_GET['m'];
     $user_actions = Database::get()->queryArray("SELECT
                             SUM(actions_daily.duration) AS duration, user_id,
@@ -291,7 +291,7 @@ if (isset($_GET['u'])) { //  stats per user
             draw($tool_content, 2);
         }
     }
-} else if ($is_editor) {
+} else if ($is_course_reviewer) {
     if (isset($_GET['format']) and $_GET['format'] == 'xls') {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();

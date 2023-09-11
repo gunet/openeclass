@@ -60,7 +60,7 @@ if (!$pid) {
 $query = "SELECT pid FROM poll WHERE course_id = ?d AND pid = ?d";
 $query_params[] = $course_id;
 $query_params[] = $pid;
-if (!$is_editor) {
+if (!$is_course_reviewer) {
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));

@@ -47,13 +47,13 @@ if (isset($_GET['id'])) {
                 'icon' => 'fa-file-archive-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
-                'show' => $is_editor),
+                'show' => $is_course_reviewer),
             array('title' => $langDumpPDF,
                 'url' => "tcuserduration.php?course=$course_code&amp;id=$_GET[id]&amp;pdf=true",
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
-                'show' => $is_editor),
+                'show' => $is_course_reviewer),
             array('title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
@@ -78,7 +78,7 @@ if (isset($_GET['id'])) {
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success',
-                'show' => $is_editor),
+                'show' => $is_course_reviewer),
             array('title' => $langBack,
                 'url' => "$back_url",
                 'icon' => 'fa-reply',
@@ -88,11 +88,11 @@ if (isset($_GET['id'])) {
 }
 
 if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation in meetings
-    if (!$is_editor and isset($_GET['per_user'])) { // security check
+    if (!$is_course_reviewer and isset($_GET['per_user'])) { // security check
         redirect_to_home_page();
     }
     if (isset($_GET['u']) and $_GET['u']) { // participation for specific user
-        if (!$is_editor and $_GET['u'] != $_SESSION['uid']) { // security check
+        if (!$is_course_reviewer and $_GET['u'] != $_SESSION['uid']) { // security check
             redirect_to_home_page();
         }
         $u = $_GET['u'];
@@ -226,7 +226,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
 
 
 // pdf output
-if (isset($_GET['pdf']) and $is_editor) {
+if (isset($_GET['pdf']) and $is_course_reviewer) {
     $pdf_content = "
         <!DOCTYPE html>
         <html lang='el'>

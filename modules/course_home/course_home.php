@@ -757,7 +757,7 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                                 }
                             }
                             // course statistics
-                            if ($is_editor) {
+                            if ($is_course_reviewer) {
                                 $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/index.php?course=$course_code'>
                                 <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langUsage'></span></a>";
                             } else {
