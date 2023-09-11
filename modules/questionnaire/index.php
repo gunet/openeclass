@@ -145,7 +145,7 @@ if ($is_editor) {
         if(!$p){
             redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
         }
-        // activate / dectivate polls
+        // activate / deactivate polls
         if (isset($_GET['visibility'])) {
             switch ($_GET['visibility']) {
                 case 'activate':
@@ -319,7 +319,7 @@ draw($tool_content, 2, null, $head_content);
 function printPolls() {
     global $tool_content, $course_id, $course_code, $urlAppend,
         $langTitle, $langCancel, $langOpenParticipation,
-        $langFrom, $langTill, $langPollNone, $is_editor, $langAnswers,
+        $langFrom, $langTill, $langPollNone, $is_editor, $is_course_reviewer, $langAnswers,
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
@@ -332,7 +332,7 @@ function printPolls() {
     $query = "SELECT * FROM poll WHERE course_id = ?d";
     $query_params[] = $course_id;
     // Bring only those assigned to the student
-    if (!$is_editor) {
+    if (!$is_course_reviewer) {
         $gids = user_group_info($uid, $course_id);
         if (!empty($gids)) {
             $gids_sql_ready = implode(',',array_keys($gids));
@@ -364,7 +364,7 @@ function printPolls() {
                 <tr class='list-header'>
                     <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
                     <th>$langDate</th>";
-        if ($is_editor) {
+        if ($is_course_reviewer) {
             $tool_content .= "<th width='16'>$langAnswers</th>";
         } else {
             $tool_content .= "<th>$langParticipate</th>";
@@ -383,7 +383,7 @@ function printPolls() {
                     $visibility_css = "";
                     $visibility_func = "deactivate";
                 } else {
-                    $visibility_css = " class=\"not_visible\"";
+                    $visibility_css = " class='not_visible'";
                     $visibility_func = "activate";
                 }
                 $tool_content .= "<tr $visibility_css>";
@@ -491,6 +491,15 @@ function printPolls() {
                           'confirm' => $langConfirmDelete ],
                     ]) . "
                     </td></tr>";
+                } else if ($is_course_reviewer) {
+                    $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
+                    $tool_content .= "<td class='text-center'>$total_participants";
+                    $tool_content .= "</td>";
+                    $tool_content .= "<td class='text-center option-btn-cell'>
+                                    <div style='padding-top:7px;padding-bottom:7px;'>
+                                        <a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>
+                                    </div>
+                                </td></tr>";
                 } else {
                     $tool_content .= "<td>";
                     if ($poll_not_started == 1) {

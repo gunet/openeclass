@@ -26,7 +26,7 @@
 
 if (!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c') { // course statistics
     $require_current_course = true;
-    $require_editor = true;
+    $require_course_reviewer = true;
     $helpTopic = 'course_stats';
     $stats_type = 'course';
 } elseif(isset($_REQUEST['t'])) { // admin statistics
@@ -158,7 +158,7 @@ if (isset($_GET['per_course_dur'])) {
     $tool_content .= user_duration_per_course($uid_stats);
     $tool_content .= user_last_logins($uid_stats);
 } else {
-    if ($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)) { // course statistics
+    if ($stats_type == 'course' && isset($course_id) && ($is_course_reviewer || $is_admin)) { // course statistics
         if (isset($_REQUEST['gc_stats'])) {
             require_once 'modules/usage/general_course_stats.php';
         } else {

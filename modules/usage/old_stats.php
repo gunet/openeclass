@@ -25,7 +25,7 @@
  * @brief Show old statistics for the course, taken from table "action_summary" of the course's database.
  */
 $require_current_course = true;
-$require_editor = true;
+$require_course_reviewer = true;
 $require_help = true;
 $helpTopic = 'course_stats';
 $helpSubTopic = 'old_statistics';
@@ -111,7 +111,7 @@ function xAxisTicksAdjust()
         dayMilliseconds = 24*60*60*1000;
         diffInDays = (edate-sdate)/dayMilliseconds;
         xTicks = new Array();
-	var tick = new Date(xmin);
+	    var tick = new Date(xmin);
         cur = xmin.getMonth();
         if(interval == 1){
             xMinVal = xmin.getFullYear()+'-'+(xmin.getMonth()+1)+'-'+tick.getDate();

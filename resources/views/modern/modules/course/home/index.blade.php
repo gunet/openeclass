@@ -165,7 +165,7 @@
                     @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
                             <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                @php 
+                                @php
                                     $alert_type = '';
                                     if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                         $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -177,7 +177,7 @@
                                         $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                     }
                                 @endphp
-                                
+
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                     {!! $alert_type !!}<span>
@@ -187,7 +187,7 @@
                                 @else
                                     {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                 @endif
-                                
+
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
@@ -255,7 +255,7 @@
                                                         </li>
                                                     @endif
                                                 @endif
-                                                @if ($is_editor)
+                                                @if ($is_course_reviewer)
                                                     <li>
                                                         <a href = "{{ $urlAppend  }}modules/usage/index.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
                                                             <i class="fa-solid fa-chart-line settings-icons"></i>
@@ -358,13 +358,13 @@
                                                     <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                         <i class='fa-solid fa-chevron-down settings-icon'></i>
                                                         {{ trans('langCourseDescription') }}
-                                                        
+
                                                     </a>
                                                     @if($is_editor)
                                                         {!! $edit_course_desc_link !!}
                                                     @endif
                                                 </div>
-                                            
+
                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
                                                     @if(count($course_descriptions) == 0)
                                                         <div class='col-12 mb-4'>
@@ -385,7 +385,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
 
                         @if($course_info->view_type == 'units')
                             <div class='card panelCard px-0 py-0 mt-4 border-0 mb-5'>
@@ -436,7 +436,7 @@
                                                             {{ trans('langShowUnitRow') }}
                                                         </a>
                                                     </li>
-                                                @endif 
+                                                @endif
                                             </ul>
                                         </div>
                                     @endif
@@ -481,7 +481,7 @@
                                                             <a class='accordion-btn d-flex justify-content-start align-items-start' role='button' data-bs-toggle='collapse' href='#item-{{ $item->id }}' aria-expanded='false' aria-controls='#{{ $faq->id }}'>
                                                                 <span class='fa-solid fa-chevron-down'></span>
                                                                 {!! q(getSerializedMessage($item->heading)) !!}
-                                                                
+
                                                             </a>
 
                                                             <div id='item-{{ $item->id }}' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
@@ -595,7 +595,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                        
+
                                                 @else
                                                     <div class='card statistics-card border-default-card drop-shadow'>
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
@@ -659,7 +659,7 @@
                 <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
                     <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
                 </button>
-                
+
             </div>
             <div class='modal-body'>
                 {{ $course_info->prof_names }}&nbsp;

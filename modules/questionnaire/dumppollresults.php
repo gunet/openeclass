@@ -22,7 +22,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
-$require_editor = true;
+$require_course_reviewer = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/questionnaire/functions.php';
 

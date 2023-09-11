@@ -36,7 +36,7 @@ if (isset($_REQUEST['t'])) {
         case 'crd':
         case 'cad':
             $require_current_course = true;
-            $require_editor = true;
+            $require_course_reviewer = true;
         break;
         case 'du':
         case 'dc':

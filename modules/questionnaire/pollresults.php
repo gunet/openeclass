@@ -113,7 +113,8 @@ if (!$thePoll) {
 }
 $PollType = $thePoll->type;
 $default_answer = $thePoll->default_answer;
-if (!$is_editor && !$thePoll->show_results) {
+
+if (!$is_course_reviewer && !$thePoll->show_results) {
     Session::flash('message',$langPollResultsAccess);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);
@@ -141,13 +142,12 @@ $tool_content .= action_bar(array(
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
-                          'show' => $is_editor),
+                          'show' => $is_course_reviewer),
                     array('title' => $langPollFullResults,
                           'url' => "dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1",
                           'icon' => 'fa-download',
                           'level' => 'primary-label',
-                          'show' => $is_editor)
-                    
+                          'show' => $is_course_reviewer)
                 ));
 $tool_content .= "<div class='col-12'>
 <div class='card panelCard px-lg-4 py-lg-3'>
