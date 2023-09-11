@@ -21,6 +21,7 @@
 
 $require_current_course = FALSE;
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'indexer.class.php';
 require_once 'courseindexer.class.php';
 $pageName = $langSearch;
@@ -143,10 +144,13 @@ foreach ($courses as $course) {
         $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
     }
 
-    // closed courses url displays contact form for logged in users
+    // closed courses url displays contact form for logged-in users
     if ($course->visible == COURSE_CLOSED && $uid > 1 && !in_array($course->id, $subscribed)) {
         $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
-        $courseUrl .= "<br/><small><em><a href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
+        $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course->id);
+        if (!$disable_course_user_requests) {
+            $courseUrl .= "<br/><small><em><a href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
+        }
         $skipincourse = true;
     }
 
@@ -156,7 +160,7 @@ foreach ($courses as $course) {
         $skipincourse = true;
     }
 
-    // logged in users have extended search options
+    // logged-in users have extended search options
     if (!$anonymous && !$skipincourse && isset($_POST['search_terms'])) {
         $courseUrl .= "<br/><small><em><a href='$courseHref?from_search=" . urlencode($_POST['search_terms']) . "'>$langSearchInCourse</a></em></small>";
     }
