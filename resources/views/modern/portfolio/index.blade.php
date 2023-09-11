@@ -77,8 +77,8 @@
     <div class='{{ $container }}'>
         <div class='row m-auto'>
             <div class='col-12'>
-                <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
-                    <div class='col-lg-8 col-12'>
+                <div class='d-xl-flex gap-5'>
+                    <div class='flex-grow-1'>
                         <div class='card border-0'>
                             <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-white border-0'>
                                 @php $totalCourses = $student_courses_count + $teacher_courses_count; @endphp
@@ -132,7 +132,7 @@
                                     {!! $perso_tool_content['lessons_content'] !!}
                                 </div>
 
-                                <div id="cources-pics" class="col-12">
+                                <div id="cources-pics">
 
                                     <div class="d-flex justify-content-end flex-wrap mb-4">
                                         <a class="btn showCoursesBars">
@@ -273,15 +273,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class='col-lg-4 col-12'>
+                    <div>
 
                         <div class='col-12 mb-4 mt-1'><h3>{{ trans('langAgenda') }}</h3></div>
                         @include('portfolio.portfolio-calendar')
 
-                        <div class='card bg-transparent border-0 mt-5'>
+                        <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                 <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
-                                <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
+                                <a class='Course-home-ellipsis-announcements text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
                                     {{ trans('langAllAnnouncements') }}
                                 </a>
                             </div>
@@ -294,7 +294,7 @@
                             </div>
                         </div>
 
-                        <div class='card bg-transparent border-0 mt-5'>
+                        <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                             
                                 <h3 class='mb-0'>{{ trans('langMessages') }}</h3>
@@ -313,7 +313,7 @@
                         </div>
 
                         @if($portfolio_page_sidebar_widgets)
-                            <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none'>
+                            <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none sticky-column-course-home'>
                                 <div class='card-header bg-white border-0 text-start'>
                                 
                                         <h3>{{ trans('langMyWidgets') }}</h3>

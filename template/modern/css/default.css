@@ -2353,6 +2353,14 @@ body .form-action-button-popover{
     margin-right: auto;
   }
 }
+@media(min-width:992px) and (max-width:1199px){
+  .Course-home-ellipsis-announcements{
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
 @media(min-width:1200px) and (max-width:1399px){
   .sticky-column-course-home{
     width: 280px;

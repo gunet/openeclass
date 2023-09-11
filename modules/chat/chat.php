@@ -164,7 +164,7 @@ if (!$conference_activity) {
               <input class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
               <input type='hidden' name='chatLine'>
               <span class='input-group-text h-40px bg-white border-0 px-0'>
-                <input class='btn submitAdminBtn' type='submit' value='$langSend'>
+                <input style='z-index:0;' class='btn submitAdminBtn' type='submit' value='$langSend'>
               </span>
             </div>
             <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>

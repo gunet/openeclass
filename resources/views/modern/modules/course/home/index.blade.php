@@ -190,7 +190,7 @@
 
                 </div>
 
-                <div class='d-xl-flex gap-4 mt-4'>
+                <div class='d-xl-flex gap-5 mt-4'>
 
                     {{--<div class='col-xl-7 col-12 mt-0'>--}}
                     <div class='flex-grow-1'>

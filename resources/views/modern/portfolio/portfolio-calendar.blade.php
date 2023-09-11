@@ -6,7 +6,7 @@
 ?>
 
 
-<div class='panel panel-admin panel-admin-calendar border-0 mt-lg-0 mt-2'>
+<div class='panel panel-admin panel-admin-calendar border-0 mt-lg-0 mt-2 sticky-column-course-home'>
    
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>
