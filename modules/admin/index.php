@@ -39,6 +39,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "{$urlServer}main/portfolio.php",
         'icon' => 'fa-reply',
+        'button-class' => 'submitAdminBtn d-none',
         'level' => 'primary')),false);
 
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();

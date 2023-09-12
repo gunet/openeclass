@@ -6,14 +6,8 @@
     <div class='{{ $container }}'>
         <div class="row m-auto">
 
-                    
-                        @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
-                    
-
-                    
-                    <div class='col-12 mt-3 mb-3'>
-                        <div class='text-md-start text-center ms-md-2 text-secondary'>{{trans('langEclass')}} - {{trans('langInfo')}}</div>
+                    <div class='col-12'>
+                        <h1>{{ trans('langPlatformIdentity') }}</h1>
                     </div>
 
                     

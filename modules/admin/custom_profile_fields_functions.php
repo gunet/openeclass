@@ -338,7 +338,7 @@ function render_profile_fields_content($context) {
 
                                 foreach ($result as $cat) {
                     $return_str .= "<div class='col'>
-                                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>";
+                                        <div class='card panelCard border-card-left-default px-3 py-2 h-100'>";
                                             $args = array();
 
                                             $ref_user_type = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $context['user_id'])->status;
@@ -395,28 +395,28 @@ function render_profile_fields_content($context) {
                                                                                             ";
 
                                                                                                 if (!$fdata_res || $fdata_res->data == '') {
-                                                                                                    $return_str .= " <p class='tag-value not_visible card-text'> $langProfileNotAvailable </p>";
+                                                                                                    $return_str .= " <p class='tag-value not_visible form-value'> $langProfileNotAvailable </p>";
                                                                                                 } else {
                                                                                                     $return_str .= "";
                                                                                                     switch ($f->datatype) {
                                                                                                         case CPF_TEXTBOX:
-                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".q($fdata_res->data)."</p>";
+                                                                                                            $return_str .= "<p class='tag-value form-value'>".q($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_TEXTAREA:
-                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".standard_text_escape($fdata_res->data)."</p>";
+                                                                                                            $return_str .= "<p class='tag-value form-value'>".standard_text_escape($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_DATE:
-                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".q($fdata_res->data)."</p>";
+                                                                                                            $return_str .= "<p class='tag-value form-value'>".q($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_MENU:
                                                                                                             $options = unserialize($f->data);
                                                                                                             $options = array_combine(range(1, count($options)), array_values($options));
                                                                                                             $options[0] = "";
                                                                                                             ksort($options);
-                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'>".q($options[$fdata_res->data])."</p>";
+                                                                                                            $return_str .= "<p class='tag-value form-value'>".q($options[$fdata_res->data])."</p>";
                                                                                                             break;
                                                                                                         case CPF_LINK:
-                                                                                                            $return_str .= "<p class='tag-value card-text mb-0'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></p>";
+                                                                                                            $return_str .= "<p class='tag-value form-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></p>";
                                                                                                             break;
                                                                                                     }
                                                                                                 }

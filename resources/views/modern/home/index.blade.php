@@ -2,8 +2,6 @@
 
 @section('content')
 
-<link href="{{ $urlAppend }}template/modern/css/homepage.css" rel="stylesheet" type="text/css">
-
 <div class="col-12 main-section">
 
         @if($warning)

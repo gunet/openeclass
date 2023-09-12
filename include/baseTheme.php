@@ -259,7 +259,7 @@ function view($view_file, $view_data = array()) {
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
     
-    $container = 'container';
+    $container = 'container-fluid';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 
     $logo_img = $themeimg.'/eclass-new-logo.svg';

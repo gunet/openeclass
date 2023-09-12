@@ -769,8 +769,8 @@ function lessonToolsMenu($rich=true) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        array_push($sideMenuText, '<b class="pe-2">' . q($modules[$mid]['title']) .
-                            " $mail_status<span class='badge rounded-pill bgLightBlue text-white TextExtraBold float-end d-flex justify-content-center align-items-center' style='height:25px width:25px; font-size:12px;'>$new_msgs</span></b>");
+                        array_push($sideMenuText, '<b class=>' . q($modules[$mid]['title']) .
+                            " $mail_status<span class='badge Primary-500-bg rounded-circle text-white float-end mt-1 d-flex justify-content-center align-items-center'>$new_msgs</span></b>");
                     } else {
                         array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                     }
@@ -779,7 +779,7 @@ function lessonToolsMenu($rich=true) {
                 }
             } elseif ($rich and $mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
                 array_push($sideMenuText, '<b class=>' . q($modules[$mid]['title']) .
-                    "<button class='badge rounded-pill bgLightBlue ms-2 mt-1 text-white TextExtraBold float-end border-0 d-flex justify-content-center align-items-center' style='height:25px width:25px; font-size:12px;'>$new_docs</button></b>");
+                    "<span class='badge Primary-500-bg rounded-circle text-white float-end mt-1 d-flex justify-content-center align-items-center'>$new_docs</span></b>");
             } else {
                 array_push($sideMenuText, q($modules[$mid]['title']));
             }

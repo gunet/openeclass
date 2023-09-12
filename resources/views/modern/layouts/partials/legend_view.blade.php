@@ -58,12 +58,12 @@
                                 @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                                     @php $getToken = generate_csrf_token_link_parameter(); @endphp
                                     @if($module_id == MODULE_ID_ANNOUNCE)
-                                        <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                        <a class="ms-2 mt-1" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                             <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                             data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
                                         </a>
                                     @else
-                                        <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                        <a class="ms-2 mt-1" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                             <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                             data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
                                         </a>
@@ -107,12 +107,12 @@
                                 @if($toolName == trans('langAnnouncements') or $toolName == trans('langBlog'))
                                     @php $getToken = generate_csrf_token_link_parameter(); @endphp
                                     @if($toolName == trans('langAnnouncements'))
-                                        <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                        <a class="ms-2 mt-1" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                             <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                             data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
                                         </a>
                                     @else
-                                        <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                        <a class="ms-2 mt-1" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                             <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                             data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
                                         </a>
@@ -204,12 +204,12 @@
                                                 @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                                                     @php $getToken = generate_csrf_token_link_parameter(); @endphp
                                                     @if($module_id == MODULE_ID_ANNOUNCE)
-                                                            <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                            <a class="ms-2 mt-1" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                                                 <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                                                 data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
                                                             </a>
                                                     @else
-                                                            <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                            <a class="ms-2 mt-1" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                                                 <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                                                 data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
                                                             </a>
@@ -267,12 +267,12 @@
                                                 @if($toolName == trans('langAnnouncements') or $toolName == trans('langBlog'))
                                                     @php $getToken = generate_csrf_token_link_parameter(); @endphp
                                                     @if($toolName == trans('langAnnouncements'))
-                                                            <a class="ms-2" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                            <a class="ms-2 mt-1" href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                                                 <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                                                 data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}"></span>
                                                             </a>
                                                     @else
-                                                            <a class="ms-2" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
+                                                            <a class="ms-2 mt-1" href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}">
                                                                 <span class="fa fa-rss-square tiny-icon tiny-icon-rss text-warning" data-bs-toggle="tooltip" 
                                                                 data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}"></span>
                                                             </a>

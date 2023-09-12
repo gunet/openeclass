@@ -166,14 +166,15 @@
                                                         }
                                                     @endphp 
 
-                                                    @if($cource->course_image == NULL)
-                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" />
-                                                    @else
-                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" />
-                                                    @endif
+                                                    
                                                             
                                                     <div class='card-body'>
-                                                        <div class="lesson-title">
+                                                        @if($cource->course_image == NULL)
+                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" />
+                                                        @else
+                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" />
+                                                        @endif
+                                                        <div class="lesson-title mt-3">
                                                             <a class='TextRegular text-decoration-underline' href="{{$urlServer}}courses/{{$cource->code}}/index.php">
                                                                 {{ $cource->title }}&nbsp({{ $cource->public_code }})
                                                             </a>

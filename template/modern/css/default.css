@@ -35,7 +35,7 @@ body{
 
 @media(min-width:992px){
   .main-section-courses{
-    min-height: calc(100vh - 80px - 352px - 80px);
+    min-height: calc(100vh - 80px - 288px - 80px);
   }
 }
 

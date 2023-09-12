@@ -1,11 +1,11 @@
 
 <nav id="bgr-cheat-header" class="navbar navbar-eclass py-0">
-
+    <div class='container-fluid py-0'>
     <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
         <div class='d-flex justify-content-start align-items-center h-100'>
 
-            <a class='ms-lg-4 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
+            <a class='ms-lg-0 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
                 <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
             </a>
 
@@ -39,7 +39,7 @@
                 
         </div>
 
-        <div class='d-flex justify-content-end align-items-center h-100 pe-4'>
+        <div class='d-flex justify-content-end align-items-center h-100 pe-0'>
             
                     
             @if(get_config('enable_search'))
@@ -214,7 +214,7 @@
                                             <li>
                                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:49px;'>
                                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                                    <button class='list-group-item d-flex justify-content-end align-items-center gap-2 py-3 w-100 text-end' type='submit' name='submit'>
+                                                    <button class='list-group-item d-flex justify-content-end align-items-center gap-2 py-3 w-100 h-100 text-end' type='submit' name='submit'>
                                                         <i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
                                                         <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                                     </button>
@@ -233,7 +233,7 @@
 
         </div>
     </div>
-  
+</div>
 </nav>
 
 

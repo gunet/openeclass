@@ -512,7 +512,7 @@ $data['action_bar'] =
             ['title' => $langBack,
                 'url' => "display_profile.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'
+                'level' => 'primary'
             ]
         ]);
 

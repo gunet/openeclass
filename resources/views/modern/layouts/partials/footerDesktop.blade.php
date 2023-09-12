@@ -1,5 +1,6 @@
 
-<footer id="bgr-cheat-footer" class="site-footer mt-auto d-flex justify-content-start align-items-center px-3">
+<footer id="bgr-cheat-footer" class="site-footer mt-auto d-flex justify-content-start align-items-center px-0">
+<div class='container-fluid py-0'>
     <div class='col-12 d-flex justify-content-between align-items-center'>
         <ul class="container-items-footer nav">
             <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
@@ -19,5 +20,6 @@
             @endif
         </div>
     </div>
+</div>
 </footer>
 

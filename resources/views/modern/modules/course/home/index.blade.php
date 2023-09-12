@@ -383,7 +383,7 @@
                         
 
                         @if($course_info->view_type == 'units')
-                            <div class='card panelCard px-0 py-0 mt-4 border-0'>
+                            <div class='card panelCard px-0 py-0 mt-4 border-0 mb-5'>
 
                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
                                     <h3>
