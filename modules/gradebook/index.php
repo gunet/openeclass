@@ -63,11 +63,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //Datepicker
 load_js('tools.js');
 load_js('datatables');
+if ($is_editor) {
+    // disable ordering for action button column
+    $columns = 'null, null, null, null, null, { orderable: false }';
+} else if ($is_course_reviewer) {
+    $columns = 'null, null, null, null, null';
+}
 
 @$head_content .= "
 <script type='text/javascript'>
 $(function() {
     var oTable = $('#users_table{$course_id}').DataTable ({
+                'columns': [ $columns ],
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
@@ -77,7 +84,7 @@ $(function() {
                           class : 'form-control input-sm ms-0 mb-3',
                           placeholder : '$langSearch...'
                         });
-},
+                },
                'sPaginationType': 'full_numbers',
                 'bSort': true,
                 'oLanguage': {
@@ -168,7 +175,7 @@ if (isset($_REQUEST['gradebook_id'])) {
 }
 
 if ($is_editor) {
-    // change gradebook visibility
+    // change grade book visibility
     if (isset($_GET['vis'])) {
         $grbid = getDirectReference($_GET['gradebook_id']);
         Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $grbid, $course_id);
@@ -229,7 +236,7 @@ if ($is_editor) {
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=".urlencode($_GET['gb'])."&gradebookBook=1");
     }
 
-    //reset gradebook users
+    //reset grade book users
     $distinct_users_count = 0;
     if (isset($_POST['resetGradebookUsers'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -276,7 +283,7 @@ if ($is_editor) {
                     AND uid IN $sql_placeholders", $gradebook_id, $active_gradebook_users);
                 $already_inserted_ids = [];
                 foreach ($already_inserted_users as $already_inserted_user) {
-                    array_push($already_inserted_ids, $already_inserted_user->uid);
+                    $already_inserted_ids[] = $already_inserted_user->uid;
                 }
                 $added_users = array();
                 foreach ($active_gradebook_users as $u) {
@@ -481,7 +488,7 @@ if ($is_editor) {
     }
     $tool_content .= "</div>";
 
-    // update gradebook settings
+    // update grade book settings
     if (isset($_POST['submitGradebookSettings'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('title', 'degreerange', 'start_date', 'end_date'));
@@ -520,7 +527,7 @@ if ($is_editor) {
         $display = FALSE;
     }
 
-    //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths
+    //UPDATE/INSERT DB: new activity from exercises, assignments, learning paths
     elseif(isset($_GET['addCourseActivity'])) {
         $id = getDirectReference($_GET['addCourseActivity']);
         $type = intval($_GET['type']);
@@ -534,7 +541,7 @@ if ($is_editor) {
         $display = FALSE;
     }
 
-    //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
+    //UPDATE/INSERT DB: add or edit activity to grade book module (edit concerns and course activities like lps)
     elseif (isset($_POST['submitGradebookActivity'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('numeric', array('weight'));
@@ -586,7 +593,7 @@ if ($is_editor) {
         }
     }
 
-    //delete gradebook activity
+    //delete grade book activity
     elseif (isset($_GET['delete'])) {
         $log_details = array('action' => 'delete activity',
                              'id' => $gradebook_id,
@@ -597,7 +604,7 @@ if ($is_editor) {
         Log::record($course_id, MODULE_ID_GRADEBOOK, LOG_MODIFY, $log_details);
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
 
-    // delete gradebook
+    // delete grade book
     } elseif (isset($_GET['delete_gb'])) {
         triggerGameGradebook($course_id, 3, getDirectReference($_GET['delete_gb']));
         $log_details = array('id' => getDirectReference($_GET['delete_gb']),
@@ -639,18 +646,18 @@ if ($is_editor) {
         // display user grades
         if(isset($_GET['book'])) {
             display_user_grades($gradebook_id);
-        } else {  // display all users
+        } else {  // display all users grades
             display_all_users_grades($gradebook_id);
         }
         $display = FALSE;
     }
     elseif (isset($_GET['new'])) {
-        new_gradebook(); // create new gradebook
+        new_gradebook(); // create new grade book
         $display = FALSE;
-    } elseif (isset($_GET['editUsers'])) { // edit gradebook users
+    } elseif (isset($_GET['editUsers'])) { // edit grade book users
         user_gradebook_settings($gradebook_id);
         $display = FALSE;
-    } elseif (isset($_GET['editSettings'])) { // gradebook settings
+    } elseif (isset($_GET['editSettings'])) { // grade book settings
         gradebook_settings($gradebook_id);
         $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { //display available assignments
@@ -679,12 +686,17 @@ if ($is_editor) {
             $display = FALSE;
         }
     }
+} else if ($is_course_reviewer) {
+    if (isset($_GET['gradebookBook'])) {
+        display_all_users_grades($gradebook_id);
+        $display = FALSE;
+    }
 }
 
 if (isset($display) and $display == TRUE) {
-    // display gradebook
+    // display grade book
     if (isset($gradebook)) {
-        if ($is_editor) {
+        if ($is_course_reviewer) {
             if (isset($_GET['u'])) {
                 student_view_gradebook($gradebook_id, $_GET['u']); // teacher view
             } else {
@@ -694,7 +706,7 @@ if (isset($display) and $display == TRUE) {
             $pageName = $gradebook->title;
             student_view_gradebook($gradebook_id, $uid); // student view
         }
-    } else { // display all gradebooks
+    } else { // display all grade-books
         display_gradebooks();
     }
 }

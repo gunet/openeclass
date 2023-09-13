@@ -374,6 +374,29 @@ if ($is_editor) {
         display_user_progress_details($element, $element_id, $_GET['u']);
         $display = FALSE;
     }
+} else if ($is_course_reviewer) {
+    if (isset($_GET['progressall'])) { // display users progress (course reviewer view)
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $pageName = "$langProgress $langsOfStudents";
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+        display_users_progress($element, $element_id);
+        $display = FALSE;
+    } elseif (isset($_GET['u'])) { // display detailed user progress
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true", "name" => $langUsers);
+        $pageName = uid_to_name($_GET['u']);
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;progressall=true",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+        display_user_progress_details($element, $element_id, $_GET['u']);
+        $display = FALSE;
+    }
 } elseif (isset($_GET['u'])) { // student view
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -390,7 +413,7 @@ if ($is_editor) {
 }
 
 if (isset($display) and $display == TRUE) {
-    if ($is_editor) {
+    if ($is_course_reviewer) {
         if (isset($element_id)) {
             $pageName = $element_title;
             // display certificate settings and resources

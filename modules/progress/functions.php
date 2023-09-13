@@ -23,28 +23,12 @@
 
 /**
  * @brief display all certificates -- initial screen
- * @global type $course_id
- * @global type $tool_content
- * @global type $course_code
- * @global type $langDeleteCourseActivities
- * @global type $langConfirmDelete
- * @global type $langCreateDuplicate
- * @global type $langNoCertificates
- * @global type $langEditChange
- * @global type $langCertificates
- * @global type $langViewHide
- * @global type $langViewShow
- * @global type $langEditChange
- * @global type $langSee
- * @global type $langPurge
- * @global type $langConfirmPurgeCert
- * @global type $urlServer
  */
-function display_certificates() {
-
+function display_certificates(): void
+{
     global $course_id, $tool_content, $course_code, $urlServer, $langPurge,
-           $langDeleteCourseActivities, $langConfirmDelete, /*$langCreateDuplicate,*/
-           $langNoCertificates, $langActive, $langInactive, $langNewCertificate,
+           $langDeleteCourseActivities, $langConfirmDelete, $is_editor,
+           $langNoCertificates, $langActive, $langInactive,
            $langEditChange, $langNewCertificate, $langCertificates, $langActivate,
            $langDeactivate, $langSee, $langConfirmPurgeCert;
 
@@ -53,20 +37,19 @@ function display_certificates() {
                                                     FROM certificate WHERE course_id = ?d", $course_id);
 
         $tool_content .= "
-
                 <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                             
                                 <h3>
                                     $langCertificates
-                                </h3>
-                                <div>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span> <span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate</span></a>
-                                </div>
-                            
-                        </div>
+                                </h3>";
+                        if ($is_editor) {
+                            $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newcert=1' class='btn submitAdminBtn'><span class='fa fa-plus' ></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewCertificate </span></a></div>";
+                        }
+                        $tool_content .= "</div>
                         <div class='card-body'>
+
                             <div class='res-table-wrapper'>";
     if (count($sql_cer) == 0) { // If no certificates
         $tool_content .= "<p class='text-center text-muted'>$langNoCertificates</p>";
@@ -92,32 +75,35 @@ function display_certificates() {
                     <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;"
                     . "<span class='{$vis_status}'>$status_msg</span>
                     </div>
-                </div>
-                <div class='col-3 text-end mt-md-0 mt-3'>".
-                action_button(array(
-                    array('title' => $langEditChange,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
-                        'icon' => 'fa-edit'),
-                    array('title' => $data->active ? $langDeactivate : $langActivate,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
-                            ($data->active ? '0' : '1'),
-                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langSee,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
-                        'icon' => 'fa-search'),
-                    array('title' => $langDeleteCourseActivities,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmDelete),
-                    array('title' => $langPurge,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$data->id",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmPurgeCert)
-                ))
-                ."</div>
-            </div>";
+
+                </div>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='col-3 text-end mt-md-0 mt-3'>" .
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;edit=1",
+                                'icon' => 'fa-edit'),
+                            array('title' => $data->active ? $langDeactivate : $langActivate,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;vis=" .
+                                    ($data->active ? '0' : '1'),
+                                'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                            array('title' => $langSee,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;certificate_id=$data->id&amp;preview=1",
+                                'icon' => 'fa-search'),
+                            array('title' => $langDeleteCourseActivities,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_cert=$data->id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmDelete),
+                            array('title' => $langPurge,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cert=$data->id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmPurgeCert)
+                        ))
+                        . "</div>";
+                }
+            $tool_content .= "</div>";
         }
     }
             $tool_content .= "
@@ -130,27 +116,11 @@ function display_certificates() {
 
 /**
  * @brief display all badges -- initial screen
- * @global type $course_id
- * @global type $tool_content
- * @global type $course_code
- * @global type $is_editor
- * @global type $urlServer
- * @global type $langDeleteCourseActivities
- * @global type $langConfirmDelete
- * @global type $langCreateDuplicate
- * @global type $langNoBadges
- * @global type $langEditChange
- * @global type $langBadges
- * @global type $langViewHide
- * @global type $langViewShow
- * @global type $langEditChange
- * @global type $langConfirmBadge
- * @global type $langPurge
  */
-function display_badges() {
-
+function display_badges(): void
+{
     global $course_id, $tool_content, $course_code, $is_editor,
-           $langDeleteCourseActivities, $langConfirmDelete, /*$langCreateDuplicate,*/
+           $langDeleteCourseActivities, $langConfirmDelete,
            $langNoBadges, $langEditChange, $langBadges, $langPurge,
            $langActivate, $langDeactivate, $langNewBadge,
            $langActive, $langInactive, $urlServer, $langConfirmPurgeBadge;
@@ -163,18 +133,19 @@ function display_badges() {
         $tool_content .= "
                 <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                            
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                            
                                 <h3>
                                     $langBadges
-                                </h3>
-                                <div>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
-                                </div>
-                            
-                        </div>
-                        <div class='card-body'>
-                            <div class='res-table-wrapper'>";
+                                </h3>";
+                                if ($is_editor) {
+                                    $tool_content .= "<div>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;newbadge=1' class='btn submitAdminBtn'><span class='fa fa-plus'></span><span class='hidden-xs'>&nbsp;&nbsp;&nbsp;$langNewBadge</span></a>
+                                    </div>";
+                                }
+        $tool_content .= "
+        </div>
+        <div class='card-body'>
+            <div class='res-table-wrapper'>";
 
     if (count($sql_cer) == 0) { // no badges
         $tool_content .= "<p class='text-center text-muted'>$langNoBadges</p>";
@@ -195,28 +166,31 @@ function display_badges() {
                                     <div class='col-6 text-center mt-md-3 mt-1'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
                                         <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
-                                    </div>
-                                    <div class='col-3 text-end mt-md-3 mt-1'>".
-                action_button(array(
-                    array('title' => $langEditChange,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
-                        'icon' => 'fa-cogs'),
-                    array('title' => $data->active ? $langDeactivate : $langActivate,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
-                            ($data->active ? '0' : '1'),
-                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDeleteCourseActivities,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmDelete),
-                    array('title' => $langPurge,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmPurgeBadge)
-                ))
-                ."</div></div>";
+                                    </div>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='col-3 text-end mt-md-3 mt-1'>" .
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;edit=1",
+                                'icon' => 'fa-cogs'),
+                            array('title' => $data->active ? $langDeactivate : $langActivate,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
+                                    ($data->active ? '0' : '1'),
+                                'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                            array('title' => $langDeleteCourseActivities,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmDelete),
+                            array('title' => $langPurge,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
+                                'icon' => 'fa-xmark',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmPurgeBadge)
+                        ))
+                        . "</div>";
+                }
+            $tool_content .= "</div>";
         }
     }
 
@@ -228,21 +202,10 @@ function display_badges() {
 
 /**
  * @brief display course completion (special type of badge)
- * @global type $course_id
- * @global type $tool_content
- * @global type $course_code
- * @global type $langDeleteCourseActivities
- * @global type $langConfirmDelete
- * @global type $langCourseCompletion
- * @global type $langActivate
- * @global type $langDeactivate
- * @global type $langActive
- * @global type $langInactive
- * @global type $langPurge
- * @global type $langConfirmPurgeCourseCompletion
  */
-function display_course_completion() {
-    global $course_id, $tool_content, $course_code,
+function display_course_completion(): void
+{
+    global $course_id, $tool_content, $course_code, $is_editor,
            $langDeleteCourseActivities, $langConfirmDelete, $langCourseCompletion,
            $langActivate, $langDeactivate, $langPurge,
            $langActive, $langInactive, $langConfirmPurgeCourseCompletion;
@@ -268,34 +231,35 @@ function display_course_completion() {
             $vis_icon = $data->active ? "fa-eye" : "fa-eye-slash";
             $status_msg = $data->active ? $langActive : $langInactive;
             $tool_content .= "
-                        <div class='row res-table-row border-0 p-3'>
-                            <div class='col-3 text-md-start text-center'>
-                                <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
-                            </div>
-                            <div class='col-6 text-center mt-0'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
-                                <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
-                            </div>
-                            <div class='col-3 text-end mt-0'>".
-                action_button(array(
-                    array('title' => $data->active ? $langDeactivate : $langActivate,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
-                            ($data->active ? '0' : '1'),
-                        'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
-                    array('title' => $langDeleteCourseActivities,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmDelete),
-                    array('title' => $langPurge,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'confirm' => $langConfirmPurgeCourseCompletion)
-                    ))
-                ."</div>
+                <div class='row res-table-row border-0 p-3'>
+                    <div class='col-3 text-md-start text-center'>
+                        <i class='fa fa-trophy fa-3x' aria-hidden='true'></i>
+                    </div>
+                    <div class='col-6 text-center mt-0'>
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id'>".q($data->title)."</a>
+                        <div style='margin-top: 5px;'><span class='fa {$vis_icon}'></span>&nbsp;&nbsp;&nbsp;<span class='{$vis_status}'>$status_msg</span></div>
                 </div>";
-
+            if ($is_editor) {
+                $tool_content .= "<div class='col-3 text-end mt-0'>" .
+                    action_button(array(
+                        array('title' => $data->active ? $langDeactivate : $langActivate,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;badge_id=$data->id&amp;vis=" .
+                                ($data->active ? '0' : '1'),
+                            'icon' => $data->active ? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $langDeleteCourseActivities,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del_badge=$data->id",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete),
+                        array('title' => $langPurge,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;purge_cc=$data->id",
+                            'icon' => 'fa-xmark',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmPurgeCourseCompletion)
+                    ))
+                    . "</div>";
+            }
+        $tool_content .= "</div>";
         $tool_content .= "
                             </div>
                         </div>
@@ -306,45 +270,12 @@ function display_course_completion() {
 
 /**
  * @brief display all certificate activities
- * @global type $tool_content
- * @global type $course_code
- * @global type $langNoActivCert
- * @global type $langAttendanceActList
- * @global type $langTitle
- * @global type $langType
- * @global type $langOfAssignment
- * @global type $langExerciseAsModuleLabel
- * @global type $langOfBlog
- * @global type $langDocumentAsModuleLabel
- * @global type $langMediaAsModuleLabel
- * @global type $langOfEBook
- * @global type $langOfGradebook
- * @global type $langOfPoll
- * @global type $langWiki
- * @global type $langOfTopicForums
- * @global type $langOfForums
- * @global type $langOfBlogComments
- * @global type $langOfCourseComments
- * @global type $langOfLikesForum
- * @global type $langOfLikesSocial
- * @global type $langOfLearningPath
- * @global type $langDelete
- * @global type $langEditChange
- * @global type $langConfirmDelete
- * @global type $langInsertWorkCap
- * @global type $langAdd
- * @global type $langExport
- * @global type $langBack
- * @global type $langInsertWorkCap
- * @global type $langUsers
- * @global type $langValue
- * @global type $langOfCourseCompletion
  * @param type $element
  * @param type $certificate_id
  */
 function display_activities($element, $id, $unit_id = 0) {
 
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $is_editor,
            $langNoActivCert, $langAttendanceActList, $langTitle, $langType,
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
@@ -355,7 +286,6 @@ function display_activities($element, $id, $unit_id = 0) {
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite;
-    /* $langOfCourseComments, $langOfLikesForum, $langOfLikesSocial */
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -518,10 +448,65 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                         <h3>
                             $langAttendanceActList
-                        </h3>
-                        <div>
+                        </h3>";
+                    if ($is_editor) {
+                        $tool_content .= "<div>
                             $addActivityBtn
-                        </div>
+                        </div>";
+                    }
+            $tool_content .= "<div class='res-table-wrapper'>
+                <div class='row res-table-header'>
+                    <div class='col-sm-7'>
+                        $langTitle
+                    </div>
+                    <div class='col-sm-2'>
+                        $langType
+                    </div>
+                    <div class='col-sm-2'>
+                        $langValue
+                    </div>";
+                    if ($is_editor) {
+                        $tool_content .= "<div class='col-sm-1 text-center'>
+                            <i class='fa fa-cogs'></i>
+                        </div>";
+                    }
+            $tool_content .= "</div>";
+        if (count($result) == 0) {
+            $tool_content .= "<p class='margin-top-fat text-center text-muted'>$langNoActivCert</p>";
+        } else {
+            foreach ($result as $details) {
+                $resource_data = get_resource_details($element, $details->id);
+                $tool_content .= "
+                <div class='row res-table-row'>
+                    <div class='col-sm-7'>".$resource_data['title']."</div>
+                    <div class='col-sm-2'>". $resource_data['type']."</div>
+                    <div class='col-sm-2'>";
+                if (!empty($details->operator)) {
+                    $op = get_operators();
+                    $tool_content .= $op[$details->operator];
+                } else {
+                    $tool_content .= "&mdash;";
+                }
+                $tool_content .= "&nbsp;$details->threshold</div>";
+                if ($is_editor) {
+                    $tool_content .= "<div class='col-sm-1 text-center'>".
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                'icon' => 'fa-edit',
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;act_mod=$details->id",
+                                'show' => in_array($details->activity_type, criteria_with_operators())
+                            ),
+                            array('title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;del_cert_res=$details->id",
+                                'confirm' => $langConfirmDelete,
+                                'class' => 'delete'))).
+                        "</div>";
+                }
+                $tool_content .= "</div>";
+            }
+        }
+        $tool_content .= "</div>
                     </div>
                     <div class='card-body'>";
                         if (count($result) == 0) {
@@ -2106,21 +2091,15 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
 
 /**
  * @brief display badge / certificate settings
- * @global type $tool_content
- * @global type $course_id
- * @global type $course_code
- * @global type $langDescription
- * @global type $langMessage
- * @global type $langpublisher
- * @global type $langCourseCompletion
  * @param type $element
  * @param type $element_id
  */
-function display_settings($element, $element_id, $unit_id = 0) {
+function display_settings($element, $element_id, $unit_id = 0): void
+{
 
     global $tool_content, $course_id, $course_code, $urlServer, $langTitle,
            $langDescription, $langMessage, $langProgressBasicInfo, $langCourseCompletion,
-           $langpublisher, $langEditChange;
+           $langpublisher, $langEditChange, $is_editor;
 
     $field = ($element == 'certificate') ? 'template' : 'icon';
 
@@ -2132,7 +2111,6 @@ function display_settings($element, $element_id, $unit_id = 0) {
     $title = $data->title;
     $description = $data->description;
     $message = $data->message;
-    $icon_link = '';
 
     if ($bundle != -1) {
         if ($element == 'badge') {
@@ -2150,18 +2128,17 @@ function display_settings($element, $element_id, $unit_id = 0) {
         $tool_content .= "
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                            
+                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                            
                                 <h3>
                                     $langProgressBasicInfo
-                                </h3>
-                                <div>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
+                                </h3>";
+                            if ($is_editor) {
+                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
-                                    </a>
-                                </div>
-                            
-                        </div>
+                                            </a>
+                                        </div>";
+                            }
+                        $tool_content .= "</div>
                         <div class='card-body'>
                             <div class='row'>
                                 <div class='col-md-4 col-12'>
@@ -2228,20 +2205,6 @@ function display_settings($element, $element_id, $unit_id = 0) {
 
 /**
  * @brief add / edit certificate / badge settings
- * @global string $tool_content
- * @global string type $head_content
- * @global type $course_code
- * @global type $course_id
- * @global type $langTitle
- * @global type $langSave
- * @global type $langInsert
- * @global type $langDescription
- * @global type $langpublisher
- * @global type $langMessage
- * @global type $langTemplate
- * @global type $langCertificateDeadline
- * @global type $langCertDeadlineHelp
- * @global type $language
  * @param type $element
  * @param type $element_id
  */
