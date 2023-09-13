@@ -515,7 +515,7 @@ function display_all_users_grades($gradebook_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
-           $langNoRegStudent, $langHere, $langGradebookGradeAlert, $dateFormatMiddle;
+           $langNoRegStudent, $langHere, $langGradebookGradeAlert, $is_editor;
 
         $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id AS recID, gradebook_users.uid as userID, user.surname AS surname,
                                                                 user.givenname AS name, user.am AS am, DATE(course_user.reg_date) AS reg_date
@@ -531,10 +531,12 @@ function display_all_users_grades($gradebook_id) {
                   <th style='width:1%'>$langID</th>
                   <th>$langName $langSurname</th>
                   <th>$langAm</th>
-                  <th>$langRegistrationDateShort</th>
-                  <th>$langGradebookGrade</th>
-                  <th class='text-center'>".icon('fa-cogs')."</th>
-                </tr>
+                  <th>$langRegistrationDateShort</th>                  
+                  <th>$langGradebookGrade</th>";
+                  if ($is_editor) {
+                    $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
+                  }
+                $tool_content .= "</tr>
             </thead>
             <tbody>";
         $cnt = 0;
@@ -561,17 +563,21 @@ function display_all_users_grades($gradebook_id) {
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;u=$resultUser->userID'>" . userGradeTotal($gradebook_id, $resultUser->userID). "</a>" . " (<small>" . $langGradebookGradeAlert . "</small>)";
                 }
-            $tool_content .="</td><td class='option-btn-cell'>".
+            $tool_content .="</td>";
+            if ($is_editor) {
+                $tool_content .= "<td class='option-btn-cell'>".
                     action_button(array(
                         array('title' => $langGradebookBook,
-                                'icon' => 'fa-plus',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=$resultUser->userID"),
+                            'icon' => 'fa-plus',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=$resultUser->userID"),
                         array('title' => $langGradebookDelete,
-                                'icon' => 'fa-times',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=" . getIndirectReference($gradebook_id) . "&amp;ruid=" . getIndirectReference($resultUser->userID) . "&amp;deleteuser=yes",
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete)))
-                        ."</td></tr>";
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=" . getIndirectReference($gradebook_id) . "&amp;ruid=" . getIndirectReference($resultUser->userID) . "&amp;deleteuser=yes",
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete)))
+                    ."</td>";
+            }
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</tbody></table>";
     } else {
@@ -705,56 +711,66 @@ function display_gradebook($gradebook) {
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langGradebookAddActivity, $langInsertWorkCap, $langExercise, $langLearnPath,
            $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade,
-           $langExportGradebook, $langExportGradebookWithUsers;
+           $langExportGradebook, $langExportGradebookWithUsers,
+           $is_editor, $is_course_reviewer;
 
     $gradebook_id = getIndirectReference($gradebook->id);
 
-    $tool_content .= action_bar(
-        array(
-            array('title' => $langAdd,
-                  'level' => 'primary-label',
-                  'options' => array(
-                      array('title' => $langGradebookAddActivity,
+    if ($is_editor) {
+        $tool_content .= action_bar(
+            array(
+                array('title' => $langAdd,
+                    'level' => 'primary-label',
+                    'options' => array(
+                        array('title' => $langGradebookAddActivity,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivity=1",
                             'icon' => 'fa fa-plus fa space-after-icon',
                             'class' => ''),
-                      array('title' => "$langInsertWorkCap",
+                        array('title' => "$langInsertWorkCap",
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityAs=1",
                             'icon' => 'fa fa-flask space-after-icon',
                             'class' => ''),
-                      array('title' => "$langExercise",
+                        array('title' => "$langExercise",
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityEx=1",
                             'icon' => 'fa fa-edit space-after-icon',
                             'class' => ''),
-                      array('title' => "$langLearnPath",
+                        array('title' => "$langLearnPath",
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityLp=1",
                             'icon' => 'fa fa-ellipsis-h space-after-icon',
                             'class' => ''),
-                      ),
-                  'icon' => 'fa-plus'),
-            array('title' => $langEditChange,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
-                  'icon' => 'fa-cog'),
-            array('title' => $langStudents,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
-                  'icon' => 'fa-users',
-                  'level' => 'primary-label'),
-            array('title' => $GLOBALS['langRefreshGrades'],
-                  'url' => "refreshgrades.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
-                  'icon' => 'fa-refresh'),
-            array('title' => $langExportGradebook,
-                  'url' => "dumpgradebook.php?course=$course_code&amp;t=1&amp;gradebook_id=$gradebook_id",
-                  'icon' => 'fa-file-excel-o'),
-            array('title' => $langExportGradebookWithUsers,
-                  'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
-                  'icon' => 'fa-file-excel-o'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'),
+                    ),
+                    'icon' => 'fa-plus'),
+                array('title' => $langEditChange,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
+                    'icon' => 'fa-cog'),
+                array('title' => $langStudents,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
+                    'icon' => 'fa-users',
+                    'level' => 'primary-label'),
+                array('title' => $GLOBALS['langRefreshGrades'],
+                    'url' => "refreshgrades.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
+                    'icon' => 'fa-refresh'),
+                array('title' => $langExportGradebook,
+                    'url' => "dumpgradebook.php?course=$course_code&amp;t=1&amp;gradebook_id=$gradebook_id",
+                    'icon' => 'fa-file-excel-o'),
+                array('title' => $langExportGradebookWithUsers,
+                    'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
+                    'icon' => 'fa-file-excel-o'),
+                array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'),
             ),
             true
         );
+    } else if ($is_course_reviewer) {
+        $tool_content .= action_bar(
+            array(
+                array('title' => $langBack,
+                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                     'icon' => 'fa-reply',
+                     'level' => 'primary-label')));
+    }
 
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
                                         FROM gradebook_users WHERE gradebook_id=?d ", $gradebook->id)->count;
@@ -791,15 +807,22 @@ function display_gradebook($gradebook) {
                                             <th>$langGradebookActivityDate2</th>
                                             <th>$langType</th><th>$langGradebookWeight</th>
                                             <th class='text-center'>$langViewShow</th>
-                                            <th class='text-center'>$langScore</th>
-                                            <th class='text-center'>".icon('fa-cogs')."</i></th>
-                                        </tr>";
+                                            <th class='text-center'>$langScore</th>";
+                                            if ($is_editor) {
+                                                $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
+                                            }
+                                        $tool_content .= "</tr>";
 
         foreach ($result as $details) {
             $activity_id = getIndirectReference($details->id);
             $content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td><strong>";
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=$activity_id'>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
+            if ($is_editor) {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=$activity_id'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
+            } else if ($is_course_reviewer) {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
+            }
+
             $tool_content .= "<small class='help-block'>";
             switch ($details->activity_type) {
                  case 1: $tool_content .= "($langGradebookOral)"; break;
@@ -861,26 +884,28 @@ function display_gradebook($gradebook) {
             } else {
                 $preview_link = '';
             }
-            $tool_content .= "<td class='option-btn-cell text-center'>".
-                action_button(array(
-                            array('title' => $langEditChange,
-                                'icon' => 'fa-edit',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;modify=" . $activity_id),
-                            array('title' => $langPreview,
-                                'icon' => 'fa-plus',
-                                'url' => $preview_link,
-                                'show' => !empty($preview_link)),
-                            array('title' => $langRefreshGrade,
-                                'icon' => 'fa-refresh',
-                                'url' => "refreshgrades.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;activity=$activity_id",
-                                'show' => (!empty($preview_link))),
-                            array('title' => $langDelete,
-                                'icon' => 'fa-times',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;delete=" . $activity_id,
-                                'confirm' => $langConfirmDelete,
-                                'class' => 'delete')
+            if ($is_editor) {
+                $tool_content .= "<td class='option-btn-cell text-center'>".
+                    action_button(array(
+                        array('title' => $langEditChange,
+                            'icon' => 'fa-edit',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;modify=" . $activity_id),
+                        array('title' => $langPreview,
+                            'icon' => 'fa-plus',
+                            'url' => $preview_link,
+                            'show' => !empty($preview_link)),
+                        array('title' => $langRefreshGrade,
+                            'icon' => 'fa-refresh',
+                            'url' => "refreshgrades.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;activity=$activity_id",
+                            'show' => (!empty($preview_link))),
+                        array('title' => $langDelete,
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;delete=" . $activity_id,
+                            'confirm' => $langConfirmDelete,
+                            'class' => 'delete')
                     )) . "</td>";
-
+            }
+            $tool_content .= "</tr>";
         } // end of while
         $tool_content .= "</table></div></div></div>";
     }
@@ -894,10 +919,10 @@ function display_gradebooks() {
 
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
-           $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
+           $langAvailableGradebooks, $langNoGradeBooks, $is_editor, $is_course_reviewer,
            $langViewShow, $langViewHide, $langStart, $uid, $langFinish;
 
-    if ($is_editor) {
+    if ($is_course_reviewer) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
     } else {
         $result = Database::get()->queryArray("SELECT gradebook.* "
@@ -906,7 +931,7 @@ function display_gradebooks() {
                 . "AND gradebook.course_id = ?d "
                 . "AND gradebook.id = gradebook_users.gradebook_id AND gradebook_users.uid = ?d", $course_id, $uid);
     }
-    if (count($result) == 0) { // no gradebooks
+    if (count($result) == 0) { // no grade-books
         $tool_content .= "<div class='alert alert-info'>$langNoGradeBooks</div>";
     } else {
         $tool_content .= "<div class='row'>";

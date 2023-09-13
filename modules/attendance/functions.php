@@ -27,10 +27,10 @@ function display_attendances() {
 
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langCreateDuplicate,
-           $langAvailableAttendances, $langNoAttendances, $is_editor,
-           $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid;
+           $langAvailableAttendances, $langNoAttendances, $is_editor, $is_course_reviewer,
+           $langViewHide, $langViewShow, $langEditChange, $langStart, $langFinish, $uid;
 
-    if ($is_editor) {
+    if ($is_course_reviewer) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
     } else {
         $result = Database::get()->queryArray("SELECT attendance.* "
@@ -48,8 +48,8 @@ function display_attendances() {
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'>
                             <th>$langAvailableAttendances</th>
-                            <th>$langStart</th>
-                            <th>$langEnd</th>";
+                            <th style='width: 150px;'>$langStart</th>
+                            <th style='width: 150px;'>$langFinish</th>";
         if( $is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
@@ -210,50 +210,61 @@ function display_attendance_activities($attendance_id) {
            $langAttendanceActList, $langTitle, $langType, $langDate,
            $langGradebookNoTitle, $langAssignment,$langAttendanceInsAut,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1,
-           $langHere, $langAttendanceNoActMessage3, $langcsvenc2, $langAttendanceActivity,
+           $langHere, $langAttendanceNoActMessage3, $langAttendanceActivity,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langExercise,
-           $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB;
+           $langAdd, $langExport, $langBack, $langNoStudentsInAttendance, $langBBB,
+           $is_editor, $is_course_reviewer;
 
     $attendance_id_ind = getIndirectReference($attendance_id);
-    $tool_content .= action_bar(
+    if ($is_editor) {
+        $tool_content .= action_bar(
             array(
                 array('title' => $langAdd,
-                      'level' => 'primary-label',
-                      'options' => array(
-                          array('title' => $langGradebookAddActivity,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivity=1",
-                                'icon' => 'fa fa-plus space-after-icon',
-                                'class' => ''),
-                          array('title' => "$langInsertWorkCap",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityAs=1",
-                                'icon' => 'fa fa-flask space-after-icon',
-                                'class' => ''),
-                          array('title' => "$langExercise",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityEx=1",
-                                'icon' => 'fa fa-edit space-after-icon',
-                                'class' => ''),
-                          array('title' => "$langBBB",
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityTc=1",
-                                'icon' => 'fa fa-exchange space-after-icon',
-                                'class' => '')),
-                     'icon' => 'fa-plus'),
+                    'level' => 'primary-label',
+                    'options' => array(
+                        array('title' => $langGradebookAddActivity,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivity=1",
+                            'icon' => 'fa fa-plus space-after-icon',
+                            'class' => ''),
+                        array('title' => "$langInsertWorkCap",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityAs=1",
+                            'icon' => 'fa fa-flask space-after-icon',
+                            'class' => ''),
+                        array('title' => "$langExercise",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityEx=1",
+                            'icon' => 'fa fa-edit space-after-icon',
+                            'class' => ''),
+                        array('title' => "$langBBB",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityTc=1",
+                            'icon' => 'fa fa-exchange space-after-icon',
+                            'class' => '')),
+                    'icon' => 'fa-plus'),
                 array('title' => $langStudents,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                      'level' => 'primary-label',
-                      'icon' => 'fa-users'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
+                    'level' => 'primary-label',
+                    'icon' => 'fa-users'),
                 array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'),
                 array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
-                      'icon' => 'fa-cog'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
+                    'icon' => 'fa-cog'),
                 array('title' => "$langExport",
-                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
+                    'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id_ind",
                     'icon' => 'fa-file-excel-o')
             ),
             true
         );
+    } else if ($is_course_reviewer) {
+        $tool_content .= action_bar(
+            array(
+                array('title' => $langBack,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
+    }
+
 
 
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count
@@ -271,17 +282,19 @@ function display_attendance_activities($attendance_id) {
                             <th>$langTitle</th>
                             <th style='text-align: center;'>$langDate</th>
                             <th>$langType</th>
-                            <th>$langStudents</th>
-                            <th class='text-center'><i class='fa fa-cogs'></i></th>
-                        </tr>";
+                            <th>$langStudents</th>";
+                            if ($is_editor) {
+                                $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
+                            }
+                        $tool_content .= "</tr>";
         foreach ($result as $details) {
-            $content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td>";
-             if (empty($details->title)) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id). "'>$langGradebookNoTitle</a>";
-            } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id) . "'>".q($details->title)."</a>";
+            if ($is_editor) {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id). "'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
+            } else if ($is_course_reviewer) {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1'>" . (!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
             }
+
             $tool_content .= "</td><td style='text-align:center;'>";
              if (!is_null($details->date)) {
                  $tool_content .= format_locale_date(strtotime($details->date), 'short', false);
@@ -306,18 +319,21 @@ function display_attendance_activities($attendance_id) {
             }
             $tool_content .= "</td>";
             $tool_content .= "<td>" . userAttendTotalActivityStats($details->id, $participantsNumber, $attendance_id) . "</td>";
-            $tool_content .= "<td class='text-center option-btn-cell'>".
+            if ($is_editor) {
+                $tool_content .= "<td class='text-center option-btn-cell'>" .
                     action_button(array(
-                                array('title' => $langEditChange,
-                                    'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;modify=" . getIndirectReference($details->id)
-                                    ),
-                                array('title' => $langDelete,
-                                    'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;attendance_id=$attendance_id&amp;delete=" .getIndirectReference($details->id),
-                                    'confirm' => $langConfirmDelete,
-                                    'class' => 'delete'))).
-                    "</td></tr>";
+                        array('title' => $langEditChange,
+                            'icon' => 'fa-edit',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;modify=" . getIndirectReference($details->id)
+                        ),
+                        array('title' => $langDelete,
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;attendance_id=$attendance_id&amp;delete=" . getIndirectReference($details->id),
+                            'confirm' => $langConfirmDelete,
+                            'class' => 'delete'))) .
+                    "</td>";
+            }
+            $tool_content .= "</tr>";
         } // end of while
         $tool_content .= "</table></div></div></div>";
     } else {
@@ -872,7 +888,7 @@ function display_all_users_presences($attendance_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname,
            $langID, $langAmShort, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAttendanceBook, $langAttendanceDelete, $langConfirmDelete,
-           $langNoStudentsInAttendance, $langHere;
+           $langNoStudentsInAttendance, $langHere, $is_editor;
 
     $attendance_limit = get_attendance_limit($attendance_id);
 
@@ -894,9 +910,12 @@ function display_all_users_presences($attendance_id) {
                   <th>$langName $langSurname</th>
                   <th class='text-center'>$langAmShort</th>
                   <th class='text-center'>$langRegistrationDateShort</th>
-                  <th class='text-center'>$langAttendanceAbsences</th>
-                  <th class='text-center'><i class='fa fa-cogs'></i></th>
-                </tr>
+                  <th class='text-center'>$langAttendanceAbsences</th>";
+                  if ($is_editor) {
+                    $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
+                  }
+
+                $tool_content .= "</tr>
             </thead>
             <tbody>";
         $cnt = 0;
@@ -916,10 +935,10 @@ function display_all_users_presences($attendance_id) {
             } else {
                 $tool_content .= "";
             }
-
             $tool_content .= "</td>
-                <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>
-                <td class='option-btn-cell'>"
+                <td class='text-center'>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>";
+            if ($is_editor) {
+                $tool_content.= "<td class='option-btn-cell'>"
                    . action_button(array(
                         array('title' => $langAttendanceBook,
                             'icon' => 'fa-plus',
@@ -928,8 +947,9 @@ function display_all_users_presences($attendance_id) {
                             'icon' => 'fa-times',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;at=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
                             'confirm' => $langConfirmDelete,
-                            'class' => 'delete')))."</td>
-                </tr>";
+                            'class' => 'delete')))."</td>";
+                }
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</tbody></table>";
     } else {

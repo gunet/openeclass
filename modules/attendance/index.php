@@ -61,20 +61,28 @@ load_js('tools.js');
 load_js('jquery');
 load_js('datatables');
 
+if ($is_editor) {
+    // disable ordering for action button column
+    $columns = 'null, null, null, null, null, { orderable: false }';
+} else if ($is_course_reviewer) {
+    $columns = 'null, null, null, null, null';
+}
+
 @$head_content .= "
 <script type='text/javascript'>
 $(function() {
     var oTable = $('#users_table{$course_id}').DataTable ({
+                'columns': [ $columns ],
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
                'fnDrawCallback': function( oSettings ) {
-                            $('#users_table{$course_id}_wrapper label input').attr({
-                              class : 'form-control input-sm',
-                              placeholder : '$langSearch...'
-                            });
-                        },
+                    $('#users_table{$course_id}_wrapper label input').attr({
+                      class : 'form-control input-sm',
+                      placeholder : '$langSearch...'
+                    });
+                },
                'sPaginationType': 'full_numbers',
                 'bSort': true,
                 'searchDelay': 1000,
@@ -570,10 +578,10 @@ if ($is_editor) {
                 $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             }
         }
-        // display user grades
+        // display user presences
         if(isset($_GET['book'])) {
             display_user_presences($attendance_id);
-        } else {  // display all users
+        } else {  // display all users presence
             display_all_users_presences($attendance_id);
         }
         $display = FALSE;
@@ -606,12 +614,17 @@ if ($is_editor) {
         $display = FALSE;
     }
 
+} else if ($is_course_reviewer) {
+    if (isset($_GET['attendanceBook'])) {
+        display_all_users_presences($attendance_id);
+        $display = FALSE;
+    }
 }
 
 if (isset($display) and $display == TRUE) {
     // display attendance
     if (isset($attendance_id)) {
-        if ($is_editor) {
+        if ($is_course_reviewer) {
             display_attendance_activities($attendance_id);
         } else {
             $pageName = $attendance->title;

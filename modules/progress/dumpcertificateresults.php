@@ -25,7 +25,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 $require_current_course = true;
-$require_editor = true;
+$require_course_reviewer = true;
 
 include '../../include/init.php';
 require_once 'process_functions.php';
