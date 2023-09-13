@@ -744,11 +744,18 @@ if ($is_editor) {
     foreach ($my_courses as $row) {
         $courses_options .= "'<option value=\"$row->Course_id\">".js_escape($row->Title)."</option>'+";
     }
+
+   
+
     $head_content .= "<script type='text/javascript'>
         $(document).on('click', '.warnLink', function() {
             var exerciseid = $(this).data('exerciseid');
+
+           
+
             bootbox.dialog({
-                title: '" . js_escape($langCreateDuplicateIn) . "',
+                closeButton: false,
+                title: '<div class=\"icon-modal-default\"><i class=\"fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">" . js_escape($langCreateDuplicateIn) . "</h3>',
                 message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
                             '<select class=\"form-select\" id=\"course_id\" name=\"clone_to_course_id\">'+
                                 '<option value=\"$course_id\">--- " . js_escape($langCurrentCourse) . " ---</option>'+
@@ -758,11 +765,11 @@ if ($is_editor) {
                     buttons: {
                         cancel: {
                             label: '" . js_escape($langCancel) . "',
-                            className: 'cancelAdminBtn'
+                            className: 'cancelAdminBtn position-center'
                         },
                         success: {
                             label: '" . js_escape($langCreateDuplicate) . "',
-                            className: 'submitAdminBtn',
+                            className: 'submitAdminBtn position-center',
                             callback: function (d) {
                                 $('#clone_form').attr('action', 'index.php?course=$course_code&choice=clone&exerciseId=' + exerciseid);
                                 $('#clone_form').submit();

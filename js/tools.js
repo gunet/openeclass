@@ -478,6 +478,7 @@ function exercise_init_countdown(params) {
     $('#cancelButton').click(function (e) {
       e.preventDefault();
       bootbox.confirm({
+        closeButton: false,
         message: params.cancelMessage,
         buttons: {
           confirm: {
@@ -765,6 +766,7 @@ function unit_password_bootbox(e) {
 
   e.preventDefault();
   bootbox.dialog({
+    closeButton: false,
     title: title,
     message: notice + passwordForm,
     buttons: {

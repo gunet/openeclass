@@ -275,10 +275,7 @@ function display_exercise($exercise_id) {
         <div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
           <div class='modal-dialog'>
             <div class='modal-content'>
-              <div class='modal-header'>
-                <button type='button' class='close' data-bs-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
-              </div>
-              <div class='modal-body'>
+              <div class='modal-body text-center'>
                 $langUsedInSeveralExercises
               </div>
               <div class='modal-footer'>

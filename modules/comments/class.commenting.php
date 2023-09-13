@@ -93,10 +93,11 @@ Class Commenting {
                       <div class='modal-dialog'>
                         <div class='modal-content'>
                           <div class='modal-header'>
-                            <h4 class='modal-title'>$langComments</h4>
-                            <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
-                                <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
-                            </button>
+                            <div class='modal-title'>
+                                <div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>
+                                <h3 class='modal-title-default text-center mb-0'>$langComments</h3>
+                            </div>
+                           
                               
                           </div>
                           <div class='modal-body' id='comments-$this->rid'>";

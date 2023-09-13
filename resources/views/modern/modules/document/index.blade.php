@@ -134,9 +134,9 @@
 
                                     <thead>
                                         <tr class="list-header">
-                                            <th>{!! headlink(trans('langType'), 'type') !!}</th>
-                                            <th>{!! headlink(trans('langName'), 'name') !!}</th>
                                             
+                                            <th>{!! headlink(trans('langName'), 'name') !!}</th>
+                                            <th>{!! headlink(trans('langType'), 'type') !!}</th>
                                             <th>{{ trans('langSize') }}</th>
                                             <th>{!! headlink(trans('langDate'), 'date') !!}</th>
 
@@ -154,14 +154,7 @@
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
 
-                                                <td>
-                                                    @if($file->visible == 1)
-                                                        <span class='visibleFile fa {{ $file->icon }}'></span>
-                                                    @else
-                                                        <span class='invisibleFile fa {{ $file->icon }}'></span>
-                                                    @endif
-                                                </td>
-
+                                                
 
                                                 <td>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
@@ -216,6 +209,16 @@
                                                         @endif
                                                     @endif
                                                 </td>
+
+
+                                                <td>
+                                                    @if($file->visible == 1)
+                                                        <span class='visibleFile'>{{ $file->format }}</span>
+                                                    @else
+                                                        <span class='invisibleFile'>{{ $file->format }}</span>
+                                                    @endif
+                                                </td>
+
 
                                                 @if ($file->is_dir)
                                                     <td>&nbsp;</td>

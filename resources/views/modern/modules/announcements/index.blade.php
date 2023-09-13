@@ -14,20 +14,29 @@
             var action_btn_class = $(this).attr('data-action-class');
             var form = $(this).closest('form').clone().appendTo('body');
 
+            console.log(action_btn_class);
+            $icon = '';
+            if(action_btn_class == 'btn-primary' || action_btn_class == 'submitAdminBtn'){
+                $icon = "<div class='icon-modal-default'><i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i></div>";
+            }else{
+                $icon = "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>";
+            }
+
             e.preventDefault();
             e.stopPropagation();
 
             bootbox.dialog({
-                message: message,
-                title: title,
+                closeButton: false,
+                message: "<p class='text-center'>"+message+"</p>",
+                title: $icon+"<h3 class='modal-title-default text-center mb-0'>"+title+"</h3>",
                 buttons: {
                     cancel_btn: {
                         label: cancel_text,
-                        className: "cancelAdminBtn"
+                        className: "cancelAdminBtn position-center"
                     },
                     action_btn: {
                         label: action_text,
-                        className: action_btn_class,
+                        className: action_btn_class+" "+"position-center",
                         callback: function () {
                             form.submit();
                         }

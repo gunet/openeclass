@@ -18,21 +18,26 @@
             if (valueMessage == 1) {
                 info_message = "{{ js_escape(trans('langUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfDisableMailNotification')) }}"
                 action_message = " {{ js_escape(trans('langDeactivate')) }} ";
+                $actionButton = "deleteAdminBtn";
+                $actionIcon = "<i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i>";
             } else {
                 info_message = "{{ js_escape(trans('langNoUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfEnableMailNotification')) }}";
                 action_message = " {{ js_escape(trans('langActivate')) }} ";
+                $actionButton = "submitAdminBtn";
+                $actionIcon = "<i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i>";
             }
             bootbox.confirm({
-                title: "{{ js_escape(trans('langEmailUnsubscribe')) }}",
-                message: info_message,
+                closeButton: false,
+                title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h3 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h3>",
+                message: "<p class='text-center'>"+info_message+"</p>",
                 buttons: {
                     confirm: {
                         label: action_message,
-                        className: 'deleteAdminBtn'
+                        className: $actionButton+' '+'position-center'
                     },
                     cancel: {
                         label: "{{ js_escape(trans('langCancel')) }}",
-                        className: 'cancelAdminBtn'
+                        className: 'cancelAdminBtn position-center'
                     }
                 },
                 callback: function(result) {

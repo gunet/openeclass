@@ -123,19 +123,20 @@
 
                             <div class="modal fade" id="exampleModal{{$course->course_id}}" tabindex="-1" aria-labelledby="exampleModalLabel{{$course->course_id}}" aria-hidden="true">
                                 <form method="post" action="{{$urlAppend}}main/unregcours.php?u={{ $_SESSION['uid'] }}&amp;cid={{$course->course_id}}">
-                                    <div class="modal-dialog modal-lg">
+                                    <div class="modal-dialog modal-md">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel{{$course->course_id}}">{{ trans('langUnCourse') }}</h4>
-                                                <button type="button" class="close" data-bs-dismiss="modal">
-                                                    <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
-                                                </button>
+                                                
+                                                <div class="modal-title" id="exampleModalLabel{{$course->course_id}}">
+                                                    <div class='icon-delete'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
+                                                    <h3 class='modal-title-default text-center text-center mb-0'>{{ trans('langUnCourse') }}</h3>
+                                                </div>
                                             </div>
-                                            <div class="modal-body">
-                                                {{ trans('langConfirmUnregCours') }}<strong class="text-capitalize orangeText"> {{$course->title}}</strong>;
+                                            <div class="modal-body text-center">
+                                                {{ trans('langConfirmUnregCours') }}<strong class="text-capitalize"> {{$course->title}}</strong>;
                                                 <input type='hidden' name='fromMyCoursesPage' value="1">
                                             </div>
-                                            <div class="modal-footer">
+                                            <div class="modal-footer d-flex justify-content-center align-items-center">
                                                 <a class="btn cancelAdminBtn" href="" data-bs-dismiss="modal">{{trans('langCancel')}}</a>
 
                                                 <button type='submit' class="btn deleteAdminBtn" name="doit">{{trans('langDelete')}}</a>
