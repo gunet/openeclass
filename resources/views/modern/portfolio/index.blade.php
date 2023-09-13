@@ -100,7 +100,7 @@
                                 @if(Session::has('message'))
                                     <div class='col-12 mt-3 px-0'>
                                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                            @php 
+                                            @php
                                                 $alert_type = '';
                                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -112,7 +112,7 @@
                                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                                 }
                                             @endphp
-                                            
+
                                             @if(is_array(Session::get('message')))
                                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                                 {!! $alert_type !!}<span>
@@ -153,41 +153,39 @@
                                                 $pagesPag++;
                                             }
                                         @endphp
-                                        @foreach($cources as $cource)
+                                        @foreach($courses as $course)
                                             @php $temp_pages++; @endphp
                                             <div class="col cardCourse{{ $pagesPag }}">
                                                 <div class="card h-100 card{{ $pagesPag }} Borders border-card">
-                                                    @php 
-                                                        $courseImage = ''; 
+                                                    @php
+                                                        $courseImage = '';
                                                         if(!empty($course->course_image)){
                                                             $courseImage = "{$urlServer}courses/$course->code/image/$course->course_image";
                                                         }else{
                                                             $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
                                                         }
-                                                    @endphp 
+                                                    @endphp
 
-                                                    
-                                                            
                                                     <div class='card-body'>
-                                                        @if($cource->course_image == NULL)
-                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $cource->course_image }}" />
+                                                        @if($course->course_image == NULL)
+                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $course->course_image }}" />
                                                         @else
-                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$cource->code}}/image/{{$cource->course_image}}" alt="{{ $cource->course_image }}" />
+                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
                                                         @endif
                                                         <div class="lesson-title mt-3">
-                                                            <a class='TextRegular text-decoration-underline' href="{{$urlServer}}courses/{{$cource->code}}/index.php">
-                                                                {{ $cource->title }}&nbsp({{ $cource->public_code }})
+                                                            <a class='TextRegular text-decoration-underline' href="{{$urlServer}}courses/{{$course->code}}/index.php">
+                                                                {{ $course->title }}&nbsp({{ $course->public_code }})
                                                             </a>
                                                         </div>
 
-                                                        <div class="vsmall-text Neutral-900-cl TextRegular">{{ $cource->professor }}</div>
+                                                        <div class="vsmall-text Neutral-900-cl TextRegular">{{ $course->professor }}</div>
                                                     </div>
-                                                
+
                                                 </div>
                                             </div>
 
                                             @php
-                                                if($countCards == 6 and $temp_pages < count($cources)){
+                                                if($countCards == 6 and $temp_pages < count($courses)){
                                                     $pagesPag++;
                                                     $countCards = 0;
                                                 }
@@ -200,7 +198,7 @@
 
                                     <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
                                     <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
-                                    
+
                                     <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-white solidPanel mt-4'>
                                         <nav aria-label='Page navigation example w-100'>
                                             <ul class='pagination mycourses-pagination w-100 mb-0'>
@@ -209,7 +207,7 @@
                                                 </li>
                                                 @if($pagesPag >=12 )
                                                     @for($i=1; $i<=$pagesPag; $i++)
-                                                    
+
                                                         @if($i>=1 && $i<=5)
                                                             @if($i==1)
                                                                 <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
@@ -246,7 +244,7 @@
                                                             </li>
                                                         @endif
                                                     @endfor
-                                                
+
                                                 @else
                                                     @for($i=1; $i<=$pagesPag; $i++)
                                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
@@ -270,7 +268,7 @@
                                         {!! $portfolio_page_main_widgets !!}
                                     </div>
                                 @endif
-                                
+
                             </div>
                         </div>
                     </div>
@@ -297,12 +295,12 @@
 
                         <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                            
+
                                 <h3 class='mb-0'>{{ trans('langMessages') }}</h3>
                                 <a class='text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/message/index.php">
                                     {{ trans('langAllMessages') }}
                                 </a>
-                                
+
                             </div>
                             <div class='card-body px-0'>
                                 @if(empty($user_messages))
@@ -316,15 +314,15 @@
                         @if($portfolio_page_sidebar_widgets)
                             <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none sticky-column-course-home'>
                                 <div class='card-header bg-white border-0 text-start'>
-                                
+
                                         <h3>{{ trans('langMyWidgets') }}</h3>
-                                    
+
                                 </div>
                                 <div class='card-body'>
                                     {!! $portfolio_page_sidebar_widgets !!}
                                 </div>
                             </div>
-                        @endif                   
+                        @endif
                     </div>
                 </div>
             </div>
@@ -337,8 +335,8 @@
 
 
 <script>
-    var user_cources = <?php echo json_encode($cources); ?>;
-    var user_cource_pages = <?php echo $cource_pages; ?>;
+    var user_cources = <?php echo json_encode($courses); ?>;
+    var user_cource_pages = <?php echo $course_pages; ?>;
 </script>
 
 <script type="text/javascript">
@@ -355,12 +353,12 @@
         // Get the button that opens the modal
         btnPortfolio = document.getElementById(idCoursePortfolio);
 
-        // When the user clicks the button, open the modal 
+        // When the user clicks the button, open the modal
         modal_portfolio.style.display = "block";
 
         $('[data-bs-toggle="tooltip"]').tooltip("hide");
 
-        
+
         var $div = $('<div />').appendTo('body');
         $div.attr('class', 'modal-backdrop fade show');
     });
@@ -402,11 +400,11 @@
 
 <script>
     var arrayLeftRight = [];
-    
+
     // init page1
     if(arrayLeftRight.length == 0){
         var totalCourses = $('#KeyallCourse').val();
-        
+
         for(j=1; j<=totalCourses; j++){
             if(j!=1){
                 $('.cardCourse'+j).removeClass('d-block');
@@ -467,7 +465,7 @@
 
                 $('#KeystartLi').removeClass('d-none');
                 $('#KeystartLi').addClass('d-block');
-                
+
                 for(i=2; i<=totalPages-1; i++){
                     $('#KeypageCenter'+i).removeClass('d-block');
                     $('#KeypageCenter'+i).addClass('d-none');
@@ -500,7 +498,7 @@
                 $('#KeycloseLi').removeClass('d-none');
                 $('#KeycloseLi').addClass('d-block');
 
-                
+
                 for(i=1; i<=number; i++){
                     $('#KeypageCenter'+i).removeClass('d-none');
                     $('#KeypageCenter'+i).addClass('d-block');
@@ -527,10 +525,10 @@
             var delPageActive = nextPage-1;
             $('#Keypage'+delPageActive).removeClass('active');
             $('#Keypage'+nextPage).addClass('active');
-        
+
             var totalCourses = $('#KeyallCourse').val();
             var totalPages = $('#KeypagesCourse').val();
-            
+
             for(i=1; i<=totalCourses; i++){
                 if(i == nextPage){
                     $('.cardCourse'+i).removeClass('d-none');
@@ -558,7 +556,7 @@
 
                 $('#KeystartLi').removeClass('d-none');
                 $('#KeystartLi').addClass('d-block');
-                
+
                 for(i=2; i<=totalPages-1; i++){
                     $('#KeypageCenter'+i).removeClass('d-block');
                     $('#KeypageCenter'+i).addClass('d-none');
@@ -608,7 +606,7 @@
                 }
             }
 
-            
+
         });
     });
 
@@ -617,7 +615,7 @@
 
     // page-link except prev-next button
     $('.page-item-pages .page-link').on('click',function(){
-        
+
         var IDCARD = this.id;
         var number = parseInt(IDCARD.match(/\d+/g));
 
@@ -654,7 +652,7 @@
             }
         }
 
-        
+
         if(number>=1 && number<=4 && totalPages>=12){
 
             $('#KeystartLi').removeClass('d-block');
@@ -662,7 +660,7 @@
 
             for(i=1; i<=5; i++){
                 $('#KeypageCenter'+i).removeClass('d-none');
-                $('#KeypageCenter'+i).addClass('d-block'); 
+                $('#KeypageCenter'+i).addClass('d-block');
             }
             for(i=6; i<=totalPages-1; i++){
                 $('#KeypageCenter'+i).removeClass('d-block');

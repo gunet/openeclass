@@ -232,14 +232,14 @@ $data['user_messages'] = $user_messages;
 
 
 // For pagination pictures of user-cources
-$cources = getUserCoursesPic($uid);
-$data['cources'] = $cources;
+$courses = getUserCoursesPic($uid);
+$data['courses'] = $courses;
 
 $items_per_page = 4;
 $data['items_per_page'] = $items_per_page;
 
-$cource_pages = ceil(count($cources)/$items_per_page);
-$data['cource_pages'] = $cource_pages;
+$course_pages = ceil(count($courses)/$items_per_page);
+$data['course_pages'] = $course_pages;
 
 $data['menuTypeID'] = 1;
 view('portfolio.index', $data);
