@@ -38,11 +38,35 @@ $head_content .= '
             $(document).on("click", ".linkdelete", function(e) {
                 var link = $(this).attr("href");
                 e.preventDefault();
-                bootbox.confirm("'.$langConfirmDeleteStudentReview.'", function(result) {
-                    if (result) {
-                        document.location.href = link;
+
+                // bootbox.confirm("'.$langConfirmDeleteStudentReview.'", function(result) {
+                //     if (result) {
+                //         document.location.href = link;
+                //     }
+                // });
+
+                bootbox.confirm({ 
+                    closeButton: false,
+                    title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
+                    message: "<p class=\"text-center\">'.js_escape($langConfirmDeleteStudentReview).'</p>",
+                    buttons: {
+                        cancel: {
+                            label: "'.js_escape($langCancel).'",
+                            className: "cancelAdminBtn position-center"
+                        },
+                        confirm: {
+                            label: "'.js_escape($langDelete).'",
+                            className: "deleteAdminBtn position-center",
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            document.location.href = link;   
+                        }
                     }
                 });
+
+
             });
         });
     ';

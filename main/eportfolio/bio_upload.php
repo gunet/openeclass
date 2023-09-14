@@ -78,10 +78,35 @@ elseif (isset($_POST['submit'])) {
 
 $head_content .= "<script>
                     function confirmDel(url) {
-                      bootbox.confirm('$langConfirmDelete', function(okay) {
-                        if(okay)
-                          location.href = url;
-                      });
+
+                    //   bootbox.confirm('$langConfirmDelete', function(okay) {
+                    //     if(okay)
+                    //       location.href = url;
+                    //   });
+
+
+                      bootbox.confirm({ 
+                        closeButton: false,
+                        title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
+                        message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
+                        buttons: {
+                            cancel: {
+                                label: '".js_escape($langCancel)."',
+                                className: 'cancelAdminBtn position-center'
+                            },
+                            confirm: {
+                                label: '".js_escape($langDelete)."',
+                                className: 'deleteAdminBtn position-center',
+                            }
+                        },
+                        callback: function (okay) {
+                            if(okay) {
+                                location.href = url;
+                            }
+                        }
+                    });
+
+
                       return false;
                     } 
                   </script>";

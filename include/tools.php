@@ -220,7 +220,7 @@ function loggedInMenu($rich=true) {
 
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "fa-file-video-o");
+    array_push($sideMenuImg, "fa-solid fa-file-video");
 
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");
@@ -387,7 +387,7 @@ function loggedOutMenu() {
     }
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "fa-file-video-o");
+    array_push($sideMenuImg, "fa-solid fa-file-video");
 
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");

@@ -157,35 +157,76 @@
             e.preventDefault();
             //var row_id = $(this).data('id');
             var row_id = (this.id);
-            bootbox.confirm('{{ js_escape(trans('langSureToDelAnnounce')) }}', function(result) {
-                if(result) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '',
-                        datatype: 'json',
-                        data: {
-                            action: 'delete',
-                            value: row_id
-                        },
-                        success: function(data){
-                            var info = oTable.page.info();
-                            var page_number = info.page;
-                            oTable.draw(false);
-                        },
-                        error: function(xhr, textStatus, error){
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
-                        }
-                    });
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{$urlAppend}}modules/search/idxasync.php'
-                    });
+            // bootbox.confirm('{{ js_escape(trans('langSureToDelAnnounce')) }}', function(result) {
+            //     if(result) {
+            //         $.ajax({
+            //             type: 'POST',
+            //             url: '',
+            //             datatype: 'json',
+            //             data: {
+            //                 action: 'delete',
+            //                 value: row_id
+            //             },
+            //             success: function(data){
+            //                 var info = oTable.page.info();
+            //                 var page_number = info.page;
+            //                 oTable.draw(false);
+            //             },
+            //             error: function(xhr, textStatus, error){
+            //                 console.log(xhr.statusText);
+            //                 console.log(textStatus);
+            //                 console.log(error);
+            //             }
+            //         });
+            //         $.ajax({
+            //             type: 'POST',
+            //             url: '{{$urlAppend}}modules/search/idxasync.php'
+            //         });
+            //     }
+            // });
+            bootbox.confirm({ 
+                closeButton: false,
+                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",
+                message: "<p class='text-center'>{{ js_escape(trans('langSureToDelAnnounce')) }}</p>",
+                buttons: {
+                    cancel: {
+                        label: "{{ js_escape(trans('langCancel')) }}",
+                        className: "cancelAdminBtn position-center"
+                    },
+                    confirm: {
+                        label: "{{ js_escape(trans('langDelete')) }}",
+                        className: "deleteAdminBtn position-center",
+                    }
+                },
+                callback: function (result) {
+                    if(result) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '',
+                            datatype: 'json',
+                            data: {
+                                action: 'delete',
+                                value: row_id
+                            },
+                            success: function(data){
+                                var info = oTable.page.info();
+                                var page_number = info.page;
+                                oTable.draw(false);
+                            },
+                            error: function(xhr, textStatus, error){
+                                console.log(xhr.statusText);
+                                console.log(textStatus);
+                                console.log(error);
+                            }
+                        });
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{$urlAppend}}modules/search/idxasync.php'
+                        });
+                    }
                 }
-            });
-        });            
-        
+            });            
+        });  
 
         $(document).on( 'click','.vis_btn', function (g) {
             

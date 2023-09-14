@@ -96,7 +96,7 @@ if (isset($_POST['submit'])) {
     $fac = getfacfromfc($fc);
     list($roots, $rootSubtrees) = $tree->buildRootsWithSubTreesArray();
     if (!$fac) { // if user does not belong to department
-        $tool_content .= "<div class='col-12 mt-4'><div class='shadow-sm p-3 mb-3 bg-body rounded bg-primary'>".$langAddHereSomeCourses."</div></div>";
+        $tool_content .= "<div class='col-12 mt-4'><h3 class='mb-0'>".$langAddHereSomeCourses."</h3></div>";
 
         if (count($roots) <= 0) {
             die("ERROR: no root nodes");
@@ -104,7 +104,7 @@ if (isset($_POST['submit'])) {
             header("Location:" . $urlServer . "modules/auth/courses.php?fc=" . intval($roots[0]->id));
             exit();
         } else {
-            $tool_content .= '<ul>' .
+            $tool_content .= '<ul class="px-0">' .
                 $tree->buildNodesNavigationHtml($roots, 'courses', null, array('showEmpty' => true, 'respectVisibility' => true), $rootSubtrees) .
                 '</ul>';
         }

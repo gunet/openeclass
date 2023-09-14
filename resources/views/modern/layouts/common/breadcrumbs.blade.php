@@ -47,7 +47,9 @@
 
 
 @if(count($breadcrumbs) > 0)
-    <div class='col-12'>
-        <div class="w-100 mt-3 @if(isset($_GET['fromFlipped'])) mb-3 @endif @if(!$course_code or isset($_GET['fromFlipped'])) legendViewContent2 @else legendViewContent @endif"></div>
-    </div>
+    @if(isset($_GET['fromFlipped']))
+        <div class='col-12'>
+            <div class="w-100 mt-3 mb-3"></div>
+        </div>
+    @endif
 @endif

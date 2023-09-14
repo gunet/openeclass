@@ -151,9 +151,57 @@
         $(document).on('click', '.delete_btn', function (e) {
             e.preventDefault();
             var row_id = $(this).closest('tr').attr('id');
-            bootbox.confirm('{{ js_escape(trans('langDeleteUser') . ' ' . trans('langDeleteUser2')) }}',
-                function (result) {
-                    if (result) {
+
+            // bootbox.confirm('{{ js_escape(trans('langDeleteUser') . ' ' . trans('langDeleteUser2')) }}',
+            //     function (result) {
+            //         if (result) {
+            //             $.ajax({
+            //                 type: 'POST',
+            //                 url: '',
+            //                 datatype: 'json',
+            //                 data: {
+            //                     action: 'delete',
+            //                     value: row_id
+            //                 },
+            //                 success: function(data) {
+            //                     var info = oTable.page.info();
+            //                     var per_page = info.length;
+            //                     var page_number = info.page;
+            //                     if (info.recordsDisplay % info.length == 1) {
+            //                         if (page_number != 0) {
+            //                             page_number--;
+            //                         }
+            //                     }
+            //                     $('#tool_title').after('<p class="success">{{ js_escape(trans('langUserDeleted')) }}</p>');
+            //                     $('.success').delay(3000).fadeOut(1500);
+            //                     oTable.page(page_number).draw(false);
+            //                 },
+            //                 error: function(xhr, textStatus, error) {
+            //                     console.log(xhr.statusText);
+            //                     console.log(textStatus);
+            //                     console.log(error);
+            //                 }
+            //             });
+            //         }
+            //     }
+            // );
+
+            bootbox.confirm({ 
+                closeButton: false,
+                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",
+                message: "<p class='text-center'>{{ js_escape(trans('langDeleteUser')) }}&nbsp{{ js_escape(trans('langDeleteUser2')) }}</p>",
+                buttons: {
+                    cancel: {
+                        label: "{{ js_escape(trans('langCancel')) }}",
+                        className: "cancelAdminBtn position-center"
+                    },
+                    confirm: {
+                        label: "{{ js_escape(trans('langDelete')) }}",
+                        className: "deleteAdminBtn position-center",
+                    }
+                },
+                callback: function (result) {
+                    if(result) {
                         $.ajax({
                             type: 'POST',
                             url: '',
@@ -182,7 +230,18 @@
                             }
                         });
                     }
-                });
+                }
+            });
+
+
+
+
+
+
+
+
+
+
         });
         $('.dataTables_filter input')
             .attr({ style: 'width: 200px',

@@ -75,7 +75,7 @@
                                         <th>{{ trans('langNewBBBSessionStatus') }}</th>
                                         <th>{{ trans('langOpenedOn') }}</th>
                                         <th>{{ trans('langUpdatedOn') }}</th>
-                                        <th class='text-center'><span class='fa fa-cogs'></span></th>
+                                        <th class='text-end'><span class='fa fa-cogs'></span></th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -201,29 +201,69 @@
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
             var row_id = this.id;
-            console.log(row_id);
-            bootbox.confirm('{{ js_escape(trans('langConfirmDelete')) }}', function(result) {
-                if (result) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '{{ $deleteUrl }}',
-                        datatype: 'json',
-                        data: {
-                            id: row_id
-                        },
-                        success: function(data){
-                            var info = oTable.page.info();
-                            var page_number = info.page;
-                            oTable.draw(false);
-                        },
-                        error: function(xhr, textStatus, error){
-                            console.log(xhr.statusText);
-                            console.log(textStatus);
-                            console.log(error);
-                        }
-                    });
+            // bootbox.confirm('{{ js_escape(trans('langConfirmDelete')) }}', function(result) {
+            //     if (result) {
+            //         $.ajax({
+            //             type: 'POST',
+            //             url: '{{ $deleteUrl }}',
+            //             datatype: 'json',
+            //             data: {
+            //                 id: row_id
+            //             },
+            //             success: function(data){
+            //                 var info = oTable.page.info();
+            //                 var page_number = info.page;
+            //                 oTable.draw(false);
+            //             },
+            //             error: function(xhr, textStatus, error){
+            //                 console.log(xhr.statusText);
+            //                 console.log(textStatus);
+            //                 console.log(error);
+            //             }
+            //         });
+            //     }
+            // });
+            bootbox.confirm({ 
+                closeButton: false,
+                title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",
+                message: "<p class='text-center'>{{ js_escape(trans('langConfirmDelete')) }}</p>",
+                buttons: {
+                    cancel: {
+                        label: "{{ js_escape(trans('langCancel')) }}",
+                        className: "cancelAdminBtn position-center"
+                    },
+                    confirm: {
+                        label: "{{ js_escape(trans('langDelete')) }}",
+                        className: "deleteAdminBtn position-center",
+                    }
+                },
+                callback: function (result) {
+                    if(result) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '{{ $deleteUrl }}',
+                            datatype: 'json',
+                            data: {
+                                id: row_id
+                            },
+                            success: function(data){
+                                var info = oTable.page.info();
+                                var page_number = info.page;
+                                oTable.draw(false);
+                            },
+                            error: function(xhr, textStatus, error){
+                                console.log(xhr.statusText);
+                                console.log(textStatus);
+                                console.log(error);
+                            }
+                        });
+                    }
                 }
-            });
+            });         
+
+
+
+
         });
     });
 </script>

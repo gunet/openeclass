@@ -34,11 +34,34 @@ $(document).ready(function () {
     $(document).on("click", ".delete_btn", function(e) {
         var link = $(this).attr("href");
         e.preventDefault();
-        bootbox.confirm("$langDelWarnCoursePrerequisite", function(result) {
-            if (result) {
-                document.location.href = link;
+
+        // bootbox.confirm("$langDelWarnCoursePrerequisite", function(result) {
+        //     if (result) {
+        //         document.location.href = link;
+        //     }
+        // });
+
+        bootbox.confirm({ 
+            closeButton: false,
+            title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">$langConfirmDelete</h3>",
+            message: "<p class=\"text-center\">$langDelWarnCoursePrerequisite</p>",
+            buttons: {
+                cancel: {
+                    label: "$langCancel",
+                    className: "cancelAdminBtn position-center"
+                },
+                confirm: {
+                    label: "$langDelete",
+                    className: "deleteAdminBtn position-center",
+                }
+            },
+            callback: function (result) {
+                if(result) {
+                    document.location.href = link;
+                }
             }
         });
+
     });
 });
 

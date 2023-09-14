@@ -297,9 +297,6 @@
         var downloadURL = $(this).prev('input').val();
         var fileTitle = $(this).attr('title');
 
-        console.log('the fileURL:'+fileURL);
-        console.log('the downloadURL:'+downloadURL);
-
         // BUTTONS declare
         var bts = {
             download: {

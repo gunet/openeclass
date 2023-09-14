@@ -130,7 +130,7 @@ function links_autodetection($text) {
 function generate_single_post_html($post) {
     global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser,
     $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
-    $langWallPinPost, $langWallUnPinPost;
+    $langWallPinPost, $langWallUnPinPost, $langConfirmDelete, $langCancel;
 
     commenting_add_js();
 
@@ -169,11 +169,36 @@ function generate_single_post_html($post) {
                           $(document).on("click", ".link", function(e) {
                               var link = $(this).attr("href");
                               e.preventDefault();
-                              bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
-                                  if (result) {
-                                      document.location.href = link;
-                                  }
-                              });
+
+                            //   bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
+                            //       if (result) {
+                            //           document.location.href = link;
+                            //       }
+                            //   });
+
+                            bootbox.confirm({ 
+                                closeButton: false,
+                                title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
+                                message: "<p class=\"text-center\">'.js_escape($langWallPostDelConfirm).'</p>",
+                                buttons: {
+                                    cancel: {
+                                        label: "'.js_escape($langCancel).'",
+                                        className: "cancelAdminBtn position-center"
+                                    },
+                                    confirm: {
+                                        label: "'.js_escape($langDelete).'",
+                                        className: "deleteAdminBtn position-center",
+                                    }
+                                },
+                                callback: function (result) {
+                                    if(result) {
+                                        document.location.href = link;     
+                                    }
+                                }
+                            });
+
+
+
                           });
                       </script>';
         $post_actions = '<div class="action-btns float-end mt-2 d-flex gap-3">';
@@ -243,17 +268,42 @@ function generate_single_post_html($post) {
 function generate_infinite_container_html($posts, $next_page) {
     global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
     $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
-    $langWallPinPost, $langWallUnPinPost, $langWall, $langWallPostsShow;
+    $langWallPinPost, $langWallUnPinPost, $langWall, $langWallPostsShow, $langConfirmDelete, $langCancel;
 
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
                               var link = $(this).attr("href");
                               e.preventDefault();
-                              bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
-                                  if (result) {
-                                      document.location.href = link;
-                                  }
-                              });
+
+                            //   bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
+                            //       if (result) {
+                            //           document.location.href = link;
+                            //       }
+                            //   });
+
+
+                            bootbox.confirm({ 
+                                closeButton: false,
+                                title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
+                                message: "<p class=\"text-center\">'.js_escape($langWallPostDelConfirm).'</p>",
+                                buttons: {
+                                    cancel: {
+                                        label: "'.js_escape($langCancel).'",
+                                        className: "cancelAdminBtn position-center"
+                                    },
+                                    confirm: {
+                                        label: "'.js_escape($langDelete).'",
+                                        className: "deleteAdminBtn position-center",
+                                    }
+                                },
+                                callback: function (result) {
+                                    if(result) {
+                                        document.location.href = link;
+                                    }
+                                }
+                            });
+
+
                           });
                       </script>';
     $ret = '

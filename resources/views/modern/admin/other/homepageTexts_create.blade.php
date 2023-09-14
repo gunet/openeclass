@@ -9,29 +9,72 @@
                 idDelete = $(this).data('id');
                 idOrder = $(this).data('order');
                
-                bootbox.confirm('{{ trans('langConfirmDelete') }}', function(result) {
-                    if (result) {
+                // bootbox.confirm('{{ trans('langConfirmDelete') }}', function(result) {
+                //     if (result) {
 
-                        $.ajax({
-                            type: 'post',
-                            data: {
-                                toDelete: idDelete,
-                                oldOrder: idOrder
-                            },
-                            success: function() {
+                //         $.ajax({
+                //             type: 'post',
+                //             data: {
+                //                 toDelete: idDelete,
+                //                 oldOrder: idOrder
+                //             },
+                //             success: function() {
 
-                                $('.indexing').each(function (i){
-                                    $(this).html(i+1);
-                                });
+                //                 $('.indexing').each(function (i){
+                //                     $(this).html(i+1);
+                //                 });
 
-                                $('.tooltip').remove();
+                //                 $('.tooltip').remove();
 
 
-                                location.reload();
-                            }
-                        });
+                //                 location.reload();
+                //             }
+                //         });
+                //     }
+                // });
+
+
+                bootbox.confirm({ 
+                    closeButton: false,
+                    title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",
+                    message: "<p class='text-center'>{{ js_escape(trans('langConfirmDelete')) }}</p>",
+                    buttons: {
+                        cancel: {
+                            label: "{{ js_escape(trans('langCancel')) }}",
+                            className: "cancelAdminBtn position-center"
+                        },
+                        confirm: {
+                            label: "{{ js_escape(trans('langDelete')) }}",
+                            className: "deleteAdminBtn position-center",
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            $.ajax({
+                                type: 'post',
+                                data: {
+                                    toDelete: idDelete,
+                                    oldOrder: idOrder
+                                },
+                                success: function() {
+
+                                    $('.indexing').each(function (i){
+                                        $(this).html(i+1);
+                                    });
+
+                                    $('.tooltip').remove();
+
+
+                                    location.reload();
+                                }
+                            });
+                        }
                     }
-                });
+                }); 
+
+
+
+
             });
         });
     </script>
