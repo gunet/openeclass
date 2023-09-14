@@ -55,13 +55,26 @@ $tool_content .= action_bar([
           'url' => "{$urlAppend}main/portfolio.php",
           'icon' => 'fa-reply',
           'level' => 'primary-label' ],
+        [ 'title' => $langMaintenanceOn,
+          'url' => "maintenance_config.php",
+          'icon' => 'fa-lock',
+          'button-class' => 'btn-danger',
+          'level' => 'primary-label',
+          'show' => get_config('maintenance') != 1 ],
+        [ 'title' => $langMaintenanceOff,
+          'url' => "maintenance_config.php",
+          'icon' => 'fa-unlock',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label',
+          'show' => get_config('maintenance') != 0 ],
         [ 'title' => $langUnlockPlatform,
           'url' => 'unlock_platform.php',
           'icon' => 'fa-unlock',
           'button-class' => 'btn-success',
           'level' => 'primary-label',
-          'show' => get_config('upgrade_begin') ],
-    ], false) . $release_alert . "
+          'show' => get_config('upgrade_begin')
+        ],
+    ], false) . $release_alert . "    
     <div class='row'>
         <div class='col-md-12'>
             <div class='panel'>
