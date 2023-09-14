@@ -211,11 +211,9 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
 
 if (get_config('maintenance') == 1 ) {
     $filename = basename($_SERVER['REQUEST_URI']);
-    //    var_dump($filename);
 
     if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed) and $filename !== 'maintenance.php') {
-            redirect_to_home_page('main/maintenance.php');
-    //        var_dump('maintenance on');
+        redirect_to_home_page('main/maintenance.php');
     }
 }
 
