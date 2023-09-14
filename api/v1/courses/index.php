@@ -24,6 +24,11 @@
 function api_method($access) {
 
 
+    if ( isset($_GET['create']) ) {
+
+    }
+
+
     if ( isset($_GET['course_id']) && isset($_GET['uname']) ) {
 
         $courseCode = $_GET['course_id'];

@@ -383,6 +383,18 @@ if (isset($_POST['submit'])) {
         }
     }
 
+    //Maintenance Text set
+    foreach ($session->active_ui_languages as $langcode) {
+        $langVar = 'maintenance_text_' . $langcode;
+        if (isset($_POST[$langVar])) {
+            $oldText = get_config($langVar);
+            $newText = purify(trim($_POST[$langVar]));
+            if ($oldText != $newText) {
+                set_config($langVar, purify(trim($_POST[$langVar])));
+            }
+        }
+    }
+
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
         'email_prevent_autoset_change' => true,
@@ -1562,6 +1574,48 @@ $tool_content .= "
                         </div>
                     </div>";
 
+            $tool_content .= "<div class='panel panel-primary' id='fifteen'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langMaintenance</h2>
+                </div>
+                <div class='panel-body'>
+                        <div class='margin-bottom-fat margin-top-fat'><strong>$langMaintenanceChange</strong></div>
+                        <fieldset>
+                            <div class='landing-default'>";
+
+            foreach ($session->active_ui_languages as $langcode) {
+                $langname = $langNameOfLang[langcode_to_name($langcode)];
+                $maintenance_text = get_config('maintenance_text_' . $langcode);
+//                if (!$policy) {
+//                    $policyFile = "lang/$langcode/privacy.html";
+//                    if (file_exists($policyFile)) {
+//                        $policy = file_get_contents($policyFile);
+//                    } else {
+//                        $policy = get_config('privacy_policy_text_en');
+//                        if (!$policy) {
+//                            $policyFile = "lang/en/privacy.html";
+//                        }
+//                    }
+//                }
+                $tool_content .= "
+                                            <div class='form-group'>
+                                                <label for='privacy_policy_text_$langcode' class='col-sm-2 control-label'>$langText:<br>($langname)</label>
+                                                <div class='col-sm-10'>" .
+                    rich_text_editor("maintenance_text_$langcode", 5, 20, $maintenance_text) . "
+                                                </div>
+                                            </div>";
+            }
+
+            $tool_content .= "</div>
+                                <div class='form-group'>
+                                    <div class='col-sm-12'>
+                                        <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
+                                    </div>
+                                </div>
+                        </fieldset>
+                    </div>
+                </div>
+            ";
             $tool_content .= generate_csrf_token_form_field() ."
         </form>
     </div>";
@@ -1607,6 +1661,7 @@ $tool_content .= "
                 <li><a href='#twelve'>$langUsage / $langLogActions</a></li>
                 <li><a href='#thirteen'>$langLoginFailCheck</a></li>
                 <li><a href='#fourteen'>$langPrivacyPolicy</a></li>
+                <li><a href='#fifteen'>$langMaintenance</a></li>
             </ul>
         </div>
     </div>";
