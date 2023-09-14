@@ -30,6 +30,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 define('MONTHS', 30 * 24 * 60 * 60);
 
+$data['webDir'] = $webDir;
 $data['mail_form_js'] = $mail_form_js;
 $data['registration_link_options'] = $registration_link_options = [
     'show' => $langViewShow,
@@ -263,6 +264,7 @@ else {
     }
     $active_ui_languages = explode(' ', get_config('active_ui_languages'));
     $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
+    $data['maintenance_theme'] = $maintenance_theme = get_config('maintenance_theme');
     $data['sel'] = [];
     $data['selectable_langs'] = [];
     $data['cbox_dont_display_login_form'] = get_config('dont_display_login_form') ? 'checked' : '';
@@ -333,6 +335,14 @@ else {
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
     $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
+    $data['cbox_maintenance'] = get_config('maintenance') ? 'checked' : '';
 }
 
 view('admin.other.eclassconf', $data);
+
+
+function checkMaintenanceTheme($maintenance_theme, $number) {
+    if ($maintenance_theme == $number) {
+        return "checked";
+    }
+}

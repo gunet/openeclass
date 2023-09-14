@@ -200,12 +200,22 @@ if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
 
 if (($upgrade_begin = get_config('upgrade_begin'))) {
     if (!defined('UPGRADE')) {
-        //Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
         Session::flash('message', sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)));
         Session::flash('alert-class', 'alert-warning');
         if (!isset($guest_allowed) or !$guest_allowed) {
            redirect_to_home_page();
         }
+    }
+}
+
+
+if (get_config('maintenance') == 1 ) {
+    $filename = basename($_SERVER['REQUEST_URI']);
+    //    var_dump($filename);
+
+    if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed) and $filename !== 'maintenance.php') {
+            redirect_to_home_page('main/maintenance.php');
+    //        var_dump('maintenance on');
     }
 }
 

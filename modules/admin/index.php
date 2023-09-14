@@ -36,11 +36,24 @@ $data['release_info'] = get_eclass_release();
 
 // Construct a table with platform identification info
 $data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-        'url' => "{$urlServer}main/portfolio.php",
-        'icon' => 'fa-reply',
-        'button-class' => 'submitAdminBtn d-none',
-        'level' => 'primary')),false);
+       [ 'title' => $langBack,
+         'url' => "{$urlServer}main/portfolio.php",
+         'icon' => 'fa-reply',
+         'button-class' => 'submitAdminBtn d-none',
+         'level' => 'primary' ],
+        [ 'title' => $langMaintenanceOn,
+          'url' => "maintenance_config.php",
+          'icon' => 'fa-lock',
+          'button-class' => 'btn-danger',
+          'level' => 'primary-label',
+          'show' => get_config('maintenance') != 1 ],
+        [ 'title' => $langMaintenanceOff,
+          'url' => "maintenance_config.php",
+          'icon' => 'fa-unlock',
+          'button-class' => 'btn-success',
+          'level' => 'primary-label',
+          'show' => get_config('maintenance') != 0 ]),
+        false);
 
 $data['serverVersion'] = Database::get()->attributes()->serverVersion();
 $data['siteName'] = $siteName;
