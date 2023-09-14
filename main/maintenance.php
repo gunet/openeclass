@@ -29,6 +29,6 @@ $tool_content .= "
     <div id='maintenance'>$maintenance_text</div>
 ";
 
-draw($tool_content, 3, null, $head_content);
+draw($tool_content, 0);
 
 ?>
