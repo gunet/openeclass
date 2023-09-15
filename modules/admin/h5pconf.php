@@ -31,7 +31,7 @@ if (isset($_GET['update']) and $_GET['update']) {
             <div class='d-flex justify-content-center'>            
                 <a class='btn submitAdminBtn' href='$_SERVER[SCRIPT_NAME]?update=true' data-bs-placement='bottom' data-bs-toggle='tooltip' title='$langMaj'>
                     <span class='fa fa-refresh space-after-icon settings-icons'></span>
-                    <span class='hidden-xs TextBold ps-2'>$langMaj</span>                    
+                    <span class='hidden-xs TextBold ps-1'>$langMaj</span>                    
                 </a>";
                 if ($ts) {
                     $tool_content .= "<span class='help-block ps-2 text-success fw-bold'><em>$langlastUpdated: " . format_locale_date(strtotime($ts), 'short', false) . "</em></span>";

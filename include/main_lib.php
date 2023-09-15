@@ -3687,7 +3687,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if (isset($option['icon'])) {
                 $iconTag = "<span class='fa $option[icon] space-after-icon settings-icons'></span>";
                 $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs TextBold ps-2'>$title</span>";
+                $title = "<span class='hidden-xs TextBold ps-1'>$title</span>";
             }
             array_unshift($out_primary,
                 "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .

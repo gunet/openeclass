@@ -913,7 +913,7 @@ function display_assignment_submissions_graph_results($id)
         $tool_content .= "<script type = 'text/javascript'>gradesChartData = ".json_encode($this_chart_data).";</script>";
         /****   C3 plot   ****/
         $tool_content .= "<div class='row plotscontainer'>";
-        $tool_content .= "<div class='col-lg-12'>";
+        $tool_content .= "<div class='col-lg-12 mt-4'>";
         $tool_content .= plot_placeholder("grades_chart", $langGraphResults);
         $tool_content .= "</div></div>";
     }
