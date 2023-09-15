@@ -40,7 +40,7 @@ if(isset($_GET['term'])){
 
   $q = $_GET['term'];
 
-  //Get all course which user is registered
+  //Get all courses which user has registered
   if(empty($q)){
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                       course.code code,
@@ -57,7 +57,7 @@ if(isset($_GET['term'])){
                       AND course_user.user_id = ?d 
                       AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
                   ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
-  }else{//Get the course from search
+  }else{//Get all courses from search-component which user has registered 
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                    course.code code,
                    course.public_code,

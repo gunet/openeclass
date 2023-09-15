@@ -41,7 +41,7 @@ $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class=
 
 $tool_content .= "
     <div class='col-sm-12'>
-        <div class='form-wrapper form-edit rounded'>
+        <div class='form-wrapper form-edit border-0 px-0'>
             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
                 <div class='form-group'>
                     <label for='userFile' class='col-sm-6 control-label-notes'>$langPathUploadFile</label>
@@ -52,8 +52,8 @@ $tool_content .= "
                         </div>
                     </div>
                 </div>
-                <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                <div class='form-group mt-4'>
+                    <div class='col-12 d-flex justify-content-start align-items-start'>
                         <button class='btn submitAdminBtn' type='submit'>$langUpload</button>
                     </div>
                 </div>

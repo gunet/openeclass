@@ -102,10 +102,10 @@ $head_content .= '
 
 $tool_content .= "
 <div id='layout' class='mt-3'>
-	<div id='jsmiin-nav-horizontal'>
-		<div class='btn-group btn-group-justified mb-4' role='group' style=''>
+	<div id='jsmiin-nav-horizontal' class='d-flex justify-content-end'>
+		<div class='btn-group btn-group-justified gap-2 mb-4' role='group' style=''>
 			<div class='btn-group' role='group'>
-				<button id='Open' type='button' class='btn submitAdminBtn me-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+				<button id='Open' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                     <span class='TextBold hidden-xs pe-2'>$langOpenMind</span> 
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
@@ -117,7 +117,7 @@ $tool_content .= "
                 </div>
 			</div>
 			<div class='btn-group' role='group'>
-				<button id='Alter' type='button' class='btn submitAdminBtn me-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+				<button id='Alter' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                     <span class='TextBold hidden-xs pe-2'>$langEditMind</span>  
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
@@ -131,7 +131,7 @@ $tool_content .= "
                 </div>
 			</div>
 			<div class='btn-group' role='group'>
-				<button id='ChooseTheme' type='button' class='btn submitAdminBtn me-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+				<button id='ChooseTheme' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                     <span class='TextBold hidden-xs pe-2'>$langThemes</span> 
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>
@@ -157,7 +157,7 @@ $tool_content .= "
                 </div>
 			</div>
 			<div class='btn-group' role='group'>
-				<button id='Save' type='button' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+				<button id='Save' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                     <span class='TextBold hidden-xs pe-2'>$langSave</span> 
                     <span class='fa-solid fa-chevron-down fa-lg'></span>
                 </button>

@@ -3763,7 +3763,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 return "<div class='col-12 mb-4'>
                             <div class='col-12 action_bar d-flex justify-content-start'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
-                                    <div class='ButtonsContent d-flex justify-content-lg-start justify-content-end align-items-center flex-wrap'>
+                                    <div class='ButtonsContent d-flex justify-content-lg-end justify-content-end align-items-center flex-wrap'>
                                         $out
                                         $action_button
                                     </div>

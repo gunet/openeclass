@@ -178,7 +178,7 @@ $tool_content .= "
     <div class='oc-metedata-list'>
         <div class='col-12'>
             <ul class='list-group'>
-                <li class='list-group-item  notes_thead'>
+                <li class='list-group-item Primary-600-bg'>
                     <span class='text-white'>$langOpenCoursesCharacteristics</span>
                 </li>
                 <li class='list-group-item'>

@@ -125,8 +125,40 @@
                         )) !!}
 
                     @endif
+
+
+                    @if(Session::has('message'))
+                    <div class='col-12 all-alerts'>
+                        <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
+                            @php 
+                                $alert_type = '';
+                                if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
+                                }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
+                                }else{
+                                    $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
+                                }
+                            @endphp
+                            
+                            @if(is_array(Session::get('message')))
+                                @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
+                                {!! $alert_type !!}<span>
+                                @foreach($messageArray as $message)
+                                    {!! $message !!}
+                                @endforeach</span>
+                            @else
+                                {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
+                            @endif
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    @endif
                     
-                    <div class='col-12'>
+                    <div class='col-xxl-4 col-lg-6 col-12'>
                         <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
                             <input type='hidden' name='course' value='{{ $course_code }}'>
                             <div class='form-group'>
@@ -142,21 +174,6 @@
                         </form>
                     </div>
 
-                    @if(Session::has('message'))
-                        <div class='col-12 mt-4'>
-                            <p class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                @if(is_array(Session::get('message')))
-                                    @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
-                                    @foreach($messageArray as $message)
-                                        {!! $message !!}
-                                    @endforeach
-                                @else
-                                    {!! Session::get('message') !!}
-                                @endif
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            </p>
-                        </div>
-                    @endif
 
                     {{--
                     @if ($previousLink or $nextLink)

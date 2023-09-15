@@ -23,7 +23,7 @@
                     @foreach ($breadcrumbs as $key => $item)
                     @if (isset($item['bread_href']))
                             <li class="breadcrumb-item d-flex justify-content-center align-items-center">
-                                <a class='text-wrap text-decoration-underline vsmall-text' href='{{ $item['bread_href'] }}'>
+                                <a class='text-wrap text-decoration-none vsmall-text' href='{{ $item['bread_href'] }}'>
                                     {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<i class="fa-solid fa-house pe-1"></i> ' : "" !!}
                                     {!! $item['bread_text'] !!}
                                 </a>

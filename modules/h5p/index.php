@@ -38,9 +38,9 @@ if ($is_editor) {
     $h5pcontenttypes = $editorAjax->getLatestLibraryVersions();
 
     // custom action bar
-    $tool_content .= "<div class='col-12 clearfix'>
-        <div class='action_bar mt-2 rounded'>
-            <div class='col-sm-12 clearfix'>
+    $tool_content .= "
+        <div class='action_bar'>
+            <div class='col-sm-12 d-flex justify-content-end'>
                 <div class='margin-top-thin margin-bottom-fat'>
                     <div class='btn-group'>";
 
@@ -79,7 +79,7 @@ if ($is_editor) {
     // Import
     $tool_content .= "
         <a class='btn submitAdminBtn ms-2' href='upload.php?course=$course_code' data-bs-placement='bottom' data-bs-toggle='tooltip'  title='$langImport'>
-            <span class='fa-solid fa-upload space-after-icon sttings-icons'></span>
+            <span class='fa-solid fa-upload space-after-icon settings-icons'></span>
             <span class='TextBold hidden-xs ps-2'>$langImport</span>
         </a>";
 
@@ -88,7 +88,7 @@ if ($is_editor) {
                     </div>
                 </div>
             </div>
-        </div></div>";
+        </div>";
 
     // Control Flags
     if (isset($_GET['choice']) && isset($_GET['id'])) {

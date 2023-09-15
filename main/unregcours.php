@@ -41,8 +41,9 @@ if (!isset($_GET['cid'])) {
 
 if (!isset($_POST['doit'])) {
     $tool_content .= "
-    <div class='col-12'>
-      <div class='form-wrapper form-edit rounded'>
+    <div class='col-12 mt-4'>
+      <h3>$pageName</h3>
+      <div class='form-wrapper form-edit rounded mt-4 p-0 border-0'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?u=$_SESSION[uid]&amp;cid=$cid'>
           <div class='form-group'>
             <div class='col-sm-12'>
