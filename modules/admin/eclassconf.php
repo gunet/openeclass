@@ -151,6 +151,8 @@ if (isset($_POST['submit'])) {
         'mydocs_student_enable' => true,
         'mydocs_teacher_enable' => true,
         'offline_course' => true,
+        'activate_privacy_policy_consent' => true,
+        'maintenance' => true
     ];
 
     register_posted_variables($config_vars, 'all', 'intval');
