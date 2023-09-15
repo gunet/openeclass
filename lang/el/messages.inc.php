@@ -6086,3 +6086,5 @@ $langMaintenanceOn = "Ενεργοποίηση συντήρησης";
 $langMaintenanceOff = "Απενεργοποίηση συντήρησης";
 $langMaintenance = "Συντήρηση";
 $langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
+$langMaintenanceMode = "Λειτουργία συντήρησης";
+
