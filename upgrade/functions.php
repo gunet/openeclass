@@ -2702,6 +2702,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `api_token` ADD `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP");
     }
 
+    if (!DBHelper::fieldExists('course_user', 'course_reviewer')) {
+        Database::get()->query("ALTER TABLE course_user ADD `course_reviewer` TINYINT NOT NULL DEFAULT '0' AFTER editor");
+    }
+
 }
 
 

@@ -215,7 +215,7 @@ img {
   font-size: 22px;
 }
   
-.legendViewContent{
+/* .legendViewContent{
   border-bottom:solid 1px #E8EDF8;
 }
   
@@ -226,7 +226,7 @@ img {
   .legendViewContent2{
     border-bottom:solid 1px #E8EDF8;
   }
-}
+} */
   
 .help-block{ 
   color:#2B3944; 
@@ -262,6 +262,10 @@ img {
 
 .max-input-width{
   max-width: 255px;
+}
+
+a:hover,button:hover{
+  cursor:  url(../images/pointer.png), auto;
 }
 
   
@@ -564,6 +568,7 @@ a:hover{
 .cancelAdminBtn:hover, .deleteAdminBtn:hover, .menu-popover a:hover,
 #bgr-cheat-header a:hover{
   text-decoration: none;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 .form-label{
@@ -717,6 +722,7 @@ body:has(.mce-fullscreen) .navbar-eclass{
 
 #btn-search:hover{
   color: #0073E6;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 .menu-item{
@@ -993,6 +999,7 @@ body:has(.mce-fullscreen) .navbar-eclass{
 .alert-dismissible .btn-close:focus, .alert-dismissible .btn-close:hover, .alert-dismissible .btn-close:active{
   outline:0 ;
   box-shadow: none ;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 
@@ -1612,6 +1619,7 @@ label:has(input[type="checkbox"]:disabled){
   background-color: #2546F0;
   color: #ffffff;
   text-decoration: none;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 .deleteAdminBtn, 
@@ -3587,6 +3595,7 @@ body .delThemeBtn{
   border-color: #2546F0;
   background-color: #2546F0;
   color: #ffffff;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 .banner-img{

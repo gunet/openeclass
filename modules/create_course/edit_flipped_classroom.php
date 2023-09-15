@@ -22,7 +22,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
-$toolName = $langCourseEdit;
+$tmp_pageName = $langCourseEdit;
 
 load_js('jstree3');
 load_js('pwstrength.js');

@@ -326,7 +326,7 @@ function show_resources($unit_id)
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                     WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
             $html .= "<div class='form-group'>
-                                <label class='col-2 control-label'>$langActInHome</label>
+                                <label class='col-2 form-label'>$langActInHome</label>
                             </div>
             ";
             $html .= "<div class='table-responsive'>";
@@ -350,7 +350,7 @@ function show_resources($unit_id)
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
 
             $html .= "<div class='form-group'>
-            <label class='col-2 control-label'>$langActInClass</label>
+            <label class='col-2 form-label'>$langActInClass</label>
             </div>
             ";
             $html .= "<div class='table-responsive'>";
@@ -370,7 +370,7 @@ function show_resources($unit_id)
             WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
 
             $html .= "<div class='form-group'>
-            <label class='col-2 control-label'>$langActAfterClass</label>
+            <label class='col-2 form-label'>$langActAfterClass</label>
             </div>
             ";
             $html .= "<div class='table-responsive'>";
@@ -633,7 +633,7 @@ function show_doc($title, $comments, $resource_id, $file_id, $act_name) {
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>" . icon($image, '') . "</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td class='text-start'>$download_hidden_link $link $res_prereq_icon $comment</td>" .
             actions('doc', $resource_id, $status) .
             "</tr>";
@@ -650,7 +650,7 @@ function show_text($comments, $resource_id, $visibility, $act_name) {
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
     $content .= "
         <tr$class_vis data-id='$resource_id'>
-        <td class='text-start' width='1'>$act_name</td>
+        <td class='text-start'>$act_name</td>
           <td colspan='2'>$comments</td>" .
             actions('text', $resource_id, $visibility) .
             "</tr>";
@@ -668,7 +668,7 @@ function show_description($title, $comments, $id, $res_id, $visibility, $act_nam
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
     $content .= "
         <tr>
-        <td class='text-start' width='1'>$act_name</td>
+        <td class='text-start'>$act_name</td>
           <td colspan='2'>
             <div class='title'>" . q($title) . "</div>
             <div class='content'>$comments</div>
@@ -735,7 +735,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$link $res_prereq_icon $comment_box <span class='pull-right'>$lp_results_button $lp_results</span></td>" .
             actions('lp', $resource_id, $status) . "</tr>";
 }
@@ -794,7 +794,7 @@ function show_video($table, $title, $comments, $resource_id, $video_id, $visibil
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon($imagelink)."</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td> $videolink $res_prereq_icon $comment_box</td>" . actions('video', $resource_id, $visibility) . "
         </tr>";
 }
@@ -827,7 +827,7 @@ function show_videocat($title, $comments, $resource_id, $videolinkcat_id, $visib
     $content = "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>".icon('fa-folder-open')."</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>" . q($title);
 
     if (!empty($comments)) {
@@ -944,7 +944,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility, $act_
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$exlink $res_prereq_icon $comment_box $assign_to_users_message</td>" .
             actions('lp', $resource_id, $visibility) . '
         </tr>';
@@ -1063,7 +1063,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$exlink $res_prereq_icon $comment_box</td>" . actions('lp', $resource_id, $visibility) . "
         </tr>";
 }
@@ -1119,7 +1119,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility,
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$forumlink $res_prereq_icon $comment_box</td>" .
             actions('forum', $resource_id, $visibility) . '
         </tr>';
@@ -1169,7 +1169,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility, $act_
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$polllink $res_prereq_icon $comment_box</td>" .
             actions('poll', $resource_id, $visibility) . '
         </tr>';
@@ -1228,7 +1228,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility, $act_
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$wikilink $res_prereq_icon $comment_box</td>" .
             actions('wiki', $resource_id, $visibility) . '
         </tr>';
@@ -1276,7 +1276,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$exlink $comment_box</td>" . actions('link', $resource_id, $visibility) . "
         </tr>";
 }
@@ -1303,7 +1303,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
         } else {
             $content = "<tr class='not_visible' data-id='$resource_id'>
                         <td width='1'>" . icon('fa-folder-open') . "</td>
-                        <td class='text-start' width='1'>$act_name</td>
+                        <td class='text-start'>$act_name</td>
                         <td>" . q($title) . " ($langWasDeleted)";
 
         }
@@ -1312,7 +1312,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             $content .= "
                         <tr$class_vis data-id='$resource_id'>
                           <td width='1'>".icon('fa-folder-open')."</td>
-                          <td class='text-start' width='1'>$act_name</td>
+                          <td class='text-start'>$act_name</td>
                           <td>" . q($lcat->name);
             if (!empty($lcat->description)) {
                 $comment_box = "<br><small>$lcat->description</small>";
@@ -1381,7 +1381,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility, $ac
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$exlink $res_prereq_icon $comment_box</td>" . actions('ebook', $resource_id, $visibility) . "
         </tr>";
 }
@@ -1496,7 +1496,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='3'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$exlink $comment_box</td>" . actions('section', $resource_id, $visibility) . "
         </tr>";
 }
@@ -1540,7 +1540,7 @@ function show_chat($title, $comments, $resource_id, $chat_id, $visibility, $act_
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$chatlink $comment_box</td>" .
         actions('chat', $resource_id, $visibility) . '
         </tr>';
@@ -1581,7 +1581,7 @@ function show_blog($title, $comments, $resource_id, $blog_id, $visibility, $act_
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$bloglink $comment_box</td>" .
         actions('blog', $resource_id, $visibility) . '
         </tr>';
@@ -1629,7 +1629,7 @@ function show_h5p($title, $comments, $resource_id, $h5p_id, $visibility, $act_na
     return "
         <tr data-id='$resource_id'>
           <td>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$h5plink $comment_box</td>" .
         actions('h5p', $resource_id, $visibility) . '
         </tr>';
@@ -1684,7 +1684,7 @@ function show_tc($title, $comments, $resource_id, $tc_id, $visibility, $act_name
     return "
         <tr$class_vis data-id='$resource_id'>
           <td width='1'>$imagelink</td>
-          <td class='text-start' width='1'>$act_name</td>
+          <td class='text-start'>$act_name</td>
           <td>$tclink $comment_box</td>" .
         actions('tc', $resource_id, $visibility) . '
         </tr>';

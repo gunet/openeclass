@@ -31,39 +31,92 @@
                 $('.group-section .list-group-item').each(function () {
                     ids.push($(this).data('id'));
                 });
-                bootbox.confirm('{{ trans('langConfirmDelete') }}', function(result) {
-                    if (result) {
 
-                        $.ajax({
-                            type: 'post',
-                            data: {
-                                toDelete: idDelete,
-                                oldOrder: idOrder
-                            },
-                            success: function() {
 
-                                elem_rem.remove();
+                // bootbox.confirm('{{ trans('langConfirmDelete') }}', function(result) {
+                //     if (result) {
 
-                                $('.indexing').each(function (i){
-                                    $(this).html(i+1);
-                                });
+                //         $.ajax({
+                //             type: 'post',
+                //             data: {
+                //                 toDelete: idDelete,
+                //                 oldOrder: idOrder
+                //             },
+                //             success: function() {
 
-                                $('.tooltip').remove();
+                //                 elem_rem.remove();
 
-                                moreDeletes = $('.alert-success').length;
+                //                 $('.indexing').each(function (i){
+                //                     $(this).html(i+1);
+                //                 });
 
-                                if (moreDeletes > 0){
-                                    $('.alert-success').html('{{ trans('langFaqDeleteSuccess') }}');
-                                } else {
-                                    $('.row.action_bar').before('<div class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>{{ trans('langFaqDeleteSuccess') }}</span></div>');
+                //                 $('.tooltip').remove();
+
+                //                 moreDeletes = $('.alert-success').length;
+
+                //                 if (moreDeletes > 0){
+                //                     $('.alert-success').html('{{ trans('langFaqDeleteSuccess') }}');
+                //                 } else {
+                //                     $('.row.action_bar').before('<div class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>{{ trans('langFaqDeleteSuccess') }}</span></div>');
+                //                 }
+
+                //                 location.reload();
+
+                //             }
+                //         });
+                //     }
+                // });
+
+                bootbox.confirm({ 
+                    closeButton: false,
+                    title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",
+                    message: "<p class='text-center'>{{ js_escape(trans('langConfirmDelete')) }}</p>",
+                    buttons: {
+                        cancel: {
+                            label: "{{ js_escape(trans('langCancel')) }}",
+                            className: "cancelAdminBtn position-center"
+                        },
+                        confirm: {
+                            label: "{{ js_escape(trans('langDelete')) }}",
+                            className: "deleteAdminBtn position-center",
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            $.ajax({
+                                type: 'post',
+                                data: {
+                                    toDelete: idDelete,
+                                    oldOrder: idOrder
+                                },
+                                success: function() {
+
+                                    elem_rem.remove();
+
+                                    $('.indexing').each(function (i){
+                                        $(this).html(i+1);
+                                    });
+
+                                    $('.tooltip').remove();
+
+                                    moreDeletes = $('.alert-success').length;
+
+                                    if (moreDeletes > 0){
+                                        $('.alert-success').html('{{ trans('langFaqDeleteSuccess') }}');
+                                    } else {
+                                        $('.row.action_bar').before('<div class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>{{ trans('langFaqDeleteSuccess') }}</span></div>');
+                                    }
+
+                                    location.reload();
+
                                 }
-
-                                location.reload();
-
-                            }
-                        });
+                            });
+                        }
                     }
-                });
+                }); 
+
+
+
             });
         });
     </script>

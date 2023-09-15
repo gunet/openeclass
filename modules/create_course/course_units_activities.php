@@ -16,6 +16,8 @@ require_once 'functions.php';
 
 $course = new Course();
 
+$tmp_pageName = $langCourseEdit;
+
 load_js('tools.js');
 
 $head_content .= <<<hContent
@@ -160,11 +162,12 @@ if(!isset($_POST['final_submit'])){
 
 
             $tool_content .= "
-
+            <div class='row m-auto'>
+            <div class='col-lg-6 col-12 px-0'>
                 <div class='form-wrapper '>
                     <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
-                    <div class='card cardPanel'>
-                        <div class='card-header border-0'>
+                    <div class='card cardPanel border-0'>
+                        <div class='card-header bg-white px-0 border-0'>
                             
                                 $langActSelect
 
@@ -175,17 +178,20 @@ if(!isset($_POST['final_submit'])){
 
                     <fieldset>
                         <div class='table-responsive'>
-                            <table class='table table-bordered table-striped'>
-                            <tr>
-                                <td style='background-color:#d1d9e5;' ></td><th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-sm-2 '>$langActivities</th>
+                            <table class='table table-default'>
+                            <thead>
+                            <tr class='list-header'><td></td>
+                            <th class='px-0' scope='col'><label for='title' class='col-sm-2 '>$langActivities</th>
                 ";
-            $i=1;
-            foreach ($_SESSION['units'] as $utitle) {
-                $tool_content .= "<th scope='col' style='background-color:#d1d9e5; color:#3a4d6b;'><label for='title' class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
-                $i++;
-            }
+                $i=1;
+                foreach ($_SESSION['units'] as $utitle) {
+                    $tool_content .= "<th class='px-0' scope='col'><label for='title' class='col-md-10 ' title='$utitle'>".$i.' '.ellipsize($utitle,20).":</label></th>";
+                    $i++;
+                }
+
+
                 $tool_content .= "
-                                </tr>
+                                </tr></thead>
                                 <tr>
                                     <th scope='row' style='color:#31708f; '>$langActInHome:</th>";
 
@@ -202,17 +208,17 @@ if(!isset($_POST['final_submit'])){
 
                     }
                     if ($title_home == $end) {
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#E8EDF8;'></td>";
                     } else {
                         $tool_content .= "</tr><tr><td></td>";
                     }
 
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                $tool_content .="<td style='background-color:#E8EDF8;'></td>";
 
                 foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                    $tool_content .="<td style='background-color:#E8EDF8;'></td>";
                 }
 
                 $tool_content .= "
@@ -233,16 +239,16 @@ if(!isset($_POST['final_submit'])){
                     }
 
                     if ($title_class == $end) {
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#E8EDF8;'></td>";
                     }else{
                         $tool_content .= "</tr><tr><td></td>";
                     }
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                $tool_content .="<td style='background-color:#E8EDF8;'></td>";
 
                 foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                    $tool_content .="<td style='background-color:#E8EDF8;'></td>";
                 }
 
 
@@ -263,17 +269,17 @@ if(!isset($_POST['final_submit'])){
                         $z++;
                     }
                     if ($title_after_class == $end){
-                        $tool_content .= "</tr><tr><td style='background-color:#d1d9e5;'></td>";
+                        $tool_content .= "</tr><tr><td style='background-color:#E8EDF8;'></td>";
                     } else {
                         $tool_content .= "</tr><tr><td></td>";
                     }
 
                 }
 
-                $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                $tool_content .="<td style='background-color:#E8EDF8;'></td>";
 
                 foreach ($_SESSION['units'] as $utitle) {
-                    $tool_content .="<td style='background-color:#d1d9e5;'></td>";
+                    $tool_content .="<td style='background-color:#E8EDF8;'></td>";
                 }
 
                 $tool_content .= "</tr>
@@ -292,6 +298,11 @@ if(!isset($_POST['final_submit'])){
 
                 </fieldset>". generate_csrf_token_form_field() ."
             </form>
+        </div>
+        </div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
+            <div class='col-12 h-100 left-form'></div>
+        </div>
         </div>
         ";
 

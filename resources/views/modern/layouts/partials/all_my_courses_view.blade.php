@@ -128,7 +128,7 @@
                                             <div class="modal-header">
                                                 
                                                 <div class="modal-title" id="exampleModalLabel{{$course->course_id}}">
-                                                    <div class='icon-delete'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
+                                                    <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
                                                     <h3 class='modal-title-default text-center text-center mb-0'>{{ trans('langUnCourse') }}</h3>
                                                 </div>
                                             </div>

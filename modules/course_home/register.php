@@ -107,10 +107,10 @@ if ($course->visible == COURSE_CLOSED) {
         $registerLink = '';
     } else {
         $registerLink = "
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langRegistration:</label>
-                <div class='col-sm-10'>
-                    <p class='form-control-static'>
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 form-label'>$langRegistration:</label>
+                <div class='col-sm-12'>
+                    <p class='form-control-static form-value'>
                         <em><a href='{$urlAppend}modules/contact/index.php?course_id=$course_id'>$langLabelCourseUserRequest</a></em>
                     </p>
                 </div>
@@ -121,16 +121,16 @@ if ($course->visible == COURSE_CLOSED) {
     $accessIcon = "<span class='fa fa-lock fa-fw' style='font-size:23px;'><span class='fa fa-pencil text-danger fa-custom-lock' style='font-size:16px; position:absolute; top:7px; left:30px;'></span></span>";
     $accessHelp = $langPrivOpen;
     $registerLink = "
-            <div class='form-group'>
-                <div class='col-sm-12 text-center'>
-                   <input type='submit' name='register' class='btn btn-default' value='$langRegEnterCourse'>
+            <div class='form-group mt-5'>
+                <div class='col-sm-12'>
+                   <input type='submit' name='register' class='btn submitAdminBtnDefault' value='$langRegEnterCourse'>
                 </div>
             </div>";
     if ($course->password) {
         $registerLink = "
-            <div class='form-group'>
-                <label class='col-sm-2 control-label' for='pass'>$langPassword:</label>
-                <div class='col-sm-10'>
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 form-label' for='pass'>$langPassword:</label>
+                <div class='col-lg-6 col-sm-12'>
                     <input class='form-control' type='password' name='pass' id='pass' autocomplete='off'>
                 </div>
             </div>" . $registerLink;
@@ -156,22 +156,22 @@ $tool_content .= action_bar(array(
         generate_csrf_token_form_field() . "
         <fieldset>
             <div class='col-xs-12'>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langCode:</label>
-                <div class='col-sm-10'>
-                    <p class='form-control-static'>" . q($course->public_code) . "</p>
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 form-label'>$langCode:</label>
+                <div class='col-sm-12'>
+                    <p class='form-control-static form-value'>" . q($course->public_code) . "</p>
                 </div>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langFaculty:</label>
-                <div class='col-sm-10'>
-                    <p class='form-control-static'>$departments</p>
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 form-label'>$langFaculty:</label>
+                <div class='col-sm-12'>
+                    <p class='form-control-static form-value'>$departments</p>
                 </div>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langConfidentiality:</label>
-                <div class='col-sm-10'>
-                    <p class='form-control-static'>
+            <div class='form-group mt-4'>
+                <label class='col-sm-12 form-label'>$langConfidentiality:</label>
+                <div class='col-sm-12'>
+                    <p class='form-control-static form-value'>
                         $accessIcon&nbsp;$accessInfo
                         <span class='help-block'><small>$accessHelp</small></span>
                     </p>

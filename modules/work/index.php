@@ -299,11 +299,37 @@ if ($is_editor) {
             $(document).on('click', '.linkdelete', function(e) {
                 var link = $(this).attr('href');
                 e.preventDefault();
-                bootbox.confirm('$langDelWarnUserAssignment', function(result) {
-                    if (result) {
-                        document.location.href = link;
+
+
+                // bootbox.confirm('$langDelWarnUserAssignment', function(result) {
+                //     if (result) {
+                //         document.location.href = link;
+                //     }
+                // });
+
+
+                bootbox.confirm({ 
+                    closeButton: false,
+                    title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
+                    message: '<p class=\'text-center\'>".js_escape($langDelWarnUserAssignment)."</p>',
+                    buttons: {
+                        cancel: {
+                            label: '".js_escape($langCancel)."',
+                            className: 'cancelAdminBtn position-center'
+                        },
+                        confirm: {
+                            label: '".js_escape($langDelete)."',
+                            className: 'deleteAdminBtn position-center',
+                        }
+                    },
+                    callback: function (result) {
+                        if(result) {
+                            document.location.href = link;     
+                        }
                     }
                 });
+
+
             });
         });";
 
@@ -4365,7 +4391,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     }
     $notice = $submissions_exist > 1? $langNotice3Multiple: $langNotice3;
     $notice = ($submissions_exist)?
-    "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . icon('fa-info-circle') . " $notice</span></div></div>": '';
+    "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$notice</span></div></div>": '';
     if ($assignment->grading_type == ASSIGNMENT_SCALING_GRADE) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);

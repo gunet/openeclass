@@ -3582,13 +3582,16 @@ function form_buttons($btnArray) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo, $course_code, $toolName, $pageName;
+    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo, $course_code, $toolName, $pageName, $tmp_pageName;
 
     $out_primary = $out_secondary = array();
     $i=0;
     $page_title = "";
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
         $page_title = "<h6 class='text-dark TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
+    }
+    if (isset($tmp_pageName) and !empty($tmp_pageName)) {
+        $page_title = "<h6 class='text-dark TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($tmp_pageName)."</h6>";
     }
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
@@ -3742,17 +3745,33 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     // }
     if ($out && $i!=0) {
         if(isset($course_code) and $course_code){
-            return "<div class='col-12 mb-4'>
-                        <div class='col-12 action_bar d-flex justify-content-start'>
-                            <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
-                                <div class='ButtonsContent d-flex justify-content-lg-start justify-content-end align-items-center flex-wrap'>
-                                    $out
-                                    $action_button
+            $titleHeader = (!empty($tmp_pageName) ? $tmp_pageName : '');
+            if(!empty($titleHeader)){
+                return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
+                            <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>
+                            <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
+                                <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
+                                    <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>
+                                        $out
+                                        $action_button
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        $pageTitleActive
-                    </div>";
+                            $pageTitleActive
+                        </div>";
+            }else{
+                return "<div class='col-12 mb-4'>
+                            <div class='col-12 action_bar d-flex justify-content-start'>
+                                <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
+                                    <div class='ButtonsContent d-flex justify-content-lg-start justify-content-end align-items-center flex-wrap'>
+                                        $out
+                                        $action_button
+                                    </div>
+                                </div>
+                            </div>
+                            $pageTitleActive
+                        </div>";
+            }
         }else{
             $marginBottom = 'mb-4';
             if(isset($_SESSION['uid'])){
