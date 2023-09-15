@@ -459,7 +459,8 @@ if (isset($_POST['submit'])) {
         'mydocs_teacher_enable' => true,
         'offline_course' => true,
         'activate_privacy_policy_text' => true,
-        'activate_privacy_policy_consent' => true
+        'activate_privacy_policy_consent' => true,
+        'maintenance' => true,
         );
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -1100,6 +1101,8 @@ else {
     $cbox_enable_strong_passwords = get_config('enable_strong_passwords') ? 'checked' : '';
     $cbox_disable_student_unregister_cours = get_config('disable_student_unregister_cours') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
+    $cbox_maintenance = get_config('maintenance') ? 'checked' : '';
+
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
         $tool_content .= "
@@ -1579,7 +1582,21 @@ $tool_content .= "
                     <h2 class='panel-title'>$langMaintenance</h2>
                 </div>
                 <div class='panel-body'>
+                        <div class='form-group'>
+                        
+                            <div class='col-sm-9'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='maintenance' value='1' $cbox_maintenance>
+                                        $langMaintenanceMode
+                                    </label>
+                                </div>
+                            </div>
+                       
+                        </div>
+                        <hr>
                         <div class='margin-bottom-fat margin-top-fat'><strong>$langMaintenanceChange</strong></div>
+                        
                         <fieldset>
                             <div class='landing-default'>";
 
@@ -1607,6 +1624,7 @@ $tool_content .= "
             }
 
             $tool_content .= "</div>
+                            <hr>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
