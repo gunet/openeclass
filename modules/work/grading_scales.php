@@ -189,7 +189,7 @@ if (isset($_GET['scale_id'])) {
         $tool_content .= " 
      
                         <div class='form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-center'>
+                            <div class='col-12 d-flex justify-content-end'>
                             
                                
                                   ".

@@ -317,7 +317,7 @@ if (isset($require_current_course) and $require_current_course) {
     } else {
         $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
-                course.title as title, course.prof_names as prof_names, course.lang as lang, view_type, course.course_license,
+                course.title as title, course.prof_names as prof_names, course.lang as lang, view_type, course.course_license as course_license,
                 course.visible as visible, hierarchy.name AS faculte
             FROM course
                 LEFT JOIN course_department ON course.id = course_department.course

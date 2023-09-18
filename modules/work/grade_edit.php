@@ -291,7 +291,7 @@ function show_edit_form($id, $sid, $assign) {
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <div class='col-sm-9 col-sm-offset-3 d-inline-flex'>
+                                    <div class='col-12 d-inline-flex justify-content-end'>
                                         <input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
                                         <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
                                     </div>
@@ -501,7 +501,7 @@ function show_edit_form($id, $sid, $assign) {
 
 
 					<div class='form-group mt-5'>
-						<div class='col-12 d-inline-flex'>
+						<div class='col-12 d-inline-flex justify-content-end'>
 							<input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
 							<a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
 						</div>

@@ -410,7 +410,7 @@ if (isset($_GET['rubric_id'])) {
                     </div>";
     if (!$rubric_used) {
         $tool_content .= "<div class='form-group mt-5'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
                          
                             
                               ".

@@ -2683,7 +2683,7 @@ function new_assignment() {
             eClassTag::tagInput();
     $tool_content .= "
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-center align-items-center'>
+            <div class='col-12 d-flex justify-content-end align-items-center'>
 
                     "
                     .
@@ -3830,7 +3830,7 @@ function show_edit_assignment($id) {
                 eClassTag::tagInput($id);
         $tool_content .= "
             <div class='form-group mt-5'>
-                <div class='col-12 d-inline-flex justify-content-center align-items-center'>
+                <div class='col-12 d-inline-flex justify-content-end align-items-center'>
 
 
                         ".
@@ -4488,7 +4488,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>
                         $extra
                         <div class='form-group mt-3'>
-                            <div class='col-12 d-flex justify-content-center align-items-center'>".
+                            <div class='col-12 d-flex justify-content-end align-items-center'>".
                     form_buttons(array(
                         array(
                             'class'         => 'submitAdminBtn',
