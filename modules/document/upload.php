@@ -271,7 +271,7 @@ if ($can_upload) {
 
 
       $tool_content .= "
-      <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+      <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
         
           
              "
@@ -282,7 +282,7 @@ if ($can_upload) {
                         'text' => $langUpload
                     ),
                     array(
-                      'class' => 'cancelAdminBtn ms-1',
+                      'class' => 'cancelAdminBtn',
                       'href' => "index.php?course=$course_code",
                   )
                 ))

@@ -317,7 +317,7 @@ if (isset($require_current_course) and $require_current_course) {
     } else {
         $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
-                course.title as title, course.prof_names as prof_names, course.lang as lang, view_type,
+                course.title as title, course.prof_names as prof_names, course.lang as lang, view_type, course.course_license,
                 course.visible as visible, hierarchy.name AS faculte
             FROM course
                 LEFT JOIN course_department ON course.id = course_department.course
@@ -325,11 +325,12 @@ if (isset($require_current_course) and $require_current_course) {
             WHERE course.code = ?s",
             function ($course_info) {
                 global $course_id, $public_code, $course_code, $fac, $course_prof_names, $course_view_type,
-                    $languageInterface, $visible, $currentCourseName, $currentCourseLanguage;
+                    $languageInterface, $visible, $currentCourseName, $currentCourseLanguage, $courseLicense;
                 $course_id = $course_info->cid;
                 $public_code = $course_info->public_code;
                 $course_code = $course_info->code;
                 $fac = $course_info->faculte;
+                $courseLicense = $course_info->course_license;
                 $course_prof_names = $course_info->prof_names;
                 $course_view_type = $course_info->view_type;
                 $languageInterface = $course_info->lang;

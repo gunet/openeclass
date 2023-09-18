@@ -1721,6 +1721,18 @@ input[type="submit"].warningAdminBtn:hover {
   margin-right:0px;
 }
 
+.submitAdminBtn .fa-solid::before, .submitAdminBtn .fa-regular::before,
+.submitAdminBtnDefault .fa-solid::before, .submitAdminBtnDefault .fa-regular::before,
+.cancelAdminBtn .fa-solid::before, .cancelAdminBtn .fa-regular::before,
+.successAdminBtn .fa-solid::before, .successAdminBtn .fa-regular::before,
+.deleteAdminBtn .fa-solid::before, .deleteAdminBtn .fa-regular::before,
+.warningAdminBtn .fa-solid::before, .warningAdminBtn .fa-regular::before{
+  width: 16px ;
+  height: 16px ;
+  display: block;
+  margin-top: 1px;
+}
+
 
 /**********************************************************************************************************************/
 /******************************************************** BASIC BUTTON ************************************************/
@@ -2568,7 +2580,7 @@ body .form-action-button-popover{
   /* border-bottom: solid 1px #eee7e7; */
 }
 .panel-default .panel-heading .panel-title, .panel-action-btn-default .panel-heading .panel-title{
-  color:#ffffff;
+  color:#2B3944;
   margin-bottom:0px;
   padding:0px;
   font-weight: 700; font-style: normal;

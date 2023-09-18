@@ -14,7 +14,7 @@
                 <div class="col-xl-12 col-lg-8 col-md-12 col-sm-6 col-xs-6 justify-content-center">
                     <div class="row p-lg-5 p-md-5 ps-1 pe-1 pt-5 pb-5" style="margin-top:-20px;">
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view')
 
                         <div class="row p-2"></div>
                         <div class="row p-2"></div>

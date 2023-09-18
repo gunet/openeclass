@@ -26,7 +26,7 @@
                         </div>
                     </div>
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view')
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
                         Module not supported yet in course offline mode!</span>
                     </div>

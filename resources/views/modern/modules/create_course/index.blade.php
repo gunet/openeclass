@@ -85,7 +85,7 @@
 
                   @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-                  @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                  @include('layouts.partials.legend_view')
 
                   {!! $action_bar !!}
 
@@ -285,15 +285,17 @@
                                     </div>
 
                               </div>
+                              
+                              <div class='text-start mt-4 fw-bold'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
 
-                              <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                              <div class='form-group mt-5 d-flex justify-content-end align-items-center gap-2'>
 
-                                          <input class='btn submitAdminBtn' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
-                                          <a href='{{ $cancel_link }}' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>
+                                  <input class='btn submitAdminBtn' type='submit' name='create_course' value='{{ trans('langCourseCreate') }}'>
+                                  <a href='{{ $cancel_link }}' class='btn cancelAdminBtn'>{{ trans('langCancel') }}</a>
 
                               </div>
 
-                        <div class='text-center mt-3 fw-bold'><small>{{ trans('langFieldsOptionalNote') }}</small></div>
+                        
 
                     {!! generate_csrf_token_form_field() !!}
                   </form>

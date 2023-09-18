@@ -29,7 +29,7 @@
                                 @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                             </div>
                         </div>
-                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                        @include('layouts.partials.legend_view')
                     @endif
                     
 

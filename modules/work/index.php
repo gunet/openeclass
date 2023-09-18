@@ -2564,11 +2564,11 @@ function new_assignment() {
                 <div class=col-12 offset-md-3'>
                     <div class='table-responsive'>
                         <table id='assignees_tbl' class='table-default hide'>
-                            <tr class='title1'>
-                              <td id='assignees'>$langStudents</td>
-                              <td class='text-center'>$langMove</td>
-                              <td>$m[WorkAssignTo]</td>
-                            </tr>
+                            <thead><tr class='title1 list-header'>
+                              <td id='assignees' class='form-label'>$langStudents</td>
+                              <td class='text-center form-label'>$langMove</td>
+                              <td class='form-label'>$m[WorkAssignTo]</td>
+                            </tr></thead>
                             <tr>
                               <td>
                                 <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple></select>

@@ -107,7 +107,7 @@
                           </div>
 
 
-                          @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                          @include('layouts.partials.legend_view')
 
                           <div id='operations_container'>
                                 {!! $action_bar !!}
@@ -529,7 +529,7 @@
                                     </div>
                                     {!! showSecondFactorChallenge() !!}
 
-                                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                                    <div class='form-group mt-5 mb-1 d-flex justify-content-end align-items-center'>
                                         <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
                                     </div>
                                 </fieldset>

@@ -35,7 +35,7 @@
                         </div>
                         @endif
 
-                        @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                        @include('layouts.partials.legend_view')
                     
 
                         @if(Session::has('message'))
@@ -130,14 +130,14 @@
 
                                         <div class='form-group mt-5'>
                                             @if($menuTypeID == 3 or $menuTypeID == 1)
-                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                                 <button class='btn submitAdminBtn ' type='submit'>{{ trans('langSave') }}</button>
-                                                <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                             </div>
                                             @else
-                                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                                            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langSave') }}</button>
-                                                <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                                <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                 {!! generate_csrf_token_form_field() !!}
                                             </div>
                                             @endif

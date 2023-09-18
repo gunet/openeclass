@@ -29,7 +29,7 @@
                     </div>
 
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view')
 
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
@@ -169,7 +169,7 @@
                                 
 
                                 <div class='form-group mt-5'>
-                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                    <div class='col-12 d-flex justify-content-end align-items-center'>
                                        
                                             
                                                  <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>

@@ -100,23 +100,19 @@
 
 
 
-                    <div class='form-group mt-3'>
-                        <div class='col-12 d-flex justify-content-start align-items-center'>
-                          
-                              
-                                    <button class='btn submitAdminBtn' type='submit' >{{ trans('langOkComment') }}</button>
-                             
-                              
-                                    <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                             
-                           
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
+                            <button class='btn submitAdminBtn' type='submit' >
+                                {{ trans('langOkComment') }}
+                            </button>
+                            <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                         </div>
                     </div>
 
 
 
                     @unless ($is_dir)
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <div class='col-sm-offset-2 col-sm-10'>
                                 <span class='help-block'>{{ trans('langNotRequired') }}</span>
                             </div>

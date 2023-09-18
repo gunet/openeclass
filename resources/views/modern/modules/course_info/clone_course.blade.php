@@ -36,7 +36,7 @@
                         </div>
                     </div>
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view')
 
                     @if (isset($_POST['create_restored_course']))
                         {!! $new_action_bar !!}

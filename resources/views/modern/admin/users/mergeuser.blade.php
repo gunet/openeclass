@@ -9,7 +9,7 @@
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
                     
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view')
                    
                     @if(!$merge_completed){!! isset($action_bar) ?  $action_bar : '' !!}@endif
                     

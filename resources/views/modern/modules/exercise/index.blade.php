@@ -37,7 +37,7 @@
                                 </nav>
 
 
-                                @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                                @include('layouts.partials.legend_view')
 
                                 <div class="row p-2"></div>
                                 <small>Καθηγητής: {{$course_Teacher}}</small>

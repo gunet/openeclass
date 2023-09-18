@@ -21,20 +21,20 @@
 
                     <div class='form-group mt-4'>
                         @if($menuTypeID == 3 or $menuTypeID == 1)
-                        <div class='col-12 d-flex justify-content-start align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                           
                                
                                     <button class='btn submitAdminBtn' type='submit'>{{ trans('langMove') }}</button>
                                
                                
-                                    <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                    <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                              
                            
                         </div>
                         @else
-                        <div class='col-offset-2 col-10 d-flex justify-content-start align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                             <button class='btn submitAdminBtn' type='submit'>{{ trans('langMove') }}</button>
-                            <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                            <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                         </div>
                         @endif
                     </div>

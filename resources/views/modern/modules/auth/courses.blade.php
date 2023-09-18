@@ -62,7 +62,7 @@
 
                             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-                            @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                            @include('layouts.partials.legend_view')
 
                             <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                                 <div class="offcanvas-header">

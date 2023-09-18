@@ -1,20 +1,13 @@
 @php
-    $check_module = Database::get()->queryArray("SELECT *FROM course_module 
-                        WHERE module_id = ?d AND course_id = ?d", $module_id, $course_id);
-    foreach($check_module as $m){
-        $visible_module = $m->visible;
-    }
+
     $go_back_url = $_SERVER['REQUEST_URI'];
 
-    $courseLicense = 0;
-    $courseInfo = Database::get()->queryArray("SELECT *FROM course WHERE id = ?d",$course_id);
-    if(count($courseInfo) > 0){
-        foreach($courseInfo as $c){
-            if($c->course_license > 0){
-                $courseLicense = $c->course_license;
-            }
-        }
+    if(!$module_visibility){
+        $visible_module = 0;
+    }else{
+        $visible_module = 1;
     }
+
 @endphp
 
 

@@ -30,7 +30,7 @@
                     </div>
 
 
-                    @include('layouts.partials.legend_view',['is_editor' => $is_editor, 'course_code' => $course_code])
+                    @include('layouts.partials.legend_view')
 
                     @if ($is_editor and $q->flipped_flag != 2)
                                 {!! action_bar(array(
