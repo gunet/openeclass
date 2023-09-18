@@ -22,7 +22,7 @@
  * Base Theme Component, eClass Core
  *
  * @abstract This component is the core of eclass. Each and every file that
- * requires output to the user's browser must include this file and use
+ * needs to output to the user's browser must include this file and use
  * the view() or draw() calls to output the UI to the user's browser.
  *
  */
@@ -56,7 +56,7 @@ require_once 'tools.php';
  * @param array $view_data
  */
 function view($view_file, $view_data = array()) {
-    global $webDir, $is_editor, $course_code, $course_id, $language, $siteName,
+    global $webDir, $is_editor, $is_course_reviewer, $course_code, $course_id, $language, $siteName,
             $urlAppend, $urlServer, $theme, $pageName, $currentCourseName, $uid, $session,
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
@@ -89,7 +89,7 @@ function view($view_file, $view_data = array()) {
             $default_open_group = $tool_group_id;
         }
     }
-    
+
 
     $eclass_version = ECLASS_VERSION;
     $template_base = $urlAppend . 'template/' . $theme;
@@ -258,7 +258,7 @@ function view($view_file, $view_data = array()) {
     $leftsideImg = '';
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
-    
+
     $container = 'container-fluid';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 
@@ -320,7 +320,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        
+
         if (!empty($theme_options_styles['loginTextColor'])){
             $styles_str .= "
                 .eclass-title, .eclassInfo{
@@ -328,7 +328,7 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
-        
+
         if (isset($theme_options_styles['loginImg'])){
             $styles_str .= "
                 .jumbotron.jumbotron-login { 
@@ -354,7 +354,7 @@ function view($view_file, $view_data = array()) {
              $eclass_banner_value = 0;
         }
 
-       
+
         if (!empty($theme_options_styles['bgColorHeader'])) {
             $styles_str .= "
                 #bgr-cheat-header {
@@ -465,7 +465,7 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-  
+
         if (!empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
                 // .submitAdminBtn, .opencourses_btn, .searchGroupBtn {
@@ -484,7 +484,7 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-        
+
         if (!empty($theme_options_styles['whiteButtonHoveredTextColor'])) {
             $styles_str .= "
                 // .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
@@ -505,7 +505,7 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-        
+
         if (!empty($theme_options_styles['whiteButtonHoveredBgColor'])) {
             $styles_str .= "
                 // .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
@@ -523,9 +523,9 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-        
-        
-      
+
+
+
         if (!empty($theme_options_styles['buttonBgColor'])) {
             $styles_str .= "
                 // .submitAdminBtn.active, submitAdminBtn.active:hover{
@@ -562,14 +562,14 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-        
+
 
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
             $aboutLeftForm = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
             $aboutLeftForm[3] = '0.1';
             $aboutLeftForm = 'rgba(' . implode(',', $aboutLeftForm) . ')';
-            
+
 
             $rgba_no_alpha = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
             $rgba_no_alpha[3] = '1';
@@ -591,7 +591,7 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
-        
+
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
 
@@ -810,7 +810,7 @@ function view($view_file, $view_data = array()) {
     $cache = $webDir . '/storage/views/' . get_config('theme');
     $blade = new Blade($views, $cache);
 
-    $global_data = compact('is_editor', 'course_code', 'course_id', 'language',
+    $global_data = compact('is_editor', 'is_course_reviewer', 'course_code', 'course_id', 'language',
             'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
             'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
             'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
@@ -843,8 +843,7 @@ function widget_view($view_file, $view_data = array()) {
     return $blade->make($view_file, $data)->render();
 }
 /**
- * Function draw
- *
+ * @brief
  * This method processes all data to render the display. It is executed by
  * each tool. Is in charge of generating the interface and parse it to the user's browser.
  *
@@ -855,22 +854,6 @@ function widget_view($view_file, $view_data = array()) {
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($tool_content, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $session, $course_code, $course_id, $helpTopic,
-        $is_editor, $langActivate, $langNote,
-        $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
-        $langChooseLang, $langDeactivate, $langProfileMenu,
-        $langHelp, $langUsageTerms,
-        $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
-        $langMyPersoAnnouncements, $langMyPersoDeadlines,
-        $langMyPersoDocs, $langMyPersoForum, $langMyCourses,
-        $langPortfolio, $langSearch, $langUser,
-        $langUserPortfolio, $langUserHeader, $language,
-        $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
-        $require_current_course, $require_course_admin, $require_help, $siteName,
-        $switchLangURL, $theme, $themeimg, $is_course_admin,
-        $toolContent_ErrorExists, $urlAppend, $urlServer,
-        $language, $saved_is_editor, $langProfileImage,
-        $langStudentViewEnable, $langStudentViewDisable, $langTitle, $langEnterNote, $langFieldsRequ, $tmp_pageName;
 
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     if ($is_embedonce) {
