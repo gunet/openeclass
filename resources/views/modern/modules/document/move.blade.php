@@ -1,4 +1,5 @@
-
+<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
         <div class='form-wrapper form-edit mt-2 rounded'>
             <form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='movePath' value='{{ $file }}'>
@@ -6,7 +7,7 @@
                     {!! $group_hidden_input !!}
                     <div class='form-group'>
                         <label for='moveTo' class='col-sm-12 control-label-notes'>{{ trans('langMove') }} {{ trans('langTo') }}:</label>
-                        <div class='col-lg-6 col-md-12 col-sm-12 col-12'>
+                        <div class='col-12'>
                             <select name='moveTo' class='form-select'>
                                 @if ($curDirPath and $curDirPath != '/')
                                     <option value=''>{{ trans('langParentDir') }}</option>
@@ -19,27 +20,18 @@
                         </div>
                     </div>
 
-                    <div class='form-group mt-4'>
-                        @if($menuTypeID == 3 or $menuTypeID == 1)
-                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                          
-                               
-                                    <button class='btn submitAdminBtn' type='submit'>{{ trans('langMove') }}</button>
-                               
-                               
-                                    <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                             
-                           
-                        </div>
-                        @else
-                        <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                            <button class='btn submitAdminBtn' type='submit'>{{ trans('langMove') }}</button>
-                            <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                        </div>
-                        @endif
+                    <div class='col-12 d-flex justify-content-end align-items-center gap-2 mt-4'>
+                        <button class='btn submitAdminBtn' type='submit'>{{ trans('langMove') }}</button>
+                        <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                    </div>
+
                     </div>
                 </fieldset>
                 {!! generate_csrf_token_form_field() !!}
             </form>
         </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+</div>
 

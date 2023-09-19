@@ -1784,14 +1784,15 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code;
+    global $id, $urlServer, $langTitle, $langDescription, $langContents, $langSubmit, $course_code, $urlAppend;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
     $rescomments = $ru->comments;
     $resource_id = $ru->id;
     $resource_type = $ru->type;
-    $content = "<div class='col-12'><div class='form-wrapper form-edit rounded'>";
+    $content = "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
     $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/index.php?course=$course_code'>" .
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
@@ -1809,12 +1810,15 @@ function edit_res($resource_id) {
                     <label class='col-sm-6 control-label-notes'>$message</label>
                     <div class='col-sm-12'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
                 </div>
-                <div class='col-12 mt-5 d-flex justify-content-center'>
+                <div class='col-12 mt-5 d-flex justify-content-end'>
                     <input class='btn submitAdminBtn' type='submit' name='edit_res_submit' value='$langSubmit'>
 
                 </div>
             </form></div>
-        </div>";
+        </div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
     return $content;
 }
 

@@ -118,16 +118,12 @@ if ($can_upload) {
             'level' => 'primary')));
     
       
-    if($menuTypeID == 3 or $menuTypeID == 1){
-      $tool_content .= "<div class='row'>
-        
-        <div class='col-lg-6 col-12'>";
-    }else{
-        $tool_content .= "<div class='col-sm-12'>";
-    }
+
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'><div class='flex-grow-1'>";
+    
     
             
-    $tool_content .= "<div class='form-wrapper form-edit rounded'>
+    $tool_content .= "<div class='form-wrapper form-edit border-0 px-0'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
           <input type='hidden' name='uploadPath' value='$uploadPath' />
@@ -294,17 +290,12 @@ if ($can_upload) {
       </div>
     </form>
     </div></div>
+    <div class='d-none d-lg-block'>
+                                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                            </div>
+                        </div>
     ";
-    if($course_id < 1){
-      $tool_content .= "<div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                          <div class='col-12 h-100 left-form'></div>
-                      </div>";
-    }
     
-
-    if($menuTypeID == 3 or $menuTypeID == 1){
-      $tool_content .= "</div>";
-    }
 } else {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotAllowed</span></div></div>";
 }

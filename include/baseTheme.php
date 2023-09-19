@@ -260,6 +260,7 @@ function view($view_file, $view_data = array()) {
     $eclass_banner_value = 1;
 
     $container = 'container-fluid';
+    $forms_image = 'form-image-modules';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 
     $logo_img = $themeimg.'/eclass-new-logo.svg';
@@ -348,6 +349,9 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['fluidContainerWidth'])){
             $container = 'container-fluid';
             $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
+            $size_image_form = $theme_options_styles['fluidContainerWidth']/2;
+            $size_image_form = $size_image_form.'px';
+            $styles_str .= "@media(min-width:1400px){.form-image-modules{max-width: calc($size_image_form - 240px);}}";
         }
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";

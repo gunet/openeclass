@@ -170,7 +170,7 @@ foreach ($app->getParams() as $param) {
 $tool_content .= $boolean_field;
 $tool_content .= "
             <div class='form-group'>
-              <div class='col-12 d-flex justify-content-center'>
+              <div class='col-12 d-flex justify-content-end'>
                 <button class='btn submitAdminBtn me-2' type='submit' name='submit'>$langSubmit</button>
                 <button class='btn deleteAdminBtn me-2' type='submit' name='submit' value='clear'>$langClearSettings</button>
                 <a href='extapp.php' class='btn cancelAdminBtn'>$langCancel</a>

@@ -121,7 +121,8 @@ $tool_content .= action_bar([
 enableCheckFileSize();
 $tool_content .= "
 
-        <div class='col-12 mt-3'>
+<div class='d-lg-flex gap-4 mt-4'>
+<div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' enctype='multipart/form-data' method='post' action='import.php?course=$course_code&amp;id=$id'>
                     <fieldset>
@@ -130,14 +131,14 @@ $tool_content .= "
                                 <p class='form-control-static'>$langImportGradesHelp</p>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='userfile' class='col-sm-12 control-label-notes'>$langWorkFile:</label>
                             <div class='col-sm-12'>" . fileSizeHidenInput() . "
                                 <input type='file' id='userfile' name='userfile'>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
-                            <div class='col-sm-offset-2 col-sm-10 d-inline-flex'>" .
+                        <div class='form-group mt-4'>
+                            <div class='col-12 d-flex justify-content-end'>" .
                                 form_buttons([[ 'class' => 'submitAdminBtn',
                                                 'name' => 'new_assign',
                                                 'value' => $langUpload,
@@ -148,6 +149,9 @@ $tool_content .= "
                     </fieldset>
                 </form>
             </div>
-        </div>";
+        </div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);

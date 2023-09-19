@@ -63,7 +63,8 @@ if (isset($_GET['delete'])) {
             'level' => 'primary'
         )
     ))."
-    <div class='col-12'><div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' name='group_id' value='$group_id'>
             <div class='form-group'>
@@ -90,6 +91,9 @@ if (isset($_GET['delete'])) {
                 </div>
             </div>            
         </form>
-    </div></div>";
+    </div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 }
 draw($tool_content, 2);

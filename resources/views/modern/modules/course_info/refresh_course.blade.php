@@ -88,8 +88,8 @@ $(function() {
                     </div>
                     @endif
                     
-                     
-                    <div class='col-12'>
+                    <div class='d-lg-flex gap-4 mt-4'>
+                    <div class='flex-grow-1'>
                     <div class='form-wrapper form-edit rounded'>
                        
                         @if (!isset($_GET['from_user']))
@@ -127,19 +127,19 @@ $(function() {
                                                 {{trans('langWithRegistrationDate')}}
                                             </label>
                                         </div>
-                                        <div class='row'>
-                                            <div class='col-sm-6'>
-                                                {!! selection(array('before' => trans('langBefore'), 'after' => trans('langAfter')), 'reg_flag', $reg_flag) !!}
-                                            </div>
-                                            <div class='col-sm-6 mt-md-1 mt-3'>
-                                                <div class='input-group'>
-                                                    <input class='form-control mt-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
-                                                    <div class='input-group-text h-40px input-bg-color input-border-color'>
-                                                        <span class="fa-solid fa-calendar text-white" aria-hidden="true"></span>
-                                                    </div>
+                                        
+                                        <div class='col-12'>
+                                            {!! selection(array('before' => trans('langBefore'), 'after' => trans('langAfter')), 'reg_flag', $reg_flag) !!}
+                                        </div>
+                                        <div class='col-12 mt-3'>
+                                            <div class='input-group'>
+                                                <input class='form-control mt-0 border-end-0' type='text' name='reg_date' id='reg_date' value='{!! date("d-m-Y", time()) !!}'>
+                                                <div class='input-group-text h-40px bg-white input-border-color'>
+                                                    <span class="fa-solid fa-calendar" aria-hidden="true"></span>
                                                 </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                     <div class='form-group mt-4'>
                                         <div class='col-sm-12 checkbox'>
@@ -150,10 +150,10 @@ $(function() {
                                             </label>
                                         </div>
                                         <div class='row'>
-                                            <div class='col-sm-6'>
+                                            <div class='col-11'>
                                                 {!! selection(array('yes' => trans('langWithDepartment'), 'no' => trans('langWithoutDepartment')), 'dept_flag', 'yes') !!}
                                             </div>
-                                            <div class='col-sm-6 mt-md-0 mt-2'>
+                                            <div class='col-1'>
                                                 {!! $buildusernode !!}
                                             </div>
                                         </div>
@@ -166,14 +166,14 @@ $(function() {
                                                 {{trans('langWith')}}
                                             </label>
                                         </div>
-                                        <div class='row'>
-                                            <div class='col-sm-6'>
-                                                {!! selection(array('am' => trans('langWithStudentId'), 'uname' => trans('langWithUsernames')), 'id_flag', 'am') !!}
-                                            </div>
-                                            <div class='col-sm-6 mt-md-0 mt-2'>
-                                                <textarea name='idlist' class='form-control' rows='5'></textarea>
-                                            </div>
+                                       
+                                        <div class='col-12'>
+                                            {!! selection(array('am' => trans('langWithStudentId'), 'uname' => trans('langWithUsernames')), 'id_flag', 'am') !!}
                                         </div>
+                                        <div class='col-12 mt-3'>
+                                            <textarea name='idlist' class='form-control' rows='5'></textarea>
+                                        </div>
+                                       
                                     </div>
 
 
@@ -271,7 +271,7 @@ $(function() {
                                     {{ showSecondFactorChallenge() }}
 
                                
-                                    <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+                                    <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
                                         <input class='btn submitAdminBtn' type='submit' value='{{ trans('langSubmitActions') }}' name='submit'>
                                     </div>
 
@@ -280,6 +280,10 @@ $(function() {
                             </form>
                         </div>
                     </div>    
+                    <div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
+                        </div>
+                    </div>
                 </div>
             </div>
 

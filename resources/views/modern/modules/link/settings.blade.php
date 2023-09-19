@@ -68,13 +68,14 @@
                         </div>
                         @endif
 
-                        <div class='col-sm-12'>
+                        <div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' action='index.php?course={{ $course_code }}'>
                                 <fieldset>                 
                                              
                                     <div class='form-group'>
-                                        <label class='col-sm-6 control-label-notes mb-2'>{{ trans('langSocialBookmarksFunct') }}</label>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langSocialBookmarksFunct') }}</label>
                                         <div class='col-sm-12'> 
                                             <div class='radio mb-2'>
                                                 <label>
@@ -109,6 +110,9 @@
                                 {!! generate_csrf_token_form_field() !!}
                                 </form>
                             </div>
+                        </div><div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
+                        </div>
                         </div>
                 </div>
             </div>

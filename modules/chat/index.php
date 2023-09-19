@@ -83,7 +83,8 @@ if ($is_editor) {
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
 
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
+        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>";
@@ -141,8 +142,11 @@ if ($is_editor) {
                 </div>
             </div>";
 
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'></div>";
-        $tool_content .= "</form></div></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "</form></div></div><div class='d-none d-lg-block'>
+                                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                            </div>
+                        </div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
             //<![CDATA[
                 var chkValidator  = new Validator("confForm");
@@ -254,7 +258,8 @@ if ($is_editor) {
         $conf = Database::get()->querySingle("SELECT * FROM conference WHERE conf_id = ?d", $conf_id);
         $textarea = rich_text_editor('description', 4, 20, $conf->conf_description);
 
-        $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
+        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+                            <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='confForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<div class='form-group'>";
@@ -340,8 +345,11 @@ if ($is_editor) {
         }
 
         $tool_content .= "<input type = 'hidden' name = 'conference_id' value='$conf_id'>";
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></div>";
-        $tool_content .= "</fieldset></form></div></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'></div>";
+        $tool_content .= "</fieldset></form></div></div><div class='d-none d-lg-block'>
+                                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                            </div>
+                        </div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("confForm");

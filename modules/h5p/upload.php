@@ -37,10 +37,10 @@ $upload_target_url = 'courses/temp/h5p';
 $toolName = $langImport;
 $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
-$tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langImportH5P</span></div></div>";
-
 $tool_content .= "
-    <div class='col-sm-12'>
+<div class='d-lg-flex gap-4 mt-4'>
+<div class='flex-grow-1'>
+<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langImportH5P</span></div></div>
         <div class='form-wrapper form-edit border-0 px-0'>
             <form class='form-horizontal' role='form' action='save.php' method='post' enctype='multipart/form-data'>
                 <div class='form-group'>
@@ -59,6 +59,9 @@ $tool_content .= "
                 </div>
             </form>
         </div>
-    </div>";
+    </div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 
 draw($tool_content, 2);

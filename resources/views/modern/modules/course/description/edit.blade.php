@@ -40,38 +40,43 @@
 
                     {!! $action_bar !!}
                 
-                    <div class='col-12'>
-                        <div class='form-wrapper form-edit rounded'>
-                            <form class='form-horizontal' role='form' action='index.php?course={{ $course_code }}' method='post'>
-                                @if ($editId)
-                                    <input type='hidden' name='editId' value='{{ getIndirectReference($editId) }}'>
-                                @endif
-                                <div class='form-group'>
-                                    <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
-                                    <div class='col-sm-12'>
-                                        {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
+                    <div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
+                            <div class='form-wrapper form-edit rounded'>
+                                <form class='form-horizontal' role='form' action='index.php?course={{ $course_code }}' method='post'>
+                                    @if ($editId)
+                                        <input type='hidden' name='editId' value='{{ getIndirectReference($editId) }}'>
+                                    @endif
+                                    <div class='form-group'>
+                                        <label for='editType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
+                                        <div class='col-sm-12'>
+                                            {!! selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') !!}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class='form-group{{ $titleError ? " form-error" : ""}} mt-4'>
-                                    <label for='titleSel' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
-                                    <div class='col-sm-12'>
-                                        <input type='text' name='editTitle' class='form-control' value='{{ $cdtitle }}' size='40' id='titleSel'>
-                                        {!! Session::getError('editTitle', "<span class='help-block Accent-200-cl'>:message</span>") !!}
+                                    <div class='form-group{{ $titleError ? " form-error" : ""}} mt-4'>
+                                        <label for='titleSel' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
+                                        <div class='col-sm-12'>
+                                            <input type='text' name='editTitle' class='form-control' value='{{ $cdtitle }}' size='40' id='titleSel'>
+                                            {!! Session::getError('editTitle', "<span class='help-block Accent-200-cl'>:message</span>") !!}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class='form-group mt-4'>
-                                    <label for='editComments' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}</label>
-                                    <div class='col-sm-12'>
-                                        {!! $text_area_comments !!}
+                                    <div class='form-group mt-4'>
+                                        <label for='editComments' class='col-sm-6 control-label-notes'>{{ trans('langContent') }}</label>
+                                        <div class='col-sm-12'>
+                                            {!! $text_area_comments !!}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class='form-group mt-5'>
-                                    <div class='col-12 d-flex justify-content-center align-items-center'>
-                                        {!! $form_buttons !!}
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                            {!! $form_buttons !!}
+                                        </div>
                                     </div>
-                                </div>
-                            {!! generate_csrf_token_form_field() !!}
-                            </form>
+                                {!! generate_csrf_token_form_field() !!}
+                                </form>
+                            </div>
+                        </div>
+                        <div class='d-none d-lg-block'>
+                                <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
                         </div>
                     </div>
                 </div>

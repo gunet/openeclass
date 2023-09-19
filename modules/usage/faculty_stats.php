@@ -216,7 +216,8 @@ if (isset($_GET['stats_submit'])) {
 
     load_js('jstree3');
     $tool_content .= "
-    <div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
                         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='get'>
                     <fieldset>";
@@ -252,12 +253,15 @@ if (isset($_GET['stats_submit'])) {
             </div>
         </div>";
     $tool_content .= "<div class='row form-group mt-5'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='stats_submit' value='$langSubmit'>
                             <a href='index.php' class='btn cancelAdminBtn ms-2'>$langCancel</a>
                         </div>
           </div>";
-    $tool_content .= "</fieldset></form></div></div>";
+    $tool_content .= "</fieldset></form></div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 }
 
 draw($tool_content, 3, null, $head_content);

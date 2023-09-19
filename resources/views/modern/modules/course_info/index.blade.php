@@ -145,52 +145,47 @@
                           @endif
 
                           
-
-                          <div class='col-12'>
+                          <div class='d-lg-flex gap-4 mt-4'>
+                          <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit py-3 rounded'>
 
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>
-                                    <div class='row'>
-                                        <div class='col-md-6 col-12'>
-                                            <div class='form-group'>
-                                                <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-md-0 mt-4'>
-                                                <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
-                                                </div>
-                                            </div>
+                                    
+                                      
+                                    <div class='form-group'>
+                                        <label for='fcode' class='col-sm-6 control-label-notes'>{{ trans('langCode') }}</label>
+                                        <div class='col-sm-12'>
+                                            <input type='text' class='form-control' name='fcode' id='fcode' value='{{ $public_code }}'>
                                         </div>
                                     </div>
-
-
-
-                                    <div class='row'>
-                                        <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-4'>
-                                                <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
-                                                <div class='col-sm-12'>
-                                                    <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-4'>
-                                                <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
-                                                <div class='col-sm-12'>
-                                                    {!! $buildusernode !!}
-                                                </div>
-                                            </div>
+                                
+                                    <div class='form-group mt-4'>
+                                        <label for='title' class='col-sm-12 control-label-notes'>{{ trans('langCourseTitle') }}</label>
+                                        <div class='col-sm-12'>
+                                            <input type='text' class='form-control' name='title' id='title' value='{{ q($title) }}'>
                                         </div>
                                     </div>
+                                      
+
+                                       
+                                    <div class='form-group mt-4'>
+                                        <label for='teacher_name' class='col-sm-12 control-label-notes'>{{ trans('langTeachers') }}</label>
+                                        <div class='col-sm-12'>
+                                            <input type='text' class='form-control' name='teacher_name' id='teacher_name' value='{{ $teacher_name }} '>
+                                        </div>
+                                    </div>
+                            
+
+                                
+                                    <div class='form-group mt-4'>
+                                        <label for='Faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
+                                        <div class='col-sm-12'>
+                                            {!! $buildusernode !!}
+                                        </div>
+                                    </div>
+                                       
+                                    
 
 
                                     <div class='form-group mt-4'>
@@ -200,75 +195,76 @@
                                         </div>
                                     </div>
 
-                                    <div class='row'>
-                                        <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-4'>
-                                                <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</label>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='view_type' value='simple' id='simple' {{ $course_type_simple }}>
-                                                        {{ trans('langCourseSimpleFormat') }}
-                                                    </label>
-                                                    </div>
-                                                    <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='view_type' value='units' id='units' {{ $course_type_units }}>
-                                                        {{ trans('langWithCourseUnits') }}
-                                                    </label>
-                                                    </div>
-                                                    <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
-                                                        {{ trans('langCourseActivityFormat') }}
-                                                    </label>
-                                                    </div>
-                                                    <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
-                                                        {{ trans('langCourseWallFormat') }}
-                                                    </label>
-                                                    </div>
-                                                    <div class='radio mb-2'>
-                                                       <label>
-                                                          <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
-                                                          {{ trans('langFlippedClassroom') }}
-                                                        </label>
-                                                    </div>
-                                                </div>
+
+                                    
+                                        
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langCourseFormat') }}</label>
+                                        <div class='col-sm-12'>
+                                            <div class='radio mb-2'>
+                                            <label>
+                                                <input type='radio' name='view_type' value='simple' id='simple' {{ $course_type_simple }}>
+                                                {{ trans('langCourseSimpleFormat') }}
+                                            </label>
                                             </div>
-                                        </div>
-
-                                        @if (isset($isOpenCourseCertified)) {
-                                            <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
-                                        @endif
-
-                                        <div class='col-md-6 col-12'>
-                                            <div class='form-group mt-4'>
-                                                <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</label>
-                                                <div class='col-sm-12'>
-                                                    <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='l_radio' value='0' {{ $license_checked0 }} $disabledVisibility>
-                                                        {{ trans('langLicenseUnset') }}
-                                                    </label>
-                                                    </div>
-                                                    <div class='radio mb-2'>
-                                                    <label>
-                                                        <input type='radio' name='l_radio' value='10' {{ $license_checked10 }} $disabledVisibility>
-                                                        {{ trans('langCopyrightedNotFree') }}
-                                                    </label>
-                                                    </div>
-                                                    <div class='radio'>
-                                                    <label>
-                                                        <input id='cc_license' type='radio' name='l_radio' value='cc' {{ $cc_checked}} $disabledVisibility>
-                                                        {{ trans("langCMeta['course_license']") }}
-                                                    </label>
-                                                    </div>
-                                                </div>
+                                            <div class='radio mb-2'>
+                                            <label>
+                                                <input type='radio' name='view_type' value='units' id='units' {{ $course_type_units }}>
+                                                {{ trans('langWithCourseUnits') }}
+                                            </label>
+                                            </div>
+                                            <div class='radio mb-2'>
+                                            <label>
+                                                <input type='radio' name='view_type' value='activity' id='activity' {{ $course_type_activity }}>
+                                                {{ trans('langCourseActivityFormat') }}
+                                            </label>
+                                            </div>
+                                            <div class='radio mb-2'>
+                                            <label>
+                                                <input type='radio' name='view_type' value='wall' id='wall' {{ $course_type_wall }}>
+                                                {{ trans('langCourseWallFormat') }}
+                                            </label>
+                                            </div>
+                                            <div class='radio mb-2'>
+                                                <label>
+                                                    <input type='radio' name='view_type' value='flippedclassroom' id='flippedclassroom' {{ $course_type_flipped_classroom }}>
+                                                    {{ trans('langFlippedClassroom') }}
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
+                                        
+
+                                    @if (isset($isOpenCourseCertified)) {
+                                        <input type='hidden' name='course_license' value='{{ getIndirectReference($course_license) }}'>
+                                    @endif
+
+                                        
+                                    <div class='form-group mt-4'>
+                                        <label class='col-sm-12 control-label-notes mb-2'>{{ trans('langOpenCoursesLicense') }}</label>
+                                        <div class='col-sm-12'>
+                                            <div class='radio mb-2'>
+                                            <label>
+                                                <input type='radio' name='l_radio' value='0' {{ $license_checked0 }} $disabledVisibility>
+                                                {{ trans('langLicenseUnset') }}
+                                            </label>
+                                            </div>
+                                            <div class='radio mb-2'>
+                                            <label>
+                                                <input type='radio' name='l_radio' value='10' {{ $license_checked10 }} $disabledVisibility>
+                                                {{ trans('langCopyrightedNotFree') }}
+                                            </label>
+                                            </div>
+                                            <div class='radio'>
+                                            <label>
+                                                <input id='cc_license' type='radio' name='l_radio' value='cc' {{ $cc_checked}} $disabledVisibility>
+                                                {{ trans("langCMeta['course_license']") }}
+                                            </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        
+                                    
 
 
                                     <div class='form-group mt-4'>
@@ -537,6 +533,10 @@
                               </form>
                             </div>
                           </div>
+                          <div class='d-none d-lg-block'>
+                                <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

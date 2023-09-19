@@ -933,7 +933,8 @@ switch ($action) {
     case 'rqSearch':
     {
         $tool_content .= "
-        <div class='col-12'>
+        <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
@@ -944,13 +945,16 @@ switch ($action) {
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' value='". $langSubmit ."'>
                             <a class='btn cancelAdminBtn ms-1' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
                         </div>
                     </div>
                 </form>
-            </div></div>";
+            </div></div><div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+        </div>";
         break;
     }
     default:

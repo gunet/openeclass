@@ -175,7 +175,8 @@ if (isset($_POST['submit'])) {
         $action .= "&amp;res_type=forum_new_topic";
     }
     $tool_content .= "
-    <div class='col-12'><div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$action' method='post' enctype='multipart/form-data'>
         <fieldset>
             <div class='form-group'>
@@ -198,7 +199,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class='form-group mt-5'>
-              <div class='col-12 d-flex justify-content-center align-items-center'>
+              <div class='col-12 d-flex justify-content-end align-items-center'>
                
                     
                         <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
@@ -211,6 +212,9 @@ if (isset($_POST['submit'])) {
             </div>
 	</fieldset>
 	</form>
-    </div></div>";
+    </div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 }
 draw($tool_content, 2, null, $head_content);

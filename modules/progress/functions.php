@@ -819,7 +819,7 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
  */
 function display_modification_activity($element, $element_id, $activity_id, $unit_id = 0) {
 
-    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes;
+    global $tool_content, $course_code, $langModify, $langOperator, $langUsedCertRes, $urlAppend;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
     if (resource_usage($element, $activity_id)) { // check if resource has been used by user
@@ -842,18 +842,24 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
         }
         $operators = get_operators();
 
-        $tool_content .= "<form action=$action method='post'><div class='form-wrapper form-edit rounded'>";
+        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'><form action=$action method='post'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<input type='hidden' name='$element_name' value='$element_id'>";
         $tool_content .= "<input type='hidden' name='activity_id' value='$activity_id'>";
         $tool_content .= "<div class='form-group mt-3'>";
         $tool_content .= "<label for='name' class='col-sm-1 control-label-notes'>$langOperator:</label>";
         $tool_content .= "<span class='col-sm-2'>" . selection($operators, 'cert_operator', $data->operator) . "</span>";
-        $tool_content .= "<span class='col-sm-2'><input class='form-control' type='text' name='cert_threshold' value='$data->threshold'></span>";
+        $tool_content .= "<span class='col-sm-2'><input class='form-control mt-3' type='text' name='cert_threshold' value='$data->threshold'></span>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='col-sm-5 col-sm-offset-5 mt-3'>";
         $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='mod_cert_activity' value='$langModify'>";
         $tool_content .= "</div>";
-        $tool_content .= "</div></form>";
+        $tool_content .= "</div></form>
+
+    </div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
     }
 }
 
@@ -2213,7 +2219,7 @@ function certificate_settings($element, $element_id = 0) {
     global $tool_content, $head_content, $course_code,
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
-           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline;
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
 
@@ -2270,7 +2276,8 @@ function certificate_settings($element, $element_id = 0) {
         $check_certdeadline = '';
         $statuscertdeadline = '';
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
                     <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
@@ -2322,7 +2329,7 @@ function certificate_settings($element, $element_id = 0) {
                 </div>
                 $cert_id";
                 $tool_content .= "<div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>
 
 
                            ".form_buttons(array(
@@ -2343,7 +2350,10 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
             </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 
 

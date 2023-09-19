@@ -98,7 +98,8 @@ if (isset($_POST['submit'])) {
         $guest_info->username = $default_guest_username;
         $submit_label = $langAdd;
     }
-    $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
         <div class='form-group'>
@@ -126,7 +127,7 @@ if (isset($_POST['submit'])) {
                 <span id='result'></span>
             </div>
         </div>
-        <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+        <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
          
              
              <input class='btn submitAdminBtn' type='submit' name='submit' value='$submit_label'>
@@ -141,7 +142,10 @@ if (isset($_POST['submit'])) {
         </fieldset>
         ". generate_csrf_token_form_field() ."
         </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 draw($tool_content, 2, null, $head_content);
 

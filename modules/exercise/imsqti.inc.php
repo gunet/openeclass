@@ -89,23 +89,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       UPLOAD FORM
       -------------------------------------- */
     $tool_content .= 
-        "<div class='col-12'><div class='form-wrapper form-edit rounded'>
+        "<div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes' method='post'>
                 <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >
                     <h5>$langImport</h5>
                     <div class='form-group'>
-                        <label class='col-sm-6 control-label-notes'>$langIMSQTIUploadFile:</label>
+                        <label class='col-sm-12 control-label-notes'>$langIMSQTIUploadFile:</label>
                         <div class='col-sm-12'>
                             <input type='file' name='uploadedPackage'>                            
                         </div>
                     </div>
                 <div class='form-group mt-4'>
-                    <div class='col-sm-offset-3 col-sm-9'>
+                    <div class='col-12'>
                         <input type='submit' value='" . $langImport . "'>
                         <span class='help-block'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</small>
                     </div>
                 </div>
             </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+</div>";
 }
 chdir($pwd);

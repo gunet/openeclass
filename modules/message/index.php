@@ -469,7 +469,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         </div>
 
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-center align-items-center'>
+            <div class='col-12 d-flex justify-content-end align-items-center'>
            
                  
                     ".

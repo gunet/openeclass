@@ -64,7 +64,7 @@ if (isset($_GET['submit'])) {
 function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langNoAssign, $tool_content, $langSelect,
             $langYes, $langNo, $langWorks, $course_id, $course_code, $langGroupWorkDeadline_of_Submission,
-            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS;
+            $themeimg, $langCancel, $urlServer, $langTitle, $langHasExpiredS, $urlAppend;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -118,7 +118,8 @@ function show_assignments() {
         $table_content .= "</td>\n    </tr>";
     }
     $tool_content .= "
-    <div class='col-12 mt-3'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>
@@ -163,7 +164,10 @@ function show_assignments() {
                     </div>
                 </fieldset>
             </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 
 // Insert a group work submitted by user uid to assignment id

@@ -460,7 +460,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
  */
 function selection_course_modules() {
 
-    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module;
+    global $langAllModules, $langModule, $langInfoUserDuration, $langInfoUserDuration2, $course_id, $modules, $course_code, $module, $urlAppend;
 
     $mod_opts = "<option value='-1'>$langAllModules</option>";
     $result = Database::get()->queryArray("SELECT module_id FROM course_module
@@ -476,15 +476,16 @@ function selection_course_modules() {
         $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
     }
 
-    $content = "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoUserDuration $langInfoUserDuration2</span></div>";
-    $content .= "
-        <div class='col-12'>
+    $content = "
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
+    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoUserDuration $langInfoUserDuration2</span></div>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' name='module_select' action='$_SERVER[SCRIPT_NAME]' method='get'>
                 <input type='hidden' name='course' value='$course_code'>
                     <div class='form-group'>
-                        <label class='col-sm-6 control-label-notes'>$langModule</label>
-                        <div class='col-sm-4'>
+                        <label class='col-sm-12 control-label-notes'>$langModule</label>
+                        <div class='col-sm-12'>
                             <select name='m' id='m' class='form-select' onChange='document.module_select.submit();'>
                                 $mod_opts
                             </select>
@@ -492,7 +493,10 @@ function selection_course_modules() {
                     </div>
                 </form>
             </div>
-        </div>";
+        </div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 
     return $content;
 }

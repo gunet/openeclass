@@ -101,7 +101,8 @@
                                             'level' => 'primary')), false) 
                                 !!}
 
-                        <div class='col-12'>
+                        <div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
                             <div class='form-wrapper form-edit rounded'>
                                 
                                 <form class='form-horizontal' action='{{ $postUrl }}' method='post' onsubmit="return checkrequired(this, 'unittitle')">
@@ -152,7 +153,7 @@
 
                                     
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center'>
                                            <button class='btn submitAdminBtn' type='submit' name='edit_submit'>{{ trans('langSubmit') }}</button>
                                            <a class='btn cancelAdminBtn ms-1' href='{{ $postUrl }}'>{{ trans('langCancel') }}</a>
                                         </div>
@@ -160,6 +161,9 @@
                                     {!! generate_csrf_token_form_field() !!}
                                 </form>
                             </div>
+                        </div><div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
+                        </div>
                         </div>
                     
                 </div>

@@ -117,7 +117,8 @@ if ($is_editor) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
         enableCheckFileSize();
         $tool_content .= "
-        <div class='col-12'>
+        <div class='d-lg-flex gap-4 mt-5'>
+    <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>" .
                 fileSizeHidenInput() . "
@@ -149,7 +150,7 @@ if ($is_editor) {
 
                 <div class='form-group mt-5'>
                     
-                       <div class='col-12 d-flex justify-content-center align-items-center'>
+                       <div class='col-12 d-flex justify-content-end align-items-center'>
                           
                               ".
                               form_buttons(array(
@@ -171,7 +172,10 @@ if ($is_editor) {
                     
                 </div>
             </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+</div>";
     } elseif (isset($_GET['vis'])) {
         if (!resource_belongs_to_progress_data(MODULE_ID_EBOOK, $_GET['vis'])) {
             Database::get()->query("UPDATE ebook SET visible = NOT visible

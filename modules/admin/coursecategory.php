@@ -307,7 +307,7 @@ function displayForm($id = null, $name = null, $ordering = null, $multiple = nul
     }
 
     $html .= "
-    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
        
            "
                 . form_buttons(array(

@@ -1707,7 +1707,7 @@ function new_assignment() {
            $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
            $langTiiExcludeValue, $langLTIOptions, $langGradeReviews, $langReviewsPerUser, $autojudge,
            $langAllowableReviewValues, $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock,
-           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission;
+           $langNoGradeRubrics, $langNoGradeScales, $langGroupWorkDeadline_of_Submission, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2129,7 +2129,8 @@ function new_assignment() {
     $fileCount = Session::has('fileCount')? Session::get('fileCount') : 2;
 
     $tool_content .= "
-    <div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' enctype='multipart/form-data' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
@@ -2705,7 +2706,10 @@ function new_assignment() {
                 </div>
             </div>
         </fieldset>
-        </form></div></div>";
+        </form></div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 
 /**
@@ -2733,7 +2737,7 @@ function show_edit_assignment($id) {
         $langTiiReportGenOnDue, $langTiiSViewReports, $langTiiExcludeBiblio, $langTiiExcludeQuoted,
         $langTiiExcludeSmall, $langTiiExcludeType, $langTiiExcludeTypeWords, $langPercentage,
         $langTiiExcludeValue, $langGradeReviews, $langReviewsPerUser, $langAllowableReviewValues,
-        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions;
+        $langReviewStart, $langReviewEnd, $langReviewDateHelpBlock, $langLTIOptions, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -3202,7 +3206,8 @@ function show_edit_assignment($id) {
     $review_error_rubric = Session::getError('rubric_review');
 
     $tool_content .= "
-    <div class='col-12 mt-3'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
     <div class='form-wrapper form-edit rounded'>
     <form class='form-horizontal' enctype='multipart/form-data' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
     <input type='hidden' name='id' value='$id' />
@@ -3658,11 +3663,11 @@ function show_edit_assignment($id) {
                     <div class='col-12'>
                         <div class='table-responsive'>
                             <table id='assignees_tbl' class='table-default ".((($row->assign_to_specific==1) or ($row->assign_to_specific==2))? '' : 'hide')."'>
-                            <tr class='title1'>
-                              <td id='assignees'>$langStudents</td>
-                              <td class='text-center'>$langMove</td>
-                              <td>$m[WorkAssignTo]</td>
-                            </tr>
+                            <thead><tr class='title1 list-headr'>
+                              <td id='assignees' class='form-label'>$langStudents</td>
+                              <td class='text-center form-label'>$langMove</td>
+                              <td class='form-label'>$m[WorkAssignTo]</td>
+                            </tr></thead>
                             <tr>
                               <td>
                                 <select class='form-select h-100 rounded-0' id='assign_box' size='10' multiple>
@@ -3853,7 +3858,10 @@ function show_edit_assignment($id) {
                 </div>
             </div>
     </fieldset>
-    </form></div></div>";
+    </form></div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 }
 
 
@@ -4301,7 +4309,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     global $tool_content, $m, $langWorkFile, $langSubmit, $langWorkFileLimit,
     $langNotice3, $langNotice3Multiple, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf,
     $course_code, $course_id, $langBack, $is_editor, $langWorkOnlineText,
-    $langGradebookGrade, $urlServer;
+    $langGradebookGrade, $urlServer, $urlAppend;
 
     if (!$_SESSION['courses'][$course_code]) {
         return;
@@ -4327,7 +4335,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $group_select_hidden_input = "<input type='hidden' name='group_id' value='$gids[0]' />";
             } elseif ($user_group_info) {
                 $group_select_form = "
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
                               " . selection($user_group_info, 'group_id') . "
@@ -4345,7 +4353,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             $groups_with_no_submissions = groups_with_no_submissions($id);
             if (count($groups_with_no_submissions)>0) {
                 $group_select_form = "
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='group_id' class='col-sm-6 control-label-notes'>$langGroupSpaceLink:</label>
                             <div class='col-sm-12'>
                               " . selection($groups_with_no_submissions, 'group_id') . "
@@ -4362,7 +4370,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
 
             if (count($users_with_no_submissions)>0) {
                 $group_select_form = "
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='user_id' class='col-sm-6 control-label-notes'>$langOnBehalfOf:</label>
                             <div class='col-sm-12'>
                               " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
@@ -4395,14 +4403,14 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3'> ($m[max_grade]: $assignment->max_grade)";
     }
     $extra = $on_behalf_of ? "
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label class='col-sm-6 control-label-notes'>$langGradebookGrade:</label>
                             <div class='col-sm-12'>
                               $grade_field
                               <input type='hidden' name='on_behalf_of' value='1'>
                             </div>
                         </div>
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                 <label class='label-container'>
@@ -4422,7 +4430,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         if ($assignment->submission_type == 1) {
             // Online text submission
             $submission_form = "
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='submission_text' class='col-sm-6 control-label-notes'>$langWorkOnlineText:</label>
                             <div class='col-sm-12'>
                                 ". rich_text_editor('submission_text', 10, 20, '') ."
@@ -4447,7 +4455,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $moreButton = '';
             }
             $submission_form = "
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='userfile' class='col-sm-6 control-label-notes'>$label:</label>
                             <div class='col-sm-10'>$moreButton
                               <input type='file' name='$inputName' id='userfile'>
@@ -4474,20 +4482,21 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 )
             ))."
                     $notice
-                    <div class='col-12 mt-3'><div class='form-wrapper form-edit rounded'>
+                    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
                      <form class='form-horizontal' enctype='multipart/form-data' action='$form_link' method='post'>
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input $course_unit_hidden_input
                         <fieldset>
                         $group_select_form
                         $submission_form
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <label for='stud_comments' class='col-sm-6 control-label-notes'>$m[comments]:</label>
                             <div class='col-sm-12'>
                               <textarea class='form-control' name='stud_comments' id='stud_comments' rows='5'></textarea>
                             </div>
                         </div>
                         $extra
-                        <div class='form-group mt-3'>
+                        <div class='form-group mt-4'>
                             <div class='col-12 d-flex justify-content-end align-items-center'>".
                     form_buttons(array(
                         array(
@@ -4505,7 +4514,10 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>
                         </fieldset>
                      </form>
-                     </div></div>
+                     </div></div><div class='d-none d-lg-block'>
+                     <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                 </div>
+                 </div>
                      <div class='float-end'><small>$GLOBALS[langMaxFileSize] " .
                 ini_get('upload_max_filesize') . "</small></div><br>";
     }

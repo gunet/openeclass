@@ -137,7 +137,7 @@ function display_user_grades($gradebook_id) {
 function new_gradebook() {
 
     global $tool_content, $course_code, $langStart, $langEnd, $head_content, $language,
-           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect;
+           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect, $urlAppend;
 
         load_js('bootstrap-datetimepicker');
         $head_content .= "
@@ -160,7 +160,10 @@ function new_gradebook() {
     $degreerange_error  = Session::getError('degreerange');
     $degreerange = Session::has('degreerange') ? Session::get('degreerange') : 0;
     $tool_content .=
-        "<div class='form-wrapper form-edit rounded'>
+        "
+<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
+        <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group".($title_error ? " has-error" : "")."'>
                     <div class='col-12'>
@@ -171,8 +174,8 @@ function new_gradebook() {
                         <span class='help-block Accent-200-cl'>$title_error</span>
                     </div>
                 </div>
-                <div class='row'>
-                    <div class='col-md-6 col-12'>
+                
+                   
                         <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                             <div class='col-12'>
                                 <label class='control-label-notes'>$langStart</label>
@@ -186,8 +189,8 @@ function new_gradebook() {
                                 <span class='help-block Accent-200-cl'>$start_date_error</span>
                             </div>
                         </div>
-                    </div>
-                    <div class='col-md-6 col-12'>
+                   
+                    
                         <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                             <div class='col-12'>
                                 <label class='control-label-notes'>$langEnd</label>
@@ -201,8 +204,8 @@ function new_gradebook() {
                                 <span class='help-block Accent-200-cl'>$end_date_error</span>
                             </div>
                         </div>
-                    </div>
-                </div>
+                 
+                
                 <div class='form-group".($degreerange_error ? " has-error" : "")." mt-4'>
                     <label class='col-12 control-label-notes'>$langGradebookRange</label>
                     <div class='col-12'>
@@ -217,7 +220,7 @@ function new_gradebook() {
                     </div>
                 </div>
                 <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>
 
                            "
                                 .form_buttons(array(
@@ -237,9 +240,14 @@ function new_gradebook() {
 
                     </div>
                 </div>
-            ". generate_csrf_token_form_field() ."
+                ". generate_csrf_token_form_field() ."
             </form>
-        </div>";
+        </div>
+    </div>
+    <div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+</div>";
 }
 
 
@@ -323,7 +331,7 @@ function gradebook_settings($gradebook_id) {
     global $tool_content, $course_code,
            $langTitle, $langSave, $langStart, $langEnd, $head_content,
            $langSave, $langGradebookRange, $langGradebookUpdate,
-           $gradebook, $langGradeScalesSelect, $language;
+           $gradebook, $langGradeScalesSelect, $language, $urlAppend;
     load_js('bootstrap-datetimepicker');
     $head_content .= "
     <script type='text/javascript'>
@@ -346,7 +354,8 @@ function gradebook_settings($gradebook_id) {
     $degreerange = Session::has('degreerange') ? Session::get('degreerange') : $gradebook->range;
     // update gradebook title
     $tool_content .= "
-        <div class='col-sm-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
@@ -356,8 +365,8 @@ function gradebook_settings($gradebook_id) {
                             <span class='help-block Accent-200-cl'>$title_error</span>
                         </div>
                     </div>
-                    <div class='row'>
-                        <div class='col-md-6 col-12'>
+                    
+                       
                             <div class='form-group".($start_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
                                     <label class='control-label-notes'>$langStart</label>
@@ -371,8 +380,8 @@ function gradebook_settings($gradebook_id) {
                                     <span class='help-block Accent-200-cl'>$start_date_error</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class='col-md-6 col-12'>
+                      
+                      
                             <div class='form-group".($end_date_error ? " has-error" : "")." mt-4'>
                                 <div class='col-12'>
                                     <label class='control-label-notes'>$langEnd</label>
@@ -386,8 +395,8 @@ function gradebook_settings($gradebook_id) {
                                     <span class='help-block Accent-color-cl'>$end_date_error</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                       
+                    
                     <div class='form-group".($degreerange_error ? " has-error" : "")." mt-4'><label class='col-12 control-label-notes'>$langGradebookRange</label>
                             <div class='col-12'>
                                 <select name='degreerange' class='form-select'>
@@ -401,7 +410,7 @@ function gradebook_settings($gradebook_id) {
                             </div>
                         </div>
                         <div class='form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                            <div class='col-12 d-flex justify-content-end align-items-center'>
 
 
                                       ".form_buttons(array(
@@ -425,7 +434,10 @@ function gradebook_settings($gradebook_id) {
                 ". generate_csrf_token_form_field() ."
                 </form>
             </div>
-        </div>";
+        </div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 
 /**
@@ -437,7 +449,7 @@ function user_gradebook_settings() {
            $langAttendanceUpdate, $langGradebookInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $gradebook;
+           $langStudents, $langMove, $langParticipate, $gradebook, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -456,7 +468,8 @@ function user_gradebook_settings() {
     $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $gradebook->end_date)->format('d-m-Y H:i');
     $tool_content .= "
 
-        <div class='col-sm-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook->id) . "&editUsers=1'>
                     <div class='form-group'>
@@ -537,7 +550,7 @@ function user_gradebook_settings() {
                         </div>
                     </div>
                     <div class='form-group mt-5'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
 
 
                                  ".form_buttons(array(
@@ -561,7 +574,10 @@ function user_gradebook_settings() {
                 ". generate_csrf_token_form_field() ."
                 </form>
             </div>
-        </div>";
+        </div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 
 /**
@@ -1245,7 +1261,7 @@ function register_user_grades($gradebook_id, $actID) {
         }
         $tool_content .= "</tbody></table></div></div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<div class='col-12 d-flex'>" .
+        $tool_content .= "<div class='col-12 d-flex justify-content-end gap-2 mt-4'>" .
                         form_buttons(array(
                             array(
                                 'text' => $langGradebookBooking,
@@ -1471,7 +1487,7 @@ function add_gradebook_other_activity($gradebook_id) {
            $langGradeVisible, $langComments, $langGradebookInsAut, $langAssignment,
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs, $langExercise,
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langLearnPath,
-           $langGradebookRemainingGrade, $langSave, $head_content, $language;
+           $langGradebookRemainingGrade, $langSave, $head_content, $language, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1489,7 +1505,8 @@ function add_gradebook_other_activity($gradebook_id) {
     $weight_error = Session::getError('weight');
     $date_error = Session::getError('date');
     $tool_content .= "
-        <div class='col-sm-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>";
                         if (isset($_GET['modify'])) { // modify an existing gradebook activity
@@ -1539,9 +1556,9 @@ function add_gradebook_other_activity($gradebook_id) {
                             $contentToModify = "";
                         }
                         @$tool_content .= "
-                        <div class='row'>
-                            <div class='col-md-6 col-12'>
-                                <div class='form-group mt-md-0 mt-4'>
+                        
+               
+                                <div class='form-group'>
                                     <label for='activity_type' class='col-sm-6 control-label-notes'>$langType</label>
                                     <div class='col-sm-12'>" . (isset($module_auto_label)? "
                                         <p class='form-control-static'>$module_auto_label</p>": "
@@ -1555,16 +1572,16 @@ function add_gradebook_other_activity($gradebook_id) {
                                         </select>") . "
                                     </div>
                                 </div>
-                            </div>
-                            <div class='col-md-6 col-12'>
-                                <div class='form-group mt-md-0 mt-4'>
+                    
+                            
+                                <div class='form-group mt-4'>
                                     <label for='actTitle' class='col-sm-6 control-label-notes'>$langTitle</label>
                                     <div class='col-sm-12'>
                                         <input type='text' class='form-control' name='actTitle' value='".q($titleToModify)."'/>
                                     </div>
                                 </div>
-                            </div>
-                        </div>";
+                            
+                        ";
                         if (isset($modifyActivity) and $modifyActivity->module_auto_type == 0) {
                             $tool_content .= "<div class='form-group".($date_error ? " has-error" : "")." mt-4'>
                                 <label for='date' class='col-sm-6 control-label-notes'>$langGradebookActivityDate2:</label>
@@ -1616,7 +1633,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             </label></div></div>";
                         }
                         $tool_content .= "<div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-center align-items-center'>
+                                <div class='col-12 d-flex justify-content-end align-items-center'>
 
 
                                         ".form_buttons(array(
@@ -1644,7 +1661,10 @@ function add_gradebook_other_activity($gradebook_id) {
                 ". generate_csrf_token_form_field() ."
                 </form>
             </div>
-        </div>";
+        </div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 }
 
 
@@ -1704,7 +1724,7 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
     global $tool_content, $course_code,
            $langImportGradesGradebookHelp, $langWorkFile, $langUpload,
            $langImportInvalidUsers, $langImportGradesError, $langImportErrorLines,
-           $langImportExtraGradebookUsers, $langGradesImported;
+           $langImportExtraGradebookUsers, $langGradesImported, $urlAppend;
 
     if ($import and isset($_FILES['userfile'])) { // import user grades
         $gradebook_range = get_gradebook_range($gradebook_id);
@@ -1790,8 +1810,9 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
     } else { // import grades form
         enableCheckFileSize();
         $tool_content .= "
-            <div class='row'>
-                <div class='col-sm-12'>
+            
+            <div class='d-lg-flex gap-4 mt-4'>
+                <div class='flex-grow-1'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' enctype='multipart/form-data' method='post' 
                             action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;imp=$activity_id&amp;import_grades=true'>
@@ -1802,26 +1823,29 @@ function import_grades($gradebook_id, $activity_id, $import = false) {
                                         <a href='dumpgradebook.php?course=$course_code&t=3&gradebook_id=" . getIndirectReference($gradebook_id) . "&activity_id=$activity_id'>Χρήστες του βαθμολογίου</a>
                                     </div>
                                 </div>
-                                <div class='form-group'>
-                                    <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                                <div class='form-group mt-4'>
+                                    <label for='userfile' class='col-sm-12 form-label'>$langWorkFile:</label>
                                     <div class='col-sm-10'>" . fileSizeHidenInput() . "
                                         <input type='file' id='userfile' name='userfile'>
                                     </div>
                                 </div>
-                                <div class='form-group'>
-                                    <div class='col-sm-offset-2 col-sm-10'>" .
+                                <div class='form-group mt-4'>
+                                    <div class='col-12 d-flex justify-content-end'>" .
                     form_buttons([['class' => 'btn-primary',
-                        'name' => 'new_assign',
-                        'value' => $langUpload,
-                        'javascript' => ''],
-                        ['href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($activity_id) . ""]]) . "
+                                    'name' => 'new_assign',
+                                    'value' => $langUpload,
+                                    'javascript' => ''],
+                                    ['class' => 'btn cancelAdminBtn','href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($activity_id) . ""]]) . "
                                     </div>
                                 </div>
                             </fieldset>
                         </form>
                     </div>
-                </div>
-            </div>";
+                </div><div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            </div>
+            </div>
+            ";
     }
 }
 

@@ -80,7 +80,8 @@ if (isset($_POST['submitCat'])) {
         )
     ));
     $tool_content .= "
-    <div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+   <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' action='$form_action_url' method='post'>
                 <div class='row form-group ".(Session::getError('questionCatName') ? "has-error" : "")."'>
@@ -91,7 +92,7 @@ if (isset($_POST['submitCat'])) {
                     </div>
                 </div>
                 <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                    <div class='col-12 d-flex justify-content-end align-items-center'>
                       
                           
                             <input class='btn submitAdminBtn' name='submitCat' type='submit' value='$langSubmit'>
@@ -105,7 +106,10 @@ if (isset($_POST['submitCat'])) {
                     </div>
                 </div>                
             </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+</div>";
 } elseif (isset($_GET['deleteCat'])) {
     $q_cat_id = $_GET['deleteCat'];
     if (Database::get()->query("DELETE FROM exercise_question_cats WHERE question_cat_id = ?d AND course_id = ?d", $q_cat_id, $course_id)->affectedRows > 0) {

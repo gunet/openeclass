@@ -4915,3 +4915,51 @@ div[role="progressbar"]::before {
   justify-content: center;
   align-items: center;
 }
+
+
+
+
+
+.col_maincontent_active .form-wrapper{
+  border: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+@media(min-width:992px) and (max-width:1199px){
+  .form-image-modules{
+    max-width:320px; 
+    float:right;
+  }
+}
+@media(min-width:1200px) and (max-width:1399px){
+  .form-image-modules{
+    max-width:360px; 
+    float:right;
+  }
+}
+@media(min-width:1400px) and (max-width:1500px){
+  .form-image-modules{
+    max-width: calc(700px - 240px);
+  }
+}
+@media(min-width:1501px) and (max-width:1600px){
+  .form-image-modules{
+    max-width: calc(800px - 240px);
+  }
+}
+@media(min-width:1601px) and (max-width:1700px){
+  .form-image-modules{
+    max-width: calc(900px - 240px);
+  }
+}
+@media(min-width:1701px) and (max-width:1800px){
+  .form-image-modules{
+    max-width: calc(1000px - 240px);
+  }
+}
+@media(min-width:1801px){
+  .form-image-modules{
+    max-width: calc(1100px - 240px);
+  }
+}

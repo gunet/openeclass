@@ -351,7 +351,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               'icon' => 'fa-reply')));
     $tool_content .= "
 
-    <div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
 
     <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
@@ -364,8 +365,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             
-            <div class='row'>
-                <div class='col-md-6 col-12'>
+            
+                
                     <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
                         <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langPollStart</label>
                         
@@ -378,12 +379,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             
                         
                     </div>
-                </div>
+               
 
             
-                <div class='col-md-6 col-12'>
+                
                     <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
-                        <label for='PollEnd' class='col-sm-6 control-label-notes mb-1'>$langPollEnd</label>
+                        <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd</label>
                         
                         <div class='input-group'>
                             <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
@@ -392,8 +393,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             
                         </div>
                     </div>
-                </div>
-            </div>
+                
+            
 
            
 
@@ -531,7 +532,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
 
             <div class='form-group mt-5'>
-              <div class='col-12 d-flex justify-content-center align-items-center'>
+              <div class='col-12 d-flex justify-content-end align-items-center'>
                 
                   
                      "
@@ -556,7 +557,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>        
         </form>
-    </div></div>";
+    </div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 } elseif (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid",
@@ -602,7 +606,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $questionScaleShowHide = $answerType == QTYPE_SCALE ? "" : " hidden";
 
     $tool_content .= "
-    <div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
     <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-6 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)."</label>
@@ -675,7 +680,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
    
 
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-center align-items-center'>
+                <div class='col-12 d-flex justify-content-end align-items-center'>
                   
                      
                          ".
@@ -697,7 +702,10 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                    
                 </div>
             </div>
-    </form></div></div>";
+    </form></div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 
 //Modify Answers
 } elseif (isset($_GET['modifyAnswers'])) {

@@ -1,5 +1,6 @@
 
-    <div class='col-12'>
+<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
         <div class='form-wrapper form-edit mt-2 rounded'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='commentPath' value='{{$file->path}}'>
@@ -15,7 +16,7 @@
 
                     <div class='row'>
                         @unless ($is_dir)
-                        <div class='col-md-6 col-12'>
+                        <div class='col-12'>
                             <div class='form-group mt-4'>
                                 <label class='col-sm-12 control-label-notes'>{{ trans('langTitle') }}</label>
                                 <div class='col-sm-12'>
@@ -25,7 +26,7 @@
                         </div>
                         @endunless
 
-                        <div class='col-md-6 col-12'>
+                        <div class='col-12'>
                             <div class='form-group mt-4'>
                                 <label class='col-sm-12 control-label-notes'>{{ trans('langComment') }}</label>
                                 <div class='col-sm-12'>
@@ -38,7 +39,7 @@
 
                     @unless ($is_dir)
                         <div class='row'>
-                            <div class='col-md-6 col-12'>
+                            <div class='col-12'>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langCategory') }}</label>
                                     <div class='col-sm-12'>
@@ -46,7 +47,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='col-md-6 col-12'>
+                            <div class='col-12'>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langSubject') }}</label>
                                     <div class='col-sm-12'>
@@ -57,7 +58,7 @@
 
 
                         <div class='row'>
-                            <div class='col-md-6 col-12'>
+                            <div class='col-12'>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langDescription') }}</label>
                                     <div class='col-sm-12'>
@@ -65,7 +66,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='col-md-6 col-12'>
+                            <div class='col-12'>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langAuthor') }}</label>
                                     <div class='col-sm-12'>
@@ -77,7 +78,7 @@
 
 
                         <div class='row'>
-                            <div class='col-md-6 col-12'>
+                            <div class='col-12'>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langCopyrighted') }}</label>
                                     <div class='col-sm-12'>
@@ -85,7 +86,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='col-md-6 col-12'>
+                            <div class='col-12'>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langLanguage') }}</label>
                                     <div class='col-sm-12'>
@@ -123,4 +124,8 @@
 			</form>
         </div>
     </div>
+    <div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+</div>
 

@@ -90,7 +90,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
         $langBBBMaxPartPerRoom, $langBBBHideParticipants,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
-        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText, $langGoToWebexLink;
+        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText, $langGoToWebexLink, $urlAppend;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -214,7 +214,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
     }
 
     $tool_content .= "
-        <div class='col-12'><div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?course=$course_code&tc_type=$tc_type' method='post' >
         <fieldset>";
 
@@ -531,13 +532,16 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $tool_content .= "
         $submit_id
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-center align-items-center'>
+            <div class='col-12 d-flex justify-content-end align-items-center'>
                 <input class='btn submitAdminBtn' type='submit' name='$submit_name' value='$value_message'>
             </div>
         </div>
         </fieldset>
          ". generate_csrf_token_form_field() ."
-        </form></div></div>";
+        </form></div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
         $tool_content .= "<script type='text/javascript'>
         //<![CDATA[
             var chkValidator  = new Validator('sessionForm');

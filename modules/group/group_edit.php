@@ -278,7 +278,8 @@ $tool_content .= action_bar(array(
             'level' => 'primary-label')
       ));
 
-$tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
+$tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
+<div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id'>
         <fieldset>
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
@@ -292,8 +293,8 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
           <label class='col-sm-6 control-label-notes'>$langDescription $langOptional</label>
           <div class='col-sm-12'><textarea class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
         </div>
-        <div class='row'>
-            <div class='col-md-6 col-12'>
+        
+            
                 <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")." mt-4'>
                     <label class='col-sm-12 control-label-notes'>$langMax $langGroupPlacesThis</label>
                     <div class='col-sm-12'>
@@ -301,20 +302,19 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
                         <span class='help-block Accent-200-cl'>".Session::getError('maxStudent')."</span>
                     </div>
                 </div>
-            </div>
-            <div class='col-md-6 col-12'>
+           
                 <div class='form-group mt-4'>
                     <label class='col-sm-12 control-label-notes'>$langGroupTutor</label>
                     <div class='col-sm-12'>
                         $tool_content_tutor
                     </div>
                 </div>
-            </div>
-        </div>
+            
+        
         <div class='form-group mt-4'>
             <label class='col-sm-6 control-label-notes'>$langGroupMembers</label>
         <div class='col-sm-12'>
-            <div class='table-responsive'>
+            <div class='table-responsive mt-0'>
                 <table class='table-default'>
                     <thead>
                         <tr class='title1 list-header'>
@@ -461,7 +461,7 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
             </div>
             <input type='hidden' name='group_id' value=$group_id></input>
         <div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-center align-items-center'>
+            <div class='col-12 d-flex justify-content-end align-items-center'>
                
                  
                       ".
@@ -486,6 +486,9 @@ $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded
         </div>
         </fieldset>
         </form>
-</div></div>";
+</div></div><div class='d-none d-lg-block'>
+<img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 
 draw($tool_content, 2, null, $head_content);

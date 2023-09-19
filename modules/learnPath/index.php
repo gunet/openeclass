@@ -211,7 +211,7 @@ if ($is_editor) {
                         $style = "caution";
                         $dialogBox .= "
                         
-                         <div class=col-12>
+                         <div class='col-12'>
                         <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         
                        
@@ -235,7 +235,7 @@ if ($is_editor) {
            
 
                         <div class='form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                            <div class='col-12 d-flex justify-content-end align-items-center'>
                               <input type='hidden' name='cmd' value='create'>".
                                     form_buttons(array(
                                         array(
@@ -264,34 +264,32 @@ if ($is_editor) {
                     ));
                     $dialogBox .= "
                     
-                    <div class='col-12'>
+                    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
 
                     <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        <div class='row'>
-                            <div class='col-md-6 col-12'>
+                        
+                           
                                 <div class='form-group mt-4'>
                                     <label for='newPathName' class='col-sm-6 control-label-notes'>$langName</label>
                                     <div class='col-sm-12'>
                                     <input name='newPathName' placeholder='$langName' type='text' class='form-control' id='newPathName'>
                                     </div>
                                 </div>
-                            </div>
-
-                        
-                            <div class='col-md-6 col-12'>
+                            
                                 <div class='form-group mt-4'>
                                     <label for='newComment' class='col-sm-6 control-label-notes'>$langDescription</label>
                                     <div class='col-sm-12'>
                                     <input name='newComment' placeholder='$langDescription' type='text' class='form-control' id='newComment'>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            
+                        
 
                        
 
                         <div class='form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-center align-items-center'>
+                            <div class='col-12 d-flex justify-content-end align-items-center'>
                               <input type='hidden' name='cmd' value='create'>
                               
                                 "
@@ -313,7 +311,10 @@ if ($is_editor) {
                             
                             </div>
                         </div>
-                        </form></div></div>";
+                        </form></div></div><div class='d-none d-lg-block'>
+                        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                    </div>
+                    </div>";
                 }
                 break;
             default:

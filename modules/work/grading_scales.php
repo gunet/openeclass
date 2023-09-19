@@ -145,7 +145,8 @@ if (isset($_GET['scale_id'])) {
     ));
     $tool_content .= "
         
-            <div class='col-12 mt-3'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
                 <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' data-bs-toggle='validator' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' id='scales_form'>
                     <fieldset>
@@ -215,7 +216,10 @@ if (isset($_GET['scale_id'])) {
                     </fieldset>
                     </form>
                 </div>
-            </div>";
+            </div><div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+        </div>";
 
 } else {
     $tool_content .= action_bar(array(

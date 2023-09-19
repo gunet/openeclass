@@ -42,24 +42,25 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
     global $tool_content, $langAdd, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderSecret,
            $langLTIProviderKey, $langNewLTIAppActive, $langNewLTIAppInActive, $langNewLTIAppStatus, $langTitle,
            $langLTIAPPlertTitle, $langLTIAPPlertURL, $langLTILaunchContainer, $langUseOfApp,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $course_id, $urlAppend;
 
     $urlext = ($is_template == false) ? '?course=' . $course_code : '';
     $urldefault = (strlen($lti_url_default) > 0) ? " value='$lti_url_default' " : '';
 
     $textarea = rich_text_editor('desc', 4, 20, '');
-    $tool_content .= "<div class='col-sm-12'>
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
         <fieldset>
         <div class='form-group'>
-            <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+            <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='desc' class='col-sm-6 control-label-notes'>$langUnitDescr</label>
+            <label for='desc' class='col-sm-12 control-label-notes'>$langUnitDescr</label>
             <div class='col-sm-12'>
                 $textarea
             </div>
@@ -100,7 +101,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
             </div>
         </div>
             <div class='form-group mt-4'>
-                <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewLTIAppStatus</label>
+                <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</label>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -118,7 +119,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
             </div>";
             if (!isset($course_code)) {
                 $tool_content .= "<div class='form-group mt-4' id='courses-list'>
-                    <label class='col-sm-6 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                    <label class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                     <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
                     <div class='col-sm-12'>
                         <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
@@ -138,13 +139,16 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
             }
 
         $tool_content .= "<div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-center align-items-center'>
+            <div class='col-12 d-flex justify-content-end align-items-center'>
                 <input class='btn submitAdminBtn' type='submit' name='new_lti_app' value='$langAdd'>
             </div>
         </div>
         </fieldset>
          ". generate_csrf_token_form_field() ."
-        </form></div></div>";
+        </form></div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 
         $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -213,25 +217,26 @@ function edit_lti_app($session_id) {
     global $tool_content, $langSubmit, $langUnitDescr, $langLTIProviderUrl, $langLTIProviderKey, $langLTIProviderSecret,
            $langNewLTIAppStatus, $langNewLTIAppActive, $langNewLTIAppInActive, $langTitle, $langLTIAPPlertTitle, $langLTIAPPlertURL,
            $langLTILaunchContainer, $langUseOfApp, $course_id,
-           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses;
+           $langUseOfAppInfo, $langJQCheckAll, $langJQUncheckAll, $langToAllCourses, $urlAppend;
 
     $row = Database::get()->querySingle("SELECT * FROM lti_apps WHERE id = ?d ", $session_id);
 
     $status = ($row->enabled == 1 ? 1 : 0);
 
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
-    $tool_content .= "<div class='col-sm-12'>
+    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
                 <div class='form-wrapper form-edit rounded'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
                     <fieldset>
                     <div class='form-group'>
-                        <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' name='title' id='title' value='".q($row->title)."'>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='desc' class='col-sm-6 control-label-notes'>$langUnitDescr</label>
+                        <label for='desc' class='col-sm-12 control-label-notes'>$langUnitDescr</label>
                         <div class='col-sm-12'>
                             $textarea
                         </div>
@@ -258,7 +263,7 @@ function edit_lti_app($session_id) {
         <div class='row'>
             <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
-                    <label for='lti_secret' class='col-sm-6 control-label-notes'>$langLTIProviderSecret</label>
+                    <label for='lti_secret' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='lti_secret' id='lti_secret' value='$row->lti_provider_secret' size='50' />
                     </div>
@@ -268,7 +273,7 @@ function edit_lti_app($session_id) {
     $tool_content .=
 "           <div class='col-md-6 col-12'>
                 <div class='form-group mt-4'>
-                    <label for='lti_launchcontainer' class='col-sm-6 control-label-notes'>$langLTILaunchContainer</label>
+                    <label for='lti_launchcontainer' class='col-sm-12 control-label-notes'>$langLTILaunchContainer</label>
                     <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  intval($row->launchcontainer)) . "</div>
                 </div>
             </div>
@@ -294,7 +299,7 @@ function edit_lti_app($session_id) {
 
                     if (!isset($course_id)) {
                         $tool_content .= "<div class='form-group mt-4' id='courses-list'>
-                            <label class='col-sm-6 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                            <label class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
                             <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
                             <div class='col-sm-12'>
                                 <select class='form-select' name='lti_courses[]' multiple class='form-control' id='select-courses'>";
@@ -326,13 +331,16 @@ function edit_lti_app($session_id) {
                     }
 
                     $tool_content .= "<div class='form-group mt-5'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='update_lti_app' value='$langSubmit'>
                         </div>
                     </div>
                     </fieldset>
                      ". generate_csrf_token_form_field() ."
-                    </form></div></div>";
+                    </form></div></div><div class='d-none d-lg-block'>
+                    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                </div>
+                </div>";
                 $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                     var chkValidator  = new Validator("sessionForm");

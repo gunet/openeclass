@@ -64,62 +64,67 @@
                     @endif
 
 
-                    <div class='col-sm-12'>
-                        <div class='form-wrapper form-edit rounded'>
-                            <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
-                                <div class='form-group'>
-                                    <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
-                                    <div class='col-sm-12'>
-                                        <input type='text' class='form-control' id='requestTitle' name='requestTitle' value='{{ $request->title }}' required>
+                    <div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
+                            <div class='form-wrapper form-edit rounded'>
+                                <form class='form-horizontal' action='{{ $targetUrl }}' method='post'>
+                                    <div class='form-group'>
+                                        <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
+                                        <div class='col-sm-12'>
+                                            <input type='text' class='form-control' id='requestTitle' name='requestTitle' value='{{ $request->title }}' required>
+                                        </div>
                                     </div>
-                                </div>
-
-                        
-
-                                <div class='form-group mt-4'>
-                                    <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
-                                    <div class='col-sm-12'>
-                                        {!! $descriptionEditor !!}
-                                    </div>
-                                </div>
-
-                                @if ($request->type_id)
-                                <div class='mt-4'></div>
-                                    @include('modules.request.extra_fields',
-                                        ['type_name' => $type->name,
-                                        'type_id' => $type->id,
-                                        'fields_info' => $field_data])
-                                @endif
 
                             
 
-                                <div class='form-group mt-4'>
-                                    <div class='col-12'>
-                                        <div class='checkbox'>
-                                            <label class='label-container'>
-                                                <input type='checkbox' name='send_mail' value='on' checked> <span class='checkmark'></span>{{ trans('langSendInfoMail') }}
-                                            </label>
+                                    <div class='form-group mt-4'>
+                                        <label for='requestDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
+                                        <div class='col-sm-12'>
+                                            {!! $descriptionEditor !!}
                                         </div>
                                     </div>
-                                </div>
 
-                        
+                                    @if ($request->type_id)
+                                    <div class='mt-4'></div>
+                                        @include('modules.request.extra_fields',
+                                            ['type_name' => $type->name,
+                                            'type_id' => $type->id,
+                                            'fields_info' => $field_data])
+                                    @endif
 
-                                <div class='form-group mt-5'>
-                                    <div class='col-12 d-flex justify-content-end align-items-center'>
-                                        
-                                           
-                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
-                                           
-                                           
-                                                 <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                           
-                                       
+                                
+
+                                    <div class='form-group mt-4'>
+                                        <div class='col-12'>
+                                            <div class='checkbox'>
+                                                <label class='label-container'>
+                                                    <input type='checkbox' name='send_mail' value='on' checked> <span class='checkmark'></span>{{ trans('langSendInfoMail') }}
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
 
-                                {!! generate_csrf_token_form_field() !!}
-                            </form>
+                            
+
+                                    <div class='form-group mt-5'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                                            
+                                            
+                                                    <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
+                                            
+                                            
+                                                    <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
+                                            
+                                        
+                                        </div>
+                                    </div>
+
+                                    {!! generate_csrf_token_form_field() !!}
+                                </form>
+                            </div>
+                        </div>
+                        <div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                         </div>
                     </div>
                 </div>

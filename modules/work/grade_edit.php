@@ -149,7 +149,7 @@ function show_edit_form($id, $sid, $assign) {
            $langBack, $assign, $langWorkOnlineText, $course_id, $langCommentsFile, $pageName,
            $langPeerReviewNoAssignments, $langNotGraded, $langDeletePeerReview,
            $langGradebookGrade, $langGradeRubric, $langNoAssignmentsForReview,
-           $langOpenCoursesFiles;
+           $langOpenCoursesFiles, $urlAppend;
 
     $grading_type = Database::get()->querySingle("SELECT grading_type FROM assignment WHERE id = ?d",$id)->grading_type;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d", $sid);
@@ -235,7 +235,8 @@ function show_edit_form($id, $sid, $assign) {
                         }
 
                         $tool_content .= "
-						    <div class='col-12 mt-3'><div class='form-wrapper form-edit rounded'>
+                        <div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
                                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data'>
                                     <input type='hidden' name='assignment' value='$id' />
                                     <input type='hidden' name='submission' value='$row->id' />
@@ -427,7 +428,8 @@ function show_edit_form($id, $sid, $assign) {
 						'level' => 'primary'
 					)
 				))."
-            <div class='col-12'>
+                <div class='d-lg-flex gap-4 mt-4'>
+                <div class='flex-grow-1'>
 			<div class='form-wrapper form-edit rounded'>
 				<form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
 				<input type='hidden' name='assignment' value='$id'>
@@ -511,7 +513,10 @@ function show_edit_form($id, $sid, $assign) {
                     
 				</fieldset>
 				</form>
-			</div></div>";
+			</div></div><div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+        </div>";
 		}
     } else {
         //Session::Messages($m['WorkNoSubmission'], 'alert-danger');

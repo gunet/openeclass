@@ -65,7 +65,8 @@ $group_quantity_value = Session::has('group_quantity') ? Session::get('group_qua
 
 if (isset($_GET['all'])) {
     $tool_content .= "
-    <div class='col-12'><div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
         <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
@@ -108,7 +109,7 @@ if (isset($_GET['all'])) {
         </div>";
         $tool_content .= "<input type='hidden' name='all' value='$_GET[all]'>";
         $tool_content .= "<div class='form-group mt-5'>
-        <div class='col-12 d-flex justify-content-center align-items-center'>
+        <div class='col-12 d-flex justify-content-end align-items-center'>
             
                 
                    <input class='btn submitAdminBtn' type='submit' value='$langCreate' name='creation'>
@@ -121,7 +122,10 @@ if (isset($_GET['all'])) {
         </div>
         </fieldset>
         </form>
-    </div></div>";
+    </div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 } else {
     if ($is_editor) {
             $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select h-100 rounded-0'>";

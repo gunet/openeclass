@@ -1079,10 +1079,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     // Upload Form section
     enableCheckFileSize();
     $tool_content .="
-        <div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
             
                 <div class='form-wrapper form-edit rounded'>
-                    <div class='col-12 text-start'><h4 class='form-heading TextBold'>$langImport</h4></div>
+                    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
+                        <p>$langNote:</p>
+                        <p>$langScormIntroTextForDummies</p></span>
+                    </div>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
                         <div class='row form-group mt-3'>
                             <label for='uploadedPackage' class='col-12 control-label-notes'>$langPathUploadFile</label>
@@ -1102,7 +1106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
 
                         <div class='form-group mt-5'>
-                            <div class='col-12 d-flex justify-content-start'>
+                            <div class='col-12 d-flex justify-content-end'>
                                
                                   
                                     ".form_buttons(array(
@@ -1122,19 +1126,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                             </div>
                         </div>
                     </form>
-                </div></div>
+                </div></div><div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            </div>
+            </div>
            
     ";
 
-    $tool_content .= "
-            
-                <div class='col-12 mt-4'>
-                    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>
-                        <p>$langNote:</p>
-                        <p>$langScormIntroTextForDummies</p></span>
-                    </div>
-                </div>
-            ";
 } // else if method == 'post'
 
 chdir($pwd);

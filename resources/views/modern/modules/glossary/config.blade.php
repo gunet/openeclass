@@ -64,7 +64,8 @@
                         @endif
 
 
-                        <div class='col-12'>
+                        <div class='d-lg-flex gap-4 mt-4'>
+                                        <div class='flex-grow-1'>
                         <div class='form-wrapper form-edit rounded'>
                           <form class='form-horizontal' role='form' action='{{ $base_url }}' method='post'>
                               <div class='form-group'>
@@ -92,6 +93,9 @@
                               </div>   
                               {!! generate_csrf_token_form_field() !!}                
                           </form>
+                        </div>
+                        </div><div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                         </div>
                         </div>
 

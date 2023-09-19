@@ -102,7 +102,8 @@ if (isset($_GET['rid'])) {
             $tool_content .= "<div class='col-sm-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langCourseUserRegError</span></div></div>";
         }
     } else {
-        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>";
+        $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>";
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langReasonReject</label></div>
@@ -121,7 +122,10 @@ if (isset($_GET['rid'])) {
         ". generate_csrf_token_form_field() ."
         <input type='hidden' name='rejected_req_id' value='$_GET[rid]'>
             <input type='hidden' name='rejected_uid' value='$_GET[u]'>
-    </fieldset></form></div></div>";
+    </fieldset></form></div></div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
     }
 } else { // display course user requests
     $sql = Database::get()->queryArray("SELECT id, uid, course_id, comments, ts FROM course_user_request WHERE course_id = ?d AND status = 1", $course_id);

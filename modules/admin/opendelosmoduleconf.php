@@ -111,7 +111,7 @@ foreach ($app->getParams() as $param) {
 }
 
 $tool_content .= $boolean_field;
-$tool_content .= "<div class='form-group mt-5 d-flex justify-content-center align-items-center'>";
+$tool_content .= "<div class='form-group mt-5 d-flex justify-content-end align-items-center'>";
 
 $tool_content .= "
 <button class='btn submitAdminBtn' type='submit' name='submit' value='$langModify'>$langModify</button>

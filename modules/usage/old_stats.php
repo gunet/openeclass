@@ -264,7 +264,8 @@ foreach ($result as $row) {
     $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
 }
 
-$tool_content .= '<div class="col-12 mt-3"><div class="form-wrapper form-edit rounded">';
+$tool_content .= '<div class="d-lg-flex gap-4 mt-4">
+<div class="flex-grow-1"><div class="form-wrapper form-edit rounded">';
 $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 $tool_content .= "
         <div class='input-append date form-group mt-4' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
@@ -290,10 +291,13 @@ $tool_content .= '<div class="form-group mt-4">
         <div class="col-12"><select name="u_module_id" id="u_module_id" class="form-select">' . $mod_opts . '</select></div>
   </div>
   <div class="form-group mt-5">
-    <div class="col-12 d-flex justify-content-center align-items-center">
+    <div class="col-12 d-flex justify-content-end align-items-center">
       <input class="btn submitAdminBtn" type="submit" name="btnUsage" value="' . $langSubmit . '">
       </div>
   </div>
-</form></div></div>';
+</form></div></div><div class="d-none d-lg-block">
+<img class="form-image-modules" src="/template/modern/img/form-image.png" alt="form-image">
+</div>
+</div>';
 
 draw($tool_content, 2, null, $head_content);

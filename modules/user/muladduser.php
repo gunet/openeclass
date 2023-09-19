@@ -86,9 +86,11 @@ if (isset($_POST['submit'])) {
 }
 
 
-$tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langAskManyUsers</span></div></div>
+$tool_content .= "
         
-<div class='col-12'>
+<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'>
+    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langAskManyUsers</span></div>
 <div class='form-wrapper form-edit rounded'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <fieldset>     
@@ -103,13 +105,16 @@ $tool_content .= "<div class='col-12'><div class='alert alert-info'><i class='fa
             </div>
             ".showSecondFactorChallenge()." 
                
-            <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
+            <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
                 <input class='btn submitAdminBtn' type='submit' name='submit' value='$langAdd'>
             </div>                       
         </fieldset>
         ". generate_csrf_token_form_field() ."  
         </form>
-        </div></div>";
+        </div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 
 draw($tool_content, 2);
 

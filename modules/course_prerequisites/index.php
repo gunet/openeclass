@@ -97,7 +97,7 @@ draw($tool_content, 2, null, $head_content);
 
 function new_prereq() {
     global $tool_content, $head_content, $urlServer, $course_code,
-           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2;
+           $langBack, $langCourse, $langSubmit, $langCancel, $langNote, $langNewCoursePrerequisiteHelp2, $urlAppend;
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -128,32 +128,35 @@ function new_prereq() {
 hContent;
 
     $tool_content .= "
-        <div class='col-12'>
-            <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><label>$langNote</label> $langNewCoursePrerequisiteHelp2</span></div>
-        </div>
-    
-        <div class='col-12'>
+
+    <div class='d-lg-flex gap-4 mt-5'>
+        <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
+                <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span><label>$langNote</label> $langNewCoursePrerequisiteHelp2</span></div>
                 <form role='form' class='form-horizontal' method='post' action='index.php?course=" . $course_code . "'>
-                <input type='hidden' name='addcommit' value='1'>
-                <fieldset>
-                    <div class='form-group'>
-                    <label for='courses-select' class='col-sm-6 control-label-notes'>$langCourse:</label>
-                    <div class='col-sm-12'>
-                        <select id='courses-select' class='form-select' name='prerequisite_course'></select>
-                    </div>
-                    </div>
-                    <div class='form-group mt-3'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>
-                        <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
-                        <a href='index.php?course=" . $course_code . "'' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                    </div>
-                    </div>
-                </fieldset>
-                ". generate_csrf_token_form_field() ."
+                    <input type='hidden' name='addcommit' value='1'>
+                    <fieldset>
+                        <div class='form-group'>
+                        <label for='courses-select' class='col-sm-6 control-label-notes'>$langCourse:</label>
+                        <div class='col-sm-12'>
+                            <select id='courses-select' class='form-select' name='prerequisite_course'></select>
+                        </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                        <div class='col-12 d-flex justify-content-end align-items-center'>
+                            <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                            <a href='index.php?course=" . $course_code . "'' class='btn cancelAdminBtn ms-1'>$langCancel</a>
+                        </div>
+                        </div>
+                    </fieldset>
+                    ". generate_csrf_token_form_field() ."
                 </form>
             </div>
         </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>
     ";
 }
 

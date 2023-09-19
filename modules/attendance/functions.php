@@ -481,7 +481,7 @@ function add_attendance_other_activity($attendance_id) {
 
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd, $langSave,
-           $langAttendanceActivityDate, $language, $head_content;
+           $langAttendanceActivityDate, $language, $head_content, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -498,8 +498,9 @@ function add_attendance_other_activity($attendance_id) {
 
     $date_error = Session::getError('date');
     $tool_content .= "
-    <div class='col-sm-12'>
-            <div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded px-0 border-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
                     <fieldset>";
                     if (isset($_GET['modify'])) { // modify an existing attendance activity
@@ -558,7 +559,7 @@ function add_attendance_other_activity($attendance_id) {
 
 
                     <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>".form_buttons(array(
+                    <div class='col-12 d-flex justify-content-end align-items-center'>".form_buttons(array(
                         array(
                             'class' => 'submitAdminBtn',
                             'text' => $langSave,
@@ -576,8 +577,13 @@ function add_attendance_other_activity($attendance_id) {
                         $tool_content .= " <input type='hidden' name='id' value=''>";
                     }
                     $tool_content .= "</fieldset>
-                            </form>
-                        </div></div>";
+                </form>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>";
 }
 
 
@@ -731,7 +737,7 @@ function new_attendance() {
 
     global $tool_content, $course_code, $langNewAttendance2, $head_content,
            $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber,
-           $attendance_limit, $langStart, $langEnd, $language;
+           $attendance_limit, $langStart, $langEnd, $language, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -754,8 +760,11 @@ function new_attendance() {
     $limit_error  = Session::getError('limit');
     $limit = Session::has('limit') ? Session::get('limit') : '';
 
-    $tool_content .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
+    $tool_content .= "
+    <div class='d-lg-flex gap-4 mt-4'>  
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded border-0 px-0'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
                     <label class='col-12 control-label-notes'>$langNewAttendance2</label></div>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
@@ -795,7 +804,7 @@ function new_attendance() {
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
-                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
                         "
 
                                     .form_buttons(array(
@@ -815,8 +824,13 @@ function new_attendance() {
 
                         "
                     </div>
-            </form>
-        </div></div>";
+                </form>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>";
 }
 
 /**
@@ -1000,7 +1014,7 @@ function attendance_settings($attendance_id) {
     global $tool_content, $course_code, $language,
            $langTitle, $langAttendanceLimitNumber,
            $langAttendanceUpdate, $langSave, $head_content,
-           $attendance, $langStart, $langEnd;
+           $attendance, $langStart, $langEnd, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1025,8 +1039,9 @@ function attendance_settings($attendance_id) {
     // update attendance title
     $tool_content .= "
 
-    <div class='col-sm-12'>
-            <div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
                     <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-12 control-label-notes'>$langTitle</label>
@@ -1066,7 +1081,7 @@ function attendance_settings($attendance_id) {
                             <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
-                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                    <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
 
 
 
@@ -1089,7 +1104,12 @@ function attendance_settings($attendance_id) {
                     </div>
                     </fieldset>
                 </form>
-            </div></div>";
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>";
 }
 
 /**
@@ -1102,7 +1122,7 @@ function user_attendance_settings($attendance_id) {
            $langAttendanceUpdate, $langAttendanceInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langGradebookAllBetweenRegDates, $langSpecificUsers, $head_content,
-           $langStudents, $langMove, $langParticipate, $attendance;
+           $langStudents, $langMove, $langParticipate, $attendance, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     $head_content .= "
@@ -1122,8 +1142,10 @@ function user_attendance_settings($attendance_id) {
     $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');
     $tool_content .= "
 
-    <div class='col-sm-12'>
-            <div class='form-wrapper form-edit rounded'>
+<div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
                     <div class='form-group'>
                         <label class='col-12 text-secondary'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
@@ -1182,18 +1204,20 @@ function user_attendance_settings($attendance_id) {
                         <div class='col-sm-12 col-sm-offset-2'>
                             <div class='table-responsive'>
                                 <table id='participants_tbl' class='table-default hide'>
-                                    <tr class='title1 list-header'>
-                                      <td id='users'>$langStudents</td>
-                                      <td class='text-center'>$langMove</td>
-                                      <td>$langParticipate</td>
-                                    </tr>
+                                    <thead>
+                                        <tr class='title1 list-header'>
+                                        <td id='users' class='form-label'>$langStudents</td>
+                                        <td class='text-center form-label'>$langMove</td>
+                                        <td class='form-label'>$langParticipate</td>
+                                        </tr>
+                                    </thead>
                                     <tr>
                                       <td>
                                         <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
                                       </td>
                                       <td class='text-center'>
-                                        <input class='btn-outline-primary rounded-2 h-40px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
-                                        <input class='btn-outline-primary rounded-2 h-40px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                        <input class='btn submitAdminBtnClassic rounded-2 h-40px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
+                                        <input class='btn submitAdminBtnClassic rounded-2 h-40px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
                                       </td>
                                       <td width='40%'>
                                         <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>
@@ -1204,7 +1228,7 @@ function user_attendance_settings($attendance_id) {
                         </div>
                     </div>
                     <div class='form-group mt-5'>
-                        <div class='col-12 d-flex justify-content-center align-items-center'>".form_buttons(array(
+                        <div class='col-12 d-flex justify-content-end align-items-center'>".form_buttons(array(
                         array(
                             'class' => 'submitAdminBtn',
                             'text' => $langRefreshList,
@@ -1219,7 +1243,13 @@ function user_attendance_settings($attendance_id) {
                     ))."</div>
                     </div>
                 </form>
-            </div></div>";
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>
+</div>";
 
 }
 

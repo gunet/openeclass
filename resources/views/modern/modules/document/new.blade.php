@@ -73,11 +73,10 @@
                         {!! $backButton !!}
                         
                         @if ($can_upload == 1)
-                            @if($menuTypeID == 3 or $menuTypeID == 1)
-                                <div class='col-lg-6 col-12'>
-                            @else
-                                <div class='col-12'>
-                            @endif
+
+                        <div class='d-lg-flex gap-4 mt-4'>
+                            <div class='flex-grow-1'>
+                           
                             
                                 <div class='form-wrapper form-edit mt-2 rounded'>
                                 
@@ -129,27 +128,25 @@
                                        
 
                                         <div class='form-group mt-5'>
-                                            @if($menuTypeID == 3 or $menuTypeID == 1)
-                                            <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
-                                                <button class='btn submitAdminBtn ' type='submit'>{{ trans('langSave') }}</button>
-                                                <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
-                                            </div>
-                                            @else
+
                                             <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langSave') }}</button>
                                                 <a class='btn cancelAdminBtn' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                 {!! generate_csrf_token_form_field() !!}
                                             </div>
-                                            @endif
+
                                         </div>
                                     </form>
                                 </div>
                             </div>
-                            @if($menuTypeID == 3 or $menuTypeID == 1)
-                                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                                    <div class='col-12 h-100 left-form'></div>
-                                </div>
-                            @endif
+                            <div class='d-none d-lg-block'>
+                                <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
+                            </div>
+                        </div>
+
+
+
+
                         @else
                         <div class='col-12'>
                             <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNotAllowed') }}</span></div>

@@ -63,20 +63,23 @@ if (isset($_GET['delete'])) {
         // Form #1 - edit title
         $tool_content .= "
         
-        <div class='col-12'><div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <input type='hidden' name='id' value='$ebook_id' />
-                <div class='form-group'>
-                    <label class='col-sm-6 control-label-notes'>$langTitle</label>
-                    <div class='col-sm-12 input-group'>
-                        <input class='form-control me-3' type='text' name='ebook_title' value='" . q($info->title) . "' />
-                        <span class='input-group-btn'>
-                            <button class='btn submitAdminBtn mt-1' name='title_submit' type='submit' value='$langModify'>$langModify</button>
-                        </span>
+<div class='d-lg-flex gap-4 mt-5'>
+    <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                    <input type='hidden' name='id' value='$ebook_id' />
+                    <div class='form-group'>
+                        <label class='col-sm-6 control-label-notes'>$langTitle</label>
+                        <div class='col-sm-12 input-group'>
+                            <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
+                            <span class='input-group-btn'>
+                                <button class='btn submitAdminBtn mt-1' name='title_submit' type='submit' value='$langModify'>$langModify</button>
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div></div>";
+                </form>
+            </div>
+        ";
         // Form #2 - edit sections
         $tool_content .= "
         
@@ -90,7 +93,7 @@ if (isset($_GET['delete'])) {
           <tr class='list-header'>
             <th>$langID</th>
             <th>$langTitle</th>
-            <th width='75'>$langActions</th>
+            <th>$langActions</th>
           </tr></thead>";
         $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
@@ -136,7 +139,7 @@ if (isset($_GET['delete'])) {
             }
             $tool_content .= "
             <tr>
-              <td style='width:70px;'>$section_id</td>
+              <td>$section_id</td>
               <td>$section_title</td>
               <td>$section_tools</td>
             </tr>";
@@ -161,7 +164,10 @@ if (isset($_GET['delete'])) {
         }
         $tool_content .= "
           </table></div>
-          </fieldset></form>";
+          </fieldset></form></div><div class='d-none d-lg-block'>
+          <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+      </div>
+  </div>";
 } elseif (isset($_POST['new_section_submit'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('new_section_title'));
@@ -344,6 +350,7 @@ if (isset($_GET['delete'])) {
         if (count($files) > 0 || count($q) > 0) {
             $tool_content .= "
       
+            <div class='form-wrapper form-edit'>
             <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <fieldset>
@@ -367,10 +374,10 @@ if (isset($_GET['delete'])) {
                        }
                        $tool_content .= "
                             <tr>
-                                <td class='smaller'><a href='show.php?$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
-                                <td><input class='form-control' type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
+                                <td><a href='show.php?$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
+                                <td><input class='form-control' type='text' name='title[$file_id]' value='" . q($r->subsection_title) . "'></td>
                                 <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
-                                <td class='center' style='width: 50px;'>
+                                <td>
                                     <input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
                                     <input type='text' class='form-control' name='ssid[$file_id]' value='" . q($r->pssid) . "'>
                                 </td>
@@ -383,21 +390,21 @@ if (isset($_GET['delete'])) {
                        $title = get_html_title($basedir . $path);
                        $tool_content .= "
                         <tr class='not_visible'>
-                            <td class='smaller'><a href='show.php?$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
-                            <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
+                            <td><a href='show.php?$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
+                            <td><input type='text' name='title[$file_id]' value='" . q($title) . "' /></td>
                             <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
-                            <td class='center' style='width: 50px;'>
+                            <td class='center'>
                                <input class='form-control' type='text' name='ssid[$file_id]'>
                            </td>
                         </tr>";
                    }
                    $tool_content .= "
                     <tr>
-                      <td colspan='3'>&nbsp;</td>
+                      <td>&nbsp;</td>
                       <td><input class='btn submitAdminBtn float-end' type='submit' name='submit' value='$langSubmit'></td>
                     </table></div>
                 </fieldset>
-             </form>";
+             </form></div>";
         } else {
             $tool_content .= "
             <div class='col-12'><div class='alert alert-warning'><span>$langEBookNoPages</span></div></div>";

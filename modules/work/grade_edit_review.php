@@ -56,7 +56,7 @@ function get_assignment_details($id) {
 function show_form($id, $sid, $assign) {
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
            $langBack, $assign, $langWorkOnlineText, $course_id, $pageName, $langEndPeerReview,
-           $langReviewStart, $langReviewEnd;
+           $langReviewStart, $langReviewEnd, $urlAppend;
 
     $pageName = $m['addgradecomments'];
 
@@ -148,7 +148,8 @@ function show_form($id, $sid, $assign) {
 					)
 			));
 
-		$tool_content .= "<div class='col-12 mt-3'><div class='form-wrapper form-edit rounded'>
+		$tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
 			<form class='form-horizontal' role='form' method='post' action='$form_link'>
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>			
@@ -208,7 +209,10 @@ function show_form($id, $sid, $assign) {
                     }
 			$tool_content .= "
 			</form>
-		</div></div>";
+		</div></div><div class='d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+    </div>";
 	} else {
 		//an den uparxoun ergasies pou eginan submit
 		//Session::Messages($m['WorkNoSubmission'], 'alert-danger');

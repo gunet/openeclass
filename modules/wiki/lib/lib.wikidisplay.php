@@ -192,7 +192,7 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
 function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $groupId = 0, $acl = null, $script = null) {
 
     global $langWikiTitle, $langWikiDescription,
-            $langCancel, $langSave, $langBack, $course_code;
+            $langCancel, $langSave, $langBack, $course_code, $urlAppend;
 
     $title = ( $title != '' ) ? $title : '';
 
@@ -224,7 +224,8 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
               'level' => 'primary',)
     ));
 
-    $form .= "<div class='col-12'><div class='form-wrapper form-edit rounded'>
+    $form .= "<div class='d-lg-flex gap-4 mt-4'>
+    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='POST' id='wikiProperties' action='$script'>
                     <fieldset>
                         <input type='hidden' name='wikiId' value='$wikiId'>
@@ -270,7 +271,7 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
     $form .= "                  </div>
                             </div>
                             <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-center align-items-center'>
+                                <div class='col-12 d-flex justify-content-end align-items-center'>
                                     
                                       
                                             <input class='btn submitAdminBtn' type='submit' name='action[exEdit]' value='$langSave'>
@@ -283,7 +284,10 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                             </div>
                         </fieldset>
                     </form>
-                </div></div>";
+                </div></div><div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            </div>
+            </div>";
 
     return $form;
 }

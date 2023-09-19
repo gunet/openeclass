@@ -210,8 +210,9 @@ if ($blog_type == 'course_blog' && $is_editor) {
 
         $tool_content .= "
             
-                <div class='col-12'>
-                    <div class='form-wrapper form-edit rounded'>
+            <div class='d-lg-flex gap-4 mt-4'>
+                <div class='flex-grow-1'>
+                    <div class='form-wrapper form-edit rounded border-0 px-0'>
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>                               
                                 <div class='form-group mt-4'>
@@ -277,7 +278,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                     </div>
                                 </div>
                             </fieldset>
-                            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
                                 
                                  
                                       
@@ -302,7 +303,12 @@ if ($blog_type == 'course_blog' && $is_editor) {
                             </div>
                         </form>
                     </div>
-                </div>";
+                </div>
+                <div class='d-none d-lg-block'>
+                    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                </div>
+            </div>
+                ";
 
 
 
@@ -384,75 +390,71 @@ if ($action == "createPost") {
                                        
                                    </div>";
         }
-        if(!$course_code){
-            $tool_content .= "
-            <div class='row'>
-                
-                <div class='col-lg-6 col-12'>
-            ";
-        }else{
-            $tool_content .= "
-                <div class='col-12'>
-            ";
-        }
+
+
+        
         $tool_content .= "
-        <div class='form-wrapper form-edit rounded'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
-            <fieldset>
-                
+<div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded border-0 px-0'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+                    <fieldset>
+                    
 
-                <div class='form-group'>
-                    <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
-                    <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
-                    </div>
-                </div>
+                        <div class='form-group'>
+                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
+                            <div class='col-sm-12'>
+                                <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' placeholder='$langBlogPostTitle'>
+                            </div>
+                        </div>
 
-             
+                    
 
-                <div class='form-group mt-4'>
-                    <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
-                    <div class='col-sm-12'>
-                        ".rich_text_editor('newContent', 4, 20, '')."
-                    </div>
-                </div>
-                $commenting_setting
-                
-                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                   
-                      
-                         
-                            ".
-                            form_buttons(array(
-                                array(
-                                    'class' => 'submitAdminBtn',
-                                    'text'  =>  $langSave,
-                                    'name'  =>  'submitBlogPost',
-                                    'value' =>  $langAdd
-                                ),
-                                array(
-                                    'class' => 'cancelAdminBtn ms-1',
-                                    'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
-                                )
-                            ))
-                            ."
-                          
-                          
-                      
-                   
-                </div>
-                <input type='hidden' name='action' value='savePost' />
-            </fieldset>
-            </form>
-        </div></div>
+                        <div class='form-group mt-4'>
+                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
+                            <div class='col-sm-12'>
+                                ".rich_text_editor('newContent', 4, 20, '')."
+                            </div>
+                        </div>
+                        $commenting_setting
+                        
+                        <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                        
+                            
+                                
+                                    ".
+                                    form_buttons(array(
+                                        array(
+                                            'class' => 'submitAdminBtn',
+                                            'text'  =>  $langSave,
+                                            'name'  =>  'submitBlogPost',
+                                            'value' =>  $langAdd
+                                        ),
+                                        array(
+                                            'class' => 'cancelAdminBtn ms-1',
+                                            'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                                        )
+                                    ))
+                                    ."
+                                
+                                
+                            
+                        
+                        </div>
+                        <input type='hidden' name='action' value='savePost' />
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>
+</div>
+
         ";
-        if(!$course_code){
-            $tool_content .= "
-                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                    <div class='col-12 h-100 left-form'></div>
-                </div>
-            </div>";
-        }
+       
     } else {
         //Session::Messages($langBlogPostNotAllowedCreate);
         Session::flash('message',$langBlogPostNotAllowedCreate);
@@ -504,78 +506,72 @@ if ($action == "editPost") {
                                           
                                        </div>";
             }
-            if(!$course_code){
-                $tool_content .= "
-                <div class='row'>
-                    
-                    <div class='col-lg-6 col-12'>
-                ";
-            }else{
-                $tool_content .= "
-                    <div class='col-12'>
-                ";
-            }
+
             $tool_content .= "
-
-            <div class='form-wrapper form-edit rounded'>
+<div class='col-12'>
+    <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
-                <fieldset>
+                    <fieldset>
+                        <div class='form-group'>
+                            <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
+                            <div class='col-sm-12'>
+                                <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
+                            </div>
+                        </div>
 
-               
-
-                <div class='form-group'>
-                    <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
-                    <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='blogPostTitle' id='blogPostTitle' value='".q($post->getTitle())."' placeholder='$langBlogPostTitle'>
-                    </div>
-                </div>
-
-               
-
-                <div class='form-group mt-4'>
-                    <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
-                    <div class='col-sm-12'>
-                        ".rich_text_editor('newContent', 4, 20, $post->getContent())."
-                    </div>
-                </div>
-                $commenting_setting
-
-                
-
-                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-                   
-                       
-                       
-                           ".
-                           form_buttons(array(
-                               array(
-                                   'class' => 'submitAdminBtn',
-                                   'text'  =>  $langSave,
-                                   'name'  =>  'submitBlogPost',
-                                   'value' =>  $langModifBlogPost
-                               ),
-                               array(
-                                'class' => 'cancelAdminBtn ms-1',
-                                'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
-                            )
-                           ))
-                           ."
-                         
-                        
-                      
                     
-                </div>
-                <input type='hidden' name='action' value='savePost'>
-                <input type='hidden' name='pId' value='".$post->getId()."'>
-                </fieldset>
-            </form>
-        </div></div>
+
+                        <div class='form-group mt-4'>
+                            <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
+                            <div class='col-sm-12'>
+                                ".rich_text_editor('newContent', 4, 20, $post->getContent())."
+                            </div>
+                        </div>
+                        $commenting_setting
+
+                        
+
+                        <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
+                        
+                            
+                            
+                                ".
+                                form_buttons(array(
+                                    array(
+                                        'class' => 'submitAdminBtn',
+                                        'text'  =>  $langSave,
+                                        'name'  =>  'submitBlogPost',
+                                        'value' =>  $langModifBlogPost
+                                    ),
+                                    array(
+                                        'class' => 'cancelAdminBtn ms-1',
+                                        'href'  =>  "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog"
+                                    )
+                                ))
+                                ."
+                                
+                                
+                            
+                            
+                        </div>
+                        <input type='hidden' name='action' value='savePost'>
+                        <input type='hidden' name='pId' value='".$post->getId()."'>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>
+</div>
        ";
-            if(!$course_code){
-                $tool_content .= " <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                <div class='col-12 h-100 left-form'></div>
-            </div></div>";
-            }
+            
+
+            
         } else {
             //Session::Messages($langBlogPostNotAllowedEdit);
             Session::flash('message',$langBlogPostNotAllowedEdit);

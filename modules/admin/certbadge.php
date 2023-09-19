@@ -234,7 +234,7 @@ if (isset($_GET['action'])) {
                             </div>
                             $cert_hidden_id
                            
-                            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
                                 
                                         
                                            <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
@@ -301,7 +301,7 @@ if (isset($_GET['action'])) {
                             </div>
                             $badge_hidden_id
                             
-                            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
                                 
                                 
                                

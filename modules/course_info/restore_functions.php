@@ -323,7 +323,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langRestore, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj, $langBack, $course_code;
+    $langNone, $langOldValue, $treeObj, $langBack, $course_code, $urlAppend;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -357,98 +357,103 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfo1 <br> $langInfo2</span></div>
                 </div>
 
-                <div class='col-12'>
-                <div class='form-wrapper form-edit rounded'>
+    <div class='d-lg-flex gap-4 mt-5'>
+        <div class='flex-grow-1'>
+            <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
 
-                    <div class='form-group'>
-                        <label for='course_code' class='col-sm-6 control-label-notes'>$langCourseCode</label>
-                        <div class='col-sm-12'>
-                            <input type='text' class='form-control' id='course_code' name='course_code' value='" . q($code) . "'>
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label for='course_code' class='col-sm-6 control-label-notes'>$langLanguage</label>
-                        <div class='col-sm-12'>
-                            " . lang_select_options('course_lang') . "
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label for='course_title' class='col-sm-6 control-label-notes'>$langTitle</label>
-                        <div class='col-sm-12'>
-                            <input class='form-control' type='text' id='course_title' name='course_title' value='" . q($title) . "' />
-                        </div>
-                    </div>
-
-                    <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langCourseDescription</label>
-                        <div class='col-sm-12'>
-                            " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langFaculty</label>
-                        <div class='col-sm-12'>
-                            " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langCourseVis:</label>
-                        <div class='col-sm-12'>
-                            " . visibility_select($vis) . "
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label for='course_prof' class='col-sm-6 control-label-notes'>$langTeacher</label>
-                        <div class='col-sm-12'>
-                            <input class='form-control' type='text' id='course_prof' name='course_prof' value='" . q($prof) . "' size='50' />
-                        </div>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes mb-2'>$langUsersWillAdd</label>
-
-                        <div class='col-sm-12'>
-                           <div class='radio mb-2'>
-                                <label>
-                                    <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
-                                    $langAll
-                                </label>
+                        <div class='form-group'>
+                            <label for='course_code' class='col-12 control-label-notes'>$langCourseCode</label>
+                            <div class='col-sm-12'>
+                                <input type='text' class='form-control' id='course_code' name='course_code' value='" . q($code) . "'>
                             </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label for='course_code' class='col-12 control-label-notes'>$langLanguage</label>
+                            <div class='col-sm-12'>
+                                " . lang_select_options('course_lang') . "
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label for='course_title' class='col-12 control-label-notes'>$langTitle</label>
+                            <div class='col-sm-12'>
+                                <input class='form-control' type='text' id='course_title' name='course_title' value='" . q($title) . "' />
+                            </div>
+                        </div>
+
+                        <div class='form-group mt-4'>
+                            <label class='col-12 control-label-notes'>$langCourseDescription</label>
+                            <div class='col-sm-12'>
+                                " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label class='col-12 control-label-notes'>$langFaculty</label>
+                            <div class='col-sm-12'>
+                                " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label class='col-12 control-label-notes'>$langCourseVis:</label>
+                            <div class='col-sm-12'>
+                                " . visibility_select($vis) . "
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label for='course_prof' class='col-12 control-label-notes'>$langTeacher</label>
+                            <div class='col-sm-12'>
+                                <input class='form-control' type='text' id='course_prof' name='course_prof' value='" . q($prof) . "' size='50' />
+                            </div>
+                        </div>
+                        <div class='form-group mt-4'>
+                            <label class='col-12 control-label-notes mb-2'>$langUsersWillAdd</label>
+
+                            <div class='col-sm-12'>
                             <div class='radio mb-2'>
-                                <label>
-                                    <input type='radio' name='add_users' value='prof' id='add_users_prof'>
-                                    $langsTeachers
+                                    <label>
+                                        <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
+                                        $langAll
+                                    </label>
+                                </div>
+                                <div class='radio mb-2'>
+                                    <label>
+                                        <input type='radio' name='add_users' value='prof' id='add_users_prof'>
+                                        $langsTeachers
+                                    </label>
+                                </div>
+                                <div class='radio mb-2'>
+                                    <label>
+                                        <input type='radio' name='add_users' value='none' id='add_users_none'>
+                                        $langNone
+                                    </label>
+                                </div>
+                            </div>
+                        </div>" .
+                        // Hide "Create accounts" option if in course (i.e. clone mode)
+                        (isset($GLOBALS['course_code'])? '': "
+                        <div class='form-group mt-4'>
+                            <div class='col-sm-12'>
+                                <label class='label-container'>
+                                    <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
+                                    <span class='checkmark'></span>
+                                    $langMultiRegType
                                 </label>
                             </div>
-                            <div class='radio mb-2'>
-                                <label>
-                                    <input type='radio' name='add_users' value='none' id='add_users_none'>
-                                    $langNone
-                                </label>
-                            </div>
-                        </div>
-                    </div>" .
-                    // Hide "Create accounts" option if in course (i.e. clone mode)
-                    (isset($GLOBALS['course_code'])? '': "
-                    <div class='form-group mt-4'>
-                        <div class='col-sm-12'>
-                            <label class='label-container'>
-                                <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
-                                <span class='checkmark'></span>
-                                $langMultiRegType
-                            </label>
-                        </div>
-                    </div>") . "
-                    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                        </div>") . "
+                        <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
 
-                        <input class='btn submitAdminBtn' type='submit' name='create_restored_course' value='$langRestore' />
-                      <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
+                            <input class='btn submitAdminBtn' type='submit' name='create_restored_course' value='$langRestore' />
+                        <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
 
-                    </div>
-                " . generate_csrf_token_form_field() . "
+                        </div>
+                    " . generate_csrf_token_form_field() . "
                 </form>
-                </div>
-                </div>
+            </div>
+        </div>
+        <div class='d-none d-lg-block'>
+             <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>
 
     ";
 }
