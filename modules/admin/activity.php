@@ -34,7 +34,7 @@ if (isset($_POST['toReorder'])) {
         if ($id) {
             Database::get()->query('DELETE FROM activity_heading WHERE id = ?d', $id);
             //Session::Messages($langGlossaryDeleted, 'alert-success');
-            Session::flash('message',$langGlossaryDeleted); 
+            Session::flash('message',$langGlossaryDeleted);
             Session::flash('alert-class', 'alert-success');
         }
     }
@@ -58,7 +58,7 @@ if (isset($_POST['toReorder'])) {
             intval(!!$_POST['required']), serialize($headings), $maxOrder + 1);
     }
     //Session::Messages($langFaqEditSuccess, 'alert-success');
-    Session::flash('message',$langFaqEditSuccess); 
+    Session::flash('message',$langFaqEditSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/activity.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
@@ -71,7 +71,7 @@ if (isset($_POST['toReorder'])) {
         $item = Database::get()->querySingle('SELECT * FROM activity_heading WHERE id = ?d', $id);
         if (!$item) {
             //Session::Messages($langGeneralError, 'alert-danger');
-            Session::flash('message',$langGeneralError); 
+            Session::flash('message',$langGeneralError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/activity.php');
         }
@@ -263,4 +263,4 @@ $(function() {
     }
 }
 
-draw($tool_content, 3, null, $head_content);
+draw($tool_content, null, null, $head_content);

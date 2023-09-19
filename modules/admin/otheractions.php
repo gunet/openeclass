@@ -141,7 +141,6 @@ if (isset($_GET['stats'])) {
     }
 }
 
-$data['menuTypeID'] = 3;
 view('admin.other.otheractions', $data);
 
 /**

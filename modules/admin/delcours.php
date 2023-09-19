@@ -111,7 +111,6 @@ if (showSecondFactorChallenge() != "") {
     $data['asktotp'] = " onclick=\"var totp=prompt('Type 2FA:','');this.setAttribute('href', this.getAttribute('href')+'&sfaanswer='+escape(totp));\" ";
 }
 
-$data['menuTypeID'] = 3;
 view ('admin.courses.delcours', $data);
 
 

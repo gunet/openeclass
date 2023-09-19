@@ -75,5 +75,4 @@ if (isDepartmentAdmin()) {
 $head_content .= $js;
 $data['html'] = $html;
 
-$data['menuTypeID'] = 3;
 view('admin.courses.searchcours', $data);

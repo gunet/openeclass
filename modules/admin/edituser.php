@@ -91,7 +91,7 @@ if ($u) {
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
         //Session::Messages($langQuotaSuccess.$extra_msg, 'alert-success');
-        Session::flash('message',$langQuotaSuccess.$extra_msg); 
+        Session::flash('message',$langQuotaSuccess.$extra_msg);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php');
     }
@@ -102,7 +102,7 @@ if ($u) {
         Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
             $u, $_POST['delete_ext_uid']);
         //Session::Messages($langSuccessfulUpdate, 'alert-success');
-        Session::flash('message',$langSuccessfulUpdate); 
+        Session::flash('message',$langSuccessfulUpdate);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
     }
@@ -119,7 +119,6 @@ if ($u) {
                 }
             }
         }
-        $data['menuTypeID'] = 3;
         view('admin.users.edituserauth', $data);
         exit();
     }
@@ -150,7 +149,7 @@ if ($u) {
                 'icon' => 'fa-xmark',
                 'level' => 'primary-label',
                 'show' => $u > 1)
-            
+
         ));
 
 
@@ -183,7 +182,6 @@ if ($u) {
                             LEFT JOIN course_user AS b ON a.id = b.course_id
                             WHERE b.user_id = ?s ORDER BY b.status", $u);
         $data['auth_ids'] = $auth_ids;
-        $data['menuTypeID'] = 3;
         view('admin.users.edituser', $data);
         exit();
     } else { // if the form was submitted then update user
@@ -202,7 +200,7 @@ if ($u) {
         if (isset($_POST['user_date_expires_at'])) {
             if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
                 //Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
-                Session::flash('message',$langUserExpiresFieldEmpty); 
+                Session::flash('message',$langUserExpiresFieldEmpty);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
             }
@@ -226,12 +224,12 @@ if ($u) {
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
             //Session::Messages($langFieldsMissing, 'alert-danger');
-            Session::flash('message',$langFieldsMissing); 
+            Session::flash('message',$langFieldsMissing);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif (isset($user_exist) and $user_exist == true) {
             //Session::Messages($langUserFree, 'alert-danger');
-            Session::flash('message',$langUserFree); 
+            Session::flash('message',$langUserFree);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif ($cpf_check[0] === false) {
@@ -241,14 +239,14 @@ if ($u) {
                 $cpf_error_str .= $cpf_error;
             }
             //Session::Messages("$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>", 'alert-danger');
-            Session::flash('message',"$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>"); 
+            Session::flash('message',"$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>");
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         }
 
         if ($registered_at > $user_expires_at) {
             //Session::Messages($langExpireBeforeRegister, 'alert-warning');
-            Session::flash('message',$langExpireBeforeRegister); 
+            Session::flash('message',$langExpireBeforeRegister);
             Session::flash('alert-class', 'alert-warning');
         }
 
@@ -292,11 +290,11 @@ if ($u) {
             $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
             if ($qry->affectedRows > 0 || $cpf_updated === true) {
                 //Session::Messages($langSuccessfulUpdate, 'alert-info');
-                Session::flash('message',$langSuccessfulUpdate); 
+                Session::flash('message',$langSuccessfulUpdate);
                 Session::flash('alert-class', 'alert-info');
         } else {
             //Session::Messages($langUpdateNoChange, 'alert-warning');
-            Session::flash('message',$langUpdateNoChange); 
+            Session::flash('message',$langUpdateNoChange);
             Session::flash('alert-class', 'alert-warning');
         }
         redirect_to_home_page('modules/admin/edituser.php?u=' . $u);

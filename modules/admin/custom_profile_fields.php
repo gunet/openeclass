@@ -70,12 +70,12 @@ require 'modules/admin/custom_profile_fields_functions.php';
                                     data = ?s
                                     WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $data, $fieldid);
             //Session::Messages($langCPFFieldEditSuccess, 'alert-success');
-            Session::flash('message',$langCPFFieldEditSuccess); 
+            Session::flash('message',$langCPFFieldEditSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else {
             //Session::Messages($langCPFEditUniqueShortnameError, 'alert-danger');
-            Session::flash('message',$langCPFEditUniqueShortnameError); 
+            Session::flash('message',$langCPFEditUniqueShortnameError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         }
@@ -97,12 +97,12 @@ require 'modules/admin/custom_profile_fields_functions.php';
             Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration, data)
                                     VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, $user_type, $registration, $data);
             //Session::Messages($langCPFFieldAddSuccess, 'alert-success');
-            Session::flash('message',$langCPFFieldAddSuccess); 
+            Session::flash('message',$langCPFFieldAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else { //shortname is not unique, abort
             //Session::Messages($langCPFCreateUniqueShortnameError, 'alert-danger');
-            Session::flash('message',$langCPFCreateUniqueShortnameError); 
+            Session::flash('message',$langCPFCreateUniqueShortnameError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         }
@@ -119,7 +119,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
     //delete field
     Database::get()->query("DELETE FROM custom_profile_fields WHERE id = ?d", $fieldid);
     //Session::Messages($langCPFFieldDelSuccess, 'alert-success');
-    Session::flash('message',$langCPFFieldDelSuccess); 
+    Session::flash('message',$langCPFFieldDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/custom_profile_fields.php");
 } elseif (isset($_GET['del_cat'])) { //delete category
@@ -140,7 +140,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
     //delete category
     Database::get()->query("DELETE FROM custom_profile_fields_category WHERE id = ?d", $catid);
     //Session::Messages($langCPFCatDelSuccess, 'alert-success');
-    Session::flash('message',$langCPFCatDelSuccess); 
+    Session::flash('message',$langCPFCatDelSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/custom_profile_fields.php");
 
@@ -151,7 +151,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
         $catid = intval(getDirectReference($_POST['cat_id']));
         Database::get()->query("UPDATE custom_profile_fields_category SET name = ?s WHERE id = ?d", $_POST['cat_name'], $catid);
         //Session::Messages($langCPFCatModSuccess, 'alert-success');
-        Session::flash('message',$langCPFCatModSuccess); 
+        Session::flash('message',$langCPFCatModSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
     } else { //save new category
@@ -164,7 +164,7 @@ require 'modules/admin/custom_profile_fields_functions.php';
         }
         Database::get()->query("INSERT INTO custom_profile_fields_category (name, sortorder) VALUES (?s, ?d)", $_POST['cat_name'], $sortorder);
         //Session::Messages($langCPFCatAddedSuccess, 'alert-success');
-        Session::flash('message',$langCPFCatAddedSuccess); 
+        Session::flash('message',$langCPFCatAddedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
     }
@@ -262,7 +262,7 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
               'level' => 'primary')));
 
     $data['fieldid'] = intval(getDirectReference($_GET['edit_field']));
-    
+
     $result = Database::get()->querySingle("SELECT * FROM custom_profile_fields WHERE id = ?d", $data['fieldid']);
     if ($result != 0) {
 
@@ -342,5 +342,4 @@ if (isset($_GET['add_cat']) || isset($_GET['edit_cat'])) { //add a new category 
   $view = 'admin.users.custom_profile_fields.index';
 }
 
-$data['menuTypeID'] = 3;
 view ($view, $data);

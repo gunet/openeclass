@@ -98,20 +98,18 @@ if (isset($_POST['submit'])) {
             $line = strtok("\n");
         }
     }
-    if (isset($success_mgs)) { 
-        //Session::Messages($success_mgs, 'alert-success');
-        Session::flash('message',$success_mgs); 
+    if (isset($success_mgs)) {
+        Session::flash('message',$success_mgs);
         Session::flash('alert-class', 'alert-success'); }
     if (isset($error_mgs)) {
-        //Session::Messages($error_mgs, 'alert-danger');
-        Session::flash('message',$error_mgs); 
+        Session::flash('message',$error_mgs);
         Session::flash('alert-class', 'alert-danger');}
     redirect_to_home_page('modules/admin/multiedituser.php');
 } else {
-   
+
     $usernames = '';
     if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
-        
+
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
@@ -126,17 +124,17 @@ if (isset($_POST['submit'])) {
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $reg_flag = isset($_POST['reg_flag']) ? intval($_POST['reg_flag']) : '';
         $user_registered_at = isset($_POST['user_registered_at']) ? $_POST['user_registered_at'] : '';
-        $user_expires_until = isset($_POST['user_expires_until']) ? $_POST['user_expires_until'] : '';        
+        $user_expires_until = isset($_POST['user_expires_until']) ? $_POST['user_expires_until'] : '';
         // Criteria/Filters
         $criteria = array();
         $terms = array();
-        
+
         if (!empty($user_registered_at)) {
             $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
             $date_user_registered_at = DateTime::createFromFormat("d-m-Y", $user_registered_at);
             $terms[] = $date_user_registered_at->format("Y-m-d");
         }
-        
+
         if (!empty($_user_expires_until)) {
             $criteria[] = 'expires_at > CURRENT_DATE() AND expires_at < ?s';
             $date_user_expires_until = DateTime::createFromFormat("d-m-Y", $user_expires_until);
@@ -190,10 +188,10 @@ if (isset($_POST['submit'])) {
         if ($search == 'inactive') {
             $criteria[] = 'expires_at < ' . DBHelper::timeAfter();
         }
-        
+
         // search for users with their account being expired in one month
         if ($search == 'wexpire') {
-            $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';            
+            $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
         }
 
         // Department search
@@ -249,7 +247,7 @@ if (isset($_POST['submit'])) {
             }
             $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
-        
+
         Database::get()->queryFunc($qry
                 , function($users) use(&$usernames) {
             $usernames .= $users->username . "\n";
@@ -331,7 +329,7 @@ if (isset($_POST['submit'])) {
             <div class='col-12 h-100 left-form'></div>
         </div></div>";
 }
-draw($tool_content, 3, '', $head_content);
+draw($tool_content, null, '', $head_content);
 
 
 /**

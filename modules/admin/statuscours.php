@@ -45,7 +45,7 @@ $user = new User();
 $cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-$data['course'] = Database::get()->querySingle("SELECT * FROM course WHERE code = ?s", $_GET['c']);     
+$data['course'] = Database::get()->querySingle("SELECT * FROM course WHERE code = ?s", $_GET['c']);
 // Update course status
 if (isset($_POST['submit'])) {
     // Update query
@@ -53,13 +53,13 @@ if (isset($_POST['submit'])) {
     // Some changes occured
     if ($sql->affectedRows > 0) {
         //Session::Messages($langCourseStatusChangedSuccess, 'alert-success');
-        Session::flash('message',$langCourseStatusChangedSuccess); 
+        Session::flash('message',$langCourseStatusChangedSuccess);
         Session::flash('alert-class', 'alert-success');
     }
     // Nothing updated
     else {
         //Session::Messages($langNoChangeHappened, 'alert-warning');
-        Session::flash('message',$langNoChangeHappened); 
+        Session::flash('message',$langNoChangeHappened);
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page('modules/admin/statuscours.php?c='.$data['course']->code);
@@ -81,9 +81,8 @@ if (isset($_GET['c'])) {
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
-              'level' => 'primary')));           
+              'level' => 'primary')));
 }
 
-$data['menuTypeID'] = 3;
 view('admin.courses.statuscours', $data);
 

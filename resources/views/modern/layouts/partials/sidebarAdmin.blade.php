@@ -90,39 +90,223 @@
         $col_size = '1';
     }
 @endphp
+
 <div class='col-12 mt-4'>
     <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-5">
-        @foreach ($toolArr as $key => $tool_group)
-            <div class='col'>
-                <div class='card panelCard p-0 bg-white m-auto h-100 border-0'>
-                    <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
-                        @if($tool_group[0]['class'] == 'user_admin')
-                            <i class="fa-solid fa-user-group settings-icons-lg"></i>
-                        @elseif($tool_group[0]['class'] == 'course_admin')
-                            <i class="fa-solid fa-book-open settings-icons-lg"></i>
+        <div class='col'>
+            <div class='card panelCard p-0 bg-white m-auto h-100 border-0'>
+                <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                    <i class="fa-solid fa-user-group settings-icons-lg"></i>
+                    <h3 class='mb-0'>{{ trans('langUsers') }}</h3>
+                </div>
+                <div class='card-body px-0'>
+                    <ul class='list-group list-group-flush'>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/search_user.php">
+                                {!! trans('langSearchUser') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                        @if (get_config('eclass_prof_reg') == 1 or get_config('alt_auth_prof_reg') == 1)
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/listreq.php">
+                                {!! trans('langProfOpen') !!}
+                            </a>
                         @else
-                            <i class="fa-solid fa-gear settings-icons-lg"></i>
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/newuseradmin.php">
+                                {!! trans('langProfReq') !!}
+                            </a>
                         @endif
-                        <h3 class='mb-0'>{{ $tool_group[0]['text'] }}</h3>
-                    </div>
-                    <div class='card-body px-0'>
-                        <ul class='list-group list-group-flush'>
-                            @foreach ($tool_group[1] as $key2 => $tool)
-                                <li class="list-group-item admin-list-group px-0 border-bottom-default">
-                                    <a href="{!! $tool_group[2][$key2] !!}" class='TextBold link_admin_tool {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}' {{ is_external_link($tool_group[2][$key2]) || $tool_group[3][$key2] == 'fa-external-link' ? ' target="_blank"' : "" }}>
-                                        {!! $tool !!}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                        @if (get_config('eclass_stud_reg') == 1 or get_config('alt_auth_stud_reg') == 1)
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/listreq.php?type=user">
+                                {!! trans('langUserOpen') !!}
+                            </a>
+                        @else
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/newuseradmin.php?type=user">
+                                {!! trans('langUserDetails') !!}
+                            </a>
+                        @endif
+                        </li>
+                        @if ($is_admin)
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/auth.php">
+                                    {!! trans('langUserAuthentication') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/mail_ver_settings.php">
+                                    {!! trans('langMailVerification') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/change_user.php">
+                                    {!! trans('langChangeUser') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/custom_profile_fields.php">
+                                    {!! trans('langCPFAdminSideMenuLink') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/eportfolio_fields.php">
+                                    {!! trans('langEPFAdminSideMenuLink') !!}
+                                </a>
+                            </li>
+                        @endif
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/multireguser.php">
+                                {!! trans('langMultiRegUser') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/multicourseuser.php">
+                                {!! trans('langMultiRegCourseUser') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/multiedituser.php">
+                                {!! trans('langMultiDelUser') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/mailtoprof.php">
+                                {!! trans('langInfoMail') !!}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        @endforeach
+        </div>
+        @if ($is_power_user or $is_departmentmanage_user)
+            <div class='col'>
+                <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                    <i class="fa-solid fa-book-open settings-icons-lg"></i>
+                    <h3 class='mb-0'>{{ trans('langCourses') }}</h3>
+                </div>
+                <div class='card-body px-0'>
+                    <ul class='list-group list-group-flush'>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/searchcours.php">
+                                {!! trans('langSearchCourse') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/course_info/restore_course.php">
+                                {!! trans('langRestoreCourse') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/multicourse.php">
+                                {!! trans('langMultiCourse') !!}
+                            </a>
+                        </li>
+                        @if ($is_admin)
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/autoenroll.php">
+                                    {!! trans('langAutoEnroll') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/modules.php">
+                                    {!! trans('langDisableModules') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/certbadge.php">
+                                    {!! trans('langCertBadge') !!}
+                                </a>
+                            </li>
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/activity.php">
+                                    {!! trans('langActivityCourse') !!}
+                                </a>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        @endif
+        @if ($is_admin)
+            <div class='col'>
+                <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                    <i class="fa-solid fa-gear settings-icons-lg"></i>
+                    <h3 class='mb-0'>{{ trans('langAdminTool') }}</h3>
+                </div>
+                <div class='card-body px-0'>
+                    <ul class='list-group list-group-flush'>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/eclassconf.php">
+                                {!! trans('langConfig') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/extapp.php">
+                                {!! trans('langExtAppConfig') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/widgets.php">
+                                {!! trans('langWidgets') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/coursecategory.php">
+                                {!! trans('langCourseCategoryActions') !!}
+                            </a>
+                        </li>
+                        @if (get_config('phpMyAdminURL'))
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{ get_config('phpMyAdminUrl') }}">
+                                    {!! trans('langDBaseAdmin') !!}
+                                </a>
+                            </li>
+                        @endif
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/usage/index.php?t=a">
+                                {!! trans('langUsage') !!}
+                            </a>
+                        </li>
+                        @if (get_config('enable_common_docs'))
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/commondocs.php">
+                                    {!! trans('langCommonDocs') !!}
+                                </a>
+                            </li>
+                        @endif
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/cleanup.php">
+                                {!! trans('langCleanUp') !!}
+                            </a>
+                        </li>
+                        @if (get_config('phpSysInfoURL'))
+                            <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                <a class='TextBold link_admin_tool' href="{{ get_config('phpSysInfoURL') }}">
+                                    {!! trans('langSysInfo') !!}
+                                </a>
+                            </li>
+                        @endif
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/phpInfo.php">
+                                {!! trans('langPHPInfo') !!}
+                            </a>
+                        </li>
+                        <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                            <a class='TextBold link_admin_tool' href="{{$urlServer}}upgrade/index.php">
+                                {!! trans('langUpgradeBase') !!}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        @endif
     </div>
 </div>
 
-@if($is_admin)
+
+
+@if ($is_admin)
     <div class='col-12 mt-4'>
         <div class="row row-cols-1 row-cols-lg-3 g-5">
             <div class='col'>

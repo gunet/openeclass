@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
 
     // Display result message
     //Session::Messages($langsecondfaUpdated, 'alert-success');
-    Session::flash('message',$langsecondfaUpdated); 
+    Session::flash('message',$langsecondfaUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/secondfamoduleconf.php');
 } // end of if($submit)
@@ -63,7 +63,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "extapp.php",
         'icon' => 'fa-reply',
-        'level' => 'primary')));    
+        'level' => 'primary')));
 
 $head_content .= "
     <script type='text/javascript'>
@@ -81,6 +81,5 @@ $head_content .= "
     });
     </script>";
 
-$data['menuTypeID'] = 3;
 view ('admin.other.extapps.secondfamoduleconf', $data);
 

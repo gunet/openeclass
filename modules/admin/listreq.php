@@ -133,7 +133,7 @@ $data['action_bar'] =
                 'url' => "$_SERVER[SCRIPT_NAME]?show=rejected$reqtype",
                 'icon' => 'fa-ban',
                 'level' => 'primary')
-            
+
                 ));
 
 // -----------------------------------
@@ -279,7 +279,6 @@ else {
 
 }
 
-$data['menuTypeID'] = 3;
 view($view, $data);
 
 /**

@@ -38,34 +38,38 @@ require_once 'modules/lti_consumer/lti-functions.php';
 function getSideMenu($menuTypeID, $rich=true) {
     switch ($menuTypeID) {
         case 0: { //logged out
-                $menu = loggedOutMenu();
-                break;
-            }
+            $menu = loggedOutMenu();
+            break;
+        }
 
         case 1: { //logged in
-                $menu = loggedInMenu($rich);
-                break;
-            }
+            $menu = loggedInMenu($rich);
+            break;
+        }
 
         case 2: { //course home (lesson tools)
-                $menu = lessonToolsMenu($rich);
-                break;
-            }
+            $menu = lessonToolsMenu($rich);
+            break;
+        }
 
-        case 3: { // admin tools
-                $menu = adminMenu();
-                break;
-            }
+        case 3: { // obsolete admin menu. Only for compatibility!
+            $menu = [];
+            break;
+        }
 
         case 4: { // custom tools
-                $menu = customMenu();
-                break;
-            }
+            $menu = customMenu();
+            break;
+        }
 
         case 5: { // tools when embedded in tinymce
-                $menu = pickerMenu();
-                break;
-            }
+            $menu = pickerMenu();
+            break;
+        }
+
+        default:
+            $menu = [];
+            breaK;
     }
     return $menu;
 }
@@ -414,253 +418,6 @@ function loggedOutMenu() {
     }
 
     displayExtrasLeft();
-
-    return $sideMenuGroup;
-}
-
-/**
- * @brief Creates the administrator menu
- * @return array
- */
-function adminMenu() {
-
-    global $urlServer, $is_admin, $is_power_user, $is_departmentmanage_user,
-        $langUsers, $langCourses;
-
-    $sideMenuGroup = array();
-
-    $sideMenuSubGroup = array();
-    $sideMenuText = array();
-    $sideMenuLink = array();
-    $sideMenuImg = array();
-    $current_module_dir = module_path($_SERVER['REQUEST_URI']);
-
-    // user administration
-    $sideMenuSubGroup[] = array(
-        'type' => 'text',
-        'text' => $langUsers,
-        'class' => 'user_admin');
-
-    $sideMenuText[] = $GLOBALS['langSearchUser'];
-    $sideMenuLink[] = '../admin/search_user.php';
-    $sideMenuImg[] = 'fa-caret-right';
-
-    // link to prof requests if enabled, else directly to new prof page
-    if (get_config('eclass_prof_reg') == 1 or get_config('alt_auth_prof_reg') == 1) {
-        $sideMenuText[] = $GLOBALS['langProfOpen'];
-        $sideMenuLink[] = '../admin/listreq.php';
-        $sideMenuImg[] = 'fa-caret-right';
-    } else {
-        $sideMenuText[] = $GLOBALS['langProfReg'];
-        $sideMenuLink[] = '../admin/newuseradmin.php';
-        $sideMenuImg[] = 'fa-caret-right';
-    }
-
-    // link to user requests if enabled, else directly to new user page
-    if (get_config('eclass_stud_reg') == 1 or get_config('alt_auth_stud_reg') == 1) {
-        $sideMenuText[] = $GLOBALS['langUserOpen'];
-        $sideMenuLink[] = '../admin/listreq.php?type=user';
-        $sideMenuImg[] = 'fa-caret-right';
-    } else {
-        $sideMenuText[] = $GLOBALS['langUserDetails'];
-        $sideMenuLink[] = '../admin/newuseradmin.php?type=user';
-        $sideMenuImg[] = 'fa-caret-right';
-    }
-
-    if (isset($is_admin) and $is_admin) {
-        $sideMenuText[] = $GLOBALS['langUserAuthentication'];
-        $sideMenuLink[] = '../admin/auth.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        $sideMenuText[] = $GLOBALS['langMailVerification'];
-        $sideMenuLink[] = '../admin/mail_ver_settings.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        $sideMenuText[] = $GLOBALS['langChangeUser'];
-        $sideMenuLink[] = '../admin/change_user.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        $sideMenuText[] = $GLOBALS['langCPFAdminSideMenuLink'];
-        $sideMenuLink[] = '../admin/custom_profile_fields.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        $sideMenuText[] = $GLOBALS['langEPFAdminSideMenuLink'];
-        $sideMenuLink[] = '../admin/eportfolio_fields.php';
-        $sideMenuImg[] = 'fa-caret-right';
-    }
-
-    $sideMenuText[] = $GLOBALS['langMultiRegUser'];
-    $sideMenuLink[] = '../admin/multireguser.php';
-    $sideMenuImg[] = 'fa-caret-right';
-
-    $sideMenuText[] = $GLOBALS['langMultiRegCourseUser'];
-    $sideMenuLink[] = '../admin/multicourseuser.php';
-    $sideMenuImg[] = 'fa-caret-right';
-
-    $sideMenuText[] = $GLOBALS['langMultiDelUser'];
-    $sideMenuLink[] = '../admin/multiedituser.php';
-    $sideMenuImg[] = 'fa-caret-right';
-
-    $sideMenuText[] = $GLOBALS['langInfoMail'];
-    $sideMenuLink[] = '../admin/mailtoprof.php';
-    $sideMenuImg[] = 'fa-caret-right';
-
-    // if ($is_admin) {
-    //     array_push($sideMenuText, $GLOBALS['langAdmins']);
-    //     array_push($sideMenuLink, '../admin/addadmin.php');
-    //     array_push($sideMenuImg, 'fa-caret-right');
-    // }
-    foreach ($sideMenuLink as $module_link) {
-        if ($current_module_dir == module_path($module_link)) {
-            $sideMenuSubGroup[0]['class'] = ' in';
-        }
-    }
-    $sideMenuSubGroup[] = $sideMenuText;
-    $sideMenuSubGroup[] = $sideMenuLink;
-    $sideMenuSubGroup[] = $sideMenuImg;
-    $sideMenuGroup[] = $sideMenuSubGroup;
-
-    if ($is_power_user or $is_departmentmanage_user) {
-        // lesson administration
-        // reset sub-arrays so that we do not have duplicate entries
-        $sideMenuSubGroup = array();
-        $sideMenuText = array();
-        $sideMenuLink = array();
-        $sideMenuImg = array();
-
-        $sideMenuSubGroup[] = array(
-            'type' => 'text',
-            'text' => $langCourses,
-            'class' => 'course_admin');
-
-        $sideMenuText[] = $GLOBALS['langSearchCourse'];
-        $sideMenuLink[] = '../admin/searchcours.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        $sideMenuText[] = $GLOBALS['langRestoreCourse'];
-        $sideMenuLink[] = '../course_info/restore_course.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        // if ($is_admin) {
-        //     array_push($sideMenuText, $GLOBALS['langHierarchy']);
-        //     array_push($sideMenuLink, '../admin/hierarchy.php');
-        //     array_push($sideMenuImg, 'fa-caret-right');
-        // }
-
-        $sideMenuText[] = $GLOBALS['langMultiCourse'];
-        $sideMenuLink[] = '../admin/multicourse.php';
-        $sideMenuImg[] = 'fa-caret-right';
-
-        if ($is_admin) {
-            $sideMenuText[] = $GLOBALS['langAutoEnroll'];
-            $sideMenuLink[] = '../admin/autoenroll.php';
-            $sideMenuImg[] = 'fa-caret-right';
-
-            $sideMenuText[] = $GLOBALS['langDisableModules'];
-            $sideMenuLink[] = "../admin/modules.php";
-            $sideMenuImg[] = "fa-caret-right";
-
-            $sideMenuText[] = $GLOBALS['langCertBadge'];
-            $sideMenuLink[] = '../admin/certbadge.php';
-            $sideMenuImg[] = 'fa-caret-right';
-
-            $sideMenuText[] = $GLOBALS['langActivityCourse'];
-            $sideMenuLink[] = '../admin/activity.php';
-            $sideMenuImg[] = 'fa-caret-right';
-
-            // array_push($sideMenuText, $GLOBALS['langCourseCategoryActions']);
-            // array_push($sideMenuLink, '../admin/coursecategory.php');
-            // array_push($sideMenuImg, 'arrow.png');
-        }
-
-        foreach ($sideMenuLink as $module_link) {
-            if ($current_module_dir == module_path($module_link)) {
-                $sideMenuSubGroup[0]['class'] = ' in';
-            }
-        }
-
-        $sideMenuSubGroup[] = $sideMenuText;
-        $sideMenuSubGroup[] = $sideMenuLink;
-        $sideMenuSubGroup[] = $sideMenuImg;
-        $sideMenuGroup[] = $sideMenuSubGroup;
-    }
-
-    // server administration
-    // reset sub-arrays so that we do not have duplicate entries
-    $sideMenuSubGroup = array();
-    $sideMenuText = array();
-    $sideMenuLink = array();
-    $sideMenuImg = array();
-
-    if (isset($is_admin) and $is_admin) {
-
-        $sideMenuSubGroup[] = array(
-            'type' => 'text',
-            'text' => $GLOBALS['langAdminTool'],
-            'class' => 'server_admin');
-
-        $sideMenuText[] = $GLOBALS['langConfig'];
-        $sideMenuLink[] = "../admin/eclassconf.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-        $sideMenuText[] = $GLOBALS['langExtAppConfig'];
-        $sideMenuLink[] = "../admin/extapp.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-        $sideMenuText[] = $GLOBALS['langWidgets'];
-        $sideMenuLink[] = "../admin/widgets.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-        $sideMenuText[] = $GLOBALS['langCourseCategoryActions'];
-        $sideMenuLink[] = $urlServer . "../admin/coursecategory.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-        if (get_config('phpMyAdminURL')) {
-            $sideMenuText[] = $GLOBALS['langDBaseAdmin'];
-            $sideMenuLink[] = get_config('phpMyAdminURL');
-            $sideMenuImg[] = "fa-caret-right";
-        }
-
-        $sideMenuText[] = $GLOBALS['langUsage'];
-        $sideMenuLink[] = "../../modules/usage/index.php?t=a";
-        $sideMenuImg[] = "fa-caret-right";
-
-        if (get_config('enable_common_docs')) {
-            $sideMenuText[] = $GLOBALS['langCommonDocs'];
-            $sideMenuLink[] = "../admin/commondocs.php";
-            $sideMenuImg[] = "fa-caret-right";
-        }
-
-        $sideMenuText[] = $GLOBALS['langCleanUp'];
-        $sideMenuLink[] = "../admin/cleanup.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-        if (get_config('phpSysInfoURL')) {
-            $sideMenuText[] = $GLOBALS['langSysInfo'];
-            $sideMenuLink[] = get_config('phpSysInfoURL');
-            $sideMenuImg[] = "fa-caret-right";
-        }
-
-        $sideMenuText[] = $GLOBALS['langPHPInfo'];
-        $sideMenuLink[] = "../admin/phpInfo.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-        $sideMenuText[] = $GLOBALS['langUpgradeBase'];
-        $sideMenuLink[] = $urlServer . "upgrade/index.php";
-        $sideMenuImg[] = "fa-caret-right";
-
-
-        foreach ($sideMenuLink as $module_link) {
-            if ($current_module_dir == module_path($module_link)) {
-                $sideMenuSubGroup[0]['class'] = ' in';
-            }
-        }
-
-        $sideMenuSubGroup[] = $sideMenuText;
-        $sideMenuSubGroup[] = $sideMenuLink;
-        $sideMenuSubGroup[] = $sideMenuImg;
-        $sideMenuGroup[] = $sideMenuSubGroup;
-    }
 
     return $sideMenuGroup;
 }

@@ -37,7 +37,7 @@ if (isset($_POST['submit'])) {
             array_keys($_POST['moduleDisable']));
     }
     //Session::Messages($langWikiEditionSucceed, 'alert-success');
-    Session::flash('message',$langWikiEditionSucceed); 
+    Session::flash('message',$langWikiEditionSucceed);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/modules.php');
 } else {
@@ -55,7 +55,7 @@ if (isset($_POST['submit'])) {
                               'url' => $urlAppend . 'modules/admin/modules_default.php',
                               'icon' => 'fa-square-check',
                               'level' => 'primary-label' ]
-                            
+
                         ], false);
 
     $alwaysEnabledModules = array(MODULE_ID_AGENDA, MODULE_ID_DOCS, MODULE_ID_ANNOUNCE, MODULE_ID_MESSAGE, MODULE_ID_DESCRIPTION);
@@ -64,5 +64,4 @@ if (isset($_POST['submit'])) {
     }
     $data['modules'] = $modules;
 }
-$data['menuTypeID'] = 3;
 view('admin.other.modules', $data);

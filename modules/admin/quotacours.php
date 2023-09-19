@@ -62,13 +62,13 @@ if (isset($_POST['submit'])) {
     // Some changes occured
     if ($sql->affectedRows > 0) {
        // Session::Messages($langQuotaSuccess, 'alert-success');
-        Session::flash('message',$langQuotaSuccess); 
+        Session::flash('message',$langQuotaSuccess);
         Session::flash('alert-class', 'alert-success');
     }
     // Nothing updated
     else {
         //Session::Messages($langQuotaFail);
-        Session::flash('message',$langQuotaFail); 
+        Session::flash('message',$langQuotaFail);
         Session::flash('alert-class', 'alert-danger');
     }
 }
@@ -98,5 +98,4 @@ $data['vq'] = round($data['course']->video_quota / MB);
 $data['gq'] = round($data['course']->group_quota / MB);
 $data['drq'] = round($data['course']->dropbox_quota / MB);
 
-$data['menuTypeID'] = 3;
 view('admin.courses.quotacours', $data);

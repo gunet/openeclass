@@ -42,7 +42,7 @@ if (isset($_GET['transition'])) {
                                 <ul>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=true'><strong>Ναι</strong></a></li>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
-                                </ul>"); 
+                                </ul>");
             Session::flash('alert-class', 'alert-warning');
     } else {
         // Session::Messages("ΠΡΟΣΟΧΗ! Θα απενεργοποιήσετε τη διαδικασία μετάβασης του τρόπου πιστοποίησης των χρηστών σε CAS (Single Sign-ON).
@@ -56,7 +56,7 @@ if (isset($_GET['transition'])) {
                                 <ul>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=false'><strong>Ναι</strong></a></li>
                                 <li><a href='$_SERVER[SCRIPT_NAME]?do_transition=cancel'><strong>Όχι</strong></a></li>
-                                </ul>"); 
+                                </ul>");
             Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page('modules/admin/auth.php');
@@ -68,12 +68,12 @@ if (isset($_GET['do_transition'])) {
         set_config('sso_transition', true);
         Transition::create_table();
         //Session::Messages("Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS ενεργοποιήθηκε.", 'alert-success');
-        Session::flash('message',"Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS ενεργοποιήθηκε."); 
+        Session::flash('message',"Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS ενεργοποιήθηκε.");
         Session::flash('alert-class', 'alert-success');
     } else if ($_GET['do_transition'] == 'false') {
         set_config('sso_transition', false);
         //Session::Messages("Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS απενεργοποιήθηκε.", 'alert-success');
-        Session::flash('message',"Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS απενεργοποιήθηκε."); 
+        Session::flash('message',"Η διαδικασία μετάβασης των χρηστών στο τρόπο πιστοποίησης μέσω CAS απενεργοποιήθηκε.");
         Session::flash('alert-class', 'alert-success');
     } else {
         redirect_to_home_page('modules/admin/auth.php');
@@ -90,12 +90,12 @@ if (isset($_GET['auth'])) {
 
         if (empty($settings) and $auth != 1) {
             //Session::Messages("$langErrActiv $langActFailure", 'alert-danger');
-            Session::flash('message',"$langErrActiv $langActFailure"); 
+            Session::flash('message',"$langErrActiv $langActFailure");
             Session::flash('alert-class', 'alert-danger');
         } else {
             Database::get()->query("UPDATE auth SET auth_default = ?d WHERE auth_id = ?d", $q, $auth);
            // Session::Messages(($q? $langActSuccess: $langDeactSuccess) . get_auth_info($auth), 'alert-success');
-            Session::flash('message',($q? $langActSuccess: $langDeactSuccess) . get_auth_info($auth)); 
+            Session::flash('message',($q? $langActSuccess: $langDeactSuccess) . get_auth_info($auth));
             Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page('modules/admin/auth.php');
@@ -104,12 +104,12 @@ if (isset($_GET['auth'])) {
             Database::get()->query("UPDATE auth SET auth_default = 1 WHERE auth_default <> 0");
             Database::get()->query("UPDATE auth SET auth_default = 2 WHERE auth_id = ?d", $auth);
             //Session::Messages($langPrimaryAuthTypeChanged, 'alert-success');
-            Session::flash('message',$langPrimaryAuthTypeChanged); 
+            Session::flash('message',$langPrimaryAuthTypeChanged);
             Session::flash('alert-class', 'alert-success');
         } else {
             Database::get()->query("UPDATE auth SET auth_default = 1 WHERE auth_id = ?d", $auth);
             //Session::Messages($langSecondaryAuthTypeChanged, 'alert-success');
-            Session::flash('message',$langSecondaryAuthTypeChanged); 
+            Session::flash('message',$langSecondaryAuthTypeChanged);
             Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page('modules/admin/auth.php');
@@ -129,7 +129,6 @@ $action_bar = action_bar(array(
 $data['auth_ids'] = $auth_ids;
 $data['auth_active_ids'] = $auth_active_ids = get_auth_active_methods();
 $data['authMethods'] = $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
-    
-$data['menuTypeID'] = 3;
+
 view ('admin.users.auth.index', $data);
 

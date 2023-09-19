@@ -75,7 +75,7 @@ if (isset($_POST['submit'])) {
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
     //Session::Messages($langModifDone, 'alert-success');
-    Session::flash('message',$langModifDone); 
+    Session::flash('message',$langModifDone);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/editcours.php?c='.$_GET['c']);
 }
@@ -109,5 +109,4 @@ if (isDepartmentAdmin()) {
 $head_content .= $js;
 $data['node_picker'] = $html;
 
-$data['menuTypeID'] = 3;
 view ('admin.courses.infocours', $data);

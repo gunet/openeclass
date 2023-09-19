@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // Check if user is administrator and if yes continue
@@ -61,7 +61,7 @@ if (isset($_GET['delete_server'])) {
     Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
     // Display result message
     //Session::Messages($langFileUpdatedSuccess, 'alert-success');
-    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('message',$langFileUpdatedSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/bbbmoduleconf.php');
 } else if (isset($_POST['submit'])) {
@@ -76,7 +76,7 @@ if (isset($_GET['delete_server'])) {
     $enable_recordings = $_POST['enable_recordings'];
     $enabled = $_POST['enabled'];
     $weight = $_POST['weight'];
-    $tc_courses = $_POST['tc_courses'];    
+    $tc_courses = $_POST['tc_courses'];
     if (in_array(0, $tc_courses)) {
         $allcourses = 1; // tc server is assigned to all courses
     } else {
@@ -94,7 +94,7 @@ if (isset($_GET['delete_server'])) {
                 all_courses = ?d
                 WHERE id =?d", $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight, $allcourses, $id);
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $id);
-        if ($allcourses == 0) {        
+        if ($allcourses == 0) {
             foreach ($tc_courses as $tc_data) {
                 Database::get()->query("INSERT INTO course_external_server SET course_id = ?d, external_server = ?d", $tc_data, $id);
                 update_bbb_session($tc_data, $id); // update existing tc_sessions
@@ -113,7 +113,7 @@ if (isset($_GET['delete_server'])) {
     }
     // Display result message
     //Session::Messages($langFileUpdatedSuccess,"alert-success");
-    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('message',$langFileUpdatedSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/bbbmoduleconf.php");
 } // end of if($submit)
@@ -132,17 +132,17 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
             ]);
     $data['enabled_recordings'] = true;
     $data['enabled'] = true;
-        
+
     if (isset($_GET['add_server'])) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
                                             WHERE id NOT IN (SELECT course_id FROM course_external_server) 
                                             AND visible != " . COURSE_INACTIVE . "
-                                            ORDER BY title");        
+                                            ORDER BY title");
         $data['listcourses'] = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
         foreach ($courses_list as $c) {
             $data['listcourses'] .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
         }
-    } else {        
+    } else {
         $data['bbb_server'] = getDirectReference($_GET['edit_server']);
         $data['server'] = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id = ?d", $data['bbb_server']);
         if ($data['server']->enable_recordings == "false") {
@@ -151,7 +151,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
         if ($data['server']->enabled == "false") {
             $data['enabled'] = false;
         }
-                
+
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course WHERE id 
                                                         NOT IN (SELECT course_id FROM course_external_server) 
                                                         AND visible != " . COURSE_INACTIVE . "
@@ -172,7 +172,7 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
         }
         foreach($courses_list as $c) {
             $listcourses .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
-        }        
+        }
         $data['listcourses'] = $listcourses;
     }
     $view = 'admin.other.extapps.bbb.create';
@@ -195,7 +195,6 @@ if (isset($_GET['add_server']) || isset($_GET['edit_server'])) {
     $view = 'admin.other.extapps.bbb.index';
 }
 
-$data['menuTypeID'] = 3;
 view($view, $data);
 
 /**
@@ -204,7 +203,7 @@ view($view, $data);
  * @param type $bbb_server_id
  */
 function update_tc_session($course_id, $tc_server_id) {
-    
+
     $q = Database::get()->querySingle("SELECT * FROM tc_session WHERE course_id = ?d", $course_id);
     if ($q) {
         foreach ($q as $data) {

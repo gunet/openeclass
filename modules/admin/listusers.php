@@ -509,10 +509,9 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-search',
         'level' => 'primary-label',
         'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive'))
-   
+
         ));
 
-$data['menuTypeID'] = 3;
 // display search results
 view('admin.users.list_users', $data);
 

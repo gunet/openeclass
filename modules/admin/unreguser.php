@@ -89,5 +89,4 @@ if ($doit) {
     }
 }
 
-$data['menuTypeID'] = 3;
 view('admin.users.unreguser', $data);

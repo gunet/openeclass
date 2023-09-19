@@ -123,7 +123,6 @@ if (isset($_REQUEST['u'])) {
     }
     $data['info'] = $info;
 }
-$data['menuTypeID'] = 3;
 view('admin.users.mergeuser', $data);
 
 

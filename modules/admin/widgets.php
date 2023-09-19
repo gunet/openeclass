@@ -64,7 +64,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             Database::get()->query("UPDATE `widget_widget_area` SET `position` = `position` - 1 WHERE `position` <= ?d AND `position` > ?d AND `widget_area_id` = ?d", $newPos, $oldPos, $widget_area_id);
         }
         Database::get()->query("UPDATE `widget_widget_area` SET `position` = ?d WHERE id = ?d", $newPos, $widget_widget_area_id);
-        
+
     } elseif ($_POST['action'] == 'getForm') {
         $widget_id = $_POST['widget_id'];
         $widget_widget_area_id = $_POST['widget_widget_area_id'];
@@ -78,10 +78,10 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         foreach ($options as $option) {
             $option_data[$option['name']] = $option['value'];
         }
-        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);     
+        \Database::get()->query("UPDATE `widget_widget_area` SET `options` = ?s WHERE id = ?d", serialize($option_data), $widget_widget_area_id);
     }
     echo json_encode($data);
-    exit;    
+    exit;
 }
 
 load_js('sortable');
@@ -94,7 +94,7 @@ if (isset($_POST['widgetAction'])) {
     }
     redirect_to_home_page('modules/admin/widgets.php');
 }
-$head_content .= 
+$head_content .=
         "
         <script type='text/javascript'>
             $(function() {
@@ -320,12 +320,12 @@ $head_content .=
 
         </script>
         ";
-        
+
 $installed_widgets = Database::get()->queryArray("SELECT id, class FROM widget");
 $installed_widgets_arr = [];
 foreach ($installed_widgets as $installed_widget) {
     $installed_widgets_arr[$installed_widget->id] = $installed_widget->class;
-}    
+}
 
 $home_main_area = new Widgets\WidgetArea(HOME_PAGE_MAIN);
 $view_data['home_main_area_widgets'] = $home_main_area->getWidgets();
@@ -342,7 +342,6 @@ $view_data['course_home_sidebar_widgets'] = $course_home_sidebar_area->getWidget
 
 $view_data = recursiveWidgetIterator('Widgets', $view_data);
 
-$view_data['menuTypeID'] = 3;
 $pageName = $langWidgets;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -358,7 +357,7 @@ view('admin.widgets.index', $view_data);
 function recursiveWidgetIterator ($directory = null, $view_data = array()) {
     global $installed_widgets_arr;
     if (!isset($view_data['installed_widgets'])) $view_data['installed_widgets'] = [];
-    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];     
+    if (!isset($view_data['uninstalled_widgets'])) $view_data['uninstalled_widgets'] = [];
     $files = new \DirectoryIterator ( $directory );
     foreach ($files as $file) {
         if ($file->isFile ()) {

@@ -112,5 +112,4 @@ if (isset($_POST['changePass'])) {
     redirect_to_home_page("modules/admin/edituser.php?u=" . urlencode($userid));
 }
 
-$data['menuTypeID'] = 3;
-view('admin.users.password', $data);                
+view('admin.users.password', $data);

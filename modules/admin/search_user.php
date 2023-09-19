@@ -128,5 +128,4 @@ list($js, $html) = $tree->buildNodePicker($depts_defaults);
 $head_content .= $js;
 $data['html'] = $html;
 
-$data['menuTypeID'] = 3;
 view('admin.users.search_user', $data);

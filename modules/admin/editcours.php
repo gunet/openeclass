@@ -65,12 +65,11 @@ $data['action_bar'] = action_bar([
             ]);
 
 // A course has been selected
-if (isset($c)) {    
+if (isset($c)) {
     // Get information about selected course
     $data['course'] = Database::get()->querySingle("SELECT code, title, prof_names, visible, doc_quota, video_quota, group_quota, dropbox_quota
 			FROM course WHERE code = ?s", $c);
     $data['departments'] = $course->getDepartmentIds($cId);
 }
 
-$data['menuTypeID'] = 3;
 view ('admin.courses.editcours', $data);

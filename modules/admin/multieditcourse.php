@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_usermanage_user = TRUE;
@@ -35,17 +35,17 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 load_js('jstree3');
 
-if (isset($_POST['submit'])) { 
-    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();   
+if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $newdepip = isset($_POST['newdepid']) ? $_POST['newdepid'] : array();
     foreach ($_POST['lessons'] as $cId) {
         $course->refresh($cId, $_POST['newdepid']);
     }
     //Session::Messages($langModifDone, 'alert-success');
-    Session::flash('message',$langModifDone); 
+    Session::flash('message',$langModifDone);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/listcours.php');
-    
+
 }
 
 $searchtitle = isset($_POST['formsearchtitle']) ? $_POST['formsearchtitle'] : '';
@@ -69,7 +69,7 @@ if ($searchtype != "-1") {
     $terms[] = $searchtype;
 }
 
-if ($searchfaculte) {    
+if ($searchfaculte) {
     $subs = $tree->buildSubtrees(array($searchfaculte));
     $ids = 0;
     foreach ($subs as $key => $id) {
@@ -91,16 +91,14 @@ $data['sql'] = Database::get()->queryArray("SELECT DISTINCT course.code, course.
                            FROM course, course_department, hierarchy
                           WHERE course.id = course_department.course
                             AND hierarchy.id = course_department.department
-                                $query", $terms); 
+                                $query", $terms);
 
 
 
-list($js, $html) = $tree->buildNodePicker(array('params' => 'name="newdepid[]"', 
-                                                'defaults' => $course->getDepartmentIds($searchfaculte),                                                            
-                                                'multiple' => false));        
+list($js, $html) = $tree->buildNodePicker(array('params' => 'name="newdepid[]"',
+                                                'defaults' => $course->getDepartmentIds($searchfaculte),
+                                                'multiple' => false));
 $head_content .= $js;
 $data['html'] = $html;
 
-
-$data['menuTypeID'] = 3;
 view('admin.courses.multieditcourse', $data);

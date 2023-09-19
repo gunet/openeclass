@@ -391,5 +391,4 @@ else {
     }
 }
 
-$data['menuTypeID'] = 3;
 view('admin.other.eclassconf', $data);

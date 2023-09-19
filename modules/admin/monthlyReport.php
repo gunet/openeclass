@@ -36,6 +36,5 @@ $data['action_bar'] = action_bar(array(
 
 $data['monthly_data'] = $monthly_data = get_monthly_archives();
 
-$data['menuTypeID'] = 3;
 view('admin.other.stats.monthlyReport', $data);
 

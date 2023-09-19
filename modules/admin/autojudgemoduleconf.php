@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
 
     // Display result message
     //Session::Messages($langAutoJudgeUpdated, 'alert-success');
-    Session::flash('message',$langAutoJudgeUpdated); 
+    Session::flash('message',$langAutoJudgeUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/extapp.php');
 } // end of if($submit)
@@ -81,6 +81,5 @@ $head_content .= "
     });
     </script>";
 
-$data['menuTypeID'] = 3;
 view('admin.other.extapps.autojudgemoduleconf', $data);
 

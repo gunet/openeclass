@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
         cleanup("$webDir/courses/$dir", $days);
     }
     //Session::Messages($messages, 'alert-success');
-    Session::flash('message',$messages); 
+    Session::flash('message',$messages);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/cleanup.php');
 }
@@ -47,7 +47,6 @@ $data['action_bar'] = action_bar([
                                         'level' => 'primary'
                                     ]
                                 ]);
-$data['menuTypeID'] = 3;
 view('admin.server.cleanup', $data);
 
 // Remove all files under $path older than $max_age days

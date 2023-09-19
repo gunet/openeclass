@@ -190,6 +190,5 @@ $head_content .= $js;
 $data['buildusernode'] = $html;
 
 $data['body_mail_rich_text'] = rich_text_editor('body_mail', 10, 20, $body_mail);
-$data['menuTypeID'] = 3;
 
 view('admin.users.mailtoprof', $data);

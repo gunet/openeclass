@@ -35,9 +35,9 @@ if ($user) {
     $data['u_realname'] = q(uid_to_name($user));
 } else {
     //Session::Messages($langErrorDelete, 'alert-danger');
-    Session::flash('message',$langErrorDelete); 
+    Session::flash('message',$langErrorDelete);
     Session::flash('alert-class', 'alert-danger');
-    redirect_to_home_page('modules/admin/listusers.php');    
+    redirect_to_home_page('modules/admin/listusers.php');
 }
 
 if (isset($_POST['doit'])) {
@@ -45,17 +45,17 @@ if (isset($_POST['doit'])) {
     checkSecondFactorChallenge();
     if (get_admin_rights($user) > 0) {
         //Session::Messages($langTryDeleteAdmin, 'alert-danger');
-        Session::flash('message',$langTryDeleteAdmin); 
+        Session::flash('message',$langTryDeleteAdmin);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page("modules/admin/deluser.php?u=$user");
     } else {
         if (deleteUser($user, true)) {
             //Session::Messages("$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.", 'alert-info');
-            Session::flash('message',"$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted."); 
+            Session::flash('message',"$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.");
             Session::flash('alert-class', 'alert-info');
         } else {
             //Session::Messages($langErrorDelete, 'alert-danger');
-            Session::flash('message',$langErrorDelete); 
+            Session::flash('message',$langErrorDelete);
             Session::flash('alert-class', 'alert-danger');
         }
         redirect_to_home_page('modules/admin/listusers.php');
@@ -72,5 +72,4 @@ $data['action_bar'] = action_bar(array(
               'icon' => 'fa-reply',
               'level' => 'primary')));
 
-$data['menuTypeID'] = 3;
 view ('admin.users.deluser', $data);

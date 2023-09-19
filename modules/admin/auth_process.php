@@ -163,17 +163,17 @@ if (isset($_POST['submit'])) {
         WHERE auth_id = ?d",
         function ($error) use (&$tool_content, $langErrActiv) {
             //Session::Messages($langErrActiv, 'alert-warning');
-            Session::flash('message',$langErrActiv); 
+            Session::flash('message',$langErrActiv);
             Session::flash('alert-class', 'alert-warning');
         }, $auth_settings, $auth_instructions, $auth_title, $auth);
     if ($result) {
         if ($result->affectedRows == 1) {
             //Session::Messages($langHasActivate, 'alert-success');
-            Session::flash('message',$langHasActivate); 
+            Session::flash('message',$langHasActivate);
             Session::flash('alert-class', 'alert-success');
         } else {
             //Session::Messages($langAlreadyActiv, 'alert-info');
-            Session::flash('message',$langAlreadyActiv); 
+            Session::flash('message',$langAlreadyActiv);
             Session::flash('alert-class', 'alert-info');
         }
     }
@@ -243,7 +243,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-$data['menuTypeID'] = 3;
 view ('admin.users.auth.auth_process', $data);
 
 /**

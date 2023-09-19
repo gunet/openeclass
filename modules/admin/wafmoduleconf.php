@@ -49,7 +49,7 @@ if (isset($_POST['submit'])) {
 
     // Display result message
     //Session::Messages($langWafUpdated, 'alert-success');
-    Session::flash('message',$langWafUpdated); 
+    Session::flash('message',$langWafUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/wafmoduleconf.php');
 } // end of if($submit)
@@ -83,6 +83,5 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary')));
 
-$data['menuTypeID'] = 3;
 view('admin.other.extapps.wafmoduleconf', $data);
 

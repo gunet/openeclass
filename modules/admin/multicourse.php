@@ -39,7 +39,7 @@ if (isset($_POST['submit'])) {
     // validation in case it skipped JS validation for department(s)
     if (count($departments) < 1 || empty($departments[0])) {
         //Session::Messages($langEmptyAddNode);
-        Session::flash('message',$langEmptyAddNode); 
+        Session::flash('message',$langEmptyAddNode);
         Session::flash('alert-class', 'alert-success');
         header("Location:" . $urlServer . "modules/admin/multicourse.php");
         exit;
@@ -84,11 +84,11 @@ if (isset($_POST['submit'])) {
                 course_index($code);
             }
             if ($prof_not_found) {
-                $error_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>' . 
+                $error_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>' .
                         q($langTeacher) . ': <b>' .
                         q($prof_info) . '</b>: ' . q($langNoUsersFound2);
             } else {
-                $sucess_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>' 
+                $sucess_messages[] = "<b>" . q($title) . '</b>: ' . q($langMultiCourseCreated).'<br>'
                         . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
             }
         }
@@ -96,15 +96,15 @@ if (isset($_POST['submit'])) {
     }
     if (!empty($sucess_messages)){
          //Session::Messages ($sucess_messages, 'alert-success');
-         Session::flash('message',$sucess_messages); 
+         Session::flash('message',$sucess_messages);
          Session::flash('alert-class', 'alert-success');
     }
     if (!empty($error_messages)){
          //Session::Messages ($error_messages);
-         Session::flash('message',$error_messages); 
+         Session::flash('message',$error_messages);
          Session::flash('alert-class', 'alert-danger');
     }
-    
+
     redirect_to_home_page('modules/admin/multicourse.php');
 }
 
@@ -115,7 +115,7 @@ $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
-        'level' => 'primary')));    
+        'level' => 'primary')));
 $tree = new hierarchy();
 $course = new course();
 $user = new user();
@@ -128,9 +128,8 @@ list($js, $html) = $tree->buildCourseNodePicker($options);
 $head_content .= $js;
 $data['html'] = $html;
 
-$data['menuTypeID'] = 3; 
 view('admin.courses.multicourse', $data);
-        
+
 
 
 /**

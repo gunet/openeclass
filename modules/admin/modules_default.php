@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
         set_config('default_modules', serialize(array_keys($_POST['module'])));
     }
     //Session::Messages($langWikiEditionSucceed, 'alert-success');
-    Session::flash('message',$langWikiEditionSucceed); 
+    Session::flash('message',$langWikiEditionSucceed);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/modules_default.php');
 } else {
@@ -54,6 +54,5 @@ if (isset($_POST['submit'])) {
               'icon' => 'fa-reply',
               'level' => 'primary' ]
         ], false);
-    $data['menuTypeID'] = 3;
     view('admin.other.modules_default', $data);
 }

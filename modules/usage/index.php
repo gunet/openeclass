@@ -141,7 +141,7 @@ if (isset($_GET['per_course_dur'])) {
             array('title' => $langPersonalStats,
                 'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$uid_stats",
                 'level' => 'primary-label')
-            
+
         ),false);
     } else {
         $tool_content .= action_bar(array(
@@ -152,7 +152,7 @@ if (isset($_GET['per_course_dur'])) {
             array('title' => $langPersonalStats,
                 'url' => "../usage/index.php?t=u",
                 'level' => 'primary-label')
-            
+
         ),false);
     }
     $tool_content .= user_duration_per_course($uid_stats);
@@ -180,7 +180,7 @@ add_units_navigation(true);
 
 if ($stats_type == 'admin' || ($stats_type == 'user' && isset($_REQUEST['u']))) {
     $navigation[] = array('url' => '../admin/', 'name' => $langAdmin);
-    draw($tool_content, 3, null, $head_content);
+    draw($tool_content, null, null, $head_content);
 } elseif ($stats_type == 'course') {
     draw($tool_content, 2, null, $head_content);
 } else {

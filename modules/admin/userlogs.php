@@ -168,5 +168,4 @@ $data['log_types'] = [
         LOG_MODIFY_COURSE => $i . $i . $langCourseInfoEdit
     ];
 
-$data['menuTypeID'] = 3;
 view('admin.users.userlogs', $data);

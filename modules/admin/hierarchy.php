@@ -207,14 +207,14 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         // Check for empty fields
         if (empty($names)) {
             //Session::Messages($langEmptyNodeName, 'alert-danger');
-            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('message',$langEmptyNodeName);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['SCRIPT_NAME'] . "?a=1");
         }
         // Check for greek letters
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
             //Session::Messages($langGreekCode, 'alert-danger');
-            Session::flash('message',$langGreekCode); 
+            Session::flash('message',$langGreekCode);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page($_SERVER['SCRIPT_NAME'] . "?a=1");
         } else {
@@ -223,7 +223,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             validateParentId($pid, isDepartmentAdmin());
             $tree->addNode($name, $description, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority, $visible);
             //Session::Messages($langAddSuccess, 'alert-success');
-            Session::flash('message',$langAddSuccess); 
+            Session::flash('message',$langAddSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("modules/admin/hierarchy.php");
         }
@@ -264,13 +264,13 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
         if ($c > 0) {
             // The node cannot be deleted
             //Session::Messages("$langNodeProErase<br>$langNodeNoErase", 'alert-danger');
-            Session::flash('message',"$langNodeProErase<br>$langNodeNoErase"); 
+            Session::flash('message',"$langNodeProErase<br>$langNodeNoErase");
             Session::flash('alert-class', 'alert-danger');
         } else {
             // The node can be deleted
             $tree->deleteNode($id);
             //Session::Messages($langNodeErase, 'alert alert-success');
-            Session::flash('message',$langNodeErase); 
+            Session::flash('message',$langNodeErase);
             Session::flash('alert-class', 'alert-success');
         }
         redirect_to_home_page('modules/admin/hierarchy.php');
@@ -314,7 +314,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         }
         if (empty($name)) {
             //Session::Messages($langEmptyNodeName, 'alert-danger');
-            Session::flash('message',$langEmptyNodeName); 
+            Session::flash('message',$langEmptyNodeName);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/admin/hierarchy.php?action=edit&id=" . $id);
         } else {
@@ -324,7 +324,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             validateParentId($newpid, isDepartmentAdmin());
             $tree->updateNode($id, $name, $description, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority, $visible);
             //Session::Messages($langEditNodeSuccess, 'alert-success');
-            Session::flash('message',$langEditNodeSuccess); 
+            Session::flash('message',$langEditNodeSuccess);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/hierarchy.php');
         }
@@ -385,5 +385,4 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
 
 // prepare javascript in head_content for rich_text_editor and for calling rich_text_editor via the view
 rich_text_editor(null, null, null, null);
-$data['menuTypeID'] = 3;
 view($view, $data);

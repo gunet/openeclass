@@ -52,14 +52,14 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
         if ($count > 0) {
             $user = ($count == 1) ? $langOfUser : $langUsersS;
             //Session::Messages($langMailVerificationChanged . " " . $m['from'] . " «" . $mail_ver_data[$old_mail_ver] . "» " . $m['in'] . " «". $mail_ver_data[$new_mail_ver] . "» $m[in] $count $user", 'alert-success');
-            Session::flash('message',$langMailVerificationChanged . " " . $m['from'] . " «" . $mail_ver_data[$old_mail_ver] . "» " . $m['in'] . " «". $mail_ver_data[$new_mail_ver] . "» $m[in] $count $user"); 
+            Session::flash('message',$langMailVerificationChanged . " " . $m['from'] . " «" . $mail_ver_data[$old_mail_ver] . "» " . $m['in'] . " «". $mail_ver_data[$new_mail_ver] . "» $m[in] $count $user");
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page('modules/admin/mail_ver_settings.php');
         }
         // user is admin or no user selected
         else {
             //Session::messages($langMailVerificationChangedNoAdmin, 'alert-danger');
-            Session::flash('message',$langMailVerificationChangedNoAdmin); 
+            Session::flash('message',$langMailVerificationChangedNoAdmin);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/mail_ver_settings.php');
         }
@@ -67,7 +67,7 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
     // no change selected
     else {
         //Session::Messages($langMailVerificationChangedNo, 'alert-info');
-        Session::flash('message',$langMailVerificationChangedNo); 
+        Session::flash('message',$langMailVerificationChangedNo);
         Session::flash('alert-class', 'alert-info');
         redirect_to_home_page('modules/admin/mail_ver_settings.php');
     }
@@ -117,5 +117,4 @@ else {
     $view = 'admin.users.mail_ver_settings.change';
 }
 
-$data['menuTypeID'] = 3;
 view($view, $data);

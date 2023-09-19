@@ -95,5 +95,4 @@ if ($appName) {
     $view = "admin.other.extapps.index";
 }
 
-$data['menuTypeID'] = 3;
 view($view, $data);

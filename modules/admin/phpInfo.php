@@ -65,6 +65,5 @@ a{
         hr {width: 600px; background-color: #cccccc; border: 0px; height: 1px; color: #000000;}
         </style>
         ';
-$data['menuTypeID'] = 3;
 view('admin.server.phpInfo', $data);
 

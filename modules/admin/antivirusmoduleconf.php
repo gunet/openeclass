@@ -50,7 +50,7 @@ if (isset($_POST['submit'])) {
     }
 
     //Session::Messages($langAntivirusUpdated, 'alert-success');
-    Session::flash('message',$langAntivirusUpdated); 
+    Session::flash('message',$langAntivirusUpdated);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/antivirusmoduleconf.php');
 }
@@ -85,5 +85,5 @@ $data['action_bar'] = action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary')));
 
-$data['menuTypeID'] = 3;
+
 view ('admin.other.extapps.antivirus_config', $data);

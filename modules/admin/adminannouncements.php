@@ -30,7 +30,7 @@ $toolName = $langAdminAn;
 // modify visibility
 if (isset($_GET['vis'])) {
     $id = $_GET['id'];
-    $vis = $_GET['vis'] ? 0 : 1;  
+    $vis = $_GET['vis'] ? 0 : 1;
     Database::get()->query("UPDATE admin_announcement SET visible = ?b WHERE id = ?d", $vis, $id);
     redirect_to_home_page('modules/admin/adminannouncements.php');
 } elseif (isset($_GET['delete'])) {
@@ -123,13 +123,13 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
             $thisAnnouncementOrderFound = true;
         }
     });
-    
+
 }
 
 // action message
 if (isset($message) && !empty($message)) {
     //Session::Messages($message, 'alert-success');
-    Session::flash('message',$message); 
+    Session::flash('message',$message);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("/modules/admin/adminannouncements.php");
 }
@@ -202,7 +202,7 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $pageName = $langAdminModifAnn;
         }
         // display add announcement command
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);        
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
         $data['action_bar'] = action_bar(array(
                     array('title' => $langBack,
                         'url' => $_SERVER['SCRIPT_NAME'],
@@ -213,11 +213,11 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
         $id = $_GET['modify'];
         $data['announcement'] = $announcement = Database::get()->querySingle("SELECT id, title, body, `date`, `begin`,`end`,
-                                                    lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);         
+                                                    lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     }
     if (isset($announcement)) {
         $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body));
-        
+
         $begindate = NULL;
         if(!is_null($announcement->begin) and !empty($announcement->begin)){
             $begindate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->begin);
@@ -226,8 +226,8 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         if(!is_null($announcement->end) and !empty($announcement->end)){
             $enddate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->end);
         }
-        
-        
+
+
         $data['checked_public'] = $announcement->visible == 1 ? " checked" : "";
         $data['start_checkbox'] = !is_null($begindate) ? " checked" : "";
         if($begindate){
@@ -241,7 +241,7 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         }else{
             $data['enddate'] = NULL;
         }
-               
+
     } else {
         $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, "");
         $data['checked_public'] = " checked";
@@ -250,10 +250,10 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $data['enddate'] = date('d-m-Y H:i', strtotime('now +1 month'));
     }
     $view = 'admin.other.announcements.create';
-} 
+}
 
 elseif (isset($_GET['ann_id'])) {
-    
+
     $row = Database::get()->querySingle("SELECT * FROM admin_announcement WHERE id = ". intval($_GET['ann_id']));
     if(empty($row)){
         redirect_to_home_page("modules/admin/adminannouncements.php");
@@ -283,10 +283,10 @@ else {
                                     'level' => 'primary-label',
                                     'button-class' => 'btn-success'
                                 ]
-                            ]);    
+                            ]);
     $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     $view = 'admin.other.announcements.index';
 
 }
-$data['menuTypeID'] = 3;
+
 view($view, $data);

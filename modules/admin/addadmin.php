@@ -38,8 +38,7 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
     if ($res) {
         $user_id = $res->id;
         if ($user_id == $uid) {
-            //Session::Messages($langErrorAddaAdmin, 'alert-danger');
-            Session::flash('message',$langErrorAddaAdmin); 
+            Session::flash('message',$langErrorAddaAdmin);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/addadmin.php');
         }
@@ -53,8 +52,7 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
             Database::get()->query('DELETE FROM admin WHERE user_id = ?d', $user_id);
             if ($privilege == DEPARTMENTMANAGE_USER) {
                 if (!isset($_POST['adminDeps']) or !$_POST['adminDeps']) {
-                    //Session::Messages($langEmptyAddNode, 'alert-danger');
-                    Session::flash('message',$langEmptyAddNode); 
+                    Session::flash('message',$langEmptyAddNode);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page('modules/admin/addadmin.php?add=add');
                 }
@@ -71,20 +69,17 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
                     $user_id, $privilege)->affectedRows;
             }
             if ($affected) {
-                //Session::Messages("$langTheUser <b>" . q($username) . "</b> $langDone", 'alert-success');
-                Session::flash('message',"$langTheUser <b>" . q($username) . "</b> $langDone"); 
+                Session::flash('message',"$langTheUser <b>" . q($username) . "</b> $langDone");
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page('modules/admin/addadmin.php');
             }
         } else {
-            //Session::Messages($langError, 'alert-danger');
-            Session::flash('message',$langError); 
+            Session::flash('message',$langError);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/addadmin.php?add=add');
         }
     } else {
-        //Session::Messages("$langTheUser " . q($username) . " $langNotFound", 'alert-danger');
-        Session::flash('message',"$langTheUser " . q($username) . " $langNotFound"); 
+        Session::flash('message',"$langTheUser " . q($username) . " $langNotFound");
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/addadmin.php?add=add');
     }
@@ -92,17 +87,14 @@ if (isset($_POST['submit']) and isset($_POST['adminrights']) and $username) {
     $aid = getDirectReference($_GET['delete']);
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
         if (Database::get()->query("DELETE FROM admin WHERE user_id = ?d", $aid)->affectedRows > 0) {
-            //Session::Messages($langNotAdmin, 'alert-success');
-            Session::flash('message',$langNotAdmin); 
+            Session::flash('message',$langNotAdmin);
             Session::flash('alert-class', 'alert-success');
         } else {
-            //Session::Messages("$langDeleteAdmin " . q($aid) . " $langNotFeasible", 'alert-danger');
-            Session::flash('message',"$langDeleteAdmin " . q($aid) . " $langNotFeasible"); 
+            Session::flash('message',"$langDeleteAdmin " . q($aid) . " $langNotFeasible");
             Session::flash('alert-class', 'alert-danger');
         }
     } else {
-        //Session::Messages($langCannotDeleteAdmin, 'alert-danger');
-        Session::flash('message',$langCannotDeleteAdmin); 
+        Session::flash('message',$langCannotDeleteAdmin);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/admin/addadmin.php');
@@ -176,12 +168,12 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
           'icon' => 'fa-plus-circle',
           'button-class' => 'btn-success',
           'level' => 'primary-label' ]
-        
+
     ]);
 }
 
 
-$data['admins'] = $admins = Database::get()->queryArray('SELECT admin.*, user.username
+$data['admins'] = $admins = Database::get()->queryArray('SELECT admin.*, user.username, user.givenname, user.surname 
     FROM user, admin
     WHERE user.id = admin.user_id
     ORDER BY user_id');
@@ -213,6 +205,5 @@ foreach ($out as $row) {
     }
 }
 
-$data['menuTypeID'] = 3;
 view ('admin.users.addadmin', $data);
 

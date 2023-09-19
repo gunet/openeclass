@@ -1,3 +1,67 @@
+@push('head_scripts')
+    <script type='text/javascript'>
+        var optwindow = null;
+        var reidxwindow = null;
+
+        function optpopup(url, w, h) {
+            var left = (screen.width/2)-(w/2);
+            var top = (screen.height/2)-(h/2);
+
+            if (optwindow == null || optwindow.closed) {
+                optwindow = window.open(url, 'optpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+                if (window.focus && optwindow !== null) {
+                    optwindow.focus();
+                }
+            } else {
+                optwindow.focus();
+            }
+
+            return false;
+        }
+
+        function reidxpopup(url, w, h) {
+            var left = (screen.width/2)-(w/2);
+            var top = (screen.height/2)-(h/2);
+
+            if (reidxwindow == null || reidxwindow.closed) {
+                reidxwindow = window.open(url, 'reidxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+                if (window.focus && reidxwindow !== null) {
+                    reidxwindow.focus();
+                }
+            } else {
+                reidxwindow.focus();
+            }
+
+            return false;
+        }
+
+        $(document).ready(function() {
+
+            $('#confirmReindexDialog').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+
+            $("#confirmReindexCancel").click(function() {
+                $("#confirmReindexDialog").modal("hide");
+            });
+
+            $("#confirmReindexOk").click(function() {
+                $("#confirmReindexDialog").modal("hide");
+                reidxpopup('../search/idxpopup.php?reindex', 600, 500);
+            });
+
+            $('#reindex_link').click(function(event) {
+                event.preventDefault();
+                $("#confirmReindexDialog").modal("show");
+            });
+
+        });
+
+    </script>
+@endpush
+
 @extends('layouts.default')
 
 @section('content')
@@ -21,13 +85,13 @@
                     <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                         @php
                             $alert_type = '';
-                            if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                            if (Session::get('alert-class', 'alert-info') == 'alert-success'){
                                 $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
-                            }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                            } elseif (Session::get('alert-class', 'alert-info') == 'alert-info'){
                                 $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
-                            }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                            } elseif (Session::get('alert-class', 'alert-info') == 'alert-warning'){
                                 $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
-                            }else{
+                            } else {
                                 $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                             }
                         @endphp
@@ -47,13 +111,9 @@
                 </div>
             @endif
 
-
-
             <!---------------------------------------------------------------------------------------->
             <!---------------------------------- Include admin panels -------------------------------->
-
                 @include('layouts.partials.sidebarAdmin')
-
             <!----------------------------------------------------------------------------------------->
             <!----------------------------------------------------------------------------------------->
 
@@ -151,11 +211,9 @@
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
-                                        @if ($idxHasDeletions)
-                                            <div class='col-lg-5 col-12'>
-                                                <a class='btn submitAdminBtn' href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
-                                            </div>
-                                        @endif
+                                        <div class='col-lg-5 col-12'>
+                                            <a class='btn submitAdminBtn' href='../search/optpopup.php' onclick="return optpopup('../search/optpopup.php', 600, 500)">{{ trans('langOptimize') }}</a>
+                                        </div>
                                         <div class='col-lg-7 col-12'>
                                             <a class='btn submitAdminBtn mt-lg-0 mt-3' id='reindex_link' href='../search/idxpopup.php?reindex'>{{ trans('langReindex') }}</a>
                                         </div>
@@ -174,14 +232,13 @@
 
                 @php
                     $colSize = '';
-                    if (count($cronParams) > 0){
+                    if (count($cronParams) > 0) {
                         $colSize = '2';
-                    }else{
+                    } else {
                         $colSize = '1';
                     }
                 @endphp
                 <div class="row row-cols-1 row-cols-lg-{{ $colSize }} g-4">
-
 
                     <div class='col'>
                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>

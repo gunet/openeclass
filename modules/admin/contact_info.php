@@ -24,6 +24,4 @@ $data['action_bar'] = action_bar([
     ]
 ]);
 
-$data['menuTypeID'] = 3;
-
 view('admin.other.contact_info', $data);

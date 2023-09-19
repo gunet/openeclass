@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 // Check if user is administrator and if yes continue
@@ -55,10 +55,10 @@ $head_content .= "<script type='text/javascript'>
 </script>";
 
 if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
-    $pageName = isset($_GET['add_server']) ? $langAddServer : $langEdit;        
+    $pageName = isset($_GET['add_server']) ? $langAddServer : $langEdit;
     $toolName = $langOpenMeetingsConf;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]", 'name' => $langOpenMeetingsConf);
-    
+
     $data['enabled_recordings'] = true;
     $data['enabled'] = true;
     $data['action_bar'] = action_bar(array(
@@ -66,13 +66,13 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
                                   'url' => "$_SERVER[SCRIPT_NAME]",
                                   'icon' => 'fa-reply',
                                   'level' => 'primary')));
-    
-    
+
+
     if (isset($_GET['add_server'])) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course 
                                             WHERE id NOT IN (SELECT course_id FROM course_external_server) 
                                             AND visible != " . COURSE_INACTIVE . "
-                                            ORDER BY title");        
+                                            ORDER BY title");
         $data['listcourses'] = "<option value='0' selected><h2>$langToAllCourses</h2></option>";
         foreach ($courses_list as $c) {
             $data['listcourses'] .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
@@ -106,38 +106,38 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
         }
         foreach($courses_list as $c) {
             $listcourses .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
-        }        
-        $data['listcourses'] = $listcourses;        
-    }   
+        }
+        $data['listcourses'] = $listcourses;
+    }
     $view = 'admin.other.extapps.openmeetings.create';
 } else if (isset($_GET['delete_server'])) {
         $id = $_GET['delete_server'];
         Database::get()->querySingle("DELETE FROM tc_servers WHERE id=?d", $id);
         // Display result message
         //Session::Messages($langFileUpdatedSuccess, 'alert-success');
-        Session::flash('message',$langFileUpdatedSuccess); 
+        Session::flash('message',$langFileUpdatedSuccess);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/bbbmoduleconf.php');
-        
-} elseif (isset($_POST['submit'])) { // Save new config.php        
+
+} elseif (isset($_POST['submit'])) { // Save new config.php
     $hostname = $_POST['hostname_form'];
     $port = $_POST['port_form'];
     $username = $_POST['username_form'];
-    $password = $_POST['password_form'];    
-    $webapp = $_POST['webapp_form'];    
+    $password = $_POST['password_form'];
+    $webapp = $_POST['webapp_form'];
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings = $_POST['enable_recordings'];
     $enabled = $_POST['enabled'];
     $weight = $_POST['weight'];
-    $tc_courses = $_POST['tc_courses'];    
+    $tc_courses = $_POST['tc_courses'];
     if (in_array(0, $tc_courses)) {
         $allcourses = 1; // tc server is assigned to all courses
     } else {
         $allcourses = 0; // tc server is assigned to specific courses
     }
-    
-    if (isset($_POST['id_form'])) {        
+
+    if (isset($_POST['id_form'])) {
         $id = $_POST['id_form'];
         Database::get()->querySingle("UPDATE tc_servers SET hostname = ?s,
                 port = ?s,
@@ -169,9 +169,9 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     }
     // Display result message
     //Session::Messages($langFileUpdatedSuccess,"alert-success");
-    Session::flash('message',$langFileUpdatedSuccess); 
+    Session::flash('message',$langFileUpdatedSuccess);
     Session::flash('alert-class', 'alert-success');
-    redirect_to_home_page("modules/admin/openmeetingsconf.php");        
+    redirect_to_home_page("modules/admin/openmeetingsconf.php");
 } else {
     //display available OpenMeetings servers
     $data['action_bar'] = action_bar(array(
@@ -190,5 +190,4 @@ if (isset($_GET['add_server']) or isset($_GET['edit_server'])) {
     $view = 'admin.other.extapps.openmeetings.index';
 }
 
-$data['menuTypeID'] = 3;
 view($view, $data);

@@ -353,7 +353,6 @@ if ($ext_uid) {
     $data['authFullName'] = $authFullName;
 }
 
-$data['menuTypeID'] = 3;
 view('admin.users.newuseradmin', $data);
 
 function getValue($name, $default='') {

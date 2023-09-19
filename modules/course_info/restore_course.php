@@ -172,4 +172,4 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
           </form>
         </div></div>";
 }
-draw($tool_content, 3, null, $head_content);
+draw($tool_content, null, null, $head_content);

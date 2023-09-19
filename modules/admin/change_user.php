@@ -64,7 +64,7 @@ if (isset($_REQUEST['username'])) {
     } else {
         $message = sprintf($langChangeUserNotFound, canonicalize_whitespace(q($_POST['username'])));
         //Session::Messages($message, 'alert-danger');
-        Session::flash('message',$message); 
+        Session::flash('message',$message);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/admin/change_user.php');
     }
@@ -76,7 +76,5 @@ $data['action_bar'] = action_bar(array(
                     'icon' => 'fa-reply',
                     'level' => 'primary')
                 ),false);
-
-$data['menuTypeID'] = 3;
 
 view('admin.users.change_user', $data);

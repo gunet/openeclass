@@ -508,7 +508,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 $tool_content .= "</tbody>";
             } else {
 
-                $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langCPFLink);
+                $field_types = array(EPF_TEXTBOX => $langCPFText, EPF_TEXTAREA => $langCPFTextarea, EPF_DATE => $langCPFDate, EPF_MENU => $langCPFMenu, EPF_LINK =>$langLink);
                 $yes_no = array(0 => $langNo, 1 => $langYes);
 
                 $tool_content .= "<tbody class='tile__list'>";
@@ -549,4 +549,4 @@ if (isset($_GET['add_cat'])) { //add a new category form
 
 }
 
-draw($tool_content, 3, null, $head_content);
+draw($tool_content, null, null, $head_content);
