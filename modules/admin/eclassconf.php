@@ -85,12 +85,8 @@ if (isset($_POST['submit'])) {
     set_config('email_sender', $_POST['formemailAdministrator']);
     set_config('admin_name', $_POST['formadministratorName']);
     set_config('site_name', $_POST['formsiteName']);
-    set_config('phone', $_POST['formtelephone']);
-    set_config('email_helpdesk', $_POST['formemailhelpdesk']);
     set_config('institution', $_POST['formInstitution']);
     set_config('institution_url', $_POST['formInstitutionUrl']);
-    set_config('postaddress', $_POST['formpostaddress']);
-    set_config('fax', $_POST['formfax']);
     set_config('account_duration', MONTHS * $_POST['formdurationAccount']);
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
@@ -260,7 +256,6 @@ if (isset($_POST['submit'])) {
 
     // Display result message
     Session::flash('scheduleIndexing', $scheduleIndexing);
-    //Session::Messages($langFileUpdatedSuccess, 'alert-success');
     Session::flash('message',$langFileUpdatedSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('modules/admin/eclassconf.php');

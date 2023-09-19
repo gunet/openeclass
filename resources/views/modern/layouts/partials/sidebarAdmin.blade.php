@@ -27,7 +27,7 @@
 
     @if($is_admin or $is_departmentmanage_user or $is_power_user)
         <a  href="searchcours.php" class='quickLink'>
-            <i class="fa-solid fa-book-open Primary-500-cl settings-icon"></i>{{ trans('langSearchCourse') }} 
+            <i class="fa-solid fa-book-open Primary-500-cl settings-icon"></i>{{ trans('langSearchCourse') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
@@ -41,7 +41,7 @@
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-sitemap Primary-500-cl settings-icon"></i>{{ trans('langHierarchy') }}  
+            <i class="fa-solid fa-sitemap Primary-500-cl settings-icon"></i>{{ trans('langHierarchy') }}
         </a>
     @endif
 
@@ -57,36 +57,36 @@
 
     @if($is_admin)
         <a href="theme_options.php" class='quickLink'>
-            <i class="fa-solid fa-display Primary-500-cl settings-icon"></i>{{ trans('langThemeSettings') }}   
+            <i class="fa-solid fa-display Primary-500-cl settings-icon"></i>{{ trans('langThemeSettings') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-display Primary-500-cl settings-icon"></i>{{ trans('langThemeSettings') }} 
+            <i class="fa-solid fa-display Primary-500-cl settings-icon"></i>{{ trans('langThemeSettings') }}
         </a>
     @endif
 
     @if($is_admin)
         <a href="extapp.php" class='quickLink'>
-            <i class="fa-solid fa-wrench Primary-500-cl settings-icon"></i>{{ trans('langExternalTools') }}  
+            <i class="fa-solid fa-wrench Primary-500-cl settings-icon"></i>{{ trans('langExternalTools') }}
         </a>
     @else
         <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-trigger="focus" title="{{trans('langForbidden')}}" class='quickLink opacity-help'>
-            <i class="fa-solid fa-wrench Primary-500-cl settings-icon"></i>{{ trans('langExternalTools') }} 
+            <i class="fa-solid fa-wrench Primary-500-cl settings-icon"></i>{{ trans('langExternalTools') }}
         </a>
     @endif
-            
+
 </div>
 
 
 
-@php 
+@php
     $col_size = '';
-    if($is_admin){
+    if($is_admin) {
         $col_size = '3';
     }
-    else if($is_power_user or $is_departmentmanage_user){
+    else if($is_power_user or $is_departmentmanage_user) {
         $col_size = '2';
-    }else if($is_usermanage_user){
+    } else if($is_usermanage_user) {
         $col_size = '1';
     }
 @endphp
@@ -124,7 +124,7 @@
 
 @if($is_admin)
     <div class='col-12 mt-4'>
-        <div class="row row-cols-1 row-cols-lg-2 g-5">
+        <div class="row row-cols-1 row-cols-lg-3 g-5">
             <div class='col'>
                 <div class='card panelCard p-0 border-0 bg-white h-100'>
                     <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
@@ -136,22 +136,22 @@
                             @if ($is_admin)
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/addadmin.php">
-                                        {!!  $GLOBALS['langAdmins'] !!} 
+                                        {!! trans('langAdmins') !!}
                                     </a>
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
-                                
+
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                        {!!  $GLOBALS['langAdminAn'] !!}
+                                        {!! trans('langAdminAn') !!}
                                     </a>
                                 </li>
-                                
+
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a class='TextBold link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">
-                                        {!!  $GLOBALS['langAdminManual'] !!}     
+                                        {!! trans('langAdminManual') !!}
                                     </a>
                                 </li>
                             @endif
@@ -165,20 +165,50 @@
                         <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
                             <i class="fa-solid fa-list-ul settings-icons-lg"></i>
                             <h3 class='mb-0'>{{trans('langFaculties')}}</h3>
-                            
+
                         </div>
                         <div class='card-body px-0'>
                             <ul class='list-group list-group-flush'>
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a href="{{$urlAppend}}modules/admin/hierarchy.php" class='TextBold link_admin_tool'>
-                                    {!!  $GLOBALS['langHierarchy'] !!}  
+                                    {!! trans('langHierarchy') !!}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            <div class='col'>
+                @if($is_admin)
+                    <div class='card panelCard p-0 border-0 bg-white h-100'>
+                        <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                            <i class="fa-solid fa-sitemap settings-icons-lg"></i>
+                            <h3 class='mb-0'>{{ trans('langEclassThemes') }}</h3>
+                        </div>
+                        <div class='card-body px-0'>
+                            <ul class='list-group list-group-flush'>
+                                <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                    <a href="{{$urlAppend}}modules/admin/theme_options.php" class='TextBold link_admin_tool'>
+                                        {!! trans('langThemeSettings') !!}
                                     </a>
                                 </li>
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
-                                    <a href="{{$urlAppend}}modules/admin/coursecategory.php" class='TextBold link_admin_tool'>
-                                        {!!  $GLOBALS['langCourseCategoryActions'] !!}  
+                                    <a href="{{$urlAppend}}modules/admin/homepageTexts_create.php" class='TextBold link_admin_tool'>
+                                        {!! trans('langAdminCreateHomeTexts') !!}
                                     </a>
                                 </li>
+                                <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                    <a href="{{$urlAppend}}modules/admin/faq_create.php" class='TextBold link_admin_tool'>
+                                        {!! trans('langAdminCreateFaq') !!}
+                                    </a>
+                                </li>
+                                <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                    <a href="{{$urlAppend}}modules/admin/contact_info.php" class='TextBold link_admin_tool'>
+                                        {!! trans('langUpgContact') !!}
+                                    </a>
+                                </li>
+
                             </ul>
                         </div>
                     </div>

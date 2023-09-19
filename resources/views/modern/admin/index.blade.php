@@ -16,10 +16,10 @@
                 <div class='mt-4'></div>
             @endif
 
-            @if(Session::has('message')) 
+            @if(Session::has('message'))
                 <div class='col-12 all-alerts'>
                     <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                        @php 
+                        @php
                             $alert_type = '';
                             if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                 $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -31,7 +31,7 @@
                                 $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                             }
                         @endphp
-                        
+
                         @if(is_array(Session::get('message')))
                             @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                             {!! $alert_type !!}<span>
@@ -41,13 +41,13 @@
                         @else
                             {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                         @endif
-                        
+
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
             @endif
 
-            
+
 
             <!---------------------------------------------------------------------------------------->
             <!---------------------------------- Include admin panels -------------------------------->
@@ -169,10 +169,10 @@
                 </div>
 
             @endif
-            
+
             <div class='col-12 mt-4'>
-                
-                @php 
+
+                @php
                     $colSize = '';
                     if (count($cronParams) > 0){
                         $colSize = '2';
@@ -181,12 +181,12 @@
                     }
                 @endphp
                 <div class="row row-cols-1 row-cols-lg-{{ $colSize }} g-4">
-                    
+
 
                     <div class='col'>
                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                             <div class='card-body'>
-                                
+
                                 <div class='row p-2 margin-bottom-thin'>
                                     <div class='col-lg-6 col-12'>
                                         <div class='form-label'>{{ trans('langLastLesson') }}</div>
@@ -277,8 +277,8 @@
                         </div>
                     @endif
                 </div>
-            </div>     
-                
+            </div>
+
         </div>
     </div>
 </div>

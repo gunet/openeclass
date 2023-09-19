@@ -171,43 +171,6 @@
                                                 </div>
 
 
-
-                                                <div class='form-group mt-4'>
-                                                    <label for='formpostaddress' class='col-sm-12 control-label-notes'>{{ trans('langPostMail') }}</label>
-                                                    <div class='col-sm-12'>
-                                                        <textarea class='form-control form-control-admin' name='formpostaddress' id='formpostaddress'>{{ get_config('postaddress') }}</textarea>
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class='form-group mt-4'>
-                                                    <label for='formtelephone' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}:</label>
-                                                    <div class='col-sm-12'>
-                                                        <input class='form-control form-control-admin' type='text' name='formtelephone' id='formtelephone' value='{{ get_config('phone') }}'>
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class='form-group mt-4'>
-                                                    <label for='formfax' class='col-sm-12 control-label-notes'>{{ trans('langFax') }}</label>
-                                                    <div class='col-sm-12'>
-                                                        <input class='form-control form-control-admin' type='text' name='formfax' id='formfax' value='{{ get_config('fax') }}'>
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class='form-group mt-4'>
-                                                    <label for='formemailhelpdesk' class='col-sm-12 control-label-notes'>{{ trans('langHelpDeskEmail') }}:</label>
-                                                    <div class='col-sm-12'>
-                                                        <input class='form-control form-control-admin' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='{{ get_config('email_helpdesk') }}'>
-                                                    </div>
-                                                </div>
-
-
-
                                                 <div class='form-group mt-4'>
                                                     <label for='formInstitution' class='col-sm-12 control-label-notes'>{{ trans('langInstituteShortName') }}:</label>
                                                     <div class='col-sm-12'>
@@ -397,7 +360,7 @@
 
 
 
-                                                
+
                                                 <div class='form-group mt-4'>
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('langGuestLoginLabel') }}:</label>
                                                     <div class='col-sm-12'>
@@ -422,7 +385,7 @@
                                                         ) !!}
                                                     </div>
                                                 </div>
-                                                
+
                                             </fieldset>
                                         </div>
                                     </div>
@@ -464,7 +427,7 @@
 
 
 
-                                    
+
                                     <div class='panel panel-admin mt-4' id='four'>
 
                                         <div class='panel-heading'>
@@ -601,7 +564,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
-                                    
+
 
 
                                     @if(!$install)
@@ -709,7 +672,7 @@
                                     </div>
                                     @endif
 
-                                    
+
                                     <div class='panel panel-admin mt-4' id='six'>
                                         <div class='panel-heading'>
 
@@ -766,10 +729,10 @@
                                             </fieldset>
                                         </div>
                                     </div>
-                                    
 
 
-                                   
+
+
                                     <div class='panel panel-admin mt-4' id='seven'>
 
                                         <div class='panel-heading'>
@@ -807,7 +770,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
-                                    
+
 
 
 
@@ -849,7 +812,7 @@
                                                                 {{ trans('lang_am_required') }}
                                                             </label>
                                                         </div>
-                                                        
+
                                                         <div class='checkbox'>
                                                         <label class='label-container'>
                                                                 <input id='index_enable' type='checkbox' name='enable_indexing' value='1' {{ $cbox_enable_indexing }}>
@@ -906,7 +869,7 @@
                                                                 {{ trans('lang_personal_blog_sharing') }}
                                                             </label>
                                                         </div>
-                                                        
+
                                                         <div class='checkbox'>
                                                             <label class='label-container'>
                                                                 <input id='eportfolio_enable' type='checkbox' name='eportfolio_enable' value='1' {{ $cbox_eportfolio_enable }}>
@@ -1138,7 +1101,7 @@
                                     </div>
 
 
-                                    
+
                                     <div class='panel panel-admin mt-4' id='twelve'>
 
                                         <div class='panel-heading'>
@@ -1193,7 +1156,7 @@
                                             </fieldset>
                                         </div>
                                     </div>
-                                    
+
 
 
                                     <div class='panel panel-admin mt-4' id='thirteen'>
@@ -1323,17 +1286,17 @@
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#two">{{ trans('langUpgReg') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#three">{{ trans('langEclassThemes') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#four">{{ trans('langHomePageSettings') }}</a>
-                                    
+
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#five">{{ trans('langEmailSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#six">{{ trans('langCourseSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#seven">{{ trans('langMetaCommentary') }}</a>
-                                   
+
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eight">{{ trans('langOtherOptions') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#nine">{{ trans('langDocumentSettings') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#ten">{{ trans('langDefaultQuota') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
-                                    
+
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#fourteen">{{ trans('langPrivacyPolicy') }}</a>
                                 </nav>

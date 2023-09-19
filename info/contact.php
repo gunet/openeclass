@@ -25,9 +25,7 @@ require_once '../include/baseTheme.php';
 $toolName = $contactpoint;
 
 $data['postaddress'] = get_config('postaddress');
-$data['Institution'] = get_config('institution');
 $data['phone'] = get_config('phone');
-$data['fax'] = get_config('fax');
 if (get_config('emailhelpdesk')) {
     $data['emailhelpdesk'] = str_replace('@', ' &lt;at&gt; ', get_config('emailhelpdesk'));
 }
