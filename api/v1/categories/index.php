@@ -20,6 +20,21 @@
  * ======================================================================== */
 
 function api_method($access) {
+
+    if (isset($_GET['all'])) {
+
+        $hierarchyQuery = Database::get()->queryArray("SELECT id, code, description, name FROM `hierarchy`");
+
+//        $name = $hierarchyQuery[6]->name;
+//        $unsName = unserialize($name);
+
+        header('Content-Type: application/json');
+        echo json_encode($hierarchyQuery, JSON_UNESCAPED_UNICODE);
+        exit();
+
+
+    }
+
     if (isset($_GET['id'])) {
         $category = Database::get()->querySingle('SELECT hierarchy.id, hierarchy.name, hierarchy.description,
                 MIN(course.created) AS timemodified, 0 AS sortorder

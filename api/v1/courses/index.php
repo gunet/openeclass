@@ -19,10 +19,78 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once '../../../modules/create_course/functions.php';
 
 
 function api_method($access) {
 
+    if ( isset($_GET['create']) ) {
+
+        $missingInputs = [];
+
+        if (!isset($_GET['category'])) {
+            $missingInputs[] = 'category';
+        }
+
+        if (!isset($_GET['title'])) {
+            $missingInputs[] = 'title';
+        }
+
+        if (!empty($missingInputs)) {
+            Access::error(20, 'The following inputs are not set: ' . implode(', ', $missingInputs));
+        } else {
+
+            $title = $_GET['title'];
+            $category = $_GET['category'];
+
+            $code = strtoupper(new_code($category));
+            $code = str_replace(' ', '', $code);
+
+            if (!create_course_dirs($code)) {
+                Access::error(20, 'An error has occurred. Please contact the platform administrator.');
+            }
+
+            $doc_quota = get_config('doc_quota');
+            $group_quota = get_config('group_quota');
+            $video_quota = get_config('video_quota');
+            $dropbox_quota = get_config('dropbox_quota');
+
+            $result = Database::get()->query("INSERT INTO course SET
+                        code = ?s,
+                        lang = ?s,
+                        title = ?s,
+                        visible = ?d,
+                        course_license = ?d,
+                        prof_names = ?s,
+                        public_code = ?s,
+                        doc_quota = ?f,
+                        video_quota = ?f,
+                        group_quota = ?f,
+                        dropbox_quota = ?f,
+                        password = ?s,
+						flipped_flag = ?s,
+                        view_type = ?s,
+                        start_date = " . DBHelper::timeAfter() . ",
+                        keywords = '',
+                        created = " . DBHelper::timeAfter() . ",
+                        glossary_expand = 0,
+                        glossary_index = 1,
+                        description = ?s",
+                $code, 'el', $title, 2,
+                '0', '', $code, $doc_quota * 1024 * 1024,
+                $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
+                $dropbox_quota * 1024 * 1024, '', 0, 'simple', '');
+
+            $new_course_id = $result->lastInsertID;
+            create_modules($new_course_id);
+
+            course_index($code);
+
+            header('Content-Type: application/json');
+            echo json_encode('Course with title ' . $title . ' in category with id ' . $category . ' created', JSON_UNESCAPED_UNICODE);
+            exit();
+        }
+    }
 
     if ( isset($_GET['course_id']) && isset($_GET['uname']) ) {
 
@@ -120,5 +188,3 @@ function api_method($access) {
 chdir('..');
 //require_once 'index.php';
 require_once 'apiCall.php';
-
-
