@@ -181,13 +181,13 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
         global $langSearchCriteria, $langTitle, $langTitle_Descr, $langDescription,
         $langDescription_Descr, $langKeywords, $langKeywords_Descr, $langTeacher,
         $langInstructor_Descr, $langCourseCode, $langCourseCode_Descr, $langDoSearch,
-        $langNewSearch;
+        $langNewSearch, $urlAppend;
 
         return "
         <div class='row'>
             
             <div class='col-lg-6 col-12'>
-                <div class='form-wrapper form-edit rounded'>
+                <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                         <fieldset>
                             <div class='form-group'>
@@ -224,8 +224,8 @@ class CourseIndexer extends AbstractBaseIndexer implements CourseIndexerInterfac
                     </form>
                 </div>
             </div>
-            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                <div class='col-12 h-100 left-form'></div>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
             </div>
         </div>";
     }

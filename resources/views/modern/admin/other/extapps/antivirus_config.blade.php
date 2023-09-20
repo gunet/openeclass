@@ -53,7 +53,7 @@
                     
                     
                     <div class='col-lg-6 col-12'>
-                        <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                        <form class='form-wrapper form-edit border-0 px-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
                                 <table class='table table-bordered' width='100%'>
                                     <tr>
@@ -82,8 +82,8 @@
                             <input class='btn submitAdminBtn m-auto d-block mt-5' type='submit' name='submit' value='{{ trans('langModify') }}'>
                         </form>
                     </div>
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                     </div>
                    
                

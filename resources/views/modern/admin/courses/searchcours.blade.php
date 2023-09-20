@@ -52,7 +52,7 @@
                     
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit rounded'>
+                        <div class='form-wrapper form-edit border-0 px-0'>
                             
                             <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
                                 <fieldset>      
@@ -99,7 +99,7 @@
                                         </div>
                                     </div>
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center'>
                                            <input class='btn submitAdminBtn' type='submit' name='search_submit' value='{{ trans('langSearch') }}'> 
                                            <a href='index.php' class='btn cancelAdminBtn ms-1'>{{ trans('langCancel') }}</a>     
                                         </div>
@@ -108,8 +108,8 @@
                             </form>
                         </div>
                     </div>
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                     </div>
                 
             

@@ -52,7 +52,7 @@
                     
 
                     <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit rounded'>
+                        <div class='form-wrapper form-edit border-0 px-0'>
                             
                             <form role='form' class='form-horizontal' action="{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course->code }}" method='post'>
                                 <fieldset>                    
@@ -61,26 +61,26 @@
                                     </div>
                                     <div class='form-group'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDoc') }}</label>
-                                            <div class='col-sm-12'><input type='text' name='dq' value='{{ $dq }}' size='4' maxlength='4'> MB</div>
+                                            <div class='col-sm-12'><input class='form-control' type='text' name='dq' value='{{ $dq }}' size='4' maxlength='4'> MB</div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langVideo') }}</label>
-                                            <div class='col-sm-12'><input type='text' name='vq' value='{{ $vq }}' size='4' maxlength='4'> MB</div>
+                                            <div class='col-sm-12'><input class='form-control' type='text' name='vq' value='{{ $vq }}' size='4' maxlength='4'> MB</div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langGroups') }}</label>
                                         <div class='col-sm-12'>
-                                            <input type='text' name='gq' value='{{ $gq }}' size='4' maxlength='4'> MB
+                                            <input class='form-control' type='text' name='gq' value='{{ $gq }}' size='4' maxlength='4'> MB
                                         </div>
                                     </div>
                                     <div class='form-group mt-4'>
                                         <label class='col-sm-12 control-label-notes'>{{ trans('langLegend') }} {{ trans('langDropBox') }}</label>
                                         <div class='col-sm-12'>
-                                            <input type='text' name='drq' value='{{ $drq }}' size='4' maxlength='4'> MB
+                                            <input class='form-control' type='text' name='drq' value='{{ $drq }}' size='4' maxlength='4'> MB
                                         </div>
                                     </div>
                                     <div class='form-group mt-5'>
-                                        <div class='col-12 d-flex justify-content-center align-items-center'>
+                                        <div class='col-12 d-flex justify-content-end align-items-center'>
                                             <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                         </div>
                                     </div>
@@ -89,8 +89,8 @@
                             </form>
                         </div>
                     </div>
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                     </div>
                
         </div>

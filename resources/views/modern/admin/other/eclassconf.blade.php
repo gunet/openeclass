@@ -652,8 +652,8 @@
                                                     <label for='formSMTPPassword' class='col-sm-12 control-label-notes'>{{trans('langPassword')}}:</label>
                                                     <div class='col-sm-12'>
                                                             <div class='input-group'>
-                                                                <input type='password' class='form-control mt-0' name='smtp_password' id='formSMTPPassword' value="{!! q(get_var('smtp_password')) !!}">
-                                                                <span id='revealPass' class='input-group-text input-group-addon h-40px input-bg-color input-border-color'><span class='fa-solid fa-eye text-white'></span></span>
+                                                                <input type='password' class='form-control mt-0 border-end-0' name='smtp_password' id='formSMTPPassword' value="{!! q(get_var('smtp_password')) !!}">
+                                                                <span id='revealPass' class='input-group-text input-group-addon h-40px bg-white input-border-color'><span class='fa-solid fa-eye'></span></span>
                                                             </div>
                                                     </div>
                                                 </div>
@@ -999,11 +999,11 @@
                                                     <label class='col-sm-12 control-label-notes'>{{ trans('langMyDocsQuota') }} (MB):</label>
                                                     <div class='col-sm-12'>
                                                             <label>
-                                                                <input type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='{{ $mydocs_teacher_quota }}'>
+                                                                <input class='form-control' type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='{{ $mydocs_teacher_quota }}'>
                                                                 {{ trans('langTeachers') }}
                                                             </label>
                                                             <label class='mt-md-0 mt-2 ms-md-3 ms-0'>
-                                                                <input type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='{{ $mydocs_student_quota }}'>
+                                                                <input class='form-control' type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='{{ $mydocs_student_quota }}'>
                                                                 {{ trans('langStudents') }}
                                                             </label>
                                                     </div>

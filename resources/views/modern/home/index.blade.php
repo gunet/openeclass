@@ -27,7 +27,7 @@
         <div class="jumbotron jumbotron-login">
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
-                    <div class='col-12'>
+                    <div class='col-12 mb-3'>
                         <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                             <div class='col-xxl-6 col-lg-5 col-12 @if($PositionFormLogin) ms-auto me-auto @endif'>
                                 <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>

@@ -285,8 +285,8 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "</tr>
                         </table>
                     </div>
-                    <div class='form-group'>
-                        <div class='col-12 d-flex'>
+                    <div class='form-group mt-4'>
+                        <div class='col-12 d-flex justify-content-end'>
                             <input id='final_sub' class='btn submitAdminBtn me-2' type='submit' name='final_submit' value='" . q($langFinalSubmit) . "' onClick=\"check()\">
                             <a class='btn cancelAdminBtn' href='{$urlServer}main/portfolio.php' class='btn btn-default'>$langCancel</a>
                         </div>
@@ -300,8 +300,8 @@ if(!isset($_POST['final_submit'])){
             </form>
         </div>
         </div>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-            <div class='col-12 h-100 left-form'></div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
         </div>
         ";

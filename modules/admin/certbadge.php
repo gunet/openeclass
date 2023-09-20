@@ -191,9 +191,9 @@ if (isset($_GET['action'])) {
         $tool_content .= "
         <div class='row'>
            
-                        <div class='col-lg-6 col-12'>
-                        <div class='form-wrapper form-edit rounded'>
-                        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
+            <div class='col-lg-6 col-12'>
+                <div class='form-wrapper form-edit border-0 px-0'>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>
                             <div class='input-group'>
                                 <label class='input-group-text control-label-notes p-0 f-6 ps-2 pe-2'>$langZipFile</label>
                                 <input type='file' class='form-control' name='filename' value=''>
@@ -235,24 +235,16 @@ if (isset($_GET['action'])) {
                             $cert_hidden_id
                            
                             <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                                
-                                        
-                                           <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
-                                      
-                                    
-                                           <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
-                                       
-                                        
-                                        
-                                  
-                               
+                                <button class='btn submitAdminBtn' type ='submit' name='submit_cert_template'>$langUpload</button>
+                                <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
                             </div>
-                            </form>
-                            </div>
-                        </div>
-                        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
-                    </div></div>";
+                    </form>
+                </div>
+            </div>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            </div>
+        </div>";
     } elseif (($_GET['action'] == 'add_badge') or  ($_GET['action'] == 'edit_badge')) { // add badge icons
         $badge_name = $badge_description = $badge_hidden_id = '';
         if (isset($_GET['bid'])) {
@@ -266,9 +258,9 @@ if (isset($_GET['action'])) {
         $tool_content .= "
         <div class='row'>
             
-                    <div class='col-lg-6 col-12'>
-                    <div class='form-wrapper form-edit rounded'>
-                        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
+            <div class='col-lg-6 col-12'>
+                <div class='form-wrapper form-edit border-0 px-0'>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' enctype='multipart/form-data'>";
                         if (isset($_GET['bid'])) {
                             $icon_link = $urlServer . BADGE_TEMPLATE_PATH . "$badge_data->filename";
                             $tool_content .= "<div class='form-group'>
@@ -302,24 +294,17 @@ if (isset($_GET['action'])) {
                             $badge_hidden_id
                             
                             <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                                
-                                
-                               
-                                    <button class='btn submitAdminBtn' type ='submit' name='submit_badge_icon'>$langUpload</button>
-                                
-                                
-                                    <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
-                              
-                                    
-                                    
-                               
-                            
-                            </form>
-                            </div></div>
-                            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                                <div class='col-12 h-100 left-form'></div>
-                            </div>
-                        </div></div>";
+                                <button class='btn submitAdminBtn' type ='submit' name='submit_badge_icon'>$langUpload</button>
+                                 <a class='btn cancelAdminBtn ms-1' href='index.php'>$langCancel</a>
+                            </div>    
+ 
+                    </form>
+                </div>
+            </div>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            </div>
+        </div>";
     }
 } else { // display available certificates / badges
     $sql1 = Database::get()->queryArray("SELECT * FROM certificate_template");

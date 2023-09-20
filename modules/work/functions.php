@@ -473,7 +473,7 @@ function show_submission_details($id) {
                         <strong class='control-label-notes'>$langWorkOnlineText:</strong>
                     </div>
                     <div class='col-sm-8'>
-                        <a href='#' class='onlineText btn submitAdminBtn' data-id='$sub->id'>$langQuestionView</a>
+                        <a href='#' class='onlineText btn submitAdminBtn d-inline-flex' data-id='$sub->id'>$langQuestionView</a>
                     </div>";
     }
     $tool_content .= "</div>";

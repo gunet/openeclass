@@ -50,7 +50,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
     $textarea = rich_text_editor('desc', 4, 20, '');
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-        <div class='form-wrapper form-edit rounded'>
+        <div class='form-wrapper form-edit border-0 px-0'>
         <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
         <fieldset>
         <div class='form-group'>
@@ -226,7 +226,7 @@ function edit_lti_app($session_id) {
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-                <div class='form-wrapper form-edit rounded'>
+                <div class='form-wrapper form-edit border-0 px-0'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
                     <fieldset>
                     <div class='form-group'>

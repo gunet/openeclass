@@ -96,6 +96,8 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                 'level' => 'primary')
         ),false);
         $tool_content .= "
+        <div class='d-lg-flex gap-4 mt-4'>
+        <div class='flex-grow-1'>
         <div class='form-wrapper'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>
             <fieldset>
@@ -113,7 +115,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                 </div>
                 <div class='form-group mt-4'>
                     <label class='col-12 control-label-notes'>Email</label>
-                    <div class='col-md-9 col-12'>
+                    <div class='col-12'>
                         <input class='form-control' type='text' name='email' value='" . q($email) . "' disabled  />
                     </div>
                 </div>
@@ -124,7 +126,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                     </div>
                 </div>
                 <div class='form-group mt-5'>
-                    <div class='col-12 d-flex justify-content-center align-items-center'>".
+                    <div class='col-12 d-flex justify-content-end align-items-center'>".
                         form_buttons(array(
                             array(
                                 'text'  => $langSend,
@@ -132,6 +134,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                                 'value' => $langSend,
                             ),
                             array(
+                                'class' => 'cancelAdminBtn',
                                 'href' => $urlAppend
                             )
                         ))
@@ -139,7 +142,11 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
                 </div>
                 </fieldset>
             </form>
-        </div>";
+        </div>
+    </div><div class='d-none d-lg-block'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+</div>
+</div>";
 
     }
 }

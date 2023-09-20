@@ -268,6 +268,13 @@ a:hover,button:hover{
   cursor:  url(../images/pointer.png), auto;
 }
 
+/* .truncate-text{
+  max-width: 430px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+} */
+
   
 /**********************************************************************************************************************/
 /************************************************* COLORS *************************************************************/
@@ -4022,14 +4029,9 @@ div[role="progressbar"]::before {
   opacity: 0.7; 
 }
 
-@media(min-width:1200px) and (max-width:1399px){
+@media(min-width:1200px){
   .manageCourseBtn{
     min-width: 250px;
-  }
-}
-@media(min-width:1400px){
-  .manageCourseBtn{
-    min-width: 230px;
   }
 }
 

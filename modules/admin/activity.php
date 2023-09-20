@@ -88,7 +88,7 @@ if (isset($_POST['toReorder'])) {
               <div class='row'>
               
        <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit rounded'>
+        <div class='form-wrapper form-edit rounded border-0 px-0'>
         <form role='form' class='form-horizontal' method='post' action='activity.php'>
           $idInput
           <fieldset>";
@@ -122,7 +122,7 @@ if (isset($_POST['toReorder'])) {
 
             
 
-            <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+            <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
               
                
                  
@@ -140,8 +140,8 @@ if (isset($_POST['toReorder'])) {
           ". generate_csrf_token_form_field() ."
         </form>
       </div></div>
-      <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                <div class='col-12 h-100 left-form'></div>
+      <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+      <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
             </div></div>";
 } else {
     load_js('sortable/Sortable.min.js');

@@ -194,7 +194,7 @@ if (!isset($_POST['next'])) {
      <div class='row'>
         
         <div class='col-lg-6 col-12'>
-        <div class='form-wrapper form-edit rounded'>
+        <div class='form-wrapper form-edit border-0 px-0'>
         <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?fromFlipped=1' onsubmit=\"return validateNodePickerForm();\">
             <fieldset>
                 <div class='form-group'>
@@ -356,7 +356,7 @@ if (!isset($_POST['next'])) {
                     <div id='dynamic_units'></div>
                     <input id='unit_count' type='hidden' name='unit_count' value='1'>
                 </div>
-                <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+                <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
                             <input class='btn submitAdminBtn' type='submit' name='next' value='" . q($langNext) . "'>
                             <a href='{$urlServer}courses/".$course_code."' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                 </div>
@@ -364,8 +364,8 @@ if (!isset($_POST['next'])) {
         </form>
         </div>
         </div>
-        <div class='col-lg-6 col-12 d-none d-lg-block'>
-            <div class='col-12 h-100 left-form'></div>
+        <div class='col-lg-6 col-12 d-none d-lg-block text-end'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
         </div>";
 

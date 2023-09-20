@@ -1,7 +1,7 @@
 
 <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-        <div class='form-wrapper form-edit mt-2 rounded'>
+        <div class='form-wrapper form-edit mt-2 border-0 px-0'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
                 <input type='hidden' name='commentPath' value='{{$file->path}}'>
                 <fieldset>

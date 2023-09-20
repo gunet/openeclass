@@ -118,7 +118,7 @@ if (isset($_REQUEST['u'])) {
         }
         if (!$target) {
             $data['target_field'] .= "<div class='form-group mt-3'><label class='col-sm-12 control-label-notes'>$langUserMergeTarget:</label>
-                                              <div class='col-sm-12'><input type='text' name='target' size='30'></div></div>";
+                                              <div class='col-sm-12'><input class='form-control' type='text' name='target' size='30'></div></div>";
         }
     }
     $data['info'] = $info;

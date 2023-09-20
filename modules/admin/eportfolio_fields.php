@@ -46,17 +46,17 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='row'>
    
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit rounded'>";
+                      <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' placeholder='$langName...'></div>";
     $tool_content .= "</div><div class='row p-2'>";
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-    <div class='col-12 h-100 left-form'></div>
+    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
 </div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
@@ -97,7 +97,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='row'>
     
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit rounded'>";
+                      <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='catForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<input type='hidden' name='cat_id' value='" . getIndirectReference($catid) . "'>";
     $tool_content .= "<fieldset>";
@@ -105,10 +105,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='catname' class='col-sm-12 control-label-notes'>$langName</label>
                       <div class='col-sm-12'><input id='catname' class='form-control' type='text' name='cat_name' value='$cat_name'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_cat' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                     </div></div>";
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -132,7 +132,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='row'>
     
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit rounded'>";
+                      <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
@@ -140,10 +140,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<label for='datatype' class='col-sm-12 control-label-notes'>$langCPFFieldDatatype</label>
                       <div class='col-sm-12'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                     </div></div>";
 
 } elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
@@ -168,7 +168,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     <div class='row'>
     
     <div class='col-lg-6 col-12'>
-                      <div class='form-wrapper form-edit rounded'>";
+                      <div class='form-wrapper form-edit border-0 px-0'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='" . getIndirectReference($catid) . "'>";
@@ -197,10 +197,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'></textarea></div>";
         $tool_content .= "</div>";
     }
-    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langAdd'></div>";
+    $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'>".showSecondFactorChallenge()."<input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langAdd'></div>";
     $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                     </div></div>";
 
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -342,7 +342,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         <div class='row'>
         
         <div class='col-lg-6 col-12'>
-                          <div class='form-wrapper form-edit rounded'>";
+                          <div class='form-wrapper form-edit border-0 px-0'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<input type='hidden' name='field_id' value='" . getIndirectReference($fieldid) . "'>";
@@ -373,10 +373,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                               <div class='col-sm-12'><textarea name='options' rows='8' class='w-100'>$textarea_val</textarea></div>";
             $tool_content .= "</div>";
         }
-        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-center align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langSave'></div>";
+        $tool_content .= "<div class='col-12 mt-5 d-flex justify-content-end align-items-center'><input class='btn submitAdminBtn' type='submit' name='submit_field' value='$langSave'></div>";
         $tool_content .= "</fieldset>". generate_csrf_token_form_field() ."</form></div></div>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                     </div></div>";
 
         $tool_content .='<script language="javaScript" type="text/javascript">

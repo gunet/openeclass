@@ -54,13 +54,13 @@
                    
 
                     <div class='col-lg-6 col-12'>
-                        <form class='form-wrapper form-edit rounded' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                        <form class='form-wrapper form-edit border-0 px-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                             <fieldset>
                                 <table class='table table-bordered'>
                                     <tr>
                                     <th width='200'><b>{{ trans('langSFAConf') }}</b></th>
                                     <td>
-                                        <select name='formconnector'>{!! implode('', $connectorOptions) !!}</select>
+                                        <select class='form-select' name='formconnector'>{!! implode('', $connectorOptions) !!}</select>
                                     </td>
                                     </tr>
                                     @foreach($connectorClasses as $curConnectorClass)
@@ -88,8 +88,8 @@
                             {!! generate_csrf_token_form_field() !!}
                         </form>
                     </div>
-                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                        <div class='col-12 h-100 left-form'></div>
+                    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                     </div>
                
         </div>

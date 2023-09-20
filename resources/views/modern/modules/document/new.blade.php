@@ -78,7 +78,7 @@
                             <div class='flex-grow-1'>
                            
                             
-                                <div class='form-wrapper form-edit mt-2 rounded'>
+                                <div class='form-wrapper form-edit mt-2 border-0 px-0'>
                                 
                                     <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post'>
                                         <input type='hidden' name='{{ $pathName }}' value='{{ $pathValue }}'>

@@ -13,10 +13,10 @@
 
 @if($course_code and !isset($_GET['fromFlipped']))
     <div class='d-none d-md-block mt-4'>
-        <div class='col-12 d-flex justify-content-between align-items-start'>
+        <div class='d-lg-flex gap-5'>
             @if($is_editor)
 
-                    <div>
+                    <div class='flex-grow-1'>
                         @if($toolName)
                             <div class='col-12 mb-2'>
                                 <h2 class='mb-0'>{{$currentCourseName}}</h2>
@@ -88,7 +88,7 @@
                 
             @else
 
-                    <div>
+                    <div class='flex-grow-1'>
                         @if($toolName)
                             <div class='col-12 mb-2'>
                                 <h2 class='mb-0'>{{$currentCourseName}}</h2>

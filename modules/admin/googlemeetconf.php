@@ -119,8 +119,8 @@ if (isset($_POST['submit'])) {
 
 $boolean_field = "";
 $tool_content .= "
-    <div class='row extapp'><div class='col-12'>
-      <div class='form-wrapper form-edit Borders'>
+    <div class='row extapp'><div class='col-lg-6 col-12'>
+      <div class='form-wrapper form-edit border-0 px-0'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
 foreach ($app->getParams() as $param) {
@@ -173,6 +173,11 @@ $tool_content .= "
         </form>
       </div>
     </div>
+
+    <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div>
+
   </div>";
 
 draw($tool_content, 3, null, $head_content);

@@ -4430,7 +4430,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
         if ($assignment->submission_type == 1) {
             // Online text submission
             $submission_form = "
-                        <div class='form-group mt-4'>
+                        <div class='form-group mt-0'>
                             <label for='submission_text' class='col-sm-6 control-label-notes'>$langWorkOnlineText:</label>
                             <div class='col-sm-12'>
                                 ". rich_text_editor('submission_text', 10, 20, '') ."
@@ -5443,15 +5443,15 @@ function show_non_submitted($id) {
                 $num_of_submissions = sprintf("$m[more_submissions]", $num_results);
             }
                 $tool_content .= "
-                            <p><div class='sub_title1'>$m[WorkGroupNoSubmission]:</div><p>
-                            <p>$num_of_submissions</p>
+                            <p class='mt-4'><div class='sub_title1 Warning-100-bg p-2 mt-4 rounded-2'>$m[WorkGroupNoSubmission]:</div><p>
+                            <p class='text-start form-label py-3'>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>
                             <table class='table-default sortable'>
-                            <tr class='list-header'>
-                          <th class='count-col'>&nbsp;</th>";
+                            <thead><tr class='list-header'>
+                          <th class='count-col'>#</th>";
                 sort_link($langGroup, 'username');
-                $tool_content .= "</tr>";
+                $tool_content .= "</tr></thead>";
                 $i=1;
                 foreach ($groups as $row => $value){
 

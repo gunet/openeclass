@@ -154,8 +154,8 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $data = Database::get()->querySingle("SELECT * FROM api_token WHERE id = ?d", $_GET['edit']);
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $data->expired);
         $tool_content .= "
-        <div class='row extapp'><div class='col-12'>
-          <div class='form-wrapper form-edit rounded-3'>
+        <div class='row extapp'><div class='col-lg-6 col-12'>
+          <div class='form-wrapper form-edit border-0 px-0'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?edit=$_GET[edit]' method='post'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='$langExtAppName' class='col-12 control-label-notes'>$langExtAppName</label>";
@@ -173,8 +173,8 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
                                     <label class='col-12 control-label-notes'>$langExpirationDate:</label>
                                     <div class='col-12'>
                                         <div class='input-group'>
-                                            <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
-                                            <span class='input-group-text input-group-addon h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar fa-lg text-white'></i></span>
+                                            <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $exp_date->format("d-m-Y H:i") . "'>
+                                            <span class='input-group-text input-group-addon h-40px bg-white border-start-0 input-border-color'><i class='fa-solid fa-calendar fa-lg'></i></span>
                                         </div>
                                     </div>
                                 </div>";
@@ -184,7 +184,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
         $tool_content .= "</div></div></div>";
         $tool_content .= "
                     <div class='form-group mt-4'>
-                      <div class='col-12 d-flex justify-content-center'>
+                      <div class='col-12 d-flex justify-content-end'>
                         <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>";
         $tool_content .= "<button class='btn submitAdminBtn ms-2' type='submit' name='submit' value='create_token'>$langCreateAPIToken</button>";
         $tool_content .= "
@@ -194,13 +194,19 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
             generate_csrf_token_form_field() . "
             </form>
             </div>
-        </div></div>";
+        </div>
+        
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+        
+        </div>";
     } else {
         $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + $duration_time));
         $boolean_field = "";
         $tool_content .= "
-        <div class='row extapp'><div class='col-12'>
-          <div class='form-wrapper form-edit rounded-3'>
+        <div class='row extapp'><div class='col-lg-6 col-12'>
+          <div class='form-wrapper form-edit border-0 px-0'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>";
 
         foreach ($app->getParams() as $param) {
@@ -226,8 +232,8 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
                     <label class='col-12 control-label-notes'>$langExpirationDate:</label>
                     <div class='col-12'>
                         <div class='input-group'>
-                            <input class='form-control mt-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
-                            <span class='input-group-text input-group-addon h-40px input-bg-color input-border-color'><i class='fa-solid fa-calendar fa-lg text-white'></i></span>
+                            <input class='form-control mt-0 border-end-0' id='token_expires_at' name='token_expires_at' type='text' value='" . $expirationDate->format("d-m-Y H:i") . "'>
+                            <span class='input-group-text input-group-addon h-40px bg-white input-border-color'><i class='fa-solid fa-calendar fa-lg'></i></span>
                         </div>
                     </div>
                 </div>";
@@ -236,7 +242,7 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
 
         $tool_content .= "
                 <div class='form-group mt-4'>
-                  <div class='col-12 d-flex justify-content-center'>
+                  <div class='col-12 d-flex justify-content-end'>
                     <button class='btn submitAdminBtn' type='submit' name='submit'>$langSubmit</button>";
         $tool_content .= "&nbsp;
                     <a href='$_SERVER[SCRIPT_NAME]' class='btn cancelAdminBtn ms-2'>$langCancel</a>
@@ -245,7 +251,13 @@ if (isset($_GET['add']) or isset($_GET['edit'])) {
             generate_csrf_token_form_field() . "
             </form>
             </div>
-        </div></div>";
+        </div>
+        
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+        
+        </div>";
     }
 }
 

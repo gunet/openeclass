@@ -121,7 +121,7 @@ $tool_content .=
 $tool_content .= 
    "<div class='row'>
         <div class='col-lg-6 col-12'>
-                <form class='form-wrapper form-edit' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
+                <form class='form-wrapper form-edit border-0 px-0' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
                     <fieldset>";
 enableCheckFileSize();
 if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
@@ -143,7 +143,7 @@ $tool_content .=
 
 
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-center align-items-center'>
+                <div class='col-12 d-flex justify-content-end align-items-center'>
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
                     <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                 </div>
@@ -154,8 +154,8 @@ $tool_content .=
                 ". generate_csrf_token_form_field() ."  
             </form>
         </div>
-        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-            <div class='col-12 h-100 left-form'></div>
+        <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
     </div>
     ";

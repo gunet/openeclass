@@ -207,17 +207,17 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         <div class='row'>
 
             <div class='col-lg-6 col-12'>
-                <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                <div class='form-wrapper form-edit border-0 px-0'><form class='form-horizontal' role='form' id='newmsg' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } elseif ($course_id == 0 && $type == 'cm') {
         $tool_content .= "
         <div class='row'>
 
             <div class='col-lg-6 col-12'>
         ";
-        $tool_content .= "<div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='form-wrapper form-edit border-0 px-0'><form class='form-horizontal' role='form' method='post' action='message_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     } else {
         $type = 'cm'; //only course messages are allowed in the context of a course
-        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+        $tool_content .= "<div class='col-12'><div class='form-wrapper form-edit border-0 px-0'><form class='form-horizontal' role='form' method='post' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
     }
     $tool_content .= "
         <fieldset>
@@ -496,8 +496,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) { //new message form
         </form></div></div>";
     if (($course_id == 0 && $type == 'cm') or ($course_id == 0 && $type == 'pm')){
         $tool_content .= "
-                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block'>
-                    <div class='col-12 h-100 left-form'></div>
+                <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                 </div>
             </div>";
     }

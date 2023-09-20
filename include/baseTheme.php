@@ -283,7 +283,7 @@ function view($view_file, $view_data = array()) {
                 height:33px;
                 width:30px;
                 background-color:#ffffff;
-                border-right: solid 1px #E8EDF8 !important;
+                //border-right: solid 1px #E8EDF8 !important;
             }
 
             .menu-item.active,
@@ -296,6 +296,8 @@ function view($view_file, $view_data = array()) {
             }
 
             .inputSearch{ height: 33px !important; margin-top: 0px !important;}
+
+            #search_terms{ padding-left: 5px; }
 
         "
         ;
