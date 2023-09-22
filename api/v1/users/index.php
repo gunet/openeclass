@@ -54,7 +54,7 @@ function api_method($access) {
             $user = Database::get()->query("INSERT INTO user
                 SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
                     email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
-                    expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                    expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
                     lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
                     description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
                 $GLOBALS['lastname'], $GLOBALS['firstname'], $GLOBALS['username'], $password_encrypted,

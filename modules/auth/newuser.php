@@ -62,7 +62,7 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$pageName = $langUserDetails;
+$pageName = "$langRegistration $langOfUserS";
 $navigation[] = array("url" => "registration.php", "name" => $langRegistration);
 
 $user_registration = get_config('user_registration');
@@ -490,14 +490,14 @@ if (!isset($_POST['submit'])) {
                                      status, am, phone, registered_at, expires_at,
                                      lang, verified_mail, whitelist, description)
                           VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
-                                  " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')",
+                                  DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND), ?s, $verified_mail, '', '')",
                                 $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
         } else {
             $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                     status, am, phone, registered_at, expires_at,
                     lang, verified_mail, whitelist, description)
                     VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
-                                  " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')",
+                                  DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND), ?s, $verified_mail, '', '')",
                     $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
             if ($q1) {
                 Database::get()->query('INSERT INTO user_ext_uid

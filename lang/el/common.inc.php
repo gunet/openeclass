@@ -34,6 +34,16 @@ $langsOfTeacher = "εκπαιδευτή";
 $langsTeachers = "εκπαιδευτές";
 $langsOfTeachers = "εκπαιδευτών";
 
+$langCourseAdmin = "Διαχειριστής";
+$langOfCourseAdmin = "Διαχειριστή";
+$langCourseAdmins = "Διαχειριστές";
+$langOfCourseAdmins = "Διαχειριστών";
+
+$langsCourseAdmin = "διαχειριστής";
+$langsOfCourseAdmin = "διαχειριστή";
+$langsCourseAdmins = "διαχειριστές";
+$langsOfCourseAdmins = "διαχειριστών";
+
 $langEditor = "Βοηθός εκπαιδευτή";
 $langOfEditor = "Βοηθού εκπαιδευτή";
 $langsEditor = "βοηθός εκπαιδευτή";

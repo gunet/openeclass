@@ -21,6 +21,9 @@
 
 $require_login = true;
 $require_valid_uid = true;
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'profile_change';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 

@@ -263,7 +263,7 @@ if ($is_valid) {
                           status = " . USER_STUDENT . ",
                           am = ?s,
                           registered_at = " . DBHelper::timeAfter() . ",
-                          expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                          expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
                           lang = ?s,
                           verified_mail = ?d,
                           whitelist='',

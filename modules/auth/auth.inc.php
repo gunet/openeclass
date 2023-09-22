@@ -606,21 +606,6 @@ function get_cas_attrs($phpCASattrs, $settings) {
 
 /**
  * @brief  Process login form submission
- * @global type $warning
- * @global type $status
- * @global type $session
- * @global type $langInvalidId
- * @global type $langAccountInactive1
- * @global type $langAccountInactive2
- * @global type $langNoCookies
- * @global type $langEnterPlatform
- * @global type $urlServer
- * @global type $langHere
- * @global type $langInvalidAuth
- * @global array $auth_ids
- * @global type $inactive_uid
- * @global type $langTooManyFails
- * @global type $urlAppend
  */
 function process_login() {
     global $warning, $session, $langInvalidId, $langAccountInactive1, $langInvalidAuth,
@@ -949,7 +934,7 @@ function hybridauth_login() {
                         username = ?s, email = ?s, status = ?d, lang = ?s,
                         am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
-                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                        expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
                         whitelist = ''",
                         $surname, $givenname, $provider, $uname, $email, $status,
                         $language, $options['am'], $verified_mail)->lastInsertID;
@@ -1275,20 +1260,7 @@ function alt_login($user_info_object, $uname, $pass, $mobile = false) {
 
 /**
  * @brief Authenticate user via Shibboleth or CAS
- * @global type $surname
- * @global type $givenname
- * @global type $email
- * @global type $status
- * @global type $language
- * @global type $session
- * @global int $is_admin
- * @global int $is_power_user
- * @global int $is_usermanage_user
- * @global int $is_departmentmanage_user
- * @global type $langUserAltAuth
- * @global type $langAccountInactive1
- * @global type $langAccountInactive2
- * @param type is 'shibboleth' or 'cas'
+ * @param $type is 'shibboleth' or 'cas'
  */
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
@@ -1440,7 +1412,7 @@ function shib_cas_login($type) {
                         username = ?s, email = ?s, status = ?d, lang = ?s,
                         am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
-                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                        expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
                         whitelist = ''",
                 $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;

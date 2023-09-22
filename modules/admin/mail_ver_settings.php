@@ -62,7 +62,7 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
         $new_mail_ver = intval($new_mail_ver);
         $count = Database::get()->query("UPDATE `user` SET verified_mail=?s WHERE verified_mail=?s AND id != 1 AND status != " . USER_GUEST, $new_mail_ver, $old_mail_ver)->affectedRows;
         if ($count > 0) {
-            $user = ($count == 1) ? $langOfUser : $langUsersS;
+            $user = ($count == 1) ? $langOfUserS : $langUsersS;
             $tool_content .= "<div class='alert alert-success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</div>";
         }
         // user is admin or no user selected

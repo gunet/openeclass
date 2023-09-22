@@ -51,7 +51,7 @@ if ($user_registration) {
         // student registration
         if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE) {
             $tool_content .= "<table class='table-default table-responsive'>";
-            $tool_content .= "<tr class='list-header'><th>$langOfStudent</th></tr>";
+            $tool_content .= "<tr class='list-header'><th>$langOfUser</th></tr>";
             if ($eclass_stud_reg == 2) { // allow student registration via eclass
                 $tool_content .= "<tr><td><a href='newuser.php'>$langUserAccountInfo2</a></td></tr>";
             } elseif ($eclass_stud_reg == 1) { // allow student registration via request
@@ -87,7 +87,7 @@ if ($user_registration) {
         // teacher registration
         if ($eclass_prof_reg or $alt_auth_prof_reg) { // allow teacher registration
             $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr class='list-header'><th>$langOfTeacher</th></tr>";
+            $tool_content .= "<tr class='list-header'><th>$langUserWithRights</th></tr>";
             if (count($auth) > 1 and $alt_auth_prof_reg) {
                 $tool_content .= "<td>$langUserAccountInfo1 $langwith:";
                 foreach ($auth as $k => $v) {
