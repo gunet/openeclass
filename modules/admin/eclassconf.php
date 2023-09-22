@@ -25,11 +25,6 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/modalconfirmation.php';
 require_once 'include/mailconfig.php';
 
-if (isset($_POST['updatePrivacyPolicy'])) {
-    set_config('privacy_policy_timestamp', date('Y-m-d H:i:s'));
-    redirect_to_home_page('modules/admin/eclassconf.php');
-}
-
 $toolName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -91,19 +86,6 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
-
-    $privacyPolicyChanged = false;
-    foreach ($session->active_ui_languages as $langCode) {
-        $langVar = 'privacy_policy_text_' . $langCode;
-        if (isset($_POST[$langVar])) {
-            $oldText = get_config($langVar);
-            $newText = purify(trim($_POST[$langVar]));
-            if ($oldText != $newText) {
-                set_config($langVar, purify(trim($_POST[$langVar])));
-                $privacyPolicyChanged = true;
-            }
-        }
-    }
 
     $config_vars = [
         'email_required' => true,
@@ -168,8 +150,6 @@ if (isset($_POST['submit'])) {
         'mydocs_student_enable' => true,
         'mydocs_teacher_enable' => true,
         'offline_course' => true,
-        'activate_privacy_policy_text' => true,
-        'activate_privacy_policy_consent' => true,
     ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -213,10 +193,6 @@ if (isset($_POST['submit'])) {
         $GLOBALS['restrict_teacher_owndep'] = 0;
     }
 
-    if ($GLOBALS['activate_privacy_policy_consent']) {
-        $GLOBALS['activate_privacy_policy_text'] = 1;
-    }
-
     $scheduleIndexing = false;
     // indexing was previously off, but now set to on, need to schedule re-indexing
     if (!get_config('enable_indexing') && $enable_indexing) {
@@ -236,22 +212,6 @@ if (isset($_POST['submit'])) {
     // update table `config`
     foreach ($config_vars as $varname => $what) {
         set_config($varname, $GLOBALS[$varname]);
-    }
-
-    if ($privacyPolicyChanged and $activate_privacy_policy_consent) {
-        // Session::Messages(trans('langPrivacyPolicyConsentAskAgain') .
-        //     "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
-        //         <button type='submit' class='btn btn-default' name='updatePrivacyPolicy' value='true'>" .
-        //             trans('langPrivacyPolicyConsentRedisplay') . "
-        //         </button>
-        //     </form>", 'alert-info');
-            Session::flash('message',trans('langPrivacyPolicyConsentAskAgain') .
-            "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
-                <button type='submit' class='btn btn-default' name='updatePrivacyPolicy' value='true'>" .
-                    trans('langPrivacyPolicyConsentRedisplay') . "
-                </button>
-            </form>");
-            Session::flash('alert-class', 'alert-info');
     }
 
     // Display result message
@@ -373,22 +333,6 @@ else {
     $data['cbox_disable_log_course_actions'] = get_config('disable_log_course_actions') ? 'checked' : '';
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
     $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
-
-    foreach ($session->active_ui_languages as $langCode) {
-        $policy = get_config('privacy_policy_text_' . $langCode);
-        if (!$policy) {
-            $policyFile = "lang/$langCode/privacy.html";
-            if (file_exists($policyFile)) {
-                $policy = file_get_contents($policyFile);
-            } else {
-                $policy = get_config('privacy_policy_text_en');
-                if (!$policy) {
-                    $policy = file_get_contents('lang/en/privacy.html');
-                }
-            }
-        }
-        $data['policyText'][$langCode] = $policy;
-    }
 }
 
 view('admin.other.eclassconf', $data);

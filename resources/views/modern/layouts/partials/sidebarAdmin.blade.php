@@ -388,11 +388,15 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                    <a href="{{$urlAppend}}modules/admin/privacy_policy_conf.php" class='TextBold link_admin_tool'>
+                                        {!! trans('langPrivacyPolicy') !!}
+                                    </a>
+                                </li>
+                                <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a href="{{$urlAppend}}modules/admin/contact_info.php" class='TextBold link_admin_tool'>
                                         {!! trans('langUpgContact') !!}
                                     </a>
                                 </li>
-
                             </ul>
                         </div>
                     </div>

@@ -395,7 +395,7 @@
                                     <div class='panel panel-admin mt-4' id='three'>
                                         <div class='panel-heading'>
 
-                                                {{ trans('langEclassThemes') }}
+                                                {{ trans('langSupportedLanguages') }}
 
                                         </div>
                                         <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
@@ -413,7 +413,6 @@
                                                 </div>
 
 
-
                                                 <div class='form-group mt-4'>
                                                     <label class='col-sm-12 control-label-notes mb-1'>{{ trans('langSupportedLanguages') }}:</label>
                                                     <div class='col-sm-12'>
@@ -423,9 +422,6 @@
                                             </fieldset>
                                         </div>
                                     </div>
-
-
-
 
 
                                     <div class='panel panel-admin mt-4' id='four'>
@@ -1211,58 +1207,7 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4' id='fourteen'>
-                                        <div class='panel-heading'>
-
-                                                {{ trans('langPrivacyPolicy') }}
-
-                                        </div>
-                                        <div class='panel-body'>
-                                            <div class='margin-bottom-fat margin-top-fat pb-3'><strong>{{ trans('langPrivacyPolicyLegend') }}</strong></div>
-                                            <fieldset>
-                                                <div class='landing-default'>
-                                                    @foreach ($selectable_langs as $langCode => $langName)
-                                                        <div class='form-group'>
-                                                            <label for='privacy_policy_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}: <span class='text-secondary'>({{ $langName }})</span></label>
-                                                            <div class='col-sm-12'>
-                                                                {!! rich_text_editor("privacy_policy_text_$langCode", 5, 20, $policyText[$langCode]) !!}
-                                                            </div>
-                                                        </div>
-                                                        <div class='row p-2'></div>
-                                                    @endforeach
-                                                </div>
-
-
-
-                                                <div class='form-group mt-4'>
-                                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </label>
-                                                    <div class='col-sm-12'>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container'>
-                                                                <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text'
-                                                                    @if (get_config('activate_privacy_policy_text')) checked @endif value='1'>
-                                                                    <span class='checkmark'></span>
-                                                                {{ trans('langDisplayPrivacyPolicyLink') }}
-                                                            </label>
-                                                        </div>
-                                                        <div class='checkbox'>
-                                                        <label class='label-container'>
-                                                                <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent'
-                                                                    @if (get_config('activate_privacy_policy_consent')) checked @endif value='1'>
-                                                                    <span class='checkmark'></span>
-                                                                {{ trans('langAskPrivacyPolicyConsent') }}
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </fieldset>
-                                        </div>
-                                    </div>
-
                                     {!! showSecondFactorChallenge() !!}
-
-
 
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-center'>
@@ -1284,7 +1229,7 @@
                                 <nav class="nav nav-pills flex-column">
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#two">{{ trans('langUpgReg') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#three">{{ trans('langEclassThemes') }}</a>
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#three">{{ trans('langSupportedLanguages') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#four">{{ trans('langHomePageSettings') }}</a>
 
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#five">{{ trans('langEmailSettings') }}</a>
@@ -1298,7 +1243,6 @@
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
 
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#fourteen">{{ trans('langPrivacyPolicy') }}</a>
                                 </nav>
                             </nav>
                         </div>
@@ -1449,19 +1393,6 @@
             $('#search_enable').prop('checked', false);
             $("#confirmIndexDialog").modal("hide");
         });
-
-        $("#privacyPolicyConsent").click(function() {
-            if ($(this).is(':checked')) {
-                $('#privacyPolicyLink')
-                    .prop('checked', true)
-                    .prop('disabled', true);
-            } else {
-                $('#privacyPolicyLink')
-                    .prop('disabled', false);
-            }
-        });
-        $('#privacyPolicyLink')
-            .prop('disabled', $("#privacyPolicyConsent").is(':checked'));
 
         $("#confirmIndexOk").click(function() {
             $("#confirmIndexDialog").modal("hide");
