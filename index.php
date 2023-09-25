@@ -30,6 +30,8 @@ session_start();
  *
  */
 
+
+
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
     $dbname = $matches[1];
@@ -138,7 +140,7 @@ if (!$upgrade_begin and $uid) {
     }
     // if user is not guest redirect him to portfolio
     header("Location: {$urlServer}main/portfolio.php");
-    
+
 } else {
     // check authentication methods
     $hybridLinkId = null;
@@ -229,7 +231,7 @@ if (!$upgrade_begin and $uid) {
 
     $data['popular_courses'] = Database::get()->queryArray('SELECT *FROM `course` 
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
-                                                
+
 
     $data['announcements'] = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
                                             WHERE `visible` = 1
@@ -240,7 +242,7 @@ if (!$upgrade_begin and $uid) {
 
     $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,1);
     $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,2);
-    
+
     //priotities
     $priority_order = 0;
     $priorities = Database::get()->queryArray("SELECT `title` FROM `homepagePriorities` ORDER BY `order` ASC");
@@ -292,6 +294,18 @@ if (!$upgrade_begin and $uid) {
 
     $data['menuTypeID'] = 0;
 
+    //Maintenance Redirect
+    if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
+        $is_admin = true;
+        $is_power_user = true;
+        $is_usermanage_user = true;
+        $is_departmentmanage_user = true;
+    }
+    if (get_config('maintenance') == 1 ) {
+        if ( !$is_admin ) {
+            redirect_to_home_page('main/maintenance.php');
+        }
+    }
+
     view('home.index', $data);
-    
 }
