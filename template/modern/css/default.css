@@ -3361,11 +3361,11 @@ body .delThemeBtn{
   height:auto;
 }
 
-.jumbotron-image-default{
+/* .jumbotron-image-default{
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
+} */
 
 /* @media(min-width:992px){
     .jumbotron.jumbotron-login { min-height:650px; padding-top: 150px; }
@@ -3541,9 +3541,8 @@ body .delThemeBtn{
 }
 
 .popular_course_img{
-  width:150px; 
-  height:150px; 
-  border-radius: 50%;
+  width:100%; 
+  height:250px; 
 }
 
 .popular_course_img:hover{

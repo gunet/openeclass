@@ -120,7 +120,44 @@
         <div class='{{ $container }}'>
             <div class='row m-auto'>
                 <div class='col-12'>
-                    <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
+                    <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-5'>
+                        <div class='col-lg-6 col-12'>
+                            <div class='card bg-transparent border-0'>
+                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                    <div class='d-flex justify-content-start align-items-center'>
+                                        <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
+                                        <a href='{{ $urlServer }}rss.php'><i class="fa-solid fa-rss"></i></a>
+                                    </div>
+                                    <div class='d-flex justify-content-end align-items-center'>
+                                        <a class='TextRegular text-decoration-underline msmall-text' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
+                                    </div>
+                                </div>
+                                <div class='card-body px-0 py-0'>
+                                    @php $counterAn = 0; @endphp
+                                    @if(count($announcements) > 0)
+                                        <ul class='list-group list-group-flush'>
+                                            @foreach ($announcements as $announcement)
+                                                @if($counterAn < 3)
+                                                    <li class='li-unstyled border-bottom-list-group px-0 py-3'>
+                                                        <a class='list-group-item announce-link-homepage bg-transparent border-0 px-0 py-0 TextBold msmall-text' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                            {{$announcement->title}}
+                                                        </a>
+                                                        <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
+                                                    </li>
+                                                @endif
+                                                @php $counterAn++; @endphp
+                                            @endforeach
+                                        </ul>
+                                    @else
+                                        <ul class='list-group list-group-flush'>
+                                            <li class='li-unstyled border-bottom-list-group px-0 py-3'>
+                                                <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ trans('langNoInfoAvailable') }}</div>
+                                            </li>
+                                        </ul>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                         <div class='col-lg-6 col-12'>
                             <div class='card bg-transparent border-0'>
                                 <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
@@ -173,43 +210,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class='col-lg-6 col-12'>
-                            <div class='card bg-transparent border-0'>
-                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                    <div class='d-flex justify-content-start align-items-center'>
-                                        <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
-                                        <a href='{{ $urlServer }}rss.php'><i class="fa-solid fa-rss"></i></a>
-                                    </div>
-                                    <div class='d-flex justify-content-end align-items-center'>
-                                        <a class='TextRegular text-decoration-underline msmall-text' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
-                                    </div>
-                                </div>
-                                <div class='card-body px-0 py-0'>
-                                    @php $counterAn = 0; @endphp
-                                    @if(count($announcements) > 0)
-                                        <ul class='list-group list-group-flush'>
-                                            @foreach ($announcements as $announcement)
-                                                @if($counterAn < 3)
-                                                    <li class='li-unstyled border-bottom-list-group px-0 py-3'>
-                                                        <a class='list-group-item announce-link-homepage bg-transparent border-0 px-0 py-0 TextBold msmall-text' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
-                                                            {{$announcement->title}}
-                                                        </a>
-                                                        <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
-                                                    </li>
-                                                @endif
-                                                @php $counterAn++; @endphp
-                                            @endforeach
-                                        </ul>
-                                    @else
-                                        <ul class='list-group list-group-flush'>
-                                            <li class='li-unstyled border-bottom-list-group px-0 py-3'>
-                                                <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ trans('langNoInfoAvailable') }}</div>
-                                            </li>
-                                        </ul>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -313,20 +313,18 @@
                                         </div>
                                     </div>
                                     <div class='card-body px-0 py-0'>
-                                        <div class='row rowMargin row-cols-1 row-cols-md-2 row-cols-lg-3 g-lg-5 g-4'>
+                                        <div class='row rowMargin row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-lg-5 g-4'>
                                             @foreach ($popular_courses as $pop_course)
                                                 <div class="col mb-lg-0 mb-4">
                                                     <div class='card border-card h-100'>
+                                                        <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
+                                                            @if($pop_course->course_image)
+                                                                <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='Course Banner'/>
+                                                            @else
+                                                                <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                            @endif
+                                                        </a>
                                                         <div class='card-body'>
-                                                            <div class="col-12 d-flex justify-content-center align-items-center">
-                                                                <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
-                                                                    @if($pop_course->course_image)
-                                                                        <img class='popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='Course Banner'/>
-                                                                    @else
-                                                                        <img class='popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
-                                                                    @endif
-                                                                </a>
-                                                            </div>
                                                             <div class="col-12 text-center mt-2">
                                                                 <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                     {{$pop_course->title}} ({{$pop_course->public_code}})<br>
