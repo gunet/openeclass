@@ -28,6 +28,8 @@ session_start();
  *
  */
 
+
+
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
     $dbname = $matches[1];
@@ -310,5 +312,20 @@ if (!$upgrade_begin and $uid) {
 
         $tool_content .= "</div>
         </div>";
+
+    //Maintenance Redirect
+    if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
+        $is_admin = true;
+        $is_power_user = true;
+        $is_usermanage_user = true;
+        $is_departmentmanage_user = true;
+    }
+    if (get_config('maintenance') == 1 ) {
+        if ( !$is_admin ) {
+            redirect_to_home_page('main/maintenance.php');
+        }
+    }
+
+
     draw($tool_content, 0, null, $head_content);
 }
