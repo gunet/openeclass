@@ -84,8 +84,9 @@
                            '<option value="teacher">{{ js_escape(trans('langCourseAdmin')) }}</option>' +
                            '<option value="student">{{ js_escape(trans('langStudent')) }}</option>' +
                            '<option value="editor">{{ js_escape(trans('langTeacher')) }}</option>' +
-                           '<option value="course_reviewer">{{ js_escape(trans('langCourseReviewer')) }}</option> '+
+                           '<option value="course_reviewer">{{ js_escape(trans('langCourseReviewer')) }}</option>' +
                            '<option value="tutor">{{ js_escape(trans('langGroupTutor')) }}</option>' +
+                           '<option value="guest">{{ js_escape(trans('langGuestName')) }}</option>' +
                         @if (get_config('opencourses_enable'))
                            '<option value="reviewer">{{ js_escape(trans('langOpenCoursesReviewer')) }}</option>' +
                         @endif

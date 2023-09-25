@@ -92,13 +92,15 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if (!empty($_GET['sSearch_1'])) {
         $filter = $_GET['sSearch_1'];
         if ($filter == 'editor') {
-            $search_sql .= ' AND course_user.editor = 1 AND course_user.status = '.USER_STUDENT;
+            $search_sql .= ' AND course_user.editor = 1 AND course_user.status = ' . USER_STUDENT;
         } elseif ($filter == 'teacher') {
-            $search_sql .= ' AND course_user.status = '.USER_TEACHER;
+            $search_sql .= ' AND course_user.status = ' . USER_TEACHER;
         } elseif ($filter == 'student') {
-            $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = '.USER_STUDENT;
+            $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = ' . USER_STUDENT;
         } elseif ($filter == 'tutor') {
             $search_sql .= ' AND course_user.tutor = 1';
+        } elseif ($filter == 'guest') {
+           $search_sql .= ' AND course_user.status = ' . USER_GUEST;
         } elseif ($filter == 'course_reviewer') {
             $search_sql .= ' AND course_user.course_reviewer = 1';
         } elseif ($filter == 'reviewer') {
@@ -199,6 +201,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $user_roles = array($langCourseReviewer);
         } elseif ($myrow->status == USER_TEACHER) {
             $user_roles = array($langCourseAdmin);
+        } elseif ($myrow->status == USER_GUEST) {
+            $user_roles = array($langGuestName);
         } else {
             $user_roles = array($langStudent);
         }
