@@ -216,12 +216,14 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
     }
 }
 
+//Maintenance redirect
 if (get_config('maintenance') == 1 ) {
     $filename = basename($_SERVER['REQUEST_URI']);
-    if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed) and $filename !== 'maintenance.php') {
+    if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed) and $filename !== 'maintenance.php' and $filename !== 'login_form_admin.php') {
         redirect_to_home_page('main/maintenance.php');
     }
 }
+
 
 
 
