@@ -37,25 +37,32 @@ function api_method($access) {
         }
 
         if (!empty($missingInputs)) {
-            Access::error(20, 'The following inputs are not set: ' . implode(', ', $missingInputs));
-        } else {
+            Access::error(20, 'The following inputs are mandatory: ' . implode(', ', $missingInputs));
+        }
 
-            $title = $_GET['title'];
-            $category = $_GET['category'];
+        $title = $_GET['title'];
+        $category = $_GET['category'];
+        $description = isset($_GET['description']) ? $_GET['description'] : "";
+        $lang = isset($_GET['lang']) ? $_GET['lang'] : "el";
+        $visible = isset($_GET['visible']) ? $_GET['visible'] : 2;
+        $password = isset($_GET['password']) ? $_GET['password'] : "";
+        $course_license = isset($_GET['course_license']) ? $_GET['course_license'] : 0;
+        $prof_names = isset($_GET['prof_names']) ? $_GET['prof_names'] : '';
 
-            $code = strtoupper(new_code($category));
-            $code = str_replace(' ', '', $code);
 
-            if (!create_course_dirs($code)) {
-                Access::error(20, 'An error has occurred. Please contact the platform administrator.');
-            }
+        $code = strtoupper(new_code($category));
+        $code = str_replace(' ', '', $code);
 
-            $doc_quota = get_config('doc_quota');
-            $group_quota = get_config('group_quota');
-            $video_quota = get_config('video_quota');
-            $dropbox_quota = get_config('dropbox_quota');
+        if (!create_course_dirs($code)) {
+            Access::error(20, 'An error has occurred. Please contact the platform administrator.');
+        }
 
-            $result = Database::get()->query("INSERT INTO course SET
+        $doc_quota = get_config('doc_quota');
+        $group_quota = get_config('group_quota');
+        $video_quota = get_config('video_quota');
+        $dropbox_quota = get_config('dropbox_quota');
+
+        $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
                         lang = ?s,
                         title = ?s,
@@ -76,20 +83,20 @@ function api_method($access) {
                         glossary_expand = 0,
                         glossary_index = 1,
                         description = ?s",
-                $code, 'el', $title, 2,
-                '0', '', $code, $doc_quota * 1024 * 1024,
-                $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-                $dropbox_quota * 1024 * 1024, '', 0, 'simple', '');
+            $code, $lang, $title, $visible,
+            $course_license, $prof_names, $code, $doc_quota * 1024 * 1024,
+            $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
+            $dropbox_quota * 1024 * 1024, $password, 0, 'simple', $description);
 
-            $new_course_id = $result->lastInsertID;
-            create_modules($new_course_id);
+        $new_course_id = $result->lastInsertID;
+        create_modules($new_course_id);
 
-            course_index($code);
+        course_index($code);
 
-            header('Content-Type: application/json');
-            echo json_encode('Course with title ' . $title . ' in category with id ' . $category . ' created', JSON_UNESCAPED_UNICODE);
-            exit();
-        }
+        header('Content-Type: application/json');
+        echo json_encode('Course with title ' . $title . ' in category with id ' . $category . ' created', JSON_UNESCAPED_UNICODE);
+        exit();
+
     }
 
     if ( isset($_GET['course_id']) && isset($_GET['uname']) ) {
