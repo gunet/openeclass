@@ -42,13 +42,50 @@ function api_method($access) {
 
         $title = $_GET['title'];
         $category = $_GET['category'];
+
         $description = isset($_GET['description']) ? $_GET['description'] : "";
         $lang = isset($_GET['lang']) ? $_GET['lang'] : "el";
-        $visible = isset($_GET['visible']) ? $_GET['visible'] : 2;
         $password = isset($_GET['password']) ? $_GET['password'] : "";
-        $course_license = isset($_GET['course_license']) ? $_GET['course_license'] : 0;
         $prof_names = isset($_GET['prof_names']) ? $_GET['prof_names'] : '';
+        $flipped_flag = isset($_GET['flipped_flag']) ? $_GET['flipped_flag'] : 0;
 
+        $doc_quota = get_config('doc_quota');
+        $group_quota = get_config('group_quota');
+        $video_quota = get_config('video_quota');
+        $dropbox_quota = get_config('dropbox_quota');
+
+        if (isset($_GET['visible'])) {
+            $valid_visible = ['0','1','2','3'];
+            if (in_array($_GET['visible'], $valid_visible)) {
+                $visible = $_GET['visible'];
+            } else {
+                Access::error(20, 'visible input must be one of the following: 0 (Closed course) / 1 (Registration is required) / 2 (Open course) / 3 (Inactive course)');
+            }
+        } else {
+            $visible = '2';
+        }
+
+        if (isset($_GET['course_license'])) {
+            $valid_course_license = ['0', '10', 'cc'];
+            if (in_array($_GET['course_license'], $valid_course_license)) {
+                $course_license = $_GET['course_license'];
+            } else {
+                Access::error(20, 'course_license input must be one of the following: 0 (Not defined) / 10 (All rights reserved) / cc (Creative Commons license-CC)');
+            }
+        } else {
+            $course_license = '0';
+        }
+
+        if (isset($_GET['view_type'])) {
+            $valid_view_types = ['simple', 'units', 'wall', 'flippedclassroom'];
+            if (in_array($_GET['view_type'], $valid_view_types)) {
+                $view_type = $_GET['view_type'];
+            } else {
+                Access::error(20, 'view_type input must be one of the following: simple (Simple form) / units (Course with modules (weekly, thematic)) / wall (Wall form) / flippedclassroom (Inverted Classroom Model)');
+            }
+        } else {
+            $view_type = 'simple';
+        }
 
         $code = strtoupper(new_code($category));
         $code = str_replace(' ', '', $code);
@@ -56,11 +93,6 @@ function api_method($access) {
         if (!create_course_dirs($code)) {
             Access::error(20, 'An error has occurred. Please contact the platform administrator.');
         }
-
-        $doc_quota = get_config('doc_quota');
-        $group_quota = get_config('group_quota');
-        $video_quota = get_config('video_quota');
-        $dropbox_quota = get_config('dropbox_quota');
 
         $result = Database::get()->query("INSERT INTO course SET
                         code = ?s,
@@ -86,7 +118,7 @@ function api_method($access) {
             $code, $lang, $title, $visible,
             $course_license, $prof_names, $code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
-            $dropbox_quota * 1024 * 1024, $password, 0, 'simple', $description);
+            $dropbox_quota * 1024 * 1024, $password, $flipped_flag, $view_type, $description);
 
         $new_course_id = $result->lastInsertID;
         create_modules($new_course_id);
