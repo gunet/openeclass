@@ -115,7 +115,7 @@ if (isset($_GET['u'])) { //  stats per user
             $back_url = "{$urlAppend}courses/$course_code/";
         }
         if (!isset($_GET['format'])) {
-            $toolName = "$langParticipate $langOfUser";
+            $toolName = "$langParticipate $langOfUserS";
             if ($is_course_reviewer) {
                 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
                 $navigation[] = array('url' => 'userduration.php?course=' . $course_code, 'name' => $langUserDuration);
@@ -234,7 +234,7 @@ if (isset($_GET['u'])) { //  stats per user
         exit;
     } else { // html output
         if (!isset($_GET['format'])) {
-            $toolName = "$langParticipate $langOfUser";
+            $toolName = "$langParticipate $langOfUserS";
             $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
             $navigation[] = array('url' => '$_SERVER[SCRIPT_NAME]?course=' . $course_code, 'name' => $langUserDuration);
             $tool_content .= action_bar(array(

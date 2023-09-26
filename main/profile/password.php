@@ -28,6 +28,9 @@
 
 $require_login = true;
 $require_valid_uid = true;
+$require_help = true;
+$helpTopic = 'registration';
+$helpSubTopic = 'password_change';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';

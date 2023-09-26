@@ -766,7 +766,7 @@ class Log {
     private function exercise_action_details($details) {
 
         global $langTitle, $langDescription, $langAttempt, $urlAppend, $course_code,
-               $langDelete, $langOfAttempt, $langOfUser, $langModify, $langIn, $langPurgeExercises;
+               $langDelete, $langOfAttempt, $langOfUserS, $langModify, $langIn, $langPurgeExercises;
 
         $details = unserialize($details);
         if (is_object($details['title'])) {
@@ -783,10 +783,10 @@ class Log {
             $content .= "<br><a href='{$urlAppend}modules/exercise/exercise_result.php?course=$course_code&amp;eurId=$details[eurid]'>$langAttempt</a>";
         }
         if (isset($details['del_eurid_uid'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDelete $langOfAttempt $langOfUser &laquo;" . uid_to_name($details['del_eurid_uid']) . "&raquo;";
+            $content .= "&nbsp;&mdash;&nbsp; $langDelete $langOfAttempt $langOfUserS &laquo;" . uid_to_name($details['del_eurid_uid']) . "&raquo;";
         }
         if (isset($details['mod_eurid_uid'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfAttempt $langOfUser &laquo;" . uid_to_name($details['mod_eurid_uid']) . "&raquo;&nbsp;$langIn&nbsp;&laquo;" . get_exercise_attempt_status_legend($details['new_eurid_status']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfAttempt $langOfUserS &laquo;" . uid_to_name($details['mod_eurid_uid']) . "&raquo;&nbsp;$langIn&nbsp;&laquo;" . get_exercise_attempt_status_legend($details['new_eurid_status']) . "&raquo";
         }
         if (isset($details['purge_results'])) {
             $content .= "&nbsp;&mdash;&nbsp;$langPurgeExercises";
@@ -851,7 +851,7 @@ class Log {
     private function course_user_action_details($details, $type): string
     {
 
-        global $langOfUser, $langToUser,
+        global $langOfUserS, $langToUser,
         $langsOfTeacher, $langsOfEditor, $langRegistration, $langAddGUser,
         $langUnCourse, $langTheU, $langGiveRight,
         $langRemovedRight, $langsOfGroupTutor, $langsOfCourseReviewer,
@@ -875,7 +875,7 @@ class Log {
             case '-5': $content = $langUnCourse;
                        $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
                 break;
-            case '0': $content = "$langUnCourse $langOfUser";
+            case '0': $content = "$langUnCourse $langOfUserS";
                       $content .= "&nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo";
                 break;
             case '+1': $content = "$langTheU &nbsp;&laquo" . display_user($details['uid'], false, false) . "&raquo;&nbsp;";

@@ -81,11 +81,11 @@
             var column = api.column(1);
             var select = $('<select id="select_role">' +
                            '<option value="0">-- {{ js_escape(trans('langAllUsers')) }} --</option>' +
-                           '<option value="teacher">{{ js_escape(trans('langTeacher')) }}</option>' +
+                           '<option value="teacher">{{ js_escape(trans('langCourseAdmin')) }}</option>' +
                            '<option value="student">{{ js_escape(trans('langStudent')) }}</option>' +
-                           '<option value="editor">{{ js_escape(trans('langEditor')) }}</option>' +
+                           '<option value="editor">{{ js_escape(trans('langTeacher')) }}</option>' +
                            '<option value="course_reviewer">{{ js_escape(trans('langCourseReviewer')) }}</option> '+
-                           '<option value="tutor">{{ js_escape(trans('langTutor')) }}</option>' +
+                           '<option value="tutor">{{ js_escape(trans('langGroupTutor')) }}</option>' +
                         @if (get_config('opencourses_enable'))
                            '<option value="reviewer">{{ js_escape(trans('langOpenCoursesReviewer')) }}</option>' +
                         @endif
@@ -187,7 +187,7 @@
             //     }
             // );
 
-            bootbox.confirm({ 
+            bootbox.confirm({
                 closeButton: false,
                 title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",
                 message: "<p class='text-center'>{{ js_escape(trans('langDeleteUser')) }}&nbsp{{ js_escape(trans('langDeleteUser2')) }}</p>",
@@ -233,16 +233,6 @@
                     }
                 }
             });
-
-
-
-
-
-
-
-
-
-
         });
         $('.dataTables_filter input')
             .attr({ style: 'width: 200px',
@@ -269,9 +259,7 @@
 
                 <div class="row">
 
-
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
@@ -281,7 +269,6 @@
                             @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                         </div>
                     </div>
-
 
                     @include('layouts.partials.legend_view')
 

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -35,50 +35,21 @@ $toolName = $langUsers;
 $pageName = $langAddGuest;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
 
-// javascript
 load_js('pwstrength.js');
-$head_content .= <<<hContent
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    var lang = {
-hContent;
-$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
-$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
-$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
-$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
-$head_content .= <<<hContent
-    };
-
-    $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
-        });
-    });
-
-/* ]]> */
-</script>
-hContent;
+load_js('bootstrap-datetimepicker');
 
 $default_guest_username = $langGuestUserName . $course_code;
 
-$tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'
-                 )));
+$data['guest_info_message'] = '';
 
 if (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
-    //Session::Messages($langGuestSuccess, 'alert-success');
-    Session::flash('message',$langGuestSuccess); 
+    Session::flash('message',$langGuestSuccess);
     Session::flash('alert-class', 'alert-success');
     if ($password === '') {
-        //Session::Messages($langGuestWarnEmptyPassword, 'alert-warning');
-        Session::flash('message',$langGuestWarnEmptyPassword); 
+        Session::flash('message',$langGuestWarnEmptyPassword);
         Session::flash('alert-class', 'alert-warning');
     }
     redirect_to_home_page("modules/user/index.php?course=$course_code");
@@ -86,10 +57,11 @@ if (isset($_POST['submit'])) {
     $guest_info = guestinfo($course_id);
     if ($guest_info) {
         if ($guest_info->password === '') {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGuestWarnEmptyPassword</span></div></div>";
+            $data['guest_info_message'] = "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langGuestWarnEmptyPassword</span></div></div>";
         } else {
-            $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGuestExist</span></div></div>";
+            $data['guest_info_message'] = "<div class='col-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGuestExist</span></div></div>";
         }
+        $data['expirationDate'] = $expirationDate = DateTime::createFromFormat("Y-m-d H:i:s", $guest_info->expires_at);
         $submit_label = $langModify;
     } else {
         $guest_info = new stdClass();
@@ -97,80 +69,53 @@ if (isset($_POST['submit'])) {
         $guest_info->surname = $langGuestSurname;
         $guest_info->username = $default_guest_username;
         $submit_label = $langAdd;
+        $data['expirationDate'] = $expirationDate = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now") + get_config('account_duration')));
     }
-    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <fieldset>
-        <div class='form-group'>
-            <label class='col-sm-6 control-label-notes'>$langName</label>
-            <div class='col-sm-12'>
-                <input class='form-control' value='".q($guest_info->givenname)."' disabled>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <label class='col-sm-6 control-label-notes'>$langSurname</label>
-            <div class='col-sm-12'>
-                <input class='form-control' value='".q($guest_info->surname)."' disabled>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <label class='col-sm-6 control-label-notes'>$langUsername</label>
-            <div class='col-sm-12'>
-                <input class='form-control' value='".q($guest_info->username)."' disabled>
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='password' class='col-sm-6 control-label-notes'>$langPass</label>
-            <div class='col-sm-12'>
-                <input class='form-control' type='text' name='guestpassword' value='' id='password' autocomplete='off' placeholder='$langAskGuest'>
-                <span id='result'></span>
-            </div>
-        </div>
-        <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
-         
-             
-             <input class='btn submitAdminBtn' type='submit' name='submit' value='$submit_label'>
-           
-            
-              <a href='index.php?course=$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-            
-         
-          
-         
-        </div>
-        </fieldset>
-        ". generate_csrf_token_form_field() ."
-        </form>
-        </div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
-    </div>
-    </div>";
 }
-draw($tool_content, 2, null, $head_content);
+
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php?course=$course_code",
+        'icon' => 'fa-reply',
+        'level' => 'primary'
+    )));
+$data['guest_info'] = $guest_info;
+$data['submit_label'] = $submit_label;
+
+view('modules.user.guestuser', $data);
+
 
 /**
  * @brief create guest account or update password if it already exists
  * @return void
  */
-function createguest($username, $course_id, $password) {
+function createguest($username, $course_id, $password): void
+{
     global $langGuestName, $langGuestSurname;
 
     if ($password !== '') {
         $password = password_hash($password, PASSWORD_DEFAULT);
     }
 
-    $q = Database::get()->querySingle("SELECT user_id from course_user WHERE status=" . USER_GUEST . " AND course_id = $course_id");
+    $q = Database::get()->querySingle("SELECT user_id from course_user WHERE status= " . USER_GUEST . " AND course_id = $course_id");
     if ($q) {
         $guest_id = $q->user_id;
-        Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password, $guest_id);
+        $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
+        $user_expires_at = $expires_at->format("Y-m-d H:i");
+        Database::get()->query("UPDATE user SET password = ?s, expires_at = ?s WHERE id = ?d", $password, $user_expires_at, $guest_id);
     } else {
+        if (isset($_POST['user_date_expires_at'])) {
+            $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
+            $user_expires_at = $expires_at->format("Y-m-d H:i");
+        } else {
+            $expires_at = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now + 1 year")));
+            $user_expires_at = $expires_at->format("Y-m-d H:i");
+        }
         $q = Database::get()->query("INSERT INTO user (surname, givenname, username, password, status, registered_at, expires_at, whitelist, description, verified_mail, receive_mail)
-                                            VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ", 
-                                                ".DBHelper::timeAfter().", 
-                                                ".DBHelper::timeAfter(get_config('account_duration')).", 
+                                            VALUES (?s, ?s, ?s, ?s, " . USER_GUEST . ",
+                                                " . DBHelper::timeAfter() . ", ?s,
                                                 '','', " . EMAIL_UNVERIFIED . ", " . EMAIL_NOTIFICATIONS_DISABLED . ")",
-                                            $langGuestSurname, $langGuestName, $username, $password);
+                                            $langGuestSurname, $langGuestName, $username, $password, $user_expires_at);
         $guest_id = $q->lastInsertID;
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
@@ -178,9 +123,7 @@ function createguest($username, $course_id, $password) {
     }
     Database::get()->query("INSERT IGNORE INTO course_user (course_id, user_id, status, receive_mail, reg_date)
                                 VALUES (?d, ?d, " . USER_GUEST . ", " . EMAIL_NOTIFICATIONS_DISABLED . " , " . DBHelper::timeAfter().")", $course_id, $guest_id);
-    Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $guest_id,
-                                                                                    'right' => '+10'));
-    return;
+    Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $guest_id, 'right' => '+10'));
 }
 
 /**
@@ -190,7 +133,7 @@ function createguest($username, $course_id, $password) {
  */
 function guestinfo($course_id) {
 
-    $q = Database::get()->querySingle("SELECT surname, givenname, username, password FROM user, course_user
+    $q = Database::get()->querySingle("SELECT surname, givenname, username, password, expires_at FROM user, course_user
                        WHERE user.id = course_user.user_id AND
                              course_user.status = " . USER_GUEST . " AND
                              course_user.course_id = ?d", $course_id);

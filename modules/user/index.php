@@ -161,22 +161,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'btn_class' => 'delete_btn deleteAdminBtn'
             ),
             array(
-                'title' => $langGiveRightTutor,
+                'title' => $langGroupTutor,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->tutor == '0' ? "fa-square" : "fa-square-check"
             ),
             array(
-                'title' => $langGiveRightCourseReviewer,
+                'title' => $langCourseReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->course_reviewer == '0' ? "give" : "remove")."CourseReviewer=". getIndirectReference($myrow->id),
                 'icon' => $myrow->course_reviewer == '0' ? "fa-square" : "fa-square-check"
             ),
             array(
-                'title' => $langGiveRightEditor,
+                'title' => $langTeacher,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
                 'icon' => $myrow->editor == '0' ? "fa-square" : "fa-square-check"
             ),
             array(
-                'title' => $langGiveRightAdmin,
+                'title' => $langCourseAdmin,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
                 'icon' => $myrow->status != '1' ? "fa-square" : "fa-square-check",
                 'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
@@ -194,16 +194,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             )
         ));
         if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
-            $user_roles = array($langEditor);
-        }  elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
+            $user_roles = array($langTeacher);
+        } elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
             $user_roles = array($langCourseReviewer);
         } elseif ($myrow->status == USER_TEACHER) {
-            $user_roles = array($langTeacher);
+            $user_roles = array($langCourseAdmin);
         } else {
             $user_roles = array($langStudent);
         }
         if ($myrow->tutor == '1') {
-            $user_roles[] = $langTutor;
+            $user_roles[] = $langGroupTutor;
         }
         if ($myrow->reviewer == '1') {
             $user_roles[] = $langOpenCoursesReviewer;

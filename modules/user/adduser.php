@@ -55,7 +55,6 @@ if (isset($_GET['add'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-      //  Session::Messages($langTheU . ' ' . $langAdded, "alert alert-success");
         Session::flash('message',$langTheU . ' ' . $langAdded);
         Session::flash('alert-class', 'alert-success');
         // notify user via email
@@ -88,7 +87,6 @@ if (isset($_GET['add'])) {
             send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]",  $_SESSION['email'], '', $email, $emailsubject, $plainemailbody, $emailbody);
         }
     } else {
-      //  Session::Messages($langAddError, "alert alert-warning");
         Session::flash('message',$langAddError);
         Session::flash('alert-class', 'alert-warning');
     }
@@ -99,76 +97,27 @@ if (isset($_GET['add'])) {
                                     'search_username' => true,
                                     'search_am' => true), 'any');
 
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'
-                 )));
+    $results = '';
+    $data['search_username'] = $data['search_givenname'] = $data['search_surname']  = $data['search_am'] = '';
+    if (isset($_POST['search_surname'])) {
+        $data['search_surname'] = $_POST['search_surname'];
+    }
+    if (isset($_POST['search_givenname'])) {
+        $data['search_givenname'] = $_POST['search_givenname'];
+    }
+    if (isset($_POST['search_username'])) {
+        $data['search_username'] = $_POST['search_username'];
+    }
+    if (isset($_POST['search_am'])) {
+        $data['search_am'] = $_POST['search_am'];
+    }
 
-    $tool_content .= "
-
-    <div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'>
-    <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langAskUser</span></div>
-                <div class='form-wrapper form-edit rounded'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <fieldset>
-
-
-
-                <div class='form-group'>
-                <label for='surname' class='col-sm-6 control-label-notes'>$langSurname</label>
-                <div class='col-sm-12'>
-                    <input class='form-control' id='surname' type='text' name='search_surname' value='" . q($search_surname) . "' placeholder='$langSurname'></div>
-                </div>
-
-
-
-                <div class='form-group mt-4'>
-                <label for='name' class='col-sm-6 control-label-notes'>$langName</label>
-                <div class='col-sm-12'>
-                    <input class='form-control' id='name' type='text' name='search_givenname' value='" . q($search_givenname) . "' placeholder='$langName'></div>
-                </div>
-
-
-
-                <div class='form-group mt-4'>
-                <label for='username' class='col-sm-6 control-label-notes'>$langUsername</label>
-                <div class='col-sm-12'>
-                    <input class='form-control' id='username' type='text' name='search_username' value='" . q($search_username) . "' placeholder='$langUsername'></div>
-                </div>
-
-
-
-                <div class='form-group mt-4'>
-                <label for='am' class='col-sm-6 control-label-notes'>$langAm</label>
-                <div class='col-sm-12'>
-                    <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
-                </div>
-
-
-
-                <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-end align-items-center'>
-
-
-                      <input class='btn submitAdminBtn' type='submit' name='search' value='$langSearch'>
-
-
-                       <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code'>$langCancel</a>
-
-
-
-
-                </div>
-                </div>
-                </fieldset>
-                </form>
-                </div></div><div class='d-none d-lg-block'>
-                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
-            </div>
-            </div>";
+    $data['action_bar'] = action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        )));
 
     $search = array();
     $values = array();
@@ -187,7 +136,7 @@ if (isset($_GET['add'])) {
                                                 user u LEFT JOIN lala c ON u.id = c.user_id WHERE
                                                 c.user_id IS NULL AND u.expires_at >= CURRENT_DATE() AND $query", $values);
         if ($result) {
-            $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
+            $results = "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
                                 <thead><tr class='list-header'>
                                   <th>$langID</th>
                                   <th>$langName</th>
@@ -206,17 +155,20 @@ if (isset($_GET['add'])) {
                     $dep_content .= $tree->getPath($dep) . $br;
                     $j++;
                 }
-                $tool_content .= "<td class='text-end'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
+                $results .= "<td class='text-start'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         $dep_content . "</td><td class='text-center'>" .
                         icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
                 $i++;
             }
-            $tool_content .= "</table></div></div>";
+            $results .= "</table></div></div>";
         } else {
-            $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoUsersFound</span></div></div>";
+            $results .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langNoUsersFound</span></div></div>";
         }
         Database::get()->query("DROP TABLE lala");
     }
 }
-draw($tool_content, 2);
+
+$data['results'] = $results;
+
+view('modules.user.adduser', $data);

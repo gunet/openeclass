@@ -23,7 +23,9 @@
  * @file perso.php
  * @brief displays user courses and courses activity
  */
-
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'my_courses';
 require_once 'perso_functions.php';
 
 if (!isset($_SESSION['uid'])) {

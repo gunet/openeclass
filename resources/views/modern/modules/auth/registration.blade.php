@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="col-12 main-section">
     <div class='{{ $container }}'>
         <div class="row m-auto">
@@ -14,7 +13,7 @@
             @if(Session::has('message'))
                 <div class='col-12 all-alerts'>
                     <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                        @php 
+                        @php
                             $alert_type = '';
                             if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                 $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -26,7 +25,7 @@
                                 $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                             }
                         @endphp
-                        
+
                         @if(is_array(Session::get('message')))
                             @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                             {!! $alert_type !!}<span>
@@ -36,7 +35,7 @@
                         @else
                             {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                         @endif
-                        
+
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
@@ -57,17 +56,12 @@
                             <ul class="nav nav-tabs" id="myRegistration">
                                 <li class="nav-item">
                                     <button class="nav-link active" id="reg-student" data-bs-toggle="tab" data-bs-target="#regStudent" type="button" role="tab" aria-controls="regStudent" aria-selected="true" aria-current="page">
-                                        
-                                        
-                                            {{ trans('langOfStudent') }}
-                                        
+                                        {{ trans('langOfUser') }}
                                     </button>
                                 </li>
                                 <li class="nav-item">
                                     <button class="nav-link" id="reg-teacher" data-bs-toggle="tab" data-bs-target="#regTeacher" type="button" role="tab" aria-controls="regTeacher" aria-selected="true" aria-current="page">
-                                        
-                                            {{ trans('langOfTeacher') }}
-                                        
+                                        {{ trans('langUserWithRights') }}
                                     </button>
                                 </li>
                             </ul>
@@ -75,7 +69,7 @@
                             <div class="tab-content mt-5" id="myContentRegistration">
                                 @if (!$registration_info)
                                     <div class="tab-pane fade show active" id="regStudent" role="tabpanel" aria-labelledby="reg-student">
-                                        @if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE)  
+                                        @if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE)
                                             <div class="col-12">
                                                 <ul class="list-group list-group-flush">
                                                     @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
@@ -87,10 +81,10 @@
                                                         @foreach ($auth as $k => $v)
                                                             @if ($v != 1)  <!--  bypass the eclass auth method -->
                                                                 <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
-                                                                @if ($v < 8) 
+                                                                @if ($v < 8)
                                                                     <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                 @else
-                                                                    @if($eclass_stud_reg == 1) 
+                                                                    @if($eclass_stud_reg == 1)
                                                                         <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                     @else
                                                                         <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
@@ -111,36 +105,36 @@
                                         @if ($eclass_prof_reg or $alt_auth_prof_reg)  <!-- allow teacher registration -->
                                             <div class='col-12'>
                                                 <ul class="list-group list-group-flush">
-                                                    @if ($eclass_prof_reg) 
-                                                        @if (empty($provider)) 
+                                                    @if ($eclass_prof_reg)
+                                                        @if (empty($provider))
                                                             <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a></li>
-                                                        @else 
+                                                        @else
                                                             <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a></li>
-                                                        @endif    
+                                                        @endif
                                                     @endif
                                                     @if (count($auth) > 1 and $alt_auth_prof_reg)
                                                         @foreach ($auth as $k => $v)
                                                             @if ($v != 1)   <!-- bypass the eclass auth method -->
                                                                 <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
-                                                                @if ($v < 8) 
-                                                                    @if ($alt_auth_prof_reg) 
+                                                                @if ($v < 8)
+                                                                    @if ($alt_auth_prof_reg)
                                                                     <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                    @else 
+                                                                    @else
                                                                     <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                     @endif
-                                                                @else 
-                                                                    @if ($alt_auth_prof_reg) 
+                                                                @else
+                                                                    @if ($alt_auth_prof_reg)
                                                                         <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                    @else 
+                                                                    @else
                                                                         <li class="list-group-item border-bottom-list-group"><a class='text-decoration-underline' href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
-                                                                    @endif    
+                                                                    @endif
                                                                 @endif
                                                             @endif
                                                         @endforeach
                                                     @endif
                                                 </ul>
                                             </div>
-                                        @else 
+                                        @else
                                             <div class='col-12'>
                                                 <p class='TextRegular'>{{ trans('langTeacherCannotRegister') }}</p>
                                             </div>
@@ -159,14 +153,9 @@
                     <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langCannotRegister') }}</span></div>
                 </div>
             @endif
-                                
-        </div> 
+
+        </div>
     </div>
 </div>
-
-
-
-                    
-
 
 @endsection
