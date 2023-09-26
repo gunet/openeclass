@@ -93,15 +93,6 @@ $data['enddate_error'] = Session::getError('enddate', "<span class='help-block A
 load_js('select2');
 load_js('bootstrap-datetimepicker');
 
-
-
-$data['action_bar'] = action_bar([
-    [ 'title' => $langBack,
-      'url' => "index.php?course=$course_code",
-      'icon' => 'fa-reply',
-      'level' => 'primary' ]
-]);
-
 $data['antitle_error'] = ($antitle_error ? " has-error" : "");
 $data['contentToModify'] = rich_text_editor('newContent', 4, 20, $contentToModify);
 

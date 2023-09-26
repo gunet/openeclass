@@ -277,17 +277,15 @@ if ($is_editor) {
             'level' => 'primary-label',
             'button-class' => 'btn-success'
         ),
-        array('title' => $langQuestionCats,
-            'url' => "question_categories.php?course=$course_code",
-            'icon' => 'fa-cubes',
-            'level' => 'primary'
-            ),
         array('title' => $langQuestionPool,
             'url' => "question_pool.php?course=$course_code",
-            'icon' => 'fa-university',
-            'level' => 'primary'
-            )
-    ),false);
+            'icon' => 'fa-university'
+        ),
+        array('title' => $langQuestionCats,
+            'url' => "question_categories.php?course=$course_code",
+            'icon' => 'fa-cubes'
+        )
+    ), false);
 
 } else {
     $tool_content .= "";

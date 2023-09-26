@@ -636,11 +636,9 @@ if ($is_editor) {
         $as_id = intval($_GET['as_id']);
         $id = intval($_GET['id']);
         if(delete_user_assignment($as_id)){
-            //Session::Messages($langDeleted, 'alert-success');
             Session::flash('message',$langDeleted);
             Session::flash('alert-class', 'alert-success');
         } else {
-           // Session::Messages($langDelError, 'alert-danger');
             Session::flash('message',$langDelError);
             Session::flash('alert-class', 'alert-danger');
         }
@@ -669,19 +667,16 @@ if ($is_editor) {
             if ($choice == 'disable') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if (Database::get()->query("UPDATE assignment SET active = '0' WHERE id = ?d", $id)->affectedRows > 0) {
-                        //Session::Messages($langAssignmentDeactivated, 'alert-success');
                         Session::flash('message',$langAssignmentDeactivated);
                         Session::flash('alert-class', 'alert-success');
                     }
                 } else {
-                    //Session::Messages($langResourceBelongsToCert, 'alert-warning');
                     Session::flash('message',$langResourceBelongsToCert);
                     Session::flash('alert-class', 'alert-warning');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
                 if (Database::get()->query("UPDATE assignment SET active = '1' WHERE id = ?d", $id)->affectedRows > 0) {
-                   // Session::Messages($langAssignmentActivated, 'alert-success');
                     Session::flash('message',$langAssignmentActivated);
                     Session::flash('alert-class', 'alert-success');
                 }
@@ -705,11 +700,9 @@ if ($is_editor) {
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'do_delete_file') {
                 if(delete_teacher_assignment_file($id)){
-                    //Session::Messages($langDelF, 'alert-success');
                     Session::flash('message',$langDelF);
                     Session::flash('alert-class', 'alert-success');
                 } else {
-                   // Session::Messages($langDelF, 'alert-danger');
                     Session::flash('message',$langDelF);
                     Session::flash('alert-class', 'alert-danger');
                 }
@@ -717,12 +710,10 @@ if ($is_editor) {
             } elseif ($choice == 'do_purge') {
                 if (!resource_belongs_to_progress_data(MODULE_ID_ASSIGN, $id)) {
                     if (purge_assignment_subs($id)) {
-                        //Session::Messages($langAssignmentSubsDeleted, 'alert-success');
                         Session::flash('message',$langAssignmentSubsDeleted);
                         Session::flash('alert-class', 'alert-success');
                     }
                 } else {
-                   // Session::Messages($langResourceBelongsToCert, 'alert-warning');
                     Session::flash('message',$langResourceBelongsToCert);
                     Session::flash('alert-class', 'alert-warning');
                 }
@@ -2085,11 +2076,6 @@ function new_assignment() {
 
     </script>";
 
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'level' => 'primary',
-            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-            'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $title = q(Session::has('title') ? Session::get('title') : '');
     $desc = Session::has('desc') ? Session::get('desc') : '';
@@ -5755,11 +5741,10 @@ function show_assignments() {
                   'level' => 'primary-label'),
             array('title' => $langGradeScales,
                   'url' => "grading_scales.php?course=$course_code",
-                  'icon' => 'fa-sort-alpha-asc',
-                  'level' => 'primary-label'),
+                  'icon' => 'fa-sort-alpha-asc'),
             array('title' => $langGradeRubrics,
                   'url' => "rubrics.php?course=$course_code",
-                  'level' => 'primary-label'),
+                  'icon' => 'fa-brands fa-readme'),
             ),false);
     if (count($result) > 0) {
 

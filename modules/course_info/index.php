@@ -151,7 +151,6 @@ if (isset($_POST['submit'])) {
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
-            //Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
             Session::flash('message',$langCreateCourseNotAllowedNode);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -222,16 +221,14 @@ if (isset($_POST['submit'])) {
     $data['action_bar'] = action_bar([
         ['title' => $langBack,
             'url' => "{$urlServer}courses/$course_code/index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary'],
+            'icon' => 'fa-reply'
+            ],
         ['title' => $langCourseDescription,
             'url' => "../course_description/index.php?course=$course_code&" . generate_csrf_token_link_parameter(),
-            'icon' => 'fa-info-circle',
-            'level' => 'primary-label'],
+            'icon' => 'fa-info-circle'],
         ['title' => $langBackupCourse,
             'url' => "archive_course.php?course=$course_code&" . generate_csrf_token_link_parameter(),
-            'icon' => 'fa-archive',
-            'level' => 'primary-label'],
+            'icon' => 'fa-archive'],
         ['title' => $langCloneCourse,
             'url' => "clone_course.php?course=$course_code",
             'icon' => 'fa-archive',

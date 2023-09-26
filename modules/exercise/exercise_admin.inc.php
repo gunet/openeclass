@@ -309,13 +309,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             $('#assignee_box').find('option').remove();
         }
     </script>";
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $exerciseId ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary'
-        )
-    ));
 
    $tool_content .= "
    <div class='d-lg-flex gap-4 mt-4'>
@@ -694,9 +687,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         [ 'title' => $langCourseInfo,
           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes",
           'icon' => 'fa-edit',
-          'level' => 'primary-label',
           'button-class' => 'btn btn-success' ]
-        
     ]);
 
     $exerciseDescription = trim($exerciseDescription);

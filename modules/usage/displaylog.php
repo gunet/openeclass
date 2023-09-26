@@ -67,9 +67,9 @@ $head_content .= "<script type='text/javascript'>
                }
             });
             $('.dataTables_filter input').attr({
-                          class : 'form-control input-sm ms-0 mb-3',
-                          placeholder : '$langSearch...'
-                        });
+              class : 'form-control input-sm ms-0 mb-3',
+              placeholder : '$langSearch...'
+            });
         });
         </script>";
 
@@ -94,21 +94,9 @@ if (isset($_GET['from_other'])) {
     $toolName = $langSystemActions;
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../usage/index.php?t=a', 'name' => $langUsage);
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "../admin/index.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary')
-        ),false);
 } else {
     $toolName = $langUsersLog;
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary')
-    ),false);
 }
 $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
 $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
@@ -265,7 +253,7 @@ $tool_content .= "<div class='row input-append date form-group mt-4' data-date= 
 
 // if we haven't choose 'system actions'
 if (!isset($_GET['from_other'])) {
-    $tool_content .= 
+    $tool_content .=
       '<div class="row form-group mt-4">  
         <label class="col-12 control-label-notes">' . $langFirstLetterUser . '</label>
         <div class="col-12">' . $letterlinks . '</div>

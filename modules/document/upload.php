@@ -111,18 +111,9 @@ if ($can_upload) {
           
         </div>";
     }
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => $backUrl,
-            'icon' => 'fa-reply',
-            'level' => 'primary')));
-    
-      
 
     $tool_content .= "<div class='d-lg-flex gap-4 mt-4'><div class='flex-grow-1'>";
-    
-    
-            
+
     $tool_content .= "<div class='form-wrapper form-edit border-0 px-0'>
 
         <form class='form-horizontal' role='form' action='$upload_target_url' method='post' enctype='multipart/form-data'>
@@ -295,7 +286,7 @@ if ($can_upload) {
                             </div>
                         </div>
     ";
-    
+
 } else {
     $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotAllowed</span></div></div>";
 }

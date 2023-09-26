@@ -225,13 +225,6 @@ if (isset($_GET['an_id'])) {
         redirect_to_home_page('modules/announcements/index.php?course=' . $course_code);
     }
 
-    $data['action_bar'] = action_bar([
-            [ 'title' => $langBack,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
-              'icon' => 'fa-reply',
-              'level' => 'primary' ]
-        ], false);
-
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
 
     $data['title'] = standard_text_escape($row->title);

@@ -1338,14 +1338,13 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
               'icon' => 'fa-upload',
               'level' => 'primary-label',
               'button-class' => 'btn-success'),
+        array('title' => $langCreateDir,
+            'url' => "{$base_url}createDir=$curDirPath",
+            'icon' => 'fa-folder',
+            'level' => 'primary'),
         array('title' => $langCreateDoc,
               'url' => "new.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
-              'icon' => 'fa-file',
-              'level' => 'primary'),
-        array('title' => $langCreateDir,
-              'url' => "{$base_url}createDir=$curDirPath",
-              'icon' => 'fa-folder',
-              'level' => 'primary'),
+              'icon' => 'fa-file'),
         array('title' => $langExternalFile,
               'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
               'icon' => 'fa-link'),
@@ -1356,7 +1355,7 @@ if (($can_upload or $user_upload) and !$is_in_tinymce) {
         array('title' => $langQuotaBar,
               'url' => "{$base_url}showQuota=true",
               'icon' => 'fa-pie-chart')
-        
+
         ), false);
 } else {
     $data['actionBar'] = $data['dialogBox'] = '';

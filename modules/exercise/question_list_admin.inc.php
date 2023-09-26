@@ -430,8 +430,6 @@ $tool_content .= action_bar(array(
           'class' => 'randomWithCriteria',
           'url' => "#",
           'icon' => 'fa-random',
-          'level' => 'primary-label',
-          'button-class' => 'btn-secondary',
           'show' => !$randomQuestions),
     array('title' => $langWithoutCriteria,
           'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
@@ -465,9 +463,10 @@ if ($nbrQuestions) {
                             <label class='form-control-static label-container'>
                              <input id='checkboxRandomQuestions'type='checkbox' name='enableRandomQuestions' value='1' ".(($randomQuestions > 0)? 'checked' : '').">
                              <span class='checkmark'></span>
-                             $langChooseRandomQuestions</label>
-                             <p class='form-label mt-3'>$langsQuestions</p>
-                             <input id='inputRandomQuestions' class='form-control' type='text' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '').">
+                             $langChooseRandomQuestions
+                             <span class='col-1'><input id='inputRandomQuestions' class='form-control' type='text' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
+                             <span class='col-1'><strong>$langsQuestions</strong></span>                                                          
+                             </label>
                          </div>
                     </div>
                 </div>

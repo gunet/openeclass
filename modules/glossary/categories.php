@@ -57,11 +57,7 @@ if ($is_editor) {
             $pageName = $langCategoryMod;
         }
 
-        $data['action_bar'] = action_bar(array(
-                array('title' => $langBack,
-                      'url' => "$cat_url",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary')));
+        $data['action_bar'] = '';
     } else {
         $data['action_bar'] = action_bar(array(
                 array('title' => $langAddGlossaryTerm,
@@ -72,7 +68,6 @@ if ($is_editor) {
                 array('title' => $langCategoryAdd,
                       'url' => "$cat_url&amp;add=1",
                       'icon' => 'fa-plus-circle',
-                      'level' => 'primary-label',
                       'button-class' => 'btn-success'),
                 array('title' => $langConfig,
                       'url' => "$base_url&amp;config=1",
@@ -82,8 +77,8 @@ if ($is_editor) {
                       'icon' => 'fa-file-excel'),
                 array('title' => $langGlossaryTerms,
                       'url' => "index.php?course=$course_code",
-                      'icon' => 'fa-tasks',
-                      'level' => 'primary-label')
+                      'icon' => 'fa-tasks'
+                      )
             ));
     }
 

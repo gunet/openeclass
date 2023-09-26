@@ -3722,21 +3722,12 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                                 </ul>
                             </div>";
     }
-    $pageTitleActive = "";
-    // if(!empty($page_title) and $pageName != $langVideo){
-    //     $pageTitleActive = "<div class='col-12 mt-3'>
-    //                            <div class='panel panel-default rounded-0'>
-    //                               <div class='panel-body rounded-0 text-center'>
-    //                                     $page_title
-    //                               </div>
-    //                            </div>
 
-    //                         </div>";
-    // }
-    if ($out && $i!=0) {
-        if(isset($course_code) and $course_code){
+    $pageTitleActive = "";
+    if ($action_button && $i!=0) {
+        if(isset($course_code) and $course_code) {
             $titleHeader = (!empty($tmp_pageName) ? $tmp_pageName : '');
-            if(!empty($titleHeader)){
+            if(!empty($titleHeader)) {
                 return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start my-3'>
                             <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
@@ -3749,7 +3740,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                             </div>
                             $pageTitleActive
                         </div>";
-            }else{
+            } else {
                 return "<div class='col-12 mb-4'>
                             <div class='col-12 action_bar d-flex justify-content-start'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
@@ -3762,7 +3753,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                             $pageTitleActive
                         </div>";
             }
-        }else{
+        } else {
             $marginBottom = 'mb-4';
             if(isset($_SESSION['uid'])){
                 $marginBottom = 'my-4';
@@ -3781,9 +3772,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>
                         $pageTitleActive
                     </div>";
-
         }
-
     } else {
         return '';
     }

@@ -32,24 +32,17 @@ $head_content .=
 
 
 $tool_content .= action_bar(array(
-    array('title' => $langBack,
-            'url' => "{$urlServer}courses/{$course_code}",
-            'icon' => 'fa-reply',
-            'level' => 'primary'),
     array('title' => $langUsersLog,
         'url' => "displaylog.php?course=$course_code",
         'icon' => 'fa-user',
-        'level' => 'primary-label',
         'show' => $is_course_admin),
     array('title' => $langPlatformGenStats,
         'url' => "index.php?course=$course_code&gc_stats=true",
-        'icon' => 'fa-bar-chart',
-        'level' => 'primary-label'),
+        'icon' => 'fa-bar-chart'),
     array('title' => $langStatsReports,
         'url' => "userduration.php?course=$course_code",
-        'icon' => 'fa-address-card',
-        'level' => 'primary-label')
-),false);
+        'icon' => 'fa-address-card')
+    ), false);
 
 /**** Summary info    ****/
 $hits = course_hits($course_id);

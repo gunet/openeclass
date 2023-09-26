@@ -301,7 +301,6 @@ function display_exercise($exercise_id) {
         ['title' => $langExerciseExecute,
             'url' => "exercise_submit.php?course=$course_code&exerciseId=$exercise_id",
             'icon' => 'fa-play-circle',
-            'level' => 'primary-label',
             'button-class' => 'btn-danger',
             'show' => (!empty($question_list))
         ],
@@ -311,11 +310,6 @@ function display_exercise($exercise_id) {
             'level' => 'primary-label',
             'button-class' => 'btn-success',
             'show' => $is_editor
-        ],
-        ['title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label'
         ]
     ]);
 
@@ -523,6 +517,6 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-12 mt-5 text-center fs-3 TextBold normalColorBlueText'>$langTotalScore: $totalWeighting</div>";
+        $tool_content .= "<div class='col-12 mt-5 text-center fs-5 TextBold normalColorBlueText'>$langTotalScore: $totalWeighting</div>";
     }
 }

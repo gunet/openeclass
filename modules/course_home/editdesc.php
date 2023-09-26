@@ -66,7 +66,7 @@ if (isset($_GET['delete_image'])) {
             }
         }
         $extra_sql = ", course_image = ?s";
-        array_push($db_vars, $file_name);
+        $db_vars[] = $file_name;
     }
     array_push($db_vars, $course_id);
     Database::get()->query("UPDATE course SET description = ?s, home_layout = ?d$extra_sql WHERE id = ?d", $db_vars);
@@ -104,15 +104,7 @@ if (isset($course->course_image)) {
     $course_image = fileSizeHidenInput() . "<input type='file' name='course_image' id='course_image'>";
 }
 
-
-$tool_content = action_bar(array(
-        array(
-            'title' => $langBack,
-            'url' => $urlAppend."courses/".$course_code,
-            'icon' => 'fa-reply',
-            'level' => 'primary',
-        )
-    ),false)."
+$tool_content = "
     <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
             <div class='form-wrapper form-edit rounded'>
@@ -138,16 +130,8 @@ $tool_content = action_bar(array(
                     </div>
                     <div class='row form-group mt-5'>
                         <div class='col-12 d-flex justify-content-end align-items-center'>
-                           
-                              
                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                            
-                              
                                 <a href='{$urlAppend}courses/$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                             
-                           
-                            
-                            
                         </div>
                     </div>
                   </fieldset>

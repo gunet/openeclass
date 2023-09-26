@@ -276,7 +276,7 @@ if ($is_editor) {
                 //         </div>
                 //     </div>
 
-                    
+
 
                 //     <div class='row input-append date form-group mt-4' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 //         <label for='startdate' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDate</label>
@@ -288,7 +288,7 @@ if ($is_editor) {
                 //         </div>
                 //     </div>
 
-                
+
 
                 //     <div class='row input-append bootstrap-timepicker form-group mt-4'>
                 //         <label for='durationcal' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDuration <small>$langInHour</small></label>
@@ -302,7 +302,7 @@ if ($is_editor) {
                 // /**** Recursion paramneters *****/
                 //     $tool_content .= "<div class='row form-group mt-4'>
                 //                             <label for='Repeat' class='col-md-3 col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
-                                            
+
                 //                             <div class='col-md-9 col-12'>
                 //                             <div class='row'>
                 //                         <div class='col-md-6 col-12'>
@@ -344,15 +344,15 @@ if ($is_editor) {
                 // $tool_content .= "<div class='row form-group mt-4'>
                 //                 <label for='Detail' class='col-md-3 col-12 control-label-notes text-capitalize'>$langDetail</label>
                 //                 <div class='col-md-9 col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
-                //             </div>    
-                            
-                            
+                //             </div>
+
+
 
                 //             <div class='row form-group mt-5'>
                 //                 <div class='col-md-3 col-12'></div>
                 //                 <div class='col-md-9 col-12 d-flex justify-content-center align-items-center'>
-                                    
-                                    
+
+
                 //                         ".
                 //                         form_buttons(array(
                 //                             array(
@@ -368,11 +368,11 @@ if ($is_editor) {
                 //                             )
                 //                         ))
                 //                         ."
-                                    
-                                    
-                                
+
+
+
                 //                 </div>
-                //             </div>                
+                //             </div>
                 //     </form></div></div>";
 
 
@@ -1016,21 +1016,16 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'button-class' => 'btn-success',
                   'show' => $is_editor),
             array('title' => $langListCalendar,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-list',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-secondary',
-                      'show' => (($view == EVENT_LIST_VIEW) and (!isset($id)))),
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-list',
+                  'show' => (($view == EVENT_LIST_VIEW) and (!isset($id)))),
             array('title' => $langListAll,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;v=1",
-                      'icon' => 'fa-list',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-secondary',
-                      'show' => ($view == EVENT_CALENDAR_VIEW or isset($id))),
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;v=1",
+                  'icon' => 'fa-list',
+                  'show' => ($view == EVENT_CALENDAR_VIEW or isset($id))),
             array('title' => $langiCalExport,
                   'url' => "icalendar.php?c=$course_id",
-                  'icon' => 'fa-calendar',
-                  'level' => 'primary')
+                  'icon' => 'fa-calendar')
         ));
     if (isset($_GET['id'])) {
        $cal_content_list = event_list_view($id);

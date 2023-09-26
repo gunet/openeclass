@@ -71,14 +71,14 @@
     <div class='{{ $container }} py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
 
                 <div class="col_maincontent_active">
-                   
+
                     <div class="row">
 
                                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -92,18 +92,14 @@
                                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                                     </div>
                                 </div>
-                                
+
                                 @include('layouts.partials.legend_view')
 
-                                @if($is_editor)
-                                    {!! isset($action_bar) ?  $action_bar : '' !!}
-                                @endif
-                        
                                 <div class='d-lg-flex gap-4'>
                                 <div class='flex-grow-1'>
-                                    <div class='form-wrapper form-edit rounded'>    
+                                    <div class='form-wrapper form-edit rounded'>
                                             <form class="form-horizontal" role="form" method="post" action="{{$urlAppend}}modules/announcements/submit.php?course={{$course_code}}">
-                                                    
+
                                                     <div class="row mt-4 form-group {{ $antitle_error }}">
                                                         <label for="AnnTitle" class="col-12 control-label-notes">{{ trans('langAnnTitle') }}</label>
                                                         <div class="col-12 ">
@@ -112,18 +108,18 @@
                                                         </div>
                                                     </div>
 
-                                        
+
 
                                                     <div class='row mt-4 form-groum'>
                                                         <label for='AnnBody' class='col-12 control-label-notes'>{{ trans('langAnnBody') }}</label>
                                                         <div class='col-12'>{!! $contentToModify !!}</div>
                                                     </div>
 
-                                                  
 
-                                                    
-                                                       
-                                                           
+
+
+
+
                                                     <div class='row mt-4 form-group'>
                                                         <label for='Email' class='col-12 control-label-notes'>{{ trans('langEmailOption') }}</label>
                                                         <div class='col-12'>
@@ -136,19 +132,19 @@
                                                             <a href='#' id='selectAll'>{{ trans('langJQCheckAll') }}</a> | <a href='#' id='removeAll'>{{ trans('langJQUncheckAll') }}</a>
                                                         </div>
                                                     </div>
-                                                
-                                                
-                                                    
+
+
+
                                                     {!! $tags !!}
-                                                       
-                                                    
-                                                    
-                                                   
-                                                       
+
+
+
+
+
                                                     <div class='row mt-4 form-group {{ $startdate_error }}'>
                                                         <label for='startdate' class='col-12 control-label-notes'>{{ trans('langStartDate') }}</label>
                                                         <div class='col-12'>
-                                                            <div class='input-group'> 
+                                                            <div class='input-group'>
                                                                 <span class='input-group-addon'>
                                                                     <label class='label-container'>
                                                                         <input class='mt-0' id='start_date_active' type='checkbox' name='startdate_active' {{ $start_checkbox }}>
@@ -161,8 +157,8 @@
                                                             <span class='help-block'>{{ $startdate_error }}</span>
                                                         </div>
                                                     </div>
-                                                
-                                                
+
+
                                                     <div class='row mt-4 form-group {{ $enddate_error }}'>
                                                         <label for='enddate' class='col-12 control-label-notes'>{{ trans('langEndDate') }}</label>
                                                         <div class='col-12'>
@@ -179,10 +175,10 @@
                                                             <span class='help-block'>{{ $enddate_error }}</span>
                                                         </div>
                                                     </div>
-                                                       
-                                                  
 
-                                                  
+
+
+
 
                                                     <div class='row mt-4 form-group'>
                                                         <div class='col-12'>
@@ -195,7 +191,7 @@
                                                         </div>
                                                     </div>
 
-                                          
+
 
                                                     <div class='row mt-4 form-group'>
                                                         <input type='hidden' name='id' value='{{ $announce_id }}'>
@@ -208,8 +204,8 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                
+
+
                                             </form>
                                         </div>
                                     </div>
@@ -218,16 +214,16 @@
                                         <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
                                     </div>
                                 </div>
-                        
-                    </div> 
-                    
+
+                    </div>
+
                 </div>
             </div>
-       
+
     </div>
     </div>
 
 @endsection
 
 
-    
+
