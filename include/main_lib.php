@@ -3582,7 +3582,8 @@ function form_buttons($btnArray) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
-    global $langConfirmDelete, $langCancel, $langDelete, $pageName, $langVideo, $course_code, $toolName, $pageName, $tmp_pageName;
+    global $langConfirmDelete, $langCancel, $langDelete,
+           $course_code, $toolName, $pageName, $tmp_pageName;
 
     $out_primary = $out_secondary = array();
     $i=0;
@@ -3683,18 +3684,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>';
         }
         $iconTag = '';
-        if ($level == 'primary-label') {
-            if (isset($option['icon'])) {
-                $iconTag = "<span class='fa $option[icon] space-after-icon settings-icons'></span>";
-                $link_attrs .= " title='$title'";
-                $title = "<span class='hidden-xs TextBold ps-1'>$title</span>";
-            }
-            array_unshift($out_primary,
-                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
-                ' ' . $dataAttrs .
-                " $link_attrs>" . $iconTag . $title . $caret .
-                "</$primaryTag>$subMenu$form_end");
-        } elseif ($level == 'primary') {
+        if ($level == 'primary' or $level == 'primary-label') {
             if (isset($option['icon'])) {
                 $iconTag = "<span class='fa $option[icon] settings-icons'></span>";
             }
@@ -3703,12 +3693,12 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 ' ' . $dataAttrs .
                 " title='$title'$link_attrs>" . $iconTag . $caret .
                 "</$primaryTag>$subMenu$form_end");
-        } else {
-            array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
-                " $link_attrs>" .
-                "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
         }
+        array_unshift($out_secondary,
+            "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+            " $link_attrs>" .
+            "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
+
         $i++;
     }
     $out = '';
@@ -3791,9 +3781,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         </div>
                         $pageTitleActive
                     </div>";
-            
+
         }
-        
+
     } else {
         return '';
     }
@@ -3947,7 +3937,7 @@ function setOpenCoursesExtraHTML() {
         $langOpenCoursesShort, $langListOpenCoursesShort,$langCourses,$langCourse,$langNationalOpenCourses,
         $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
-    
+
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
             
@@ -3988,7 +3978,7 @@ function setOpenCoursesExtraHTML() {
             
             
             ";
-    
+
 }
 
 /**
