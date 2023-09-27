@@ -30,8 +30,17 @@
                     <div class='col-12 mb-3'>
                         <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                             <div class='col-xxl-6 col-lg-5 col-12 @if($PositionFormLogin) ms-auto me-auto @endif'>
-                                <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
-                                <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
+                                @if(get_config('homepage_title'))
+                                    <h1 class='eclass-title'>{!! get_config('homepage_title') !!}</h1>
+                                @else
+                                    <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
+                                @endif
+
+                                @if(get_config('homepage_intro'))
+                                    <p class='eclassInfo'>{!! get_config('homepage_intro') !!}</p>
+                                @else
+                                    <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
+                                @endif
                                 @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                                     <div class='card cardLogin border-0 px-xxl-5 pt-xxl-5 pb-xxl-3 p-lg-3 mt-3'>
                                         <div class='card-header bg-transparent border-0 text-center'>
@@ -79,7 +88,7 @@
             </div>
         </div>
 
-
+        {{--
         @if(get_config('homepage_title') or get_config('homepage_intro'))
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
@@ -114,13 +123,14 @@
                 </div>
             </div>
         @endif
+        --}}
 
 
 
         <div class='{{ $container }}'>
             <div class='row m-auto'>
                 <div class='col-12'>
-                    <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-5'>
+                    <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                         <div class='col-lg-6 col-12'>
                             <div class='card bg-transparent border-0'>
                                 <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
@@ -219,6 +229,34 @@
         </div>
 
 
+        @if($texts)
+            <div class='{{ $container }}'>
+                <div class='row m-auto'>
+                    <div class='col-12'>
+                        <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-lg-5 g-4">
+                            @foreach($texts as $text)
+                                <div class='col'>
+                                    <div class='card bg-transparent border-0'>
+                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                                            <div class='d-flex justify-content-start align-items-center'>
+                                                <h3 class='pe-2'>
+                                                    {!! $text->title !!}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class='card-body px-0 py-0'>
+                                            <div class='TextRegular msmall-text Neutral-800-cl mt-3'>{!! $text->body !!}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+
         @if(!get_config('dont_display_testimonials') or $eclass_banner_value == 1 or get_config('opencourses_enable'))
             <div class='{{ $container }}'>
                 <div class='row m-auto'>
@@ -231,38 +269,37 @@
                                             <h3>{{ trans('langSaidForUs') }}</h3>
                                         </div>
                                         <div class='card-body px-0'>
-                                            <div id="carouselHomepage" class="carousel slide" data-bs-ride="carousel">
-                                                <div class="carousel-inner">
-                                                    <?php for($i=0; $i<3; $i++){ ?>
-                                                        <div class="carousel-item @if($i==0) active @endif">
-                                                            <div class='col-12 d-md-flex gap-3 px-5'>
-                                                                <div class='card cardTestimonial bg-transparent border-0 d-flex align-items-strech'>
-                                                                    <div class='card-body Primary-200-bg'>
-                                                                        <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet.</p>
+                                            @if(count($testimonials) > 0)
+                                                <div id="carouselHomepage" class="carousel slide" data-bs-ride="carousel">
+                                                    <div class="carousel-inner">
+                                                        @php $i=0; @endphp
+                                                        @foreach($testimonials as $t)
+                                                            <div class="carousel-item @if($i==0) active @endif">
+                                                                <div class='col-12 d-md-flex gap-3 px-5'>
+                                                                    <div class='card cardTestimonial bg-transparent border-0 d-flex align-items-strech'>
+                                                                        <div class='card-body Primary-200-bg'>
+                                                                            <p class="Neutral-800-cl">{!! $t->body !!}</p>
+                                                                        </div>
+                                                                        <div class='card-footer text-end border-0 Primary-200-bg'>
+                                                                            <div class="form-label">{{ $t->title }}</div>
+                                                                        </div>
                                                                     </div>
-                                                                    <div class='card-footer text-end border-0 Primary-200-bg'>
-                                                                        <div class="form-label">John Smith</div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class='card cardTestimonial bg-transparent border-0 d-flex align-items-strech '>
-                                                                    <div class='card-body Primary-200-bg'>
-                                                                        <p class="Neutral-800-cl">Lorem Ipsum är en utfyllnadstext från tryck- och förlagsindustrin. Lorem ipsum har varit standard ända sedan 1500-talet..</p>
-                                                                    </div>
-                                                                    <div class='card-footer text-end border-0 Primary-200-bg'>
-                                                                        <div class="form-label">John Smith</div>
-                                                                    </div>
+                                                                   
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    <?php } ?>
+                                                            @php $i++; @endphp
+                                                        @endforeach
+                                                    </div>
+                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselHomepage" data-bs-slide="prev">
+                                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button class="carousel-control-next" type="button" data-bs-target="#carouselHomepage" data-bs-slide="next">
+                                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                    </button>
                                                 </div>
-                                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselHomepage" data-bs-slide="prev">
-                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                </button>
-                                                <button class="carousel-control-next" type="button" data-bs-target="#carouselHomepage" data-bs-slide="next">
-                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                </button>
-                                            </div>
+                                            @else
+
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -348,32 +385,7 @@
 
 
 
-        @if($texts)
-            <div class='{{ $container }}'>
-                <div class='row m-auto'>
-                    <div class='col-12'>
-                        <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-lg-5 g-4">
-                            @foreach($texts as $text)
-                                <div class='col'>
-                                    <div class='card bg-transparent border-0'>
-                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
-                                            <div class='d-flex justify-content-start align-items-center'>
-                                                <h3 class='pe-2'>
-                                                    {!! $text->title !!}
-                                                </h3>
-                                            </div>
-                                        </div>
-                                        <div class='card-body px-0 py-0'>
-                                            <div class='TextRegular msmall-text Neutral-800-cl mt-3'>{!! $text->body !!}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
+        
 
 </div>
         

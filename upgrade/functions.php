@@ -2706,6 +2706,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE course_user ADD `course_reviewer` TINYINT NOT NULL DEFAULT '0' AFTER editor");
     }
 
+    if (!DBHelper::fieldExists('homepageTexts','type')) {
+        Database::get()->query("ALTER table homepageTexts ADD `type` INT(11) NOT NULL DEFAULT 1");
+    }
+
 }
 
 

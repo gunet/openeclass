@@ -186,6 +186,17 @@
                                         <div class='col-sm-12'>{!! $lang_select_options !!}</div>
                                     </div>
 
+
+                                    <div class='form-group mt-4'>
+                                        <label for='type' class='col-sm-12 control-label-notes'>{{ trans('langType') }}</label>
+                                        <div class='col-sm-12'>
+                                            <select class='form-select' id='type' name='type'>
+                                                <option value="1" {{ $modify && $textModify->type == 1 ? 'selected' : '' }}>{{ trans('langText') }}</option>
+                                                <option value="2" {{ $modify && $textModify->type == 2 ? 'selected' : '' }}>Testimonial</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
                                    
                                     <div class='form-group mt-5'>
                                         <div class='col-12 d-flex justify-content-end align-items-center'>
@@ -195,6 +206,9 @@
 
                                         </div>
                                     </div>
+
+                                    
+
                                 </form>
                                
                             </div>
@@ -212,7 +226,10 @@
                                                 <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
                                                     
                                                         
-                                                        <h3>{!! $text->title !!}</h3>
+                                                        <h3>
+                                                            {!! $text->title !!}
+                                                            @if($text->type == 2) <span class='badge Primary-200-bg form-value'>Testimonial</span> @endif
+                                                        </h3>
                                                         
                                                         <div>
                                                             <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}'>

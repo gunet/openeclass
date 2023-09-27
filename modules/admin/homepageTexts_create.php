@@ -44,10 +44,11 @@ if(isset($_POST['submitText'])){
     $title = $_POST['textTitle'];
     $content = $_POST['content'];
     $languageText = $_POST['localize'];
+    $type = $_POST['type'];
 
     $top = Database::get()->querySingle("SELECT MAX(`order`) as max FROM `homepageTexts`")->max;
 
-    Database::get()->query("INSERT INTO homepageTexts (lang,title, body, `order`) VALUES (?s,?s, ?s, ?d)",$languageText, $title, $content, $top + 1);
+    Database::get()->query("INSERT INTO homepageTexts (lang,title, body, `order`, `type`) VALUES (?s,?s, ?s, ?d, ?d)",$languageText, $title, $content, $top + 1, $type);
 
     Session::flash('message',"$langAddSuccess");
     Session::flash('alert-class', 'alert-success');
@@ -61,8 +62,9 @@ if(isset($_POST['modifyText'])){
     $content = $_POST['content'];
     $record = $_POST['id'];
     $languageText = $_POST['localize'];
+    $type = $_POST['type'];
 
-    Database::get()->query("UPDATE homepageTexts SET `lang`=?s, `title`=?s, `body`=?s WHERE `id`=?d",$languageText, $title, $content, $record);
+    Database::get()->query("UPDATE homepageTexts SET `lang`=?s, `title`=?s, `body`=?s , `type`=?d WHERE `id`=?d",$languageText, $title, $content, $type, $record);
 
     Session::flash('message',"$langRegDone");
     Session::flash('alert-class', 'alert-success');

@@ -1719,14 +1719,14 @@ input[type="submit"].warningAdminBtn:hover {
   width:14px;
 }
 
-.action_bar .ButtonsContent .btn{
+/* .action_bar .ButtonsContent .btn{
   margin-right: 5px;
   margin-bottom: 5px;
 }
 
 .action_bar .ButtonsContent .btn:last-child{
   margin-right:0px;
-}
+} */
 
 .submitAdminBtn .fa-solid::before, .submitAdminBtn .fa-regular::before,
 .submitAdminBtnDefault .fa-solid::before, .submitAdminBtnDefault .fa-regular::before,
@@ -2814,7 +2814,7 @@ body .form-action-button-popover{
 }
 
 .item-content .not_visible, .not_visible td, .InvisibleCourse, .InvisibleAuth , .not_visible_unit{ 
-  opacity:0.3; 
+  opacity:0.5; 
 }
 
 .not_visible td:last-child{ 

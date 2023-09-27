@@ -863,6 +863,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `homepageTexts` (
     `title` text NULL,
     `body` text NULL,
     `order` int(11) NOT NULL,
+    `type` INT(11) NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`)) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `eportfolio_fields` (

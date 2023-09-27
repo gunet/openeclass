@@ -3732,7 +3732,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                             <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>
                             <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
-                                    <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>
+                                    <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
                                         $out
                                         $action_button
                                     </div>
@@ -3744,7 +3744,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 return "<div class='col-12 mb-4'>
                             <div class='col-12 action_bar d-flex justify-content-start'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
-                                    <div class='ButtonsContent d-flex justify-content-lg-end justify-content-end align-items-center flex-wrap'>
+                                    <div class='ButtonsContent d-flex justify-content-lg-end justify-content-end align-items-center flex-wrap gap-2'>
                                         $out
                                         $action_button
                                     </div>
@@ -3764,7 +3764,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                         <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>
                         <div class='col-lg-7 col-md-6 col-12 action_bar d-flex justify-content-md-end justify-content-start align-items-start px-0 mt-md-0 mt-4'>
                             <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
-                                <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap'>
+                                <div class='ButtonsContent d-flex justify-content-end align-items-center flex-wrap gap-2'>
                                     $out
                                     $action_button
                                 </div>
@@ -3861,7 +3861,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
     if($fc){
         $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-wrench";
     }else{
-        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-ellipsis-vertical";
+        $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
     }
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "submitAdminBtn";
     if (count($out_secondary)) {

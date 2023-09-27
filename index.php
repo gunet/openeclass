@@ -238,7 +238,8 @@ if (!$upgrade_begin and $uid) {
                                                     AND (NOW() <= `end` or `end` IS null)
                                             ORDER BY `order` DESC", $language);
 
-    $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s ORDER BY `order` ASC",$language);
+    $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,1);
+    $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,2);
     
 
     $data['dateFormatLong'] = $dateFormatLong;
