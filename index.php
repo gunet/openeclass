@@ -303,7 +303,7 @@ if (!$upgrade_begin and $uid) {
     }
     if (get_config('maintenance') == 1 ) {
         if ( !$is_admin ) {
-            redirect_to_home_page('main/maintenance.php');
+            redirect_to_home_page('maintenance/maintenance.php');
         }
     }
 
