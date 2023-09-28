@@ -222,7 +222,7 @@ if (isset($_POST['submit'])) {
         ['title' => $langBack,
             'url' => "{$urlServer}courses/$course_code/index.php",
             'icon' => 'fa-reply'
-            ],
+        ],
         ['title' => $langCourseDescription,
             'url' => "../course_description/index.php?course=$course_code&" . generate_csrf_token_link_parameter(),
             'icon' => 'fa-info-circle'],
@@ -250,9 +250,8 @@ if (isset($_POST['submit'])) {
         ['title' => $langDelCourse,
             'url' => "delete_course.php?course=$course_code",
             'icon' => 'fa-xmark',
-            'button-class' => 'btn-danger']
+            'text-class' => 'text-danger']
     ]);
-
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
                 	       course_license, password, id, view_type, flipped_flag

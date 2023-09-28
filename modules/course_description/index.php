@@ -44,9 +44,7 @@ if ($is_editor) {
     $data['action_bar'] = action_bar(array(
                 array('title' => $langEditCourseProgram,
                     'url' => "edit.php?course=$course_code",
-                    'icon' => 'fa-plus-circle',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+                    'icon' => 'fa-plus-circle')));
 
     processActions();
 

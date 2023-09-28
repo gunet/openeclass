@@ -56,17 +56,12 @@ $tree = new Hierarchy();
 $course = new Course();
 $pageName = ''; // delete $pageName set in doc_init.php
 
-$main_content = $cunits_content = $course_info_extra = $email_notify_icon = $data['countUnits'] = "";
+$main_content = $cunits_content = $course_info_extra = $data['countUnits'] = "";
 
 add_units_navigation(TRUE);
 
 load_js('tools.js');
 
-// $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, finish_date,
-//                                                view_type, start_date, finish_date, description, home_layout, course_image, password
-//                                           FROM course WHERE id = ?d", $course_id);
-
-// INCOMING CHANGE AFTER install_db
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
                                                view_type, start_date, end_date, description, home_layout, course_image, flipped_flag, password
                                           FROM course WHERE id = ?d", $course_id);
@@ -94,7 +89,6 @@ if ($is_editor) {
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            //Session::Messages($langCourseUnitDeleted, 'alert-success');
             Session::flash('message',$langCourseUnitDeleted);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("courses/$course_code/");
@@ -122,7 +116,6 @@ if ($is_editor) {
         redirect_to_home_page("courses/$course_code/");
     } elseif (isset($_REQUEST['up'])) { // change order up
         $id = intval(getDirectReference($_REQUEST['up']));
-        //$id = intval($_REQUEST['up']);
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
         }
@@ -139,11 +132,9 @@ if (isset($_REQUEST['register'])) {
             if (empty($course_info->password) || $course_info->password == $_POST['password']) {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
                                     VALUES (?d, ?d, ?d, NOW())", $course_id, $uid, USER_STUDENT);
-                //Session::Messages($langNotifyRegUser1, 'alert-success');
                 Session::flash('message',$langNotifyRegUser1);
                 Session::flash('alert-class', 'alert-success');
             } else {
-                //Session::Messages($langInvalidCode, 'alert-warning');
                 Session::flash('message',$langInvalidCode);
                 Session::flash('alert-class', 'alert-warning');
             }
@@ -166,42 +157,6 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('sortable/Sortable.min.js');
 
 ModalBoxHelper::loadModalBox();
-$head_content .= "
-<script type='text/javascript'>
-    $(document).ready(function() {
-        $('#btn-syllabus').click(function () {
-            $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
-    });";
-
-// Calendar stuff
-$head_content .= 'var calendar = $("#bootstrapcalendar").calendar({
-    tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
-    events_source: "'.$urlAppend.'main/calendar_data.php?course='.$course_code.'",
-    language: "'.$langLanguageCode.'",
-    views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
-    onAfterViewLoad: function(view) {
-                $("#current-month").text(this.getTitle());
-                $(".btn-group button").removeClass("active");
-                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
-                }
-});
-
-$(".btn-group button[data-calendar-nav]").each(function() {
-    var $this = $(this);
-    $this.click(function() {
-        calendar.navigate($this.data("calendar-nav"));
-    });
-});
-
-$(".btn-group button[data-calendar-view]").each(function() {
-    var $this = $(this);
-    $this.click(function() {
-        calendar.view($this.data("calendar-view"));
-    });
-});
-'
-."})
-</script>";
 
 $registerUrl = js_escape($urlAppend . 'modules/course_home/register.php?course=' . $course_code);
 
@@ -225,16 +180,8 @@ if (isset($uid) and isset($_SESSION['status']) and $_SESSION['status'] != USER_G
                 ));
             }
         }
-
-        if (get_user_email_notification($uid, $course_id)) {
-            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'><i class='fa fa-envelope settings-icons'></i>" . q($langUserEmailNotification) . "</a>";
-        } else {
-            $email_notify_icon = "<a id='email_notification' href='{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0' class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'><i class='fa fa-envelope-open settings-icons'></i>" . q($langNoUserEmailNotification) . "</a>";
-        }
     }
 }
-$data['email_notify_icon'] = $email_notify_icon;
-
 
 // For statistics: record login
 Database::get()->query("INSERT INTO logins
@@ -328,7 +275,7 @@ if ($course_info->description) {
 }
 
 // offline course setting
-$data['offline_course'] = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
+$data['offline_course'] = $offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
@@ -358,41 +305,81 @@ if ($is_editor) {
 
 $data['departments'] = $course->getDepartmentIds($course_id);
 if ($is_course_admin) {
-    $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
+    $data['numUsers'] = $numUsers = Database::get()->querySingle("SELECT COUNT(user_id) AS numUsers
                 FROM course_user
                 WHERE course_id = ?d", $course_id)->numUsers;
 
 } else if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1) {
-    $data['numUsers'] = Database::get()->querySingle("SELECT COUNT(*) AS numUsers FROM course_user, user
+    $data['numUsers'] = $numUsers = Database::get()->querySingle("SELECT COUNT(*) AS numUsers FROM course_user, user
                 WHERE `user`.`id` = `course_user`.`user_id`
                 AND user.expires_at > " . DBHelper::timeAfter() . "
                 AND `course_user`.`course_id` = ?d", $course_id)->numUsers;
 }
 
-//set the lang var for lessons visibility status
-switch ($visible) {
-    case COURSE_CLOSED: {
-        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langClosedCourseShort'></span><span class='hidden'>.</span>";
-        break;
-    }
-    case COURSE_REGISTRATION: {
-        $data['lessonStatus'] = "   <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPrivOpen'>
-                                <span class='fa fa-pencil text-danger fa-custom-lock'></span>
-                            </span><span class='hidden'>.</span>";
-        break;
-    }
-    case COURSE_OPEN: {
-        $data['lessonStatus'] = "    <span class='fa fa-unlock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPublic'></span><span class='hidden'>.</span>";
-        break;
-    }
-    case COURSE_INACTIVE: {
-        $data['lessonStatus'] = "    <span class='fa fa-lock fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langCourseInactiveShort'>
-                                <span class='fa-solid fa-xmark text-danger fa-custom-lock'></span>
-                             </span><span class='hidden'>.</span>";
-        break;
-    }
-}
+$data['lessonStatus'] = course_access_icon($visible);
 
+$data['action_bar'] = action_bar([
+    [
+        'title' => "$numUsers $langRegistered",
+        'url' => "{$urlAppend}modules/user/index.php?course=$course_code",
+        'icon' => 'fa-users',
+        'level' => 'primary',
+        'show' => ($uid && $is_course_admin)
+    ],
+    [
+        'title' => "$numUsers $langRegistered",
+        'url' => "{$urlAppend}modules/user/userslist.php?course=$course_code",
+        'icon' => 'fa-users',
+        'show' => ($uid && !$is_course_admin && (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1))
+    ],
+    [
+        'title' => $langUserEmailNotification,
+        'url' => "{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1",
+        'icon' => 'fa-envelope',
+        'text-class' => 'text-success',
+        'level' => 'primary',
+        'show' => ($uid && get_user_email_notification($uid, $course_id)),
+        'link-attrs' => "id='email_notification'"
+    ],
+    [
+        'title' => $langNoUserEmailNotification,
+        'url' => "{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0",
+        'icon' => 'fa-triangle-exclamation',
+        'text-class' => 'text-danger',
+        'level' => 'primary',
+        'show' => ($uid && !(get_user_email_notification($uid, $course_id))),
+        'link-attrs' => "id='email_notification'"
+    ],
+    [   'title' => $langEditMeta,
+        'url' => "{$urlAppend}modules/course_home/editdesc.php?course=$course_code",
+        'icon' => 'fa-pen-to-square',
+        'show' => $is_editor
+    ],
+    [
+        'title' => $langUsage,
+        'url' => "{$urlAppend}modules/usage/index.php?course=$course_code",
+        'icon' => 'fa-chart-line',
+        'show' => ($uid && $is_course_reviewer)
+    ],
+    [
+        'title' => $langCourseParticipation,
+        'url' => "{$urlAppend}modules/usage/userduration.php?course=$course_code&u=$uid",
+        'icon' => 'fa-chart-line',
+        'show' => ($uid && !$is_course_reviewer)
+    ],
+    [
+        'title' => $langDownloadCourse,
+        'url' => "{$urlAppend}modules/offline/index.php?course=$course_code",
+        'icon' => 'fa-download',
+        'show' => $offline_course
+    ],
+    [
+        'title' => $langCitation,
+        'url' => "javascript:void(0);",
+        'link-attrs' => "data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'",
+        'icon' => 'fa-link'
+    ]
+]);
 
 
 if ($uid) {
@@ -418,49 +405,11 @@ if ($uid) {
 }
 
 
-
 // display opencourses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 $data['level'] = $level;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
-    $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}modules/course_metadata/course_metadata.css'>
-<style type='text/css'></style>
-<script type='text/javascript'>
-/* <![CDATA[ */
-
-    var dialog;
-
-    var showMetadata = function(course) {
-        $('.modal-body', dialog).load('../../modules/course_metadata/anoninfo.php', {course: course}, function(response, status, xhr) {
-            if (status === 'error') {
-                $('.modal-body', dialog).html('Sorry but there was an error, please try again');
-            }
-        });
-        dialog.modal('show');
-    };
-
-    $(document).ready(function() {
-        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'>
-                        <div class='modal-dialog modal-lg'>
-                            <div class='modal-content'>
-                                <div class='modal-header'>
-                                    <div class='modal-title' id='modal-label'>{$langCourseMetadata}</div>
-                                    <button type='button' class='close' data-bs-dismiss='modal'>
-                                        <span class='fa-solid fa-xmark' aria-hidden='true'></span>
-                                        <span class='sr-only'>{$langCancel}</span>
-                                    </button>
-                                    
-                                </div>
-                                <div class='modal-body'>body</div>
-                            </div>
-                        </div>
-                    </div>\");
-    });
-
-/* ]]> */
-</script>";
     $data['opencourses_level'] = "
         <div class='row'>
             <div class='col-12 d-flex justify-content-center'>
@@ -482,8 +431,6 @@ if (isset($level) && !empty($level)) {
             </div>
         </div>";
 }
-
-
 
 if ($is_editor) {
     warnCourseInvalidDepartment(true);
@@ -664,8 +611,6 @@ if ($total_cunits > 0) {
         // end carousel-inner
         $cunits_content .= "</div>";
 
-
-
         //end courseUnitsControls
         $cunits_content .= "</div>";
     } else {
@@ -809,7 +754,6 @@ foreach ($course_home_page_sidebar->getCourseAndAdminWidgets($course_id) as $key
     $data['course_home_sidebar_widgets'] .= $widget->run($key);
 }
 
-$data['action_bar'] = '';
 $data['registered'] = false;
 if ($uid) {
     $myCourses = [];
@@ -833,19 +777,15 @@ if ($uid) {
     }
 }
 
+
 view('modules.course.home.index', $data);
 
 /**
  * @brief fetch course announcements
- * @global type $course_id
- * @global type $course_code
- * @global type $langNoAnnounce
- * @global type $urlAppend
- * @global type $dateFormatLong
  * @return string
  */
 function course_announcements() {
-    global $course_id, $course_code, $langNoAnnounce, $urlAppend, $dateFormatLong, $indexOfAnnounce;
+    global $course_id, $course_code, $langNoAnnounce, $urlAppend, $indexOfAnnounce;
 
     if (visible_module(MODULE_ID_ANNOUNCE)) {
         $q = Database::get()->queryArray("SELECT title, `date`, id

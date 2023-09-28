@@ -1431,7 +1431,7 @@ function course_access_icon($visibility) {
 
     switch ($visibility) {
         case COURSE_OPEN: {
-            $access_icon = "<span class='fa fa-unlock fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen'></span>";
+            $access_icon = "<span class='fa fa-lock-open fa-lg fa-fw' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeOpen'></span>";
             break;
         }
         case COURSE_REGISTRATION: {
@@ -3617,6 +3617,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $confirm_extra = $confirm_modal_class = $form_begin = $form_end = '';
             $href = " href='$url'";
         }
+        if (isset($option['text-class'])) {
+            $text_class = $option['text-class'];
+        } else {
+            $text_class = '';
+        }
         if (!isset($option['button-class'])) {
             $button_class = 'submitAdminBtn';
         } else {
@@ -3675,10 +3680,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $subMenu = '<div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border">
                             <ul class="list-group list-group-flush">';
                 foreach ($option['options'] as $subOption) {
-                $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
-                $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' settings-icons"></span>' : '';
-                $subMenu .= q($subOption['title']) . '</div></a></li>';
-
+                    $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start">';
+                    $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' settings-icons"></span>' : '';
+                    $subMenu .= q($subOption['title']) . '</div></a></li>';
                 }
                 $subMenu .= '</ul>
                         </div>';
@@ -3695,7 +3699,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 "</$primaryTag>$subMenu$form_end");
         }
         array_unshift($out_secondary,
-            "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+            "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
             " $link_attrs>" .
             "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
 
@@ -3709,8 +3713,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $action_button = '';
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
+
     if (count($out_secondary)) {
-        $action_button .= "<button  type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false'>
+        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
                                 <span class='hidden-xs TextBold'>$secondary_title</span> 
@@ -3758,7 +3763,6 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if(isset($_SESSION['uid'])){
                 $marginBottom = 'my-4';
             }
-
             $titleHeader = (!empty($pageName) ? $pageName : $toolName);
             return "<div class='col-12 d-md-flex justify-content-md-between align-items-lg-start $marginBottom'>
                         <div class='col-lg-5 col-md-6 col-12'><h2 class='mb-0'>$titleHeader</h2></div>

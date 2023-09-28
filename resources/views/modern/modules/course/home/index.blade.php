@@ -2,49 +2,90 @@
 
 @push('head_scripts')
     <script type='text/javascript'>
-        $(document).on('click', '#email_notification', function(e) {
-            e.preventDefault();
-            var info_message = '';
-            var action_message = '';
-            var url = $(this).attr('href');
-            var varUrl = url.split('?'); /* split url parameters */
-
-            for (i = 0; i < varUrl.length; i++) {
-                varUrlName = varUrl[i].split('=');
-            }
-
-            var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */
-
-            if (valueMessage == 1) {
-                info_message = "{{ js_escape(trans('langUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfDisableMailNotification')) }}"
-                action_message = " {{ js_escape(trans('langDeactivate')) }} ";
-                $actionButton = "deleteAdminBtn";
-                $actionIcon = "<i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i>";
-            } else {
-                info_message = "{{ js_escape(trans('langNoUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfEnableMailNotification')) }}";
-                action_message = " {{ js_escape(trans('langActivate')) }} ";
-                $actionButton = "submitAdminBtn";
-                $actionIcon = "<i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i>";
-            }
-            bootbox.confirm({
-                closeButton: false,
-                title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h3 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h3>",
-                message: "<p class='text-center'>"+info_message+"</p>",
-                buttons: {
-                    confirm: {
-                        label: action_message,
-                        className: $actionButton+' '+'position-center'
+        $(document).ready(function() {
+            $('#btn-syllabus').click(function () {
+                $(this).find('.fa-chevron-right').toggleClass('fa-rotate-90');
+            });
+            var calendar = $("#bootstrapcalendar").calendar({
+                tmpl_path: "{{ $urlAppend }}js/bootstrap-calendar-master/tmpls/",
+                    events_source: "{{ $urlAppend }}main/calendar_data.php?course={{ $course_code }}",
+                    language: "{{ js_escape(trans('langLanguageCode')) }}",
+                    views: {
+                        year:{
+                            enable: 0
+                        },
+                        week:{
+                            enable: 0
+                        },
+                        day:{
+                            enable: 0
+                        }
                     },
-                    cancel: {
-                        label: "{{ js_escape(trans('langCancel')) }}",
-                        className: 'cancelAdminBtn position-center'
-                    }
-                },
-                callback: function(result) {
-                    if (result) {
-                        window.location.href = url;
-                    }
+                onAfterViewLoad: function(view) {
+                    $("#current-month").text(this.getTitle());
+                    $(".btn-group button").removeClass("active");
+                    $("button[data-calendar-view=\'" + view + "\']").addClass("active");
                 }
+            });
+
+            $(".btn-group button[data-calendar-nav]").each(function() {
+                var $this = $(this);
+                $this.click(function() {
+                    calendar.navigate($this.data("calendar-nav"));
+                });
+            });
+
+            $(".btn-group button[data-calendar-view]").each(function() {
+                var $this = $(this);
+                $this.click(function() {
+                    calendar.view($this.data("calendar-view"));
+                });
+            });
+
+            $("#email_notification").click(function(e) {
+                e.preventDefault();
+                var info_message = '';
+                var action_message = '';
+                var url = $(this).attr("href");
+                var varUrl = url.split('?'); /* split url parameters */
+
+                for (i = 0; i < varUrl.length; i++) {
+                    varUrlName = varUrl[i].split('=');
+                }
+
+                var valueMessage = varUrlName[2]; /* value of url parameter 'email_un' */
+
+                if (valueMessage == 1) {
+                    info_message = "{{ js_escape(trans('langUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfDisableMailNotification')) }}"
+                    action_message = " {{ js_escape(trans('langDeactivate')) }} ";
+                    $actionButton = "deleteAdminBtn";
+                    $actionIcon = "<i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i>";
+                } else {
+                    info_message = "{{ js_escape(trans('langNoUserEmailNotification')) }}" + "<br><br>" + "{{ js_escape(trans('langConfEnableMailNotification')) }}";
+                    action_message = " {{ js_escape(trans('langActivate')) }} ";
+                    $actionButton = "submitAdminBtn";
+                    $actionIcon = "<i class='fa-solid fa-cloud-arrow-up fa-xl Neutral-500-cl'></i>";
+                }
+                bootbox.confirm({
+                    closeButton: false,
+                    title: "<div class='icon-modal-default'>"+$actionIcon+"</div>"+"<h3 class='modal-title-default text-center mb-0'>"+"{{ js_escape(trans('langEmailUnsubscribe')) }}"+"</h3>",
+                    message: "<p class='text-center'>"+info_message+"</p>",
+                    buttons: {
+                        confirm: {
+                            label: action_message,
+                            className: $actionButton+' '+'position-center'
+                        },
+                        cancel: {
+                            label: "{{ js_escape(trans('langCancel')) }}",
+                            className: 'cancelAdminBtn position-center'
+                        }
+                    },
+                    callback: function(result) {
+                        if (result) {
+                            window.location.href = url;
+                        }
+                    }
+                });
             });
         });
     </script>
@@ -109,6 +150,41 @@
     </script>
 @endpush
 
+
+@if (!empty($level))
+    @push('head_scripts')
+        <link rel='stylesheet' type='text/css' href='{{ $urlAppend }}modules/course_metadata/course_metadata.css'>
+        <script type='text/javascript'>
+            var dialog;
+            var showMetadata = function(course) {
+                $('.modal-body', dialog).load('{{ $urlAppend }}modules/course_metadata/anoninfo.php', {course: course}, function(response, status, xhr) {
+                    if (status === 'error') {
+                        $('.modal-body', dialog).html('Sorry but there was an error, please try again');
+                    }
+                });
+                dialog.modal('show');
+            };
+            $(document).ready(function() {
+                dialog = $("<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'>" +
+                    "<div class='modal-dialog modal-lg'>" +
+                        "<div class='modal-content'>" +
+                            "<div class='modal-header'>" +
+                                "<div class='modal-title' id='modal-label'>{{ js_escape((trans('langCourseMetadata'))) }}</div>" +
+                                    "<button type='button' class='close' data-bs-dismiss='modal'>" +
+                                        "<span class='fa-solid fa-xmark' aria-hidden='true'></span>" +
+                                        "<span class='sr-only'>{{ js_escape((trans('langCancel'))) }}</span>" +
+                                    "</button>" +
+                                "</div>" +
+                                "<div class='modal-body'>body</div>" +
+                            "</div>" +
+                        "</div>" +
+                    "</div>"
+                );
+            });
+        </script>
+    @endpush
+@endif
+
 @section('content')
 
 <style>
@@ -161,19 +237,18 @@
 
                     @include('layouts.partials.legend_view')
 
-
                     @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
                             <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
                                 @php
                                     $alert_type = '';
-                                    if(Session::get('alert-class', 'alert-info') == 'alert-success'){
+                                    if (Session::get('alert-class', 'alert-info') == 'alert-success') {
                                         $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
-                                    }elseif(Session::get('alert-class', 'alert-info') == 'alert-info'){
+                                    } elseif(Session::get('alert-class', 'alert-info') == 'alert-info') {
                                         $alert_type = "<i class='fa-solid fa-circle-info fa-lg'></i>";
-                                    }elseif(Session::get('alert-class', 'alert-info') == 'alert-warning'){
+                                    } elseif(Session::get('alert-class', 'alert-info') == 'alert-warning') {
                                         $alert_type = "<i class='fa-solid fa-triangle-exclamation fa-lg'></i>";
-                                    }else{
+                                    } else {
                                         $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                     }
                                 @endphp
@@ -197,95 +272,15 @@
 
                 <div class='d-xl-flex gap-5 mt-4'>
 
-                    {{--<div class='col-xl-7 col-12 mt-0'>--}}
                     <div class='flex-grow-1'>
                         <div class='card panelCard border-0'>
                             <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
-
                                 <div>
                                     <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
                                 </div>
-
                                 <div>
-                                    <button class="btn submitAdminBtn" type="button" id="dropdownToolsCourse" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
-
-                                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownToolsCourse" style='z-index:1;'>
-                                        <ul class="list-group list-group-flush">
-                                            @if ($is_editor)
-                                                @php
-                                                    warnCourseInvalidDepartment(true);
-                                                @endphp
-                                                <li>
-                                                    <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='{{ $urlAppend }}modules/course_home/editdesc.php?course={{ $course_code }}'>
-                                                        <i class="fa-solid fa-pen-to-square settings-icons"></i>
-                                                        {{ trans('langEditMeta') }}
-                                                    </a>
-                                                </li>
-                                            @endif
-
-
-                                            <li>{!! $email_notify_icon !!}</li>
-
-
-                                            <li>
-                                                <a class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3' href='javascript:void(0);' data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'>
-                                                    <i class="fa-solid fa-link settings-icons"></i>
-                                                    {{ trans('langCitation') }}
-                                                </a>
-                                            </li>
-
-
-                                            @if($uid)
-                                                @if ($is_course_admin)
-                                                    <li>
-                                                        <a href="{{ $urlAppend }}modules/user/index.php?course={{$course_code}}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                            <i class="fa-solid fa-users settings-icons"></i>
-                                                            {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}
-                                                        </a>
-                                                    </li>
-                                                @else
-                                                    @if (setting_get(SETTING_USERS_LIST_ACCESS, $course_id) == 1)
-                                                        <li>
-                                                            <a href="{{ $urlAppend }}modules/user/userslist.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                                <i class="fa-solid fa-users settings-icons"></i>
-                                                                {{ $numUsers }}&nbsp;{{ trans('langRegistered') }}
-                                                            </a>
-                                                        </li>
-                                                    @endif
-                                                @endif
-                                                @if ($is_course_reviewer)
-                                                    <li>
-                                                        <a href = "{{ $urlAppend  }}modules/usage/index.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                            <i class="fa-solid fa-chart-line settings-icons"></i>
-                                                            {{ trans('langUsage') }}
-                                                        </a>
-                                                    </li>
-                                                @else
-                                                    <li>
-                                                        <a href = "{{ $urlAppend }}modules/usage/userduration.php?course={{ $course_code }}&u={{ $uid }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                            <i class="fa-solid fa-chart-line settings-icons"></i>
-                                                            {{ trans('langCourseParticipation') }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                            @endif
-
-
-                                            @if ($offline_course)
-                                                <li>
-                                                    <a href="{{ $urlAppend }}modules/offline/index.php?course={{ $course_code }}" class='list-group-item d-flex justify-content-start align-items-start gap-2 py-3'>
-                                                        <i class="fa-solid fa-download settings-icons"></i>
-                                                        {{ trans('langDownloadCourse') }}
-                                                    </a>
-                                                </li>
-                                            @endif
-                                        </ul>
-                                    </div>
-
+                                    {!! $action_bar !!}
                                 </div>
-
                             </div>
                             <div class='card-body pb-0'>
                                 <div class='row'>
@@ -339,13 +334,11 @@
 
                         </div>
 
-
                         @if(isset($social_content))
                             <div class='col-12 d-flex justify-content-end align-items-start mt-4'>
                                 <div>{!! $social_content !!}</div>
                             </div>
                         @endif
-
 
                         <div class='col-12 mt-4'>
                             <div class='row'>
