@@ -3746,7 +3746,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                             $pageTitleActive
                         </div>";
             } else {
-                return "<div class='col-12 mb-4'>
+                return "<div class='col-12 actionCont mb-4'>
                             <div class='col-12 action_bar d-flex justify-content-start'>
                                 <div class='margin-top-thin margin-bottom-fat hidden-print w-100'>
                                     <div class='ButtonsContent d-flex justify-content-lg-end justify-content-end align-items-center flex-wrap gap-2'>
@@ -3935,7 +3935,7 @@ function setOpenCoursesExtraHTML() {
         $openCoursesExtraHTML = "
             
         
-            <div class='col-xl-8 col-12 ms-auto me-auto banner_openCourses'>
+            <div class='col-12 ms-auto me-auto banner_openCourses'>
                 <div class='card border-card h-100'>
                     <div class='card-body card-body d-flex justify-content-center align-items-center'>
                         <div class='row m-auto w-100 ms-0'>

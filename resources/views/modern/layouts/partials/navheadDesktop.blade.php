@@ -1,6 +1,6 @@
 
 <nav id="bgr-cheat-header" class="navbar navbar-eclass py-0">
-    <div class='container-fluid py-0'>
+    <div class='{{ $container }} py-0'>
     <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
         <div class='d-flex justify-content-start align-items-center h-100'>
@@ -93,6 +93,17 @@
                                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user" aria-labelledby="btnGroupDrop1">
                                         <ul class="list-group list-group-flush">
 
+                                            <li>
+                                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 pe-none">
+                                                    <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
+                                                    <div>
+                                                        <p class='form-label mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</p>
+                                                        <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
+                                                    </div>
+                                                    
+                                                </a>
+                                            </li>
+
                                             @if ((isset($is_admin) and $is_admin) or
                                                 (isset($is_power_user) and $is_power_user) or
                                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
@@ -120,6 +131,13 @@
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/portfolio.php">
                                                     <i class="fa-solid fa-house settings-icons"></i>
                                                     {{ trans('langMyPortfolio') }}  
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/profile/display_profile.php">
+                                                    <i class="fa-solid fa-user settings-icons"></i>
+                                                    {{ trans('langMyProfile') }}
                                                 </a>
                                             </li>
 
@@ -177,12 +195,7 @@
                                                     {{ trans('langMyAgenda') }}
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/profile/display_profile.php">
-                                                    <i class="fa-solid fa-user settings-icons"></i>
-                                                    {{ trans('langMyProfile') }}
-                                                </a>
-                                            </li>
+                                            
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/my_widgets.php">
                                                     <i class="fa-solid fa-layer-group settings-icons"></i>

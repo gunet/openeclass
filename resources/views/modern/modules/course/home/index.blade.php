@@ -212,7 +212,7 @@
 
 <div class="col-12 main-section">
     <div class='{{ $container }} py-lg-0'>
-        <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
+        <div class="course-wrapper course-wrapper-courseHome d-lg-flex align-items-lg-strech w-100">
 
             <aside id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
@@ -270,7 +270,7 @@
 
                 </div>
 
-                <div class='d-xl-flex gap-5 mt-4'>
+                <div class='d-xl-flex gap-5 mt-0'>
 
                     <div class='flex-grow-1'>
                         <div class='card panelCard border-0'>
@@ -524,6 +524,7 @@
                     {{--<div class='col-xl-5 col-12 mt-xl-0 mt-5 sticky-column-course-home'>--}}
                     <div>
                         <div class="panel panel-admin panel-admin-calendar p-0 border-0 sticky-column-course-home">
+                            <h3 class='mt-1 mb-4'>{{ trans('langAgenda') }}</h3>
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
                                 <div class='d-flex align-items-center px-2 py-1'>

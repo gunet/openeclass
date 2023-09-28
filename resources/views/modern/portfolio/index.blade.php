@@ -173,7 +173,7 @@
                                                             <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
                                                         @endif
                                                         <div class="lesson-title mt-3">
-                                                            <a class='TextRegular text-decoration-underline' href="{{$urlServer}}courses/{{$course->code}}/index.php">
+                                                            <a class='TextRegular' href="{{$urlServer}}courses/{{$course->code}}/index.php">
                                                                 {{ $course->title }}&nbsp({{ $course->public_code }})
                                                             </a>
                                                         </div>

@@ -33,10 +33,17 @@
                             <img class="user-icon-filename mt-0 me-2" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                     </button>
 
-                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border" aria-labelledby="dropdownMenuButton1">
+                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
                         <ul class="list-group list-group-flush dropdown_menu_user">
-                            <li class='pe-none'>
-                                <a class='list-group-item d-flex justify-content-center align-items-center py-3'><h4 class='mb-0'>{{ $_SESSION['uname'] }}</h4></a>
+                            <li>
+                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 pe-none">
+                                    <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
+                                    <div>
+                                        <p class='form-label mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</p>
+                                        <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
+                                    </div>
+                                    
+                                </a>
                             </li>
                             @if ((isset($is_admin) and $is_admin) or
                                 (isset($is_power_user) and $is_power_user) or

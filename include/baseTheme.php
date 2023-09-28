@@ -259,7 +259,7 @@ function view($view_file, $view_data = array()) {
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
 
-    $container = 'container-fluid';
+    $container = 'container';
     $forms_image = 'form-image-modules';
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 
@@ -289,10 +289,6 @@ function view($view_file, $view_data = array()) {
             .menu-item.active,
             .menu-item.active2{
                 color: #2B3944;
-            }
-
-            .jumbotron-image-default{
-                display: none;
             }
 
             .inputSearch{ height: 33px !important; margin-top: 0px !important;}

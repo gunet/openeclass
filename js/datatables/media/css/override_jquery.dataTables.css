@@ -68,7 +68,7 @@
     padding: 10px 10px 10px 10px;
   }
 
-  table.dataTable tbody tr td a{
+  table.dataTable tbody tr td a:hover{
     text-decoration: underline;
   }
 

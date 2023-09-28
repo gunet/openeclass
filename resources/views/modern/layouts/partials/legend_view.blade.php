@@ -59,12 +59,12 @@
                                                 @if($visible_module == 0)
                                                     <a class='btn submitAdminBtn' href="javascript:$('#form_id').submit();"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}">
-                                                        <i class="fa-solid fa-square-minus"></i>
+                                                        <i class="fa-regular fa-eye-slash"></i>
                                                     </a>
                                                 @else
                                                     <a class='btn submitAdminBtn' href="javascript:$('#form_id').submit();"
                                                         data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}">
-                                                        <i class="fa-solid fa-check"></i>
+                                                        <i class="fa-regular fa-eye"></i>
                                                     </a>
                                                 @endif
                                             @endif
