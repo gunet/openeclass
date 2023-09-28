@@ -17,7 +17,6 @@
         <!-- Theme style  -->
         <link rel="stylesheet" href="css/style.css">
     </head>
-
     <body>
         <div id="page">
             <div id="fh5co-container" class="js-fullheight">
@@ -32,12 +31,13 @@
                                     <div style="text-align: center; color:#fff; padding-left: 20%; padding-right: 20%;">
                                         <?php echo $maintenance_text;?>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="bg-cover" style="background-image:url(images/background.jpg);"></div>
+                <div class="bg-cover" style="background-image:url(images/background6.jpg);"></div>
             </div>
         </div>
         <!-- jQuery -->
@@ -50,7 +50,6 @@
         <script src="js/jquery.waypoints.min.js"></script>
         <!-- Main -->
         <script src="js/main.js"></script>
-
     </body>
 </html>
 

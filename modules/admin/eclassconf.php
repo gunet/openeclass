@@ -33,6 +33,12 @@ if (isset($_POST['updatePrivacyPolicy'])) {
 $toolName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
+function checkMaintenanceTheme($maintenance_theme, $number) {
+    if ($maintenance_theme == $number) {
+        return "checked";
+    }
+}
+
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -342,6 +348,8 @@ if (isset($_POST['submit'])) {
         set_config('homepage_intro', purify($_POST['homepage_intro']));
     }
 
+    set_config('maintenance_theme', $_POST['maintenance_theme']);
+
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
     set_config('base_url', $_POST['formurlServer']);
     set_config('phpMyAdminURL', $_POST['formphpMyAdminURL']);
@@ -571,6 +579,9 @@ else {
 
     $cbox_block_duration_account = get_config('block_duration_account') ? 'checked' : '';
     $cbox_block_duration_alt_account = get_config('block_duration_alt_account') ? 'checked' : '';
+
+    $maintenance_theme = get_config('maintenance_theme');
+
     $tool_content .= "
 <div class='row'>
     <div class='col-sm-9'>
@@ -1603,17 +1614,6 @@ $tool_content .= "
             foreach ($session->active_ui_languages as $langcode) {
                 $langname = $langNameOfLang[langcode_to_name($langcode)];
                 $maintenance_text = get_config('maintenance_text_' . $langcode);
-//                if (!$policy) {
-//                    $policyFile = "lang/$langcode/privacy.html";
-//                    if (file_exists($policyFile)) {
-//                        $policy = file_get_contents($policyFile);
-//                    } else {
-//                        $policy = get_config('privacy_policy_text_en');
-//                        if (!$policy) {
-//                            $policyFile = "lang/en/privacy.html";
-//                        }
-//                    }
-//                }
                 $tool_content .= "
                                             <div class='form-group'>
                                                 <label for='privacy_policy_text_$langcode' class='col-sm-2 control-label'>$langText:<br>($langname)</label>
@@ -1624,6 +1624,65 @@ $tool_content .= "
             }
 
             $tool_content .= "</div>
+                            <hr>
+                            <div>
+                                <div class='margin-bottom-fat margin-top-fat'><strong>$langThemes</strong></div>
+                                <div class='row'>
+                                    <div class='col-sm-6'>
+                                        <div class='form-check'>
+                                            <input class='form-check-input' type='radio' name='maintenance_theme' id='image1' value='1' ".checkMaintenanceTheme($maintenance_theme, 1).">
+                                            <label class='form-check-label' for='image1'>
+                                                <img style='max-width: 300px;' src='../../maintenance/preview_img/theme_1.png' class='img-fluid' alt='Image preview 1'>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-6'>
+                                        <div class='form-check'>
+                                            <input class='form-check-input' type='radio' name='maintenance_theme' id='image2' value='2' ".checkMaintenanceTheme($maintenance_theme, 2).">
+                                            <label class='form-check-label' for='image2'>
+                                                <img style='max-width: 300px;' src='../../maintenance/preview_img/theme_2.png' class='img-fluid' alt='Image preview 2'>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class='row'>    
+                                    <div class='col-sm-6'>
+                                        <div class='form-check'>
+                                            <input class='form-check-input' type='radio' name='maintenance_theme' id='image3' value='3' ".checkMaintenanceTheme($maintenance_theme, 3).">
+                                            <label class='form-check-label' for='image3'>
+                                                <img style='max-width: 300px;' src='../../maintenance/preview_img/theme_3.png' class='img-fluid' alt='Image preview 3'>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-6'>
+                                        <div class='form-check'>
+                                            <input class='form-check-input' type='radio' name='maintenance_theme' id='image4' value='4' ".checkMaintenanceTheme($maintenance_theme, 4).">
+                                            <label class='form-check-label' for='image4'>
+                                                <img style='max-width: 300px;' src='../../maintenance/preview_img/theme_4.png' class='img-fluid' alt='Image preview 4'>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='row'>    
+                                    <div class='col-sm-6'>
+                                        <div class='form-check'>
+                                            <input class='form-check-input' type='radio' name='maintenance_theme' id='image5' value='5' ".checkMaintenanceTheme($maintenance_theme, 5).">
+                                            <label class='form-check-label' for='image5'>
+                                                <img style='max-width: 300px;' src='../../maintenance/preview_img/theme_5.png' class='img-fluid' alt='Image preview 5'>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class='col-sm-6'>
+                                        <div class='form-check'>
+                                            <input class='form-check-input' type='radio' name='maintenance_theme' id='image6' value='6' ".checkMaintenanceTheme($maintenance_theme, 6).">
+                                            <label class='form-check-label' for='image6'>
+                                                <img style='max-width: 300px;' src='../../maintenance/preview_img/theme_6.png' class='img-fluid' alt='Image preview 6'>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <hr>
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
