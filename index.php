@@ -30,7 +30,9 @@ session_start();
  *
  */
 
-
+if (isset($_POST['admin_login'])) {
+   define('MAINTENANCE_PAGE', true);
+}
 
 // Handle alias of .../courses/<CODE>/... to index.php for course homes
 if (preg_match('|/courses/([a-zA-Z0-9_-]+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
@@ -293,19 +295,6 @@ if (!$upgrade_begin and $uid) {
     }
 
     $data['menuTypeID'] = 0;
-
-    //Maintenance Redirect
-    if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
-        $is_admin = true;
-        $is_power_user = true;
-        $is_usermanage_user = true;
-        $is_departmentmanage_user = true;
-    }
-    if (get_config('maintenance') == 1 ) {
-        if ( !$is_admin ) {
-            redirect_to_home_page('maintenance/maintenance.php');
-        }
-    }
 
     view('home.index', $data);
 }

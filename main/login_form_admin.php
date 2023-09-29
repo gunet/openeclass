@@ -20,6 +20,7 @@
  * ======================================================================== */
 
 define('UPGRADE', true);
+define('MAINTENANCE_PAGE', true);
 
 require_once '../include/baseTheme.php';
 
@@ -33,8 +34,9 @@ $tool_content .= "
     </div>
     <div class='panel-body login-page-option'>
       <form class='form-horizontal' role='form' action='$urlServer' method='post'>
+        <input type='hidden' name='admin_login' value='true'>
         <div class='form-group mt-3'>
-          <div class='col-12'>
+          <div class='col-12'>         
             <input class='form-control' name='uname' placeholder='$langUsername' autofocus>
           </div>
         </div>

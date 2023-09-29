@@ -210,12 +210,10 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
 
 //Maintenance redirect
 if (get_config('maintenance') == 1 ) {
-    $filename = basename($_SERVER['REQUEST_URI']);
-    if (!$is_admin and (!isset($guest_allowed) or !$guest_allowed) and $filename !== 'maintenance.php' and $filename !== 'login_form_admin.php') {
-        redirect_to_home_page('maintenance/maintenance.php');
+    if (!$is_admin and !defined('MAINTENANCE_PAGE')) {
+        redirect_to_home_page('maintenance/');
     }
 }
-
 // ----------------- sso transition ------------------
 if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
     header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
