@@ -25,4 +25,9 @@ $maintenance_theme = get_config('maintenance_theme');
 $langcode = $session->language;
 $maintenance_text = get_config('maintenance_text_' . $langcode);
 
-include_once('theme_'.$maintenance_theme.'/index.php');
+if (get_config('maintenance')==1) {
+    include_once('theme_'.$maintenance_theme.'/index.php');
+} else {
+    redirect_to_home_page();
+}
+
