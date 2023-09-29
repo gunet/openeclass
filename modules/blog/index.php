@@ -90,7 +90,7 @@ if ($blog_type == 'course_blog') {
     } else {
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
     }
-
+    $navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');
     //check if rating is enabled for personal blogs
@@ -392,7 +392,7 @@ if ($action == "createPost") {
         }
 
 
-        
+
         $tool_content .= "
 <div class='col-12'>
     <div class='d-lg-flex gap-4 mt-4'>
@@ -454,7 +454,7 @@ if ($action == "createPost") {
 </div>
 
         ";
-       
+
     } else {
         //Session::Messages($langBlogPostNotAllowedCreate);
         Session::flash('message',$langBlogPostNotAllowedCreate);
@@ -569,9 +569,9 @@ if ($action == "editPost") {
     </div>
 </div>
        ";
-            
 
-            
+
+
         } else {
             //Session::Messages($langBlogPostNotAllowedEdit);
             Session::flash('message',$langBlogPostNotAllowedEdit);
@@ -693,7 +693,7 @@ if ($action == "showPost") {
             }
         }
 
-        
+
         $tool_content .= "
                     <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
@@ -833,7 +833,7 @@ if ($action == "showBlog") {
             if ($comments_enabled && ($post->getCommenting() == 1)) {
                 $comm = new Commenting('blogpost', $post->getId());
                 //$comment_content = "<a class='btn submitAdminBtn float-end mt-3' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
-                
+
 
                 $comment_content = "<a class='commentPress float-end mt-3 pe-0' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>
                                             <i class='fa-regular fa-comment-dots'></i>

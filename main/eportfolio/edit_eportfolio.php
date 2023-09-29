@@ -31,7 +31,9 @@ check_guest();
 $toolName = $langMyePortfolio;
 $pageName = $langEditResume;
 $token = token_generate('eportfolio' . $uid);
-$navigation[] = array('url' => "index.php?id=$uid&amp;token=$token", 'name' => $langMyePortfolio);
+$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
+$navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
+
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div>";
@@ -58,11 +60,8 @@ if (isset($_POST['submit'])) {
         Session::flashPost()->Messages($langFormErrors, 'alert-danger')->Errors($v->errors());
         redirect_to_home_page("main/eportfolio/edit_eportfolio.php");
     } else {
-
         process_eportfolio_fields_data();
-    
-        //Session::Messages($langePortfolioChangeSucc, 'alert-success');
-        Session::flash('message', $langePortfolioChangeSucc); 
+        Session::flash('message', $langePortfolioChangeSucc);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("main/eportfolio/index.php?id=$uid&token=$token");
     }
@@ -125,14 +124,15 @@ $tool_content .=
         action_bar(array(
             array('title' => $langBack,
                 'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
-                'icon' => 'fa-reply',
-                'level' => 'primary')));
+                'icon' => 'fa-reply'
+                )));
+
         $tool_content .=
             "<div class='row'>
                 <div class='col-sm-9'>
                     <form class='form-horizontal' role='form' action='$sec' method='post'>
                     <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";
-                    
+
 
 
 //add custom profile fields
@@ -140,18 +140,9 @@ $ret_str = render_eportfolio_fields_form();
 $tool_content .= $ret_str['panels'];
 
 $tool_content .= "
-
-<div class='form-group mt-5 d-flex justify-content-center align-items-center'>
-
-                       
-
-                            <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                          
-                         
-                            <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                          
-                       
-
+    <div class='form-group mt-5 d-flex justify-content-center align-items-center'>
+        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>     
+        <a href='{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                   </div>
       ". generate_csrf_token_form_field() ."  
       </div></form>

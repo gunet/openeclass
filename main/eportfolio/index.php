@@ -23,6 +23,10 @@
 $require_login = false;
 $guest_allowed = true;
 
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'e_portfolio';
+
 include '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'main/eportfolio/eportfolio_functions.php';
@@ -34,7 +38,7 @@ if (!get_config('eportfolio_enable')) {
         draw($tool_content, 0);
     } else {
         draw($tool_content, 1);
-    }    
+    }
     exit;
 }
 
@@ -61,13 +65,12 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, eportfolio_
                                           FROM user WHERE id = ?d", $id);
 
 $pageName = q("$userdata->givenname $userdata->surname");
+$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
 $clipboard_link = "";
 
 if ($userdata) {
-    
-    if ($uid == $id) {
 
-        
+    if ($uid == $id) {
         if (isset($_GET['toggle_val'])) {
             if ($_GET['toggle_val'] == 'on') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
@@ -76,7 +79,7 @@ if ($userdata) {
             }
             redirect_to_home_page("main/eportfolio/index.php?id=$id&token=$token");
         }
-        
+
         if ($userdata->eportfolio_enable == 0) {
             $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langePortfolioDisableWarning</span></div></div>";
         } elseif ($userdata->eportfolio_enable == 1) {
@@ -112,28 +115,32 @@ if ($userdata) {
         }
 
         $tool_content .= action_bar(array(
+                                        array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
+                                            'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
+                                            'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
+                                            'level' => 'primary'),
                                         array('title' => $langBio,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
-                                            'icon' => 'fa-download',
-                                            'level' => 'primary-label',
+                                            'icon' => 'fa-solid fa-book-open',
+                                            'level' => 'primary',
                                             'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
-                                        array('title' => $langResume,
-                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                                            'level' => 'primary-label',
-                                            'button-class' => 'btn-primary'),
-                                        array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
-                                              'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
-                                              'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
-                                        array('title' => $langResourcesCollection,
-                                            'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
-                                            'level' => 'primary-label'),
-                                        array('title' => $langEditResume,
-                                            'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
-                                            'icon' => 'fa-edit'),
                                         array('title' => $langUploadBio,
                                             'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
-                                            'icon' => 'fa-upload')
-                                    ));    
+                                            'icon' => 'fa-upload'),
+                                        array('title' => $langResume,
+                                            'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                                            'icon' => 'fa-solid fa-book-open-reader',
+                                            'level' => 'primary',
+                                            'button-class' => 'btn-primary'),
+                                        array('title' => $langEditResume,
+                                            'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
+                                            'icon' => 'fa-edit' ),
+                                        array('title' => $langResourcesCollection,
+                                            'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                                            'icon' => 'fa-solid fa-award',
+                                            'level' => 'primary'
+                                            )
+                                ));
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUserePortfolioDisabled</span></div></div>";
@@ -144,23 +151,25 @@ if ($userdata) {
             }
             exit;
         }
-        
+
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
-                                            'icon' => 'fa-download',
+                                            'icon' => 'fa-solid fa-book-open',
                                             'level' => 'primary-label',
                                             'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
                                         array('title' => $langResume,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
                                             'level' => 'primary-label',
+                                            'icon' => 'fa-solid fa-book-open-reader',
                                             'button-class' => 'btn-primary'),
                                         array('title' => $langResourcesCollection,
                                               'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                                              'icon' => 'fa-solid fa-award',
                                               'level' => 'primary-label'),
                                     ));
     }
-    
+
     if (isset($_GET['action']) && $_GET['action'] == 'get_bio') {
         if (file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
             send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
@@ -191,9 +200,31 @@ if ($userdata) {
                 stickywidget.addClass('affix');
             }
         });
-    });
+    }
     </script>";
-    
+
+    $head_content .= "
+        <script>
+        $(function() {
+            $('body').scrollspy({ target: '#affixedSideNav' });
+        });
+        </script>
+    ";
+
+    $head_content .= "
+        <script>
+        $(function() {
+            $('#floatMenu').affix({
+              offset: {
+                top: 230,
+                bottom: function () {
+                  return (this.bottom = $('.footer').outerHeight(true))
+                }
+              }
+            })
+        });
+        </script>";
+
     $ret_str = render_eportfolio_fields_content($id);
 
     if ($ret_str['panels'] == ""){
@@ -209,7 +240,7 @@ if ($userdata) {
                             <div class='row row-cols-1 row-cols-md-2 g-4'>".$ret_str['panels']."</div>";
     }
 
-    
+
     if ($userdata->eportfolio_enable == 1 AND $ret_str['panels'] != "") {
         $social_share = "<div class='float-end mt-4 shadow-sm p-3 rounded bg-white rounded-pill'>".print_sharing_links($urlServer."main/eportfolio/index.php?id=$id&token=$token", $langUserePortfolio)."</div>";
     } else {

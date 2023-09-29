@@ -30,7 +30,8 @@ check_guest();
 $toolName = $langMyePortfolio;
 $pageName = $langUploadBio;
 $token = token_generate('eportfolio' . $uid);
-$navigation[] = array('url' => "index.php?id=$uid&amp;token=$token", 'name' => $langMyePortfolio);
+$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
+$navigation[] = array('url' => "index.php?id=$uid&token=$token", 'name' => $langMyePortfolio);
 
 if (!get_config('eportfolio_enable')) {
     $tool_content = "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langePortfolioDisabled</span></div></div>";
@@ -47,7 +48,6 @@ if ($userdata->eportfolio_enable == 0) {
 if (isset($_GET['delete_bio'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
-    //Session::Messages($langBioDeletedSuccess, 'alert-success');
     $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langBioDeletedSuccess</span></div></div>";
     redirect_to_home_page('main/eportfolio/bio_upload.php');
 }
@@ -62,18 +62,15 @@ elseif (isset($_POST['submit'])) {
             if ($_FILES['bio']['size'] <= get_config('bio_quota')*1024*1024) {
                 @unlink("$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
                 move_uploaded_file($_FILES['bio']['tmp_name'], "$webDir/courses/eportfolio/userbios/$uid/bio.pdf");
-                //Session::Messages($langUploadBioSuccess, 'alert-success');
                 $tool_content .= "<div class='col-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>$langUploadBioSuccess</span></div></div>";
             } else {
-                //Session::Messages(sprintf($langUploadBioFailSize, get_config('bio_quota')), 'alert-danger');
                 $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailSize ".get_config('bio_quota')."</span></div></div>";
             }
         } else {
-            //Session::Messages($langUploadBioFailType, 'alert-danger');
             $tool_content .= "<div class='col-12'><div class='alert alert-danger'><i class='fa-solid fa-circle-xmark fa-lg'></i><span>$langUploadBioFailType</span></div></div>";
         }
         redirect_to_home_page('main/eportfolio/bio_upload.php');
-    } 
+    }
 }
 
 $head_content .= "<script>
@@ -115,10 +112,10 @@ $tool_content .=
     action_bar(array(
         array('title' => $langBack,
             'url' => "{$urlAppend}main/eportfolio/index.php?id=$uid&amp;token=$token",
-            'icon' => 'fa-reply',
-            'level' => 'primary')));
-        
-$tool_content .= 
+            'icon' => 'fa-reply'
+            )));
+
+$tool_content .=
    "<div class='row'>
         <div class='col-lg-6 col-12'>
                 <form class='form-wrapper form-edit border-0 px-0' role='form' method='post' enctype='multipart/form-data' action='' onsubmit='return validateNodePickerForm();'>
@@ -132,7 +129,7 @@ if (file_exists("$webDir/courses/eportfolio/userbios/$uid/bio.pdf")) {
     $label = $langPathUploadFile;
     $bio = '';
 }
-$tool_content .= 
+$tool_content .=
     "<div class='col-12'>
         <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langBioPermFileType ".sprintf($langBioMaxSize, get_config('bio_quota'))."</span></div></div>
             <div class='row'>
@@ -141,7 +138,6 @@ $tool_content .=
                 <div class='col-12 mt-3'><input type='file' name='bio' class='form-control'></div>
             </div>
 
-
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-end align-items-center'>
                     <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
@@ -149,7 +145,7 @@ $tool_content .=
                 </div>
             </div>";
 
-$tool_content .= 
+$tool_content .=
                 "</fieldset>
                 ". generate_csrf_token_form_field() ."  
             </form>
@@ -159,5 +155,5 @@ $tool_content .=
         </div>
     </div>
     ";
-            
+
 draw($tool_content, 1, null, $head_content);

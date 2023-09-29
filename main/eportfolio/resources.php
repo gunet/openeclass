@@ -51,6 +51,8 @@ if (isset($_GET['id']) && intval($_GET['id']) > 0) {
     }
 }
 
+$navigation[] = array("url" => "{$urlAppend}main/profile/display_profile.php", "name" => $langMyProfile);
+
 if (!token_validate('eportfolio' . $id, $_GET['token'])) {
     redirect_to_home_page();
 }
@@ -105,28 +107,32 @@ if ($userdata) {
         }
 
         $tool_content .= action_bar(array(
-                array('title' => $langBio,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
-                      'icon' => 'fa-download',
-                      'level' => 'primary-label',
-                      'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
-                array('title' => $langResume,
-                      'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
-                      'level' => 'primary-label'),
-                array('title' => $langResourcesCollection,
-                      'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-primary'),
-                array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
-                      'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token&amp;toggle_val=on",
-                      'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye'),
-                array('title' => $langEditResume,
-                      'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
-                      'icon' => 'fa-edit'),
-                array('title' => $langUploadBio,
-                      'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
-                      'icon' => 'fa-upload')
-            ));
+            array('title' => $userdata->eportfolio_enable ? $langViewHide : $langViewShow,
+                'url' => $userdata->eportfolio_enable ? "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=off" : "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token&amp;toggle_val=on",
+                'icon' => $userdata->eportfolio_enable ? 'fa-eye-slash' : 'fa-eye',
+                'level' => 'primary'),
+            array('title' => $langBio,
+                'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
+                'icon' => 'fa-solid fa-book-open',
+                'level' => 'primary',
+                'show' => file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")),
+            array('title' => $langUploadBio,
+                'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
+                'icon' => 'fa-upload'),
+            array('title' => $langResume,
+                'url' => "{$urlAppend}main/eportfolio/index.php?id=$id&amp;token=$token",
+                'icon' => 'fa-solid fa-book-open-reader',
+                'level' => 'primary',
+                'button-class' => 'btn-primary'),
+            array('title' => $langEditResume,
+                'url' => "{$urlAppend}main/eportfolio/edit_eportfolio.php",
+                'icon' => 'fa-edit' ),
+            array('title' => $langResourcesCollection,
+                'url' => "{$urlAppend}main/eportfolio/resources.php?id=$id&amp;token=$token",
+                'icon' => 'fa-solid fa-award',
+                'level' => 'primary'
+            )
+        ));
 
         if (isset($_GET['action']) && $_GET['action'] == 'add') {
             if (isset($_GET['type']) && isset($_GET['rid'])) {
@@ -158,7 +164,6 @@ if ($userdata) {
 
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'blog',$post->course_id,$course_title,serialize($data));
-                            //Session::Messages($langePortfolioResourceAdded, 'alert-success');
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class', 'alert-success');
                             $tool_content .= "
@@ -169,8 +174,6 @@ if ($userdata) {
                             redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
                     }
-
-                    //Session::Messages($langGeneralError, 'alert-danger');
                     Session::flash('message', $langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
@@ -224,7 +227,6 @@ if ($userdata) {
 
                                 Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid,$rid,'work_submission',$work->course_id,$course_title,serialize($data));
-                                //Session::Messages($langePortfolioResourceAdded, 'alert-success');
                                 Session::flash('message', $langePortfolioResourceAdded);
                                 Session::flash('alert-class', 'alert-success');
                                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
@@ -233,7 +235,6 @@ if ($userdata) {
                         }
                     }
 
-                    //Session::Messages($langGeneralError, 'alert-danger');
                     Session::flash('message', $langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
@@ -265,14 +266,12 @@ if ($userdata) {
                             Database::get()->query("INSERT INTO eportfolio_resource (user_id,resource_id,resource_type,course_id,course_title,data)
                                     VALUES (?d,?d,?s,?d,?s,?s)", $uid, $rid, 'mydocs', 0 ,'', serialize($data));
 
-                            //Session::Messages($langePortfolioResourceAdded, 'alert-success');
                             Session::flash('message', $langePortfolioResourceAdded);
                             Session::flash('alert-class', 'alert-success');
                             redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
                         }
                     }
 
-                    //Session::Messages($langGeneralError, 'alert-danger');
                     Session::flash('message', $langGeneralError);
                     Session::flash('alert-class', 'alert-danger');
                     redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
@@ -292,12 +291,10 @@ if ($userdata) {
                     @unlink($webDir.'/'.$data_array["file_path"]);
                 }
                 Database::get()->query("DELETE FROM eportfolio_resource WHERE id = ?d", $er_id);
-                //Session::Messages($langePortfolioResourceRemoved, 'alert-success');
                 Session::flash('message', $langePortfolioResourceRemoved);
                 Session::flash('alert-class', 'alert-success');
                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
             } else {
-                //Session::Messages($langGeneralError, 'alert-danger');
                 Session::flash('message', $langGeneralError);
                 Session::flash('alert-class', 'alert-danger');
                 redirect_to_home_page("main/eportfolio/resources.php?id=$uid&token=$token");
@@ -374,12 +371,8 @@ if ($userdata) {
                 $post->course_title = $langUserBlog;
             }
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                       
-                                           
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                                                                                 
                                             <h3>".q($data['title'])."</h3>
-                                           
-                                           
                                             <div>
                                                 ". action_button(array(
                                                                     array(
@@ -390,17 +383,13 @@ if ($userdata) {
                                                                             'confirm' => $langePortfolioSureToRemoveResource,
                                                                             'show' => ($post->user_id == $uid)
                                                                     )))."
-                                            </div>
-                                           
-                                         
+                                            </div>                                           
                                     </div>
                                     <div class='card-body'>
                                         <p>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
                                     </div>
-                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
-                                        
-                                            <div class='small-text'>$post->course_title</div>
-                                        
+                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>                                        
+                                            <div class='small-text'>$post->course_title</div>                                        
                                     </div>
                                 </div>";
             }
@@ -411,7 +400,6 @@ if ($userdata) {
                 draw($tool_content, 1);
             }
             exit;
-
         }
 
     $blog_posts = Database::get()->queryArray("SELECT * FROM eportfolio_resource WHERE user_id = ?d AND resource_type = ?s ORDER BY time_added DESC", $id, 'blog');
@@ -473,7 +461,7 @@ if ($userdata) {
             $tool_content .= '<div id="blog" role="tabpanel" class="'.$blog_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
             //usort($blog_posts, "cmp");
             $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
-            
+
             foreach ($blog_posts as $post) {
                 $tool_content .= "<div class='col'>";
                 $data = unserialize($post->data);
@@ -483,11 +471,8 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
                 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-3 h-100'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                        
-                                           
-                                        <h3>".q($data['title'])."</h3>
-                                    
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                                           
+                                        <h3>".q($data['title'])."</h3>                                    
                                         <div>
                                             ". action_button(array(
                                                 array(
@@ -498,18 +483,14 @@ if ($userdata) {
                                                     'confirm' => $langePortfolioSureToRemoveResource,
                                                     'show' => ($post->user_id == $uid)
                                                 )))."
-                                        </div>
-                                          
-                                       
+                                        </div>                                          
                                     </div>
                                     <div class='card-body'>
                                         <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
                                         ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
-                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
-                                       
-                                            <div class='small-text'>$post->course_title</div>
-                                       
+                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>                                       
+                                        <div class='small-text'>$post->course_title</div>                                       
                                     </div>
                                 </div>";
             $tool_content .= "</div>";
@@ -522,10 +503,9 @@ if ($userdata) {
         //show assignment submissions
         if ($submissions) {
             $tool_content .= '<div id="works" role="tabpanel" class="'.$work_div_class.'" aria-labelledby="worktab" style="padding-top:20px">';
-            //usort($submissions, "cmp");
             $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-4'>";
-           
-            foreach ($submissions as $submission) { 
+
+            foreach ($submissions as $submission) {
                 $tool_content .= "<div class='col'>";
                 $data = unserialize($submission->data);
                 if (is_null($data['grade'])) {
@@ -556,18 +536,12 @@ if ($userdata) {
                 } else {
                    $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
-                $submission_footer = "<div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
-                                         
-                                              <div class='small-text'>$submission->course_title</div>
-                                          
+                $submission_footer = "<div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>                                         
+                                              <div class='small-text'>$submission->course_title</div>                                          
                                       </div>";
                 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
-                                        
-                                           
-                                            $submission_header_content
-                                           
-                                           
+                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                                        
+                                            $submission_header_content                                           
                                             <div>
                                             ". action_button(array(
                                                 array(
@@ -578,9 +552,7 @@ if ($userdata) {
                                                         'confirm' => $langePortfolioSureToRemoveResource,
                                                         'show' => ($submission->user_id == $uid)
                                                 )))."
-                                            </div>
-                                           
-                                        
+                                            </div>                                           
                                     </div>
                                     <div class='card-body'>
                                     $submission_content    
@@ -596,7 +568,6 @@ if ($userdata) {
         //show mydocs collection
         if ($docs) {
             $tool_content .= '<div id="mydocs" role="tabpanel" class="'.$mydocs_div_class.'" aria-labelledby="blogtab" style="padding-top:20px">';
-            //usort($docs, "cmp");
             $tool_content .= "<div class='table-responsive'>
                                 <table class='table-default'>
                                   <tbody>
