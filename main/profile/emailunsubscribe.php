@@ -61,7 +61,6 @@ if (isset($_POST['submit'])) {
             ));
         }
         $message = q(sprintf($course_title, $langEmailUnsubSuccess));
-        //Session::Messages($message, "alert-success");
         Session::flash('message',$message);
         Session::flash('alert-class', 'alert-success');
     } else { // change email subscription for all courses
@@ -81,7 +80,6 @@ if (isset($_POST['submit'])) {
                 'course_title' => $course_title
             ));
         }
-        //Session::Messages($langWikiEditionSucceed, "alert-success");
         Session::flash('message',$langWikiEditionSucceed);
         Session::flash('alert-class', 'alert-success');
     }

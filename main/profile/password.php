@@ -43,7 +43,6 @@ $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
 
 check_uid();
 
-
 $data['passUrl'] = $urlServer . 'main/profile/password.php';
 $data['passLocation'] = 'Location: ' . $data['passUrl'];
 
@@ -86,12 +85,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-$data['action_bar'] = action_bar(array(
-    array('title' => $langBack,
-          'url' => 'display_profile.php',
-          'icon' => 'fa-reply',
-          'level' => 'primary')));
-
 if (!isset($_POST['changePass'])) {
     $data['old_pass_error'] = Session::getError('old_pass');
     $data['old_pass'] = Session::has('old_pass') ? Session::get('old_pass') : '';
@@ -99,8 +92,16 @@ if (!isset($_POST['changePass'])) {
     $data['password_form'] = Session::has('password_form') ? Session::get('password_form') : '';
     $data['password_form1_error'] = Session::getError('password_form1');
     $data['password_form1'] = Session::has('password_form1') ? Session::get('password_form1') : '';
-    $tool_content .= "";
 }
 
-$data['menuTypeID'] = 1;
+$data['action_bar'] = action_bar(
+    [
+        [
+            'title' => $langBack,
+            'url' => 'display_profile.php',
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        ]
+    ]);
+
 view('main.profile.password', $data);

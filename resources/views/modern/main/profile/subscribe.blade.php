@@ -31,7 +31,7 @@
                         @if(isset($mail_notification))
                             <div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langEmailUnsubscribeWarning') }}</span></div>
                             <label class='label-container'>
-                                <input type='checkbox' id='unsub' name='unsub' value='1'> 
+                                <input type='checkbox' id='unsub' name='unsub' value='1'>
                                 <span class='checkmark'></span>
                                 {{ trans('langEmailFromCourses') }}
                             </label>
@@ -40,8 +40,8 @@
 
                         <div class='col-12 mt-5'>
                             <div class='row'>
-                                
-                                
+
+
 
                                 <div class='col-lg-6 col-12'>
                                     <div class='form-wrapper form-edit border-0 px-0'>
@@ -49,7 +49,7 @@
                                         @if(isset($_REQUEST['cid']))
                                         <label class='label-container'>
                                             <input type='checkbox' name='c_unsub' value='1' {{ $selected }}>
-                                            @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp 
+                                            @php $cid = $_GET['cid']; $course_title = course_id_to_title($cid) @endphp
                                             <span class='checkmark'></span>
                                             {{ $course_title }}
                                             <input type='hidden' name='cid' value='{{ $cid }}'>
@@ -68,15 +68,15 @@
                                         </div>
                                         <br>
                                         <div class='col-12 d-flex justify-content-end align-items-center mt-5'>
-                                        
+
                                                 <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langSubmit') }}'>
-                                        
-                                    
+
+
                                                 <a class='btn cancelAdminBtn ms-1' href='display_profile.php'>{{ trans('langCancel') }}</a>
-                                        
+
                                         </div>
-                                        
-                                    
+
+
                                     </div>
                                 </div>
                                 <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
@@ -86,9 +86,9 @@
                         </div>
                         {!! generate_csrf_token_form_field() !!}
                     </form>
-                
+
         </div>
-    
+
 </div>
 </div>
 
