@@ -42,6 +42,22 @@
                 });
             });
 
+            $('#cu-help-btn').click(function(e) {
+                e.preventDefault();
+                $.get($(this).attr("href"), function (data) {
+                    bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
+                        message: data,
+                        buttons: {
+                            ok: {
+                                label: "{{ js_escape(trans('langClose')) }}"
+                            }
+                        }
+                    });
+                });
+            });
+
             $("#email_notification").click(function(e) {
                 e.preventDefault();
                 var info_message = '';
@@ -387,7 +403,7 @@
                                     <h3>
                                         <div class='d-flex gap-2'>
                                             {{ trans('langCourseUnits') }}
-                                            <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                            <a id='cu-help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                                 <i class="fa-solid fa-circle-info settings-icon Neutral-600-cl pt-1"></i>
                                             </a>
                                         </div>

@@ -12,7 +12,7 @@
             <ul class="container-items nav">
                 @if(!get_config('hide_login_link'))
                     <li class="nav-item">
-                        <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}"> 
+                        <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}">
                             {{ trans('langHome') }}
                         </a>
                     </li>
@@ -29,19 +29,19 @@
                         {{ trans('langCourses') }}
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
                     <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
                         {{ trans('langFaq') }}
                     </a>
                 </li>
             </ul>
-                
+
         </div>
 
         <div class='d-flex justify-content-end align-items-center h-100 pe-0'>
-            
-                    
+
+
             @if(get_config('enable_search'))
                 <div class='h-100 d-flex justify-content-start align-items-center'>
                     <div class='h-30px'>
@@ -51,8 +51,8 @@
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>
-                            <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='Search...' name="search_terms" aria-describedby="basic-inputSearch"/>
-                        </form> 
+                            <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-describedby="basic-inputSearch"/>
+                        </form>
                     </div>
                     <div class='split-left h-30px ps-0 pe-3'></div>
                 </div>
@@ -71,7 +71,7 @@
 
             <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
                 <div class='d-flex justify-content-start align-items-center h-80px'>
-                
+
                     @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
                         <a class='d-flex align-items-center text-uppercase TextBold userLoginMobile ms-0' href="{{$urlAppend}}main/login_form.php">
                             <i class="fa-solid fa-user loginText pe-1"></i>
@@ -82,7 +82,7 @@
                     @if(isset($_SESSION['uid']))
                         <div class='d-flex justify-content-end p-0 h-80px'>
                             <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                                
+
 
                                 <div class="btn-group" role="group">
                                     <button id="btnGroupDrop1" type="button" class="btn user-menu-btn rounded-0 d-flex justify-content-center align-items-center gap-2 rounded-0" data-bs-toggle="dropdown" aria-expanded="false">
@@ -100,7 +100,7 @@
                                                         <p class='form-label mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</p>
                                                         <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
                                                     </div>
-                                                    
+
                                                 </a>
                                             </li>
 
@@ -130,7 +130,7 @@
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/portfolio.php">
                                                     <i class="fa-solid fa-house settings-icons"></i>
-                                                    {{ trans('langMyPortfolio') }}  
+                                                    {{ trans('langMyPortfolio') }}
                                                 </a>
                                             </li>
 
@@ -165,7 +165,7 @@
                                                 <li>
                                                     <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/eportfolio/index.php?id={{$uid}}&token={{ token_generate('eportfolio'.$uid) }}">
                                                         <i class="fa-regular fa-address-card settings-icons"></i>
-                                                        {{ trans('langMyePortfolio') }}   
+                                                        {{ trans('langMyePortfolio') }}
                                                     </a>
                                                 </li>
                                             @endif
@@ -195,7 +195,7 @@
                                                     {{ trans('langMyAgenda') }}
                                                 </a>
                                             </li>
-                                            
+
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/my_widgets.php">
                                                     <i class="fa-solid fa-layer-group settings-icons"></i>
@@ -205,13 +205,13 @@
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/gradebookUserTotal/index.php">
                                                     <i class="fa-solid fa-a settings-icons"></i>
-                                                    {{ trans('langGradeTotal') }}  
+                                                    {{ trans('langGradeTotal') }}
                                                 </a>
                                             </li>
                                             <li>
                                                 <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-3" href="{{ $urlAppend }}main/mycertificates.php">
                                                     <i class="fa-solid fa-award settings-icons"></i>
-                                                    {{ trans('langMyCertificates') }} 
+                                                    {{ trans('langMyCertificates') }}
                                                 </a>
                                             </li>
                                             @if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or ($session->status == USER_STUDENT and get_config('mydocs_student_enable')) or ($session->status == ADMIN_USER and get_config('mydocs_teacher_enable')))
@@ -311,7 +311,7 @@
 
 <script type='text/javascript'>
     $(document).ready(function() {
-        
+
         $('.inputSearch').on('focus',function(){
             $('.container-items').addClass('d-none');
         });
@@ -327,7 +327,7 @@
             setTimeout(function () {
                 $('.container-items').removeClass('d-none');
             }, 500);
-            
+
         });
     });
 </script>

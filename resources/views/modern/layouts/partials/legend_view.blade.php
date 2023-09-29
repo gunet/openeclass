@@ -25,16 +25,16 @@
                             <div class='col-12 d-inline-flex'>
                                 <!-- toolName -->
                                 <h4>{{$toolName}}</h4>
-                                
-                                
+
+
                             </div>
                         @else
                             <div class='col-12'>
-                                
+
                                 <h2 class='mb-0'>{{$currentCourseName}}</h2>
-                                
+
                                 <div class='d-flex justify-content-start align-items-center gap-2'>
-                                    <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p> 
+                                    <p>{{course_id_to_public_code($course_id)}}&nbsp - &nbsp{{course_id_to_prof($course_id)}}</p>
                                     @if($courseLicense > 0)
                                         <div class='copyright-img'>{!! copyright_info($course_id) !!}</div>
                                     @endif
@@ -85,7 +85,6 @@
                                         </a>
                                     @endif
                                 @endif
-
                                 <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn submitAdminBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
                                     <i class="fa-solid fa-circle-question"></i>
                                 </a>
@@ -97,7 +96,7 @@
 
 
                     </div>
-                
+
             @else
 
                     <div class='flex-grow-1'>
@@ -108,7 +107,7 @@
                             </div>
                             <div class='col-12 d-inline-flex'>
                                 <h4>{{$toolName}}</h4>
-                                
+
                             </div>
                         @else
                             <div class='col-12'>
@@ -128,12 +127,12 @@
                         @if($toolName == trans('langAnnouncements') or $toolName == trans('langBlog'))
                             @php $getToken = generate_csrf_token_link_parameter(); @endphp
                             @if($toolName == trans('langAnnouncements'))
-                                <a class='btn submitAdminBtn' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}" data-bs-toggle="tooltip" 
+                                <a class='btn submitAdminBtn' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}" data-bs-toggle="tooltip"
                                     data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}">
                                     <i class="fa-solid fa-rss"></i>
                                 </a>
                             @else
-                                <a class='btn submitAdminBtn' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}" data-bs-toggle="tooltip" 
+                                <a class='btn submitAdminBtn' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}" data-bs-toggle="tooltip"
                                     data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}">
                                     <i class="fa-solid fa-rss"></i>
                                 </a>
@@ -144,7 +143,7 @@
                             <span class='fa-solid fa-circle-question'></span>
                         </a>
                     </div>
-                
+
             @endif
         </div></br>
     </div>
