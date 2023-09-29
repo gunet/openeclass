@@ -23,6 +23,10 @@
 $require_login = false;
 $guest_allowed = true;
 
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'e_portfolio';
+
 include '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'main/eportfolio/eportfolio_functions.php';
@@ -34,7 +38,7 @@ if (!get_config('eportfolio_enable')) {
         draw($tool_content, 0);
     } else {
         draw($tool_content, 1);
-    }    
+    }
     exit;
 }
 
@@ -64,10 +68,10 @@ $pageName = q("$userdata->givenname $userdata->surname");
 $clipboard_link = "";
 
 if ($userdata) {
-    
+
     if ($uid == $id) {
 
-        
+
         if (isset($_GET['toggle_val'])) {
             if ($_GET['toggle_val'] == 'on') {
                 Database::get()->query("UPDATE user SET eportfolio_enable = ?d WHERE id = ?d", 1, $id);
@@ -76,7 +80,7 @@ if ($userdata) {
             }
             redirect_to_home_page("main/eportfolio/index.php?id=$id&token=$token");
         }
-        
+
         if ($userdata->eportfolio_enable == 0) {
             $tool_content .= "<div class='alert alert-warning'>$langePortfolioDisableWarning</div>";
         } elseif ($userdata->eportfolio_enable == 1) {
@@ -135,7 +139,7 @@ if ($userdata) {
                                         array('title' => $langUploadBio,
                                             'url' => "{$urlAppend}main/eportfolio/bio_upload.php",
                                             'icon' => 'fa-upload')
-                                    ));    
+                                    ));
     } else {
         if ($userdata->eportfolio_enable == 0) {
             $tool_content = "<div class='alert alert-danger'>$langUserePortfolioDisabled</div>";
@@ -146,7 +150,7 @@ if ($userdata) {
             }
             exit;
         }
-        
+
         $tool_content .= action_bar(array(
                                         array('title' => $langBio,
                                             'url' => "{$urlAppend}main/eportfolio/index.php?action=get_bio&amp;id=$id&amp;token=$token",
@@ -162,13 +166,13 @@ if ($userdata) {
                                               'level' => 'primary-label'),
                                     ));
     }
-    
+
     if (isset($_GET['action']) && $_GET['action'] == 'get_bio') {
         if (file_exists("$webDir/courses/eportfolio/userbios/$id/bio.pdf")) {
             send_file_to_client(str_replace('\\', '/', $webDir)."/courses/eportfolio/userbios/$id/bio.pdf", 'bio.pdf', null, true);
         }
     }
-    
+
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
@@ -200,7 +204,7 @@ if ($userdata) {
         });
     }
     </script>";
-    
+
     $head_content .= "
         <script>
         $(function() {
@@ -208,7 +212,7 @@ if ($userdata) {
         });
         </script>
     ";
-    
+
     $head_content .= "
         <script>
         $(function() {
@@ -222,7 +226,7 @@ if ($userdata) {
             })
         });
         </script>";
-    
+
     $ret_str = render_eportfolio_fields_content($id);
 
     if ($ret_str['panels'] == ""){

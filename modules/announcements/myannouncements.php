@@ -20,9 +20,14 @@
  * ======================================================================== */
 
 define('INDEX_START', 1);
+
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'main/perso.php';
+
+$require_help = true;
+$helpTopic = 'portfolio';
+$helpSubTopic = 'my_announcements';
 
 $pageName = $langMyPersoAnnouncements;
 

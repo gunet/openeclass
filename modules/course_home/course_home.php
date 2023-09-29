@@ -1029,11 +1029,23 @@ if ($course_info->view_type == 'activity') {
         $(function() {
             $('#help-btn').click(function(e) {
                 e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+                $.get($(this).attr(\"href\"), function(data) {
+                    bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
+                        message: data,
+                        buttons: {
+                            ok: {
+                                label: '" . js_escape($langClose) ."'
+                            }
+                        }
+                    });
+                });
             });
         });
         </script>
         ";
+
     $tool_content .= "<a class='pull-left add-unit-btn' id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=course_units\" data-toggle='tooltip' data-placement='top' title='$langHelp'>
             <span class='fa fa-question-circle'></span>
         </a>";
