@@ -20,16 +20,18 @@
  * ======================================================================== */
 
 define('UPGRADE', true);
+define('MAINTENANCE_PAGE', true);
 
 require_once '../include/baseTheme.php';
 
 $pageName = $langAdminLoginPage;
 
-$tool_content .= "    
+$tool_content .= "
   <div class='panel panel-default login-page'>
     <div class='panel-heading'><span>$langUpgDetails</span></div>
     <div class='panel-body login-page-option'>
       <form class='form-horizontal' role='form' action='$urlServer' method='post'>
+        <input type='hidden' name='admin_login' value='true'>
         <div class='form-group'>
           <div class='col-xs-12'>
             <input class='form-control' name='uname' placeholder='$langUsername' autofocus>
