@@ -4379,6 +4379,7 @@ $langAmShort = "Student ID";
 $langMonthlyCourseRegistration = "Registration to $langsCourse";
 $langAdminCreateFaq = "Create FAQ";
 $langAdminCreateHomeTexts = "Create texts on the homepage";
+$langAdminManageHomepage = "Homepage management";
 $langFaq = "Frequently Asked Questions";
 $langFaqQuestion = "Question";
 $langFaqAnswer = "Answer";
@@ -5644,4 +5645,6 @@ $langEclassInfo = "La plataforma Open eClass 4.0 es un completo Sistema Electró
 $langSaidForUs = "dijeron de nosotros";
 $langCloseOptions = "Cerrar opciones";
 $langOpenOptions = "Opciones abiertas";
+$langShowOnlyLoginScreen = "Show only the login screen on the home page?";
+$langHomepageTexts = "Homepage Texts";
 

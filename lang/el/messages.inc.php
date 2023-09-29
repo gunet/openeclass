@@ -216,6 +216,7 @@ $langUnlockPlatform = 'Ξεκλείδωμα πλατφόρμας';
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
 $langAdminCreateHomeTexts = "Δημιουργία κειμένων στην αρχική σελίδα";
+$langAdminManageHomepage = "Διαχείριση αρχικής σελίδας";
 $langFaq = "Συχνές ερωτήσεις";
 $langFaqQuestion = "Ερώτηση";
 $langFaqAdd = "Προσθήκη ερώτησης";
@@ -6181,3 +6182,5 @@ $langEclassInfo = "Η πλατφόρμα Open eClass 4.0 αποτελεί ένα
 $langSaidForUs = "Είπαν για εμάς";
 $langCloseOptions = "Κλείσιμο επιλογών";
 $langOpenOptions = "Άνοιγμα επιλογών";
+$langShowOnlyLoginScreen = "Να εμφανίζεται μόνο η οθόνη σύνδεσης στην αρχική σελίδα;";
+$langHomepageTexts = "Κείμενα αρχικής σελίδας";

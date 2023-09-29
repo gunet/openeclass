@@ -25,6 +25,7 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'manage_home.php', 'name' => $langAdminManageHomepage);
 $toolName = $langAdminAn;
 
 // modify visibility
@@ -277,12 +278,19 @@ elseif (isset($_GET['ann_id'])) {
 else {
     $data['action_bar'] = action_bar([
                                 [
+                                    'title' => $langBack,
+                                    'url' => "{$urlServer}modules/admin/manage_home.php",
+                                    'icon' => 'fa-reply',
+                                    'level' => 'primary'
+                                ],
+                                [
                                     'title' => $langAdminAddAnn,
                                     'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
                                     'icon' => 'fa-plus-circle',
                                     'level' => 'primary-label',
                                     'button-class' => 'btn-success'
                                 ]
+                                
                             ]);
     $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     $view = 'admin.other.announcements.index';

@@ -241,6 +241,27 @@ if (!$upgrade_begin and $uid) {
     $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,1);
     $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,2);
     
+    //priotities
+    $priority_order = 0;
+    $priorities = Database::get()->queryArray("SELECT `title` FROM `homepagePriorities` ORDER BY `order` ASC");
+    if(count($priorities) > 0){
+        foreach($priorities as $p){
+            if($p->title == 'announcements'){
+                $data['announcements_priority'] = $priority_order;
+            }elseif($p->title == 'popular_courses'){
+                $data['popular_courses_priority'] = $priority_order;
+            }elseif($p->title == 'texts'){
+                $data['texts_priority'] = $priority_order;
+            }elseif($p->title == 'testimonials'){
+                $data['testimonials_priority'] = $priority_order;
+            }elseif($p->title == 'statistics'){
+                $data['statistics_priority'] = $priority_order;
+            }else{
+                $data['open_courses_priority'] = $priority_order;
+            }
+            $priority_order++;
+        }
+    }
 
     $data['dateFormatLong'] = $dateFormatLong;
 

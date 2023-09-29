@@ -83,8 +83,8 @@ if(isset($_GET['homepageText']) and $_GET['homepageText'] == 'modify'){
 }
 
 
-
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'manage_home.php', 'name' => $langAdminManageHomepage);
 $toolName = $langAdminCreateHomeTexts;
 $pageName = $langAdminCreateHomeTexts;
 
@@ -102,6 +102,12 @@ if ($data['new']) {
 if(!$data['new'] and !$data['modify']){
    $data['action_bar'] = action_bar(
     [
+        [
+            'title' => $langBack,
+            'url' => "{$urlServer}modules/admin/manage_home.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary'
+        ],
         [
             'title' => $langAdd,
             'url' => $_SERVER['SCRIPT_NAME'].'?homepageText=new',

@@ -36,10 +36,10 @@
                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
                         <ul class="list-group list-group-flush dropdown_menu_user">
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 pe-none">
+                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-2 px-1 pe-none">
                                     <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                     <div>
-                                        <p class='form-label mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</p>
+                                        <h4 class='mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</h4>
                                         <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
                                     </div>
                                     
@@ -106,9 +106,9 @@
                             </li>
                             @endif
                             <li>
-                                <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:14px;'>
+                                <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:49px;'>
                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                    <button type='submit' class='list-group-item d-flex justify-content-end align-items-center py-3 w-100 text-end gap-2' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
+                                    <button type='submit' class='list-group-item d-flex justify-content-start align-items-center py-3 w-100 text-end gap-2' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
                                     <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                     </button>
                                 </form>

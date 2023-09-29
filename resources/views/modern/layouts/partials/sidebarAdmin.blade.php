@@ -325,12 +325,12 @@
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
-
+                                {{--
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
                                         {!! trans('langAdminAn') !!}
                                     </a>
-                                </li>
+                                </li>--}}
 
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
@@ -378,10 +378,16 @@
                                     </a>
                                 </li>
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
+                                    <a href="{{$urlAppend}}modules/admin/manage_home.php" class='TextBold link_admin_tool'>
+                                        {!! trans('langAdminManageHomepage') !!}
+                                    </a>
+                                </li>
+                                {{--
+                                <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a href="{{$urlAppend}}modules/admin/homepageTexts_create.php" class='TextBold link_admin_tool'>
                                         {!! trans('langAdminCreateHomeTexts') !!}
                                     </a>
-                                </li>
+                                </li>--}}
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a href="{{$urlAppend}}modules/admin/faq_create.php" class='TextBold link_admin_tool'>
                                         {!! trans('langAdminCreateFaq') !!}

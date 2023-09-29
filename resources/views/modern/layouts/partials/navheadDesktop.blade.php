@@ -9,33 +9,35 @@
                 <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
             </a>
 
-            <ul class="container-items nav">
-                @if(!get_config('hide_login_link'))
+            @if(!get_config('show_only_loginScreen'))
+                <ul class="container-items nav">
+                    @if(!get_config('hide_login_link'))
+                        <li class="nav-item">
+                            <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}">
+                                {{ trans('langHome') }}
+                            </a>
+                        </li>
+                    @endif
+                    @if (!isset($_SESSION['uid']))
+                        <li class="nav-item">
+                            <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
+                                {{ trans('langRegistration') }}
+                            </a>
+                        </li>
+                    @endif
                     <li class="nav-item">
-                        <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}">
-                            {{ trans('langHome') }}
+                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                            {{ trans('langCourses') }}
                         </a>
                     </li>
-                @endif
-                @if (!isset($_SESSION['uid']))
-                    <li class="nav-item">
-                        <a id="link-register" class="nav-link menu-item mx-lg-2 @if(get_config('registration_link')=='hide') d-none @endif" href="{{ $urlServer }}modules/auth/registration.php">
-                            {{ trans('langRegistration') }}
-                        </a>
-                    </li>
-                @endif
-                <li class="nav-item">
-                    <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
-                        {{ trans('langCourses') }}
-                    </a>
-                </li>
 
-                <li class="nav-item">
-                    <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
-                        {{ trans('langFaq') }}
-                    </a>
-                </li>
-            </ul>
+                    <li class="nav-item">
+                        <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">
+                            {{ trans('langFaq') }}
+                        </a>
+                    </li>
+                </ul>
+            @endif
 
         </div>
 
@@ -94,10 +96,10 @@
                                         <ul class="list-group list-group-flush">
 
                                             <li>
-                                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-3 pe-none">
+                                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-2 px-1 pe-none">
                                                     <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                                     <div>
-                                                        <p class='form-label mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</p>
+                                                        <h4 class='mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</h4>
                                                         <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
                                                     </div>
 
@@ -227,7 +229,7 @@
                                             <li>
                                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:49px;'>
                                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                                    <button class='list-group-item d-flex justify-content-end align-items-center gap-2 py-3 w-100 h-100 text-end' type='submit' name='submit'>
+                                                    <button class='list-group-item d-flex justify-content-start align-items-center gap-2 py-3 w-100 h-100 text-end' type='submit' name='submit'>
                                                         <i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
                                                         <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                                     </button>

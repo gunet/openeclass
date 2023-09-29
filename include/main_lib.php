@@ -3954,8 +3954,8 @@ function setOpenCoursesExtraHTML() {
                                             </span>
                                         </a>
                                     </div>
-                                    <div class='col-12 ps-0 pe-0 mt-3'>
-                                        <a class='btn opencourses_btn d-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
+                                    <div class='col-12 d-flex justify-content-end px-0 mt-3'>
+                                        <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
                                             $langNationalOpenCourses
                                             <span class='fa-solid fa-chevron-right ms-2'></span>
                                         </a>

@@ -93,7 +93,7 @@ function getUserLessonInfo($uid) {
                 <tr class='$visclass row-course'>
 			        <td class='border-top-0 border-start-0 border-end-0'>
                         <div>
-                            <a class='TextRegular' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
+                            <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
                                 &nbsp(" . q($data->public_code) . ")
                             </a>                            
                         </div>

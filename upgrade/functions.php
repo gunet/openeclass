@@ -2710,6 +2710,42 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER table homepageTexts ADD `type` INT(11) NOT NULL DEFAULT 1");
     }
 
+    $total_courses = get_config('total_courses');
+    if (is_null($total_courses)) {
+        set_config('total_courses', 0);
+    }
+
+    $visits_per_week = get_config('visits_per_week');
+    if (is_null($visits_per_week)) {
+        set_config('visits_per_week', 0);
+    }
+
+    $show_only_loginScreen = get_config('show_only_loginScreen');
+    if (is_null($show_only_loginScreen)) {
+        set_config('show_only_loginScreen', 0);
+    }
+
+
+    //priorities homepage
+    if (!DBHelper::tableExists('homepagePriorities')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `homepagePriorities` (
+                                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                                        `title` text NULL,
+                                        `order` int(11) NOT NULL,
+                                        PRIMARY KEY (`id`)) $tbl_options");
+
+        Database::get()->query("INSERT INTO `homepagePriorities` (`title`, `order`) VALUES 
+                                            ('announcements', 0),
+                                            ('popular_courses', 1),
+                                            ('texts', 2),
+                                            ('testimonials', 3),
+                                            ('statistics', 4),
+                                            ('open_courses', 5)");
+
+    }
+    
+    
+
 }
 
 
