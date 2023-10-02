@@ -37,6 +37,12 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 
+// Get success message from current course language
+if (Session::has('course-modify-success')) {
+    Session::flash('message', $langModifDone);
+    Session::flash('alert-class', 'alert-success');
+}
+
 $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
@@ -148,6 +154,11 @@ if (isset($_POST['submit'])) {
         $deps_changed = count(array_diff($old_deps, $departments)) +
                         count(array_diff($departments, $old_deps));
 
+        $course_language = $session->language;
+        if (isset($_POST['course_language']) and in_array($_POST['course_language'], $session->active_ui_languages)) {
+            $course_language = $_POST['course_language'];
+        }
+
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if ($deps_changed and !$deps_valid) {
@@ -169,7 +180,7 @@ if (isset($_POST['submit'])) {
                             WHERE id = ?d",
                                 $_POST['title'], mb_substr($_POST['fcode'], 0, 100), $_POST['course_keywords'],
                                 $_POST['formvisible'], $course_license, $_POST['teacher_name'],
-                                $session->language, $password, $view_type, $flipped_flag, $course_id);
+                                $course_language, $password, $view_type, $flipped_flag, $course_id);
             $course->refresh($course_id, $departments);
 
             Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
@@ -210,8 +221,8 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['enable_access_users_list'])) {
                 setting_set(SETTING_USERS_LIST_ACCESS, $_POST['enable_access_users_list'], $course_id);
             }
-            Session::flash('message',$langModifDone);
-            Session::flash('alert-class', 'alert-success');
+            // Course settings modified, will get success message after redirect in current course language
+            Session::flash('course-modify-success', true);
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
         }
     }
@@ -278,7 +289,7 @@ if (isset($_POST['submit'])) {
     $data['teacher_name'] = q($c->prof_names);
 
     $language = $c->lang;
-    $data['lang_select_options'] = lang_select_options('localize', "class='form-control'");
+    $data['lang_select_options'] = lang_select_options('course_language', 'class="form-control"', $language);
     $data['course_keywords'] = q($c->keywords);
 
     $data['password'] = q($c->password);
