@@ -59,7 +59,7 @@ if(isset($_GET['term'])){
                       AND course_user.user_id = ?d 
                       AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
                   ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
-  }else{//Get all courses from search-component which user has registered 
+  }else{//Get all courses from search-component which user has registered
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                    course.code code,
                    course.public_code,
@@ -81,7 +81,7 @@ if(isset($_GET['term'])){
   if($myCourses){
       $html .="<div class='col-12'>
             <div class='row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4'>";
-                
+
                     $pagesPag = 0;
                     $allCourses = 0;
                     $temp_pages = 0;
@@ -89,20 +89,20 @@ if(isset($_GET['term'])){
                     if($countCards == 1){
                         $pagesPag++;
                     }
-                
+
                 foreach($myCourses as $course){
                     $temp_pages++;
-                    
+
                   $html .= "<div class='col cardCourse$pagesPag'>
                         <div class='card h-100 card$pagesPag Borders border-card px-2 py-3'>";
-                            
+
                                 $courseImage = '';
                                 if(!empty($course->course_image)){
                                     $courseImage = "{$urlServer}courses/{$course->code}/image/{$course->course_image}";
                                 }else{
                                     $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
                                 }
-                            
+
                       $html .= "<div class='card-header border-0 bg-white'>
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
                                     if($course->visible == 1){
@@ -193,14 +193,14 @@ if(isset($_GET['term'])){
                         </form>
                     </div>";
 
-                    
+
                     if($countCards == 6 and $temp_pages < count($myCourses)){
                         $pagesPag++;
                         $countCards = 0;
                     }
                     $countCards++;
                     $allCourses++;
-                    
+
 
                   }
 
@@ -220,7 +220,7 @@ if(isset($_GET['term'])){
 
 
   echo($html);
-  
+
   exit();
 
 }
@@ -241,13 +241,12 @@ $data['action_bar']  = action_bar([
       'icon' => 'fa-plus-circle',
       'level' => 'primary-label',
       'button-class' => 'submitAdminBtnDefault' ]
-    
+
 ], false);
 
 $data['menuTypeID'] = 1;
 
 view('main.my_courses.index', $data);
-
 
 
 

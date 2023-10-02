@@ -48,7 +48,6 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 load_js('datatables');
 
 // display privacy policy consent message to user if necessary
-$modalShow = '';
 if (get_config('activate_privacy_policy_text')) {
     $consentMessage = get_config('privacy_policy_text_' . $session->language);
     if (isset($_POST['accept_policy'])) {
@@ -64,124 +63,7 @@ if (get_config('activate_privacy_policy_text')) {
         }
         redirect_to_home_page();
     }
-
-    if ($_SESSION['status'] == USER_STUDENT and
-        get_config('activate_privacy_policy_consent') and
-        !isset($_SESSION['accept_policy_later']) and
-        !user_has_accepted_policy($uid)) {
-        $tool_content .= "
-            <div class='modal fade' id='consentModal' tabindex='-1' role='dialog' aria-labelledby='consentModalLabel'>
-                <div class='modal-dialog' role='document'>
-                    <div class='modal-content'>
-                        <div class='modal-header'>
-                            <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-                            <h4 class='modal-title' id='consentModalLabel'>$langUserConsent</h4>
-                        </div>
-                        <div class='modal-body' style='margin-left:20px; margin-right:20px;'>
-                            $consentMessage
-                        </div>
-                        <div class='modal-footer'>
-                            <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-                                <button type='submit' class='btn submitAdminBtn' role='button' name='accept_policy' value='yes'>$langAccept</button>
-                                <button type='submit' class='btn deleteAdminBtn' role='button' name='accept_policy' value='no'>$langRejectRequest</button>
-                                <button type='submit' class='btn cancelAdminBtn' role='button' name='accept_policy' value='later'>$langLater</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>";
-        $modalShow = "$('#consentModal').modal('show')";
-    } else {
-        $modalShow = '';
-    }
 }
-
-$head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
-<script type='text/javascript'>
-jQuery(document).ready(function() {
-  $modalShow
-  jQuery('#portfolio_lessons').DataTable({
-    'bLengthChange': false,
-    'iDisplayLength': 8,
-    'bSort' : false,
-    'fnDrawCallback': function( oSettings ) {
-      $('#portfolio_lessons_filter label input').attr({
-        class : 'form-control input-sm searchCoursePortfolio Neutral-700-cl ms-0 mb-3',
-        placeholder : '$langSearch...'
-      });
-      $('#portfolio_lessons_filter label').prepend('<span class=\"sr-only\">$langSearch</span>')
-    },
-    'dom': '<\"all_courses float-end px-0\">frtip',
-    'oLanguage': {
-           'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-           'sZeroRecords':  '".$langNoResult."',
-           'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-           'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-           'sInfoFiltered': '',
-           'sInfoPostFix':  '',
-           'sSearch':       '',
-           'sUrl':          '',
-           'oPaginate': {
-               'sFirst':    '&laquo;',
-               'sPrevious': '&lsaquo;',
-               'sNext':     '&rsaquo;',
-               'sLast':     '&raquo;'
-           }
-       }
-  });
-
-
- //$('div.all_courses').html('<div class=\"d-flex justify-content-md-start justify-content-center flex-wrap\"><a class=\"btn submitAdminBtn mb-3 ms-md-0 mx-2\" href=\"{$urlAppend}modules/auth/courses.php\">$langRegCourses</a><a id=\"btn_create_course\" class=\"btn submitAdminBtn btn_create_course\" href=\"{$urlAppend}modules/create_course/create_course.php\">$langCourseCreate</a></div>');
-  
-
- $('div.all_courses').html('<div class=\"d-flex justify-content-end flex-wrap\"><a class=\"btn showCoursesBars active\"><i class=\"fa-solid fa-table-list\"></i></a><a class=\"btn showCoursesPics\"><i class=\"fa-solid fa-table-cells-large\"></i></a></div>');
- 
- 
- jQuery('.panel_title').click(function()
-  {
-    var mypanel = $(this).next();
-    mypanel.slideToggle(100);
-    if($(this).hasClass('active')) {
-        $(this).removeClass('active');
-    } else {
-        $(this).addClass('active');
-    }
-  });"
-  .'var calendar = $("#bootstrapcalendar").calendar({
-                    tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
-                    events_source: "'.$urlAppend.'main/calendar_data.php",
-                    language: "'.$langLanguageCode.'",
-                    views: {year:{enable: 0}, week:{enable: 0}, day:{enable: 0}},
-                    onAfterViewLoad: function(view) {
-                                $("#current-month").text(this.getTitle());
-                                $(".btn-group button").removeClass("active");
-                                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
-                                }
-        });
-
-        $(".btn-group button[data-calendar-nav]").each(function() {
-            var $this = $(this);
-            $this.click(function() {
-                calendar.navigate($this.data("calendar-nav"));
-            });
-        });
-
-        $(".btn-group button[data-calendar-view]").each(function() {
-            var $this = $(this);
-            $this.click(function() {
-                calendar.view($this.data("calendar-view"));
-            });
-        });'
-."});
-".
-'function show_month(day,month,year){
-    $.get("calendar_data.php",{caltype:"small", day:day, month: month, year: year}, function(data){$("#smallcal").html(data);});
-}
-
-
-
-</script>';
 
 $data['action_bar'] = action_bar(array(
         array('title' => $langRegCourses,
@@ -201,7 +83,6 @@ $data['user_announcements'] = $user_announcements;
 
 $data['portfolio_page_main_widgets'] = '';
 $portfolio_page_main = new WidgetArea(PORTFOLIO_PAGE_MAIN);
-
 
 foreach ($portfolio_page_main->getUserAndAdminWidgets($uid) as $key => $widget) {
     $data['portfolio_page_main_widgets'] .= $widget->run($key);
@@ -230,9 +111,8 @@ $data['student_courses_count'] = $student_courses_count;
 
 $data['user_messages'] = $user_messages;
 
-
-// For pagination pictures of user-cources
-$courses = getUserCoursesPic($uid);
+// For pagination pictures of user-courses
+$courses = getUserCourses($uid);
 $data['courses'] = $courses;
 
 $items_per_page = 4;
@@ -241,5 +121,4 @@ $data['items_per_page'] = $items_per_page;
 $course_pages = ceil(count($courses)/$items_per_page);
 $data['course_pages'] = $course_pages;
 
-$data['menuTypeID'] = 1;
 view('portfolio.index', $data);

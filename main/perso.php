@@ -39,7 +39,7 @@ $_user['lastLogin'] = str_replace('-', ' ', $_user['persoLastLogin']);
 $user_announcements = '';
 
 //  Get user's course info
-$user_lesson_info = getUserLessonInfo($uid);
+$user_lesson_info = getUserCourseInfo($uid);
 //if user is registered to at least one lesson
 if (count($lesson_ids) > 0) {
     // get user announcements

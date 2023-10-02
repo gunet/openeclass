@@ -32,7 +32,7 @@ require_once 'modules/message/class.msg.php';
  * @param integer $uid
  * @return string
  */
-function getUserLessonInfo($uid) {
+function getUserCourseInfo($uid) {
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions,
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
@@ -41,23 +41,7 @@ function getUserLessonInfo($uid) {
 
     $lesson_content = '';
     $lesson_ids = array();
-    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible visible,
-                             course.description description,
-                             course.course_image course_image,
-                             course.popular_course popular_course,
-                             course_user.status status,
-                             course_user.favorite favorite
-                        FROM course JOIN course_user
-                            ON course.id = course_user.course_id
-                            AND course_user.user_id = ?d
-                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
-                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
+    $myCourses = getUserCourses($uid);
 
     $courses = [];
     if ($myCourses) {
@@ -161,7 +145,6 @@ function getUserLessonInfo($uid) {
         }
         $lesson_content .= "</tbody></table>";
     } else { // if we are not registered to courses
-        //$lesson_content .= "<div class='col-12 d-flex justify-content-start'><a class='btn submitAdminBtn mb-1' href='{$urlServer}modules/auth/courses.php'>$langRegCourses</a></div>";
         $lesson_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNotEnrolledToLessons!</span></div></div>";
         if ($session->status == USER_TEACHER) {
             $lesson_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langWelcomeSelect $langWelcomeProfPerso</span></div></div>";
@@ -370,44 +353,30 @@ function user_accept_policy($uid, $accept = true) {
 }
 
 
-/*
- * @DIKH MOY SYNARTHSH GIA NA FTIAKSW TO PAGINATION ME TIS EIKONES TWN MATHIMATWN STO PORTFOLIO BLADE ARXEIO
-*/
-function getUserCoursesPic($uid) {
-
-    global $session;
-    if ($session->status == USER_TEACHER) {
-        $myCourses = Database::get()->queryArray("SELECT course.id course_id,
+/**
+ * @brief get user courses
+ * @param $uid
+ * @return array|DBResult|null
+ */
+function getUserCourses($uid)
+{
+    $myCourses = Database::get()->queryArray("SELECT course.id course_id,
                              course.code code,
                              course.public_code,
-                             course.course_image course_image,
                              course.title title,
                              course.prof_names professor,
                              course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d
-                       ORDER BY course_user.status, course.visible, course.created DESC", $uid, $uid);
-    } else {
-        $myCourses = Database::get()->queryArray('SELECT course.id course_id,
-                             course.code code,
-                             course.public_code,
+                             course.visible visible,
+                             course.description description,
                              course.course_image course_image,
-                             course.title title,
-                             course.prof_names professor,
-                             course.lang,
-                             course.visible,
-                             course_user.status status
-                       FROM course, course_user, user
-                       WHERE course.id = course_user.course_id AND
-                             course_user.user_id = ?d AND
-                             user.id = ?d AND
-                             (course.visible != ' . COURSE_INACTIVE . ' OR course_user.status = ' . USER_TEACHER . ')
-                       ORDER BY course.title, course.prof_names', $uid, $uid);
-    }
+                             course.popular_course popular_course,
+                             course_user.status status,
+                             course_user.favorite favorite
+                        FROM course JOIN course_user
+                            ON course.id = course_user.course_id
+                            AND course_user.user_id = ?d
+                            AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
+                        ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
 
     return $myCourses;
 }
