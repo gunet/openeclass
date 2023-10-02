@@ -48,107 +48,112 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
     $urldefault = (strlen($lti_url_default) > 0) ? " value='$lti_url_default' " : '';
 
     $textarea = rich_text_editor('desc', 4, 20, '');
-    $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'>
-        <div class='form-wrapper form-edit border-0 px-0'>
-        <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
-        <fieldset>
-        <div class='form-group'>
-            <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
-            <div class='col-sm-12'>
-                <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
-            </div>
-        </div>
-        <div class='form-group mt-4'>
-            <label for='desc' class='col-sm-12 control-label-notes'>$langUnitDescr</label>
-            <div class='col-sm-12'>
-                $textarea
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col-md-6 col-12'>
-                <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
-                    <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' $urldefault />
-                    </div>
-                </div>
-            </div>
-            <div class='col-md-6 col-12'>
-                <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
-                    <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' size='50' />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col-md-6 col-12'>
-                <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
-                    <div class='col-sm-12'>
-                        <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' size='50' />
-                    </div>
-                </div>
-            </div>";
+  $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
+                        <div class='flex-grow-1'>
+                            <div class='form-wrapper form-edit border-0 px-0'>
+                                <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]$urlext' method='post' >
+                                    <fieldset>
+                                        <div class='form-group'>
+                                            <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' name='title' id='title' placeholder='$langTitle' size='50' />
+                                            </div>
+                                        </div>
+                                        <div class='form-group mt-4'>
+                                            <label for='desc' class='col-sm-12 control-label-notes'>$langUnitDescr</label>
+                                            <div class='col-sm-12'>
+                                                $textarea
+                                            </div>
+                                        </div>
+       
+            
+                                        <div class='form-group mt-4'>
+                                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderUrl</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' name='lti_url' id='lti_url' placeholder='$langLTIProviderUrl' size='50' $urldefault />
+                                            </div>
+                                        </div>
+            
+          
+                                        <div class='form-group mt-4'>
+                                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderKey</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' name='lti_key' id='lti_key' placeholder='$langLTIProviderKey' size='50' />
+                                            </div>
+                                        </div>
+            
+        
+       
+                                        <div class='form-group mt-4'>
+                                            <label for='title' class='col-sm-12 control-label-notes'>$langLTIProviderSecret</label>
+                                            <div class='col-sm-12'>
+                                                <input class='form-control' type='text' name='lti_secret' id='lti_secret' placeholder='$langLTIProviderSecret' size='50' />
+                                            </div>
+                                        </div>
+            ";
 
         $tool_content .= "
-        <div class='col-md-6 col-12'>
-            <div class='form-group mt-4'>
-                <label for='lti_launchcontainer' class='col-sm-12 control-label-notes'>$langLTILaunchContainer</label>
-                <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
-            </div>
-        </div>
-            <div class='form-group mt-4'>
-                <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</label>
-                <div class='col-sm-12'>
-                    <div class='radio mb-2'>
-                      <label>
-                        <input type='radio' id='active_button' name='status' value='1' checked>
-                        $langNewLTIAppActive
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='inactive_button' name='status' value='0'>
-                       $langNewLTIAppInActive
-                      </label>
-                    </div>
-                </div>
-            </div>";
-            if (!isset($course_code)) {
-                $tool_content .= "<div class='form-group mt-4' id='courses-list'>
-                    <label class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
-                    <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
-                    <div class='col-sm-12'>
-                        <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
-                    $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
-                                                            WHERE visible <> " . COURSE_INACTIVE . "
-                                                            ORDER BY title");
-                    $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
-                    foreach($courses_list as $c) {
-                        $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
-                    }
-                    $tool_content .= "</select>
-                        <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
-                    </div>
-                </div>";
-            } else {
-                $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
-            }
+        
+                                        <div class='form-group mt-4'>
+                                            <label for='lti_launchcontainer' class='col-sm-12 control-label-notes'>$langLTILaunchContainer</label>
+                                            <div class='col-sm-12'>" . selection(lti_get_containers_selection(), 'lti_launchcontainer',  LTI_LAUNCHCONTAINER_EMBED) . "</div>
+                                        </div>
+        
+                                        <div class='form-group mt-4'>
+                                            <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewLTIAppStatus</label>
+                                            <div class='col-sm-12'>
+                                                <div class='radio mb-2'>
+                                                <label>
+                                                    <input type='radio' id='active_button' name='status' value='1' checked>
+                                                    $langNewLTIAppActive
+                                                </label>
+                                                </div>
+                                                <div class='radio'>
+                                                <label>
+                                                    <input type='radio' id='inactive_button' name='status' value='0'>
+                                                $langNewLTIAppInActive
+                                                </label>
+                                                </div>
+                                            </div>
+                                        </div>";
 
-        $tool_content .= "<div class='form-group mt-5'>
-            <div class='col-12 d-flex justify-content-end align-items-center'>
-                <input class='btn submitAdminBtn' type='submit' name='new_lti_app' value='$langAdd'>
-            </div>
-        </div>
-        </fieldset>
-         ". generate_csrf_token_form_field() ."
-        </form></div></div><div class='d-none d-lg-block'>
-        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
-    </div>
-    </div>";
+                                    if (!isset($course_code)) {
+                                        $tool_content .= "
+                                        <div class='form-group mt-4' id='courses-list'>
+                                            <label class='col-sm-12 control-label-notes'>$langUseOfApp:&nbsp;&nbsp;
+                                            <span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langUseOfAppInfo'></span></label>
+                                            <div class='col-sm-12'>
+                                                <select id='select-courses' class='form-select' name='lti_courses[]' multiple>";
+                                            $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
+                                                                                    WHERE visible <> " . COURSE_INACTIVE . "
+                                                                                    ORDER BY title");
+                                            $tool_content .= "<option value='0' selected><h2>$langToAllCourses</h2></option>";
+                                            foreach($courses_list as $c) {
+                                                $tool_content .= "<option value='$c->id'>" . q($c->title) . " (" . q($c->code) . ")</option>";
+                                            }
+                            $tool_content .= "</select>
+                                                <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
+                                            </div>
+                                        </div>";
+                                    } else {
+                                        $tool_content .= "<input type='hidden' name='lti_courses[]' value='$course_id'>";
+                                    }
+
+        $tool_content .= "
+                                        <div class='form-group mt-5'>
+                                            <div class='col-12 d-flex justify-content-end align-items-center'>
+                                                <input class='btn submitAdminBtn' type='submit' name='new_lti_app' value='$langAdd'>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    ". generate_csrf_token_form_field() ."
+                                </form>
+                            </div>
+                        </div>
+                        <div class='d-none d-lg-block'>
+                            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                        </div>
+                    </div>";
 
         $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[

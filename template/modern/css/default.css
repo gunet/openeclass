@@ -1853,6 +1853,11 @@ input[type="submit"].warningAdminBtn:hover {
   border: solid 1px #CDD4E0;
   filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
 }
+@media(max-width:991px){
+  .action_bar .contextual-menu{
+    z-index: 0;
+  }
+}
 
 .contextual-menu-user{
   min-width: 310px;
@@ -4896,7 +4901,7 @@ div[role="progressbar"]::before {
 
 
 
-
+/* platform has boxed settings */
 .col_maincontent_active .form-wrapper{
   border: 0px;
   padding-left: 0px;
@@ -4904,39 +4909,60 @@ div[role="progressbar"]::before {
 }
 
 @media(min-width:992px) and (max-width:1199px){
-  .form-image-modules{
+  .main-section:has(.course-wrapper) .form-image-modules{
     max-width:320px; 
     float:right;
   }
 }
-@media(min-width:1200px) and (max-width:1399px){
-  .form-image-modules{
+@media(min-width:1200px) and (max-width:1299px){
+  .main-section:has(.course-wrapper) .form-image-modules{
     max-width:360px; 
     float:right;
   }
 }
+@media(min-width:1300px) and (max-width:1399px){
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width:400px; 
+    float:right;
+  }
+}
 @media(min-width:1400px) and (max-width:1500px){
-  .form-image-modules{
-    max-width: calc(750px - 240px);
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width: 400px;
+    float:right;
   }
 }
 @media(min-width:1501px) and (max-width:1600px){
-  .form-image-modules{
-    max-width: calc(750px - 240px);
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width: 400px;
+    float:right;
   }
 }
 @media(min-width:1601px) and (max-width:1700px){
-  .form-image-modules{
-    max-width: calc(800px - 240px);
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width: 400px;
+    float:right;
   }
 }
 @media(min-width:1701px) and (max-width:1800px){
-  .form-image-modules{
-    max-width: calc(750px - 240px);
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width: 400px;
+    float:right;
   }
 }
 @media(min-width:1801px){
-  .form-image-modules{
-    max-width: calc(750px - 240px);
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width: 400px;
+    float:right;
   }
+}
+@media(min-width:1901px){
+  .main-section:has(.course-wrapper) .form-image-modules{
+    max-width: 400px;
+    float:right;
+  }
+}
+
+.main-section:not(:has(.course-wrapper)) .form-image-modules{
+  width:auto;
 }

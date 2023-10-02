@@ -590,19 +590,19 @@
                                             </a>
                                         @endif
                                     </div>
-                                    <div class='card-body'>
+                                    <div class='card-body px-0'>
                                         <div class='text-center'>
                                             <div class='col-12 h-100'>
                                                 @if ($is_editor)
                                                     <div class='card statistics-card border-default-card drop-shadow'>
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
-                                                            <div>
-                                                                <div class='d-flex justify-content-center'>
-                                                                    <img src='{{ $urlAppend }}template/modern/images/Icons_user.svg'>
-                                                                    <h1 class='mb-0 ms-2'>{{ $certified_users}}/{{ $studentUsers }}</h1>
-                                                                </div>
-                                                                <p class='form-label text-center mt-3'>{{trans('langUsers')}}</p>
-                                                            </div>
+                                                            <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
+                                                                @if ($percentage_t == '100')
+                                                                    <i class='fa fa-check-circle fa-5x state_success'></i>
+                                                                @else
+                                                                    <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $percentage_t }}deg;">{{ $percentage_t }}%</div>
+                                                                @endif
+                                                            </a>
                                                         </div>
                                                     </div>
 

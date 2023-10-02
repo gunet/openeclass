@@ -79,8 +79,8 @@
 
                                 
 
-                                <div class='row'>
-                                    <div class='col-md-6 col-12'>
+                                
+                                    
                                         @if ($request_types)
                                             <div class='form-group mt-4'>
                                                 <label for='requestType' class='col-sm-6 control-label-notes'>{{ trans('langType') }}</label>
@@ -94,16 +94,16 @@
                                                 </div>
                                             </div>
                                         @endif
-                                    </div>
-                                    <div class='col-md-6 col-12'>
+                                    
+                                   
                                         <div class='form-group mt-4'>
                                             <label for='requestTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}</label>
                                             <div class='col-sm-12'>
                                                 <input type='text' class='form-control' placeholder="{{ trans('langTitle') }}..." id='requestTitle' name='requestTitle' required>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    
+                                
 
                                 
 
@@ -116,8 +116,8 @@
 
                              
 
-                                <div class='row'>
-                                    <div class='col-md-6 col-12'>
+                               
+                                    
                                         <div class='form-group mt-4'>
                                             <label for='assignTo' class='col-sm-6 control-label-notes'>{{ trans("m['WorkAssignTo']") }}:</label>
                                             <div class='col-sm-12'>
@@ -128,8 +128,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class='col-md-6 col-12'>
+                                   
+                                  
                                         <div class='form-group mt-4'>
                                             <label for='requestWatchers' class='col-sm-6 control-label-notes'>{{ trans('langWatchers') }}:</label>
                                             <div class='col-sm-12'>
@@ -142,8 +142,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                    
+                               
 
                                 @if ($request_types)
                                     <div class="mt-4"></div>

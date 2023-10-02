@@ -397,6 +397,8 @@ if ($uid) {
                                                                     AND course_id = ?d
                                                                     AND completed = 1
                                                                     AND badge = ?d", $course_id, $course_completion_id)->t;
+
+            $data['percentage_t'] = round($data['certified_users'] / $data['studentUsers'] * 100, 0);
         } else {
             $course_completion_status = has_certificate_completed($uid, 'badge', $course_completion_id);
             $data['percentage'] = $percentage = get_cert_percentage_completion('badge', $course_completion_id);

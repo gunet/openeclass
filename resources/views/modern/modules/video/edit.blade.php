@@ -183,8 +183,8 @@
 
 
 
-                                        <div class='row'>
-                                            <div class='col-md-6 col-12'>
+                                        
+                                            
                                                 <div class='form-group mt-4'>
                                                     <label for='Creator' class='col-sm-12 control-label-notes'>{{ trans('langCreator') }}</label>
                                                     <div class='col-sm-12'>
@@ -195,9 +195,9 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            </div>
+                                            
 
-                                            <div class='col-md-6 col-12'>
+                                            
                                                 <div class='form-group mt-4'>
                                                     <label for='Publisher' class='col-sm-12 control-label-notes'>{{ trans('langpublisher') }}</label>
                                                     <div class='col-sm-12'>
@@ -208,20 +208,20 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            
+                                        
 
 
-                                        <div class='row'>
+                                        
                                             @if (isset($form_input))
-                                            <div class='col-md-6 col-12'>
-                                                <div class='form-group mt-4'>
+                                            
+                                                <div class="form-group mt-4 @if(isset($_GET['table_edit'])) d-none @endif">
                                                     <label for='Date' class='col-sm-6 control-label-notes'>{{ trans('langDate') }}</label>
-                                                    <div class='col-sm-12'><input class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
+                                                    <div class='col-sm-12'><input id='videodate' class='form-control' type='text' name='date' value='{{ date('Y-m-d G:i') }}'></div>
                                                 </div>
-                                            </div>
+                                            
                                             @endif
-                                            <div class='col-md-6 col-12'>
+                                            
                                                 <div class='form-group mt-4'>
                                                     <label for='Category' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}</label>
                                                     <div class='col-sm-12'>
@@ -243,8 +243,8 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                           
+                                        
 
 
 

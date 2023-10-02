@@ -347,9 +347,56 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['fluidContainerWidth'])){
             $container = 'container-fluid';
             $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
-            $size_image_form = $theme_options_styles['fluidContainerWidth']/2;
-            $size_image_form = $size_image_form.'px';
-            $styles_str .= "@media(min-width:1400px){.form-image-modules{max-width: calc($size_image_form - 240px);}}";
+            // $size_image_form = $theme_options_styles['fluidContainerWidth']/2;
+            // $size_image_form = $size_image_form.'px';
+            // $styles_str .= "@media(min-width:1400px){.form-image-modules{max-width: calc($size_image_form - 240px);}}";
+
+            $styles_str .= "
+            
+              @media(min-width:1400px) and (max-width:1500px){
+                .main-section:has(.course-wrapper) .form-image-modules{
+                  max-width: 450px;
+                  float:right;
+                }
+              }
+              @media(min-width:1501px) and (max-width:1600px){
+                .main-section:has(.course-wrapper) .form-image-modules{
+                  max-width: 470px;
+                  float:right;
+                }
+              }
+              @media(min-width:1601px) and (max-width:1700px){
+                .main-section:has(.course-wrapper) .form-image-modules{
+                  max-width: 490px;
+                  float:right;
+                }
+              }
+              @media(min-width:1701px) and (max-width:1800px){
+                .main-section:has(.course-wrapper) .form-image-modules{
+                  max-width: 510px;
+                  float:right;
+                }
+              }
+              @media(min-width:1801px){
+                .main-section:has(.course-wrapper) .form-image-modules{
+                  max-width: 530px;
+                  float:right;
+                }
+              }
+              @media(min-width:1901px){
+                .main-section:has(.course-wrapper) .form-image-modules{
+                  max-width: 550px;
+                  float:right;
+                }
+              }
+              
+              .main-section:not(:has(.course-wrapper)) .form-image-modules{
+                width:auto;
+              } 
+            
+            
+            
+            ";
         }
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";

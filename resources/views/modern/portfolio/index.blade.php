@@ -651,8 +651,22 @@
                                                 $pagesPag++;
                                             }
                                         @endphp
+                                        @php //print_a($courses); @endphp
                                         @foreach($courses as $course)
                                             @php $temp_pages++; @endphp
+
+                                            @php 
+                                                if (isset($course->favorite)) {
+                                                    $favorite_icon = 'fa-star Primary-500-cl';
+                                                    $fav_status = 0;
+                                                    $fav_message = '';
+                                                } else {
+                                                    $favorite_icon = 'fa-regular fa-star';
+                                                    $fav_status = 1;
+                                                    $fav_message = $langFavorite;
+                                                }
+                                            @endphp
+
                                             <div class="col cardCourse{{ $pagesPag }}">
                                                 <div class="card h-100 card{{ $pagesPag }} Borders border-card">
                                                     @php
@@ -664,19 +678,33 @@
                                                         }
                                                     @endphp
 
+                                                    @if($course->course_image == NULL)
+                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $course->course_image }}" />
+                                                    @else
+                                                        <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
+                                                    @endif
+
                                                     <div class='card-body'>
-                                                        @if($course->course_image == NULL)
-                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $course->course_image }}" />
-                                                        @else
-                                                            <img class="card-img-top cardImgCourse @if($course->visible == 3) InvisibleCourse @endif" src="{{$urlAppend}}courses/{{$course->code}}/image/{{$course->course_image}}" alt="{{ $course->course_image }}" />
-                                                        @endif
-                                                        <div class="lesson-title mt-3">
+                                                       
+                                                        <div class="lesson-title">
                                                             <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
                                                                 {{ $course->title }}&nbsp({{ $course->public_code }})
                                                             </a>
                                                         </div>
 
                                                         <div class="vsmall-text Neutral-900-cl TextRegular">{{ $course->professor }}</div>
+                                                    </div>
+
+                                                    <div class='card-footer bg-white border-0'>
+                                                       {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
+                                                        @if ($course->status == USER_STUDENT)
+                                                            @if (get_config('disable_student_unregister_cours') == 0)
+                                                                {!! icon('fa-minus-circle ms-3', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
+                                                                
+                                                            @endif
+                                                        @elseif ($course->status == USER_TEACHER)
+                                                            {!! icon('fa-wrench ms-3', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
+                                                        @endif
                                                     </div>
 
                                                 </div>
