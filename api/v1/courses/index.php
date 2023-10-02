@@ -22,8 +22,22 @@
 require_once '../../../modules/create_course/functions.php';
 
 
+
 function api_method($access) {
 
+
+
+    if ( isset($_GET['test']) ) {
+
+        $session = new Session();
+
+        $activeLanguages = $session->active_ui_languages;
+
+        header('Content-Type: application/json');
+        echo json_encode($session->active_ui_languages, JSON_UNESCAPED_UNICODE);
+        exit();
+
+    }
 
     if ( isset($_GET['create']) ) {
 
@@ -44,16 +58,67 @@ function api_method($access) {
         $title = $_GET['title'];
         $category = $_GET['category'];
 
+        $code = strtoupper(new_code($category));
+        $code = str_replace(' ', '', $code);
+
         $description = isset($_GET['description']) ? $_GET['description'] : "";
-        $lang = isset($_GET['lang']) ? $_GET['lang'] : "el";
         $password = isset($_GET['password']) ? $_GET['password'] : "";
         $prof_names = isset($_GET['prof_names']) ? $_GET['prof_names'] : '';
         $flipped_flag = isset($_GET['flipped_flag']) ? $_GET['flipped_flag'] : 0;
+        $public_code = isset($_GET['public_code']) ? $_GET['public_code'] : $code;
 
-        $doc_quota = get_config('doc_quota');
-        $group_quota = get_config('group_quota');
-        $video_quota = get_config('video_quota');
-        $dropbox_quota = get_config('dropbox_quota');
+        if (isset($_GET['doc_quota'])) {
+            if (is_numeric($_GET['doc_quota']) && $_GET['doc_quota'] > 0) {
+                $doc_quota = $_GET['doc_quota'];
+            } else {
+                Access::error(20, 'doc_quota input must be a number and higher than zero');
+            }
+        } else {
+            $doc_quota = get_config('doc_quota');
+        }
+
+        if (isset($_GET['group_quota'])) {
+            if (is_numeric($_GET['group_quota']) && $_GET['group_quota'] > 0) {
+                $group_quota = $_GET['group_quota'];
+            } else {
+                Access::error(20, 'group_quota input must be a number and higher than zero');
+            }
+        } else {
+            $group_quota = get_config('group_quota');
+        }
+
+        if (isset($_GET['video_quota'])) {
+            if (is_numeric($_GET['video_quota']) && $_GET['video_quota'] > 0) {
+                $video_quota = $_GET['video_quota'];
+            } else {
+                Access::error(20, 'video_quota input must be a number and higher than zero');
+            }
+        } else {
+            $video_quota = get_config('video_quota');
+        }
+
+        if (isset($_GET['dropbox_quota'])) {
+            if (is_numeric($_GET['dropbox_quota']) && $_GET['dropbox_quota'] > 0) {
+                $dropbox_quota = $_GET['dropbox_quota'];
+            } else {
+                Access::error(20, 'dropbox_quota input must be a number and higher than zero');
+            }
+        } else {
+            $dropbox_quota = get_config('dropbox_quota');
+        }
+
+
+        if (isset($_GET['lang'])) {
+            $session = new Session();
+            $valid_languages = $session->active_ui_languages;
+            if (in_array($_GET['lang'], $valid_languages)) {
+                $lang = $_GET['lang'];
+            } else {
+                Access::error(20, 'lang input must be one of the following: ' . implode(", ", $valid_languages));
+            }
+        } else {
+            $lang = 'el';
+        }
 
         if (isset($_GET['visible'])) {
             $valid_visible = ['0','1','2','3'];
@@ -88,9 +153,6 @@ function api_method($access) {
             $view_type = 'simple';
         }
 
-        $code = strtoupper(new_code($category));
-        $code = str_replace(' ', '', $code);
-
         if (!create_course_dirs($code)) {
             Access::error(20, 'An error has occurred. Please contact the platform administrator.');
         }
@@ -117,7 +179,7 @@ function api_method($access) {
                         glossary_index = 1,
                         description = ?s",
             $code, $lang, $title, $visible,
-            $course_license, $prof_names, $code, $doc_quota * 1024 * 1024,
+            $course_license, $prof_names, $public_code, $doc_quota * 1024 * 1024,
             $video_quota * 1024 * 1024, $group_quota * 1024 * 1024,
             $dropbox_quota * 1024 * 1024, $password, $flipped_flag, $view_type, $description);
 
@@ -127,9 +189,21 @@ function api_method($access) {
         course_index($code);
 
         header('Content-Type: application/json');
-        echo json_encode('Course with title ' . $title . ' in category with id ' . $category . ' created', JSON_UNESCAPED_UNICODE);
-        exit();
 
+        echo json_encode([
+            'title' => $title,
+            'code' => $code,
+            'category id' => $category,
+            'lang' => $lang,
+            'visible' => $visible,
+            'course_license' => $course_license,
+            'prof_names' => $prof_names,
+            'public_code' => $public_code,
+            'view_type' => $view_type,
+            'description' => $description,
+
+        ], JSON_UNESCAPED_UNICODE);
+        exit();
 
     }
 
