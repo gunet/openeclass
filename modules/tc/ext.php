@@ -46,7 +46,17 @@ if ($q) {
     $active = $q->active;
     $unlock_interval = $q->unlock_interval;
     $external_users = $q->external_users;
-    $r_group = explode(",",$external_users);
+    // External user details are now stored as JSON...
+    try {
+        $external_user_details = json_decode($external_users, true, 512, JSON_THROW_ON_ERROR);
+        $r_group = [];
+        foreach ($external_user_details as $item) {
+            $r_group[] = $item[0];
+        }
+    } catch (Exception $e) {
+        // If they're not, they used to be stored as comma-delimited e-mails
+        $r_group = explode(',', $external_users);
+    }
     if (!empty($q->options))  {
         $options = unserialize($q->options);
     } else {
@@ -66,7 +76,7 @@ if ($active <> '1') {
     exit;
 }
 // wrong external email
-if (!in_array($_GET['username'],$r_group)) {
+if (!in_array($_GET['username'], $r_group)) {
     display_message($langNoAccessPrivilages);
     exit;
 }
@@ -134,27 +144,27 @@ function display_message($message) {
     echo "
         <!DOCTYPE HTML>
         <html>
-        <head>            
+        <head>
             <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
             <title>$langBBBWelcomeMsg</title>
             <link rel='stylesheet' href='{$urlServer}template/default/CSS/bootstrap-custom.css'>
-        </head>        
+        </head>
         <body style='background-color: white;'>
             <div class='container'>
                 <div class='row'>
                     <div class='col-xs-12 text-center'>
                         <div style='padding-top: 10px; padding-bottom: 10px;'>
                             <img style = 'filter: invert(100%);' src='{$urlServer}template/default/img/logo_eclass.png' alt=''>
-                        </div>                        
+                        </div>
                         <div class='panel-body'>
                             <div class='alert alert-warning'>
                                 $message
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
-        </body>         
+        </body>
         </html>
     ";
 }
