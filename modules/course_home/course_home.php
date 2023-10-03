@@ -148,7 +148,7 @@ $course = new Course();
 
 $pageName = ''; // delete $pageName set in doc_init.php
 $require_help = TRUE;
-$helpTopic = 'course_home';
+$helpTopic = 'course';
 
 add_units_navigation(TRUE);
 
@@ -337,7 +337,6 @@ $data['action_bar'] = action_bar([
         'url' => "{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=1",
         'icon' => 'fa-envelope',
         'text-class' => 'text-success',
-        'level' => 'primary',
         'show' => ($uid && get_user_email_notification($uid, $course_id)),
         'link-attrs' => "id='email_notification'"
     ],
@@ -346,7 +345,6 @@ $data['action_bar'] = action_bar([
         'url' => "{$urlAppend}modules/course_home/course_home.php?course=$course_code&amp;email_un=0",
         'icon' => 'fa-triangle-exclamation',
         'text-class' => 'text-danger',
-        'level' => 'primary',
         'show' => ($uid && !(get_user_email_notification($uid, $course_id))),
         'link-attrs' => "id='email_notification'"
     ],
@@ -378,6 +376,12 @@ $data['action_bar'] = action_bar([
         'url' => "javascript:void(0);",
         'link-attrs' => "data-bs-modal='citation' data-bs-toggle='modal' data-bs-target='#citation'",
         'icon' => 'fa-link'
+    ],
+    [
+        'title' => $langHelp,
+        'url' => "{$urlServer}modules/help/help.php?language=$language&topic=$helpTopic",
+        'link-attrs' => "id='help-btn'",
+        'icon' => 'fa-circle-question'
     ]
 ]);
 

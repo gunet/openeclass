@@ -3233,28 +3233,28 @@ function faq_exist() {
 /**
  * Initialize copyright/license global arrays
  */
-function copyright_info($cid, $noImg=1) {
+function copyright_info($cid, $noImg = 1) {
 
-    global $language, $license, $themeimg;
+    global $language, $license, $langCopyrightedNotFree;
 
     $lang = langname_to_code($language);
+    $link = '';
 
     $lic = Database::get()->querySingle("SELECT course_license FROM course WHERE id = ?d", $cid)->course_license;
-    if (($lic == 0) or ($lic >= 10)) {
-        $link_suffix = '';
-    } else {
-        if ($language != 'en') {
-            $link_suffix = 'deed.' . $lang;
+    if ($noImg == 1) {
+        if (($lic == 0) or ($lic >= 10)) {
+            $link = "<a class='btn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($langCopyrightedNotFree) . "'>
+                    <i class='fa-regular fa-copyright fa-lg'></i></a>";
         } else {
-            $link_suffix = '';
+            if ($language != 'en') {
+                $link_suffix = 'deed.' . $lang;
+            } else {
+                $link_suffix = '';
+            }
+            $link = "<a class='btn' href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
+                    <i class='fa-brands fa-creative-commons fa-lg'></i></a>";
         }
     }
-    if ($noImg == 1) {
-        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . q($license[$lic]['title']) . "' alt='" . q($license[$lic]['title']) . "' data-bs-toggle='tooltip' data-bs-placement='top' /></a><br>";
-    } else if ($noImg == 0) {
-        $link = "";
-    }
-
     return $link;
 }
 

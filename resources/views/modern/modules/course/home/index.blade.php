@@ -290,6 +290,7 @@
 
                     <div class='flex-grow-1'>
                         <div class='card panelCard border-0'>
+
                             <div class='card-header px-0 py-0 border-0 bg-white d-flex justify-content-between align-items-center'>
                                 <div>
                                     <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
@@ -325,7 +326,7 @@
                                         <div class='col-12 px-0'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
-                                                        {!! $course_info->description !!}
+                                                    {!! $course_info->description !!}
                                                 @else
                                                     <p class='not_visible text-center'> - {{ trans('langThisCourseDescriptionIsEmpty') }} - </p>
                                                 @endif
@@ -367,13 +368,11 @@
                                                     <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                         <i class='fa-solid fa-chevron-down settings-icon'></i>
                                                         {{ trans('langCourseDescription') }}
-
                                                     </a>
                                                     @if($is_editor)
                                                         {!! $edit_course_desc_link !!}
                                                     @endif
                                                 </div>
-
                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
                                                     @if(count($course_descriptions) == 0)
                                                         <div class='col-12 mb-4'>
