@@ -46,7 +46,17 @@ if ($q) {
     $active = $q->active;
     $unlock_interval = $q->unlock_interval;
     $external_users = $q->external_users;
-    $r_group = explode(",",$external_users);
+    // External user details are now stored as JSON...
+    try {
+        $external_user_details = json_decode($external_users, true, 512, JSON_THROW_ON_ERROR);
+        $r_group = [];
+        foreach ($external_user_details as $item) {
+            $r_group[] = $item[0];
+        }
+    } catch (Exception $e) {
+        // If they're not, they used to be stored as comma-delimited e-mails
+        $r_group = explode(',', $external_users);
+    }
     if (!empty($q->options))  {
         $options = unserialize($q->options);
     } else {
@@ -66,7 +76,7 @@ if ($active <> '1') {
     exit;
 }
 // wrong external email
-if (!in_array($_GET['username'],$r_group)) {
+if (!in_array($_GET['username'], $r_group)) {
     display_message($langNoAccessPrivilages);
     exit;
 }
@@ -134,7 +144,7 @@ function display_message($message) {
     echo "
         <!DOCTYPE HTML>
         <html>
-        <head>            
+        <head>
             <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
             <title>$langBBBWelcomeMsg</title>
             <link rel='stylesheet' href='{$urlServer}template/modern/css/bootstrap.min.css'>
@@ -151,11 +161,11 @@ function display_message($message) {
                             <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>
                                 $message</span>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>
-        </body>         
+        </body>
         </html>
     ";
 }
