@@ -90,7 +90,7 @@ function getUserCourseInfo($uid) {
                         <div class='col-12 portfolio-tools'>
                             <div class='d-inline-flex'>";
 
-            $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='#' id='{$data->code}' type'button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
+            $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='#' id='{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
                                 <i class='fa-solid fa-display'></i>
                             </a>
 

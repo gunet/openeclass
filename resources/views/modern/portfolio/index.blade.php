@@ -92,7 +92,7 @@
         var idCoursePortfolio = '';
         var btnPortfolio = '';
         var modal_portfolio = '';
-        $(".ClickCoursePortfolio").click(function() {
+        $("#portfolio_lessons, #cources-pics").on('click','.ClickCoursePortfolio',function() {
             // Get the btn id
             idCoursePortfolio = this.id;
 
@@ -651,7 +651,7 @@
                                                 $pagesPag++;
                                             }
                                         @endphp
-                                        @php //print_a($courses); @endphp
+                                        
                                         @foreach($courses as $course)
                                             @php $temp_pages++; @endphp
 
@@ -696,6 +696,9 @@
                                                     </div>
 
                                                     <div class='card-footer bg-white border-0'>
+                                                        <a class='ClickCoursePortfolio me-3' href='#' id='{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp{{ trans('langOfCourse') }}">
+                                                            <i class='fa-solid fa-display'></i>
+                                                        </a>
                                                        {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
                                                         @if ($course->status == USER_STUDENT)
                                                             @if (get_config('disable_student_unregister_cours') == 0)
