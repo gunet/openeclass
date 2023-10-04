@@ -30,7 +30,7 @@ require_once 'bbb-api.php';
 function select_tc_server($course_id) {
     global $tool_content, $urlAppend, $course_code, $langNewBBBSession, $langZoomLongDescription,
            $langBBBLongDescription, $langJitsiLongDescription, $langGoogleMeetLongDescription,
-           $langWebexLongDescription;
+           $langWebexLongDescription, $langMsTeamsLongDescription;
 
     $tool_content .= "<div class='row extapp'><div class='col-sm-12'>";
 
@@ -40,6 +40,7 @@ function select_tc_server($course_id) {
         'googlemeet' => ['Google Meet', $langGoogleMeetLongDescription],
         'zoom' => ['Zoom', $langZoomLongDescription],
         'webex' => ['Webex', $langWebexLongDescription],
+        'microsoftteams' => ['Microsoft Teams', $langMsTeamsLongDescription]
     ];
     foreach (get_enabled_tc_services() as $name) {
         $icon = $name == 'bbb'? 'bigbluebutton': $name;
@@ -78,9 +79,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langUnitDescr, $langStart, $langVisible, $langInvisible,
         $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore,
         $start_session, $BBBEndDate, $langAnnouncements, $langBBBAnnDisplay,
-        $langTitle, $langBBBNotifyExternalUsersHelpBlock, $langNo,
+        $langTitle, $langNo, $langYes,
         $langBBBNotifyUsers, $langBBBNotifyExternalUsers, $langBBBSessionMaxUsers,
-        $langAllUsers, $langParticipants, $langBBBRecord, $langYes,
+        $langAllUsers, $langParticipants, $langBBBRecord,
         $langBBBSessionSuggestedUsers, $langBBBSessionSuggestedUsers2,
         $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll,
         $langEnd, $langBBBEndHelpBlock, $langModify, $langBBBExternalUsers,
@@ -88,9 +89,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langBBBlockSettingsDisableMic, $langBBBlockSettingsDisablePrivateChat,
         $langBBBlockSettingsDisablePublicChat, $langBBBlockSettingsDisableNote,
         $langBBBlockSettingsHideUserList, $langBBBwebcamsOnlyForModerator,
-        $langBBBMaxPartPerRoom, $langBBBHideParticipants,
+        $langBBBMaxPartPerRoom, $langBBBHideParticipants, $langDelete,
+        $langInsertUserInfo, $langSurnameName, $langProfEmail, $langSelect,
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
-        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText, $langGoToWebexLink, $urlAppend;
+        $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
+        $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText,
+        $langGoToWebexLink, $urlServer;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -143,6 +147,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $options_show = "";
         }
         $google_meet_link = ($tc_type == 'googlemeet') ? "https://meet.google.com/" . $row->meeting_id : '';
+        $microsoft_teams_link = ($tc_type == 'microsoftteams') ? "https://teams.live.com/" . $row->meeting_id : '';
         $zoom_link = ($tc_type == 'zoom') ? "https://zoom.us/j/" . $row->meeting_id . '?pwd=' . $row->mod_pw : '';
         $webex_link = ($tc_type == 'webex') ? $row->meeting_id : '';
 
@@ -177,7 +182,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
         $submit_name = 'new_tc_session';
         $submit_id = '';
-        $google_meet_link = $zoom_link = $webex_link = '';
+        $google_meet_link = $zoom_link = $webex_link = $microsoft_teams_link = '';
         $value_message = $langAdd;
         $record = get_config('bbb_recording', 1);
         $checked_muteOnStart = get_config('bbb_muteOnStart', 0) ? 'checked' : '';
@@ -205,6 +210,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         case 'googlemeet':
         case 'zoom':
         case 'webex':
+        case 'microsoftteams':
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = ?s AND enabled = 'true'", $tc_type)->id;
             break;
         case 'bbb':
@@ -226,9 +232,21 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='form-group'>
                 <label for='title' class='col-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
-                    <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='Google Meet $langLink' size='50'>
+                    <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50'>
                 </div>
             </div>";
+        }
+
+        if ($tc_type == 'microsoftteams') { // Microsoft Teams
+            $tool_content .= "<div class='alert alert-info'>$langGoToMicrosoftTeamsLink</div>";
+            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://teams.live.com/' target='_blank'>$langGoToMicrosoftTeamsLinkText</a></div>";
+
+            $tool_content .= "<div class='form-group'>
+                            <label for='title' class='col-sm-2 control-label'>$langLink:</label>
+                            <div class='col-sm-10'>
+                                <input class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50'>
+                            </div>
+                        </div>";
         }
 
         if ($tc_type == 'zoom') { // zoom
@@ -670,6 +688,28 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'googlemeet') {
             $meeting_id = preg_replace('/http(s|):\/\/meet.google.com\//', '', $options);
+            $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
+                                                            title = ?s,
+                                                            description = ?s,
+                                                            start_date = ?t,
+                                                            end_date = ?t,
+                                                            public = 1,
+                                                            active = ?s,
+                                                            running_at = ?d,
+                                                            meeting_id = ?s,
+                                                            mod_pw = ?s,
+                                                            att_pw = ?s,
+                                                            unlock_interval = ?s,
+                                                            external_users = ?s,
+                                                            participants = ?s,
+                                                            record = 'false',
+                                                            sessionUsers = ?s",
+                $course_id, $title, $desc, $start_session, $BBBEndDate,
+                $status, $server_id,
+                $meeting_id, '', '' ,
+                $minutes_before, $external_users, $r_group, $sessionUsers);
+        } elseif ($tc_type == 'microsoftteams') {
+            $meeting_id = preg_replace('/http(s|):\/\/teams.live.com\//', '', $options);
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1746,7 +1786,8 @@ function is_enabled_tc_server($course_id) {
            (get_config('ext_googlemeet_enabled') && is_active_tc_server('googlemeet', $course_id)) ||
            (get_config('ext_jitsi_enabled') && is_active_tc_server('jitsi', $course_id)) ||
            (get_config('ext_zoom_enabled') && is_active_tc_server('zoom', $course_id)) ||
-           (get_config('ext_webex_enabled') && is_active_tc_server('webex', $course_id));
+           (get_config('ext_webex_enabled') && is_active_tc_server('webex', $course_id)) ||
+           (get_config('ext_microsoftteams_enabled') && is_active_tc_server('microsoftteams', $course_id));
 }
 
 
@@ -1771,6 +1812,9 @@ function get_enabled_tc_services() {
     }
     if (get_config('ext_webex_enabled')) {
         $tc_services[] = 'webex';
+    }
+    if (get_config('ext_microsoftteams_enabled')) {
+        $tc_services[] = 'microsoftteams';
     }
     /* if (get_config('ext_openmeetings_enabled')) {
         $tc_services = 'om';
