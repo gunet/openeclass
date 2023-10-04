@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} py-lg-0'>
+    <div class='{{ $container }} py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -14,11 +14,9 @@
 
             <div class="col_maincontent_active">
 
-
                 <div class="row">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-
 
                     <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
                         <div class="offcanvas-header">
@@ -29,7 +27,6 @@
                         </div>
                     </div>
 
-
                     @include('layouts.partials.legend_view')
 
                     @if ($is_editor and $q->flipped_flag != 2)
@@ -39,25 +36,24 @@
                                         'icon' => 'fa fa-edit',
                                         'level' => 'primary-label',
                                         'button-class' => 'btn-success'),
-                                    array('title' => trans('langUnitManage'),
+                                    array('title' => trans('langUnitCompletion'),
                                         'url' => $manageUrl,
-                                        'icon' => 'fa fa-edit',
-                                        'level' => 'primary-label',
+                                        'icon' => 'fa fa-gear',
                                         'button-class' => 'btn-success'),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
-                                        'url' => $insertBaseUrl . 'exercise',
-                                        'icon' => 'fa fa-square-pen',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_EXERCISE)),
-                                    array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
-                                        'url' => $insertBaseUrl . 'doc',
-                                        'icon' => 'fa fa-folder-open',
-                                        'level' => 'secondary',
-                                        'show' => !is_module_disable(MODULE_ID_DOCS)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertText'),
                                         'url' => $insertBaseUrl . 'text',
                                         'icon' => 'fa fa-file-lines',
                                         'level' => 'secondary'),
+                                    array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
+                                        'url' => $insertBaseUrl . 'exercise',
+                                        'icon' => 'fa fa-file-pen',
+                                        'level' => 'secondary',
+                                        'show' => !is_module_disable(MODULE_ID_EXERCISE)),
+                                    array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
+                                        'url' => $insertBaseUrl . 'doc',
+                                        'icon' => 'fa fa-folder',
+                                        'level' => 'secondary',
+                                        'show' => !is_module_disable(MODULE_ID_DOCS)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertLink'),
                                         'url' => $insertBaseUrl . 'link',
                                         'icon' => 'fa fa-link',
@@ -65,7 +61,7 @@
                                         'show' => !is_module_disable(MODULE_ID_LINKS)),
                                     array('title' => trans('langAdd') . ' ' . trans('langLearningPath1'),
                                         'url' => $insertBaseUrl . 'lp',
-                                        'icon' => 'fa fa-ellipsis-h',
+                                        'icon' => 'fa fa-timeline',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_LP)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertVideo'),
@@ -80,31 +76,31 @@
                                         'show' => !is_module_disable(MODULE_ID_H5P)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
                                         'url' => $insertBaseUrl . 'forum',
-                                        'icon' => 'fa fa-comments',
+                                        'icon' => 'fa-regular fa-comment',
                                         'level' => 'secondary'),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertEBook'),
                                         'url' => $insertBaseUrl . 'ebook',
-                                        'icon' => 'fa fa-book',
+                                        'icon' => 'fa fa-book-atlas',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_EBOOK)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
                                         'url' => $insertBaseUrl . 'work',
-                                        'icon' => 'fa fa-flask',
+                                        'icon' => 'fa fa-upload',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_ASSIGN)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertPoll'),
                                         'url' => $insertBaseUrl . 'poll',
-                                        'icon' => 'fa fa-question-circle',
+                                        'icon' => 'fa fa-question',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_QUESTIONNAIRE)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertWiki'),
                                         'url' => $insertBaseUrl . 'wiki',
-                                        'icon' => 'fa fa-won-sign',
+                                        'icon' => 'fa fa-w',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_WIKI)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertChat'),
                                         'url' => $insertBaseUrl . 'chat',
-                                        'icon' => 'fa fa-exchange',
+                                        'icon' => 'fa-regular fa-comment-dots',
                                         'level' => 'secondary',
                                         'show' => !is_module_disable(MODULE_ID_CHAT)),
                                     array('title' => trans('langAdd') . ' ' . trans('langInsertTcMeeting'),
@@ -112,7 +108,8 @@
                                         'icon' => 'fa fa-exchange',
                                         'level' => 'secondary',
                                         'show' => (!is_module_disable(MODULE_ID_TC) && is_enabled_tc_server($course_id)))
-                                    )) !!}
+                                    ))
+                                !!}
 
                     @endif
                     @if ($is_editor and $q->flipped_flag == 2)
@@ -126,11 +123,10 @@
 
                     @endif
 
-
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -142,7 +138,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -152,35 +148,16 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
-                    
-                    <div class='col-xxl-4 col-lg-6 col-12'>
-                        <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
-                            <input type='hidden' name='course' value='{{ $course_code }}'>
-                            <div class='form-group'>
-                                <label class='control-label-notes' for='id'><span class='fa fa-search'></span>&nbsp{{ trans('langCourseUnits') }}</label>
-                                <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
-                                    @foreach ($units as $unit)
-                                        <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
-                                            {{ ellipsize($unit->title, 50) }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </form>
-                    </div>
 
-
-                    {{--
                     @if ($previousLink or $nextLink)
-
                         <div class='col-12'>
                             <div class='card panelCard px-lg-0 py-lg-0 border-0'>
-                                <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders">              
+                                <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders">
                                     @if ($previousLink)
                                         <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                             <span class='fa fa-arrow-left space-after-icon'></span>
@@ -196,10 +173,7 @@
                                 </div>
                             </div>
                         </div>
-
                     @endif
-                    --}}
-
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
@@ -227,6 +201,23 @@
                         </div>
                     </div>
 
+                    <div class='col-xxl-4 col-lg-6 col-12'>
+                        <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
+                            <input type='hidden' name='course' value='{{ $course_code }}'>
+                            <div class='mb-3'>
+                                <div class="d-inline-flex align-items-center">
+                                    <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp{{ trans('langGoTo') }}</label>
+                                    <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
+                                        @foreach ($units as $unit)
+                                            <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                                {{ ellipsize($unit->title, 50) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
 
                     @if ($is_editor and $q->flipped_flag == 2)
                         <div class='col-12 mt-4'>
@@ -259,13 +250,13 @@
                                                     {!! action_button(array(
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
                                                             'url' => $base_url . 'exercise&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-square-pen',
+                                                            'icon' => 'fa fa-file-pen',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_EXERCISE, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertDoc'),
                                                             'url' => $base_url . 'doc&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-folder-open',
+                                                            'icon' => 'fa fa-folder',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_DOCS, $course_code, $id, $in_home->activity_id)),
 
@@ -277,7 +268,7 @@
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langLearningPath1'),
                                                             'url' => $base_url . 'lp&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-ellipsis-h',
+                                                            'icon' => 'fa fa-timeline',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_LP, $course_code, $id, $in_home->activity_id)),
 
@@ -289,37 +280,37 @@
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertForum'),
                                                             'url' => $base_url . 'forum&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-comments',
+                                                            'icon' => 'fa-regular fa-comment',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_FORUM, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertEBook'),
                                                             'url' => $base_url . 'ebook&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-book',
+                                                            'icon' => 'fa fa-upload',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_EBOOK, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertWork'),
                                                             'url' => $base_url . 'work&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-flask',
+                                                            'icon' => 'fa fa-upload',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_ASSIGN, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' =>trans('langAdd') . ' ' . trans('langInsertPoll'),
                                                             'url' => $base_url . 'poll&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-question-circle',
+                                                            'icon' => 'fa fa-question',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' =>trans('langAdd') . ' ' . trans('langInsertWiki'),
                                                             'url' => $base_url . 'wiki&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-won-sign',
+                                                            'icon' => 'fa fa-w',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_WIKI, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertChat'),
                                                             'url' => $base_url . 'chat&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-exchange',
+                                                            'icon' => 'fa-regular fa-comment-dots',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_CHAT, $course_code, $id, $in_home->activity_id)),
 
@@ -337,7 +328,7 @@
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langWall'),
                                                             'url' => $base_url . 'wall&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-list',
+                                                            'icon' => 'fa-solid fa-quote-left',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_WALL, $course_code, $id, $in_home->activity_id)),
 
@@ -349,7 +340,7 @@
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langBlog'),
                                                             'url' => $base_url . 'blog&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-columns',
+                                                            'icon' => 'fa-solid fa-globe',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_BLOG, $course_code, $id, $in_home->activity_id)),
 
@@ -361,13 +352,13 @@
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langGradebook'),
                                                             'url' => $base_url . 'gradebook&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-sort-numeric-desc',
+                                                            'icon' => 'fa-solid fa-a',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK, $course_code, $id, $in_home->activity_id)),
 
                                                         array('title' => trans('langAdd') . ' ' . trans('langProgress'),
                                                             'url' => $base_url . 'progress&fc_type=0&act_name=' . $act_title . '&act_id=' . $in_home->activity_id,
-                                                            'icon' => 'fa fa-trophy',
+                                                            'icon' => 'fa-solid fa-arrow-trend-up',
                                                             'level' => 'secondary',
                                                             'show' => !is_module_disable_FC(MODULE_ID_PROGRESS, $course_code, $id, $in_home->activity_id))
 
@@ -428,7 +419,7 @@
 
                                                             array('title' => trans('langAdd').' '.trans('langLearningPath1'),
                                                                 'url' => $base_url . 'lp&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-ellipsis-h',
+                                                                'icon' => 'fa fa-timeline',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_LP,$course_code,$id,$in_class->activity_id)),
 
@@ -440,31 +431,31 @@
 
                                                             array('title' =>trans('langAdd').' '.trans('langInsertForum'),
                                                                 'url' => $base_url . 'forum&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-comments',
+                                                                'icon' => 'fa fa-tablet',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_FORUM,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '. trans('langInsertEBook'),
                                                                 'url' => $base_url . 'ebook&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-book',
+                                                                'icon' => 'fa fa-book-atlas',
                                                                 'level' => 'secondary',
                                                                 'show' =>  !is_module_disable_FC(MODULE_ID_EBOOK,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '.trans('langInsertWork'),
                                                                 'url' => $base_url . 'work&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-flask',
+                                                                'icon' => 'fa fa-upload',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_ASSIGN,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '. trans('langInsertPoll'),
                                                                 'url' => $base_url . 'poll&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-question-circle',
+                                                                'icon' => 'fa fa-question',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_QUESTIONNAIRE,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '. trans('langInsertWiki'),
                                                                 'url' => $base_url . 'wiki&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-won-sign',
+                                                                'icon' => 'fa fa-w',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_WIKI,$course_code,$id,$in_class->activity_id)),
 
@@ -488,7 +479,7 @@
 
                                                             array('title' => trans('langAdd').' '.trans('langWall'),
                                                                 'url' => $base_url . 'wall&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-list',
+                                                                'icon' => 'fa-solid fa-quote-left',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$in_class->activity_id)),
 
@@ -506,7 +497,7 @@
 
                                                             array('title' => trans('langAdd').' '.trans('langBlog'),
                                                                 'url' => $base_url . 'blog&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-columns',
+                                                                'icon' => 'fa-solid fa-globe',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$in_class->activity_id)),
 
@@ -518,13 +509,13 @@
 
                                                             array('title' => trans('langAdd').' '.trans('langGradebook'),
                                                                 'url' => $base_url . 'gradebook&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-sort-numeric-desc',
+                                                                'icon' => 'fa-solid fa-a',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$in_class->activity_id)),
 
                                                             array('title' => trans('langAdd').' '.trans('langProgress'),
                                                                 'url' => $base_url . 'progress&fc_type=1&act_name='. $act_title. '&act_id='.$in_class->activity_id,
-                                                                'icon' => 'fa fa-trophy',
+                                                                'icon' => 'fa-solid fa-arrow-trend-up',
                                                                 'level' => 'secondary',
                                                                 'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$in_class->activity_id))
 
@@ -545,10 +536,8 @@
                                                                 'confirm' => trans('langUnitActivityDeleteConfirm'))))
                                                     !!}
 
-
                                                 @endif
                                                 </td></tr><tr><td></td>
-
                                             @endforeach
                                         @endif
 
@@ -648,7 +637,7 @@
 
                                                     array('title' => trans('langAdd').' '.trans('langWall'),
                                                         'url' => $base_url . 'wall&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa fa-list',
+                                                        'icon' => 'fa-solid fa-quote-left',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_WALL,$course_code,$id,$after_class->activity_id)),
 
@@ -666,7 +655,7 @@
 
                                                     array('title' => trans('langAdd').' '.trans('langBlog'),
                                                         'url' => $base_url . 'blog&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa fa-columns',
+                                                        'icon' => 'fa-solid fa-globe',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_BLOG,$course_code,$id,$after_class->activity_id)),
 
@@ -678,13 +667,13 @@
 
                                                     array('title' => trans('langAdd').' '.trans('langGradebook'),
                                                         'url' => $base_url . 'gradebook&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa fa-sort-numeric-desc',
+                                                        'icon' => 'fa-solid fa-a',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_GRADEBOOK,$course_code,$id,$after_class->activity_id)),
 
                                                     array('title' => trans('langAdd').' '.trans('langProgress'),
                                                         'url' => $base_url . 'progress&fc_type=2&act_name='. $act_title. '&act_id='.$after_class->activity_id,
-                                                        'icon' => 'fa fa-trophy',
+                                                        'icon' => 'fa-solid fa-arrow-trend-up',
                                                         'level' => 'secondary',
                                                         'show' => !is_module_disable_FC(MODULE_ID_PROGRESS,$course_code,$id,$after_class->activity_id))
 
@@ -714,39 +703,10 @@
                         </div>
                     @endif
 
-
-
-                    {{--
-                    <div class='col-12 mt-4'>
-                        <div class='panel panel-default'>
-                            <div class='panel-heading Primary-600-bg'>{{ trans('langCourseUnits') }}</div>
-                            <div class='panel-body'>
-                                <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
-                                    <input type='hidden' name='course' value='{{ $course_code }}'>
-                                    <div class='form-group'>
-                                        <div class='col-sm-12'>
-                                            <label class='sr-only' for='id'>{{ trans('langCourseUnits') }}</label>
-                                            <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
-                                                @foreach ($units as $unit)
-                                                    <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
-                                                        {{ ellipsize($unit->title, 50) }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    --}}
-
-
                 </div>
             </div>
         </div>
-    
-</div>
+    </div>
 </div>
 
 @endsection

@@ -4697,6 +4697,7 @@ $langStudentViewDisable = "Προβολή σελίδας σαν $langsTeacher";
 $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 $langNoUnits = "Δεν υπάρχουν ενότητες";
+$langGoTo = "Μετάβαση σε";
 
 /* * ********************************************************************
   units_prerequisites
