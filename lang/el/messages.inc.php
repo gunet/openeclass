@@ -6087,7 +6087,7 @@ $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμε
 $langAnalyticsStatus = 'Επίπεδο';
 
 // h5p
-$langH5p = "Διαδραστικό περιεχόμενο";
+$langH5p = "Περιεχόμενο H5P";
 $langH5pInstall = "Εγκατάσταση πακέτων και βιβλιοθηκών διαδραστικού περιεχομένου τύπου H5P";
 $langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε!';
 $langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
@@ -6107,17 +6107,28 @@ $langReuseDeactivate = "Απενεργοποίηση Διαμοιρασμού";
 $langEmailBody = "Email Body";
 $langCustomEmailBody = "Προσαρμοσμένο Email Body";
 $langCustomMailHelp = "
-    <p>Placeholder μεταβλητών</p>
-    </br>
-    <ul>
-      <li>[first] : Όνομα</li>
-      <li>[last] : Επώνυμο</li>
-      <li>[id] : Αριθμός μητρώου</li>
-      <li>[email] : Διεύθυνση e-mail</li>
-      <li>[phone] : Τηλέφωνο</li>
-      <li>[username] : Όνομα χρήστη</li>
-      <li>[password] : Κωδικός χρήστη</li>
-    </ul>";
+<p>Placeholder μεταβλητών</p>
+</br>
+<ul>
+  <li>[first] : Όνομα</li>
+  <li>[last] : Επώνυμο</li>
+  <li>[id] : Αριθμός μητρώου</li>
+  <li>[email] : Διεύθυνση e-mail</li>
+  <li>[phone] : Τηλέφωνο</li>
+  <li>[username] : Όνομα χρήστη</li>
+  <li>[password] : Κωδικός χρήστη</li>
+</ul>";
+
+$langUnsubscribeCourse = "Απενεργοποίηση απεγγραφής μαθήματος";
+$lang_disable_name_surname_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το όνομα και το επώνυμο";
+$lang_disable_email_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το e-mail";
+$lang_disable_am_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες τον αριθμό μητρώου";
+
+$langMaintenanceOn = "Ενεργοποίηση συντήρησης";
+$langMaintenanceOff = "Απενεργοποίηση συντήρησης";
+$langMaintenance = "Συντήρηση";
+$langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
+$langMaintenanceMode = "Λειτουργία συντήρησης";
 
 // ticketing (aka request)
 $langRequests = "Αιτήματα";
