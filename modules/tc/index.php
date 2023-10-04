@@ -380,7 +380,7 @@ elseif(isset($_GET['choice']))
                         header('Location: ' . bbb_join_user($_GET['meeting_id'], $_GET['att_pw'], $_SESSION['surname'], $_SESSION['givenname']));
                     }
                 }
-            } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet') { // if tc server is `jitsi` or 'googlemeet'
+            } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
                 header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '/?pwd=' . $sess->mod_pw);
@@ -475,6 +475,8 @@ elseif(isset($_GET['choice']))
 
     if ($tc_type == 'googlemeet') {
         $options = $_POST['google_meet_link'];
+    } if ($tc_type == 'microsoftteams') {
+        $options = $_POST['microsoft_teams_link'];
     } elseif ($tc_type == 'zoom') {
         $options = "$_POST[zoom_link]";
     } elseif ($tc_type == 'webex') {

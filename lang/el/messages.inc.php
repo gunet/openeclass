@@ -5802,6 +5802,8 @@ $langLtiPublishLongDescription = "Δημοσίευση $langsOfCourses μεσω 
 $langLtiPublishFrameAncestorsTooltip = "Λίστα urls χωριζομενη με κόμματα πχ https://url1, https://url2";
 $langGoogleMeetShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
 $langGoogleMeetLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Google Meet.";
+$langMsTeamsShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
+$langMsTeamsLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Microsoft Teams.";
 $langZoomShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langZoomLongDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Zoom.";
 $langWebexShortDescription = "Σύνδεση με την υπηρεσία τηλεδιάσκεψης Webex.";
@@ -5817,6 +5819,9 @@ $langGoToZoomLink = "Κάντε κλικ στο 'Μετάβαση στο Zoom' �
     Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
 $langGoToWebexLink = "Κάντε κλικ στο 'Μετάβαση στο Webex' παρακάτω, για να μεταφερθείτε στο περιβάλλον του Webex έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
     Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
+$langGoToMicrosoftTeamsLink = "Κάντε κλικ στο 'Μετάβαση στο Microsoft Teams' παρακάτω, για να μεταφερθείτε στο περιβάλλον της Microsoft έτσι ώστε να δημιουργήσετε το σύνδεσμο της τηλεσυνεργασίας.
+    Αφού τον δημιουργήσετε, αντιγράψτε τον και επικολλήστε τον στο πεδίο 'Σύνδεσμος'";
+$langGoToMicrosoftTeamsLinkText = "Μετάβαση στο Microsoft Teams";
 $langGoToZoomLinkText = "Μετάβαση στο Zoom";
 $langGoToWebexLinkText = "Μετάβαση στο Webex";
 
