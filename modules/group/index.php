@@ -74,7 +74,7 @@ if (isset($_GET['urlview'])) {
 
 if ($is_editor) {
     if (isset($_GET['choice'])) { // change group visibility
-        change_group_visibility($_GET['choice'], getDirectReference($_GET['group_id']), $course_id);
+        change_group_visibility($_GET['choice'], $_GET['group_id'], $course_id);
     }
     if (isset($_GET['deletecategory'])) { // delete group category
         $id = $_GET['id'];
@@ -314,7 +314,7 @@ if ($is_editor) {
 
         $message = $langGroupsDeleted;
     } elseif (isset($_REQUEST['delete'])) {
-        $id = getDirectReference($_REQUEST['delete']);
+        $id = intval($_REQUEST['delete']);
         if (!$id) {
             forbidden();
         }
@@ -556,10 +556,10 @@ if ($is_editor) {
                             'url' => "muladduser.php?course=$course_code&amp;group_id=$group->id",
                             'icon' => 'fa-plus-circle'),
                         array('title' => $visibility_text,
-                            'url' => "index.php?course=$course_code&amp;group_id=$group_id_indirect&amp;$visibility_url",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group->id&amp;$visibility_url",
                             'icon' => $visibility_icom),
                         array('title' => $langDelete,
-                            'url' => "index.php?course=$course_code&amp;delete=$group_id_indirect",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
                             'icon' => 'fa-times',
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete))) .
