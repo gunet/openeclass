@@ -24,9 +24,9 @@
                     </div>
                 @else
                     <div class='col-12 mb-2'>
-                        <div class='d-flex align-content-start gap-1 mt-auto'>
+                        <div class='d-md-flex align-content-md-start gap-1 mt-auto'>
                             <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                            <span class="btn">{!! course_access_icon($course_info->visible) !!}</span>
+                            <span class=" px-0 pt-1">{!! course_access_icon($course_info->visible) !!}</span>
                             @if($courseLicense > 0)
                                 {!! copyright_info($course_id) !!}
                             @endif

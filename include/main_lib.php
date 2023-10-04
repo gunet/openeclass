@@ -3251,7 +3251,7 @@ function copyright_info($cid, $noImg = 1) {
             } else {
                 $link_suffix = '';
             }
-            $link = "<a class='btn' href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
+            $link = "<a class='btn px-0 pt-1' href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
                     <i class='fa-brands fa-creative-commons fa-lg'></i></a>";
         }
     }

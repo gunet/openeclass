@@ -1855,7 +1855,7 @@ input[type="submit"].warningAdminBtn:hover {
 }
 @media(max-width:991px){
   .action_bar .contextual-menu{
-    z-index: 0;
+    z-index: 1;
   }
 }
 
@@ -3898,7 +3898,7 @@ body .delThemeBtn{
 }
 
 .row-course:hover td:first-child, .row-course:hover td:last-child{
-  background-color: #E8EDF8 ;
+  background-color: #EFF6FF ;
   /* cursor:  url(../images/pointer.png), auto; */
 }
 .row-course a:hover{
