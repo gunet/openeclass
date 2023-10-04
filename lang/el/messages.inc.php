@@ -6052,7 +6052,7 @@ $langAnalyticsMaxValue = 'Ανώτερη τιμή';
 $langAnalyticsResourceNotAvailable = 'Δεν υπάρχουν διαθέσιμες πηγές.';
 
 // h5p
-$langH5p = "Διαδραστικό περιεχόμενο";
+$langH5p = "Περιεχόμενο H5P";
 $langH5pInstall = "Εγκατάσταση πακέτων και βιβλιοθηκών διαδραστικού περιεχομένου τύπου H5P";
 $langH5pUpdateComplete = 'Η ενημέρωση των πακέτων και βιβλιοθηκών ολοκληρώθηκε!';
 $langH5pInteractiveContent = 'Διαδραστικό περιεχόμενο τύπου H5P';
@@ -6092,4 +6092,3 @@ $langMaintenanceOff = "Απενεργοποίηση συντήρησης";
 $langMaintenance = "Συντήρηση";
 $langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
 $langMaintenanceMode = "Λειτουργία συντήρησης";
-
