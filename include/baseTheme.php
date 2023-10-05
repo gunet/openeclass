@@ -286,10 +286,10 @@ function view($view_file, $view_data = array()) {
                 //border-right: solid 1px #E8EDF8 !important;
             }
 
-            .menu-item.active,
-            .menu-item.active2{
-                color: #2B3944;
-            }
+            // .menu-item.active,
+            // .menu-item.active2{
+            //     color: #2B3944;
+            // }
 
             .inputSearch{ height: 33px !important; margin-top: 0px !important;}
 

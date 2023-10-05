@@ -1859,6 +1859,10 @@ input[type="submit"].warningAdminBtn:hover {
   }
 }
 
+.contextual-menu-manage-course{
+  width:280px;
+}
+
 .contextual-menu-user{
   min-width: 310px;
   max-width:320px;
@@ -1922,6 +1926,7 @@ input[type="submit"].warningAdminBtn:hover {
   letter-spacing: 0px;
   line-height: 16px;
   background-color: #ffffff;
+  min-height: 40px;
 }
 
 .contextual-menu li:last-child .list-group-item{
