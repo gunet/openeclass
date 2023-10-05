@@ -2228,9 +2228,10 @@ function certificate_settings($element, $element_id = 0) {
     global $tool_content, $head_content, $course_code,
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
-           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline;
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlServer;
 
     load_js('bootstrap-datetimepicker');
+    load_js('select2');
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
@@ -2250,6 +2251,66 @@ function certificate_settings($element, $element_id = 0) {
                     $('#late_sub_row').addClass('hide');
                 }
             });
+
+         if ($('#selectWithIcon').length > 0) {
+            let urlServer = $('#urlServer').val();
+            let select2Data;
+            
+            if ($('#certificate_hidden').length > 0) {
+                let data = JSON.parse($('#certificate_hidden').val());
+                select2Data = Object.keys(data).map(key => ({
+                  id: key,
+                  text: data[key],
+                  image: urlServer + 'courses/user_progress_data/cert_templates/certificate' + key + '_thumbnail.png'
+                }));
+            }
+            
+            if ($('#badge_hidden').length > 0) {
+                let data = JSON.parse($('#badge_hidden').val());
+                select2Data = Object.keys(data).map(key => ({
+                  id: key,
+                  text: data[key],
+                  image: urlServer + 'courses/user_progress_data/badge_templates/' + data[key] + '.png',
+                  width: 48
+                }));
+            }
+            
+            $('#selectWithIcon').select2({
+                  data: select2Data,
+                  templateResult: formatOption,
+                });
+            
+            function formatOption(option) {
+              let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';               
+              return $(dareturn);
+            }
+            
+            $('#selectWithIcon').on('change', function (e) {
+                let dataType = $(this).data('type');
+                
+                if (dataType == 'certificate') {
+                    let imgPath = urlServer + 'courses/user_progress_data/cert_templates/certificate' + $('#selectWithIcon').val() + '_thumbnail.png';
+                    $('#selected_icon').attr('src', imgPath);
+                } else if (dataType === 'badge') {
+                    let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
+                    $('#selected_icon').attr('src', imgPath);
+                }
+              
+            });
+            
+            if ($('#certificate_hidden').length > 0) {
+                let imgPath = urlServer + 'courses/user_progress_data/cert_templates/certificate' + $('#selectWithIcon').val() + '_thumbnail.png';
+                $('#selected_icon').attr('src', imgPath);
+            }
+            
+            if ($('#badge_hidden').length > 0) {
+                let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
+                $('#selected_icon').attr('src', imgPath);
+                $('#selected_icon').attr('width', 48);
+            }
+            
+         }
+         
         });
         </script>";
 
@@ -2304,8 +2365,26 @@ function certificate_settings($element, $element_id = 0) {
                     $tool_content .= ($element == 'certificate') ? $langTemplate : $langIcon;
                     $tool_content .= "</label>
                         <div class='col-sm-10'>";
-                            $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template) : selection(get_badge_icons(), 'template', $template);
+                            $tool_content .= ($element == 'certificate') ? selection(get_certificate_templates(), 'template', $template, 'id="selectWithIcon" data-type="certificate"',) : selection(get_badge_icons(), 'template', $template, 'id="selectWithIcon"  data-type="badge"');
+//                            if ($element == 'certificate') {
+//                                $tool_content .= "<input id='certificate_hidden' type='hidden' value='".json_encode(get_certificate_templates())."'>";
+//                            }
+//                            if ($element == 'badge') {
+//                                $tool_content .= "<input id='badge_hidden' type='hidden' value='".json_encode(get_badge_icons())."'>";
+//                            }
+                            if ($element == 'certificate' || $element == 'badge') {
+                                $inputId = $element . '_hidden';
+                                $value = ($element == 'certificate') ? json_encode(get_certificate_templates()) : json_encode(get_badge_icons());
+                                $tool_content .= "<input id='$inputId' type='hidden' value='$value'>";
+                            }
+                            $tool_content .= "<input id='urlServer' type='hidden' value='".$urlServer."'>";
                         $tool_content .= "</div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-2'></div>
+                    <div class='col-sm-10'>
+                        <img id='selected_icon' src='' alt=''>
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='message' class='col-sm-2 control-label'>$langMessage</label>
