@@ -4641,8 +4641,8 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "has expired";
 $langHasExpired = "Expired";
-$langExportGradebookWithUsers = "Extract user results";
-$langExportGradebook = "Extract gradebook results";
+$langExportGradebookWithUsers = "Extract results per user";
+$langExportGradebook = "Extract results per activity";
 $langRestrictions = "Restrictions";
 $langTimeConstraint = "Time";
 $langHitConstraint = "Attempts";
@@ -5664,14 +5664,11 @@ $langTypeOutMessage = "Write your message...";
 $langDateHasExpire = "The date has passed. Try again.";
 $langCalculateNewDuration = "Calculation of new duration";
 $langChooseDayAgain = "You cannot choose different days. Try again.";
-$langMessageInfo = "Message informations";
+$langMessageInfo = "Message information";
 $langMessageContent = "Message content";
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
-
-
-
 $langCreateCourseLeftForm = "Creating a course is the most important action of the user – instructor on the platform.</br></br>
 Enter a title for your lesson.</br></br>
 Type a short description for the course.</br></br>
@@ -5687,3 +5684,6 @@ $langOpenOptions = "Open options";
 $langShowOnlyLoginScreen = "Show only the login screen on the home page?";
 $langHomepageTexts = "Homepage Texts";
 
+$langEmailBody = "Email Body";
+$langCustomEmailBody = "Custom Email Body";
+$langUnsubscribeCourse = "Disable Course Unsubscription";
