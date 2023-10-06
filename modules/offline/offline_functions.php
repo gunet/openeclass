@@ -779,7 +779,7 @@ function get_theme_options() {
                 background-color: #ffffff;
             }
             
-            .navbar-eclass{
+            #bgr-cheat-header{
                 z-index: 0;
             }
             

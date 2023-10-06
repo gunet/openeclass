@@ -24,10 +24,10 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('bgColorHeader','buttonTextColor', 'whiteButtonHoveredTextColor'),
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor', 'whiteButtonHoveredTextColor'),
                 'rgba(247, 249, 254, 1)' => array('bgColorFooter'),
                 'rgb(0, 115, 230)' => array('buttonBgColor','whiteButtonHoveredBgColor', 'whiteButtonTextColor'),
-                'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
+                //'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
                 'rgba(173,173,173,1)' => array('leftMenuFontColor', 'leftSubMenuFontColor'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeaderFooter','loginTextColor'),
                 'rgba(0, 115, 230, 1)' => array('linkHoverColorHeaderFooter'),
@@ -435,13 +435,13 @@ if (isset($_POST['optionsSave'])) {
     @$tool_content .= "
     <div class='col-sm-12 mb-4'>
     <div class='form-wrapper form-edit Borders p-lg-5 p-3'>
-        <div class='d-flex justify-content-start'>
-            <strong class='control-label-notes'>$langActiveTheme:</strong>
+        <div class='d-flex justify-content-start align-items-center gap-2'>
+            <strong class='control-label-notes mb-0'>$langActiveTheme:</strong>
             ".$themes_arr[$active_theme]."
         </div>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
             <div class='form-group mt-4'>
-                <label for='bgColor' class='col-sm-6 control-label-notes ps-2'>$langAvailableThemes:</label>
+                <label for='bgColor' class='col-sm-12 control-label-notes'>$langAvailableThemes:</label>
                 <div class='col-sm-12'>
                     ".  selection($themes_arr, 'active_theme_options', $theme_id, 'class="form-control form-submit" id="theme_selection"')."
                 </div>

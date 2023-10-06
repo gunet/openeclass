@@ -1,5 +1,5 @@
 
-<div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-center @endif'>
+<div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-start @endif'>
 
     <div class='d-inline-flex align-items-top overflow-auto'>
         <!-- this is toggle-button in breadcrumb -->

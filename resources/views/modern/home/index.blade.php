@@ -80,7 +80,7 @@
 
 
         
-        <div class='{{ $container }} my-3'>
+        <div class='{{ $container }} my-0'>
             <div class='row m-auto'>
 
                 @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))

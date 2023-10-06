@@ -273,17 +273,13 @@ function view($view_file, $view_data = array()) {
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-        //$styles_str .= ".menu-popover .delete.confirmAction{background: red;}";
+       
         $styles_str .= " 
-            body{
-                background: #ffffff !important;
-            }
 
             #btn-search{
                 height:33px;
                 width:30px;
                 background-color:#ffffff;
-                //border-right: solid 1px #E8EDF8 !important;
             }
 
             // .menu-item.active,
@@ -291,12 +287,14 @@ function view($view_file, $view_data = array()) {
             //     color: #2B3944;
             // }
 
-            .inputSearch{ height: 33px !important; margin-top: 0px !important;}
+            // .inputSearch{ height: 33px !important; margin-top: 0px !important;}
 
             #search_terms{ padding-left: 5px; }
 
         "
         ;
+
+        // BACKGROUND COLOR OR BACKGROUND IMAGE OF BODY
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
             if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
@@ -307,9 +305,22 @@ function view($view_file, $view_data = array()) {
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
             $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
+
+            if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
+                $styles_str .= "
+                    .main-section-mobile, .jumbotron.jumbotron-login, .site-footer{ 
+                        background-color: transparent !important; 
+                    }
+                    
+                    ";
+
+                    
+            }
         }
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
+
+        // BACKGROUND COLOR OF JUMBOTRON
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
             $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
             $styles_str .= "
@@ -320,6 +331,7 @@ function view($view_file, $view_data = array()) {
         }
 
 
+        // TEXT COLOR OF HOMEPAGE_INTRO
         if (!empty($theme_options_styles['loginTextColor'])){
             $styles_str .= "
                 .eclass-title, .eclassInfo{
@@ -328,6 +340,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        // BACKGROUND IMAGE OF JUMBOTRON
         if (isset($theme_options_styles['loginImg'])){
             $styles_str .= "
                 .jumbotron.jumbotron-login { 
@@ -340,16 +353,16 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
+
+        // POSITION OF LOGIN-FORM
         if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
             $PositionFormLogin = 1;
         }
 
+        // FLUID OR BOXED SIZE OF PLATFORM
         if (isset($theme_options_styles['fluidContainerWidth'])){
             $container = 'container-fluid';
             $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
-            // $size_image_form = $theme_options_styles['fluidContainerWidth']/2;
-            // $size_image_form = $size_image_form.'px';
-            // $styles_str .= "@media(min-width:1400px){.form-image-modules{max-width: calc($size_image_form - 240px);}}";
 
             $styles_str .= "
             
@@ -398,12 +411,15 @@ function view($view_file, $view_data = array()) {
             
             ";
         }
+
+        // SHOW - HIDE ECLASS_BANNER
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";
              $eclass_banner_value = 0;
         }
 
 
+        // BACKGROUND-COLOR HEADER
         if (!empty($theme_options_styles['bgColorHeader'])) {
             $styles_str .= "
                 #bgr-cheat-header {
@@ -418,10 +434,6 @@ function view($view_file, $view_data = array()) {
                     --fg: $theme_options_styles[bgColorHeader];
                     --bg: #e8e8e8;
                 }
-
-                // .bgTheme{
-                //     background-color: $theme_options_styles[bgColorHeader] !important;
-                // }
 
                 .nav-link-adminTools.normalColorBlueText.active{
                     background-color: $theme_options_styles[bgColorHeader];
@@ -439,6 +451,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        // BACKGROUND COLOR FOOTER
         if (!empty($theme_options_styles['bgColorFooter'])) {
             $styles_str .= "
                 .site-footer, .div_social{
@@ -447,6 +460,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        // LINKS COLOR OF HEADER-FOOTER 
         if (!empty($theme_options_styles['linkColorHeaderFooter'])){
             $styles_str .= "
 
@@ -473,6 +487,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        // COLOR OF HOVER LINK IN HEADER-FOOTER
         if (!empty($theme_options_styles['linkHoverColorHeaderFooter'])){
             $styles_str .= "
 
@@ -613,6 +628,7 @@ function view($view_file, $view_data = array()) {
         }
 
 
+        // BACKGROUND COLOR OF LEFT MENU
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
             $aboutLeftForm = explode(',', preg_replace(['/^.*\(/', '/\).*$/'], '', $theme_options_styles['leftNavBgColor']));
@@ -626,21 +642,14 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
-                // .left-form{ 
-                //     background: linear-gradient(170deg, $aboutLeftForm 20%, rgba(255,255,255,1) 35%, rgba(232,232,232,1) 100%);
-                // }
-
-                .pagination-glossary .page-item.active .page-link{
-                    background-color: $theme_options_styles[leftNavBgColor];
-                    border-color: $theme_options_styles[leftNavBgColor];
-                    color:#ffffff !important;
+                .ContentLeftNav{
+                    background: $theme_options_styles[leftNavBgColor];
                 }
-
-                
 
             ";
         }
 
+        // LINKS COLOR OF PLATFORM 
         if (!empty($theme_options_styles['linkColor'])){
            $styles_str .= "
 
@@ -693,6 +702,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        // HOVER COLOR OF LINKS IN PLATFORM
         if (!empty($theme_options_styles['linkHoverColor'])){
             $styles_str .= "
                 a:hover, a:focus, 

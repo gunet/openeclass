@@ -29,6 +29,7 @@
   font-size: 14px;
   letter-spacing: 0px;
   line-height: 16px;
+  background-color: transparent;
 }
 
 .contextual-sidebar li:last-child .list-group-item{
@@ -55,27 +56,37 @@
   background-color: white; 
   border-radius: 0px;
 }
-/* @media(max-width:991px){
-  .col_maincontent_active{ 
-    padding: 4px 16px 4px 16px;
-  }
-} */
+
 @media(min-width:992px){
   .col_maincontent_active{ 
     border: 0px;
     border-left: solid 1px #E8EDF8;
     border-radius: 0px; 
-    padding: 64px 32px 64px 32px;
     min-height: calc(100vh - 80px - 80px);
     flex: 1;
   }
+  .container-fluid .course-wrapper .col_maincontent_active{
+    padding: 24px 32px 24px 32px;
+  }
+
+  .container .course-wrapper .col_maincontent_active{
+    padding: 24px 32px 24px 32px;
+  }
   
+}
+@media(max-width:991px){
+  .container-fluid .course-wrapper .col_maincontent_active{
+    padding: 8px 12px 8px 12px;
+  }
+  .container .course-wrapper .col_maincontent_active{
+    padding: 8px 12px 8px 12px;
+  }
 }
 
 .col_sidebar_active{ 
   transition: 0.4s;  
   border-radius: 0px; 
-  background-color: transparent !important ;
+  /* background-color: transparent !important ; */
 
 }
 
@@ -309,7 +320,7 @@
   }
 
   #background-cheat-leftnav, .ContentLeftNav{
-    width: 265px;
+    width: 256px;
   }
 
   .course-wrapper:has(.active-nav) #background-cheat-leftnav,

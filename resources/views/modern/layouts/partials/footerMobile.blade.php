@@ -1,9 +1,9 @@
 
 <footer id="bgr-cheat-footer" class="site-footer mt-auto rounded-0">
-    <div class="container-fluid">
-        <div class="row m-auto">
+    <div class="{{ $container }} footer-container d-flex justify-content-center align-items-center">
+        <div class="row m-auto w-100">
 
-            <div class="col-12">
+            <div class="col-12 px-0">
                 <ul class="ul_tools_site_footer">
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
                     <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">{{ trans('langContact') }}</a></li>
@@ -15,7 +15,7 @@
                 </ul>
             </div>
 
-            <div class="12">
+            <div class="col-12 px-0">
                 @if(get_config('enable_social_sharing_links'))
                     <ul class="social_meadia_ul">
                         <li>
