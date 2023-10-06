@@ -91,7 +91,6 @@ if (!isset($_POST['create_course'])) {
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
-                                      'level' => 'primary',
                                       'button-class' => 'btn-default')
                             ),false);
 
@@ -135,14 +134,12 @@ if (!isset($_POST['create_course'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
-       // Session::Messages($langEmptyAddNode);
         Session::flash('message',$langEmptyAddNode);
         Session::flash('alert-class', 'alert-warning');
         $validationFailed = true;
     }
 
     if (empty($title)) {
-        //Session::Messages($langFieldsMissing);
         Session::flash('message',$langFieldsMissing);
         Session::flash('alert-class', 'alert-warning');
         $validationFailed = true;
@@ -270,7 +267,6 @@ if (!isset($_POST['create_course'])) {
         array('title' => $langEnter,
               'url' => $urlAppend . "courses/$code/",
               'icon' => 'fa-arrow-right',
-              'level' => 'primary-label',
               'button-class' => 'btn-success')));
 
     // logging
@@ -283,5 +279,3 @@ if (!isset($_POST['create_course'])) {
     $data['menuTypeID'] = 1;
     view('modules.create_course.create_course', $data);
 } // end of submit
-
-

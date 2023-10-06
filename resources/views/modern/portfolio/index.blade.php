@@ -651,11 +651,11 @@
                                                 $pagesPag++;
                                             }
                                         @endphp
-                                        
+
                                         @foreach($courses as $course)
                                             @php $temp_pages++; @endphp
 
-                                            @php 
+                                            @php
                                                 if (isset($course->favorite)) {
                                                     $favorite_icon = 'fa-star Primary-500-cl';
                                                     $fav_status = 0;
@@ -663,7 +663,7 @@
                                                 } else {
                                                     $favorite_icon = 'fa-regular fa-star';
                                                     $fav_status = 1;
-                                                    $fav_message = $langFavorite;
+                                                    $fav_message = trans('langFavorite');
                                                 }
                                             @endphp
 
@@ -685,7 +685,7 @@
                                                     @endif
 
                                                     <div class='card-body'>
-                                                       
+
                                                         <div class="lesson-title">
                                                             <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
                                                                 {{ $course->title }}&nbsp({{ $course->public_code }})
@@ -703,7 +703,7 @@
                                                         @if ($course->status == USER_STUDENT)
                                                             @if (get_config('disable_student_unregister_cours') == 0)
                                                                 {!! icon('fa-minus-circle ms-3', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
-                                                                
+
                                                             @endif
                                                         @elseif ($course->status == USER_TEACHER)
                                                             {!! icon('fa-wrench ms-3', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
