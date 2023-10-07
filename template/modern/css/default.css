@@ -45,6 +45,14 @@ body{
   .container, .container-fluid{
     min-width: 100%;
   }
+  .main-section:not(:has(.jumbotron)) .container,
+  .main-section:not(:has(.jumbotron)) .container-fluid{
+    min-height: calc(100vh - 56px - 340px);
+  }
+  /* homepage container */
+  .container-homepage{
+    min-height: calc(100vh - 56px - 340px - 230px);
+  }
 }
 .container, .container-fluid{
   background-color: #ffffff;
@@ -74,6 +82,11 @@ body{
 }
 
 @media(min-width:992px){
+
+  /* homepage container */
+  .container-homepage{
+    min-height: calc(100vh - 80px - 80px - 213px);
+  }
   
   /* portfolio-container-courses */
   .main-section-courses .container,
@@ -935,7 +948,7 @@ a:hover{
 }
 
 #bgr-cheat-footer {
-  background: #F7F9FE;
+  background-color: #F7F9FE;
   color: #fff;
   font-size: 14px;
   width:auto;

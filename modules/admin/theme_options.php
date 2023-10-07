@@ -25,9 +25,8 @@ require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor', 'whiteButtonHoveredTextColor'),
-                'rgba(247, 249, 254, 1)' => array('bgColorFooter'),
+                'rgba(247, 249, 254, 1)' => array('bgColorFooter','loginTextBgColor'),
                 'rgb(0, 115, 230)' => array('buttonBgColor','whiteButtonHoveredBgColor', 'whiteButtonTextColor'),
-                //'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
                 'rgba(173,173,173,1)' => array('leftMenuFontColor', 'leftSubMenuFontColor'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeaderFooter','loginTextColor'),
                 'rgba(0, 115, 230, 1)' => array('linkHoverColorHeaderFooter'),
@@ -83,6 +82,9 @@ if (isset($_GET['export'])) {
         }
         if (isset($styles['loginImg'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
+        }
+        if (isset($styles['loginImgL'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImgL]");
         }
 
         $zipFile = new ZipArchive();
@@ -404,6 +406,15 @@ if (isset($_POST['optionsSave'])) {
        $login_image_field = "<input type='file' name='loginImg' id='loginImg'>";
     }
 
+    if (isset($theme_options_styles['loginImgL'])) {
+        $login_image_fieldL = "
+            <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImgL'>$langDelete</a>
+            <input type='hidden' name='loginImgL' value='$theme_options_styles[loginImgL]'>
+        ";
+    } else {
+       $login_image_fieldL = "<input type='file' name='loginImgL' id='loginImgL'>";
+    }
+
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -669,9 +680,20 @@ $tool_content .= "
                
             </div>
             <div class='form-group mt-4'>
-                <label for='loginImg' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>
+                <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText:</label>
+                <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
+               
+            </div>
+            <div class='form-group mt-4'>
+                <label for='loginImg' class='col-sm-6 control-label-notes mb-2'>$langLoginImg (jumbotron):</label>
                 <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                    $login_image_field
+                </div>
+            </div>
+            <div class='form-group mt-4'>
+                <label for='loginImgL' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>
+                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                   $login_image_fieldL
                 </div>
             </div>
             <div class='form-group mt-4'>
@@ -790,7 +812,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -806,7 +828,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];

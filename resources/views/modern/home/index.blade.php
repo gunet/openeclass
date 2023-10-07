@@ -26,21 +26,25 @@
     
         @if(!get_config('show_only_loginScreen'))
             <div class="jumbotron jumbotron-login">
-                <div class='{{ $container }}'>
+                <div class='{{ $container }} jumbotron-container'>
                     <div class='row m-auto'>
                         <div class='col-12 mb-3'>
-                            <div class='row row-cols-1'>
-                                @if(get_config('homepage_title'))
-                                    <h1 class='eclass-title'>{!! get_config('homepage_title') !!}</h1>
-                                @else
-                                    <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
-                                @endif
+                            <div class='row row-cols-1 row-intro'>
+                                <div class='col-12'>
+                                    <div class='intro-content'>
+                                        @if(get_config('homepage_title'))
+                                            <h1 class='eclass-title'>{!! get_config('homepage_title') !!}</h1>
+                                        @else
+                                            <h1 class='eclass-title'>{{ trans('langEclass') }}</h1>
+                                        @endif
 
-                                @if(get_config('homepage_intro'))
-                                    <p class='eclassInfo'>{!! get_config('homepage_intro') !!}</p>
-                                @else
-                                    <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
-                                @endif
+                                        @if(get_config('homepage_intro'))
+                                            <p class='eclassInfo'>{!! get_config('homepage_intro') !!}</p>
+                                        @else
+                                            <p class='eclassInfo'>{{ trans('langEclassInfo')}}</p>
+                                        @endif
+                                    </div>
+                                </div>
                             </div>
                             <div class='row row-cols-1'>
                                 @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
@@ -80,7 +84,7 @@
 
 
         
-        <div class='{{ $container }} my-0'>
+        <div class='{{ $container }} container-homepage my-0'>
             <div class='row m-auto'>
 
                 @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
@@ -114,7 +118,7 @@
                             </div>
                             @if(!get_config('show_only_loginScreen'))
                                 <div class='col-lg-6 col-12 d-none @if($PositionFormLogin) d-lg-none @else d-lg-block d-flex justify-content-end align-items-center @endif'>
-                                    <img class='jumbotron-image-default' src='{{ $urlAppend }}template/modern/img/jumbotron-eclass4.png'>
+                                    <img class='jumbotron-image-default' src='{{ $loginIMG }}'>
                                 </div>
                             @endif
                         </div>

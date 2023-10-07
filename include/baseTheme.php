@@ -61,7 +61,7 @@ function view($view_file, $view_data = array()) {
             $require_help, $professor, $helpTopic, $helpSubTopic, $head_content, $toolName, $themeimg, $navigation,
             $require_current_course, $saved_is_editor, $require_course_admin, $is_course_admin,
             $require_editor, $langHomePage,
-            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg, $tmp_pageName, $courseLicense;
+            $is_admin, $is_power_user, $is_departmentmanage_user, $is_usermanage_user, $leftsideImg, $tmp_pageName, $courseLicense, $loginIMG;
 
     if (!isset($course_id) or !$course_id) {
         $course_id = $course_code = null;
@@ -265,6 +265,7 @@ function view($view_file, $view_data = array()) {
 
     $logo_img = $themeimg.'/eclass-new-logo.svg';
     $logo_img_small = $themeimg.'/eclass-new-logo.svg';
+    $loginIMG = $themeimg.'/loginIMG.png';
 
     //////////////////////////////////////////  Theme creation  ///////////////////////////////////////////////
 
@@ -308,11 +309,10 @@ function view($view_file, $view_data = array()) {
 
             if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
                 $styles_str .= "
-                    .main-section-mobile, .jumbotron.jumbotron-login, .site-footer{ 
-                        background-color: transparent !important; 
+                    .main-section-mobile, .jumbotron.jumbotron-login, #bgr-cheat-footer{ 
+                        background-color: transparent ; 
                     }
-                    
-                    ";
+                ";
 
                     
             }
@@ -323,13 +323,62 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND COLOR OF JUMBOTRON
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
             $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-            $styles_str .= "
-                .jumbotron.jumbotron-login {
-                     background: $gradient_str; 
-                }
-            ";
+            
+            if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
+                $styles_str .= "
+                    .jumbotron.jumbotron-login {
+                        background-color:transparent;
+                    }
+                    .jumbotron-container{
+                        background-color: $gradient_str; 
+                    }
+                ";
+            }else{
+                $styles_str .= "
+                    .jumbotron.jumbotron-login {
+                        background-color: $gradient_str; 
+                    }
+                    .jumbotron-container{
+                        background-color: transparent; 
+                    }
+                ";
+            }
+            
         }
 
+        // BACKGROUND IMAGE OF JUMBOTRON
+        if (isset($theme_options_styles['loginImg'])){
+
+            if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
+                $styles_str .= "
+                    .jumbotron-container { 
+                        background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
+                        border:0px; no-repeat center center fixed; 
+                        -webkit-background-size: cover; 
+                        -moz-background-size: cover; 
+                        -o-background-size: cover; 
+                        background-size: cover;
+                    }
+                ";
+            }else{
+                $styles_str .= "
+                    .jumbotron.jumbotron-login { 
+                        background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
+                        border:0px; no-repeat center center fixed; 
+                        -webkit-background-size: cover; 
+                        -moz-background-size: cover; 
+                        -o-background-size: cover; 
+                        background-size: cover;
+                    }
+                ";
+            }
+            
+        }
+
+        // BACKGROUND IMAGE OF LOGIN FORM
+        if (isset($theme_options_styles['loginImgL'])){
+            $loginIMG =  "$urlThemeData/$theme_options_styles[loginImgL]";
+        }
 
         // TEXT COLOR OF HOMEPAGE_INTRO
         if (!empty($theme_options_styles['loginTextColor'])){
@@ -340,19 +389,17 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        // BACKGROUND IMAGE OF JUMBOTRON
-        if (isset($theme_options_styles['loginImg'])){
+        // BACKGROUND COLOR OF HOMEPAGE_INTRO
+        if(!empty($theme_options_styles['loginTextBgColor'])){
             $styles_str .= "
-                .jumbotron.jumbotron-login { 
-                    background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
-                    border:0px; no-repeat center center fixed; 
-                    -webkit-background-size: cover; 
-                    -moz-background-size: cover; 
-                    -o-background-size: cover; 
-                    background-size: cover;
+                .intro-content{
+                    border-radius:8px;
+                    padding: 5px 15px 15px 15px;
+                    background-color: $theme_options_styles[loginTextBgColor];
                 }
             ";
         }
+
 
         // POSITION OF LOGIN-FORM
         if (isset($theme_options_styles['FormLoginPlacement']) && $theme_options_styles['FormLoginPlacement']=='center-position') {
@@ -879,7 +926,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 'courseLicense');
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 'courseLicense', 'loginIMG');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();
