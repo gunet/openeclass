@@ -3550,8 +3550,12 @@ body .delThemeBtn{
     height: 30px; 
     
   }
+
+  .offCanvas-Tools{
+    background: #ffffff;
+  }
   .toolHomePage{
-    background-color: transparent;
+    background-color: #ffffff;
     color: #2B3944;
   }
 }
@@ -3566,6 +3570,7 @@ body .delThemeBtn{
 .popular_course_img{
   width:100%; 
   height:180px; 
+  object-fit: cover;
 }
 
 .popular_course_img:hover{

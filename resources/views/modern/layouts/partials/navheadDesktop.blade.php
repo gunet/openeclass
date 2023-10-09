@@ -46,10 +46,10 @@
 
             @if(get_config('enable_search'))
                 <div class='h-100 d-flex justify-content-start align-items-center'>
-                    <div class='h-40px'>
+                    <div class='h-40px pe-2'>
                         <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post'>
                             <div>
-                                <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-white border-0 p-0 rounded-0" type="button" name="quickSearch">
+                                <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>

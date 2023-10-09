@@ -1744,10 +1744,11 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
 
     $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
     $content = "<td style='padding: 10px 0; width: 85px;'>
-                    <div class='reorder-btn d-flex justify-content-center' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                <div class='d-flex justify-content-center gap-3'>
+                    <div class='reorder-btn d-flex justify-content-center align-items-center'>
                         <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                     </div>
-                <div class='d-flex justify-content-center mt-3'>";
+                <div>";
     $content .= action_button(array(
                 array('title' => $langEditChange,
                       'url' => $edit_link,
@@ -1772,7 +1773,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'class' => 'delete')
             ));
 
-    $content .= "</div></td>";
+    $content .= "</div></div></td>";
 
     $first = false;
     return $content;

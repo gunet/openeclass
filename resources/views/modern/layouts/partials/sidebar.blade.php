@@ -3,7 +3,11 @@
 
     <div class='col-12 text-end d-none d-lg-block'>
         <button type="button" id="menu-btn" class="btn menu_btn_button" data-bs-toggle="tooltip" data-bs-placement="right">
-            <img class='settings-icons' src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' />
+            @if(get_config('theme_options_id') == 0)
+                <img class='settings-icons' src='{{ $urlAppend }}template/modern/img/Icons_menu-collapse.svg' />
+            @else 
+                <i class="fa-solid fa-bars settings-icons"></i>
+            @endif
         </button>
     </div>
 

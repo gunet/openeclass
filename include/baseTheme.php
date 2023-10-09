@@ -277,20 +277,31 @@ function view($view_file, $view_data = array()) {
        
         $styles_str .= " 
 
-            #btn-search{
-                height:40px;
-                width:30px;
-                background-color:#ffffff;
-            }
+            // #btn-search{
+            //     height:40px;
+            //     width:30px;
+            //     background-color:#ffffff;
+            // }
 
             // .menu-item.active,
             // .menu-item.active2{
             //     color: #2B3944;
             // }
 
-            .inputSearch{ height: 40px; margin-top: 1px !important;}
+            // .inputSearch{ height: 40px; margin-top: 1px !important;}
 
-            #search_terms{ padding-left: 5px; }
+            // #search_terms{ padding-left: 5px; }
+
+            #submitSearch{
+                gap: 8px;
+            }
+            #search_terms{ 
+                border-color: transparent;
+                background-color: transparent;
+            }
+            .inputSearch::placeholder{
+                background-color: transparent;
+            }
 
         "
         ;
@@ -531,6 +542,14 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeaderFooter];
                 }
 
+                .inputSearch::placeholder, .inputSearch{
+                    color: $theme_options_styles[linkColorHeaderFooter];
+                }
+
+                #btn-search {
+                    color: $theme_options_styles[linkColorHeaderFooter];
+                }
+
             ";
         }
 
@@ -689,7 +708,7 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
-                .ContentLeftNav{
+                .ContentLeftNav, #collapseTools, .offCanvas-Tools{
                     background: $theme_options_styles[leftNavBgColor];
                 }
 
@@ -858,7 +877,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['leftSubMenuFontColor'])){
             $styles_str .= "
-                .contextual-sidebar .list-group-item{
+                .contextual-sidebar .list-group-item, .menu_btn_button .fa-bars{
                     color: $theme_options_styles[leftSubMenuFontColor];
                 }
             ";
