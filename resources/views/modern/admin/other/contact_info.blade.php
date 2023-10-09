@@ -8,7 +8,8 @@
             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
             @include('layouts.partials.legend_view')
             {!! $action_bar !!}
-            <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
+
+            <div class='col-lg-6 col-12 forms-panels-admin'>
                 <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
 
                         <div class='panel-body'>
@@ -35,7 +36,7 @@
                             </div>
 
                             <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-center'>
+                                <div class='col-12 d-flex justify-content-end align-items-center'>
                                     <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
                                     <a class='btn cancelAdminBtn ms-1' href='index.php'>{{ trans('langCancel') }}</a>
                                 </div>
@@ -44,6 +45,9 @@
                         </div>
 
                 </form>
+            </div>
+            <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
+                <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
             </div>
         </div>
     </div>

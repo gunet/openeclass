@@ -301,9 +301,7 @@
                   </form>
                 </div>
               </div>
-              <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
-              <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
-              </div>
+              c
               
         </div>
     

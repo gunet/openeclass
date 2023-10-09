@@ -1,10 +1,10 @@
-<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass fixed-top pt-0 pb-0">
+<nav id="bgr-cheat-header" class="navbar h-auto navbar-eclass fixed-top py-0">
+    <div class='{{ $container }} header-container py-0'>
+        <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
-        <div class='col-12 d-flex justify-content-between align-items-center'>
-
-            <div class='d-flex justify-content-start align-items-center'>
+            <div class='d-flex justify-content-start align-items-center gap-2'>
                 
-                <button class="btn btn-transparent ms-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
+                <button class="btn small-basic-size bg-white d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
                     <i class='fa-solid fa-bars'></i>
                 </button>
 
@@ -28,9 +28,9 @@
             
             @if(isset($_SESSION['uid']))
                 <div>
-                    <button class="btn btn-transparent dropdown-toogle d-flex justify-content-end align-items-center" type="button"
+                    <button class="btn btn-transparent p-0 dropdown-toogle d-flex justify-content-end align-items-center" type="button"
                             id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img class="user-icon-filename mt-0 me-2" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
+                            <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                     </button>
 
                     <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
@@ -119,6 +119,7 @@
             @endif
             
         </div>
+    </div>
 </nav>
 
 

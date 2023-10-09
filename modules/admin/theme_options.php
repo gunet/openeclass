@@ -26,13 +26,12 @@ require_once 'include/lib/fileUploadLib.inc.php';
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor', 'whiteButtonHoveredTextColor'),
                 'rgba(247, 249, 254, 1)' => array('bgColorFooter','loginTextBgColor'),
-                'rgb(0, 115, 230)' => array('buttonBgColor','whiteButtonHoveredBgColor', 'whiteButtonTextColor'),
-                'rgba(173,173,173,1)' => array('leftMenuFontColor', 'leftSubMenuFontColor'),
-                'rgba(43, 57, 68, 1)' => array('linkColorHeaderFooter','loginTextColor'),
-                'rgba(0, 115, 230, 1)' => array('linkHoverColorHeaderFooter'),
-                "rgba(77,161,228,1)" => array('linkColor', 'leftSubMenuHoverBgColor', 'leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor','whiteButtonHoveredBgColor', 'whiteButtonTextColor'),
+                'rgba(43, 57, 68, 1)' => array('linkColorHeaderFooter','loginTextColor', 'leftSubMenuFontColor'),
+                'rgba(0, 115, 230, 1)' => array('linkHoverColorHeaderFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor'),
+                "rgba(77,161,228,1)" => array('linkColor', 'leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
-                "rgba(238,238,238,1)" => array('leftSubMenuHoverFontColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
@@ -738,10 +737,14 @@ $tool_content .= "
             <hr>
 
             <h3 class='theme_options_legend mt-2'>$langMainMenuConfiguration</h3>
+            
+            <!-- DISABLE 
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuBgColor' class='control-label-notes me-2 mb-2'>$langMainMenuBgColor:</label>
               <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
-            </div>
+            </div> -->
+            
+            
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkColor:</label>
               <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
@@ -750,10 +753,12 @@ $tool_content .= "
               <label for='leftMenuHoverFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkHoverColor:</label>
               <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
             </div>
+
+            <!-- DISABLE 
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuSelectedFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuActiveLinkColor:</label>
               <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
-            </div>
+            </div> -->
 
             <hr>
 
@@ -771,6 +776,15 @@ $tool_content .= "
               <label for='leftSubMenuHoverBgColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkBgHoverColor:</label>
               <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
             </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                <label for='leftMenuSelectedBgColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkBgActive:</label>
+                <input name='leftMenuSelectedBgColor' type='text' class='form-control colorpicker' id='leftMenuSelectedBgColor' value='$theme_options_styles[leftMenuSelectedBgColor]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                <label for='leftMenuSelectedLinkColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColorActive:</label>
+                <input name='leftMenuSelectedLinkColor' type='text' class='form-control colorpicker' id='leftMenuSelectedLinkColor' value='$theme_options_styles[leftMenuSelectedLinkColor]'>
+            </div>
+
         </div>
     </div>
     <div role='tabpanel' class='tab-pane' id='messages'>...</div>

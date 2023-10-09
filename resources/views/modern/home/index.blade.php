@@ -28,7 +28,7 @@
             <div class="jumbotron jumbotron-login">
                 <div class='{{ $container }} jumbotron-container'>
                     <div class='row m-auto'>
-                        <div class='col-12 mb-3'>
+                        <div class='col-12'>
                             <div class='row row-cols-1 row-intro'>
                                 <div class='col-12'>
                                     <div class='intro-content'>
@@ -84,7 +84,7 @@
 
 
         
-        <div class='{{ $container }} container-homepage my-0'>
+        <div class="{{ $container }} homepage-container @if(get_config('show_only_loginScreen')) onlyLoginContainer pt-5 @endif my-0">
             <div class='row m-auto'>
 
                 @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
