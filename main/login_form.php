@@ -85,8 +85,8 @@ $tool_content .= "<div class='col-12'>
                   </div>";
 
 $tool_content .= "<div class='col-12 mt-5'>";
-  $tool_content .= "<div class='row g-lg-5 g-4'>";
-    $tool_content .= "<div class='col-xxl-6 col-lg-7 col-12'>";
+  $tool_content .= "<div class='row m-auto'>";
+    $tool_content .= "<div class='col-12 px-0'>";
                           $counter = 0;
                           $active = '';
       $tool_content .= "";
@@ -119,7 +119,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
                                 }
 
                                 if($counter == 0){
-                                  $tool_content .= "<ul class='nav nav-tabs'>";
+                                  $tool_content .= "<ul class='nav nav-tabs ms-auto me-auto'>";
                                 }
 
                                 if($counter >= 0){
@@ -151,7 +151,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
 
 
                               if($counter == 0){
-                                $tool_content .= "<div class='col-lg-8 tab-content mt-5'>";
+                                $tool_content .= "<div class='col-lg-6 tab-content ms-auto me-auto mt-5'>";
                               }
 
                               if($counter >= 0){
@@ -173,10 +173,6 @@ $tool_content .= "<div class='col-12 mt-5'>";
     
 
        $tool_content .= "
-                      </div>
-
-                      <div class='col-xxl-6 col-lg-5 col-12'>
-                        <img class='form-image' src='{$urlAppend}template/modern/img/jumbotron-eclass4.png'>
                       </div>
 
                     </div>

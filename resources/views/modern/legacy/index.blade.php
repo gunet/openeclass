@@ -3,7 +3,7 @@
 @section('content')
   
 <div class="col-12 main-section">
-<div class="{{ $container }} @if($course_code and $currentCourseName and !isset($_GET['fromFlipped'])) py-lg-0 @endif">
+<div class="{{ $container }} @if($course_code and $currentCourseName and !isset($_GET['fromFlipped'])) module-container py-lg-0 @else main-container @endif">
     <div class="@if($course_code and $currentCourseName and !isset($_GET['fromFlipped'])) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
 
         @if($course_code and $currentCourseName and !isset($_GET['fromFlipped']))

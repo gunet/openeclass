@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="col-12 main-section">
-<div class='{{ $container }}'>
+<div class='{{ $container }} main-container'>
         <div class="row m-auto">
 
                     <div class='col-12'>

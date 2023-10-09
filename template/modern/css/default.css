@@ -695,7 +695,7 @@ a:hover{
 #bgr-cheat-header{ 
   z-index:4;
   overflow: visible; 
-  background: transparent; 
+  background-color: transparent; 
   border: 0 none; 
   height:80px; 
   /* filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)); */

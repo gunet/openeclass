@@ -278,7 +278,7 @@ function view($view_file, $view_data = array()) {
         $styles_str .= " 
 
             #btn-search{
-                height:33px;
+                height:40px;
                 width:30px;
                 background-color:#ffffff;
             }
@@ -288,7 +288,7 @@ function view($view_file, $view_data = array()) {
             //     color: #2B3944;
             // }
 
-            // .inputSearch{ height: 33px !important; margin-top: 0px !important;}
+            .inputSearch{ height: 40px; margin-top: 1px !important;}
 
             #search_terms{ padding-left: 5px; }
 
@@ -469,8 +469,8 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND-COLOR HEADER
         if (!empty($theme_options_styles['bgColorHeader'])) {
             $styles_str .= "
-                #bgr-cheat-header {
-                    background: $theme_options_styles[bgColorHeader];
+                .header-container {
+                    background-color: $theme_options_styles[bgColorHeader];
                 }
 
                 .panel-admin>.panel-heading, .descCoursePanel, #cal-header{
@@ -501,8 +501,8 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND COLOR FOOTER
         if (!empty($theme_options_styles['bgColorFooter'])) {
             $styles_str .= "
-                .site-footer, .div_social{
-                    background: $theme_options_styles[bgColorFooter];
+                .footer-container, .div_social{
+                    background-color: $theme_options_styles[bgColorFooter];
                 }
             ";
         }

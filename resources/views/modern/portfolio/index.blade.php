@@ -504,7 +504,7 @@
     @endif
 
 <div class='col-12 main-section-mobile Primary-100-bg'>
-    <div class='{{ $container }}'>
+    <div class='{{ $container }} main-container'>
         <div class='row m-auto'>
             <div class='col-12 d-lg-flex justify-content-lg-between align-items-lg-center'>
 
@@ -572,7 +572,7 @@
 
 
 <div class='col-12 main-section-courses'>
-    <div class='{{ $container }}'>
+    <div class='{{ $container }} main-container'>
         <div class='row m-auto'>
             <div class='col-12'>
                 <div class='d-xl-flex gap-5'>

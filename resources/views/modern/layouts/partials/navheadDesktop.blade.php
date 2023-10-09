@@ -46,8 +46,8 @@
 
             @if(get_config('enable_search'))
                 <div class='h-100 d-flex justify-content-start align-items-center'>
-                    <div class='h-30px'>
-                        <form id='submitSearch' class="d-flex justify-content-start align-items-center h-30px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post'>
+                    <div class='h-40px'>
+                        <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post'>
                             <div>
                                 <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-white border-0 p-0 rounded-0" type="button" name="quickSearch">
                                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -56,17 +56,17 @@
                             <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-describedby="basic-inputSearch"/>
                         </form>
                     </div>
-                    <div class='split-left h-30px ps-0 pe-3'></div>
+                    <div class='split-left h-40px ps-0 pe-3'></div>
                 </div>
             @endif
 
             @if(!isset($_SESSION['uid']))
                 <div class='h-100 d-flex justify-content-start align-items-center'>
-                    <div class="d-flex justify-content-start align-items-center h-30px @if(get_config('dont_display_login_form')) pe-3 @endif">
+                    <div class="d-flex justify-content-start align-items-center h-40px @if(get_config('dont_display_login_form')) pe-3 @endif">
                         {!! lang_selections_Desktop() !!}
                     </div>
                     @if(get_config('dont_display_login_form'))
-                        <div class='split-left h-30px ps-0 pe-3'></div>
+                        <div class='split-left h-40px ps-0 pe-3'></div>
                     @endif
                 </div>
             @endif

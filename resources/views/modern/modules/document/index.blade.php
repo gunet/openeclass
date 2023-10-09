@@ -5,7 +5,7 @@
 <?php load_js('tinymce.popup.urlgrabber.min.js');?>
 
 <div class="col-12 main-section">
-<div class='{{ $container }} @if($course_code) py-lg-0 @endif'>
+<div class='{{ $container }} @if($course_code) module-container py-lg-0 @else main-container @endif'>
         <div class="@if($course_code) course-wrapper d-lg-flex align-items-lg-strech w-100 @else row m-auto @endif">
 
             @if($course_code)

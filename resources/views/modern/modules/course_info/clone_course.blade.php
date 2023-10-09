@@ -12,7 +12,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='{{ $container }} py-lg-0'>
+<div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
