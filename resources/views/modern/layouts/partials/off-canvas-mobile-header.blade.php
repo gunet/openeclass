@@ -9,7 +9,7 @@
                     @if(get_config('enable_search'))
                         <div class='col-12 mt-5 d-flex justify-content-center align-items-center px-4'>
                             @if(isset($course_code) and $course_code)
-                                <form action="{{ $urlAppend }}modules/search/search_incourse.php?all=true" class='d-flex justify-content-center align-items-end w-100 gap-2'>
+                                <form action="{{ $urlAppend }}modules/search/search_incourse.php?all=true" class='d-flex justify-content-center align-items-end w-100'>
                             @else
                                 <form action="{{ $urlAppend }}modules/search/search.php" class='d-flex justify-content-center align-items-end w-100'>
                             @endif

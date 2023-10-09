@@ -316,6 +316,7 @@ a:hover,button:hover{
   text-overflow: ellipsis;
 } */
 
+
   
 /**********************************************************************************************************************/
 /************************************************* COLORS *************************************************************/
@@ -4098,6 +4099,12 @@ div[role="progressbar"]::before {
 .panelCard .card-header .submitAdminBtn, .panelCard .card-header .submitAdminBtn span, .panelCard .card-header .submitAdminBtn .fa{
   font-weight: 700;
   font-style: normal;
+}
+
+@media(max-width:991px){
+  .panelCard .card-body{
+    overflow: auto !important;
+  }
 }
 .panelCard .card-footer{
   border-bottom-left-radius: 4px ;

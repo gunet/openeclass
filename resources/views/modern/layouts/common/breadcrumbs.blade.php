@@ -1,7 +1,7 @@
 
-<div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-start @endif'>
+<div class='col-12 breadcrumbs-container @if(!$course_code) d-flex justify-content-md-start justify-content-start @endif overflow-hidden'>
 
-    <div class='d-inline-flex align-items-top overflow-auto'>
+    <div class='d-inline-flex align-items-top overflow-hidden'>
         <!-- this is toggle-button in breadcrumb -->
         @if($course_code and !$is_in_tinymce and $currentCourseName and !isset($_GET['fromFlipped']))
             <nav class="me-lg-0 me-2">
