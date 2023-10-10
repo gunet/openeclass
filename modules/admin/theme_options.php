@@ -151,8 +151,6 @@ if (isset($_POST['optionsSave'])) {
     }
     upload_images();
 
-
-
     //jumbotron image
     if(isset($_POST['choose_from_jumbotronlist']) && !empty($_POST['choose_from_jumbotronlist'])){
         $imageName = $_POST['choose_from_jumbotronlist'];
@@ -172,7 +170,24 @@ if (isset($_POST['optionsSave'])) {
         }
     }
 
-
+    //login image
+    if(isset($_POST['choose_from_loginlist']) && !empty($_POST['choose_from_loginlist'])){
+        $imageName = $_POST['choose_from_loginlist'];
+        $imagePath = "$webDir/template/modern/images/login_images/$imageName";
+        $newPath = "$webDir/courses/theme_data/$theme_id/";
+        $name = pathinfo($imageName, PATHINFO_FILENAME);
+        $ext =  get_file_extension($imageName);
+        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+        $newName  = $newPath.$image_without_ext.".".$ext;
+        $copied = copy($imagePath , $newName);
+        if ((!$copied)) {
+            echo "Error : Not Copied";
+        }
+        else{ 
+            //serialize $_post login img jumbotron
+            $_POST['loginImgL'] = $image_without_ext.".".$ext;
+        }
+    }
 
     clear_default_settings();
     $serialized_data = serialize($_POST);
@@ -375,9 +390,6 @@ if (isset($_POST['optionsSave'])) {
             });
 
 
-
-
-
             //jumbotron images upload
             $('.chooseJumbotronImage').on('click',function(){
                 var id_img = this.id;
@@ -388,9 +400,15 @@ if (isset($_POST['optionsSave'])) {
 
             });
 
+            //login images upload
+            $('.chooseLoginImage').on('click',function(){
+                var id_img = this.id;
+                alert('Selected image: '+id_img);
+                document.getElementById('choose_from_loginlist').value = id_img;
+                $('#LoginImagesModal').modal('hide');
+                document.getElementById('selectedImageLogin').value = '$langSelect:'+id_img;
 
-
-
+            });
 
 
 
@@ -476,11 +494,36 @@ if (isset($_POST['optionsSave'])) {
 
     if (isset($theme_options_styles['loginImgL'])) {
         $login_image_fieldL = "
-            <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImgL'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn d-inline' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImgL'>$langDelete</a>
             <input type='hidden' name='loginImgL' value='$theme_options_styles[loginImgL]'>
         ";
     } else {
-       $login_image_fieldL = "<input type='file' name='loginImgL' id='loginImgL'>";
+       $login_image_fieldL = "
+       
+            <ul class='nav nav-tabs' id='nav-tab2' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='tabs-upload-tab2' data-bs-toggle='tab' data-bs-target='#tabs-upload2' type='button' role='tab' aria-controls='tabs-upload2' aria-selected='true'>$langUpload</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='tabs-selectImage-tab2' data-bs-toggle='tab' data-bs-target='#tabs-selectImage2' type='button' role='tab' aria-controls='tabs-selectImage2' aria-selected='false'>$langAddPicture</button>
+                </li>
+            </ul>
+            <div class='tab-content mt-3' id='tabs-tabContent2'>
+                <div class='tab-pane fade show active' id='tabs-upload2' role='tabpanel' aria-labelledby='tabs-upload-tab2'>
+                    <input type='file' name='loginImgL' id='loginImgL'>
+                </div>
+                <div class='tab-pane fade' id='tabs-selectImage2' role='tabpanel' aria-labelledby='tabs-selectImage-tab2'>
+                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#LoginImagesModal'>
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp$langSelect
+                    </button>
+                    <input type='hidden' id='choose_from_loginlist' name='choose_from_loginlist'>
+                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageLogin'>
+                </div>
+            </div>
+       
+       
+       
+       ";
     }
 
 
@@ -519,6 +562,11 @@ if (isset($_POST['optionsSave'])) {
     $dirname = getcwd();
     $dirname = $dirname . '/template/modern/images/jumbotron_images';
     $dir_jumbotron_images = scandir($dirname);
+
+    // Get all images from dir login_images
+    $dirname2 = getcwd();
+    $dirname2 = $dirname2 . '/template/modern/images/login_images';
+    $dir_login_images = scandir($dirname2);
 
 
 
@@ -679,9 +727,6 @@ $tool_content .= "
             <hr>
 
 
-
-
-
             <h3 class='theme_options_legend mt-2'>$langButtonsColorCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='buttonBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
@@ -696,15 +741,6 @@ $tool_content .= "
             <hr>
 
             
-
-
-
-
-
-
-
-
-
             <h3 class='theme_options_legend mt-2'>$langButtonsColorWhiteCongiguration</h3>
 
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -721,15 +757,6 @@ $tool_content .= "
             </div>
 
             <hr>
-
-
-
-
-
-
-
-          
-
 
 
             <h3 class='theme_options_legend mt-2'>$langLinksCongiguration ($langEclass)</h3>
@@ -765,48 +792,6 @@ $tool_content .= "
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div class='form-group mt-4'>
                 <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginImg (jumbotron):</label>
                 <div class='col-sm-12'>
@@ -815,57 +800,10 @@ $tool_content .= "
             </div>
             <div class='form-group mt-4'>
                 <label for='loginImgL' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>
-                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                <div class='col-sm-12'>
                    $login_image_fieldL
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             <div class='form-group mt-4'>
@@ -1014,25 +952,41 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<div class='modal fade' id='LoginImagesModal' tabindex='-1' aria-labelledby='LoginImagesModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='LoginImagesModalLabel'>$langLoginImg</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+            </div>
+            <div class='modal-body'>
+                <div class='row row-cols-1 row-cols-md-2 g-4'>";
+                        foreach($dir_login_images as $image) {
+                            $extension = pathinfo($image, PATHINFO_EXTENSION);
+                            $imgExtArr = ['jpg', 'jpeg', 'png'];
+                            if(in_array($extension, $imgExtArr)){
+                                $tool_content .= " 
+                                    <div class='col'>
+                                        <div class='card h-100'>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/login_images/$image' alt='image login'/>
+                                            <div class='card-body'>
+                                                <p class='form-value'>$image</p>
+                                                
+                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseLoginImage mt-3' value='$langSelect'>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                ";
+                            }
+                            
+                        }
+                    
+$tool_content .= "      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 ";
