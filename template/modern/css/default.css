@@ -3393,6 +3393,13 @@ body .delThemeBtn{
 }
 
 
+.uploadImageCourse{ 
+  height: 280px;  
+  width: 100%; 
+  object-fit: cover ; 
+  margin:auto; 
+  display: block;
+}
 
 /* @media(min-width:992px){
     .jumbotron.jumbotron-login { min-height:650px; padding-top: 150px; }
@@ -4797,8 +4804,6 @@ div[role="progressbar"]::before {
 
   .user-icon-filename{ width:30px; height:30px; margin-top: -3px; border-radius:50%; }
 
-  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
-
 }
 
 @media(min-width: 992px) and (max-width: 1023px){
@@ -4807,7 +4812,6 @@ div[role="progressbar"]::before {
 
   .user-icon-filename{ width:20px; height:20px; border-radius:50%;}
 
-  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 }
 
 /* ------------------------------------------------------- L tablet -------------------------------------------------------------------------*/
@@ -4820,8 +4824,6 @@ div[role="progressbar"]::before {
 
   .user-icon-filename{ width:30px; height:30px; border-radius:50%;}
 
-  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
-
 }
 
 /* ------------------------------------------------------- small laptop ---------------------------------------------------------------------*/
@@ -4831,8 +4833,6 @@ div[role="progressbar"]::before {
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
 @media (min-width: 1200px) and (max-width: 1399px){ 
-
-  .uploadImageCourse{ height: 280px;  width: 100%; object-fit: cover ; margin:auto; display: block;}
 
   .user-icon-filename{ width:30px; height:30px; border-radius:50%;}
 }
@@ -4844,8 +4844,6 @@ div[role="progressbar"]::before {
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/ 
 
 @media (min-width:1400px){
-
-  .uploadImageCourse{ height: 280px; width: 100%; object-fit: cover ; margin:auto; display: block;}
 
   .user-icon-filename{ width:30px; height:30px; border-radius:50%;}
 }

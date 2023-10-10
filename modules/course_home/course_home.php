@@ -319,6 +319,11 @@ if ($is_course_admin) {
 $data['lessonStatus'] = course_access_icon($visible);
 
 $data['action_bar'] = action_bar([
+    [   'title' => $langEditMeta,
+        'url' => "{$urlAppend}modules/course_home/editdesc.php?course=$course_code",
+        'icon' => 'fa-pen-to-square',
+        'show' => $is_editor
+    ],
     [
         'title' => "$numUsers $langRegistered",
         'url' => "{$urlAppend}modules/user/index.php?course=$course_code",
@@ -347,11 +352,6 @@ $data['action_bar'] = action_bar([
         'text-class' => 'text-danger',
         'show' => ($uid && !(get_user_email_notification($uid, $course_id))),
         'link-attrs' => "id='email_notification'"
-    ],
-    [   'title' => $langEditMeta,
-        'url' => "{$urlAppend}modules/course_home/editdesc.php?course=$course_code",
-        'icon' => 'fa-pen-to-square',
-        'show' => $is_editor
     ],
     [
         'title' => $langUsage,

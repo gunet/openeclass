@@ -299,8 +299,8 @@
                                     {!! $action_bar !!}
                                 </div>
                             </div>
-                            <div class='card-body pb-0'>
-                                <div class='row'>
+                            <div class='card-body pb-0 px-0'>
+                                <div class='row m-auto'>
                                     @if($course_info->home_layout == 1)
                                         <div class='col-12 px-0'>
                                             <figure>
@@ -313,7 +313,7 @@
                                                 </picture>
                                             </figure>
                                         </div>
-                                        <div class='col-12 mt-1 mb-3 px-0'>
+                                        <div class='col-12 mt-1 mb-3'>
                                             <div class='course_info'>
                                                 @if ($course_info->description)
                                                         {!! $course_info->description !!}
