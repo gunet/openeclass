@@ -94,11 +94,12 @@ body{
   .jumbotron-container{
     padding: 24px 18px 24px 18px;
     background-color: #F7F9FE;
+    min-height: 315px;
   }
   .homepage-container{
     padding: 24px 18px 24px 18px;
     background-color: #ffffff;
-    min-height: calc(100vh - 80px - 80px - 217px);
+    min-height: calc(100vh - 80px - 80px - 315px);
   }
   .portfolio-profile-container{
     min-height: 256px;

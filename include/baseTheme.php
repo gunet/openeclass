@@ -480,6 +480,11 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND-COLOR HEADER
         if (!empty($theme_options_styles['bgColorHeader'])) {
             $styles_str .= "
+
+                #bgr-cheat-header{ 
+                    box-shadow: none;
+                }
+
                 .header-container {
                     background-color: $theme_options_styles[bgColorHeader];
                 }

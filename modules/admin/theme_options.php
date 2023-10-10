@@ -150,6 +150,30 @@ if (isset($_POST['optionsSave'])) {
         csrf_token_error();
     }
     upload_images();
+
+
+
+    //jumbotron image
+    if(isset($_POST['choose_from_jumbotronlist']) && !empty($_POST['choose_from_jumbotronlist'])){
+        $imageName = $_POST['choose_from_jumbotronlist'];
+        $imagePath = "$webDir/template/modern/images/jumbotron_images/$imageName";
+        $newPath = "$webDir/courses/theme_data/$theme_id/";
+        $name = pathinfo($imageName, PATHINFO_FILENAME);
+        $ext =  get_file_extension($imageName);
+        $image_without_ext = preg_replace('/\\.[^.\\s]{3,4}$/', '', $imageName);
+        $newName  = $newPath.$image_without_ext.".".$ext;
+        $copied = copy($imagePath , $newName);
+        if ((!$copied)) {
+            echo "Error : Not Copied";
+        }
+        else{ 
+            //serialize $_post login img jumbotron
+            $_POST['loginImg'] = $image_without_ext.".".$ext;
+        }
+    }
+
+
+
     clear_default_settings();
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
@@ -349,6 +373,27 @@ if (isset($_POST['optionsSave'])) {
             $('#btnEnterAColor').click(function() {
                 $(this).closest('.colorpicker').spectrum('set', $('#enterAColor').val());
             });
+
+
+
+
+
+            //jumbotron images upload
+            $('.chooseJumbotronImage').on('click',function(){
+                var id_img = this.id;
+                alert('Selected image: '+id_img);
+                document.getElementById('choose_from_jumbotronlist').value = id_img;
+                $('#JumbotronImagesModal').modal('hide');
+                document.getElementById('selectedImage').value = '$langSelect:'+id_img;
+
+            });
+
+
+
+
+
+
+
         });
     </script>";
     $all_themes = Database::get()->queryArray("SELECT * FROM theme_options ORDER BY name, id");
@@ -390,7 +435,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
-            <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn d-inline' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
         ";
     } else {
@@ -398,11 +443,35 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
-            <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn d-inline' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
         ";
     } else {
-       $login_image_field = "<input type='file' name='loginImg' id='loginImg'>";
+       $login_image_field = "
+
+            <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'>$langUpload</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='tabs-selectImage-tab' data-bs-toggle='tab' data-bs-target='#tabs-selectImage' type='button' role='tab' aria-controls='tabs-selectImage' aria-selected='false'>$langAddPicture</button>
+                </li>
+            </ul>
+            <div class='tab-content mt-3' id='tabs-tabContent'>
+                <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
+                     <input type='file' name='loginImg' id='loginImg'>
+                </div>
+                <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
+                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#JumbotronImagesModal'>
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp$langSelect
+                    </button>
+                    <input type='hidden' id='choose_from_jumbotronlist' name='choose_from_jumbotronlist'>
+                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
+                </div>
+            </div>
+
+            
+        ";
     }
 
     if (isset($theme_options_styles['loginImgL'])) {
@@ -442,6 +511,17 @@ if (isset($_POST['optionsSave'])) {
                 </div>
                 ";
     }
+
+
+
+
+    // Get all images from dir jumbotron_images
+    $dirname = getcwd();
+    $dirname = $dirname . '/template/modern/images/jumbotron_images';
+    $dir_jumbotron_images = scandir($dirname);
+
+
+
     @$tool_content .= "
     <div class='col-sm-12 mb-4'>
     <div class='form-wrapper form-edit Borders p-lg-5 p-3'>
@@ -683,9 +763,53 @@ $tool_content .= "
                 <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
                
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div class='form-group mt-4'>
-                <label for='loginImg' class='col-sm-6 control-label-notes mb-2'>$langLoginImg (jumbotron):</label>
-                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginImg (jumbotron):</label>
+                <div class='col-sm-12'>
                    $login_image_field
                 </div>
             </div>
@@ -695,6 +819,55 @@ $tool_content .= "
                    $login_image_fieldL
                 </div>
             </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div class='form-group mt-4'>
                 <div class='form-inline col-sm-9 col-sm-offset-3'>
                       <div class='radio'>
@@ -799,7 +972,70 @@ $tool_content .= "
     </div>
     ". generate_csrf_token_form_field() ."
 </form>
-</div>";
+</div>
+
+
+
+<div class='modal fade' id='JumbotronImagesModal' tabindex='-1' aria-labelledby='JumbotronImagesModalLabel' aria-hidden='true'>
+    <div class='modal-dialog modal-lg'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title' id='JumbotronImagesModalLabel'>$langLoginImg (jumbotron)</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+            </div>
+            <div class='modal-body'>
+                <div class='row row-cols-1 row-cols-md-2 g-4'>";
+                        foreach($dir_jumbotron_images as $image) {
+                            $extension = pathinfo($image, PATHINFO_EXTENSION);
+                            $imgExtArr = ['jpg', 'jpeg', 'png'];
+                            if(in_array($extension, $imgExtArr)){
+                                $tool_content .= " 
+                                    <div class='col'>
+                                        <div class='card h-100'>
+                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/jumbotron_images/$image' alt='image jumbotron'/>
+                                            <div class='card-body'>
+                                                <p class='form-value'>$image</p>
+                                                
+                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseJumbotronImage mt-3' value='$langSelect'>
+                                            </div>
+                                        </div>
+                                    </div>    
+                                ";
+                            }
+                            
+                        }
+                    
+$tool_content .= "      
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+";
 }
 
 function clear_default_settings() {
