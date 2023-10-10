@@ -750,7 +750,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                                 
                                 let newRow = $('<tr data-id=\"'+newId+'\">');
                                 
-                                let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + newId + '\">');
+                                let checkboxCell = $('<td class=\"col-sm-1 text-center\">').html('<input type=\"checkbox\" onclick=\"mailList(this)\" class=\"checkbox_extUsers\" id=\"user-' + newId + '\" checked>');
                                 let emailCell = $('<td class=\"col-sm-5\">').html('<strong class=\"usermail\">' + userEmail + '</strong>');
                                 let nameCell = $('<td class=\"col-sm-4\">').html('<strong class=\"username\">' + userName + '</strong>');
                                 let copyCell = $('<td class=\"col-sm-4\">').html('<i class=\"fa fa-copy\" onclick=\"copyLinkToClipboard(this)\" data-url=\"$course_code\"></i>');
@@ -760,6 +760,13 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
                                 $('#user-list tbody').append(newRow);
                                 $('#newExtEmail').val('');
                                 $('#newExtName').val('');
+                                
+                                let mailingListInput = $('#mailinglist');
+                                let currentEmails = mailingListInput.val().split(',');
+                                currentEmails.push(userEmail);
+                                currentEmails = currentEmails.filter(email => email.trim() !== '');
+                                let updatedMailingList = currentEmails.join(',');
+                                mailingListInput.val(updatedMailingList);
                                 
                             } else {
                               alert('email \"' + userEmail + '\" is not valid');
