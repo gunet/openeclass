@@ -230,7 +230,7 @@
                                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:40px;'>
                                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
                                                     <button class='list-group-item d-flex justify-content-start align-items-center gap-2 py-0 w-100 h-100 text-end' type='submit' name='submit'>
-                                                        <i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
+                                                        <i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl "></i>
                                                         <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                                     </button>
                                                 </form>

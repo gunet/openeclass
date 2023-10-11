@@ -280,7 +280,7 @@ $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                     </div>
                   </div>
 
-                  <div class='d-none d-lg-block'>
+                  <div class='form-content-modules d-none d-lg-block'>
                       <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                   </div>
             </div>

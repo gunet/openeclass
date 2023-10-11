@@ -726,6 +726,7 @@ a:hover{
 }
 
 .header-container{
+  background-color: #ffffff;
   padding: 32px 18px 32px 18px;
 }
 @media(max-width:991px){
@@ -2120,7 +2121,9 @@ body .form-action-button-mydropdowns{
   color: #C44601;
 }
 
-
+.menu-popover .delete.confirmAction .fa-xmark{
+  margin-top: 1px;
+}
 
 /* after close modal , display none from body and block inside popover for form-action-button */
 body .form-action-button-popover{ 
@@ -4614,10 +4617,10 @@ div[role="progressbar"]::before {
   font-weight: 600 !important;
   font-style: normal !important;
   font-size: 14px;
-  color: #2546F0;
+  color: #2546F0 !important;
 }
 .bs-placeholder:hover .filter-option .filter-option-inner-inner{
-  color: #ffffff;
+  color: #2546F0 !important;
 }
 
 /**********************************************************************************************************************/
@@ -4970,6 +4973,11 @@ div[role="progressbar"]::before {
   padding-right: 0px;
 }
 
+/* personal docs */
+.main-section:has(.form-content-modules) .form-image-modules{
+  max-width: 650px;
+}
+
 @media(min-width:992px) and (max-width:1199px){
   .main-section:has(.course-wrapper) .form-image-modules{
     max-width:320px; 
@@ -5028,3 +5036,4 @@ div[role="progressbar"]::before {
 .main-section:not(:has(.course-wrapper)) .form-image-modules{
   width:auto;
 }
+

@@ -11,7 +11,7 @@
                 </div>
 
                 <div class='col-12 mt-4'>
-                        <div class='border-card bg-white Borders p-lg-5 p-3'>{!! $terms !!}</div> 
+                        <div class='border-card bg-transparent Borders p-lg-5 p-3'>{!! $terms !!}</div> 
                 </div>
                     
 

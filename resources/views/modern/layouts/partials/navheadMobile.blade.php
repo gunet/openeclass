@@ -4,7 +4,7 @@
 
             <div class='d-flex justify-content-start align-items-center gap-2'>
                 
-                <button class="btn small-basic-size bg-white d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
+                <button class="btn small-basic-size mobile-btn bg-white d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
                     <i class='fa-solid fa-bars'></i>
                 </button>
 
@@ -108,7 +108,7 @@
                             <li>
                                 <form method='post' action='{{ $urlAppend }}modules/auth/logout.php' style='height:49px;'>
                                     <input type='hidden' name='token' value='{{ $_SESSION['csrf_token'] }}'>
-                                    <button type='submit' class='list-group-item d-flex justify-content-start align-items-center py-3 w-100 text-end gap-2' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl settings-icons"></i>
+                                    <button type='submit' class='list-group-item d-flex justify-content-start align-items-center py-3 w-100 text-end gap-2' name='submit'><i class="fa-solid fa-arrow-right-from-bracket Accent-200-cl"></i>
                                     <span class='Accent-200-cl TextBold'>{{ trans('langLogout2') }}</span>
                                     </button>
                                 </form>

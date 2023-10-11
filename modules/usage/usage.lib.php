@@ -955,7 +955,7 @@ function user_last_logins($u) {
         foreach ($result as $lastVisit) {
             $tool_content .= "<li class='list-group-item'>
                         <div class='row'>
-                          <div class='col-sm-8'><strong>" . format_locale_date(strtotime($lastVisit->when)) . "</strong>
+                          <div class='col-sm-8'><strong class='last-visit-li'>" . format_locale_date(strtotime($lastVisit->when)) . "</strong>
                           </div>
                         </div>
                       </li>";

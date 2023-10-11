@@ -64,7 +64,7 @@
                                         @if($eclass_banner_value == 1)
                                             <div>
                                                 <div class='card border-0 border-radius-default'>
-                                                    <div class='card-body border-0 bg-white border-radius-default py-lg-2 py-1'>
+                                                    <div class='card-body banner-body border-0 bg-white border-radius-default py-lg-2 py-1'>
                                                         <a href="http://www.openeclass.org/" target="_blank">
                                                             <img style='width:150px;' src="{{ $themeimg }}/Open-Eclass-Banner.svg" alt="Open eClass Banner">
                                                         </a> 

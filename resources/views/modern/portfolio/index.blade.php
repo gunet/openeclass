@@ -578,8 +578,8 @@
             <div class='col-12'>
                 <div class='d-xl-flex gap-5'>
                     <div class='flex-grow-1'>
-                        <div class='card border-0'>
-                            <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-white border-0'>
+                        <div class='card border-0 bg-transparent'>
+                            <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
                                 @php $totalCourses = $student_courses_count + $teacher_courses_count; @endphp
                                 <h2>{{ trans('langMyCoursesSide') }}&nbsp({{ $totalCourses }})</h2>
                                 <div class='d-flex'>
@@ -696,7 +696,7 @@
                                                         <div class="vsmall-text Neutral-900-cl TextRegular">{{ $course->professor }}</div>
                                                     </div>
 
-                                                    <div class='card-footer bg-white border-0'>
+                                                    <div class='card-footer bg-tranparent border-0'>
                                                         <a class='ClickCoursePortfolio me-3' href='#' id='{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp{{ trans('langOfCourse') }}">
                                                             <i class='fa-solid fa-display'></i>
                                                         </a>
@@ -729,7 +729,7 @@
                                     <input type='hidden' id='KeyallCourse' value='{{ $allCourses }}'>
                                     <input type='hidden' id='KeypagesCourse' value='{{ $pagesPag }}'>
 
-                                    <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-white solidPanel mt-4'>
+                                    <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent solidPanel mt-4'>
                                         <nav aria-label='Page navigation example w-100'>
                                             <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                 <li class='page-item page-item-previous'>

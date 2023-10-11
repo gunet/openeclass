@@ -51,9 +51,9 @@
 }
 
 #cal-slide-content {
-  -webkit-box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) !important;
-  box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) !important;
-  background: #ffffff !important;
+  -webkit-box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) ;
+  box-shadow: inset 0px 0px 15px 0px rgb(255, 255, 255) ;
+  background: #ffffff ;
 }
 
 #cal-slide-content a.event-item {

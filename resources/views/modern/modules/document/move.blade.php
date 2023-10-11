@@ -30,7 +30,7 @@
                 {!! generate_csrf_token_form_field() !!}
             </form>
         </div>
-        <div class='d-none d-lg-block'>
+        <div class='form-content-modules d-none d-lg-block'>
             <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
         </div>
 </div>

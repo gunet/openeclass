@@ -581,7 +581,7 @@ if (isset($_POST['optionsSave'])) {
 
     @$tool_content .= "
     <div class='col-sm-12 mb-4'>
-    <div class='form-wrapper form-edit Borders p-lg-5 p-3'>
+    <div class='form-wrapper form-edit theme-option-wrapper Borders p-lg-5 p-3'>
         <div class='d-flex justify-content-start align-items-center gap-2'>
             <strong class='control-label-notes mb-0'>$langActiveTheme:</strong>
             ".$themes_arr[$active_theme]."
