@@ -582,6 +582,7 @@ $langUserType = "Τύπος χρήστη";
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί";
+$langActiveUsers = "Ενεργοί";
 $langWillExpireUsers = "Λήγουν μέσα στο μήνα";
 $langAddSixMonths = "Επέκταση διάρκειας λογαριασμών";
 $langChangeDepartment = 'Αλλαγή σχολής - τμήματος';
@@ -6220,3 +6221,4 @@ $langCloseOptions = "Κλείσιμο επιλογών";
 $langOpenOptions = "Άνοιγμα επιλογών";
 $langShowOnlyLoginScreen = "Να εμφανίζεται μόνο η οθόνη σύνδεσης στην αρχική σελίδα;";
 $langHomepageTexts = "Κείμενα αρχικής σελίδας";
+$langAccountStatus = "Κατάσταση λογαριασμού";
