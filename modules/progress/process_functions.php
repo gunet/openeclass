@@ -1222,18 +1222,18 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
 
 /**
  * @brief register user as certified
- * @global type $course_id
  * @param type $table
  * @param type $element_id
  * @param type $element_title
  * @param type $user_id
  */
-function register_certified_user($table, $element_id, $element_title, $user_id) {
+function register_certified_user($table, $element_id, $user_id) {
 
     global $course_id;
 
     $title = course_id_to_title($course_id);
     $user_fullname = uid_to_name($user_id);
+    $cert_title = get_cert_title($table, $element_id);
     $issuer = get_cert_issuer($table, $element_id);
     $message = get_cert_message($table, $element_id);
     $expiration_date = get_cert_expiration_day($table, $element_id);
@@ -1248,7 +1248,7 @@ function register_certified_user($table, $element_id, $element_title, $user_id) 
                                                                 . "expires = ?s, "
                                                                 . "template_id = ?d, "
                                                                 . "identifier = '" . uniqid(rand()) . "'",
-                                                    $title, $element_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
+                                                    $title, $cert_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
 
 }
 
