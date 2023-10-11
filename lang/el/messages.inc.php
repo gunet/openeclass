@@ -574,6 +574,7 @@ $langUserType = "Τύπος χρήστη";
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί";
+$langActiveUsers = "Ενεργοί";
 $langWillExpireUsers = "Λήγουν μέσα στο μήνα";
 $langAddSixMonths = "Επέκταση διάρκειας λογαριασμών";
 $langChangeDepartment = 'Αλλαγή σχολής - τμήματος';
@@ -6087,4 +6088,6 @@ $langMaintenanceOff = "Απενεργοποίηση συντήρησης";
 $langMaintenance = "Συντήρηση";
 $langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
 $langMaintenanceMode = "Λειτουργία συντήρησης";
+
+$langAccountStatus = "Κατάσταση λογαριασμού";
 

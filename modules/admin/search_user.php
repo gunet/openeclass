@@ -94,6 +94,10 @@ $tool_content .= action_bar(array(
                 'url' => "listusers.php?search=yes",
                 'icon' => 'fa-search',
                 'level' => 'primary-label'),
+            array('title' => $langActiveUsers,
+                'url' => "listusers.php?search=active",
+                'icon' => 'fa-search',
+                'level' => 'primary-label'),
             array('title' => $langInactiveUsers,
                 'url' => "listusers.php?search=inactive",
                 'icon' => 'fa-search',
@@ -167,6 +171,27 @@ $tool_content .= "
         </div>
     </div>
     <div class='form-group'>
+        <label class='col-sm-2 control-label'>$langAccountStatus:</label>
+        <div class='col-sm-10'>
+        
+            <div class='col-sm-3'>
+                <input type='radio' name='search' value='all' id='all-option' checked>
+                <label for='all-option'>$langAllUsers</label>
+            </div>
+            
+            <div class='col-sm-2'>
+                <input type='radio' name='search' value='active' id='active-option'>
+                <label for='active-option'>$langActiveUsers</label>
+            </div>
+            
+            <div class='col-sm-2'>
+                <input type='radio' name='search' value='inactive' id='inactive-option'>
+                <label for='inactive-option'>$langInactiveUsers</label>
+            </div>
+            
+        </div>
+    </div>
+    <div class='form-group'>
         <label class='col-sm-2 control-label'>$langAuthMethod:</label>
         <div class='col-sm-10'>
             " . selection($authtype_data, 'auth_type', 0, 'class="form-control"') . "
@@ -215,16 +240,7 @@ $tool_content .= "
             </select>
         </div>
     </div>
-    <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <div class='checkbox'>
-              <label>
-                <input type='checkbox' name='search' value='inactive'$inactive_checked>
-                $langInactiveUsers
-              </label>
-            </div>
-        </div>
-    </div>
+    
     <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn btn-primary' type='submit' value='$langSearch'>
