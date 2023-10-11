@@ -1173,7 +1173,11 @@
   .modal-content {
     background-color: #2B3944;
     border: 1px solid #ffffff;
- }
+  }
+
+  .modal-content .form-wrapper.form-edit{
+    background-color: #2B3944;
+  }
  
   /**********************************************************************************************************************/
 /**************************************************** FORMS ***********************************************************/
@@ -1213,9 +1217,16 @@
     color: #74AFE9;
   }
   
-  .submitAdminBtnClassic.active{
+  .submitAdminBtnClassic.active,
+  .submitAdminBtnClassic.active .fa::before,
+  .submitAdminBtnClassic.active .fa-solid::before,
+  .submitAdminBtnClassic.active .fa-regular::before{
     background-color: #74AFE9 !important;
     color:#ffffff !important;
+  }
+
+  .input-group-text .fa-calendar{
+    color: #687DA3;
   }
   
 
@@ -2107,6 +2118,12 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 /**********************************************************************************************************************/
+/*************************************************** ABOUT **************************************************************/
+/**********************************************************************************************************************/
+.list-about{
+  color: #ffffff;
+}
+/**********************************************************************************************************************/
 /*************************************************** ADMIN ************************************************************/
 /**********************************************************************************************************************/
 
@@ -2236,11 +2253,11 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
 .myPersonalCalendar tbody tr:hover{
-  background-color: transparent;
+  background-color: #2B3944;
 }
 
 .myPersonalCalendar{
-  background-color: #ffffff;
+  background-color: #2B3944;
 }
 
 .personal-calendar-header .btn-group .btn.active{
@@ -2259,11 +2276,23 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   color: #003e87;
   font-size: 17px ;
 }
+.myPersonalCalendar .cal-day-today {
+  background-color: #2B3944 !important;
+}
 .myPersonalCalendar .cal-day-today .number-day-cal{
   color: #ffffff ;
 }
 .myPersonalCalendar .cal-cell{
   border: solid 0.5px #f5f4f4 ;
+}
+.myPersonalCalendar #cal-day-box .cal-day-hour:nth-child(odd) {
+  background-color: transparent;
+}
+.myPersonalCalendar .cal-before-eventlist:hover{
+  background-color: transparent;
+}
+.myPersonalCalendar .cal-month-day:hover .number-day-cal{
+  color: #000000 !important;
 }
 
 
@@ -2405,7 +2434,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
 
- 
+
  /* slider in left menu */
  .slider-round {
     background-color: #212D37;

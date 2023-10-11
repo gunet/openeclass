@@ -140,6 +140,7 @@ if (isset($_GET['per_course_dur'])) {
                 'level' => 'primary'),
             array('title' => $langPersonalStats,
                 'url' => "$_SERVER[SCRIPT_NAME]?t=u&amp;u=$uid_stats",
+                'icon' => 'fa-solid fa-timeline',
                 'level' => 'primary-label')
 
         ),false);
@@ -151,6 +152,7 @@ if (isset($_GET['per_course_dur'])) {
                 'level' => 'primary'),
             array('title' => $langPersonalStats,
                 'url' => "../usage/index.php?t=u",
+                'icon' => 'fa-solid fa-timeline',
                 'level' => 'primary-label')
 
         ),false);
