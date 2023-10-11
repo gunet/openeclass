@@ -160,6 +160,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         add_param('search', 'inactive');
     }
 
+    // search for active users
+    if ($search == 'active') {
+        $criteria[] = 'expires_at > CURRENT_DATE()';
+        add_param('search', 'active');
+    }
+
     // search for users with their account being expired in one month
     if ($search == 'wexpire') {
         $criteria[] = 'expires_at BETWEEN CURRENT_DATE() AND date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
@@ -496,6 +502,11 @@ $tool_content .= action_bar(array(
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-search',
                 'level' => 'primary-label'),
+            array('title' => $langActiveUsers,
+                'url' => "$_SERVER[SCRIPT_NAME]?search=active",
+                'icon' => 'fa-search',
+                'level' => 'primary-label',
+                'show' => !(isset($_GET['search']) and $_GET['search'] == 'active')),
             array('title' => $langInactiveUsers,
                 'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
                 'icon' => 'fa-search',
