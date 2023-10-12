@@ -59,9 +59,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = '%' . $searchcode . '%';
         $terms[] = '%' . $searchcode . '%';
     }
+//    if ($searchtype != "-1") {
+//        $query .= ' AND course.visible = ?d';
+//        $terms[] = $searchtype;
+//    }
     if ($searchtype != "-1") {
-        $query .= ' AND course.visible = ?d';
-        $terms[] = $searchtype;
+        if ($searchtype == '4') {
+            $query .= ' AND course.visible < ?d';
+            $terms[] = 3;
+        } else {
+            $query .= ' AND course.visible = ?d';
+            $terms[] = $searchtype;
+        }
+
     }
     if ($searchprof !== '') {
         $query .= ' AND course.prof_names LIKE ?s';

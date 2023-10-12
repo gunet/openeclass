@@ -1585,6 +1585,7 @@ $langPublicShort = "Ελεύθερη (χωρίς εγγραφή)";
 $langClosedCourseShort = "Πρόσβαση στο $langsCourse έχουν μόνο όσοι βρίσκονται στη Λίστα Χρηστών του $langsOfCourse";
 $langCourseInactive= "Πρόσβαση στο $langsCourse έχουν μόνο οι $langsTeachers του $langsOfCourse";
 $langCourseInactiveShort = "Ανενεργά $langsCourses";
+$langCourseActiveShort = "Ενεργά $langsCourses";
 $langPrivateShort = "Περιορισμένη (με Λίστα Χρηστών)";
 $langAlertTitle = "Παρακαλώ συμπληρώστε τον τίτλο του $langsOfCourse!";
 $langAlertProf = "Παρακαλώ συμπληρώστε τον διδάσκοντα του $langsOfCourse!";
