@@ -151,7 +151,6 @@ abstract class GameAbstract {
             } else {
                 Database::get()->query("update $this->table set completed = true, assigned = " . DBHelper::timeAfter() . " where user = ?d and $this->field = ?d", $uid, $this->id);
                 if ($this->table == 'user_certificate') {
-                    echo 'here';
                     register_certified_user('certificate', $this->id, $uid);
                 }
             }
