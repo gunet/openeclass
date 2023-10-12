@@ -144,7 +144,7 @@ if ($is_editor) {
     $export_box .= "
     <div class='col-12 mb-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                   
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                   
                 <h3>$langDumpUserDurationToFile</h3>
             </div>
             <div class='card-body'>
@@ -169,7 +169,7 @@ $tool_content .= action_bar(array(
         ))."
 $export_box
 <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
     </div>
     <div class='card-body'>
@@ -283,7 +283,7 @@ $this_chart_data = array();
 $tool_content .= "
 <div class='col-12 mt-3'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lcolles1</h3>
     </div>
     <div class='card-body'>";
@@ -313,7 +313,7 @@ $tool_content .= "
 $tool_content .= "
 <div class='col-12 mt-3'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lcolles2</h3>
     </div>
     <div class='card-body'>";
@@ -343,7 +343,7 @@ $tool_content .= "
 $tool_content .= "
 <div class='col-12 mt-3'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lcolles3</h3>
     </div>
     <div class='card-body'>";
@@ -373,7 +373,7 @@ $this_chart_data = array();
 $tool_content .= "
 <div class='col-12 mt-3'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lcolles4</h3>
     </div>
     <div class='card-body'>";
@@ -403,7 +403,7 @@ $tool_content .= "
 
 <div class='col-12 mt-3'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lcolles5</h3>
     </div>
     <div class='card-body'>";
@@ -434,7 +434,7 @@ $tool_content .= "
 
 <div class='col-12 mt-3'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lcolles6</h3>
     </div>
     <div class='card-body'>";

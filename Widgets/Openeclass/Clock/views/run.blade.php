@@ -8,7 +8,7 @@
         
 @else
        
-            <div class="digital_clock p-0 Borders bg-white mt-3">
+            <div class="digital_clock p-0 Borders bg-default mt-3">
                 <div class="display">
                     <ul>
                         <li class="digital_hour"></li>

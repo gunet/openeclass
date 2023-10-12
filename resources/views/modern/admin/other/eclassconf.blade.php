@@ -649,7 +649,7 @@
                                                     <div class='col-sm-12'>
                                                             <div class='input-group'>
                                                                 <input type='password' class='form-control mt-0 border-end-0' name='smtp_password' id='formSMTPPassword' value="{!! q(get_var('smtp_password')) !!}">
-                                                                <span id='revealPass' class='input-group-text input-group-addon h-40px bg-white input-border-color'><span class='fa-solid fa-eye'></span></span>
+                                                                <span id='revealPass' class='input-group-text input-group-addon h-40px bg-default input-border-color'><span class='fa-solid fa-eye'></span></span>
                                                             </div>
                                                     </div>
                                                 </div>
@@ -1225,7 +1225,7 @@
                         <div class='col-xl-3 col-lg-4 col-md-0 col-sm-0 col-0 d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block float-end hidden-xs' id='affixedSideNav'>
 
 
-                            <nav id="navbar-example3" class="navbar navbar-light bg-white flex-column align-items-stretch p-3 sticky-top BorderSolidDes Borders" style="z-index:0;">
+                            <nav id="navbar-example3" class="navbar navbar-light bg-default flex-column align-items-stretch p-3 sticky-top BorderSolidDes Borders" style="z-index:0;">
                                 <nav class="nav nav-pills flex-column">
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#one">{{ trans('langBasicCfgSetting') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#two">{{ trans('langUpgReg') }}</a>

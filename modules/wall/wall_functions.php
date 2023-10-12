@@ -240,7 +240,7 @@ function generate_single_post_html($post) {
     <div class="col-12">
         <div class="row p-0 margin-right-thin margin-left-thin margin-top-thin m-auto">
                                   <div class="card panelCard ps-0 pe-0">
-                                        <div class="card-header bg-white border-0">
+                                        <div class="card-header bg-default border-0">
                                             <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                 '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') .'
                                                 &nbsp<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
@@ -308,7 +308,7 @@ function generate_infinite_container_html($posts, $next_page) {
                       </script>';
     $ret = '
         <div class="card panelCard border-0 mt-5">
-          <div class="card-header px-0 py-0 border-0 bg-white d-md-flex justify-content-md-between align-items-md-center">
+          <div class="card-header px-0 py-0 border-0 bg-default d-md-flex justify-content-md-between align-items-md-center">
             
                 <h3>'.$langWallPostsShow.'</h3>
             
@@ -396,7 +396,7 @@ function generate_infinite_container_html($posts, $next_page) {
                 <div class="row margin-right-thin margin-left-thin margin-top-thin">
                   <div class="col-12 mb-4">
                     <div class="card panelCard">
-                      <div class="card-header bg-white border-0">
+                      <div class="card-header bg-default border-0">
                         <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .
                           profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '
                           &nbsp<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>

@@ -604,7 +604,7 @@ if ($is_editor) {
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                         <div class='card panelCard $link_class card$pagesPag px-lg-4 py-lg-3 h-100'>
-                                                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                                                 <a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                                                                 <div>
                                                                     " .
@@ -648,7 +648,7 @@ if ($is_editor) {
                                                                     $tool_content .= "<small><a href = 'javascirpt:void(0);' data-bs-toggle = 'modal' data-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
                                                                 }
                                         $tool_content .= "</div>
-                                                            <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-white pb-3'>";
+                                                            <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-default pb-3'>";
                                                             if ($max_members > 0) {
                                                                 $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                                                             } else {
@@ -675,11 +675,11 @@ if ($is_editor) {
                                 $tool_content .= "<input type='hidden' id='KeyallGroup' value='$allGroups'>
                                         <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
                                         <div class='col-12'>
-                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-white rounded-pill mt-2 mb-3 shadow-sm'>
+                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-default rounded-pill mt-2 mb-3 shadow-sm'>
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -731,7 +731,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>
@@ -879,7 +879,7 @@ if ($is_editor) {
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                       <div class='card panelCard card$pagesPag px-lg-4 py-lg-3 h-100'>
-                                                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>";
+                                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>";
                                                                 if ($is_member or $is_tutor) {
                                                                 $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                                                                                     "</a> 
@@ -919,7 +919,7 @@ if ($is_editor) {
                                                                 }
 
                                         $tool_content .= "</div>
-                                                        <div class='card-footer d-flex bg-white border-0 justify-content-between align-items-center'>";
+                                                        <div class='card-footer d-flex bg-default border-0 justify-content-between align-items-center'>";
                                                                 $group_id_indirect = getIndirectReference($group_id);
                                                                 $control = '';
 
@@ -964,11 +964,11 @@ if ($is_editor) {
                                 $tool_content .= "<input type='hidden' id='KeyallGroup' value='$allGroups'>
                                         <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
                                         <div class='col-12'>
-                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-white rounded-pill mt-2 mb-3 shadow-sm'>
+                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-default rounded-pill mt-2 mb-3 shadow-sm'>
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
+                                                        <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                                                     </li>";
                                                     if($pagesPag >=12 ){
                                                         for($i=1; $i<=$pagesPag; $i++){
@@ -1020,7 +1020,7 @@ if ($is_editor) {
                                                     }
 
                                     $tool_content .="<li class='page-item page-item-next'>
-                                                        <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
+                                                        <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                                                     </li>
                                                 </ul>
                                             </nav>

@@ -45,7 +45,7 @@ if (get_config('personal_blog_commenting')) {
                  <div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                     <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <a class='media-left' href='#'>
                                     ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
                                 </a>

@@ -1,5 +1,6 @@
 
 <footer id="bgr-cheat-footer" class="site-footer mt-auto d-flex justify-content-start align-items-center px-3">
+<div class='container-fluid footer-container py-0 d-flex align-items-center'>
     <div class='col-12 d-flex justify-content-between align-items-center'>
         <ul class="container-items-footer nav">
             <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="#">{{ trans('langPlatformIdentity') }}</a></li>
@@ -19,4 +20,5 @@
             @endif
         </div>
     </div>
+</div>
 </footer>

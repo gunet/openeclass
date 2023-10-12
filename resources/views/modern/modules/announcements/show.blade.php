@@ -30,7 +30,7 @@
 
                         <div class='col-12'>
                             <div class="card panelCard px-lg-4 py-lg-3">
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>{!! $title !!}</h3>
                                 </div>
                                 <div class="card-body">
@@ -39,7 +39,7 @@
                                         <p class='card-text'>{{ trans('langTags') }}: {!! $tags_list !!}</p>
                                     @endif
                                 </div>
-                                <div class='card-footer small-text bg-white border-0'>
+                                <div class='card-footer small-text bg-default border-0'>
                                     {!! $date !!}
                                 </div>
                             </div>

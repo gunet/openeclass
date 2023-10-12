@@ -1,7 +1,7 @@
 
 <footer id="bgr-cheat-footer" class="site-footer mt-auto rounded-0">
-    <div class="container-fluid">
-        <div class="row m-auto">
+    <div class="container-fluid footer-container d-flex justify-content-center align-items-center">
+        <div class="row m-auto w-100">
 
             <div class="col-12">
                 <ul class="ul_tools_site_footer">

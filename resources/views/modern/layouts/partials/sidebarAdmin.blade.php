@@ -7,7 +7,7 @@
 @if ($release_info and version_compare($release_info->release, ECLASS_VERSION) > 0)
     <div class='col-12 mb-4'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>{{ trans('langNewEclassVersion') }}</h3>
             </div>
             <div class='card-body'>
@@ -94,8 +94,8 @@
 <div class='col-12 mt-4'>
     <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-lg-5 g-4">
         <div class='col'>
-            <div class='card panelCard p-0 bg-white m-auto h-100 border-0'>
-                <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+            <div class='card panelCard p-0 bg-default m-auto h-100 border-0'>
+                <div class='card-header border-0 bg-default p-0 d-flex justify-content-start align-items-center gap-2'>
                     <i class="fa-solid fa-user-group settings-icons-lg"></i>
                     <h3 class='mb-0'>{{ trans('langUsers') }}</h3>
                 </div>
@@ -181,7 +181,7 @@
         </div>
         @if ($is_power_user or $is_departmentmanage_user)
             <div class='col'>
-                <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                <div class='card-header border-0 bg-default p-0 d-flex justify-content-start align-items-center gap-2'>
                     <i class="fa-solid fa-book-open settings-icons-lg"></i>
                     <h3 class='mb-0'>{{ trans('langCourses') }}</h3>
                 </div>
@@ -230,7 +230,7 @@
         @endif
         @if ($is_admin)
             <div class='col'>
-                <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                <div class='card-header border-0 bg-default p-0 d-flex justify-content-start align-items-center gap-2'>
                     <i class="fa-solid fa-gear settings-icons-lg"></i>
                     <h3 class='mb-0'>{{ trans('langAdminTool') }}</h3>
                 </div>
@@ -310,8 +310,8 @@
     <div class='col-12 mt-4'>
         <div class="row row-cols-1 row-cols-lg-3 g-lg-5 g-4">
             <div class='col'>
-                <div class='card panelCard p-0 border-0 bg-white h-100'>
-                    <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                <div class='card panelCard p-0 border-0 bg-default h-100'>
+                    <div class='card-header border-0 bg-default p-0 d-flex justify-content-start align-items-center gap-2'>
                         <i class="fa-solid fa-toolbox settings-icons-lg"></i>
                         <h3 class='mb-0'>{{trans('langAdministratorTools')}}</h3>
                     </div>
@@ -345,8 +345,8 @@
             </div>
             <div class='col'>
                 @if($is_admin)
-                    <div class='card panelCard p-0 border-0 bg-white h-100'>
-                        <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                    <div class='card panelCard p-0 border-0 bg-default h-100'>
+                        <div class='card-header border-0 bg-default p-0 d-flex justify-content-start align-items-center gap-2'>
                             <i class="fa-solid fa-list-ul settings-icons-lg"></i>
                             <h3 class='mb-0'>{{trans('langFaculties')}}</h3>
 
@@ -365,8 +365,8 @@
             </div>
             <div class='col'>
                 @if($is_admin)
-                    <div class='card panelCard p-0 border-0 bg-white h-100'>
-                        <div class='card-header border-0 bg-white p-0 d-flex justify-content-start align-items-center gap-2'>
+                    <div class='card panelCard p-0 border-0 bg-default h-100'>
+                        <div class='card-header border-0 bg-default p-0 d-flex justify-content-start align-items-center gap-2'>
                             <i class="fa-solid fa-sitemap settings-icons-lg"></i>
                             <h3 class='mb-0'>{{ trans('langEclassThemes') }}</h3>
                         </div>

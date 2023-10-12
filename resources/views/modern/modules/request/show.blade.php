@@ -71,7 +71,7 @@
                     <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
                             
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <h3>
                                     {{ $request->title }}
                                     @if ($request->type_id)
@@ -150,7 +150,7 @@
 
                             </div>
 
-                            <div class='card-footer small-text bg-white border-0'>
+                            <div class='card-footer small-text bg-default border-0'>
                                 {{ format_locale_date(strtotime($request->open_date)) }}
                             </div>
                         </div>

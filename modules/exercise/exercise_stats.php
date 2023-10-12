@@ -149,7 +149,7 @@ $tool_content .= "
 
     <div class='col-12 mt-5'>
     <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'><h3>$langQuestions</h3></div>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'><h3>$langQuestions</h3></div>
     <div class='card-body'>
 
     <div class='table-responsive mt-0'>

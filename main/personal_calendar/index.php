@@ -538,7 +538,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         <div class='modal-content'>
                                             <div class='modal-header border-0'>
                                                 <h2 class='mb-0'>$langAddEvent</h2> 
-                                                <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                                <button type='button' class='bg-default border-0' data-bs-dismiss='modal'>
                                                     <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                                                 </button>
                                             </div>
@@ -624,7 +624,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                             <label for='enddate' class='col-12 control-label-notes'>$langUntil</label>
                                                             <div class='col-12'>
                                                                 <div class='input-group'>
-                                                                    <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                                                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                                                     <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                                                                     
                                                                 </div>
@@ -718,7 +718,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         title.addClass('text-center');
 
                                         var time = element.find( '.fc-time' );
-                                        time.addClass('text-center mb-2 bagde bg-white normalBlueText');
+                                        time.addClass('text-center mb-2 bagde bg-default normalBlueText');
 
                                     },
 
@@ -946,7 +946,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
                                                     <h2 class='mb-0'>$langAddEvent</h2> 
-                                                    <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                                    <button type='button' class='bg-default border-0' data-bs-dismiss='modal'>
                                                         <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                                                     </button>
                                                 </div>
@@ -1022,7 +1022,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                                     $tool_content .= "<div class='input-append date mt-4' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                                                                             <label for='enddate' class='col-sm-6 control-label-notes'>$langUntil</label>
                                                                             <div class='input-group'>
-                                                                                <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                                                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
                                                                                 <input class='form-control mt-0 border-start-0' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                                                                                 
                                                                             </div>
@@ -1315,7 +1315,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 <div class='modal-content'>
                     <div class='modal-header'>
                         <h2 class='mb-0'>$langiCalFeed</h2> 
-                        <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                        <button type='button' class='bg-default border-0' data-bs-dismiss='modal'>
                             <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                         </button>
                     </div>

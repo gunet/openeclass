@@ -207,7 +207,7 @@ if (isset($_GET['store']) && $is_editor) {
                 $token = token_generate($user_id, true);
                 echo "
                     <div class='col-12 ps-3 pe-3'>
-                        <div class='panel panel-admin border-0 BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                        <div class='panel panel-admin border-0 BorderSolid bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                             <div class='panel-heading bg-body p-0'>
                                 <div class='col-12 Help-panel-heading pb-1'>
                                     <span class='panel-title text-capitalize Help-text-panel-heading'>

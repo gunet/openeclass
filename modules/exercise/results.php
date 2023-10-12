@@ -125,7 +125,7 @@ $showScore = $displayScore == 1
     ]);
 
 $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>" . q_math($exerciseTitle) . "</h3></div>";
 if ($exerciseDescription_temp) {
     $tool_content .= "<div class='card-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";

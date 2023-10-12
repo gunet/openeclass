@@ -103,7 +103,7 @@ if(isset($_GET['term'])){
                                     $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
                                 }
 
-                      $html .= "<div class='card-header border-0 bg-white'>
+                      $html .= "<div class='card-header border-0 bg-default'>
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
                                     if($course->visible == 1){
                                         $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse'>
@@ -146,7 +146,7 @@ if(isset($_GET['term'])){
                                 </div>
 
                             </div>
-                            <div class='card-footer d-flex justify-content-center align-items-center bg-white border-0 mb-2'>";
+                            <div class='card-footer d-flex justify-content-center align-items-center bg-default border-0 mb-2'>";
                                 // check if uid is editor of course or student
                                 $is_course_teacher = check_editor($uid,$course->course_id);
 
@@ -258,11 +258,11 @@ function GroupCardsPagination($allCourses,$pagesPag){
   $pagination .= "<input type='hidden' id='KeyallCourse' value='$allCourses'>
             <input type='hidden' id='KeypagesCourse' value='$pagesPag'>
 
-            <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-white solidPanel mt-4'>
+            <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-default solidPanel mt-4'>
                 <nav aria-label='Page navigation example w-100'>
                     <ul class='pagination mycourses-pagination w-100 mb-0'>
                         <li class='page-item page-item-previous'>
-                            <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
+                            <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                         </li>";
                         if($pagesPag >=12 ){
                             for($i=1; $i<=$pagesPag; $i++){
@@ -313,7 +313,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         }
 
                         $pagination .=" <li class='page-item page-item-next'>
-                            <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
+                            <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                         </li>
                     </ul>
                 </nav>

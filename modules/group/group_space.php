@@ -254,7 +254,7 @@ if (isset($_GET['group_as'])) {
             <div class='row row-cols-1 row-cols-lg-2 g-4'>
                 <div class='col-xl-7 col-lg-6 col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             <h3>$langGroupInfo</h3>
                         </div>
                         <div class='card-body'>
@@ -272,7 +272,7 @@ if (isset($_GET['group_as'])) {
                $tool_content .= "                            
                                 <p class='form-label'>$langDescription</p>
                                 <p class='small-text'>$tool_content_description</p>
-                                <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-white pb-3'>";
+                                <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-default pb-3'>";
                             if ($max_members > 0) {
                                 $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                             } else {
@@ -284,7 +284,7 @@ if (isset($_GET['group_as'])) {
                 </div>
                 <div class='col-xl-5 col-lg-6 d-none d-lg-block'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             <h3>$langTools</h3>
                         </div>
                         <div class='card-body'>
@@ -367,7 +367,7 @@ if (isset($_GET['group_as'])) {
             $tool_content .= "
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <h3>$langGroupMembersInfo</h3>
                             </div>
                             <div class='card-body'>

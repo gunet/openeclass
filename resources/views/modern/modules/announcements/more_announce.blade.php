@@ -47,7 +47,7 @@
                     
                         <div class='col-12'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>
                                        {!! $announcement->title !!}
                                     </h3>
@@ -55,7 +55,7 @@
                                 <div class='card-body'>
                                     {!! $announcement->content !!}
                                 </div>
-                                <div class='card-footer d-flex justify-content-between align-items-center small-text bg-white border-0'>
+                                <div class='card-footer d-flex justify-content-between align-items-center small-text bg-default border-0'>
                                        
                                     @if($announcement->code)
                                         <a class='TextBold' href='{{$urlAppend}}modules/announcements/index.php?course={{$announcement->code}}&an_id={{$announcement->id}}'>{!! $announcement->course_title !!}</a>

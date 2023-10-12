@@ -86,7 +86,7 @@ if (isset($_GET['mid'])) {
                         <div class='row row-cols-1 row-cols-lg-2 g-4'>
                             <div class='col'>
                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                         <h3>$langMessageInfo</h3>
                                     </div>
                                     <div class='card-body'>
@@ -141,7 +141,7 @@ if (isset($_GET['mid'])) {
 
                             <div class='col'>
                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                         <h3>$langMessageContent</h3>
                                     </div>
                                     <div class='card-body'>

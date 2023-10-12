@@ -626,7 +626,7 @@ if (isset($timeleft)) { // time remaining
 
 if (!empty($exerciseDescription)) { // description
     $tool_content .= "<div class='col-sm-12 mb-3'><div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'><h3>$langDescription</h3></div>";
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'><h3>$langDescription</h3></div>";
     $tool_content .= "<div class='card-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
 }

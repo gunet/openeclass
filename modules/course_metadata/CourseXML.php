@@ -204,7 +204,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mt-5'>
-                <div class='panel panel-admin BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                <div class='panel panel-admin BorderSolid bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                     <div class='panel-heading bg-body p-0'>
                         
                         <div class='col-12 Help-panel-heading'>
@@ -409,7 +409,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mb-3 mt-3'>
-                <div class='panel panel-admin BorderSolid bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                <div class='panel panel-admin BorderSolid bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                     <div class='panel-heading bg-body p-0'>
                         
                         <div class='col-12 Help-panel-heading'>

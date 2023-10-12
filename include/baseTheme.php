@@ -1143,7 +1143,7 @@ function lang_selections_Mobile() {
     }
 
     $lang_select = "
-      <a class='btn small-basic-size mobile-btn bg-white d-flex justify-content-center align-items-center' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+      <a class='btn small-basic-size mobile-btn bg-default d-flex justify-content-center align-items-center' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
           <i class='fa-solid fa-earth-europe'></i>
       </a>
       <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='dropdownMenuLang'>

@@ -60,7 +60,7 @@ function render_eportfolio_fields_content($uid) {
             $cat_return_string['panels'] .= '
             <div class="col-lg-6 col-12">
             <div class="card panelCard border-card-left-default px-3 py-2 h-100" id="IndexPortfolio'.$c->id.'">
-                                                <div class="card-header border-0 bg-white d-flex justify-content-between align-items-center">
+                                                <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">
                                                     <h3>'.$c->name.'</h3>
                                                 </div>
                                                  <div class="card-body">
@@ -154,7 +154,7 @@ function render_eportfolio_fields_form() {
     $return_string = array();
     $return_string['panels'] = "";
     $return_string['right_menu'] = "<div class='col-sm-3 hidden-xs' id='affixedSideNav' style='margin-top:-23px;'>
-    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-white flex-column align-items-stretch p-3 sticky-top Borders border-card' style='z-index:0;'>
+    <nav id='navbar-examplePortfolioEdit' class='navbar navbar-light mt-4 bg-default flex-column align-items-stretch p-3 sticky-top Borders border-card' style='z-index:0;'>
         <nav class='nav nav-pills flex-column'>";
 
     $result = Database::get()->queryArray("SELECT id, name FROM eportfolio_fields_category ORDER BY sortorder DESC");

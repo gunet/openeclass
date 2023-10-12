@@ -371,7 +371,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langPollStart</label>
                         
                         <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
                                 <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
                                
@@ -387,7 +387,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd</label>
                         
                         <div class='input-group'>
-                            <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                            <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                             <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
                             <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
                             
@@ -732,7 +732,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
  
     <div class='col-12 mt-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>$langQuestion&nbsp;"
                     . icon('fa-edit text-white', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
                 "</h3>
@@ -747,7 +747,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     
     <div class='col-12 mt-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>$langQuestionAnswers</h3>
             </div>
             <div class='card-body'>
@@ -859,7 +859,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     <div class='col-12 mb-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-          <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+          <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
             <h3>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h3>
           </div>
 

@@ -144,7 +144,7 @@
                         </div>
                         @elseif  ($_GET['stats'] == 'vmusers')
                                 <div class='col-12'>
-                                    <div class='shadow-sm p-3 Borders bg-white'>
+                                    <div class='shadow-sm p-3 Borders bg-default'>
                                         <div class='control-label-notes pb-3'>
                                             {{ trans('langUsers') }}
                                         </div>

@@ -696,7 +696,7 @@
                                                         <div class="vsmall-text Neutral-900-cl TextRegular">{{ $course->professor }}</div>
                                                     </div>
 
-                                                    <div class='card-footer bg-tranparent border-0'>
+                                                    <div class='card-footer bg-default border-0'>
                                                         <a class='ClickCoursePortfolio me-3' href='#' id='{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp{{ trans('langOfCourse') }}">
                                                             <i class='fa-solid fa-display'></i>
                                                         </a>
@@ -733,7 +733,7 @@
                                         <nav aria-label='Page navigation example w-100'>
                                             <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                 <li class='page-item page-item-previous'>
-                                                    <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-left'></span></a>
+                                                    <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-left'></span></a>
                                                 </li>
                                                 @if($pagesPag >=12 )
                                                     @for($i=1; $i<=$pagesPag; $i++)
@@ -784,7 +784,7 @@
                                                 @endif
 
                                                 <li class='page-item page-item-next'>
-                                                    <a class='page-link bg-white' href='#'><span class='fa-solid fa-chevron-right'></span></a>
+                                                    <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-right'></span></a>
                                                 </li>
                                             </ul>
                                         </nav>
@@ -794,7 +794,7 @@
 
 
                                 @if($portfolio_page_main_widgets)
-                                    <div class='panel panel-admin border-0 bg-white mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                                    <div class='panel panel-admin border-0 bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
                                         {!! $portfolio_page_main_widgets !!}
                                     </div>
                                 @endif
@@ -842,8 +842,8 @@
                         </div>
 
                         @if($portfolio_page_sidebar_widgets)
-                            <div class='card panelCard border-0 BorderSolid bg-white mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none sticky-column-course-home'>
-                                <div class='card-header bg-white border-0 text-start'>
+                            <div class='card panelCard border-0 BorderSolid bg-default mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none sticky-column-course-home'>
+                                <div class='card-header bg-default border-0 text-start'>
 
                                         <h3>{{ trans('langMyWidgets') }}</h3>
 

@@ -39,7 +39,7 @@ function display_certificates(): void
         $tool_content .= "
                 <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             
                                 <h3>
                                     $langCertificates
@@ -133,7 +133,7 @@ function display_badges(): void
         $tool_content .= "
                 <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                            
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                            
                                 <h3>
                                     $langBadges
                                 </h3>";
@@ -445,7 +445,7 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "
             <div class='col-12 mt-3'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                         <h3>
                             $langAttendanceActList
                         </h3>";
@@ -572,7 +572,7 @@ function display_activities($element, $id, $unit_id = 0) {
             $tool_content .= "<div class='main-content'>
                                 <div class='col-12'>
                                     <div class='card panelCard px-lg-4 py-lg-3'>
-                                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                             <h3>
                                                 $langUnitCompletion
                                             </h3>
@@ -671,7 +671,7 @@ function display_activities($element, $id, $unit_id = 0) {
         $tool_content .= "
 
                         <div class='card panelCard px-lg-4 py-lg-3 mt-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <h3>
                                     $langUnitPrerequisites
                                 </h3>
@@ -2134,7 +2134,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
         $tool_content .= "
                 <div class='col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                            
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                            
                                 <h3>
                                     $langProgressBasicInfo
                                 </h3>";
@@ -2455,7 +2455,7 @@ function student_view_progress() {
             $tool_content .= "
                     <div class='col-12 mt-3'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <h3>$langBadges</h3>
                             </div>
                             <div class='card-body'>";
@@ -2506,7 +2506,7 @@ function student_view_progress() {
             $tool_content .= "
                     <div class='col-12 mt-3'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             <h3>$langCertificates</h3>
                             </div>
                             <div class='card-body'>";
@@ -2706,7 +2706,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 	$tool_content .= "
             <div class='col-12'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                     <h3>$element_title</h3>
                     </div>
                     <div class='card-body'>
@@ -2758,7 +2758,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 	$tool_content .= "
         <div class='col-12 mt-3'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>$langAttendanceActivity</h3>
                 </div>
                 <div class='card-body'>

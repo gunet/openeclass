@@ -103,7 +103,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
                                                                         <h5 class='modal-title text-white'>$langError</h5>
                                                                         <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
                                                                     </div>
-                                                                    <div class='modal-body bg-white'>
+                                                                    <div class='modal-body bg-default'>
                                                                       ".Session::get('login_error')."
                                                                     </div>
                                                                 </div>

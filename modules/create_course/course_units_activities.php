@@ -167,7 +167,7 @@ if(!isset($_POST['final_submit'])){
                 <div class='form-wrapper '>
                     <form id='activities' class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]'>
                     <div class='card cardPanel border-0'>
-                        <div class='card-header bg-white px-0 border-0'>
+                        <div class='card-header bg-default px-0 border-0'>
                             
                                 $langActSelect
 
@@ -366,7 +366,7 @@ if(!isset($_POST['final_submit'])){
         $tool_content .= "<div class='form-wrapper'><fieldset>
             <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]?course=$course_code&edit_act=$unit_id' onsubmit=\"return validateNodePickerForm();\">
                 <div class='card border-0 mb-3'>
-                    <div class='card-header bg-white border-0 px-0'>
+                    <div class='card-header bg-default border-0 px-0'>
                         <h3'>
                             $langActSelect
                         </h3>

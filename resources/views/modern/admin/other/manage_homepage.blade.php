@@ -129,7 +129,7 @@
                             <div id='orderTexts'>
                                 @foreach($priorities as $p)
                                     <div class='card panelCard px-lg-4 py-lg-3 mb-4' data-id='{{ $p->id }}'>
-                                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center p-0'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center p-0'>
                                             <h3 class='mb-0'>
                                                 @if($p->title == 'announcements')
                                                     {{ trans('langAnnouncements')}}

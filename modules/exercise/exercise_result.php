@@ -259,7 +259,7 @@ if (!isset($_GET['pdf'])) {
 }
 
 $tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
-$tool_content .= "<div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>";
+$tool_content .= "<div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>";
 if ($user) { // user details
     $tool_content .= "<h3>" . q($user->surname) . " " . q($user->givenname);
     if ($user->am) {
@@ -289,7 +289,7 @@ $tool_content .= "
 ";
 
 $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'>
-                      <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                      <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             <h3>" . q_math($exerciseTitle) . "</h3>
                       </div>";
 

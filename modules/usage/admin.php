@@ -75,7 +75,7 @@ $tool_content .= "
                         </ul>
                     </div>
                 </div>
-                <div class='col-12 shadow-default bg-white Borders p-3 mt-4'>
+                <div class='col-12 shadow-default bg-default Borders p-3 mt-4'>
                     <ul class='list-group list-group-flush'>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>

@@ -177,7 +177,7 @@
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
-                            <div class='card-header border-0 bg-white d-xl-flex justify-content-xl-between align-items-xl-center'>
+                            <div class='card-header border-0 bg-default d-xl-flex justify-content-xl-between align-items-xl-center'>
                                 <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
                                     <div class='form-value'>
@@ -194,7 +194,7 @@
                                 </div>
                             </div>
                             @if ($tags_list)
-                                <div class='card-footer small-text bg-white border-0'>
+                                <div class='card-footer small-text bg-default border-0'>
                                     <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
                                 </div>
                             @endif
@@ -222,7 +222,7 @@
                     @if ($is_editor and $q->flipped_flag == 2)
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>
                                         <div class='d-inline-flex align-items-top'>
                                             {{ trans('langActivities')}}
@@ -707,7 +707,7 @@
                     @if(count($units) > 0)
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3 p-3'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center px-0 py-0'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center px-0 py-0'>
                                     <h3 class='mb-0'>{{ trans('langUnits')}}</h3>
                                 </div>
                                 <div class='card-body px-0'>

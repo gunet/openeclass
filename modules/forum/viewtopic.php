@@ -734,7 +734,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         </div>";
     if ($rate_str or $parent_post_link or $reply_button) {
         $content .= "
-        <div class='card-footer bg-white border-0'>
+        <div class='card-footer bg-default border-0'>
             <div class='row'>
                 <div class='col-12 d-flex justify-content-between align-items-center'>
                    

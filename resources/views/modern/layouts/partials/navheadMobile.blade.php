@@ -4,7 +4,7 @@
 
             <div class='d-flex justify-content-start align-items-center gap-2'>
                 
-                <button class="btn small-basic-size mobile-btn bg-white d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
+                <button class="btn small-basic-size mobile-btn bg-default d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
                     <i class='fa-solid fa-bars'></i>
                 </button>
 

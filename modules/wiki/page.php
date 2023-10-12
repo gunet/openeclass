@@ -964,7 +964,7 @@ $print_button = icon('fa-print', $langWikiPagePrintable, "$_SERVER[SCRIPT_NAME]?
 if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes")) {
         $tool_content .= "<div class='col-12'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     
                                         <h3>
                                           

@@ -374,7 +374,7 @@ function render_profile_fields_content($context) {
                                                                                     ORDER BY sortorder DESC", $args);
                                             }
 
-                                            $return_str .= "<div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                            $return_str .= "<div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                                                 <h3>".$cat->name."</h3>
                                                             </div>
 

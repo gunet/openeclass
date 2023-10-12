@@ -18,7 +18,7 @@
                     
                     <div class="col-12">
                         <div class="card panelCard px-lg-4 py-lg-3">
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <h3>{!! $title !!}</h3>
                             </div>
                         
@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>
+                            <div class='card-footer bg-default border-0 d-flex justify-content-start align-items-center'>
                                 <div class="announcement-date info-date small-text">
                                      {!! $date !!} 
                                 </div>

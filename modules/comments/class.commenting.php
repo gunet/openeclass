@@ -151,7 +151,7 @@ Class Commenting {
                 $out .= "<div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                           <div class='col-12'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <div>
                                         <a class='media-left p-0' href='#'>
                                             ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL,'img-circle rounded-circle') ."

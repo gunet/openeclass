@@ -697,7 +697,7 @@ if ($action == "showPost") {
         $tool_content .= "
                     <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
 
                                     
@@ -738,7 +738,7 @@ if ($action == "showPost") {
                                
                             </div>
                             <div class='card-body'>" . format_locale_date(strtotime($post->getTime())). "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
-                            <div class='card-footer bg-white border-0 d-flex justify-content-between align-items-center'>
+                            <div class='card-footer bg-default border-0 d-flex justify-content-between align-items-center'>
 
                                
                                     <div>$rating_content</div>
@@ -846,7 +846,7 @@ if ($action == "showBlog") {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3 mt-2' style='border-radius:3px !important;'>
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                    
                                        
                                      
@@ -885,7 +885,7 @@ if ($action == "showBlog") {
                                     <p class='TextBold mb-2'>" . format_locale_date(strtotime($post->getTime())) . "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='card-footer bg-white d-flex justify-content-between align-items-center pt-lg-3'>
+                                <div class='card-footer bg-default d-flex justify-content-between align-items-center pt-lg-3'>
                                     
                                         <div>$rating_content</div>
                                         <div>$sharing_content</div>

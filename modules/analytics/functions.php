@@ -68,7 +68,7 @@ function display_learning_analytics() {
 
             <div class='col-12'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                         
                            
                             <h3>$langLearningAnalytics</h3>
@@ -178,7 +178,7 @@ function display_general_lists($analytics_id) {
         $tool_content .= "
                 <div class='col-12 mt-3'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             
                                 <h3>
                                     
@@ -304,7 +304,7 @@ function display_analytics_elements($analytics_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                     
                        
                         <h3>$langAnalyticsParameters</h3>
@@ -345,7 +345,7 @@ function display_analytics_information($analytics_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                     
                         <h3>
                             $title<span class='$active_vis small-text ms-1'>($active_msg)</span>
@@ -504,7 +504,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     $tool_content .= "
         <div class='col-12 mt-3'>                 
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>             
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>             
                     <h3>$analytics_title->title</h3>
                 </div>
                 <div class='card-body'>
@@ -661,7 +661,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
     $tool_content .= "
                 <div class='col-12 mt-3'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             <h3>$analytics_title->title</h3>
                         </div>
                         <div class='card-body'>
@@ -694,7 +694,7 @@ function display_user_info($user_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                     <h3>
                         $givenname $surname
                     </h3>
@@ -876,7 +876,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         <label class='col-sm-6 control-label-notes'>$langStart</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='start_date' id='start_date' type='text' value='$start_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsStartDescription</span>
@@ -886,7 +886,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         <label class='col-sm-6 control-label-notes'>$langFinish</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='end_date' id='end_date' type='text' value='$end_date'>
                             </div>
                             <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i>$langAnalyticsEndDescription</span>

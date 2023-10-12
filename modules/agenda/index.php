@@ -394,7 +394,7 @@ if ($is_editor) {
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
                                                     <h2 class='mb-0'>$langAddEvent</h2> 
-                                                    <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                                    <button type='button' class='bg-default border-0' data-bs-dismiss='modal'>
                                                         <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                                                     </button>
                                                 </div>
@@ -470,7 +470,7 @@ if ($is_editor) {
                                                                 <label for='enddate' class='col-12 control-label-notes text-capitalize mb-1'>$langUntil</label>
                                                                     <div class='col-12 ps-0 pe-0 ms-2'>
                                                                         <div class='input-group'>
-                                                                            <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                                            <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                                                             <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                                                                             
                                                                         </div>
@@ -555,7 +555,7 @@ if ($is_editor) {
                                         title.addClass('text-center');
 
                                         var time = element.find( '.fc-time' );
-                                        time.addClass('text-center mb-2 bagde bg-white normalBlueText');
+                                        time.addClass('text-center mb-2 bagde bg-default normalBlueText');
                                     },
 
                                     eventClick:  function(event) {
@@ -780,7 +780,7 @@ if ($is_editor) {
                                 <div class='modal-content'>
                                     <div class='modal-header border-0'>
                                         <h2 class='mb-0'>$langAddEvent</h2> 
-                                        <button type='button' class='bg-white border-0' data-bs-dismiss='modal'>
+                                        <button type='button' class='bg-default border-0' data-bs-dismiss='modal'>
                                             <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                                         </button>
                                     </div>
@@ -854,7 +854,7 @@ if ($is_editor) {
                                             <label for='enddate' class='col-12 control-label-notes text-capitalize'>$langUntil</label>
                                                 <div class='col-12'>
                                                     <div class='input-group'>
-                                                        <span class='add-on input-group-text h-40px bg-white input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                                                        <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                                         <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                                                         
                                                     </div>

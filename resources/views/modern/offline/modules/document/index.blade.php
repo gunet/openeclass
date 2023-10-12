@@ -1,7 +1,7 @@
 @extends($is_in_tinymce ? 'layouts.embed' : 'layouts.default')
 
 @section('content')
-<div class="col-12 main-section bg-white">
+<div class="col-12 main-section bg-default">
 <div class='container-fluid py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 

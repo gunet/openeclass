@@ -106,7 +106,7 @@
 
                             <div class="col">
                                 <div class="card panelCard border-card-left-default px-3 py-2 h-100">
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                         <h3>{{ trans('langPersInfo') }}</h3>
                                     </div>
                                     <div class="card-body">
@@ -202,7 +202,7 @@
                         @if (count($cert_completed) > 0)
                             <div class='col-12 mt-4'>
                                 <div class="card panelCard border-card-left-default px-3 py-2">
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                         <h3>{{ trans('langMyCertificates') }}</h3>
                                     </div>
                                     <div class="card-body">
@@ -244,7 +244,7 @@
                         @if (count($badge_completed) > 0)
                             <div class='col-12 mt-4'>
                                 <div class="card panelCard border-card-left-default px-3 py-2">
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                         <h3>{{ trans('langBadges') }}</h3>
                                     </div>
                                     <div class="card-body">
@@ -285,14 +285,14 @@
                     @if ($uid == $id)
                         <div class="col-12 mt-4">
                             <div class="card panelCard border-card-left-default px-3 py-2">
-                                <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>{{trans('langUnregUser')}}</h3>
                                 </div>
                                 <div class="card-body">
                                     <p class='card-text'>{{ trans('langExplain') }}</p>
                                 </div>
                                 @if($action_bar_unreg == 1)
-                                <div class='card-footer bg-white border-0 d-flex justify-content-start'>
+                                <div class='card-footer bg-default border-0 d-flex justify-content-start'>
                                     <a class='btn deleteAdminBtn' href='{{ $urlAppend }}main/unreguser.php'>{{ trans('langUnregUser')}}</a>
                                 </div>
                                 @endif

@@ -315,7 +315,7 @@ function display_exercise($exercise_id) {
 
     $tool_content .= "
     <div class='col-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
               <h3>" . q_math($exercise->selectTitle());
               if ($is_editor) {
                     $tool_content .= "<a href='admin.php?course=$course_code&amp;exerciseId=$exercise_id&amp;modifyExercise=yes'>

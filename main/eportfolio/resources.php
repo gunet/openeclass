@@ -371,7 +371,7 @@ if ($userdata) {
                 $post->course_title = $langUserBlog;
             }
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                                                                                 
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                                                                                 
                                             <h3>".q($data['title'])."</h3>
                                             <div>
                                                 ". action_button(array(
@@ -388,7 +388,7 @@ if ($userdata) {
                                     <div class='card-body'>
                                         <p>" . format_locale_date(strtotime($data['timestamp'])) . "</p><br><br>".standard_text_escape($data['content'])."
                                     </div>
-                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>                                        
+                                    <div class='card-footer bg-default border-0 d-flex justify-content-start align-items-center'>                                        
                                             <div class='small-text'>$post->course_title</div>                                        
                                     </div>
                                 </div>";
@@ -471,7 +471,7 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
                 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-3 h-100'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                                           
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                                           
                                         <h3>".q($data['title'])."</h3>                                    
                                         <div>
                                             ". action_button(array(
@@ -489,7 +489,7 @@ if ($userdata) {
                                         <p class='TextBold'>$langSubmit:<span class='ms-1 small-text TextRegular'>" . format_locale_date(strtotime($data['timestamp'])) . "</span></p>
                                         ".ellipsize_html(standard_text_escape($data['content']), 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?id=$id&amp;action=showBlogPost&amp;er_id=".$post->id."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     </div>
-                                    <div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>                                       
+                                    <div class='card-footer bg-default border-0 d-flex justify-content-start align-items-center'>                                       
                                         <div class='small-text'>$post->course_title</div>                                       
                                     </div>
                                 </div>";
@@ -536,11 +536,11 @@ if ($userdata) {
                 } else {
                    $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }
-                $submission_footer = "<div class='card-footer bg-white border-0 d-flex justify-content-start align-items-center'>                                         
+                $submission_footer = "<div class='card-footer bg-default border-0 d-flex justify-content-start align-items-center'>                                         
                                               <div class='small-text'>$submission->course_title</div>                                          
                                       </div>";
                 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                                    <div class='card-header border-0 bg-white d-flex justify-content-between align-items-center'>                                        
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                                        
                                             $submission_header_content                                           
                                             <div>
                                             ". action_button(array(
@@ -622,7 +622,7 @@ if ($userdata) {
         }
 
         if ($userdata->eportfolio_enable == 1) {
-            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end bg-white rounded-pill'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
+            $social_share = "<div class='col-12 mt-5'><div class='shadow-sm p-3 rounded float-end bg-default rounded-pill'>".print_sharing_links($urlServer."main/resources.php?id=$id&token=$token", $langUserePortfolio)."</div></div>";
         } else {
             $social_share = '';
         }

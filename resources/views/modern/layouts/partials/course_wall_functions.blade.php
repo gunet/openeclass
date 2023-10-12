@@ -19,7 +19,7 @@
 
     <div class="col-12 mt-5">
         <div class='card panelCard border-0'>
-            <div class='card-header px-0 py-0 border-0 bg-white d-md-flex justify-content-md-between align-items-md-center'>
+            <div class='card-header px-0 py-0 border-0 bg-default d-md-flex justify-content-md-between align-items-md-center'>
                
                     <h3>{{trans('langWall')}}</h3>
                 

@@ -51,8 +51,8 @@ function draw($toolContent, $options=null, $head_content ='') {
     $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
     $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
-    $t->set_var('logo_img', '../template/modern/img/logo_eclass.png');
-    $t->set_var('logo_img_small', '../template/modern/img/logo_eclass_small.png');
+    $t->set_var('logo_img', '../template/modern/img/eclass-new-logo.svg');
+    $t->set_var('logo_img_small', '../template/modern/img/eclass-new-logo.svg');
     $t->set_var('template_base', '../template/modern');
     $t->set_var('HEAD_EXTRAS', $head_content);
 
