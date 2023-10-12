@@ -92,6 +92,9 @@ if (isset($_GET['searchcode'])) {
         case "3":
             $typeSel[0] = "selected";
             break;
+        case "4":
+            $typeSel[0] = "selected";
+            break;
         default:
             $typeSel[-1] = "selected";
             break;
@@ -106,6 +109,7 @@ $tool_content .= "<div class='form-group'>
            <option value='2' " . @$typeSel[2] . ">$langTypeOpen</option>
            <option value='1' " . @$typeSel[1] . ">$langTypeRegistration</option>
            <option value='0' " . @$typeSel[0] . ">$langTypeClosed</option>
+           <option value='4' " . @$typeSel[4] . ">$langCourseActiveShort</option>
            <option value='3' " . @$typeSel[3] . ">$langCourseInactiveShort</option>
           </select>
         </div>
