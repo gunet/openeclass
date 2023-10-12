@@ -46,43 +46,43 @@
 
     
   .border-card{
-    border: solid 1px #EFF2FB;
+    border: solid 1px #4F6893;
   }
   
   .border-default-card{
-    border: solid 1px #B3D1FF;
+    border: solid 1px #4F6893;
   }
   
   .border-custom{
-    border: solid 1px #EFF2FB;
+    border: solid 1px #4F6893;
   }
   
   .border-bottom-custom{
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: solid 1px #EFF2FB;
+    border-bottom: solid 1px #4F6893;
   }
     
   .border-bottom-card-header{
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: solid 1px #B3D1FF;
+    border-bottom: solid 1px #4F6893;
   }
     
   .border-bottom-list-group{
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: solid 1px #EFF6FF;
+    border-bottom: solid 1px #4F6893;
   }
   
   .border-bottom-default{
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: solid 1px #E8EDF8;
+    border-bottom: solid 1px #4F6893;
   }
   
   .border-card-left-default{
@@ -93,7 +93,7 @@
   }
   
   .border-bottom-table-head{
-    border-bottom: solid 2px #0073E6;
+    border-bottom: solid 2px #74AFE9;
   }
     
   .input-bg-color{
@@ -143,6 +143,13 @@
 
   .menu_btn_button .fa-bars{
     color: #ffffff;
+  }
+
+  #progress_circle {
+    background: conic-gradient(#74AFE9 var(--progress), #E8EDF8 0deg) !important;
+  }
+  #progress_circle::after {
+    background: #212D37 !important;
   }
 
  
@@ -197,7 +204,8 @@
   }
   
   .Neutral-300-bg{
-    background-color: #E8EDF8;
+    /* background-color: #E8EDF8; */
+    background-color: #4F6893;
   }
   .Neutral-300-cl{
     color: #E8EDF8;
@@ -240,7 +248,8 @@
   }
   
   .Primary-200-bg{
-    background-color: #EFF6FF;
+    /* background-color: #EFF6FF; */
+    background-color: #4F6893;
   }
   .Primary-200-cl{
     color: #EFF6FF;
@@ -388,7 +397,7 @@
     color: #ffffff;
   }
   
-  p,span,strong,.li-indented,li{
+  p,span,strong,.li-indented,li,small{
     color:#ffffff;
   }
   
@@ -562,7 +571,7 @@
 /**********************************************************************************************************************/
 
 .group-section .list-group-item{
-    border-bottom: solid 1px #E8EDF8 ;
+    border-bottom: solid 1px #4F6893 ;
   }
   .group-section .list-group-item .accordion-btn{
     color:#74AFE9;
@@ -601,13 +610,14 @@
   .testimonials .testimonial {
     background: #212D37;
     color: #4F6893;
-    border: solid 1px #ffffff;
+    border: solid 1px #4F6893;
   }
   
   /* active testimonial */
   .testimonial.slick-slide.slick-current.slick-active.slick-center{
-    background-color: #EFF6FF;
+    background-color: #B4BED1;
     color: #4F6893;
+    border: solid 1px #4F6893;
   }
   .testimonial.slick-slide.slick-current.slick-active.slick-center span,
   .testimonial.slick-slide.slick-current.slick-active.slick-center strong,
@@ -818,11 +828,11 @@
   .submitAdminBtn, .cancelAdminBtn {
     border-color: #74AFE9;
     color: #74AFE9;
-    background-color: #ffffff;
+    background-color: #212D37;
   }
   
   .submitAdminBtn:hover, .cancelAdminBtn:hover {
-    background-color: #ffffff;
+    background-color: #212D37;
     border-color: #74AFE9;
     color: #74AFE9;
   }
@@ -1192,6 +1202,11 @@
     color:#ffffff; 
   } 
   
+  /* statistics wrapper */
+  .form-wrapper.form-edit.borderLg{
+    padding-left: 15px;
+    padding-right: 15px;
+  }
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn{
@@ -1199,11 +1214,19 @@
     border-color: #74AFE9;
     color: #ffffff;
   }
+  .form-wrapper:has(.submitAdminBtn) .submitAdminBtn .settings-icons::before,
+  .form-horizontal:has(.submitAdminBtn) .submitAdminBtn .settings-icons::before{
+    color: #ffffff;
+  }
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover{
     background-color: #74AFE9;
     border-color: #74AFE9;
+    color: #ffffff;
+  }
+  .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before,
+  .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before{
     color: #ffffff;
   }
   
@@ -1240,7 +1263,7 @@
 
 
 .panel-admin{
-  border: solid 1px #E8EDF8;
+  border: solid 1px #4F6893;
 }
 .panel-admin .panel-heading{
   background: #74AFE9;
@@ -1259,7 +1282,7 @@
 
 
 .panel-admin-calendar{
-  border: solid 1px #E8EDF8;
+  border: solid 1px #4F6893;
 }
 .panel-admin-calendar .panel-heading{
   background: #74AFE9;
@@ -1278,7 +1301,7 @@
 
 .panel-primary,.panel-action-btn-primary{
   border-radius:4px;
-  border: solid 1px #E8EDF8;
+  border: solid 1px #4F6893;
 }
 .panel-primary .panel-heading, .panel-action-btn-primary .panel-heading{
   background: #74AFE9;
@@ -1295,7 +1318,7 @@
 
 
 .panel-success{
-  border: solid 1px #E8EDF8;
+  border: solid 1px #4F6893;
 }
 .panel-success .panel-heading{
   background: #1E7E0E;
@@ -1311,19 +1334,19 @@
 
 
 .panel-default,.panel-action-btn-default{
-  border: solid 1px #EFF2FB;
+  border: solid 1px #4F6893;
 }
 .panel-default:not(:has(.panel-heading)){
-  border: solid 1px #EFF2FB;
+  border: solid 1px #4F6893;
 }
 .panel-action-btn-default:not(:has(.panel-heading)){
-  border: solid 1px #EFF2FB;
+  border: solid 1px #4F6893;
 }
 .panel-default:has(.panel-heading){
-  border: solid 1px #EFF2FB;
+  border: solid 1px #4F6893;
 }
 .panel-action-btn-default:has(.panel-heading){
-  border: solid 1px #EFF2FB;
+  border: solid 1px #4F6893;
 }
 .panel-default .panel-heading, .panel-action-btn-default .panel-heading {
   background: #212D37;
@@ -1343,7 +1366,7 @@
 
 .panel-info{
   border-radius:4px;
-  border:solid 1px #e8e8e8;
+  border:solid 1px #4F6893;
 }
 .panel-info>.panel-heading{
   background: #B3D1FF;
@@ -1360,7 +1383,7 @@
 
 .panel-danger{
   border-radius:4px;
-  border:solid 1px #e8e8e8;
+  border:solid 1px #4F6893;
 }
 .panel-danger .panel-heading{
   background:#C44601;
@@ -1377,7 +1400,7 @@
 
 
 .media{ 
-  border: solid 1px #e8e8e8;
+  border: solid 1px #4F6893;
 }
 
 
@@ -1484,7 +1507,7 @@
   }
   
   tbody tr{
-    border-bottom: solid 1px #EFF6FF;
+    border-bottom: solid 1px #4F6893;
   }
   
   @media(min-width:992px){
@@ -1547,7 +1570,7 @@ table.dataTable.order-column.stripe tbody tr.odd > .sorting_1,
 table.dataTable.display tbody tr.even > .sorting_1, 
 table.dataTable.order-column.stripe tbody tr.even > .sorting_1{
   background-color: #212D37;
-  border-bottom: solid 1px #EFF6FF;
+  border-bottom: solid 1px #4F6893;
 }
 
 table.dataTable tbody tr {
@@ -1555,11 +1578,11 @@ table.dataTable tbody tr {
 }
 
 table.dataTable thead th, table.dataTable thead td {
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #4F6893;
 }
 
 table.dataTable tbody td{
-  border-bottom: solid 1px #EFF6FF;
+  border-bottom: solid 1px #4F6893;
 }
 
 @media(min-width:992px){
@@ -1569,16 +1592,16 @@ table.dataTable tbody td{
 }
 
 table.dataTable.no-footer {
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #4F6893;
 }  
 
 
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
-    border-bottom: 1px solid #ffffff;
+    border-bottom: 1px solid #4F6893;
 }
 
 table.dataTable tfoot th, table.dataTable tfoot td {
-    border-top: 2px solid #ffffff;
+    border-top: 0px;
 }
 
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
@@ -1622,7 +1645,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
   outline: none;
-  background: #E8EDF8;
+  background: #4F6893;
   box-shadow: none;
 }
 
@@ -1643,6 +1666,14 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous, .dataTables_wrapper .dataTables_paginate .paginate_button.first {
+  color: #ffffff !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.next, .dataTables_wrapper .dataTables_paginate .paginate_button.last{
+  color: #ffffff !important;
+}
+
 /************************************************** portfolio-table **********************************************************************/
 
 #portfolio_lessons tbody tr{
@@ -1650,7 +1681,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 #portfolio_lessons_paginate .paginate_button.current{ 
-  background: #E8EDF8;
+  background: #4F6893;
 }
 
 #portfolio_lessons_filter input[type="search"]{
@@ -1682,17 +1713,17 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
   .list-group-item.element{
     background-color: transparent;
-    border-bottom: solid 1px #EFF2FB;
+    border-bottom: solid 1px #4F6893;
   }
   
   .list-group-default .list-group-item{
     background-color: #EFF2FB;
-    border-bottom: #EFF2FB;
+    border-bottom: #4F6893;
   }
 
   .list-group-default .list-group-item.element{
     background-color: #212D37;
-    border-bottom: solid 1px #EFF2FB;
+    border-bottom: solid 1px #4F6893;
   }
   .list-group-default .list-group-item.element:hover{
     background-color: #212D37;
@@ -1700,7 +1731,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .list-group-default .list-group-item:has(.collapsed){
     background-color: #EFF2FB;
-    border-bottom: #EFF2FB;
+    border-bottom: #4F6893;
   }
   
   .list-group-default .list-group-btn{
@@ -1726,6 +1757,20 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 /*************************************************** PORTFOLIO ********************************************************/
 /**********************************************************************************************************************/
+
+  .myProfileBtn{
+    background-color: #74AFE9;
+    color: #ffffff;
+  }
+  .myProfileBtn .fa-solid::before{
+    color: #ffffff;
+  }
+  .myProfileBtn:hover{
+    background-color: #74AFE9;
+    color: #ffffff;
+  }
+
+
   .profile-pers-info-row{
     border-bottom: solid 1px #EFF2FB;
   }
@@ -1740,7 +1785,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .user-info-card{
       background-color: #212D37;
-      border: solid 1px #ffffff !important;
+      border: solid 1px #4F6893 !important;
   }
 
   .portfolio-courses-container {
@@ -1755,6 +1800,17 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     background-color: #212D37 ;
   }
 
+  .showCoursesBars, .showCoursesPics{
+    color: #ffffff;
+  }
+  .showCoursesBars:hover, .showCoursesPics:hover{
+    color: #74AFE9;
+  }
+  .showCoursesBars.active, .showCoursesPics.active{
+    background-color: #74AFE9;
+    color: #ffffff;
+  }
+
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE *************************************************************/
 /**********************************************************************************************************************/
@@ -1764,6 +1820,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .cardLogin{
       background-color: #212D37 !important;
+      border: solid 1px #4F6893;
   }
 
   .announce-link-homepage {
@@ -1839,7 +1896,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   
   .panelCard{
     background-color: #212D37 !important;
-    border: solid 1px#EFF2FB;
+    border: solid 1px #4F6893;
   }
   
   .panelCard .card-header{
@@ -1855,7 +1912,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   }
   
   .panelCard.border-card-left-default{
-    border-left: solid 7px #EFF2FB;
+    border-left: solid 7px #4F6893;
   }
   
   .searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
@@ -1896,7 +1953,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   
   .openCoursesFormWrapper, .borderLg{
     background-color: #212D37 !important;
-    border: solid 1px #ffffff !important;
+    border: solid 1px #4F6893 !important;
   }
   
 
@@ -1974,7 +2031,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .wallWrapper{
-  background-clip: border-box !important; border: 1px solid rgba(0,0,0,.125) !important;
+  background-clip: border-box !important; border: 1px solid #ffffff !important;
 }
 
 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
@@ -2049,7 +2106,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .mycourses-pagination .page-item .page-link{
-  color: #001146;
+  color: #ffffff; background-color: #212D37;
 }
 
 .mycourses-pagination .page-item .page-link:hover{
@@ -2057,12 +2114,12 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   color: #000000;
 }
 .mycourses-pagination .page-item .page-link.active:hover{
-  background-color: #212D37;
-  color: #ffffff;
+  background-color: #e8e8e8;
+  color: #212D37;
 }
 .mycourses-pagination .page-item .page-link.active{
-  background-color: #74AFE9;
-  color: #ffffff;
+  background-color: #4F6893;
+  color: #74AFE9;
 }
 
 .mycourses-pagination .page-item-pages{
@@ -2110,9 +2167,9 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /*************************************************** COMMENTS **************************************************************/
 /**********************************************************************************************************************/
 
-#comments_title{
+/* #comments_title{
   background-color: #000000 !important;
-}
+} */
 
 /**********************************************************************************************************************/
 /*************************************************** USAGE **************************************************************/
@@ -2132,7 +2189,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
 .quickLink{
-  border: solid 1px #E8EDF8;
+  border: solid 1px #4F6893;
   background-color: #212D37;
   color: #ffffff;
 }
@@ -2146,7 +2203,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
 .theme-option-wrapper, .wrapper-lostpass{
-  border: solid 1px #ffffff !important;
+  border: solid 1px #4F6893 !important;
 }
 
 
@@ -2456,7 +2513,16 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   .col_maincontent_active{
       background-color: #212D37;
   }
+  @media(min-width:992px){
+    .col_maincontent_active{
+      border-left: solid 1px #4F6893;
+    }
+  }
   .ContentLeftNav {
       background: #212D37;
   }
 
+
+
+
+  

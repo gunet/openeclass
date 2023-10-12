@@ -364,7 +364,7 @@
                                         <ul class="list-group list-group-flush">
                                             <li class="list-group-item px-0 mb-4 bg-transparent">
 
-                                                <div class='d-flex justify-content-between' style='border-bottom: solid 1px #E8EDF8;'>
+                                                <div class='d-flex justify-content-between border-bottom-default'>
                                                     <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                         <i class='fa-solid fa-chevron-down settings-icon'></i>
                                                         {{ trans('langCourseDescription') }}

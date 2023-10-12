@@ -513,7 +513,7 @@
                     <div class='text-lg-start text-center'>
                         <img class="user-detals-photo m-auto d-block" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                         <div class='col-lg-12 col-md-3 col-6 ms-auto me-auto'>
-                            <a class='btn submitAdminBtn mt-2' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                            <a class='btn submitAdminBtn myProfileBtn mt-2' href='{{ $urlAppend }}main/profile/display_profile.php'>
                                 <i class='fa-solid fa-user'></i>&nbsp&nbsp{{ trans('langMyProfile') }}
                             </a>
                         </div>

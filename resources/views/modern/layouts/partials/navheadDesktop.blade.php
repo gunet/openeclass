@@ -13,7 +13,7 @@
                 <ul class="container-items nav">
                     @if(!get_config('hide_login_link'))
                         <li class="nav-item">
-                            <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid'])) active2 @endif" href="{{ $urlServer }}">
+                            <a id="link-home" class="nav-link menu-item mx-lg-2 @if (!isset($_SESSION['uid']) && empty($pageName)) active2 @endif" href="{{ $urlServer }}">
                                 {{ trans('langHome') }}
                             </a>
                         </li>

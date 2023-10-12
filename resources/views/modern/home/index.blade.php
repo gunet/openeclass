@@ -299,7 +299,8 @@
                                                 <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                     <div>
                                                         <div class='d-flex justify-content-center'>
-                                                            <img src='{{ $urlAppend }}template/modern/images/Icons_book-open.svg'>
+                                                            {{--<img src='{{ $urlAppend }}template/modern/images/Icons_book-open.svg'>--}}
+                                                            <i class="fa-solid fa-book-open fa-xl mt-4"></i>
                                                             <h1 class='mb-0 ms-2'>{{ get_config('total_courses') }}</h1>
                                                         </div>
                                                         <p class='form-label text-center'>{{ trans('langCourses') }}</p>
@@ -312,7 +313,8 @@
                                                 <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                     <div>
                                                         <div class='d-flex justify-content-center'>
-                                                            <img src='{{ $urlAppend }}template/modern/images/Icons_globe.svg'>
+                                                            {{--<img src='{{ $urlAppend }}template/modern/images/Icons_globe.svg'>--}}
+                                                            <i class="fa-solid fa-globe fa-xl mt-4"></i>
                                                             <h1 class='mb-0 ms-2'>{{ get_config('visits_per_week')}}K+</h1>
                                                         </div>
                                                         <p class='form-label text-center'>{{trans('langUserLogins')}}/</br>{{trans('langWeek')}}</p>
@@ -325,7 +327,8 @@
                                                 <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                     <div>
                                                         <div class='d-flex justify-content-center'>
-                                                            <img src='{{ $urlAppend }}template/modern/images/Icons_user.svg'>
+                                                            {{--<img src='{{ $urlAppend }}template/modern/images/Icons_user.svg'>--}}
+                                                            <i class="fa-solid fa-user fa-xl mt-4"></i>
                                                             <h1 class='mb-0 ms-2'>{{ getOnlineUsers() }}</h1>
                                                         </div>
                                                         <p class='form-label text-center'>{{trans('langOnlineUsers')}}</p>
