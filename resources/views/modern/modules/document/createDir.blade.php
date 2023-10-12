@@ -1,7 +1,7 @@
 
 <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-        <div class='form-wrapper form-edit mt-2 mb-3 rounded'>
+        <div class='form-wrapper form-edit borderLg mt-2 mb-3 rounded'>
             <form action='{{ $base_url }}' method='post' class='form-horizontal' role='form'>
                 {!! $group_hidden_input !!}
                 <input type='hidden' name='newDirPath' value='{{ $curDirPath }}'>

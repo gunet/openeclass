@@ -204,14 +204,15 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mt-5'>
-                <div class='panel panel-admin BorderSolid bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                    <div class='panel-heading bg-body p-0'>
+                <div class='panel panel-admin'>
+                    <div class='panel-heading'>
                         
-                        <div class='col-12 Help-panel-heading'>
-                            <div class='panel-title text-uppercase Help-text-panel-heading'>
-                                <a class='metadataCourseCollapseBtn text-uppercase collapsed' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
-                                <span class='fas fa-arrow-down'></span></a>
-                            </div>
+                        <div class='panel-title'>
+                            
+                                <a class='metadataCourseCollapseBtn form-value collapsed' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                                    <span class='fas fa-arrow-down'></span>
+                                </a>
+                            
                         </div>
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
@@ -409,16 +410,16 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mb-3 mt-3'>
-                <div class='panel panel-admin BorderSolid bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                    <div class='panel-heading bg-body p-0'>
+                <div class='panel panel-admin'>
+                    <div class='panel-heading'>
                         
-                        <div class='col-12 Help-panel-heading'>
-                            <div class='panel-title text-uppercase Help-text-panel-heading'>
-                                <a class='metadataCourseCollapseBtn text-uppercase' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                        
+                            <div class='panel-title'>
+                                <a class='metadataCourseCollapseBtn form-value' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
                                    <span class='fa fa-arrow-down'></span>
                                 </a>
                             </div>
-                        </div>
+                       
 
                     </div>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>

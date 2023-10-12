@@ -883,7 +883,7 @@ function user_duration_per_course($u) {
                     <ul class='list-group'>
                       <li class='list-group-item Primary-600-bg'>
                         <div class='row'>
-                          <div class='col-sm-12'><strong class='text-white'>$langDurationVisitsPerCourse</strong></div>
+                          <div class='col-sm-12'><strong class='default-value'>$langDurationVisitsPerCourse</strong></div>
                         </div>
                       </li>";
     foreach ($duration as $code => $time) {
@@ -949,7 +949,7 @@ function user_last_logins($u) {
                     <ul class='list-group'>
                       <li class='list-group-item Primary-600-bg'>
                         <div class='row'>
-                          <div class='col-sm-12'><b class='text-white'>$langLastVisits</b></div>
+                          <div class='col-sm-12'><b class='default-value'>$langLastVisits</b></div>
                         </div>";
 
         foreach ($result as $lastVisit) {

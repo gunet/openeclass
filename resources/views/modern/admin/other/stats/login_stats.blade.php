@@ -30,7 +30,7 @@
                             <table class='table-default'>
                                 <thead><tr>
                                     <th class='list-header' colspan='2'>
-                                        <strong class='text-white'>{{ trans('langLoginUser') }} {{ trans('langUsersOf') }}</strong>
+                                        <strong>{{ trans('langLoginUser') }} {{ trans('langUsersOf') }}</strong>
                                     </th>
                                 </tr></thead>
                                 @foreach ($recent_logins as $data)

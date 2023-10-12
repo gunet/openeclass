@@ -118,22 +118,22 @@ $head_content .= <<<EOF
             $(this).parent().parent().children( ".instructor_container" ).append(
                 '<div class="cmetarow">' +
                     '<span class="cmetalabel">{$instrFirst} ({$greek}):</span>' +
-                    '<span class="cmetafield"><input size="55" name="course_instructor_firstName_el[]" type="text"></span>' +
+                    '<span class="cmetafield"><input class="form-control" name="course_instructor_firstName_el[]" type="text"></span>' +
                     '<span class="cmetamandatory">*</span>' +
                 '</div>' +
                 '<div class="cmetarow">' +
                     '<span class="cmetalabel">{$instrLast} ({$greek}):</span>' +
-                    '<span class="cmetafield"><input size="55" name="course_instructor_lastName_el[]" type="text"></span>' +
+                    '<span class="cmetafield"><input class="form-control" name="course_instructor_lastName_el[]" type="text"></span>' +
                     '<span class="cmetamandatory">*</span>' +
                 '</div>' +
                 '<div class="cmetarow">' +
                     '<span class="cmetalabel">{$instrFirst} ({$english}):</span>' +
-                    '<span class="cmetafield"><input size="55" name="course_instructor_firstName_en[]" type="text"></span>' +
+                    '<span class="cmetafield"><input class="form-control" name="course_instructor_firstName_en[]" type="text"></span>' +
                     '<span class="cmetamandatory">*</span>' +
                 '</div>' +
                 '<div class="cmetarow">' +
                     '<span class="cmetalabel">{$instrLast} ({$english}):</span>' +
-                    '<span class="cmetafield"><input size="55" name="course_instructor_lastName_en[]" type="text"></span>' +
+                    '<span class="cmetafield"><input class="form-control" name="course_instructor_lastName_en[]" type="text"></span>' +
                     '<span class="cmetamandatory">*</span>' +
                 '</div>' +
                 '<div class="cmetarow">' +
@@ -146,7 +146,7 @@ $head_content .= <<<EOF
                 '</div>' +
                 '<div class="cmetarow">' +
                     '<span class="cmetalabel">{$instrCode}:</span>' +
-                    '<span class="cmetafield"><input size="55" name="course_instructor_registrationCode[]" type="text"></span>' +
+                    '<span class="cmetafield"><input class="form-control" name="course_instructor_registrationCode[]" type="text"></span>' +
                 '</div>'
                     );
         });

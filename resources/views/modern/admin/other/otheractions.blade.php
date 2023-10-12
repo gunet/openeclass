@@ -68,7 +68,7 @@
                                         <tr>
                                             <td colspan='2'>
                                                 <b>
-                                                    <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span class='form-value'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -97,7 +97,7 @@
                                         <tr>
                                             <td colspan='2'>
                                                 <b>
-                                                    <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span class='form-value'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -128,7 +128,7 @@
                                         <tr>
                                             <td class='text-end' colspan='2'>
                                                 <b>
-                                                    <span class='text-dark'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span class='form-value'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -144,7 +144,7 @@
                         </div>
                         @elseif  ($_GET['stats'] == 'vmusers')
                                 <div class='col-12'>
-                                    <div class='shadow-sm p-3 Borders bg-default'>
+                                    <div class='form-wrapper form-edit'>
                                         <div class='control-label-notes pb-3'>
                                             {{ trans('langUsers') }}
                                         </div>
@@ -153,25 +153,25 @@
                                                 <label>
                                                     <a href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
                                                 </label>
-                                                <span class='badge btn btn-secondary btn-sm pe-none float-end'>{{ $verifiedEmailUserCnt }}</span>
+                                                <span class='badge bg-secondary text-white float-end'>{{ $verifiedEmailUserCnt }}</span>
                                             </li>
                                             <li class='list-group-item'>
                                                 <label>
                                                     <a href='listusers.php?search=yes&verified_mail=2'>{{ trans('langMailVerificationNo') }}</a>
                                                 </label>
-                                                <span class='badge btn btn-secondary btn-sm pe-none float-end'>{{ $unverifiedEmailUserCnt }}</span>
+                                                <span class='badge bg-secondary text-white float-end'>{{ $unverifiedEmailUserCnt }}</span>
                                             </li>
                                             <li class='list-group-item'>
                                                 <label>
                                                     <a href='listusers.php?search=yes&verified_mail=0'>{{ trans('langMailVerificationPending') }}</a>
                                                 </label>
-                                                <span class='badge btn btn-secondary btn-sm pe-none float-end'>{{ $verificationRequiredEmailUserCnt }}</span>
+                                                <span class='badge bg-secondary text-white float-end'>{{ $verificationRequiredEmailUserCnt }}</span>
                                             </li>
                                             <li class='list-group-item'>
                                                 <label>
                                                     <a href='listusers.php?search=yes'>{{ trans('langTotal') }}</a>
                                                 </label>
-                                                <span class='badge btn btn-success btn-sm pe-none float-end'>{{ $totalUserCnt }}</span>
+                                                <span class='badge bg-success text-white float-end'>{{ $totalUserCnt }}</span>
                                             </li>
                                         </ul>
                                     </div>

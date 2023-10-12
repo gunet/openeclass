@@ -29,7 +29,7 @@ $tool_content .= "
 <div class='col-sm-12'>  
   <div class='panel panel-admin login-page'>
     <div class='panel-heading'>
-      <div class='panel-title p-0 text-white text-center'>$langUpgDetails</div>
+      <div class='panel-title p-0 text-center'>$langUpgDetails</div>
     </div>
     <div class='panel-body login-page-option'>
       <form class='form-horizontal' role='form' action='$urlServer' method='post'>

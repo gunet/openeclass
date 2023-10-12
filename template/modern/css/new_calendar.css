@@ -230,6 +230,7 @@
   border: 0px;
   box-sizing:content-box;
   box-shadow: none;
+  z-index: 0;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button{
   background: transparent;
@@ -247,6 +248,7 @@
   border: 0px;
   box-sizing:content-box;
   box-shadow: none;
+  z-index: 0;
 }
 .myCalendarEvents .fc-head-container.fc-widget-header{
   background: #e8e8e8;

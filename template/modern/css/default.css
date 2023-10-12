@@ -460,6 +460,10 @@ a:hover,button:hover{
   color: #687DA3;
 }
 
+.default-value{
+  color: #ffffff;
+}
+
 .orangeText{ 
   color: #F57600; 
 }

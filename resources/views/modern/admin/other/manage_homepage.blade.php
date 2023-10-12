@@ -128,7 +128,7 @@
                         <div class='col-12 mt-5'>
                             <div id='orderTexts'>
                                 @foreach($priorities as $p)
-                                    <div class='card panelCard px-lg-4 py-lg-3 mb-4' data-id='{{ $p->id }}'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 p-3 mb-4' data-id='{{ $p->id }}'>
                                         <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center p-0'>
                                             <h3 class='mb-0'>
                                                 @if($p->title == 'announcements')
@@ -147,7 +147,7 @@
                                             </h3>
                                                 
                                             <div>
-                                                <a href='javascript:void(0);'><span class='fa fa-arrows text-dark pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
+                                                <a href='javascript:void(0);'><span class='fa fa-arrows pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
                                             </div>
                                         </div>
                                     </div>

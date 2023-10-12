@@ -734,7 +734,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>$langQuestion&nbsp;"
-                    . icon('fa-edit text-white', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
+                    . icon('fa-edit Warning-200-cl', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid") .
                 "</h3>
             </div>
             <div class='card-body'>
@@ -771,7 +771,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
                         
                         <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
-                            " . icon('fa-xmark text-white', $langDelete, '#', ' class="del_btn"') . "
+                            " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
               }
@@ -783,7 +783,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <input class='form-control mt-0' type='text' name='answers[]' value=''>
                      
                             <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
-                                " . icon('fa-xmark text-white', $langDelete, '#', ' class="del_btn"') . "
+                                " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                             </div>
                     </div>
 
@@ -794,7 +794,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input class='form-control mt-0' type='text' name='answers[]' value=''>
                       
                         <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
-                            " . icon('fa-xmark text-white', $langDelete, '#', ' class="del_btn"') . "
+                            " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
         }

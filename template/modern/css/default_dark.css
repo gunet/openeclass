@@ -348,10 +348,6 @@
     background-color: #74AFE9;
   }
   
-  .bgEclass { 
-    background-color: #e8e8e8;
-  }
-  
   .lightColor{ 
     background-color: #f5f5f5; 
   }
@@ -408,7 +404,7 @@
     color: #74AFE9;
   }
   
-  .form-label{
+  .form-label, .default-value{
     color: #ffffff;
   }
   
@@ -2008,6 +2004,27 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     padding-left: 0px;
   }
 
+
+  div[role="progressbar"] {
+    --size: 9rem;
+    --fg: #74AFE9;
+    --bg: #e8e8e8;
+    --pgPercentage: var(--value);
+    animation: growProgressBar 3s 1 forwards;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: 
+      radial-gradient(closest-side, #212D37 80%, transparent 0 99.9%, #212D37 0),
+      conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0)
+      ;
+    font-weight: 700; font-style: normal;
+    font-size: calc(var(--size) / 5);
+    color: var(--fg);
+  }
 
 /**********************************************************************************************************************/
 /*************************************************** QUESTIONAIRE *****************************************************/

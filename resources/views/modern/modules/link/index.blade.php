@@ -84,7 +84,7 @@
                                     <th class='text-start'>{{ trans('langNoCategory') }}</th>
                                 </tr></thead>
                                 <tr>
-                                    <td class='text-dark text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
+                                    <td class='form-value text-start not_visible nocategory-link'> - {{ trans('langNoLinkInCategory') }} - </td>
                                 </tr>
                             @endif
                             </table>

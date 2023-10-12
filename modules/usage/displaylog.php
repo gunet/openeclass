@@ -281,7 +281,7 @@ $tool_content .= "<div class='row form-group mt-5'><div class='col-12 d-flex jus
     ))."
   
 
-</div></div></form></div></div><div class='d-none d-lg-block'>
+</div></div></form></div></div><div class='form-content-modules d-none d-lg-block'>
 <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
 </div>
 </div>";

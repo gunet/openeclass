@@ -179,7 +179,7 @@ $tool_content .= "
         <div class='col-12'>
             <ul class='list-group'>
                 <li class='list-group-item Primary-600-bg'>
-                    <span class='text-white'>$langOpenCoursesCharacteristics</span>
+                    <span class='default-value'>$langOpenCoursesCharacteristics</span>
                 </li>
                 <li class='list-group-item'>
                     <span class='badge $openAccessImgBadge'><i class='fa $openAccessImg'></i></span>
@@ -225,7 +225,7 @@ $tool_content .= "
 $tool_content .= <<<EOF
                             <ul class='list-group'>
                                 <li class='list-group-item Primary-600-bg'>
-                                    <span class='text-white'>$langOpenCoursesCharacter</span>
+                                    <span class='default-value'>$langOpenCoursesCharacter</span>
                                 </li>
                                 <li class='list-group-item'>
                                     <label for='check_AMinus'>$langOpenCoursesType <strong>$langOpenCoursesIsAMinusLevel</strong></label>
