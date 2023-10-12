@@ -35,7 +35,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $tree = new Hierarchy();
     $course = new Course();
     $user = new User();
-
     // A search has been submitted
     $search = isset($_GET['search']) ? $_GET['search'] : '';
     $searchurl = "&search=yes";
@@ -59,9 +58,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = '%' . $searchcode . '%';
         $terms[] = '%' . $searchcode . '%';
     }
+
     if ($searchtype != "-1") {
-        $query .= ' AND course.visible = ?d';
-        $terms[] = $searchtype;
+        if ($searchtype == '4') {
+            $query .= ' AND course.visible < ?d';
+            $terms[] = 3;
+        } else {
+            $query .= ' AND course.visible = ?d';
+            $terms[] = $searchtype;
+        }
+
     }
     if ($searchprof !== '') {
         $query .= ' AND course.prof_names LIKE ?s';
@@ -124,6 +130,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
                                     $query $filter_query $extra_query", $terms, $filter_terms, $extra_terms);
+
     $all_results = Database::get()->querySingle("SELECT COUNT(*) as total FROM course, course_department, hierarchy
                                                 WHERE course.id = course_department.course
                                                 AND hierarchy.id = course_department.department

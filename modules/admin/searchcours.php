@@ -37,17 +37,6 @@ $user = new User();
 load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
-$head_content .= "<script type='text/javascript'>
-        $(function() {
-            $('#id_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
-                language: '" . $language . "',
-                autoclose: true
-            });
-        });
-    </script>";
-
 $toolName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
@@ -63,8 +52,32 @@ $data['action_bar'] = action_bar(array(
     ));
 
 
+/*if (isset($_GET['searchcode'])) {
+    switch ($searchcode) {
+        case "2":
+            $typeSel[2] = "selected";
+            break;
+        case "1":
+            $typeSel[1] = "selected";
+            break;
+        case "0":
+            $typeSel[0] = "selected";
+            break;
+        case "3":
+            $typeSel[0] = "selected";
+            break;
+        case "4":
+            $typeSel[0] = "selected";
+            break;
+        default:
+            $typeSel[-1] = "selected";
+            break;
+    }
+}*/
+
 $data['reg_flag_data'][1] = $langAfter;
 $data['reg_flag_data'][2] = $langBefore;
+
 
 if (isDepartmentAdmin()) {
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
