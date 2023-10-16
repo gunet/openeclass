@@ -2,7 +2,7 @@
 /************************************************* TEMP CLASSES *******************************************************/
 /**********************************************************************************************************************/
 
-  body{ 
+/* body{ 
     background: #212D37;
     color: #ffffff;
   }
@@ -150,7 +150,7 @@
   }
   #progress_circle::after {
     background: #212D37 !important;
-  }
+  } */
 
   
  
@@ -158,7 +158,7 @@
   /************************************************* COLORS *************************************************************/
   /**********************************************************************************************************************/
   
-  .bg-light, .bgEclass{
+  /* .bg-light, .bgEclass{
     background-color: #212D37 !important;
   }
 
@@ -205,7 +205,6 @@
   }
   
   .Neutral-300-bg{
-    /* background-color: #E8EDF8; */
     background-color: #4F6893;
   }
   .Neutral-300-cl{
@@ -249,7 +248,6 @@
   }
   
   .Primary-200-bg{
-    /* background-color: #EFF6FF; */
     background-color: #4F6893;
   }
   .Primary-200-cl{
@@ -363,7 +361,7 @@
 
   .bg-default{
     background-color: #212D37;
-  }
+  } */
 
   
   
@@ -371,7 +369,7 @@
   /************************************************* TYPOGRAPHY *********************************************************/
   /**********************************************************************************************************************/
   
-  h1{
+  /* h1{
     color: #ffffff;
   }
   
@@ -413,13 +411,13 @@
   .form-value{
     color: #E8EDF8;
   }
-  
+   */
 /**********************************************************************************************************************/
 /************************************************* HEADER *************************************************************/
 /**********************************************************************************************************************/
 
 
-  #bgr-cheat-header{ 
+  /* #bgr-cheat-header{ 
     background-color: #2B3944; 
   }
 
@@ -454,14 +452,13 @@
   }
   .menu-item:hover{
     color: #74AFE9;
-  }
+  } */
 
   .menu-item.active, .menu-item.active2{
-    background-color: #ffffff;
-    color: #74AFE9;
+    color: #B70A0A;
   }
 
-  .inputSearch{ 
+  /* .inputSearch{ 
     background-color: #ffffff;
   }
 
@@ -469,16 +466,16 @@
   .inputSearch:focus,
   .inputSearch:hover { 
     box-shadow: none;
-  }
+  } */
 
 
   .user-menu-btn:hover,
   .user-menu-btn:focus{
-      border-top: solid 4px #74AFE9;
+      border-top: solid 4px #B70A0A;
       cursor:  url(../images/pointer.png), auto;
   }
 
-  .user-menu-btn:hover .user-icon-filename,
+  /* .user-menu-btn:hover .user-icon-filename,
   .user-menu-btn:focus .user-icon-filename{
       margin-top: -4px;
   }
@@ -511,14 +508,14 @@
 
   #collapseTools, .offCanvas-Tools {
       background: #212D37;
-  }
+  } */
 
 /**********************************************************************************************************************/
 /************************************************* FOOTER *************************************************************/
 /**********************************************************************************************************************/
 
   
-  .copyright{ 
+  /* .copyright{ 
     color:#ffffff
   }
   
@@ -546,22 +543,22 @@
       background-color: #2B3944;
     }
   }
-  
+   */
 
   /**********************************************************************************************************************/
 /****************************************************** TABS **********************************************************/
 /**********************************************************************************************************************/
 
   .nav-tabs .nav-item:hover .nav-link{
-    color: #74AFE9;
+    color: #B70A0A;
   }
 
   .nav-tabs .nav-item .nav-link{
-    color: #ffffff;
+    color: #B70A0A;
   }
   .nav-tabs .nav-item .nav-link.active{
-    color: #74AFE9;
-    border-bottom: solid 2px #74AFE9;
+    color: #B70A0A;
+    border-bottom: solid 2px #B70A0A;
   }
 
   /**********************************************************************************************************************/
@@ -569,24 +566,24 @@
 /**********************************************************************************************************************/
 
 .group-section .list-group-item{
-    border-bottom: solid 1px #4F6893 ;
+    border-bottom: solid 1px #E8EDF8 ;
   }
   .group-section .list-group-item .accordion-btn{
-    color:#74AFE9;
+    color:#B70A0A;
   }
   .group-section .list-group-item .accordion-btn:hover{
-    color: #74AFE9;
+    color: #B70A0A;
   }
   
   .group-section .list-group-item .accordion-btn[aria-expanded="true"], .group-section .list-group-item .accordion-btn.showAll{
-    color: #74AFE9;
+    color: #B70A0A;
   }
 
   /**********************************************************************************************************************/
 /************************************************* BREADCRUMBS ********************************************************/
 /**********************************************************************************************************************/
 
-  
+/*   
   .breadcrumb-item+.breadcrumb-item::before {
     color: #9BA9C1 ;
   }
@@ -594,7 +591,7 @@
   .breadcrumb-item.active a.pe-none.Neutral-900-cl{
         color: #E8EDF8 !important;
     }
-  
+   */
 
   /**********************************************************************************************************************/
 /************************************************* TESTIMONIALS - OWL_CAROUSEL ****************************************/
@@ -602,28 +599,28 @@
 
   
   .testimonials {
-    background-color: #212D37;
+    background-color: #ffffff;
   }
   
   .testimonials .testimonial {
-    background: #212D37;
-    color: #4F6893;
-    border: solid 1px #4F6893;
+    background: #ffffff;
+    color: #2B3944;
+    border: solid 1px #2B3944;
   }
   
   /* active testimonial */
   .testimonial.slick-slide.slick-current.slick-active.slick-center{
-    background-color: #B4BED1;
-    color: #4F6893;
-    border: solid 1px #4F6893;
+    background-color: #B70A0A;
+    color: #ffffff;
+    border: solid 1px #ffffff;
   }
   .testimonial.slick-slide.slick-current.slick-active.slick-center span,
   .testimonial.slick-slide.slick-current.slick-active.slick-center strong,
   .testimonial.slick-slide.slick-current.slick-active.slick-center p,
   .testimonial.slick-slide.slick-current.slick-active.slick-center b,
   .testimonial.slick-slide.slick-current.slick-active.slick-center .form-label{
-    color: #4F6893;
-  }
+    color: #ffffff;
+  } 
 
   
 /**********************************************************************************************************************/
@@ -631,7 +628,7 @@
 /**********************************************************************************************************************/
 
   .radio label{ 
-    color:#ffffff;
+    color:#2B3944;
   } 
   
   
@@ -641,15 +638,15 @@
     color: #2B3944;
   }
   input[type="radio"]:checked { 
-    border: solid 6px #74AFE9;
+    border: solid 6px #B70A0A;
   }
   .input-StatusCourse:checked{
     box-shadow: inset 0 0 0 0px #e8e8e8;
     border: 0px solid #e8e8e8;
-    background-color: #74AFE9;
+    background-color: #B70A0A;
   }
   .radio:has(.input-StatusCourse:checked) .fa{
-    color: #ffffff;
+    color: #2B3944;
   }
   
   label:has(input[type="radio"]:disabled){
@@ -658,14 +655,14 @@
 
   /* panels and form-wrapper where contains checkbox checked then change checked label color*/
   .form-wrapper.form-edit label:has(input[type="radio"]:checked){
-    color:#74AFE9;
+    color:#B70A0A;
   }
 
   
   /*******************************************************************/
   
   .label-container {
-    color: #ffffff;
+    color: #2B3944;
   }
   
   .label-container > input[type="checkbox"] {
@@ -674,16 +671,16 @@
   }
   
   .label-container > input[type="checkbox"]:checked {
-    border: 1px solid #74AFE9;
-    background-color: #74AFE9;
+    border: 1px solid #B70A0A;
+    background-color: #B70A0A;
   }
   
   .label-container > input[type="checkbox"]:checked + .checkmark::before {
-    color: #ffffff;
+    color: #2B3944;
   }
   
   .label-container > input[type="checkbox"]:active {
-    border: 1px solid #74AFE9;
+    border: 1px solid #B70A0A;
   }
   
   .label-container:has(input[type="checkbox"]:disabled){
@@ -692,7 +689,7 @@
   
   /**************************************************************/
 
-  .add-on,
+  /* .add-on,
   .add-on1,
   .add-on2{
     background-color: #212D37 !important;
@@ -813,7 +810,7 @@
     border-bottom: solid 2px #f9f8fa;
     background-color: #DCDCDC;
   }
-  
+   */
   
   /**********************************************************************************************************************/
   /*********************************************** SUBMITBUTTONS ********************************************************/
@@ -824,29 +821,29 @@
   } 
   
   .submitAdminBtn, .cancelAdminBtn {
-    border-color: #74AFE9;
-    color: #74AFE9;
-    background-color: #212D37;
+    border-color: #B70A0A;
+    color: #B70A0A;
+    background-color: #ffffff;
   }
   
   .submitAdminBtn:hover, .cancelAdminBtn:hover {
-    background-color: #212D37;
-    border-color: #74AFE9;
-    color: #74AFE9;
+    background-color: #ffffff;
+    border-color: #B70A0A;
+    color: #B70A0A;
   }
   
   .submitAdminBtn.active{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
   }
   
   .submitAdminBtnDefault, input[type="submit"], button[type="submit"]{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
-    border-color: #74AFE9;
+    border-color: #B70A0A;
   }
   .submitAdminBtnDefault:hover, input[type="submit"]:hover, button[type="submit"]:hover {
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
   }
   
@@ -899,13 +896,13 @@
   }
   
   .submitAdminBtn span{
-    color: #74AFE9;
+    color: #B70A0A;
   }
   .submitAdminBtn .fa-solid::before, 
   .submitAdminBtn .fa-regular::before,
   .submitAdminBtn .fa-brands::before,
   .submitAdminBtn span.fa::before{
-    color: #74AFE9;
+    color: #B70A0A;
   }
   .submitAdminBtnDefault .fa-solid::before, 
   .submitAdminBtnDefault .fa-regular::before,
@@ -915,7 +912,7 @@
   .cancelAdminBtn .fa-solid::before, 
   .cancelAdminBtn .fa-regular::before,
   .cancelAdminBtn .fa-brands::before{
-    color: #74AFE9;
+    color: #B70A0A;
   }
 
   /**********************************************************************************************************************/
@@ -923,25 +920,25 @@
 /**********************************************************************************************************************/
 
   .btn.btn-default{
-    border-color: #74AFE9;
-    color: #74AFE9;
+    border-color: #B70A0A;
+    color: #B70A0A;
     background-color: #ffffff;
   }
   .btn.btn-default:hover{
-    border-color: #74AFE9;
-    color: #74AFE9;
+    border-color: #B70A0A;
+    color: #B70A0A;
     background-color: #ffffff;
   }
   
   .btn.btn-primary{
-    border-color: #74AFE9;
+    border-color: #B70A0A;
     color: #ffffff;
-    background-color: #74AFE9;
+    background-color: #B70A0A;
   }
   .btn.btn-primary:hover{
-    border-color: #74AFE9;
+    border-color: #B70A0A;
     color: #ffffff;
-    background-color: #74AFE9;
+    background-color: #B70A0A;
   }
   
   .btn.btn-danger,
@@ -972,14 +969,14 @@
   }
   
   .btn-outline-secondary{
-    border-color: #74AFE9;
-    color: #74AFE9;
+    border-color: #B70A0A;
+    color: #B70A0A;
     background-color: #ffffff;
   }
   .btn-outline-secondary:hover{
     background-color: #ffffff;
-    border-color: #74AFE9 ;
-    color: #74AFE9;
+    border-color: #B70A0A ;
+    color: #B70A0A;
   }
   
   .btn.btn-secondary{
@@ -992,7 +989,7 @@
 /************************************************* CONTEXTUAL MENUS ***************************************************/
 /**********************************************************************************************************************/
 
-  .contextual-menu{
+  /* .contextual-menu{
     border: solid 1px #CDD4E0;
     filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
   }
@@ -1067,7 +1064,7 @@
   .contextual-sidebar .list-group-item.active{
     background-color: #74AFE9;
     color: #ffffff;
-  }
+  } */
   
 
   /**********************************************************************************************************************/
@@ -1076,14 +1073,14 @@
   
   .bootbox.show .modal-footer .submitAdminBtn,
   .modal.show .modal-footer .submitAdminBtn{
-    border-color: #74AFE9;
-    background-color: #74AFE9;
+    border-color: #B70A0A;
+    background-color: #B70A0A;
     color: #ffffff;
   }
   .bootbox.show .modal-footer .submitAdminBtn:hover,
   .modal.show .modal-footer .submitAdminBtn:hover{
-    border-color: #74AFE9;
-    background-color: #74AFE9;
+    border-color: #B70A0A;
+    background-color: #B70A0A;
     color: #ffffff;
   }
   
@@ -1125,11 +1122,11 @@
   
   .menu-popover .list-group-item:hover{ 
     background-color: #EFF6FF;
-    color:#74AFE9;
+    color:#B70A0A;
   }
 
   .menu-popover .list-group-item:hover .fa{ 
-    color:#74AFE9;
+    color:#B70A0A;
   }
   
   .menu-popover .delete.confirmAction, 
@@ -1207,12 +1204,11 @@
 /**************************************************** FORMS ***********************************************************/
 /**********************************************************************************************************************/
 
-/* first choice of inputs forms */
+
   .form-wrapper.form-edit .control-label-notes{ 
-    color:#ffffff; 
+    color:#2B3944; 
   } 
-  
-  /* statistics wrapper */
+ 
   .form-wrapper.form-edit.borderLg{
     padding-left: 15px;
     padding-right: 15px;
@@ -1220,8 +1216,8 @@
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn{
-    background-color: #74AFE9;
-    border-color: #74AFE9;
+    background-color: #B70A0A;
+    border-color: #B70A0A;
     color: #ffffff;
   }
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn .settings-icons::before,
@@ -1231,8 +1227,8 @@
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover{
-    background-color: #74AFE9;
-    border-color: #74AFE9;
+    background-color: #B70A0A;
+    border-color: #B70A0A;
     color: #ffffff;
   }
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before,
@@ -1243,15 +1239,15 @@
   .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic,
   .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic{
     background-color: #ffffff;
-    border-color: #74AFE9;
-    color: #74AFE9;
+    border-color: #B70A0A;
+    color: #B70A0A;
   }
   
   .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
   .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover{
     background-color: #ffffff;
-    border-color: #74AFE9;
-    color: #74AFE9;
+    border-color: #B70A0A;
+    color: #B70A0A;
   }
   
   .submitAdminBtnClassic.active,
@@ -1259,7 +1255,7 @@
   .submitAdminBtnClassic.active .fa-solid::before,
   .submitAdminBtnClassic.active .fa-brands::before,
   .submitAdminBtnClassic.active .fa-regular::before{
-    background-color: #74AFE9 !important;
+    background-color: #B70A0A !important;
     color:#ffffff !important;
   }
 
@@ -1277,7 +1273,7 @@
   border: solid 1px #4F6893;
 }
 .panel-admin .panel-heading{
-  background: #74AFE9;
+  background: #B70A0A;
   color:#ffffff;
 }
 .panel-admin .panel-heading .panel-title{
@@ -1296,18 +1292,18 @@
   border: solid 1px #4F6893;
 }
 .panel-admin-calendar .panel-heading,#cal-header{
-  background: #74AFE9;
+  background: #B70A0A;
   color:#ffffff;
 }
 .panel-admin-calendar .panel-heading .panel-title{
   color:#ffffff;
 }
 .panel-admin-calendar>.panel-body-calendar{
-    background-color: #212D37;
+    background-color: #ffffff;
 }
 
 .panel-admin-calendar>.panel-footer{
-  background-color: #212D37;
+  background-color: #ffffff;
 }
 
 .panel-primary,.panel-action-btn-primary{
@@ -1315,7 +1311,7 @@
   border: solid 1px #4F6893;
 }
 .panel-primary .panel-heading, .panel-action-btn-primary .panel-heading{
-  background: #74AFE9;
+  background: #B70A0A;
   color:#ffffff;
 }
 .panel-primary .panel-heading .panel-title, .panel-action-btn-primary .panel-heading .panel-title{
@@ -1433,11 +1429,11 @@
 
 
 .Help-panel-heading {
-  border-bottom:solid 1px #74AFE9;
+  border-bottom:solid 1px #B70A0A;
 }
 
 .Help-text-panel-heading {
-  color: #74AFE9 !important; 
+  color: #B70A0A !important; 
 }
 
 .panel-default .panel-heading .submitAdminBtn,
@@ -1447,7 +1443,7 @@
 .panel-info .panel-heading .submitAdminBtn,
 .panel-success .panel-heading .submitAdminBtn{
   background-color: #ffffff;
-  color: #74AFE9;
+  color: #B70A0A;
 }
 .panel-default .panel-heading .fa-edit,
 .panel-admin .panel-heading .fa-edit,
@@ -1465,7 +1461,7 @@
 .panel-info .panel-heading .submitAdminBtn:hover,
 .panel-success .panel-heading .submitAdminBtn:hover{
   color: #ffffff;
-  background-color: #74AFE9;
+  background-color: #B70A0A;
 }
 
 
@@ -1473,14 +1469,14 @@
 /*********************************************** DATEPICHER-DATETIMEPICHER ********************************************/
 /**********************************************************************************************************************/
 
-.datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top{ 
+/* .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top{ 
     background-color: white; 
   }
   
   .datetimepicker.datetimepicker-dropdown-bottom-right.dropdown-menu{  
     background-color: white; 
   }
-  
+   */
 
 
 
@@ -1488,7 +1484,7 @@
 /**************************************************** TABLES **********************************************************/
 /**********************************************************************************************************************/
 
-  @media(min-width:992px){
+  /* @media(min-width:992px){
     
     .table-default tbody::-webkit-scrollbar-track {
       background-color: #212D37;
@@ -1525,19 +1521,19 @@
     tbody tr:hover{
       background-color: #212D37;
     }
-  }
+  } */
   
   thead, tbody .list-header {
-    border-bottom: solid 2px #74AFE9;
+    border-bottom: solid 2px #B70A0A;
   }
   
-  tr.warning{
+  /* tr.warning{
     background-color: #FFF4D1;
   }
   
   tr.danger{
     background-color: #FDEFE9;
-  }
+  } */
 
 /* -------------------------------------------- ALL DATATABLES FROM OVERRIDE FILE  -----------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -1545,7 +1541,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
 
-.dataTables_wrapper input::placeholder{
+/* .dataTables_wrapper input::placeholder{
   color: #787e89;
 }
 .dataTables_wrapper input[type="text"],
@@ -1617,12 +1613,12 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate {
   color: #ffffff;
-}
+} */
 
 
 /********************************************************* form-select **********************************************************************/
 
-.dataTables_wrapper select {
+/* .dataTables_wrapper select {
   background-color: #ffffff;
   border-color: #687DA3;
   color:#687DA3;
@@ -1634,15 +1630,15 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 .dataTables_wrapper select option{
   color: #687DA3;
-}
+} */
 
 
 /************************************************ pagination buttons next-prev ***************************************************************/
 .dataTables_paginate.paging_simple_numbers span .paginate_button, .dataTables_paginate.paging_full_numbers span .paginate_button{
-  color: #ffffff !important;
+  color: #212D37 !important;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-  color: #74AFE9 !important;
+  color: #B70A0A !important;
   background:#E8EDF8; 
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
@@ -1651,7 +1647,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   background: transparent;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-  color: #74AFE9 !important;
+  color: #B70A0A !important;
   background: #E8EDF8;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button:active {
@@ -1679,15 +1675,15 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.previous, .dataTables_wrapper .dataTables_paginate .paginate_button.first {
-  color: #ffffff !important;
+  color: #212D37 !important;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button.next, .dataTables_wrapper .dataTables_paginate .paginate_button.last{
-  color: #ffffff !important;
+  color: #212D37 !important;
 }
 
 /************************************************** portfolio-table **********************************************************************/
 
-#portfolio_lessons tbody tr{
+/* #portfolio_lessons tbody tr{
   background-color: #212D37;
 }
 
@@ -1705,7 +1701,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   outline: 0 none;
   background-color: #212D37;
   color:#ffffff;
-}
+} */
 
 
   
@@ -1714,7 +1710,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
   .nav-link-adminTools.normalColorBlueText.active{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff !important;
   }
   
@@ -1724,17 +1720,17 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
   .list-group-item.element{
     background-color: transparent;
-    border-bottom: solid 1px #4F6893;
+    border-bottom: solid 1px #E8EDF8;
   }
   
   .list-group-default .list-group-item{
     background-color: #EFF2FB;
-    border-bottom: #4F6893;
+    border-bottom: #E8EDF8;
   }
 
   .list-group-default .list-group-item.element{
     background-color: #212D37;
-    border-bottom: solid 1px #4F6893;
+    border-bottom: solid 1px #E8EDF8;
   }
   .list-group-default .list-group-item.element:hover{
     background-color: #212D37;
@@ -1742,11 +1738,11 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .list-group-default .list-group-item:has(.collapsed){
     background-color: #EFF2FB;
-    border-bottom: #4F6893;
+    border-bottom: #E8EDF8;
   }
   
   .list-group-default .list-group-btn{
-    color: #74AFE9;
+    color: #B70A0A;
   }
 
   .list-group-default .list-group-btn.collapsed{
@@ -1758,9 +1754,9 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     .toolHomePage:hover,
     .toolHomePage:focus{
       background-color: transparent;
-      color: #74AFE9;
+      color: #B70A0A;
       border: 0px;
-      border-bottom: solid 1px #4F6893;
+      border-bottom: solid 1px #E8EDF8;
     }
   }
   
@@ -1771,7 +1767,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
   .circle-img-contant { 
-    background-color: #74AFE9; 
+    background-color: #B70A0A; 
   }
 
 
@@ -1780,14 +1776,14 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
   .myProfileBtn{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
   }
   .myProfileBtn .fa-solid::before{
     color: #ffffff;
   }
   .myProfileBtn:hover{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
   }
 
@@ -1796,93 +1792,93 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     border-bottom: solid 1px #EFF2FB;
   }
 
-  .portfolio-profile {
+  /* .portfolio-profile {
     background-color: #212D37;
-  }
+  } */
 
-  .portfolio-profile-container {
+  /* .portfolio-profile-container {
         background-color: #212D37;
-  }
+  } */
 
-  .user-info-card{
+  /* .user-info-card{
       background-color: #212D37;
       border: solid 1px #4F6893 !important;
-  }
+  } */
 
-  .portfolio-courses-container {
+  /* .portfolio-courses-container {
       background-color: #212D37;
-  }
+  } */
 
   .agenda-comment{ 
       color: #ffffff;
   }
 
   .row-course:hover td:first-child, .row-course:hover td:last-child{
-    background-color: #212D37 ;
+    background-color: #EFF2FB ;
   }
 
   .showCoursesBars, .showCoursesPics{
-    color: #ffffff;
+    color: #B70A0A;
   }
   .showCoursesBars:hover, .showCoursesPics:hover{
-    color: #74AFE9;
+    color: #B70A0A;
   }
   .showCoursesBars.active, .showCoursesPics.active{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
   }
 
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE *************************************************************/
 /**********************************************************************************************************************/
-  .jumbotron.jumbotron-login {
-      background-color: #212D37;
-  }
+  /* .jumbotron.jumbotron-login {
+      background-color: #ffffff;
+  } */
 
   .cardLogin{
-      background-color: #212D37 !important;
-      border: solid 1px #4F6893;
+      background-color: #ffffff !important;
+      border: solid 1px #E8EDF8;
   }
 
   .announce-link-homepage {
-      color: #74AFE9;
+      color: #B70A0A;
   }
 
   .testimonials{
-      background-color: #212D37;
+      background-color: #ffffff;
   }
 
   .statistics-card .card-body{
-      background-color: #212D37 !important;
+      background-color: #E8EDF8 !important;
   }
 
   .login-form-submit {
-    border-color: #74AFE9;
+    border-color: #B70A0A;
     color: #ffffff;
-    background-color: #74AFE9;
+    background-color: #B70A0A;
   }
   .login-form-submit:hover {
-    border-color: #74AFE9;
-    background-color: #74AFE9;
+    border-color: #B70A0A;
+    background-color: #B70A0A;
     color: #ffffff;
     text-decoration: none;
   }
 
   .opencourses_btn {
-    border-color: #74AFE9;
-    background-color: #74AFE9;
+    border-color: #B70A0A;
+    background-color: #B70A0A;
     color: #ffffff;
   }
   .opencourses_btn:hover {
-    background-color: #74AFE9;
+    background-color: #B70A0A;
     color: #ffffff;
-    border-color: #74AFE9;
+    border-color: #B70A0A;
     text-decoration: none;
   }
 
   .login-input:focus {
     border-color: #ffffff;
-    background-color: #212D37;
+    background-color: #B70A0A;
     color: #ffffff;
   }
 
@@ -1900,13 +1896,13 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   }
   
   .carousel-indicators>button:not(:has(.active)) {background-color: #CDD4E0;}
-  .carousel-indicators>button.active {background-color: #74AFE9;}
+  .carousel-indicators>button.active {background-color: #B70A0A;}
   .carousel-prev-btn,.carousel-next-btn{
     background-color: transparent;
   }
   
   .descCoursePanel{ 
-    background: #74AFE9; 
+    background: #B70A0A; 
   }
   
 
@@ -1916,24 +1912,24 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   /**********************************************************************************************************************/
   
   .panelCard{
-    background-color: #212D37 !important;
-    border: solid 1px #4F6893;
+    background-color: transparent !important;
+    border: solid 1px #E8EDF8;
   }
   
   .panelCard .card-header{
-    background-color: #212D37 !important;
+    background-color: transparent !important;
   }
 
   .panelCard .card-body{
-    background-color: #212D37 !important;
+    background-color: transparent !important;
   }
 
   .panelCard .card-footer{
-    background-color: #212D37 !important;
+    background-color: transparent !important;
   }
   
   .panelCard.border-card-left-default{
-    border-left: solid 7px #4F6893;
+    border-left: solid 7px #E8EDF8;
   }
   
   .searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
@@ -1944,7 +1940,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     background-color: #e8e8e8;
   }
   .searchGroupBtn:hover{
-    background-color: #74AFE9;
+    background-color: #B70A0A;
   }
   .searchGroupBtn:hover span{
     color: #ffffff;
@@ -1953,13 +1949,13 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .showSettings{
     background-color: #ffffff !important;
-    border-color: #74AFE9;
-    color: #74AFE9 !important;
+    border-color: #B70A0A;
+    color: #B70A0A !important;
   }
   .showSettings:hover{
     background-color: #ffffff !important;
-    border-color: #74AFE9;
-    color: #74AFE9 !important;
+    border-color: #B70A0A;
+    color: #B70A0A !important;
   }
   
   
@@ -1969,7 +1965,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   /**********************************************************************************************************************/
 
   .list-group-item.list-header{  
-    color: #ffffff; 
+    color: #212D37; 
   }
   
   .openCoursesFormWrapper, .borderLg{
@@ -1983,7 +1979,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   /**********************************************************************************************************************/
 
   .title1{ 
-    background-color: #212D37; 
+    background-color: #2B3944; 
   }
 
   /**********************************************************************************************************************/
@@ -1991,8 +1987,8 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   /**********************************************************************************************************************/
 
   .pagination-glossary .page-item.active .page-link{
-    background-color: #74AFE9;
-    border-color: #74AFE9;
+    background-color: #B70A0A;
+    border-color: #B70A0A;
     color: #ffffff !important;
   }
 
@@ -2032,7 +2028,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   div[role="progressbar"] {
     --size: 9rem;
-    --fg: #74AFE9;
+    --fg: #B70A0A;
     --bg: #e8e8e8;
     --pgPercentage: var(--value);
     animation: growProgressBar 3s 1 forwards;
@@ -2058,7 +2054,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   .input-Questionnaire:checked{
     box-shadow: inset 0 0 0 0px #e8e8e8;
     border: 0px solid #e8e8e8;
-    background-color: #005ad9;
+    background-color: #B70A0A;
   }
   .radio:has(.input-Questionnaire:checked) .fa{
     color: #ffffff;
@@ -2069,7 +2065,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
 .wallWrapper textarea:focus, .wallWrapper textarea:active{
-  border-color: #74AFE9;
+  border-color: #B70A0A;
 }
 
 .wallWrapper{
@@ -2077,19 +2073,19 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
-  background-color: #74AFE9;
-  border-color: #74AFE9;
+  background-color: #B70A0A;
+  border-color: #B70A0A;
   color: #ffffff;
 }
 
 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn:hover{
-  background-color: #74AFE9;
-  border-color: #74AFE9;
+  background-color: #B70A0A;
+  border-color: #B70A0A;
   color: #ffffff;
 }
 
 .commentPress:hover{
-  color: #0d6efd;
+  color: #B70A0A;
 }
 
 
@@ -2126,7 +2122,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
 .nav-link-widgets.active{
-  border: solid 1px #74AFE9;
+  border: solid 1px #B70A0A;
 }
 
 
@@ -2161,7 +2157,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 .mycourses-pagination .page-item .page-link.active{
   background-color: #4F6893;
-  color: #74AFE9;
+  color: #B70A0A;
 }
 
 .mycourses-pagination .page-item-pages{
@@ -2193,7 +2189,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
 .bs-placeholder .filter-option .filter-option-inner-inner{
-  color: #74AFE9 !important;
+  color: #B70A0A !important;
 }
 .bs-placeholder:hover .filter-option .filter-option-inner-inner{
   color: #ffffff;
@@ -2231,15 +2227,15 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
 .quickLink{
-  border: solid 1px #4F6893;
-  background-color: #212D37;
-  color: #ffffff;
+  border: solid 1px #B70A0A;
+  background-color: #ffffff;
+  color: #B70A0A;
 }
 
 .quickLink:hover,
 .quickLink:hover .fa-solid{
-  border: solid 1px #74AFE9;
-  background-color: #74AFE9;
+  border: solid 1px #B70A0A;
+  background-color: #B70A0A;
   color: #ffffff !important;
 }
 
@@ -2267,7 +2263,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background-color: #74AFE9;
+  background-color: #B70A0A;
   color: white;
 }
 
@@ -2276,11 +2272,11 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .select2-container--default .select2-results__option[aria-selected=true] {
-  background-color: #74AFE9;
+  background-color: #B70A0A;
 }
 
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
-  background-color: #74AFE9;
+  background-color: #B70A0A;
   border: 1px solid #aaa;
   border-radius: 4px;
   cursor: default;
@@ -2308,8 +2304,8 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /***************** this is portfolio-calendar , courseHome-calendar *********************************/
 /****************************************************************************************************/
 
-#calendar-header{
-  background-color: #2B3944;
+/* #calendar-header{
+  background-color: #B70A0A;
 }
 
 #current-month{  
@@ -2335,20 +2331,20 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 #cal-slide-content a.event-item {
-  color: #74AFE9 !important;
+  color: #B70A0A !important;
 }
 
 .cal-day-today {
   background-color: #212D37 !important;
 }
 .cal-day-today.cal-day-holiday .number-day-cal {
-  background-color: #74AFE9 !important;
+  background-color: #B70A0A !important;
   color: #ffffff !important; 
 }
 
 #cal-week-box {
-  background-color: #212D37 !important;
-}
+  background-color: #ffffff !important;
+} */
 
 /************************************rgba(255, 255, 255, 0.5)**********************************************/
 /***************** this is mypersonal-calendar , courseHome-calendar *********************************/
@@ -2364,19 +2360,19 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .personal-calendar-header .btn-group .btn.active{
-  background: #005ad9 ;
+  background: #B70A0A ;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head{
   background: #ffffff;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1{
-  color:#003e87;
+  color:#B70A0A;
 }
 .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1:hover{
   background-color: transparent;
 }
 .myPersonalCalendar .number-day-cal{
-  color: #003e87;
+  color: #B70A0A;
   font-size: 17px ;
 }
 .myPersonalCalendar .cal-day-today {
@@ -2446,7 +2442,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   color: #ffffff;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
-  background: #005ad9 ;
+  background: #B70A0A ;
   color: #ffffff;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button{
@@ -2454,14 +2450,14 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   color: #ffffff;
 }
 .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active{
-  background: #005ad9 ;
+  background: #B70A0A ;
   color: #ffffff;
 }
 .myCalendarEvents .fc-head-container.fc-widget-header{
   background: #e8e8e8;
 }
 .myCalendarEvents .fc-head-container.fc-widget-header .fc-day-header span{
-  color:#003e87;
+  color:#B70A0A;
 }
 .myCalendarEvents .fc-widget-content table tbody td{
   border: solid 1px #f5f4f4 ;
@@ -2491,7 +2487,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
  .datetimepicker .table-condensed thead > tr > td:hover,
  .datetimepicker .table-condensed tbody > tr > td:hover,
  .datetimepicker .table-condensed tfoot > tr > td:hover {
-     color:#74AFE9;
+     color:#B70A0A;
   }
 
   .datetimepicker .table-condensed thead tr th.next::after{ color:#ffffff;}
@@ -2522,7 +2518,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 .datepicker-days .table-condensed thead > tr > td:hover,
 .datepicker-days .table-condensed tbody > tr > td:hover,
 .datepicker-days .table-condensed tfoot > tr > td:hover {
-   color: #74AFE9;
+   color: #B70A0A;
  }
 
 
@@ -2538,7 +2534,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
   #collapse-left-menu-icon path{
-    fill: #ffffff !important;
+    fill: #2B3944 !important;
   }
 
  /* slider in left menu */
@@ -2547,24 +2543,24 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     border: solid 1px #CDD4E0;
   }
   .on, .off {
-    color: #ffffff;
+    color: #2B3944;
   }
   input:checked + .slider-round {
-      background-color: #74AFE9;
+      background-color: #B70A0A;
   }
 
 
   /* left menu and main content */
   .col_maincontent_active{
-      background-color: #212D37;
+      background-color: #F7F9FE;
   }
   @media(min-width:992px){
     .col_maincontent_active{
-      border-left: solid 1px #4F6893;
+      border-left: solid 1px #E8EDF8;
     }
   }
   .ContentLeftNav {
-      background: #212D37;
+      background: #ffffff;
   }
 
 

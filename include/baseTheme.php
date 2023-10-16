@@ -481,7 +481,7 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgColorHeader];
                 }
 
-                .panel-admin>.panel-heading, .descCoursePanel, #cal-header{
+                .panel-admin>.panel-heading, #cal-header{
                     background:$theme_options_styles[bgColorHeader];
                 }
 
@@ -943,6 +943,12 @@ function view($view_file, $view_data = array()) {
         if($theme_options->name == 'Default Dark'){
             $head_content .= "
                 <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?v=4.0-dev'/>
+            ";
+        }
+
+        if($theme_options->name == 'Crimson'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?v=4.0-dev'/>
             ";
         }
         

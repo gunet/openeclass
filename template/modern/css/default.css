@@ -3263,7 +3263,7 @@ body .delThemeBtn{
 
 .cardLogin{
   max-width: 720px;
-  height: auto;
+  max-height: 425px;
   background-color: #ffffff !important; 
   border: solid 1px #EFF2FB;
 }
@@ -3272,6 +3272,12 @@ body .delThemeBtn{
       max-width: 100%;
   }
 }
+.jumbotron-image-default{
+ max-height: 425px;
+ width: 100%;
+ object-fit: cover;
+}
+
 
 
 .Announcements-Homepage{ background-color: #f8f9fa; box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);}
