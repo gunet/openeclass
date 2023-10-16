@@ -44,10 +44,12 @@ class ExerciseEvent extends BasicEvent {
                     . " ORDER BY eurid DESC LIMIT 1", $data->uid, $data->resource, $data->courseId, ATTEMPT_COMPLETED);
 
             $objExercise = new Exercise();
-            $objExercise->read($eur->eid);
-            $canonical_score = $objExercise->canonicalize_exercise_score($eur->total_score, $eur->total_weighting);
-            if ($eur && $canonical_score > 0) {
-                $threshold = $canonical_score;
+            if ($eur) {
+                $objExercise->read($eur->eid);
+                $canonical_score = $objExercise->canonicalize_exercise_score($eur->total_score, $eur->total_weighting);
+                if ($eur && $canonical_score > 0) {
+                    $threshold = $canonical_score;
+                }
             }
 
             $this->setEventData($data);
