@@ -156,7 +156,6 @@ if ($is_editor) {
     if (isset($_GET['vis'])) { // activate or deactivate certificate / badge
         if (has_activity($element, $element_id) > 0) {
             update_visibility($element, $element_id, $_GET['vis']);
-            //Session::Messages($langGlossaryUpdated, 'alert-success');
             Session::flash('message',$langGlossaryUpdated);
             Session::flash('alert-class', 'alert-success');
         } else {

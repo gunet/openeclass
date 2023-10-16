@@ -480,7 +480,7 @@ $lp_action_button = action_button(array(
         'icon' => "fa-info-circle"
     ),
     array(
-        'title' => "$langUsed $langModuleOfMyCourse",
+        'title' => "$langModuleOfMyCourse",
         'url' => "insertMyModule.php?course=$course_code",
         'icon' => "fa-plus-square"
     )
