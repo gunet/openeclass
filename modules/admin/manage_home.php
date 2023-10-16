@@ -37,7 +37,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 if(isset($_POST['submit'])){
     set_config('total_courses',$_POST['total_courses']);
     set_config('visits_per_week',$_POST['visits_per_week']);
+
+    set_config('homepage_title',$_POST['homepage_title']);
+    set_config('homepage_name',$_POST['homepage_name']);
+
+    set_config('homepage_intro', purify($_POST['homepage_intro']));
+    
     set_config('show_only_loginScreen',$_POST['show_only_loginScreen']);
+    set_config('dont_display_login_form',$_POST['dont_display_login_form']);
+    set_config('hide_login_link',$_POST['hide_login_link']);
+    set_config('dont_display_testimonials',$_POST['dont_display_testimonials']);
+
+
     Session::flash('message',"$langRegDone");
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/admin/manage_home.php");
@@ -45,6 +56,8 @@ if(isset($_POST['submit'])){
 
 $data['total_courses'] = get_config('total_courses');
 $data['visits_per_week'] = get_config('visits_per_week');
+
+$data['homepage_intro'] = rich_text_editor('homepage_intro', 5, 20, get_config('homepage_intro'));
 $data['priorities'] = Database::get()->queryArray("SELECT * FROM homepagePriorities ORDER BY `order` ASC");
 
 $data['action_bar'] = action_bar(

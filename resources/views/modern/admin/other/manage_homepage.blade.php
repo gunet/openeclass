@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
 
-                                <div class='form-group mt-4'>
+                                {{--<div class='form-group mt-4'>
                                     <div class='col-sm-12 checkbox'>
                                         <label class='label-container'>
                                             <input id='showOnlyLoginScreen' type='checkbox' name='show_only_loginScreen' {!! get_config('show_only_loginScreen') ? 'checked' : '' !!}>
@@ -104,7 +104,87 @@
                                         </label>
                                         
                                     </div>
+                                </div>--}}
+
+
+
+
+
+
+
+
+
+                                <div class='form-group mt-4'>
+                                    <label for='defaultHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='homepage_title' id='defaultHomepageTitle' value="{!! q(get_config('homepage_title', trans('langEclass'))) !!}">
+                                        <p class='help-block mt-1'>{{trans('langHomePageTitleHelpText')}}</p>
+                                    </div>
                                 </div>
+
+
+                                <div class='form-group mt-4'>
+                                    <label for='defaultHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
+                                    <div class='col-sm-12'>
+                                        <input class='form-control' type='text' name='homepage_name' id='defaultHomepageBcrmp' value="{!! q(get_config('homepage_name', trans('langHomePage'))) !!}">
+                                        <p class='help-block mt-1'>{{trans('langHomePageNavTitleHelp')}}</p>
+                                    </div>
+                                </div>
+
+
+                                <div class='form-group mt-4'>
+                                    <label for='defaultHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
+                                    <div class='col-sm-12'>
+                                        {!! $homepage_intro !!}
+                                        <p class='help-block mt-1'>{{trans('langHomePageIntroTextHelp')}}</p>
+                                    </div>
+                                </div>
+
+
+                                <div class='form-group mt-4'>
+                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_login_form')}}: </label>
+                                    <div class='col-sm-12'>
+                                            <div class='checkbox'>
+                                                <label class='label-container'>
+                                                    <input id='showOnlyLoginScreen' type='checkbox' name='show_only_loginScreen' {!! get_config('show_only_loginScreen') ? 'checked' : '' !!}>
+                                                    <span class='checkmark'></span>
+                                                    {{ trans('langShowOnlyLoginScreen') }}
+                                                </label>
+                                            </div>
+                                            <div class='checkbox'>
+                                                <label class='label-container'>
+                                                    <input id='hide_login_check' type='checkbox' name='dont_display_login_form' {!! get_config('dont_display_login_form') ? 'checked' : '' !!}>
+                                                    <span class='checkmark'></span>
+                                                    {{trans('lang_dont_display_login_form')}}
+                                                </label>
+                                            </div>
+                                            <div class='checkbox'>
+                                                <label class='label-container'>
+                                                    <input id='hide_login_link_check' type='checkbox' name='hide_login_link' {!! get_config('hide_login_link') ? 'checked' : '' !!}>
+                                                    <span class='checkmark'></span>
+                                                    {{trans('lang_hide_login_link')}}
+                                                </label>
+                                            </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class='form-group mt-4'>
+                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_testimonials')}}: </label>
+                                    <div class='col-sm-12'>
+                                        <div class='checkbox'>
+                                            <label class='label-container'>
+                                                <input id='dont_display_testimonials' type='checkbox' name='dont_display_testimonials' {!! get_config('dont_display_testimonials') ? 'checked' : '' !!}>
+                                                <span class='checkmark'></span>
+                                                {{trans('lang_dont_display_login_testimonials')}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
                                
                                 
                                 <div class='form-group mt-5'>
@@ -168,6 +248,30 @@
                 document.getElementById('showOnlyLoginScreen').value = 1;
             }else{
                 document.getElementById('showOnlyLoginScreen').value = 0;
+            }
+        });
+
+        $('#hide_login_check').on('click',function(){
+            if($('#hide_login_check').is(":checked")){
+                document.getElementById('hide_login_check').value = 1;
+            }else{
+                document.getElementById('hide_login_check').value = 0;
+            }
+        });
+
+        $('#hide_login_link_check').on('click',function(){
+            if($('#hide_login_link_check').is(":checked")){
+                document.getElementById('hide_login_link_check').value = 1;
+            }else{
+                document.getElementById('hide_login_link_check').value = 0;
+            }
+        });
+
+        $('#dont_display_testimonials').on('click',function(){
+            if($('#dont_display_testimonials').is(":checked")){
+                document.getElementById('dont_display_testimonials').value = 1;
+            }else{
+                document.getElementById('dont_display_testimonials').value = 0;
             }
         });
     });

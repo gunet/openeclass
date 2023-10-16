@@ -587,7 +587,7 @@ if ($total_cunits > 0) {
                         'show' => $visible == COURSE_OPEN),
                     array('title' => $langDelete,
                         'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
-                        'icon' => 'fa-trash',
+                        'icon' => 'fa-solid fa-xmark Accent-200-cl',
                         'class' => 'delete',
                         'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
             } else {
@@ -706,7 +706,7 @@ if ($total_cunits > 0) {
                         'show' => $visible == COURSE_OPEN),
                     array('title' => $langDelete,
                         'url' => $urlAppend . "modules/course_home/course_home.php?course=$course_code&amp;del=$cu_indirect&amp;order=".$cu->order,
-                        'icon' => 'fa-trash',
+                        'icon' => 'fa-solid fa-xmark Accent-200-cl',
                         'class' => 'delete',
                         'confirm' => $langCourseUnitDeleteConfirm)))."</div>";
 

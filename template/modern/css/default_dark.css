@@ -152,6 +152,7 @@
     background: #212D37 !important;
   }
 
+  
  
   /**********************************************************************************************************************/
   /************************************************* COLORS *************************************************************/
@@ -363,6 +364,7 @@
   .bg-default{
     background-color: #212D37;
   }
+
   
   
   /**********************************************************************************************************************/
@@ -899,13 +901,20 @@
   .submitAdminBtn span{
     color: #74AFE9;
   }
-  .submitAdminBtn .fa-solid::before, .submitAdminBtn .fa-regular::before,.submitAdminBtn span.fa::before{
+  .submitAdminBtn .fa-solid::before, 
+  .submitAdminBtn .fa-regular::before,
+  .submitAdminBtn .fa-brands::before,
+  .submitAdminBtn span.fa::before{
     color: #74AFE9;
   }
-  .submitAdminBtnDefault .fa-solid::before, .submitAdminBtnDefault .fa-regular::before{
+  .submitAdminBtnDefault .fa-solid::before, 
+  .submitAdminBtnDefault .fa-regular::before,
+  .submitAdminBtnDefault .fa-brands::before{
     color: #ffffff;
   }
-  .cancelAdminBtn .fa-solid::before, .cancelAdminBtn .fa-regular::before{
+  .cancelAdminBtn .fa-solid::before, 
+  .cancelAdminBtn .fa-regular::before,
+  .cancelAdminBtn .fa-brands::before{
     color: #74AFE9;
   }
 
@@ -1109,6 +1118,10 @@
   .menu-popover .list-group-item .fa{ 
     color:#000000;
   }
+  .menu-popover .list-group-item .fa-xmark,
+  .menu-popover .list-group-item .fa-trash{ 
+    color:#C44601;
+  }
   
   .menu-popover .list-group-item:hover{ 
     background-color: #EFF6FF;
@@ -1132,7 +1145,8 @@
     color: #C44601;
   }
 
-  .menu-popover .delete.confirmAction .fa-xmark{
+  .menu-popover .delete.confirmAction .fa-xmark,
+  .menu-popover .delete.confirmAction .fa-trash{
     color: #C44601;
     margin-top: 1px;
   }
@@ -1243,6 +1257,7 @@
   .submitAdminBtnClassic.active,
   .submitAdminBtnClassic.active .fa::before,
   .submitAdminBtnClassic.active .fa-solid::before,
+  .submitAdminBtnClassic.active .fa-brands::before,
   .submitAdminBtnClassic.active .fa-regular::before{
     background-color: #74AFE9 !important;
     color:#ffffff !important;
@@ -1738,6 +1753,16 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #2B3944;
   }
 
+  @media (max-width: 991px){
+    .toolHomePage,
+    .toolHomePage:hover,
+    .toolHomePage:focus{
+      background-color: transparent;
+      color: #74AFE9;
+      border: 0px;
+      border-bottom: solid 1px #4F6893;
+    }
+  }
   
 
 
@@ -2512,6 +2537,9 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
 
+  #collapse-left-menu-icon path{
+    fill: #ffffff !important;
+  }
 
  /* slider in left menu */
  .slider-round {

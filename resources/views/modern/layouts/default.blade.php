@@ -16,37 +16,32 @@
     <link rel="icon" type="image/png" href="{{ $urlAppend }}template/modern/favicon/openeclass_128x128.png" />
 
     <!-- Bootstrap v5 -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?v=4.0-dev"/>
 
     <!-- new link for input icon -->
     <!-- Font Awesome - A font of icons -->
-    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
+    <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css?v=4.0-dev" rel="stylesheet"/>
 
     
     <!-- Font Manrope -->
-    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+    <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css?v=4.0-dev" rel="stylesheet"/>
 
     <!-- fullcalendar v3.10.2-->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v=4.0-dev"/>
 
     <!-- DataTables 1.10.19 version -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css?v=4.0-dev"/>
 
     <!-- Owl-carousel -->
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css"/>
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-carousel.css?v=4.0-dev"/>
+    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/owl-theme-default.css?v=4.0-dev"/>
 
     <!-- Our css modern if we need it -->
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css"/>
-
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/bootstrap.min.css?donotcache"/>
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/sidebar.css?donotcache"/>
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/new_calendar.css?donotcache"/>
-    <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/default.css?donotcache"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?v=4.0-dev"/>
 
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)

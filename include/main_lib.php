@@ -143,7 +143,7 @@ function load_js($file, $init='') {
             $file = 'slick-master/slick/slick.min.js';
         } elseif ($file == 'datatables') {
             $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
-            $head_content .= css_link('datatables/media/css/override_jquery.dataTables.css');
+            $head_content .= css_link('datatables/media/css/override_jquery.dataTables.css?v=4.0-dev');
             $file = 'datatables/media/js/jquery.dataTables.min.js';
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
@@ -187,7 +187,7 @@ function load_js($file, $init='') {
         } elseif ($file == 'select2') {
             $head_content .= css_link('select2-4.0.3/css/select2.min.css') .
             css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
-            css_link('select2-4.0.3/css/override_select2_design.css') .
+            css_link('select2-4.0.3/css/override_select2_design.css?v=4.0-dev') .
             js_link('select2-4.0.3/js/select2.full.min.js');
             $file = "select2-4.0.3/js/i18n/$language.js";
         } elseif ($file == 'bootstrap-calendar') {
@@ -3244,7 +3244,7 @@ function copyright_info($cid, $noImg = 1) {
     if ($noImg == 1) {
         if (($lic == 0) or ($lic >= 10)) {
             $link = "<a class='btn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($langCopyrightedNotFree) . "'>
-                    <i class='fa-regular fa-copyright fa-lg'></i></a>";
+                    <span class='fa-regular fa-copyright fa-lg'></span></a>";
         } else {
             if ($language != 'en') {
                 $link_suffix = 'deed.' . $lang;
@@ -3252,7 +3252,7 @@ function copyright_info($cid, $noImg = 1) {
                 $link_suffix = '';
             }
             $link = "<a class='btn px-0 pt-1' href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
-                    <i class='fa-brands fa-creative-commons fa-lg'></i></a>";
+                    <span class='fa-brands fa-creative-commons fa-lg'></span></a>";
         }
     }
     return $link;
