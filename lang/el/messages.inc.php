@@ -1532,6 +1532,9 @@ $langPortrait = "Κάθετος";
 $langLandscape = "Οριζόντιος";
 $langMyCertificates = "Τα πιστοποιητικά μου";
 $langCertAuthenticity = "Αναγνωριστικό γνησιότητας";
+$langRefreshProgress = "Ανανέωση από δραστηριότητες";
+$langRefreshProgressInfo = "Η ανανέωση αφορά μόνο τις ασκήσεις, εργασίες και τις γραμμές μάθησης.";
+$langRefreshProgressResults = "Η πρόοδος των $langsOfStudents ανανεώθηκε";
 //------------------------------------
 
 
