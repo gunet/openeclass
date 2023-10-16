@@ -1255,7 +1255,8 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
  * @param type $element_title
  * @param type $user_id
  */
-function register_certified_user($table, $element_id, $user_id) {
+function register_certified_user($table, $element_id, $user_id): void
+{
 
     global $course_id;
 
@@ -1278,6 +1279,52 @@ function register_certified_user($table, $element_id, $user_id) {
                                                                 . "identifier = '" . uniqid(rand()) . "'",
                                                     $title, $cert_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
 
+}
+
+/**
+ * @brief refresh user progress from activities (note: only from exercises, assignments and learning path)
+ * @param $element
+ * @param $element_id
+ * @return void
+ */
+function refresh_user_progress($element, $element_id): void
+{
+    global $course_id;
+
+    require_once "modules/exercise/exercise.class.php";
+    require_once "modules/progress/AssignmentEvent.php";
+    require_once "modules/progress/ExerciseEvent.php";
+    require_once "include/lib/learnPathLib.inc.php";
+
+    $users = get_course_users($course_id);
+    foreach ($users as $u) {
+        $q = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d", $element_id);
+        foreach ($q as $data) {
+            switch ($data->activity_type) {
+                case "assignment":
+                        $eventData = new stdClass();
+                        $eventData->courseId = $course_id;
+                        $eventData->uid = $u;
+                        $eventData->activityType = AssignmentEvent::ACTIVITY;
+                        $eventData->module = MODULE_ID_ASSIGN;
+                        $eventData->resource = intval($data->resource);
+                        AssignmentEvent::trigger(AssignmentEvent::UPGRADE, $eventData);
+                    break;
+                case "exercise":
+                        $eventData = new stdClass();
+                        $eventData->courseId = $course_id;
+                        $eventData->uid = $u;
+                        $eventData->activityType = ExerciseEvent::ACTIVITY;
+                        $eventData->module = MODULE_ID_EXERCISE;
+                        $eventData->resource = intval($data->resource);
+                        ExerciseEvent::trigger(ExerciseEvent::NEWRESULT, $eventData);
+                    break;
+                case "learning path":
+                        triggerLPGame($course_id, $u, $data->resource, LearningPathEvent::UPDPROGRESS);
+                    break;
+            }
+        }
+    }
 }
 
 

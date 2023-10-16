@@ -123,11 +123,18 @@ if ($is_editor) {
     } elseif (isset($_GET['progressall'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id", "name" => $element_title);
         $pageName = "$langProgress $langsOfStudents";
+        $info_title = $langRefreshProgressInfo;
         $tool_content .= action_bar(array(
+            array('title' => $langRefreshProgress,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;refresh=true",
+                  'icon' => 'fa-refresh',
+                  'link-attrs' => "title='$info_title'",
+                  'level' => 'primary-label'),
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary-label')));
+                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
+                   'icon' => 'fa-reply',
+                   'level' => 'primary-label')
+            ));
     } elseif (isset($_GET['preview'])) { // certificate preview
         cert_output_to_pdf($element_id, $uid, null, null, null, null, null, null);
     } elseif (!(isset($_REQUEST['certificate_id']) or (isset($_REQUEST['badge_id'])))) {
@@ -301,7 +308,7 @@ if ($is_editor) {
         Session::Messages("$langCourseCompletionCreated", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code");
         $display = FALSE;
-    } elseif (isset($_GET['edit'])) { // edit certificate /badge settings
+    } elseif (isset($_GET['edit'])) { // edit certificate / badge settings
         certificate_settings($element, $element_id);
         $display = FALSE;
     } elseif (isset($_GET['add']) and isset($_GET['act'])) { // insert certificate / badge activity
@@ -316,6 +323,10 @@ if ($is_editor) {
     } elseif (isset($_GET['u'])) { // display detailed user progress
         display_user_progress_details($element, $element_id, $_GET['u']);
         $display = FALSE;
+    } elseif (isset($_GET['refresh'])) {
+        refresh_user_progress($element, $element_id);
+        Session::Messages("$langRefreshProgressResults", "alert-success");
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id&progressall=true");
     }
 } else if ($is_course_reviewer) {
     if (isset($_GET['progressall'])) { // display users progress (course reviewer view)
