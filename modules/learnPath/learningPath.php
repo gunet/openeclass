@@ -101,8 +101,8 @@ if ($is_editor) {
 // main page
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = " . intval($uid);
-    list($bestAttempt, $bestProgress) = get_learnPath_bestAttempt_progress($_SESSION['path_id'], $uid);
-    $uidCheckString .= " AND UMP.`attempt` = " . intval($bestAttempt);
+    // list($bestAttempt, $bestProgress) = get_learnPath_bestAttempt_progress($_SESSION['path_id'], $uid);
+    // $uidCheckString .= " AND UMP.`attempt` = " . intval($bestAttempt);
 } else { // anonymous
     $uidCheckString = "AND UMP.`user_id` IS NULL ";
 }
