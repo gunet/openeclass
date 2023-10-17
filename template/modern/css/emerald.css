@@ -78,9 +78,9 @@
 /************************************************* FOOTER *************************************************************/
 /**********************************************************************************************************************/
 
- #bgr-cheat-footer {
+ /* #bgr-cheat-footer {
   background-color: #ffffff;
-}
+} */
 
 @media(min-width:992px){ 
   .footer-container{
@@ -979,12 +979,12 @@ tr.danger{
 
 .opencourses_btn {
   border-color: #1E7E0E;
-  background-color: #1E7E0E;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #1E7E0E;
 }
 .opencourses_btn:hover {
-  background-color: #1E7E0E;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #1E7E0E;
   border-color: #1E7E0E;
   text-decoration: none;
 }

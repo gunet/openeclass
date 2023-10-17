@@ -73,19 +73,24 @@
       cursor:  url(../images/pointer.png), auto;
   }
 
+  #bgr-cheat-footer {
+    background-color: #ffffff;
+  }
+
+  .header-container{
+    background-color: transparent;
+  }
 
 /**********************************************************************************************************************/
 /************************************************* FOOTER *************************************************************/
 /**********************************************************************************************************************/
 
-   #bgr-cheat-footer {
+  #bgr-cheat-footer {
     background-color: #ffffff;
   }
 
-  @media(min-width:992px){ 
-    .footer-container{
-      background-color: #ffffff;
-    }
+  .footer-container{
+    background-color: transparent;
   }
 
    .social-icon-tool {
@@ -948,6 +953,10 @@
 /************************************************* HOMEPAGE *************************************************************/
 /**********************************************************************************************************************/
 
+  .jumbotron-container{
+    background-color: transparent;
+  }
+
   .cardLogin{
       background-color: #ffffff !important;
       border: solid 1px #EFF6FF;
@@ -979,12 +988,12 @@
 
   .opencourses_btn {
     border-color: #B70A0A;
-    background-color: #B70A0A;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #B70A0A;
   }
   .opencourses_btn:hover {
-    background-color: #B70A0A;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #B70A0A;
     border-color: #B70A0A;
     text-decoration: none;
   }

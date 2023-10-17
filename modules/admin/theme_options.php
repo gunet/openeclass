@@ -35,8 +35,7 @@ $defaults = array(
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
-                "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
-                "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
+                "rgba(247, 249, 254, 1)" => array('loginJumbotronRadialBgColor', 'loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement"),
                 "" => array('fluidContainerWidth')
             );

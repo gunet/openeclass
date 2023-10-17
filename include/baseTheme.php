@@ -274,6 +274,25 @@ function view($view_file, $view_data = array()) {
         $theme_options_styles = unserialize($theme_options->styles);
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
+
+        //Get .css files in order to export more info about themes
+        if($theme_options->name == 'Default Dark'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?v=4.0-dev'/>
+            ";
+        }
+
+        if($theme_options->name == 'Crimson'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?v=4.0-dev'/>
+            ";
+        }
+
+        if($theme_options->name == 'Emerald'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?v=4.0-dev'/>
+            ";
+        }
        
 
         $styles_str .= " 
@@ -303,22 +322,6 @@ function view($view_file, $view_data = array()) {
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
             $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
-
-            if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
-                $styles_str .= "
-                    .jumbotron.jumbotron-login, #bgr-cheat-footer, .portfolio-profile{ 
-                        background-color: transparent ; 
-                    }
-                    #bgr-cheat-header{ 
-                        box-shadow: none;
-                    }
-                    .header-container{
-                        box-shadow: 1px 2px 6px rgba(43,57,68,0.04);
-                    }
-                ";
-
-                    
-            }
         }
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
@@ -326,44 +329,18 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND COLOR OF JUMBOTRON
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
             $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-            
-            if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
-                $styles_str .= "
-                    .jumbotron.jumbotron-login {
-                        background-color:transparent;
-                    }
-                    .jumbotron-container{
-                        background-color: $gradient_str; 
-                    }
-                ";
-            }else{
-                $styles_str .= "
-                    .jumbotron.jumbotron-login {
-                        background-color: $gradient_str; 
-                    }
-                    .jumbotron-container{
-                        background-color: transparent; 
-                    }
-                ";
-            }
-            
+            $styles_str .= "
+                .jumbotron.jumbotron-login{
+                    background: $gradient_str;
+                }
+                .jumbotron-container{
+                    background-color: transparent;
+                }
+            ";
         }
 
         // BACKGROUND IMAGE OF JUMBOTRON
         if (isset($theme_options_styles['loginImg'])){
-
-            if(!empty($theme_options_styles['bgImage']) || !empty($theme_options_styles['bgColor'])){
-                $styles_str .= "
-                    .jumbotron-container { 
-                        background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
-                        border:0px; no-repeat center center fixed; 
-                        -webkit-background-size: cover; 
-                        -moz-background-size: cover; 
-                        -o-background-size: cover; 
-                        background-size: cover;
-                    }
-                ";
-            }else{
                 $styles_str .= "
                     .jumbotron.jumbotron-login { 
                         background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
@@ -373,8 +350,10 @@ function view($view_file, $view_data = array()) {
                         -o-background-size: cover; 
                         background-size: cover;
                     }
+                    .jumbotron-container{
+                        background-color: transparent;
+                    }
                 ";
-            }
             
         }
 
@@ -418,38 +397,38 @@ function view($view_file, $view_data = array()) {
             
             @media(min-width:1400px) and (max-width:1500px){
                 .main-section:has(.course-wrapper) .form-image-modules{
-                max-width: 450px;
-                float:right;
+                    max-width: 450px;
+                    float:right;
                 }
             }
             @media(min-width:1501px) and (max-width:1600px){
                 .main-section:has(.course-wrapper) .form-image-modules{
-                max-width: 470px;
-                float:right;
+                    max-width: 470px;
+                    float:right;
                 }
             }
             @media(min-width:1601px) and (max-width:1700px){
                 .main-section:has(.course-wrapper) .form-image-modules{
-                max-width: 490px;
-                float:right;
+                    max-width: 490px;
+                    float:right;
                 }
             }
             @media(min-width:1701px) and (max-width:1800px){
                 .main-section:has(.course-wrapper) .form-image-modules{
-                max-width: 510px;
-                float:right;
+                    max-width: 510px;
+                    float:right;
                 }
             }
             @media(min-width:1801px){
                 .main-section:has(.course-wrapper) .form-image-modules{
-                max-width: 530px;
-                float:right;
+                    max-width: 530px;
+                    float:right;
                 }
             }
             @media(min-width:1901px){
                 .main-section:has(.course-wrapper) .form-image-modules{
-                max-width: 550px;
-                float:right;
+                    max-width: 550px;
+                    float:right;
                 }
             }
             
@@ -474,33 +453,11 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
 
                 #bgr-cheat-header{ 
-                    box-shadow: none;
+                    background-color: $theme_options_styles[bgColorHeader];
                 }
 
                 .header-container {
-                    background-color: $theme_options_styles[bgColorHeader];
-                }
-
-                .panel-admin>.panel-heading, #cal-header{
-                    background:$theme_options_styles[bgColorHeader];
-                }
-
-                div[role='progressbar'] {
-                    --fg: $theme_options_styles[bgColorHeader];
-                    --bg: #e8e8e8;
-                }
-
-                .nav-link-adminTools.normalColorBlueText.active{
-                    background-color: $theme_options_styles[bgColorHeader];
-                    color: #ffffff !important;
-                }
-
-                .input-StatusCourse:checked{
-                    background-color: $theme_options_styles[bgColorHeader];
-                }
-
-                .circle-img-contant { 
-                    background-color: $theme_options_styles[bgColorHeader];
+                    background-color: transparent;
                 }
 
             ";
@@ -509,8 +466,12 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND COLOR FOOTER
         if (!empty($theme_options_styles['bgColorFooter'])) {
             $styles_str .= "
-                .footer-container, .div_social{
+
+                #bgr-cheat-footer{
                     background-color: $theme_options_styles[bgColorFooter];
+                }
+                .footer-container, .div_social{
+                    background-color: transparent;
                 }
             ";
         }
@@ -518,10 +479,6 @@ function view($view_file, $view_data = array()) {
         // LINKS COLOR OF HEADER-FOOTER 
         if (!empty($theme_options_styles['linkColorHeaderFooter'])){
             $styles_str .= "
-
-                #bgr-cheat-header .form-value{
-                    color:$theme_options_styles[linkColorHeaderFooter];
-                }
 
                 .user-menu-btn .user-name,
                 .user-menu-btn .fa-chevron-down,
@@ -533,19 +490,17 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColorHeaderFooter];
                 }
 
+                .menu-item.active, 
+                .menu-item.active2 {
+                    color: $theme_options_styles[linkColorHeaderFooter];
+                }
+
                 .copyright, 
                 .social-icon-tool, 
                 .a_tools_site_footer {
                     color:$theme_options_styles[linkColorHeaderFooter];
                 }
 
-                .inputSearch::placeholder, .inputSearch{
-                    color: $theme_options_styles[linkColorHeaderFooter];
-                }
-
-                #btn-search {
-                    color: $theme_options_styles[linkColorHeaderFooter];
-                }
 
             ";
         }
@@ -585,28 +540,43 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['buttonBgWhiteColor'])) {
             $styles_str .= "
-                // .submitAdminBtn, .opencourses_btn {
-                //     border-color: $theme_options_styles[buttonBgWhiteColor];
-                //     color: $theme_options_styles[buttonBgWhiteColor];
-                // }
+
+                .submitAdminBtn, 
+                .cancelAdminBtn,
+                .opencourses_btn {
+                    border-color: $theme_options_styles[buttonBgWhiteColor];
+                    color: $theme_options_styles[buttonBgWhiteColor];
+                    background-color: #ffffff;
+                }
+
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
+                    border-color: $theme_options_styles[buttonBgWhiteColor];
+                    color: $theme_options_styles[buttonBgWhiteColor];
+                    background-color: #ffffff;
+                }
+
 
             ";
         }
 
         if (!empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
-                // .submitAdminBtn, .opencourses_btn, .searchGroupBtn {
-                //     border-color: $theme_options_styles[whiteButtonTextColor];
-                //     color: $theme_options_styles[whiteButtonTextColor];
-                //     background-color: #ffffff;
-                // }
-                
+                .submitAdminBtn, 
+                .cancelAdminBtn,
+                .opencourses_btn {
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                    background-color: #ffffff;
+                }
 
-                // .menu-popover .list-group-item{
-                //     border-color: $theme_options_styles[whiteButtonTextColor];
-                //     color: $theme_options_styles[whiteButtonTextColor];
-                //     background-color: #ffffff;
-                // }
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                    background-color: #ffffff;
+                }
+    
 
 
             ";
@@ -614,20 +584,21 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonHoveredTextColor'])) {
             $styles_str .= "
-                // .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
-                // .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
-                //     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
-                //     color: $theme_options_styles[whiteButtonHoveredTextColor];
-                // }
+                .submitAdminBtn:hover, 
+                .cancelAdminBtn:hover,
+                .opencourses_btn:hover,
+                .submitAdminBtn:focus, 
+                .cancelAdminBtn:focus,
+                .opencourses_btn:focus {
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
 
-                // .menu-popover:focus{
-                //     color: $theme_options_styles[whiteButtonHoveredTextColor];
-                // }
-
-                // .menu-popover .list-group-item:hover{
-                //     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
-                //     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
-                // }
+                .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
+                .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
 
 
             ";
@@ -635,18 +606,17 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['whiteButtonHoveredBgColor'])) {
             $styles_str .= "
-                // .submitAdminBtn:hover, .opencourses_btn:hover, .searchGroupBtn:hover,
-                // .submitAdminBtn:focus, .opencourses_btn:focus, .searchGroupBtn:focus {
-                //     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                // }
+                .submitAdminBtn:hover, 
+                .cancelAdminBtn:hover,
+                .opencourses_btn:hover,
+                .submitAdminBtn:focus, 
+                .cancelAdminBtn:focus,
+                .opencourses_btn:focus {
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
 
-                // .menu-popover:focus{
-                //     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                // }
+              
 
-                // .menu-popover .list-group-item:hover{
-                //     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                // }
 
             ";
         }
@@ -655,37 +625,107 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['buttonBgColor'])) {
             $styles_str .= "
-                // .submitAdminBtn.active, submitAdminBtn.active:hover{
-                //     background-color: $theme_options_styles[buttonBgColor];
-                //     z-index: 0 !important;
-                // }
+                .submitAdminBtn.active, 
+                submitAdminBtn.active:hover{
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
 
-                // .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
-                //     border-color: $theme_options_styles[buttonBgColor];
-                //     background-color: $theme_options_styles[buttonBgColor];
-                // }
+                .submitAdminBtnDefault, 
+                .submitAdminBtnDefault:hover{
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
 
-                // .login-form-submit, .login-form-submit:hover {
-                //     border-color: $theme_options_styles[buttonBgColor];
-                //     background-color: $theme_options_styles[buttonBgColor];
-                // }
+                .login-form-submit, 
+                .login-form-submit:hover {
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+                .myProfileBtn,
+                .myProfileBtn:hover{
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+                .submitAdminBtnDefault, 
+                .submitAdminBtnDefault:hover,
+                input[type=submit], 
+                input[type=submit]:hover,
+                button[type=submit],
+                button[type=submit]{
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+                .submitAdminBtnClassic.active {
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
+
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover, 
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn,
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
+                    border-color: $theme_options_styles[buttonBgColor] !important;
+                    background-color: $theme_options_styles[buttonBgColor] !important;
+                }
+               
+
+                .carousel-indicators>button.active {
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+
+
+               
+                  
+
+
+
 
             ";
         }
 
         if (!empty($theme_options_styles['buttonTextColor'])) {
             $styles_str .= "
-                // .submitAdminBtn.active, .submitAdminBtn.active:hover{
-                //     color: $theme_options_styles[buttonTextColor];
-                // }
+                .submitAdminBtn.active, 
+                .submitAdminBtn.active:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
 
-                // .submitAdminBtnDefault, .submitAdminBtnDefault:hover{
-                //     color: $theme_options_styles[buttonTextColor];
-                // }
+                .submitAdminBtnDefault, 
+                .submitAdminBtnDefault:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
 
-                // .login-form-submit, .login-form-submit:hover{
-                //     color: $theme_options_styles[buttonTextColor];
-                // }
+                .login-form-submit, 
+                .login-form-submit:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
+
+                .myProfileBtn,
+                .myProfileBtn:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
+                
+                input[type=submit], 
+                input[type=submit]:hover,
+                button[type=submit],
+                button[type=submit]:hover{
+                    color: $theme_options_styles[buttonTextColor];
+                }
+
+                .submitAdminBtnClassic.active {
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover, 
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn,
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
+                    color: $theme_options_styles[buttonTextColor];
+                }
 
             ";
         }
@@ -714,7 +754,7 @@ function view($view_file, $view_data = array()) {
 
         // LINKS COLOR OF PLATFORM 
         if (!empty($theme_options_styles['linkColor'])){
-        $styles_str .= "
+            $styles_str .= "
 
                 a, .toolAdminText, .announce-link-homepage{
                     color: $theme_options_styles[linkColor];
@@ -761,6 +801,77 @@ function view($view_file, $view_data = array()) {
                 .contextual-sidebar .list-group-item.active {
                     color: $theme_options_styles[linkColor];
                 }
+
+                .social-icon-tool {
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .contextual-menu .list-group-item:hover,
+                .contextual-menu button[type=submit]:hover
+                .contextual-menu input[type=submit]:hover{
+                    color: $theme_options_styles[linkColor];
+                }
+                .contextual-menu .list-group-item:hover .settings-icons::before{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .menu-popover .list-group-item:hover{ 
+                    color: $theme_options_styles[linkColor];
+                }
+                
+                .menu-popover .list-group-item:hover .fa{ 
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .menu-popover .list-group-item:hover .fa-xmark,
+                .menu-popover .list-group-item:hover .fa-trash{ 
+                    color:#C44601;
+                }
+
+                
+                .label-container > input[type=checkbox]:checked {
+                    border: 1px solid $theme_options_styles[linkColor];
+                    background-color: $theme_options_styles[linkColor];
+                }
+                  
+                .label-container > input[type=checkbox]:active {
+                    border: 1px solid $theme_options_styles[linkColor];
+                }
+
+                input[type='radio']:checked { 
+                    border: solid 6px $theme_options_styles[linkColor];
+                }
+                .input-StatusCourse:checked{
+                    background-color: $theme_options_styles[linkColor];
+                }
+                  
+                .form-wrapper.form-edit label:has(input[type=radio]:checked){
+                    color:$theme_options_styles[linkColor];
+                }
+
+
+                thead, tbody .list-header {
+                    border-bottom: solid 2px $theme_options_styles[linkColor];
+                }
+
+                .showCoursesBars.active, 
+                .showCoursesPics.active {
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .Primary-500-cl {
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .Primary-500-bg {
+                    background-color:  $theme_options_styles[linkColor];
+                }
+
+                .menu-item.active,
+                .menu-item.active2{
+                    color:  $theme_options_styles[linkColor];
+                }
+
                 
             ";
         }
@@ -806,33 +917,6 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-
-        // if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])){
-        //     $styles_str .= "
-        //         #leftnav .panel a.list-group-item:hover{
-        //             background: $theme_options_styles[leftSubMenuHoverBgColor];
-        //         } 
-                
-        //         #leftnav .panel a.list-group-item.active:hover{
-        //             background:#ccc;
-        //         }
-
-        //     ";
-        // }
-
-        // DISABLE 
-        // if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])){
-        //     $styles_str .= "
-        //         #leftnav .panel a.list-group-item:hover{
-        //             color: $theme_options_styles[leftSubMenuHoverFontColor];
-        //         }
-        //         #leftnav .panel .leftMenuToolCourse:hover .toolSidebarTxt{
-        //             color: $theme_options_styles[leftSubMenuHoverFontColor];
-        //         }
-
-        //     ";
-        // }
-
         if (!empty($theme_options_styles['leftMenuFontColor'])){
             $styles_str .= "
                 #leftnav .panel a.parent-menu{
@@ -857,20 +941,6 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
-
-        // DISABLE
-        // if (!empty($theme_options_styles['leftMenuBgColor'])){
-        //     $styles_str .= "
-        //         #leftnav .panel a.parent-menu{
-        //             background: $theme_options_styles[leftMenuBgColor];
-        //         }
-
-        //         #leftnav .panel a.parent-menu .panel-title{
-        //             background: $theme_options_styles[leftMenuBgColor];
-        //         }
-                
-        //     ";
-        // }
 
         if(!empty($theme_options_styles['leftSubMenuFontColor'])){
             $styles_str .= "
@@ -912,24 +982,6 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        // if (!empty($theme_options_styles['leftMenuSelectedFontColor'])){
-        //     $styles_str .= "
-        //         #leftnav .panel a.parent-menu:not(.collapsed){
-        //             color: $theme_options_styles[leftMenuSelectedFontColor];
-        //         }
-
-        //         #leftnav .panel:has(.show.Borders.Collapse0) #Tool0 span{
-        //             color: $theme_options_styles[leftMenuSelectedFontColor];
-        //         }
-
-        //         #leftnav .panel:has(.show.Borders.Collapse1) #Tool1 span{
-        //             color: $theme_options_styles[leftMenuSelectedFontColor];
-        //         }
-
-                
-        //     ";
-        // }
-
         if (isset($theme_options_styles['imageUpload'])){
             $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         }
@@ -938,26 +990,6 @@ function view($view_file, $view_data = array()) {
             $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
         }
 
-
-        //Get .css files in order to export more info about themes
-        if($theme_options->name == 'Default Dark'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?v=4.0-dev'/>
-            ";
-        }
-
-        if($theme_options->name == 'Crimson'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?v=4.0-dev'/>
-            ";
-        }
-
-        if($theme_options->name == 'Emerald'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?v=4.0-dev'/>
-            ";
-        }
-        
 
     }
 
