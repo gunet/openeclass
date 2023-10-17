@@ -1512,68 +1512,98 @@
 }
 
 
-
 /****************************************************************************************************/
 /*************************************** this is datetimepicker-calendar *************************************/
 /****************************************************************************************************/
 
- .datetimepicker .table-condensed thead > tr > th,
- .datetimepicker .table-condensed tbody > tr > th,
- .datetimepicker .table-condensed tfoot > tr > th,
- .datetimepicker .table-condensed thead > tr > td,
- .datetimepicker .table-condensed tbody > tr > td,
- .datetimepicker .table-condensed tfoot > tr > td {
-     color:#ffffff;
-     background-color: #2b3944;
-     border-radius: 0px;
-  }
+.datetimepicker .table-condensed{ 
+  background-color: #ffffff;
+  color:#B70A0A;
+}
 
-  .datetimepicker .table-condensed thead > tr > th:hover,
- .datetimepicker .table-condensed tbody > tr > th:hover,
- .datetimepicker .table-condensed tfoot > tr > th:hover,
- .datetimepicker .table-condensed thead > tr > td:hover,
- .datetimepicker .table-condensed tbody > tr > td:hover,
- .datetimepicker .table-condensed tfoot > tr > td:hover {
-     color:#B70A0A;
-  }
+.datetimepicker .table-condensed thead,
+.datetimepicker .table-condensed thead tr th{ 
+  background-color: #ffffff;
+  color:#B70A0A;
+}
 
-  .datetimepicker .table-condensed thead tr th.next::after{ color:#ffffff;}
+.datetimepicker .table-condensed thead tr th.prev::before,
+.datetimepicker .table-condensed thead tr th.next::after{
+ color:#B70A0A;
+}
 
-  .datetimepicker .table-condensed thead tr th.switch{ color:#ffffff;}
+.datetimepicker .table-condensed tbody{ 
+  background-color: #ffffff;
+  color:#B70A0A;
+}
 
-  .datetimepicker .table-condensed thead tr th.prev::before{ color:#ffffff;}
+.datetimepicker .table-condensed tfoot{ 
+  background-color: #ffffff;
+  color:#B70A0A;
+}
 
-  
+.datetimepicker .table-condensed span{
+ color:#B70A0A;
+}
+
+.datetimepicker .table-condensed tbody tr td.day{
+  color:#B70A0A;
+}
+
+.datetimepicker .table-condensed tbody tr td.active,
+.datetimepicker .table-condensed tbody tr td span.active{
+ background-color: #B70A0A;
+ background-image: -webkit-linear-gradient(top, #B70A0A, #B70A0A);
+ color:#ffffff;
+}
+
+
+
 /****************************************************************************************************/
 /*************************************** this is datepicker-calendar *************************************/
 /****************************************************************************************************/
 
-.datepicker-days .table-condensed thead > tr > th,
-.datepicker-days .table-condensed tbody > tr > th,
-.datepicker-days .table-condensed tfoot > tr > th,
-.datepicker-days .table-condensed thead > tr > td,
-.datepicker-days .table-condensed tbody > tr > td,
-.datepicker-days .table-condensed tfoot > tr > td {
-   color: #ffffff;
-   background-color: #2b3944;
-   border-radius: 0px;
- }
 
- .datepicker-days .table-condensed thead > tr > th:hover,
-.datepicker-days .table-condensed tbody > tr > th:hover,
-.datepicker-days .table-condensed tfoot > tr > th:hover,
-.datepicker-days .table-condensed thead > tr > td:hover,
-.datepicker-days .table-condensed tbody > tr > td:hover,
-.datepicker-days .table-condensed tfoot > tr > td:hover {
-   color: #B70A0A;
- }
+.datepicker-days .table-condensed{ 
+background-color: #ffffff;
+color:#B70A0A;
+}
 
+.datepicker-days .table-condensed thead,
+.datepicker-days .table-condensed thead tr th{ 
+background-color: #ffffff;
+color:#B70A0A;
+}
 
- .datepicker-days .table-condensed thead tr th.next::after{ color:#ffffff;}
+.datepicker-days .table-condensed thead tr th.prev::before,
+.datepicker-days .table-condensed thead tr th.next::after{
+color:#B70A0A;
+}
 
- .datepicker-days .table-condensed thead tr th.switch{ color:#ffffff;}
+.datepicker-days .table-condensed tbody{ 
+background-color: #ffffff;
+color:#B70A0A;
+}
 
- .datepicker-days .table-condensed thead tr th.prev::before{ color:#ffffff;}
+.datepicker-days .table-condensed tfoot{ 
+background-color: #ffffff;
+color:#B70A0A;
+}
+
+.datepicker-days .table-condensed span{
+color:#B70A0A;
+}
+
+.datepicker-days .table-condensed tbody tr td.day{
+color:#B70A0A;
+}
+
+.datepicker-days .table-condensed tbody tr td.active,
+.datepicker-days .table-condensed tbody tr td span.active{
+background-color: #B70A0A;
+background-image: -webkit-linear-gradient(top, #B70A0A, #B70A0A);
+color:#ffffff;
+}
 
 
 
