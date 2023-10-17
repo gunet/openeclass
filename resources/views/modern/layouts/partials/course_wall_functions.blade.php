@@ -18,13 +18,13 @@
     @endphp
 
     <div class="col-12 mt-5">
-        <div class='card panelCard border-0'>
-            <div class='card-header px-0 py-0 border-0 bg-default d-md-flex justify-content-md-between align-items-md-center'>
+        <div class='card panelCard panelCardDefault border-0'>
+            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-md-flex justify-content-md-between align-items-md-center'>
                
                     <h3>{{trans('langWall')}}</h3>
                 
             </div>
-            <div class='card-body px-0 py-0'>
+            <div class='card-body card-body-default px-0 py-0'>
                 <div class="form-wrapper form-edit rounded">
                     <form id="wall_form" method="post" action="{{$urlServer}}modules/wall/index.php?course={{$course_code}}&fromCoursePage" enctype="multipart/form-data">
                         <fieldset> 

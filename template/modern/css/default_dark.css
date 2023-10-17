@@ -858,6 +858,9 @@
     color: #ffffff;
     background-color: #C44601;
   }
+  .deleteAdminBtn .fa-xmark{
+    color:#C44601;
+  }
   
   .deleteAdminBtn:hover,
   button[type="submit"].deleteAdminBtn:hover,
@@ -1305,6 +1308,13 @@
 }
 .panel-admin-calendar>.panel-body-calendar{
     background-color: #212D37;
+}
+.panel-admin-calendar> .panel-body-calendar .cal-row-fluid:hover{
+  background-color: #212D37;
+}
+.panel-admin-calendar> .panel-body-calendar .cal-cell:hover,
+.panel-admin-calendar> .panel-body-calendar .cal-cell1:hover{
+  background-color: #4F6893;
 }
 
 .panel-admin-calendar>.panel-footer{

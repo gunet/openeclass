@@ -49,22 +49,22 @@ $tool_content .= "
 
 
   
-  <div class='panel panel-default login-page rounded-0'>
+  <div class='panel panel-default login-page rounded-2 m-auto' style='max-width:400px;'>
       <div class='panel-heading rounded-0'>
-        <span>$langUpgDetails</span>
+        <h3>$langUpgDetails</h3>
       </div>
       <div class='panel-body login-page-option rounded-0'>
 
         <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
 
           <div class='form-group mt-3'>
-            <div class='col-lg-6 12 ms-auto me-auto'>
+            <div class='col-12 ms-auto me-auto'>
               <input class='form-control' name='login' placeholder='$langUsername' type='text'>
             </div>
           </div>
 
           <div class='form-group mt-3'>
-            <div class='col-lg-6 col-12 ms-auto me-auto'>
+            <div class='col-12 ms-auto me-auto'>
               <input class='form-control' name='password' placeholder='$langPass' type='password'>
             </div>
           </div>

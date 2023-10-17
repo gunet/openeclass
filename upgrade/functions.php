@@ -3256,7 +3256,8 @@ function finalize_upgrade(): void
     // Import new themes
     importThemes();
     if (!get_config('theme_options_id')) {
-        set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
+        // set_config('theme_options_id', Database::get()->querySingle('SELECT id FROM theme_options WHERE name = ?s', 'Open eClass 2020 - Default')->id);
+        set_config('theme_options_id', 0);
     }
 
     set_config('version', ECLASS_VERSION);

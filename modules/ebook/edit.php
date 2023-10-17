@@ -83,7 +83,7 @@ if (isset($_GET['delete'])) {
         // Form #2 - edit sections
         $tool_content .= "
         
-        <form class='border-card py-3 px-4 rounded-2 mt-4'method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+        <form class='panelCard border-card py-3 px-4 rounded-2 mt-4'method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>
         <h3>$langSections</h3>
         <input type='hidden' name='id' value='$ebook_id' />

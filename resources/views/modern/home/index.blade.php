@@ -350,7 +350,7 @@
                     @if(get_config('opencourses_enable'))
                         <div class='col-12 mb-5 order-{{ $open_courses_priority }}'>
                             <div class='row row-cols-1'>
-                                <div class='col-lg-6 col-12'>
+                                <div class='col-12'>
                                     <div class='row row-cols-1'>
                                         
                                         @if ($openCoursesExtraHTML)
