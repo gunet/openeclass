@@ -659,16 +659,16 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .submitAdminBtnClassic.active {
-                    border-color: $theme_options_styles[buttonBgColor] !important;
-                    background-color: $theme_options_styles[buttonBgColor] !important;
+                    border-color: $theme_options_styles[buttonBgColor] ;
+                    background-color: $theme_options_styles[buttonBgColor] ;
                 }
 
                 .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
                 .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover, 
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn,
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
-                    border-color: $theme_options_styles[buttonBgColor] !important;
-                    background-color: $theme_options_styles[buttonBgColor] !important;
+                    border-color: $theme_options_styles[buttonBgColor] ;
+                    background-color: $theme_options_styles[buttonBgColor] ;
                 }
                
 
