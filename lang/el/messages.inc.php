@@ -6072,6 +6072,7 @@ $langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι �
                     Δείτε περισσότερες λεπτομέρειες στο
                     <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
                     για τους διαθέσιμους τύπους περιεχομένων.";
+$langUpdateRequired = "Χρειάζεται ενημέρωση";
 $langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";
 $langReuseDeactivate = "Απενεργοποίηση Διαμοιρασμού";
 $langCustomMailHelp = "

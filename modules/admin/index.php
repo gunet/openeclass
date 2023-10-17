@@ -256,6 +256,22 @@ $tool_content .= "
                     $accessMessage
                 </div>
             </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                    <strong>$langH5p:</strong>
+                </div>";
+                $ts = get_config('h5p_update_content_ts');
+                if ($ts) {
+                    $tool_content .= "<div class='col-sm-8'>
+                        <a href='h5pconf.php'>$langlastUpdated: " . format_locale_date(strtotime($ts), 'short', false) . "</a>
+                    </div>";
+                } else {
+                    $tool_content .= "<div class='col-sm-8'>
+                        <a style='color:red; font-weight: bold;' href='h5pconf.php'>$langUpdateRequired !</a>
+                    </div>";
+                }
+                $tool_content .= "
+            </div>
         </div>
     </div>";
 
