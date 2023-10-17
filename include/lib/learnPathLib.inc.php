@@ -504,6 +504,34 @@ function calculate_learnPath_bestAttempt_progress($modules): array {
     }
 }
 
+function calculate_learnPath_combined_progress($modules): int {
+    if (!is_array($modules) || empty($modules)) {
+        return 0;
+    } else {
+        $progress = 0;
+
+        // progression is calculated in percents
+        foreach ($modules as $module) {
+            if ($module->scoreMax <= 0) {
+                $modProgress = 0;
+            } else {
+                $modProgress = @round($module->raw / $module->scoreMax * 100);
+            }
+
+            // in case of scorm module, progression depends on the lesson status value
+            if (($module->contentType == "SCORM") && ($module->scoreMax <= 0) && (( $module->lesson_status == 'COMPLETED') || ($module->lesson_status == 'PASSED'))) {
+                $modProgress = 100;
+            }
+
+            if ($modProgress >= 0) {
+                $progress += $modProgress;
+            }
+        }
+
+        return $progress;
+    }
+}
+
 function calculate_number_of_visible_modules($lpid) {
     global $course_id;
 
@@ -683,6 +711,43 @@ function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
             ORDER BY UMP.`attempt`, LPM.`rank`";
     $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
     return calculate_learnPath_bestAttempt_progress($modules);
+}
+
+function get_learnPath_combined_progress($lpid, $lpUid): float {
+    $sql = "SELECT 
+                   MAX(LPM.`learnPath_module_id`) as learnPath_module_id,
+                   MAX(LPM.`parent`) as parent,
+                   MAX(LPM.`lock`) as `lock`,
+                   MAX(M.`module_id`) as module_id,
+                   MAX(M.`contentType`) as contentType,
+                   MAX(M.`name`) as name,
+                   MAX(UMP.`lesson_status`) as lesson_status,
+                   MAX(UMP.`raw`) as raw,
+                   MAX(UMP.`scoreMax`) as scoreMax,
+                   MAX(UMP.`credit`) as credit,
+                   MAX(A.`path`) as path
+              FROM (`lp_module` AS M, `lp_rel_learnPath_module` AS LPM)
+         LEFT JOIN `lp_user_module_progress` AS UMP
+                ON UMP.`learnPath_module_id` = LPM.`learnPath_module_id`
+               AND UMP.`user_id` = ?d
+         LEFT JOIN `lp_asset` AS A
+                ON M.`startAsset_id` = A.`asset_id`
+             WHERE LPM.`module_id` = M.`module_id`
+               AND LPM.`learnPath_id` = ?d
+               AND LPM.`visible` = 1
+               AND LPM.`module_id` = M.`module_id`
+               AND M.`contentType` != ?s
+          GROUP BY LPM.`module_id`
+          ORDER BY MIN(LPM.`rank`)";
+    $modules = Database::get()->queryArray($sql, $lpUid, $lpid, CTLABEL_);
+    $modulesProg = calculate_learnPath_combined_progress($modules);
+    $nbrOfVisibleModules = calculate_number_of_visible_modules($lpid);
+
+    if (is_numeric($nbrOfVisibleModules)) {
+        return @round($modulesProg / $nbrOfVisibleModules);
+    } else {
+        return 0;
+    }
 }
 
 /**

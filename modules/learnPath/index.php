@@ -587,9 +587,9 @@ foreach ($result as $list) { // while ... learning path list
             $globaltime = addScormTime($globaltime, $lpTotalTime);
         }
         // % progress
-        $prog = get_learnPath_progress($list->learnPath_id, $uid);
+        $prog = get_learnPath_combined_progress($list->learnPath_id, $uid);
         $tool_content .= "<td>$lpTotalTime</td>";
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($lpProgress, 1) . "</td>";
+        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
     }
 
     $tool_content .= "</tr>";
