@@ -274,6 +274,7 @@ if ($moduleNbT == 0) {
     if (is_numeric($nbrOfVisibleModules)) {
         $bestProgress = @round($globalProg[$bestAttempt] / $nbrOfVisibleModules);
     }
+    $lpCombinedProgress = get_learnPath_combined_progress($_REQUEST['path_id'], $_REQUEST['uInfo']);
 
     // display global stats
     $tool_content .= "<tr>
@@ -281,13 +282,13 @@ if ($moduleNbT == 0) {
                         <th><small>" . (($global_time[$bestAttempt] != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . "</small></th>
                         <th><small>" . (($global_time[$bestAttempt] != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time[$bestAttempt]) : '&nbsp;') . "</small></th>
                         <th><small>" . $langTotalPercentCompleteness . "</small></th>
-                        <th>" . disp_progress_bar($bestProgress, 1) . "</th>
+                        <th>" . disp_progress_bar($lpCombinedProgress, 1) . "</th>
                     </tr>";
     $data[] = [];
     if ($global_time[$bestAttempt] != "0000:00:00") {
         $data[] = [ $langTimeInLearnPath, $global_time[$bestAttempt] ];
     }
-    $data[] = [ $langTotalPercentCompleteness, $bestProgress . "%" ];
+    $data[] = [ $langTotalPercentCompleteness, $lpCombinedProgress . "%" ];
 }
 $tool_content .= "</table></div>";
 

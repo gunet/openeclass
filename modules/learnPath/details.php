@@ -135,6 +135,7 @@ if ($learnPathName) {
     $tool_content .= "<tbody>";
     foreach ($usersList as $user) {
         list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($path_id, $user->id);
+        $lpCombinedProgress = get_learnPath_combined_progress($path_id, $user->id);
         $tool_content .= "<tr>";
         if (!isset($_GET['pdf'])) {
             $tool_content .= "<td>
@@ -154,7 +155,7 @@ if ($learnPathName) {
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>
                             <td>" . $lp_total_status . "</td>
-                            <td>" . disp_progress_bar($lpProgress, 1) . "</td>";
+                            <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>";
         $tool_content .= "</tr>";
 
         $ug = user_groups($course_id, $user->id, 'csv');
