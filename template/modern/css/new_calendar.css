@@ -298,7 +298,7 @@
 
   .datetimepicker .table-condensed thead tr th.next::after{ content: '\f061'; font-size: 15px; font-weight: 700; color:black;}
 
-  .datetimepicker .table-condensed thead tr th.switch{ font-size: 14px; padding: 5px; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal; color:'555555';}
+  .datetimepicker .table-condensed thead tr th.switch{ font-size: 14px; padding: 5px; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal; color:black;}
 
   .datetimepicker .table-condensed thead tr th.prev::before{ content: '\f060'; font-size: 15px; font-weight: 700; color:black;}
 
@@ -326,6 +326,6 @@
 
  .datepicker-days .table-condensed thead tr th.next::after{ content: '\f178'; font-size: 15px; font-weight: 700; color:black;}
 
- .datepicker-days .table-condensed thead tr th.switch{ font-size: 14px; padding: 5px; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal; color:'555555';}
+ .datepicker-days .table-condensed thead tr th.switch{ font-size: 14px; padding: 5px; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal; color:black;}
 
  .datepicker-days .table-condensed thead tr th.prev::before{ content: '\f177'; font-size: 15px; font-weight: 700; color:black;}

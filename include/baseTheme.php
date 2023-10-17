@@ -951,6 +951,12 @@ function view($view_file, $view_data = array()) {
                 <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?v=4.0-dev'/>
             ";
         }
+
+        if($theme_options->name == 'Emerald'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?v=4.0-dev'/>
+            ";
+        }
         
 
     }

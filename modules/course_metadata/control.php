@@ -223,7 +223,7 @@ $tool_content .= "
                         <div class='list-group'>
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF
-                            <ul class='list-group'>
+                            <ul class='list-group oc-metedata-list'>
                                 <li class='list-group-item Primary-600-bg'>
                                     <span class='text-white TextBold'>$langOpenCoursesCharacter</span>
                                 </li>

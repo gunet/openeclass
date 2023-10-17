@@ -890,6 +890,14 @@
     border-bottom: 1px solid #EFF6FF;
   }
 
+  .col_maincontent_active .oc-metedata-list .list-group-item{
+      background-color: #ffffff;
+  }
+  
+  .col_maincontent_active .oc-metedata-list .list-group-item.Primary-600-bg{
+    background-color: #B70A0A;;
+  }
+
 
 /**********************************************************************************************************************/
 /************************************************* CONTACT - ABOUT ****************************************************/

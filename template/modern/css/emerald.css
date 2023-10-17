@@ -1,0 +1,1654 @@
+/**********************************************************************************************************************/
+/************************************************* TEMP CLASSES *******************************************************/
+/**********************************************************************************************************************/
+
+.border-card {
+    border: solid 1px #EFF6FF;
+}
+
+.border-default-card {
+    border: solid 1px #EFF6FF;
+}
+
+@media (min-width: 992px){
+  .BorderSolidDes {
+      border: solid 1px #EFF6FF;
+      filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  }
+}
+
+.border-bottom-table-head {
+  border-bottom: solid 2px #1E7E0E;
+  background-color: #ffffff;
+}
+
+.default-value{
+  color: #2B3944;
+}
+
+#progress_circle {
+  background: conic-gradient(#1E7E0E var(--progress), #E8EDF8 0deg) !important;
+}
+#progress_circle::after {
+  background: #ffffff !important;
+}
+
+/**********************************************************************************************************************/
+/************************************************* COLORS *************************************************************/
+/**********************************************************************************************************************/
+
+.Primary-500-cl,
+.Primary-600-cl {
+    color: #1E7E0E;
+}
+
+.Primary-500-bg,
+.Primary-600-bg {
+    background-color: #1E7E0E;
+}
+
+
+
+
+/**********************************************************************************************************************/
+/************************************************* TYPOGRAPHY *********************************************************/
+/**********************************************************************************************************************/
+
+
+
+
+
+
+/**********************************************************************************************************************/
+/************************************************* HEADER *************************************************************/
+/**********************************************************************************************************************/
+
+.menu-item.active, .menu-item.active2{
+  color: #1E7E0E;
+}
+
+.user-menu-btn:hover,
+.user-menu-btn:focus{
+    border-top: solid 4px #1E7E0E;
+    cursor:  url(../images/pointer.png), auto;
+}
+
+
+/**********************************************************************************************************************/
+/************************************************* FOOTER *************************************************************/
+/**********************************************************************************************************************/
+
+ #bgr-cheat-footer {
+  background-color: #ffffff;
+}
+
+@media(min-width:992px){ 
+  .footer-container{
+    background-color: #ffffff;
+  }
+}
+
+ .social-icon-tool {
+    color: #1E7E0E;
+}
+
+/**********************************************************************************************************************/
+/****************************************************** TABS **********************************************************/
+/**********************************************************************************************************************/
+
+.nav-tabs .nav-item:hover .nav-link{
+  color: #1E7E0E;
+}
+
+.nav-tabs .nav-item .nav-link{
+  color: #1E7E0E;
+}
+.nav-tabs .nav-item .nav-link.active{
+  color: #1E7E0E;
+  border-bottom: solid 2px #1E7E0E;
+}
+
+/**********************************************************************************************************************/
+/************************************************* ACCORDIONS *********************************************************/
+/**********************************************************************************************************************/
+
+
+
+.group-section .list-group-item{
+  border-bottom: solid 1px #E8EDF8 ;
+}
+.group-section .list-group-item .accordion-btn{
+  color:#687DA3;
+}
+.group-section .list-group-item .accordion-btn:hover{
+  color: #1E7E0E;
+}
+
+.group-section .list-group-item .accordion-btn[aria-expanded="true"], .group-section .list-group-item .accordion-btn.showAll{
+  color: #1E7E0E;
+}
+
+
+/**********************************************************************************************************************/
+/************************************************* BREADCRUMBS ********************************************************/
+/**********************************************************************************************************************/
+
+
+
+
+
+/**********************************************************************************************************************/
+/************************************************* TESTIMONIALS - OWL_CAROUSEL ****************************************/
+/**********************************************************************************************************************/
+
+
+.testimonials {
+  background-color: #ffffff;
+}
+
+.testimonials .testimonial {
+  background: #ffffff;
+  color: #2b3944;
+  border: solid 1px #EFF6FF;
+}
+
+/* active testimonial */
+.testimonial.slick-slide.slick-current.slick-active.slick-center{
+  background-color: #1E7E0E;
+  color: #ffffff;
+  border: solid 1px #ffffff;
+}
+.testimonial.slick-slide.slick-current.slick-active.slick-center span,
+.testimonial.slick-slide.slick-current.slick-active.slick-center strong,
+.testimonial.slick-slide.slick-current.slick-active.slick-center p,
+.testimonial.slick-slide.slick-current.slick-active.slick-center b,
+.testimonial.slick-slide.slick-current.slick-active.slick-center .form-label{
+  color: #ffffff;
+} 
+
+
+/**********************************************************************************************************************/
+/****************************************** CHECKBOXES - RADIOS - INPUT IN FORMS **************************************/
+/**********************************************************************************************************************/
+
+.radio label{ 
+  color:#2B3944;
+} 
+
+
+input[type="radio"]{
+  border: solid 1px #9BA9C1;
+  background-color: #ffffff;
+  color: #2B3944;
+}
+input[type="radio"]:checked { 
+  border: solid 6px #1E7E0E;
+}
+.input-StatusCourse:checked{
+  box-shadow: inset 0 0 0 0px #e8e8e8;
+  border: 0px solid #e8e8e8;
+  background-color: #1E7E0E;
+}
+.radio:has(.input-StatusCourse:checked) .fa{
+  color: #2B3944;
+}
+
+label:has(input[type="radio"]:disabled){
+  color: #687DA3;
+}
+
+/* panels and form-wrapper where contains checkbox checked then change checked label color*/
+.form-wrapper.form-edit label:has(input[type="radio"]:checked){
+  color:#1E7E0E;
+}
+
+
+/*******************************************************************/
+
+.label-container {
+  color: #2B3944;
+}
+
+.label-container > input[type="checkbox"] {
+  border: 1px solid #9BA9C1;
+  background-color: #ffffff;
+}
+
+.label-container > input[type="checkbox"]:checked {
+  border: 1px solid #1E7E0E;
+  background-color: #1E7E0E;
+}
+
+.label-container > input[type="checkbox"]:checked + .checkmark::before {
+  color: #ffffff;
+}
+
+.label-container > input[type="checkbox"]:active {
+  border: 1px solid #1E7E0E;
+}
+
+.label-container:has(input[type="checkbox"]:disabled){
+  color: #687DA3;
+}
+
+/**************************************************************/
+
+/* .add-on,
+.add-on1,
+.add-on2{
+  background-color: #212D37 !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border: 1px solid #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  -webkit-box-shadow: 0 0 0px 1000px #2B3944 inset;
+  transition: background-color 5000s ease-in-out 0s;
+  font-size: 14px;
+}
+
+input::placeholder{ 
+  background-color: #212D37; 
+  color:#787e89 !important; 
+}
+
+.form-wrapper.form-edit { 
+  border:solid 1px #212D37; 
+  background-color: #212D37;
+}
+
+input[type="text"], 
+input[type="password"], 
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="email"]{
+  border-color: #ffffff;
+  background-color: #212D37;
+  color: #ffffff;
+}
+
+textarea,
+textarea.form-control{
+  border-color: #ffffff;
+  background-color: #212D37;
+  color: #ffffff;
+}
+
+input[type="text"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="time"]:focus,
+input[type="week"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="color"]:focus,
+.form-control:focus,
+.uneditable-input:focus,
+textarea:focus {   
+  border-color:#ffffff;
+  background-color: #212D37;
+  color:#ffffff;
+}
+
+input[type="text"]:active,
+input[type="datetime"]:active,
+input[type="datetime-local"]:active,
+input[type="date"]:active,
+input[type="month"]:active,
+input[type="time"]:active,
+input[type="week"]:active,
+input[type="number"]:active,
+input[type="email"]:active,
+input[type="url"]:active,
+input[type="search"]:active,
+input[type="tel"]:active,
+input[type="color"]:active,
+.form-control:active,
+.uneditable-input:active,
+textarea:active {   
+  border-color:#ffffff;
+  background-color: #212D37;
+  color:#ffffff;
+}
+
+.form-control:disabled{
+  border-color: #ffffff;
+  background-color: #212D37 ;
+}
+
+
+
+select.form-select {
+  background-color: #212D37;
+  border-color:#ffffff;
+  color:#ffffff;
+  background: url(../images/chevron_down_select.svg) no-repeat right #212D37;
+  -webkit-appearance: none;
+  background-position-x: 97.5%;
+}
+
+select.form-select:focus {
+  background-color: #212D37;
+  border-color: #ffffff;
+}
+
+select.form-select option{
+  color: #9BA9C1; 
+}
+
+select.form-select:disabled{
+  border-bottom: solid 2px #f9f8fa;
+  background-color: #DCDCDC;
+}
+ */
+
+
+ input[type="text"]:focus,
+ input[type="datetime"]:focus,
+ input[type="datetime-local"]:focus,
+ input[type="date"]:focus,
+ input[type="month"]:focus,
+ input[type="time"]:focus,
+ input[type="week"]:focus,
+ input[type="number"]:focus,
+ input[type="email"]:focus,
+ input[type="url"]:focus,
+ input[type="search"]:focus,
+ input[type="tel"]:focus,
+ input[type="color"]:focus,
+ .form-control:focus,
+ .uneditable-input:focus,
+ textarea:focus {   
+   border-color:#1E7E0E;
+ }
+
+ select.form-select:focus {
+  border-color: #1E7E0E;
+}
+
+/**********************************************************************************************************************/
+/*********************************************** SUBMITBUTTONS ********************************************************/
+/**********************************************************************************************************************/
+/* first choice of inputs forms */
+.form-wrapper.form-edit .control-label-notes{ 
+  color:#ffffff; 
+} 
+
+.submitAdminBtn, .cancelAdminBtn {
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+  background-color: #ffffff;
+}
+
+.submitAdminBtn:hover, .cancelAdminBtn:hover {
+  background-color: #ffffff;
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+}
+
+.submitAdminBtn.active{
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+
+.submitAdminBtnDefault, input[type="submit"], button[type="submit"]{
+  background-color: #1E7E0E;
+  color: #ffffff;
+  border-color: #1E7E0E;
+}
+.submitAdminBtnDefault:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+
+.deleteAdminBtn, 
+button[type="submit"].deleteAdminBtn,
+input[type="submit"].deleteAdminBtn {
+  border-color: #C44601;
+  color: #ffffff;
+  background-color: #C44601;
+}
+
+.deleteAdminBtn:hover,
+button[type="submit"].deleteAdminBtn:hover,
+input[type="submit"].deleteAdminBtn:hover {
+  border-color: #B70A0A;
+  background-color: #B70A0A;
+  color: #ffffff;
+}
+
+.successAdminBtn,
+button[type="submit"].successAdminBtn,
+input[type="submit"].successAdminBtn {
+  border-color: #1E7E0E;
+  color: #ffffff	;
+  background-color: #1E7E0E;
+}
+
+.successAdminBtn:hover,
+button[type="submit"].successAdminBtn:hover,
+input[type="submit"].successAdminBtn:hover {
+  background-color: #19680C;
+  border-color: #19680C;
+  color: #ffffff;
+}
+
+.warningAdminBtn,
+button[type="submit"].warningAdminBtn,
+input[type="submit"].warningAdminBtn {
+  border-color: #FFF4D1;
+  color: #2B3944	;
+  background-color: #FFF4D1;
+}
+
+.warningAdminBtn:hover,
+button[type="submit"].warningAdminBtn:hover,
+input[type="submit"].warningAdminBtn:hover {
+  background-color: #F57600;
+  border-color: #F57600;
+  color: #ffffff;
+}
+
+.submitAdminBtn span{
+  color: #1E7E0E;
+}
+.submitAdminBtn .fa-solid::before, 
+.submitAdminBtn .fa-regular::before,
+.submitAdminBtn .fa-brands::before,
+.submitAdminBtn span.fa::before{
+  color: #1E7E0E;
+}
+.submitAdminBtnDefault .fa-solid::before, 
+.submitAdminBtnDefault .fa-regular::before,
+.submitAdminBtnDefault .fa-brands::before{
+  color: #ffffff;
+}
+.cancelAdminBtn .fa-solid::before, 
+.cancelAdminBtn .fa-regular::before,
+.cancelAdminBtn .fa-brands::before{
+  color: #1E7E0E;
+}
+
+/**********************************************************************************************************************/
+/******************************************************** BASIC BUTTON ************************************************/
+/**********************************************************************************************************************/
+
+.btn.btn-default{
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+  background-color: #ffffff;
+}
+.btn.btn-default:hover{
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+  background-color: #ffffff;
+}
+
+.btn.btn-primary{
+  border-color: #1E7E0E;
+  color: #ffffff;
+  background-color: #1E7E0E;
+}
+.btn.btn-primary:hover{
+  border-color: #1E7E0E;
+  color: #ffffff;
+  background-color: #1E7E0E;
+}
+
+.btn.btn-danger,
+.delete.confirmAction, 
+.delete.delete_btn{
+  border-color: #C44601;
+  color: #ffffff;
+  background-color: #C44601;
+}
+.btn.btn-danger:hover,
+.delete.confirmAction:hover, 
+.delete.delete_btn:hover{
+  border-color: #1E7E0E;
+  color: #ffffff;
+  background-color: #1E7E0E;
+}
+
+
+.btn.btn-success{
+  border-color: #1E7E0E;
+  color: #ffffff;
+  background-color: #1E7E0E;
+}
+.btn.btn-success:hover{
+  border-color: #19680C;
+  color: #ffffff;
+  background-color: #19680C;
+}
+
+.btn-outline-secondary{
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+  background-color: #ffffff;
+}
+.btn-outline-secondary:hover{
+  background-color: #ffffff;
+  border-color: #1E7E0E ;
+  color: #1E7E0E;
+}
+
+.btn.btn-secondary{
+  border-color: rgb(93, 97, 95);
+  background: linear-gradient(180deg,#DCDCDC 0%,rgb(93, 97, 95) 49%, rgb(93, 97, 95) 51%,rgba(93, 97, 95, 0.963) 100%);
+}
+
+
+/**********************************************************************************************************************/
+/************************************************* CONTEXTUAL MENUS ***************************************************/
+/**********************************************************************************************************************/
+
+.contextual-menu .list-group-item:hover,
+.contextual-menu button[type="submit"]:hover
+.contextual-menu input[type="submit"]:hover{
+  background-color: #EFF6FF;
+  color:#1E7E0E;
+}
+.contextual-menu .list-group-item:hover .settings-icons::before{
+  color: #1E7E0E;
+}
+
+
+/**********************************************************************************************************************/
+/***************************************** BOOTBOX - MENUPOPOVER -MODALS **********************************************/
+/**********************************************************************************************************************/
+
+.bootbox.show .modal-footer .submitAdminBtn,
+.modal.show .modal-footer .submitAdminBtn{
+  border-color: #1E7E0E;
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+.bootbox.show .modal-footer .submitAdminBtn:hover,
+.modal.show .modal-footer .submitAdminBtn:hover{
+  border-color: #1E7E0E;
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+
+.menu-popover{ 
+  background: #FFFFFF; 
+  border: solid 1px #E8EDF8;
+}
+
+.menu-popover.submitAdminBtn,
+.btn-group-default .submitAdminBtn{
+  color: #9BA9C1;
+  background-color: transparent;
+}
+.menu-popover.submitAdminBtn:hover,
+.btn-group-default .submitAdminBtn:hover{
+  background-color: transparent;
+}
+
+.btn-group-default .deleteAdminBtn{
+  color: #1E7E0E;
+  background-color: transparent;
+}
+.btn-group-default .deleteAdminBtn:hover{
+  background-color: transparent;
+}
+
+
+.menu-popover .list-group-item{ 
+  border-bottom: solid 1px #EFF6FF;
+}
+
+.menu-popover .list-group-item .fa{ 
+  color:#2b3944;
+}
+.menu-popover .list-group-item .fa-xmark,
+.menu-popover .list-group-item .fa-trash{ 
+  color:#C44601;
+}
+
+.menu-popover .list-group-item:hover{ 
+  background-color: #EFF6FF;
+  color:#1E7E0E;
+}
+
+.menu-popover .list-group-item:hover .fa{ 
+  color:#1E7E0E;
+}
+
+.menu-popover .delete.confirmAction, 
+.menu-popover .delete.delete_btn{
+  border-bottom: solid 1px #EFF6FF;
+  background-color: #ffffff;
+  color: #C44601;
+}
+
+.menu-popover .delete.confirmAction:hover, 
+.menu-popover .delete.delete_btn:hover{
+  background-color: #EFF6FF;
+  color: #C44601;
+}
+
+.menu-popover .delete.confirmAction .fa-xmark,
+.menu-popover .delete.confirmAction .fa-trash{
+  color: #C44601;
+  margin-top: 1px;
+}
+
+/**********************************************************************************************************************/
+/**************************************************** FORMS ***********************************************************/
+/**********************************************************************************************************************/
+
+
+.form-wrapper.form-edit .control-label-notes{ 
+  color:#2B3944; 
+} 
+
+.form-wrapper.form-edit.borderLg{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
+.form-horizontal:has(.submitAdminBtn) .submitAdminBtn{
+  background-color: #1E7E0E;
+  border-color: #1E7E0E;
+  color: #ffffff;
+}
+.form-wrapper:has(.submitAdminBtn) .submitAdminBtn .settings-icons::before,
+.form-horizontal:has(.submitAdminBtn) .submitAdminBtn .settings-icons::before{
+  color: #ffffff;
+}
+
+.form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
+.form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover{
+  background-color: #1E7E0E;
+  border-color: #1E7E0E;
+  color: #ffffff;
+}
+.form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before,
+.form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before{
+  color: #ffffff;
+}
+
+.form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic,
+.form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic{
+  background-color: #ffffff;
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+}
+
+.form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
+.form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover{
+  background-color: #ffffff;
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+}
+
+.submitAdminBtnClassic.active,
+.submitAdminBtnClassic.active .fa::before,
+.submitAdminBtnClassic.active .fa-solid::before,
+.submitAdminBtnClassic.active .fa-brands::before,
+.submitAdminBtnClassic.active .fa-regular::before{
+  background-color: #1E7E0E !important;
+  color:#ffffff !important;
+}
+
+.input-group-text .fa-calendar{
+  color: #1E7E0E;
+}
+
+
+/**********************************************************************************************************************/
+/*************************************************** PANELS ***********************************************************/
+/**********************************************************************************************************************/
+
+
+.panel-admin{
+border: solid 1px #EFF6FF;
+}
+.panel-admin .panel-heading{
+background: #1E7E0E;
+color:#ffffff;
+}
+.panel-admin .panel-heading .panel-title{
+color:#ffffff;
+}
+
+
+.panel-admin>.panel-footer{
+background-color: white;
+}
+
+
+
+.panel-admin-calendar{
+border: solid 1px #EFF6FF;
+}
+.panel-admin-calendar .panel-heading,#cal-header{
+background: #2B3944;
+color:#ffffff;
+}
+.panel-admin-calendar .panel-heading .panel-title{
+color:#ffffff;
+}
+.panel-admin-calendar>.panel-body-calendar{
+  background-color: #ffffff;
+}
+
+.panel-admin-calendar>.panel-footer{
+background-color: transparent;
+}
+
+
+.Help-panel-heading {
+border-bottom:solid 1px #1E7E0E;
+}
+
+.Help-text-panel-heading {
+color: #1E7E0E !important; 
+}
+
+.panel-default .panel-heading .submitAdminBtn,
+.panel-admin .panel-heading .submitAdminBtn,
+.panel-action-btn-default .panel-heading .submitAdminBtn,
+.panel-primary .panel-heading .submitAdminBtn,
+.panel-info .panel-heading .submitAdminBtn,
+.panel-success .panel-heading .submitAdminBtn{
+background-color: #ffffff;
+color: #1E7E0E;
+}
+.panel-default .panel-heading .fa-edit,
+.panel-admin .panel-heading .fa-edit,
+.panel-action-btn-default .panel-heading .fa-edit,
+.panel-primary .panel-heading .fa-edit,
+.panel-info .panel-heading .fa-edit,
+.panel-success .panel-heading .fa-edit{
+color: #ffffff;
+}
+
+.panel-default .panel-heading .submitAdminBtn:hover
+.panel-admin .panel-heading .submitAdminBtn:hover
+.panel-action-btn-default .panel-heading .submitAdminBtn:hover
+.panel-primary .panel-heading .submitAdminBtn:hover
+.panel-info .panel-heading .submitAdminBtn:hover,
+.panel-success .panel-heading .submitAdminBtn:hover{
+color: #ffffff;
+background-color: #1E7E0E;
+}
+
+
+/**********************************************************************************************************************/
+/*********************************************** DATEPICHER-DATETIMEPICHER ********************************************/
+/**********************************************************************************************************************/
+
+
+
+
+
+/**********************************************************************************************************************/
+/**************************************************** TABLES **********************************************************/
+/**********************************************************************************************************************/
+
+thead{
+  background-color: #ffffff;
+  min-height: 40px;
+}
+
+/* thead tr th,
+thead tr td{
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+} */
+.table-default thead tr th,
+.announcements_table thead tr th,
+table.dataTable thead tr th,
+.table-default thead tr td,
+.announcements_table thead tr td,
+table.dataTablethead tr td{
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+thead, tbody .list-header {
+  border-bottom: solid 2px #1E7E0E;
+}
+
+/* tbody tr td,
+tbody tr th{
+  background-color: #ffffff;
+} */
+.table-default tbody tr td,
+.announcements_table tbody tr td,
+table.dataTable tbody tr td,
+.table-default tbody tr th,
+.announcements_table tbody tr th,
+table.dataTable tbody tr th{
+  background-color: #ffffff;
+}
+
+tr.warning{
+  background-color: #FFF4D1;
+}
+
+tr.danger{
+  background-color: #FDEFE9;
+}
+
+/* -------------------------------------------- ALL DATATABLES FROM OVERRIDE FILE  -----------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+/********************************************************* form-select **********************************************************************/
+
+
+
+/************************************************ pagination buttons next-prev ***************************************************************/
+
+
+/************************************************** portfolio-table **********************************************************************/
+
+
+
+
+
+/**********************************************************************************************************************/
+/**************************************************** AFFIXED SIDENAV *************************************************/
+/**********************************************************************************************************************/
+
+.nav-link-adminTools.normalColorBlueText.active{
+  background-color: #1E7E0E;
+  color: #ffffff !important;
+}
+
+
+/**********************************************************************************************************************/
+/**************************************************** LIST-GROUPS *****************************************************/
+/**********************************************************************************************************************/
+
+.col_maincontent_active .list-group-item {
+  background-color: transparent;
+  border: 0px;
+  border-bottom: 1px solid #EFF6FF;
+}
+
+.col_maincontent_active .oc-metedata-list .list-group-item{
+    background-color: #ffffff;
+}
+
+.col_maincontent_active .oc-metedata-list .list-group-item.Primary-600-bg{
+   background-color: #1E7E0E;;
+}
+
+
+/**********************************************************************************************************************/
+/************************************************* CONTACT - ABOUT ****************************************************/
+/**********************************************************************************************************************/
+
+.circle-img-contant { 
+  background-color: #1E7E0E; 
+}
+
+
+/**********************************************************************************************************************/
+/*************************************************** PORTFOLIO ********************************************************/
+/**********************************************************************************************************************/
+
+.myProfileBtn{
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+.myProfileBtn .fa-solid::before{
+  color: #ffffff;
+}
+.myProfileBtn:hover{
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+
+
+.profile-pers-info-row{
+  border-bottom: solid 1px #EFF2FB;
+}
+
+.row-course:hover td:first-child, .row-course:hover td:last-child{
+  background-color: #EFF2FB ;
+}
+
+.showCoursesBars, .showCoursesPics{
+  color: #1E7E0E;
+}
+.showCoursesBars:hover, .showCoursesPics:hover{
+  color: #1E7E0E;
+}
+.showCoursesBars.active, .showCoursesPics.active{
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+
+/**********************************************************************************************************************/
+/************************************************* HOMEPAGE *************************************************************/
+/**********************************************************************************************************************/
+
+.cardLogin{
+    background-color: #ffffff !important;
+    border: solid 1px #EFF6FF;
+}
+
+.announce-link-homepage {
+    color: #1E7E0E;
+}
+
+.testimonials{
+    background-color: #ffffff;
+}
+
+.statistics-card .card-body{
+    background-color: #E8EDF8 !important;
+}
+
+.login-form-submit {
+  border-color: #1E7E0E;
+  color: #ffffff;
+  background-color: #1E7E0E;
+}
+.login-form-submit:hover {
+  border-color: #1E7E0E;
+  background-color: #1E7E0E;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.opencourses_btn {
+  border-color: #1E7E0E;
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+.opencourses_btn:hover {
+  background-color: #1E7E0E;
+  color: #ffffff;
+  border-color: #1E7E0E;
+  text-decoration: none;
+}
+
+.login-input:focus {
+  border-color: #ffffff;
+  background-color: #1E7E0E;
+  color: #ffffff;
+}
+
+.banner-body{
+  background-color: #ffffff !important;
+}
+
+/**********************************************************************************************************************/
+/************************************************* COURSEHOME *********************************************************/
+/**********************************************************************************************************************/
+
+
+.state_success { 
+  color: #22b473; 
+}
+
+.carousel-indicators>button:not(:has(.active)) {background-color: #CDD4E0;}
+.carousel-indicators>button.active {background-color: #1E7E0E;}
+.carousel-prev-btn,.carousel-next-btn{
+  background-color: transparent;
+}
+
+.descCoursePanel{ 
+  background: #1E7E0E; 
+}
+
+
+
+/**********************************************************************************************************************/
+/************************************************* GROUPS *************************************************************/
+/**********************************************************************************************************************/
+
+.panelCard{
+  background-color: #ffffff !important;
+  border: solid 1px #EFF6FF;
+}
+
+.panelCard .card-header{
+  background-color: #ffffff !important;
+}
+
+.panelCard .card-body{
+  background-color: #ffffff !important;
+}
+
+.panelCard .card-footer{
+  background-color: #ffffff !important;
+}
+
+.panelCardDefault{
+  background-color: transparent !important;
+}
+
+.panelCardDefault .card-header-default{
+  background-color: transparent !important;
+}
+
+.panelCardDefault .card-body-default{
+  background-color: transparent !important;
+}
+
+.panelCardDefault .card-footer-default{
+  background-color: transparent !important;
+}
+
+.panelCard.border-card-left-default{
+  border-left: solid 7px #EFF6FF;
+}
+
+.searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
+  background-color: #e8e8e8;
+}
+
+.searchGroupBtn{
+  background-color: #e8e8e8;
+}
+.searchGroupBtn:hover{
+  background-color: #1E7E0E;
+}
+.searchGroupBtn:hover span{
+  color: #ffffff;
+}
+
+
+.showSettings{
+  background-color: #ffffff !important;
+  border-color: #1E7E0E;
+  color: #1E7E0E !important;
+}
+.showSettings:hover{
+  background-color: #ffffff !important;
+  border-color: #1E7E0E;
+  color: #1E7E0E !important;
+}
+
+
+
+/**********************************************************************************************************************/
+/****************************************** AUTH REGISTER COURSES *****************************************************/
+/**********************************************************************************************************************/
+
+.list-group-item.list-header{  
+  color: #2b3944; 
+}
+
+.openCoursesFormWrapper, .borderLg{
+  background-color: transparent !important;
+  border: solid 1px #E8F2E7 !important;
+}
+
+
+/**********************************************************************************************************************/
+/************************************************** ANNOUNCEMENTS *****************************************************/
+/**********************************************************************************************************************/
+
+.title1{ 
+  background-color: #ffffff; 
+}
+
+/**********************************************************************************************************************/
+/******************************************************* GLOSSARY *****************************************************/
+/**********************************************************************************************************************/
+
+.pagination-glossary .page-item.active .page-link{
+  background-color: #1E7E0E;
+  border-color: #1E7E0E;
+  color: #ffffff !important;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** NOTES ************************************************************/
+/**********************************************************************************************************************/
+
+.control-label-notes{ 
+  color: #2b3944; 
+}
+
+ /**********************************************************************************************************************/
+/*************************************************** ASSIGNMENTS ************************************************************/
+/**********************************************************************************************************************/
+.margin-bottom-thin.Success-100-bg strong,
+.sub_title1.Warning-100-bg{
+  color: #2b3944;
+  font-weight: 700;
+}
+.container-fluid.form-group{
+  border: solid 1px #ffffff !important;
+  background-color: #ffffff;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** DOCUMENTS ********************************************************/
+/**********************************************************************************************************************/
+
+.metadataCourseCollapseBtn,
+.metadataCourseCollapseBtn:hover,
+.metadataCourseCollapseBtn:focus{
+  color: #ffffff;
+}
+
+
+.visibleFile{ 
+  color: #ffffff; 
+}
+
+.docPanel{ 
+  padding-left: 0px;
+  background-color: transparent;
+}
+
+
+div[role="progressbar"] {
+  --size: 9rem;
+  --fg: #1E7E0E;
+  --bg: #e8e8e8;
+  --pgPercentage: var(--value);
+  animation: growProgressBar 3s 1 forwards;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: 
+    radial-gradient(closest-side, #ffffff 80%, transparent 0 99.9%, #ffffff 0),
+    conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0)
+    ;
+  font-weight: 700; font-style: normal;
+  font-size: calc(var(--size) / 5);
+  color: var(--fg);
+}
+
+/**********************************************************************************************************************/
+/*************************************************** QUESTIONAIRE *****************************************************/
+/**********************************************************************************************************************/
+
+.input-Questionnaire:checked{
+  box-shadow: inset 0 0 0 0px #e8e8e8;
+  border: 0px solid #e8e8e8;
+  background-color: #1E7E0E;
+}
+.radio:has(.input-Questionnaire:checked) .fa{
+  color: #ffffff;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** WALL *************************************************************/
+/**********************************************************************************************************************/
+
+.wallWrapper textarea:focus, .wallWrapper textarea:active{
+border-color: #1E7E0E;
+}
+
+.wallWrapper{
+background-clip: border-box !important; border: 1px solid #ffffff !important;
+}
+
+.wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
+background-color: #1E7E0E;
+border-color: #1E7E0E;
+color: #ffffff;
+}
+
+.wallWrapper:has(.submitAdminBtn) .submitAdminBtn:hover{
+background-color: #1E7E0E;
+border-color: #1E7E0E;
+color: #ffffff;
+}
+
+.commentPress:hover{
+color: #1E7E0E;
+}
+
+
+/**********************************************************************************************************************/
+/*************************************************** CHAT *************************************************************/
+/**********************************************************************************************************************/
+
+.bodyChat::-webkit-scrollbar-track {
+background-color: #2b3944;
+}
+
+.bodyChat::-webkit-scrollbar-thumb {
+background-color: #2b3944;
+}
+
+.bodyChat::-webkit-scrollbar-thumb {
+background-color: #d6dee1;
+}
+
+.bodyChat::-webkit-scrollbar-thumb {
+background-color: #B4BED1;
+border-radius: 20px;
+border: 6px solid transparent;
+background-clip: content-box;
+}
+
+.bodyChat::-webkit-scrollbar-thumb:hover {
+background-color: #B4BED1;
+}
+
+
+/**********************************************************************************************************************/
+/*************************************************** WIDGETS **********************************************************/
+/**********************************************************************************************************************/
+
+.nav-link-widgets.active{
+border: solid 1px #1E7E0E;
+}
+
+
+/**********************************************************************************************************************/
+/*************************************************** EXERCISE *********************************************************/
+/**********************************************************************************************************************/
+
+.table-exercise td, .table-exercise th{
+background-color: #ffffff;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** MY COURSES *******************************************************/
+/**********************************************************************************************************************/
+
+
+
+
+
+
+/**********************************************************************************************************************/
+/*************************************************** H5P **************************************************************/
+/**********************************************************************************************************************/
+
+.bs-placeholder .filter-option .filter-option-inner-inner{
+color: #1E7E0E !important;
+}
+.bs-placeholder:hover .filter-option .filter-option-inner-inner{
+color: #ffffff;
+}
+
+.optgroup-1 .text{
+color: #2b3944;
+}
+
+
+
+/**********************************************************************************************************************/
+/*************************************************** COMMENTS **************************************************************/
+/**********************************************************************************************************************/
+
+
+
+/**********************************************************************************************************************/
+/*************************************************** USAGE **************************************************************/
+/**********************************************************************************************************************/
+.last-visit-li{
+color: #2b3944;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** ABOUT **************************************************************/
+/**********************************************************************************************************************/
+.list-about{
+color: #2b3944;
+}
+/**********************************************************************************************************************/
+/*************************************************** ADMIN ************************************************************/
+/**********************************************************************************************************************/
+
+.quickLink{
+border: solid 1px #1E7E0E;
+background-color: #ffffff;
+color: #1E7E0E;
+}
+
+.quickLink:hover,
+.quickLink:hover .fa-solid{
+border: solid 1px #1E7E0E;
+background-color: #1E7E0E;
+color: #ffffff !important;
+}
+
+
+.theme-option-wrapper, .wrapper-lostpass{
+border: solid 1px #EFF6FF !important;
+}
+
+
+
+/****************************************************************************************************/
+/******************************************* SELECT 2 OVERRIDE *********************************/
+/****************************************************************************************************/
+
+.select2-selection.select2-selection--multiple{ 
+  /* border-color:#ffffff; */
+  background-color: #ffffff;
+  /* color: #ffffff; */
+
+}
+
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+/* border: solid #ffffff 1px; */
+outline: 0;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+background-color: #1E7E0E;
+color: #ffffff;
+}
+
+.select2-results__option{
+background-color: #ffffff;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+background-color: #1E7E0E;
+}
+
+.select2-container--default .select2-selection--multiple .select2-selection__choice {
+background-color: #1E7E0E;
+border: 1px solid #aaa;
+border-radius: 4px;
+cursor: default;
+float: left;
+margin-right: 5px;
+margin-top: 5px;
+padding: 0 5px;
+color: #ffffff;
+}
+
+
+.select2-selection--multiple:before { content: ""; position: absolute; right: 15px; top: 45%; border-top: 5px solid #ffffff;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; background: transparent;
+}
+
+.select2-selection__rendered{ background: transparent;  }
+
+.select2.select2-container{background: transparent; }
+
+.select2-dropdown--below{ background-color: #ffffff !important; }
+
+
+
+/****************************************************************************************************/
+/***************** this is portfolio-calendar , courseHome-calendar *********************************/
+/****************************************************************************************************/
+
+
+
+/************************************rgba(255, 255, 255, 0.5)**********************************************/
+/***************** this is mypersonal-calendar , courseHome-calendar *********************************/
+/****************************************************************************************************/
+
+
+.myPersonalCalendar tbody tr:hover{
+background-color: #F7F9FE ;
+}
+
+.myPersonalCalendar{
+background-color: #F7F9FE ;
+}
+
+.personal-calendar-header .btn-group .btn.active{
+background: #1E7E0E ;
+}
+.myPersonalCalendar .cal-row-fluid.cal-row-head{
+background: #F7F9FE ;
+border-bottom: solid 1px #ebe4e4;
+}
+.myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1{
+color:#1E7E0E;
+}
+.myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1:hover{
+background-color: transparent;
+}
+.myPersonalCalendar .number-day-cal{
+color: #1E7E0E;
+font-size: 17px ;
+}
+.myPersonalCalendar .cal-day-today {
+background-color: transparent !important;
+}
+.myPersonalCalendar .cal-day-today .number-day-cal{
+color: #ffffff ;
+}
+.myPersonalCalendar .cal-cell{
+border: solid 0.5px #EFF6FF  ;
+}
+.myPersonalCalendar #cal-day-box .cal-day-hour:nth-child(odd) {
+background-color: transparent;
+}
+.myPersonalCalendar .cal-before-eventlist:hover{
+background-color: transparent;
+}
+.myPersonalCalendar .cal-month-day:hover .number-day-cal{
+color: #2b3944 !important;
+}
+
+
+
+.myCalendarEvents tbody tr:hover{
+background-color: transparent;
+}
+
+.myCalendarEvents .fc-header-toolbar{
+background: #2b3944;
+border-color: #2b3944;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button{
+background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button .fc-icon-left-single-arrow{
+color:#ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button.fc-state-hover{
+background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-prev-button.fc-state-hover .fc-icon-left-single-arrow{
+color:#ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button{
+background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button .fc-icon-right-single-arrow{
+color:#ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button.fc-state-hover{
+background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-next-button.fc-state-hover .fc-icon-right-single-arrow{
+color:#ffffff;
+text-shadow: none;
+}
+.myCalendarEvents .fc-today-button{
+background: transparent;
+color: #ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-center h2{
+color: #ffffff;
+background: transparent;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button{
+background: transparent;
+color: #ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button.fc-state-active{
+background: #1E7E0E ;
+color: #ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button{
+background: transparent;
+color: #ffffff;
+}
+.myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active{
+background: #1E7E0E ;
+color: #ffffff;
+}
+.myCalendarEvents .fc-head-container.fc-widget-header{
+background: #ffffff;
+}
+.myCalendarEvents .fc-head-container.fc-widget-header .fc-day-header span{
+color:#1E7E0E;
+}
+.myCalendarEvents .fc-widget-content table tbody td{
+border: solid 1px #f5f4f4 ;
+
+}
+
+
+/****************************************************************************************************/
+/*************************************** this is datetimepicker-calendar *************************************/
+/****************************************************************************************************/
+
+.datetimepicker .table-condensed{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed thead,
+.datetimepicker .table-condensed thead tr th{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed thead tr th.prev::before,
+.datetimepicker .table-condensed thead tr th.next::after{
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed tbody{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed tfoot{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed span{
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed tbody tr td.day{
+color:#1E7E0E;
+}
+
+.datetimepicker .table-condensed tbody tr td.active,
+.datetimepicker .table-condensed tbody tr td span.active{
+background-color: #1E7E0E;
+background-image: -webkit-linear-gradient(top, #1E7E0E, #1E7E0E);
+color:#ffffff;
+}
+
+
+
+/****************************************************************************************************/
+/*************************************** this is datepicker-calendar *************************************/
+/****************************************************************************************************/
+
+
+.datepicker-days .table-condensed{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed thead,
+.datepicker-days .table-condensed thead tr th{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed thead tr th.prev::before,
+.datepicker-days .table-condensed thead tr th.next::after{
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed tbody{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed tfoot{ 
+background-color: #ffffff;
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed span{
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed tbody tr td.day{
+color:#1E7E0E;
+}
+
+.datepicker-days .table-condensed tbody tr td.active,
+.datepicker-days .table-condensed tbody tr td span.active{
+background-color: #1E7E0E;
+background-image: -webkit-linear-gradient(top, #1E7E0E, #1E7E0E);
+color:#ffffff;
+}
+
+
+
+
+
+
+#collapse-left-menu-icon path{
+  fill: #2b3944 !important;
+}
+
+/* left menu and main content */
+.col_maincontent_active{
+    background-color: #F7F9FE;
+}
+@media(min-width:992px){
+  .col_maincontent_active{
+    border-left: solid 1px #E8EDF8;
+  }
+}
+.col_maincontent_active .form-wrapper.form-edit{
+  background-color: transparent;
+}
+
+.col_maincontent_active .form-wrapper.form-edit.borderLg{
+  background-color: #ffffff !important;
+}
+
+.ContentLeftNav {
+    background: #ffffff;
+}
+
+@media(max-width:991px){
+  .module-container{
+    background-color: #F7F9FE;
+  }
+}
+
+
+
+

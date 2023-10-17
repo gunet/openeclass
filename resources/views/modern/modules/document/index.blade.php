@@ -291,14 +291,14 @@
         // BUTTONS declare
         var bts = {
             download: {
-                label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
+                label: '<i class="fa fa-download"></i> {{ trans('langDownload') }}',
                 className: 'submitAdminBtn',
                 callback: function (d) {
                     window.location = downloadURL;
                 }
             },
             print: {
-                label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
+                label: '<i class="fa fa-print"></i> {{ trans('langPrint') }}',
                 className: 'submitAdminBtn',
                 callback: function (d) {
                     var iframe = document.getElementById('fileFrame');
@@ -308,7 +308,7 @@
         };
         if (screenfull.enabled) {
             bts.fullscreen = {
-                label: '<span class="fa fa-arrows-alt"></span> {{ trans('langFullScreen') }}',
+                label: '<i class="fa fa-arrows-alt"></i> {{ trans('langFullScreen') }}',
                 className: 'submitAdminBtn',
                 callback: function() {
                     screenfull.request(document.getElementById('fileFrame'));
@@ -317,7 +317,7 @@
             };
         }
         bts.newtab = {
-            label: '<span class="fa fa-plus"></span> {{ trans('langNewTab') }}',
+            label: '<i class="fa fa-plus"></i> {{ trans('langNewTab') }}',
             className: 'submitAdminBtn',
             callback: function() {
                 window.open(fileURL);

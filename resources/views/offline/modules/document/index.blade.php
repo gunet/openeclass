@@ -133,14 +133,14 @@
                         '</div>',
                 buttons: {
                     download: {
-                        label: '<span class="fa fa-download"></span> {{ trans('langDownload') }}',
+                        label: '<i class="fa fa-download"></i> {{ trans('langDownload') }}',
                         className: 'submitAdminBtn',
                         callback: function (d) {
                             window.location = downloadURL;
                         }
                     },
                     print: {
-                        label: '<span class="fa fa-print"></span> {{ trans('langPrint') }}',
+                        label: '<i class="fa fa-print"></i> {{ trans('langPrint') }}',
                         className: 'submitAdminBtn',
                         callback: function (d) {
                             var iframe = document.getElementById('fileFrame');
