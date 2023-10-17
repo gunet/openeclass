@@ -11,7 +11,7 @@
     <script src="{{ $urlAppend }}js/bootbox/bootbox.min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/language/el-GR.js?v=4.0-dev"></script>
     <link href="{{ $urlAppend }}js/bootstrap-calendar-master/css/calendar_small.css?v=4.0-dev" rel="stylesheet" type="text/css">
-    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css" rel="stylesheet" type="text/css">
+    <link href="{{ $urlAppend }}template/modern/css/new_calendar.css?v=4.0-dev" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/js/calendar.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/bootstrap-calendar-master/components/underscore/underscore-min.js?v=4.0-dev"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/sortable/Sortable.min.js?v=4.0-dev"></script>

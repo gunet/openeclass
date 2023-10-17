@@ -1278,8 +1278,9 @@ function register_certified_user($table, $element_id, $user_id): void
                                                                 . "assigned = " . DBHelper::timeAfter() . ","
                                                                 . "expires = ?s, "
                                                                 . "template_id = ?d, "
+                                                                . "user_id = ?d, "
                                                                 . "identifier = '" . uniqid(rand()) . "'",
-                                                    $title, $cert_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id);
+                                                    $title, $cert_title, $message, $element_id, $issuer, $user_fullname, $expiration_date, $template_id, $user_id);
 
 }
 
@@ -1341,8 +1342,8 @@ function get_cert_identifier($certificate_id, $user_id) {
     $user_fullname = uid_to_name($user_id);
     $sql = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE "
                                                         . "cert_id = ?d "
-                                                        . "AND user_fullname = ?s",
-                                                    $certificate_id, $user_fullname);
+                                                        . "AND (user_fullname = ?s OR user_id = ?d)",
+                                                    $certificate_id, $user_fullname, $user_id);
     if ($sql) {
         return $sql->identifier;
     } else {
