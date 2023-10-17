@@ -1311,8 +1311,8 @@ function get_cert_identifier($certificate_id, $user_id) {
     $user_fullname = uid_to_name($user_id);
     $sql = Database::get()->querySingle("SELECT identifier FROM certified_users WHERE "
                                                         . "cert_id = ?d "
-                                                        . "AND user_fullname = ?s",
-                                                    $certificate_id, $user_fullname);
+                                                        . "AND (user_fullname = ?s OR user_id = ?d)",
+                                                    $certificate_id, $user_fullname, $user_id);
     if ($sql) {
         return $sql->identifier;
     } else {
