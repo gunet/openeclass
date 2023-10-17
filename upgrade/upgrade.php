@@ -278,7 +278,7 @@ if ($command_line or $ajax_call) {
 
                 if ($step == 3) {
                     // install h5p content if needed
-                    $hp5_last_update = get_config('h5p_update_content_ts');
+                    /*$hp5_last_update = get_config('h5p_update_content_ts');
                     if ($hp5_last_update) {
                         $hp5_last_update = date_create_from_format('Y-m-d H:i', $hp5_last_update);
                         $date_diff = date_diff($hp5_last_update, date_create());
@@ -288,7 +288,7 @@ if ($command_line or $ajax_call) {
                         $hubUpdater = new H5PHubUpdater();
                         $hubUpdater->fetchLatestContentTypes();
                         set_config('h5p_update_content_ts', date('Y-m-d H:i', time()));
-                    }
+                    } */
                     steps_finished();
                 }
 

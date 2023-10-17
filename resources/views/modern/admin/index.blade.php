@@ -309,10 +309,30 @@
                         </div>
                     </div>
 
-                    @if (count($cronParams) > 0)
-                        <div class='col'>
-                            <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
-                                <div class='card-body'>
+                    <div class='col'>
+                        <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
+                            <div class='card-body'>
+
+                                <div class='row p-2 margin-bottom-thin'>
+                                    <div class='col-lg-6 col-12'>
+                                        <div class='form-label'>{{ trans('langH5p') }}</div>
+                                    </div>
+                                    @if ($ts)
+                                        <div class='col-lg-6 col-12'>
+                                            <div class='form-value'>
+                                                <a href='h5pconf.php'>{{ trans('langlastUpdated') }}: {{ $ts }}</a>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <div class='col-lg-6 col-12'>
+                                            <div class='form-value'>
+                                                <a style='color:red; font-weight: bold;' href='h5pconf.php'>{{ trans('langUpdateRequired') }} !</a>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                @if (count($cronParams) > 0)
                                     <div class='row p-2 margin-bottom-thin'>
                                         <div class='col-lg-6 col-12'>
                                             <div class='form-label'>{{ trans('langCronName') }}</div>
@@ -329,13 +349,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                         </div>
-                    @endif
+                    </div>
+
                 </div>
             </div>
-
         </div>
     </div>
 </div>

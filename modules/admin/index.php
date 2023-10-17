@@ -82,6 +82,10 @@ if (get_config('enable_indexing')) {
 // CRON RELATED
 $data['cronParams'] = Database::get()->queryArray("SELECT name, last_run FROM cron_params");
 
+// H5P related
+$ts = get_config('h5p_update_content_ts');
+$data['ts'] = format_locale_date(strtotime($ts), 'short', false);
+
 view('admin.index', $data);
 
 function get_eclass_release() {
