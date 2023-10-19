@@ -1188,7 +1188,7 @@ function cert_output_to_pdf($certificate_id, $user, $certificate_title = null, $
     } else { // logged out
         $q = Database::get()->querySingle("SELECT filename, orientation FROM certificate_template
                                                 JOIN certified_users ON certificate_template.id = certified_users.template_id
-                                                AND certified_users.cert_title = ?s", $certificate_title);
+                                                AND certified_users.identifier = ?s", $certificate_identifier);
         $cert_file = $q->filename;
         $orientation = $q->orientation;
         $cert_link = $langCertAuthenticity . ":&nbsp;&nbsp;&nbsp;" . $urlServer . "main/out.php?i=" .$certificate_identifier;
