@@ -97,13 +97,18 @@
 
                         <div class="form-group mt-4">
                             <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langAccountStatus') }}</label>
+                            <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                 <input type='radio' name='search' value='all' id='all-option' checked>
                                 {{ trans('langAllUsers') }}
+                            </div>
+                            <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                 <input type='radio' name='search' value='active' id='active-option'>
                                 {{ trans('langActiveUsers') }}
+                            </div>
+                            <div class="radio d-flex justify-content-start align-items-center">
                                 <input type='radio' name='search' value='inactive' id='inactive-option'>
                                 {{ trans('langInactiveUsers') }}
-
+                            </div>
                         </div>
 
                         <div class='form-group mt-4'>
