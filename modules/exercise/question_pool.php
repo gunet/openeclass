@@ -524,13 +524,13 @@ function clone_question_pool($clone_course_id)
  * @param $course_id
  */
 function purge_question_pool($course_id) {
-    Database::get()->query("DELETE FROM exercise_answer
+    /*Database::get()->query("DELETE FROM exercise_answer
             WHERE question_id IN (SELECT exercise_question.id
                 FROM exercise_question
                     LEFT JOIN exercise_with_questions
                         ON exercise_question.id = question_id AND
                            exercise_question.course_id = ?d
-                WHERE question_id IS NULL)", $course_id);
+                WHERE question_id IS NULL)", $course_id); */
     Database::get()->query("DELETE FROM exercise_question
             WHERE exercise_question.course_id = ?d
             AND exercise_question.id NOT IN
