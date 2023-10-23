@@ -4669,6 +4669,7 @@ function get_platform_logo($size='normal') {
  *        appropriate encoding
  */
 function set_content_disposition($disposition, $filename) {
-    $filename = strtr($filename, '"\'', '__');
+    $filename = strtr($filename, ['"\'' => '__', ',' => '__']);
+    //$filename = strtr($filename, '"\'', '__');
     header("Content-Disposition: $disposition; filename*=UTF-8''" . rawurlencode($filename));
 }
