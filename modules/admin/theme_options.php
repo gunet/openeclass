@@ -125,12 +125,11 @@ if (isset($_POST['import'])) {
                 $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
                 $theme_options = unserialize(base64_decode($base64_str));
-                $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
+                $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES(?s, ?s, 4)", $theme_options->name, $theme_options->styles)->lastInsertID;
                 rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
-                //Session::Messages($langThemeInstalled);
-                Session::flash('message',$langThemeInstalled); 
+                Session::flash('message',$langThemeInstalled);
                 Session::flash('alert-class', 'alert-success');
             } else {
                 die("Error while unzipping file !");
@@ -138,8 +137,7 @@ if (isset($_POST['import'])) {
             $archive->close();
         }
     } else {
-        //Session::Messages($langUnwantedFiletype);
-        Session::flash('message',$langUnwantedFiletype); 
+        Session::flash('message',$langUnwantedFiletype);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/admin/theme_options.php');
@@ -163,7 +161,7 @@ if (isset($_POST['optionsSave'])) {
         if ((!$copied)) {
             echo "Error : Not Copied";
         }
-        else{ 
+        else{
             //serialize $_post login img jumbotron
             $_POST['loginImg'] = $image_without_ext.".".$ext;
         }
@@ -182,7 +180,7 @@ if (isset($_POST['optionsSave'])) {
         if ((!$copied)) {
             echo "Error : Not Copied";
         }
-        else{ 
+        else{
             //serialize $_post login img jumbotron
             $_POST['loginImgL'] = $image_without_ext.".".$ext;
         }
@@ -207,7 +205,7 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_POST['themeOptionsName'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $theme_options_name = $_POST['themeOptionsName'];
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES(?s, '', 4)", $theme_options_name)->lastInsertID;
     clear_default_settings();
 
     clone_images($new_theme_id); //clone images
@@ -413,7 +411,7 @@ if (isset($_POST['optionsSave'])) {
 
         });
     </script>";
-    $all_themes = Database::get()->queryArray("SELECT * FROM theme_options ORDER BY name, id");
+    $all_themes = Database::get()->queryArray("SELECT * FROM theme_options WHERE version = 4 ORDER BY name, id");
     $themes_arr[0] = "---- $langDefaultThemeSettings ----";
     foreach ($all_themes as $row) {
         $themes_arr[$row->id] = $row->name;
@@ -545,7 +543,7 @@ if (isset($_POST['optionsSave'])) {
             'icon' => 'fa-upload',
             'class' => 'uploadTheme',
             'level' => 'primary-label')
-        
+
         ),false);
     if (isset($preview_theme)) {
         $tool_content .= "
@@ -602,6 +600,7 @@ if (isset($_POST['optionsSave'])) {
             </div>
         </div>
     </div></div>";
+
 $tool_content .= "
 <div role='tabpanel mt-4'>
 
@@ -819,7 +818,7 @@ $tool_content .= "
                       <div class='radio'>
                         <label>
                           <input type='radio' name='FormLoginPlacement' value='center-position' ".(($theme_options_styles['FormLoginPlacement'] == 'center-position')? 'checked' : '').">
-                          $langFormLoginPlacementCenter &nbsp;
+                          $langFormLoginPlacementCenter
                         </label>
                       </div>
                       <div class='radio'>
@@ -948,9 +947,9 @@ $tool_content .= "
                                     </div>    
                                 ";
                             }
-                            
+
                         }
-                    
+
 $tool_content .= "      
                 </div>
             </div>
@@ -986,9 +985,9 @@ $tool_content .= "
                                     </div>    
                                 ";
                             }
-                            
+
                         }
-                    
+
 $tool_content .= "      
                 </div>
             </div>

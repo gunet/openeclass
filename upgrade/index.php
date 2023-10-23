@@ -38,18 +38,17 @@ if ($language == 'el') {
 }
 
 $tool_content .= "
-<div class='col-sm-12'>
-  <div class='alert alert-info'>
-    <p class='margin-bottom-thin'>$langExplUpgrade</p>
-    <p class='margin-top-thin margin-bottom-thin text-danger'>$langExpl2Upgrade</p>
-    <p class='margin-top-thin margin-bottom-thin'>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
-      $langUpgRead <a href='$upgrade_info_file' target='_blank'>$langUpgMan</a> $langUpgLastStep</p>
-    <p>$langUpgradeCont</p>
-  </div>
+        <div class='col-12'>            
+            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langExpl2Upgrade</span></div>
+            <div class='alert alert-info'><i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                <p><span>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
+                    $langUpgRead <a href='$upgrade_info_file' target='_blank'>$langUpgMan</a> $langUpgLastStep
+                </p></span>
+            </div>            
+        </div>";
 
 
-  
-  <div class='panel panel-default login-page rounded-2 m-auto' style='max-width:400px;'>
+  $tool_content .= "<div class='panel panel-default login-page rounded-2 m-auto' style='max-width:400px;'>
       <div class='panel-heading rounded-0'>
         <h3>$langUpgDetails</h3>
       </div>

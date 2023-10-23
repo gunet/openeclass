@@ -216,10 +216,10 @@ function quote($s) {
 /**
  * @brief import themes
  */
-function importThemes($themes = null) {
+function importThemes() {
     global $webDir;
 
-    $themesDir = "$webDir/template/$_SESSION[theme]/themes";
+    $themesDir = "$webDir/template/modern/themes";
     if (!is_dir("$webDir/courses/theme_data")) make_dir("$webDir/courses/theme_data");
     if (is_dir($themesDir) && $handle = opendir($themesDir)) {
         while (false !== ($file_name = readdir($handle))) {
@@ -237,7 +237,7 @@ function importThemes($themes = null) {
  * @param $file_name
  */
 function installTheme($themesDir, $file_name) {
-    global $webDir, $logfile_path;
+    global $webDir;
 
     $tempdir = "$webDir/courses/theme_data/temp";
     if (file_exists($tempdir)) {
@@ -253,7 +253,7 @@ function installTheme($themesDir, $file_name) {
         $exists = Database::get()->querySingle('SELECT id FROM theme_options
             WHERE name = ?s', $theme_options->name);
         if (!$exists) {
-            $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)",
+            $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles, version) VALUES (?s, ?s, 4)",
                 $theme_options->name, $theme_options->styles)->lastInsertID;
             rename($tempdir . '/' . $theme_options->id, "$webDir/courses/theme_data/$new_theme_id");
         }
@@ -2635,9 +2635,13 @@ function upgrade_to_4_0($tbl_options): void {
         set_config('dont_display_testimonials', 0);
     }
 
+    // themes
     $current_theme = get_config('theme');
     if (!$current_theme or $current_theme == 'default') {
         set_config('theme', 'modern');
+    }
+    if (!DBHelper::fieldExists('theme_options', 'version')) {
+        Database::get()->query("ALTER TABLE theme_options ADD version TINYINT");
     }
 
     if (!DBHelper::fieldExists('group_properties', 'public_users_list')) {
@@ -2743,8 +2747,8 @@ function upgrade_to_4_0($tbl_options): void {
                                             ('open_courses', 5)");
 
     }
-    
-    
+
+
 
 }
 
