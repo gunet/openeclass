@@ -43,13 +43,22 @@ $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle($langResults);
 $sheet->getDefaultColumnDimension()->setWidth(30);
 $filename = $course_code . "_users_progress_results.xlsx";
+$course_title = course_id_to_title($course_id);
 
-$data[] = [ get_cert_title($element, $element_id) ];
+$data[] = [ "$course_title - " . get_cert_title($element, $element_id) . ""];
 $data[] = [];
 $data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langProgress ];
 
-$sql = Database::get()->queryArray("SELECT user, completed, completed_criteria, total_criteria FROM user_{$element}
-                                        WHERE $element = ?d", $element_id);
+$sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria
+                                            FROM user_{$element}
+                                            JOIN course_user ON user_{$element}.user = course_user.user_id
+                                             JOIN user ON user.id = user_{$element}.user
+                                                AND course_user.status = " .USER_STUDENT . "
+                                                AND editor = 0
+                                                AND course_id = ?d
+                                                AND $element = ?d
+                                            ORDER BY user.surname, user.givenname
+                                            ASC", $course_id, $element_id);
 
 foreach ($sql as $user_data) {
     $data[] = [ uid_to_name($user_data->user, 'surname'),
@@ -62,13 +71,13 @@ foreach ($sql as $user_data) {
 }
 
 $sheet->mergeCells("A1:F1");
-$sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+$sheet->getCell('A1')->getStyle()->getFont()->setBold(true)->setSize(13);
 for ($i = 1; $i <= 6; $i++) {
     $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
 }
+
 // create spreadsheet
 $sheet->fromArray($data, NULL);
-
 // file output
 $writer = new Xlsx($spreadsheet);
 header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
