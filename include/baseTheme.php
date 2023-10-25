@@ -293,7 +293,7 @@ function view($view_file, $view_data = array()) {
                 <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?v=4.0-dev'/>
             ";
         }
-       
+
 
         $styles_str .= " 
 
@@ -354,7 +354,7 @@ function view($view_file, $view_data = array()) {
                         background-color: transparent;
                     }
                 ";
-            
+
         }
 
         // BACKGROUND IMAGE OF LOGIN FORM
@@ -476,7 +476,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        // LINKS COLOR OF HEADER-FOOTER 
+        // LINKS COLOR OF HEADER-FOOTER
         if (!empty($theme_options_styles['linkColorHeaderFooter'])){
             $styles_str .= "
 
@@ -752,7 +752,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        // LINKS COLOR OF PLATFORM 
+        // LINKS COLOR OF PLATFORM
         if (!empty($theme_options_styles['linkColor'])){
             $styles_str .= "
 
@@ -929,7 +929,7 @@ function view($view_file, $view_data = array()) {
                 
             ";
         }
-        
+
         if (!empty($theme_options_styles['leftMenuHoverFontColor'])){
             $styles_str .= "
                 #leftnav .panel .panel-sidebar-heading:hover{

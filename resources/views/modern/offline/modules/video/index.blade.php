@@ -28,11 +28,11 @@
 
                     @include('layouts.partials.legend_view')
 
-                    {!! $action_bar or '' !!}
+                    {!! isset($action_bar) ?  $action_bar : '' !!}
 
                     @if ($count_video > 0 or $count_video_links > 0)
                         @if (count($items))
-                            
+
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
                                         <table class='table-default nocategory-links'>
@@ -44,11 +44,11 @@
                                         </table>
                                     </div>
                                 </div>
-                            
+
                         @endif
-                    
+
                         @if ($num_of_categories > 0)
-                           
+
                                 <div class='col-sm-12'>
                                     <div class='table-responsive'>
                                         <table class='table-default category-links'>
@@ -77,7 +77,7 @@
                                         </table>
                                     </div>
                                 </div>
-                            
+
                         @endif
                     @else
                         <div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div>
@@ -85,8 +85,8 @@
                 </div>
             </div>
         </div>
-    
+
 </div>
 </div>
-    
+
 @endsection

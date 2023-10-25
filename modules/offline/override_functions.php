@@ -23,7 +23,7 @@
 /**
  * Function lessonToolsMenu
  *
- * Creates a multi-dimensional array of the user's tools
+ * Creates a multidimensional array of the user's tools
  * in regard to the user's user level
  * (student | professor | platform administrator)
  *
@@ -35,11 +35,6 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
     global $langExternalLinks, $offline_course_modules, $langCourseTools;
 
     $sideMenuGroup = array();
-    $sideMenuSubGroup = array();
-    $sideMenuText = array();
-    $sideMenuLink = array();
-    $sideMenuImg = array();
-    $sideMenuID = array();
 
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
@@ -60,7 +55,7 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         $arrMenuType = array('type' => 'text',
                             'text' => $section['title'],
                             'class' => $section['class']);
-        array_push($sideMenuSubGroup, $arrMenuType);
+        $sideMenuSubGroup[] = $arrMenuType;
 
         foreach ($offline_course_modules as $key => $value) {
             $mids[$key] = $offline_course_modules[$key]['link'];
@@ -82,11 +77,11 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
             array_push($sideMenuID, $m);
 
         }
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuSubGroup, $sideMenuID);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
+        $sideMenuSubGroup[] = $sideMenuID;
+        $sideMenuGroup[] = $sideMenuSubGroup;
     }
     $result2 = getExternalLinks();
     if ($result2) { // display external link (if any)
@@ -97,27 +92,24 @@ function lessonToolsMenu_offline($rich=true, $urlAppend) {
         $arrMenuType = array('type' => 'text',
             'text' => $langExternalLinks,
             'class' => 'external');
-        array_push($sideMenuSubGroup, $arrMenuType);
+        $sideMenuSubGroup[] = $arrMenuType;
 
         foreach ($result2 as $ex_link) {
-            array_push($sideMenuText, q($ex_link->title));
-            array_push($sideMenuLink, q($ex_link->url));
-            array_push($sideMenuImg, 'fa-external-link');
+            $sideMenuText[] = q($ex_link->title);
+            $sideMenuLink[] = q($ex_link->url);
+            $sideMenuImg[] = 'fa-external-link';
         }
 
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
+        $sideMenuGroup[] = $sideMenuSubGroup;
     }
     return $sideMenuGroup;
 }
 
 /**
  * Used in documents path navigation bar
- * @global type $langRoot
- * @global type $base_url
- * @global type $group_sql
  * @param type $path
  * @return type
  */
@@ -146,6 +138,7 @@ function make_clickable_path($path) {
 }
 
 function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $filterl, $is_in_tinymce, $compatiblePlugin) {
+
     $uncatresults = array();
 
     $vis_q = ($is_editor) ? '' : "AND visible = 1";
@@ -188,11 +181,11 @@ function getLinksOfCategory($cat_id, $is_editor, $filterv, $order, $course_id, $
                 if (!$is_in_tinymce and ( !empty($myrow->creator) or ! empty($myrow->publisher))) {
                     $resultObj->extradescription .= '<br><small>';
                     if ($myrow->creator == $myrow->publisher) {
-                        $resultObj->extradescription .= $GLOBALS['langcreator'] . ": " . q($myrow->creator);
+                        $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
                     } else {
                         $emit = false;
                         if (!empty($myrow->creator)) {
-                            $resultObj->extradescription .= $GLOBALS['langcreator'] . ": " . q($myrow->creator);
+                            $resultObj->extradescription .= $GLOBALS['langCreator'] . ": " . q($myrow->creator);
                             $emit = true;
                         }
                         if (!empty($myrow->publisher)) {

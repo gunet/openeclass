@@ -51,16 +51,6 @@ function zip_offline_directory($zip_filename, $downloadDir) {
 
 /**
  * @brief get / render documents
- * @global type $blade
- * @global type $webDir
- * @global type $course_id
- * @global type $course_code
- * @global type $downloadDir
- * @global type $langDownloadDir
- * @global type $langSave
- * @global type $copyright_titles
- * @global type $copyright_links
- * @global type $theme_data
  * @param type $curDirPath
  * @param type $curDirName
  * @param type $curDirPrefix
@@ -68,9 +58,10 @@ function zip_offline_directory($zip_filename, $downloadDir) {
  */
 function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) {
     global $blade, $webDir, $course_id, $course_code, $downloadDir,
-           $langDownloadDir, $langSave, $copyright_titles, $copyright_links,
+           $langDownloadDir, $langSave,
            $theme_data;
 
+    copyright_info_init();
     // doc init
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     if (!file_exists($downloadDir . '/modules/' . $curDirName)) {
@@ -168,8 +159,8 @@ function offline_documents($curDirPath, $curDirName, $curDirPrefix, $bladeData) 
             if ($copyid and $copyid != 2) {
                 $info['copyrighted'] = true;
                 $info['copyright_icon'] = ($copyid == 1) ? 'fa-copyright' : 'fa-cc';
-                $info['copyright_title'] = $copyright_titles[$copyid];
-                $info['copyright_link'] = $copyright_links[$copyid];
+                $info['copyright_title'] = $GLOBALS['copyright_titles'][$copyid];
+                $info['copyright_link'] = $GLOBALS['copyright_links'][$copyid];
             }
 
             $files[] = (object) $info;
@@ -310,9 +301,6 @@ function offline_course_units() {
  * @brief get / render unit resources from a given course unit
  * @param type $unit_id
  * @param type $downloadDir
- * @global type $course_id
- * @global type $theme_data
- * @global type $blade
  */
 function offline_unit_resources($bladeData, $downloadDir) {
 
@@ -548,12 +536,11 @@ function offline_wiki($bladeData) {
 
 /**
  * @brief get glossary terms
- * @global type $blade
- * @global type $course_id
  * @param array $bladeData
  * @param type $downloadDir
  */
 function offline_glossary($bladeData, $downloadDir) {
+
     global $blade, $course_id;
 
     $categories = $prefixes = array();
@@ -574,7 +561,7 @@ function offline_glossary($bladeData, $downloadDir) {
         }
     }, $course_id);
 
-    if (count($prefixes) > 1) {
+    if (count($prefixes) > 0) {
         $html_prefix = '';
         $begin = true;
         foreach ($prefixes as $letter) {
@@ -586,7 +573,7 @@ function offline_glossary($bladeData, $downloadDir) {
         }
         $begin = true;
         foreach ($prefixes as $letter) {
-            $bladeData['glossary'] = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
+            $bladeData['glossary'] = $q = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
                                 FROM glossary WHERE course_id = ?d AND term LIKE '$letter%'
                                 GROUP BY term, definition, url, notes, category_id, id
                                 ORDER BY term", $course_id);
@@ -694,7 +681,7 @@ function get_theme_options() {
     $data = [];
 
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
-    
+
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);

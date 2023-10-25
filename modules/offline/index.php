@@ -22,7 +22,7 @@
 
 // Allow unlimited time for creating the archive
 set_time_limit(0);
-//ini_set('display_errors', '1');
+ini_set('display_errors', '1');
 $require_current_course = true;
 
 require_once '../../include/baseTheme.php';
@@ -46,8 +46,7 @@ require_once 'offline_imscp.php';
 // security check
 $offline_course = get_config('offline_course') && (setting_get(SETTING_OFFLINE_COURSE, $course_id));
 if (!$offline_course) {
-    //Session::Messages($langForbidden, 'alerτ-warning');
-    Session::flash('message',$langForbidden); 
+    Session::flash('message',$langForbidden);
     Session::flash('alert-class', 'alert-warning');
     redirect_to_home_page('');
 }
@@ -60,7 +59,6 @@ $course = new Course();
 /************************************ */
 /* ViewDir for modern offline course */
 /*********************************** */
-// $viewsDir = $webDir . '/resources/views/offline';
 $viewsDir = $webDir . '/resources/views/modern/offline';
 /************************************* */
 /************************************* */
@@ -89,9 +87,8 @@ if (!empty($theme_data['logo_img_small'])) {
 }
 
 $data = [
+    'breadcrumbs' => '',
     'urlAppend' => './',
-    'template_base' => './template/modern',
-    'themeimg' => './template/modern/img',
     'is_mobile' => false,
     'eclass_version' => ECLASS_VERSION,
     'jquery_version' => JQUERY_VERSION,
@@ -106,7 +103,6 @@ $data = [
     'user_personal_calendar' => null,
     'course_home_sidebar_widgets' => null,
     'course_descriptions_modals' => null,
-    'pageTitle' => null,
     'container' => null,
     'uname' => null,
     'menuTypeID' => null,
@@ -124,7 +120,8 @@ $data = [
     'is_in_tinymce' => false,
     'can_upload' => false,
     'full_description' => '',
-    'truncated_text' => ''
+    'truncated_text' => '',
+    'default_open_group' => 0
 ];
 
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license, 
@@ -151,15 +148,12 @@ foreach ($departments as $dep) {
 
 $section_title = $currentCourseName;
 $toolArr = lessonToolsMenu_offline(true, $data['urlAppend']);
-$global_data = @compact('is_editor', 'course_code', 'course_id', 'language',
-    'pageTitle', 'urlAppend', 'urlServer', 'eclass_version', 'template_base', 'toolName',
-    'container', 'uid', 'uname', 'is_embedonce', 'session', 'nextParam',
-    'require_help', 'helpTopic', 'helpSubTopic', 'head_content', 'toolArr', 'module_id',
-    'module_visibility', 'professor', 'pageName', 'menuTypeID', 'section_title',
-    'messages', 'breadcrumbs', 'logo_img', 'logo_img_small', 'styles_str',
-    'is_mobile', 'current_module_dir','search_action', 'require_current_course',
-    'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
-    'show_toggle_student_view', 'themeimg', 'currentCourseName');
+$global_data = compact('is_editor', 'course_code', 'course_id', 'language',
+    'urlServer', 'toolName',
+    'uid', 'session', 'head_content', 'toolArr', 'module_id',
+    'pageName', 'section_title', 'logo_img', 'logo_img_small', 'styles_str',
+    'require_current_course', 'is_course_admin',
+    'currentCourseName');
 $bladeData = array_merge($global_data, $data);
 $bladeData['pageTitle'] = $course_info->title;
 $bladeData['professor'] = $course_info->prof_names;

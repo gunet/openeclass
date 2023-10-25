@@ -22,9 +22,12 @@
     <!-- Font Awesome - A font of icons -->
     <link href="{{ $urlAppend }}template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet"/>
 
-    
+
     <!-- Font Manrope -->
     <link href="{{ $urlAppend }}template/modern/css/font-Manrope/css/Manrope.css" rel="stylesheet"/>
+
+    <!-- fullcalendar v3.10.2-->
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}js/fullcalendar/fullcalendar.css?v=4.0-dev"/>
 
     <!-- DataTables 1.10.19 version -->
     <link rel="stylesheet" href="{{ $urlAppend }}template/modern/css/jquery.dataTables.min.css"/>
@@ -73,7 +76,11 @@
     <script src="{{ $urlAppend }}js/screenfull/screenfull.min.js"></script>
     <!-- cLICKbOARD -->
     <script src="{{ $urlAppend }}js/clipboard.js/clipboard.min.js"></script>
-    
+    <!-- fullcalendar v3.10.2 and moment v 2.29.1-->
+    <script src="{{ $urlAppend }}js/fullcalendar/moment.min.js"></script>
+    <script src="{{ $urlAppend }}js/fullcalendar/fullcalendar.min.js"></script>
+    <script src="{{ $urlAppend }}js/fullcalendar/locales/fullcalendar.{{ $language }}.js"></script>
+
 
     <script>
         $(function() {
@@ -105,6 +112,7 @@
 <body>
 
     <div class="ContentEclass d-flex flex-column min-vh-100">
+
         <!-- Desktop navbar -->
         <div class="d-none d-lg-block">
             @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
