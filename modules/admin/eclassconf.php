@@ -30,7 +30,6 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 define('MONTHS', 30 * 24 * 60 * 60);
 
-$data['webDir'] = $webDir;
 $data['mail_form_js'] = $mail_form_js;
 $data['registration_link_options'] = $registration_link_options = [
     'show' => $langViewShow,
@@ -88,6 +87,18 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
+
+    //Maintenance Text set
+    foreach ($session->active_ui_languages as $langcode) {
+        $langVar = 'maintenance_text_' . $langcode;
+        if (isset($_POST[$langVar])) {
+            $oldText = get_config($langVar);
+            $newText = purify(trim($_POST[$langVar]));
+            if ($oldText != $newText) {
+                set_config($langVar, purify(trim($_POST[$langVar])));
+            }
+        }
+    }
 
     $config_vars = [
         'email_required' => true,
@@ -288,7 +299,6 @@ else {
                                 $loclangname
                             </label>
                         </div>";
-
         }
     }
 

@@ -1225,82 +1225,74 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class='landing-default'>
-                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langMaintenanceChange') }}:</label>
-                                                    @foreach ($session->active_ui_languages as $langcode)
-                                                        @php
-                                                            $langname = trans('langNameOfLang[langcode_to_name($langcode)]');
-                                                            $maintenance_text = get_config('maintenance_text_' . $langcode);
-                                                        @endphp
-                                                        <div class='form-group mb-4'>
-                                                            <label for='privacy_policy_text_{{ $langcode }}' class='col-sm-2 control-label'>{{ trans('langText') }}:<br>({{ trans('langname') }})</label>
-                                                            <div class='col-sm-12'>
-                                                                {!! rich_text_editor("maintenance_text_$langcode", 5, 20, $maintenance_text) !!}
+                                                <label class='col-sm-12 control-label-notes'>{{ trans('langMaintenanceChange') }}</label>
+                                                @foreach ($selectable_langs as $langCode => $langName)
+                                                    @php $maintenance_text = get_config('maintenance_text_' . $langCode) @endphp
+                                                    <div class='form-group mt-4'>
+                                                        <label for='maintenance_text_{{ $langCode }}' class='col-sm-2 control-label'>{{ trans('langText') }}:<br>({{ $langName }})</label>
+                                                        <div class='col-sm-12'>
+                                                            {!! rich_text_editor('maintenance_text_'.$langCode, 5, 20, $maintenance_text) !!}
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                                <hr>
+                                                <div>
+                                                    <label class='col-sm-2 control-label'><strong>{{ trans('langThemes') }}</label>
+                                                    <div class='row'>
+                                                        <div class='col-sm-6'>
+                                                            <div class='form-check'>
+                                                                <input class='form-check-input' type='radio' name='maintenance_theme' id='image1' value='1' {!! checkMaintenanceTheme($maintenance_theme, 1) !!}>
+                                                                <label class='form-check-label' for='image1'>
+                                                                    <img style='max-width: 300px;' src='{{ $urlServer }}maintenance/preview_img/theme_1.png' class='img-fluid' alt='Image preview 1'>
+                                                                </label>
                                                             </div>
                                                         </div>
-                                                    @endforeach
-                                                    <hr>
-                                                    <div>
-                                                        <label class='col-sm-2 control-label'><strong>{{ trans('langThemes') }}</label>
-                                                        <div class='row'>
-                                                            <div class='col-sm-6'>
-                                                                <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='maintenance_theme' id='image1' value='1' {!! checkMaintenanceTheme($maintenance_theme, 1) !!}>
-                                                                    <label class='form-check-label' for='image1'>
-                                                                        <img style='max-width: 300px;' src='{{ $webDir }}maintenance/preview_img/theme_1.png' class='img-fluid' alt='Image preview 1'>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class='col-sm-6'>
-                                                                <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='maintenance_theme' id='image2' value='2' {!! checkMaintenanceTheme($maintenance_theme, 2) !!}>
-                                                                    <label class='form-check-label' for='image2'>
-                                                                        <img style='max-width: 300px;' src='{{ $webDir }}/maintenance/preview_img/theme_2.png' class='img-fluid' alt='Image preview 2'>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class='row'>
-                                                            <div class='col-sm-6'>
-                                                                <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='maintenance_theme' id='image3' value='3' {!! checkMaintenanceTheme($maintenance_theme, 3) !!}>
-                                                                    <label class='form-check-label' for='image3'>
-                                                                        <img style='max-width: 300px;' src='{{ $webDir }}maintenance/preview_img/theme_3.png' class='img-fluid' alt='Image preview 3'>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class='col-sm-6'>
-                                                                <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='maintenance_theme' id='image4' value='4' {!! checkMaintenanceTheme($maintenance_theme, 4) !!}>
-                                                                    <label class='form-check-label' for='image4'>
-                                                                        <img style='max-width: 300px;' src='{{ $webDir }}maintenance/preview_img/theme_4.png' class='img-fluid' alt='Image preview 4'>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class='row'>
-                                                            <div class='col-sm-6'>
-                                                                <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='maintenance_theme' id='image5' value='5' {!! checkMaintenanceTheme($maintenance_theme, 5) !!}>
-                                                                    <label class='form-check-label' for='image5'>
-                                                                        <img style='max-width: 300px;' src='{{ $webDir }}maintenance/preview_img/theme_5.png' class='img-fluid' alt='Image preview 5'>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class='col-sm-6'>
-                                                                <div class='form-check'>
-                                                                    <input class='form-check-input' type='radio' name='maintenance_theme' id='image6' value='6' {!! checkMaintenanceTheme($maintenance_theme, 6) !!}>
-                                                                    <label class='form-check-label' for='image6'>
-                                                                        <img style='max-width: 300px;' src='{{ $webDir }}maintenance/preview_img/theme_6.png' class='img-fluid' alt='Image preview 6'>
-                                                                    </label>
-                                                                </div>
+                                                        <div class='col-sm-6'>
+                                                            <div class='form-check'>
+                                                                <input class='form-check-input' type='radio' name='maintenance_theme' id='image2' value='2' {!! checkMaintenanceTheme($maintenance_theme, 2) !!}>
+                                                                <label class='form-check-label' for='image2'>
+                                                                    <img style='max-width: 300px;' src='{{ $urlServer }}/maintenance/preview_img/theme_2.png' class='img-fluid' alt='Image preview 2'>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                     </div>
-
-
+                                                    <div class='row'>
+                                                        <div class='col-sm-6'>
+                                                            <div class='form-check'>
+                                                                <input class='form-check-input' type='radio' name='maintenance_theme' id='image3' value='3' {!! checkMaintenanceTheme($maintenance_theme, 3) !!}>
+                                                                <label class='form-check-label' for='image3'>
+                                                                    <img style='max-width: 300px;' src='{{ $urlServer }}maintenance/preview_img/theme_3.png' class='img-fluid' alt='Image preview 3'>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class='col-sm-6'>
+                                                            <div class='form-check'>
+                                                                <input class='form-check-input' type='radio' name='maintenance_theme' id='image4' value='4' {!! checkMaintenanceTheme($maintenance_theme, 4) !!}>
+                                                                <label class='form-check-label' for='image4'>
+                                                                    <img style='max-width: 300px;' src='{{ $urlServer }}maintenance/preview_img/theme_4.png' class='img-fluid' alt='Image preview 4'>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class='row'>
+                                                        <div class='col-sm-6'>
+                                                            <div class='form-check'>
+                                                                <input class='form-check-input' type='radio' name='maintenance_theme' id='image5' value='5' {!! checkMaintenanceTheme($maintenance_theme, 5) !!}>
+                                                                <label class='form-check-label' for='image5'>
+                                                                    <img style='max-width: 300px;' src='{{ $urlServer }}maintenance/preview_img/theme_5.png' class='img-fluid' alt='Image preview 5'>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class='col-sm-6'>
+                                                            <div class='form-check'>
+                                                                <input class='form-check-input' type='radio' name='maintenance_theme' id='image6' value='6' {!! checkMaintenanceTheme($maintenance_theme, 6) !!}>
+                                                                <label class='form-check-label' for='image6'>
+                                                                    <img style='max-width: 300px;' src='{{ $urlServer }}maintenance/preview_img/theme_6.png' class='img-fluid' alt='Image preview 6'>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-
                                             </fieldset>
                                         </div>
                                     </div>
@@ -1340,8 +1332,9 @@
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#ten">{{ trans('langDefaultQuota') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
-
                                     <a class="nav-link nav-link-adminTools normalColorBlueText" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
+
+                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#fourteen">{{ trans('langMaintenance') }}</a>
                                 </nav>
                             </nav>
                         </div>

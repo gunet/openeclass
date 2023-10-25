@@ -208,12 +208,6 @@ if (($upgrade_begin = get_config('upgrade_begin'))) {
     }
 }
 
-//Maintenance redirect
-if (get_config('maintenance') == 1 ) {
-    if (!$is_admin and !defined('MAINTENANCE_PAGE')) {
-        redirect_to_home_page('maintenance/');
-    }
-}
 // ----------------- sso transition ------------------
 if (isset($_SESSION['SSO_USER_TRANSITION']) and !isset($transition_script)) {
     header("Location: {$urlServer}modules/auth/transition/auth_transition.php");
@@ -246,6 +240,13 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_power_user = false;
     $is_usermanage_user = false;
     $is_departmentmanage_user = false;
+}
+
+//Maintenance redirect
+if (get_config('maintenance') == 1 ) {
+    if (!$is_admin and !defined('MAINTENANCE_PAGE')) {
+        redirect_to_home_page('maintenance/');
+    }
 }
 
 $theme = $_SESSION['theme'] = get_config('theme');

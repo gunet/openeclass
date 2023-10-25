@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.2
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2015  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,33 +26,5 @@ require_once '../include/baseTheme.php';
 
 $pageName = $langAdminLoginPage;
 
-$tool_content .= "  
-<div class='col-sm-12'>  
-  <div class='panel panel-admin login-page'>
-    <div class='panel-heading'>
-      <div class='panel-title p-0 text-center'>$langUpgDetails</div>
-    </div>
-    <div class='panel-body login-page-option'>
-      <form class='form-horizontal' role='form' action='$urlServer' method='post'>
-        <input type='hidden' name='admin_login' value='true'>
-        <div class='form-group mt-3'>
-          <div class='col-12'>         
-            <input class='form-control' name='uname' placeholder='$langUsername' autofocus>
-          </div>
-        </div>
-        <div class='form-group mt-3'>
-          <div class='col-12'>
-            <input class='form-control' name='pass' placeholder='$langPass' type='password'>
-          </div>
-        </div>
-        <div class='form-group mt-3'>
-          <div class='col-12 d-flex justify-content-md-start justify-content-center'>
-            <button class='btn submitAdminBtn margin-bottom-fat' type='submit' name='submit' value='submit'>$langAdminLoginPage</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>";
-
-draw($tool_content, 0);
+$data['menuTypeID'] = 0;
+view('main.login_form_admin', $data);
