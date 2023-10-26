@@ -1229,15 +1229,15 @@
                                                 @foreach ($selectable_langs as $langCode => $langName)
                                                     @php $maintenance_text = get_config('maintenance_text_' . $langCode) @endphp
                                                     <div class='form-group mt-4'>
-                                                        <label for='maintenance_text_{{ $langCode }}' class='col-sm-2 control-label'>{{ trans('langText') }}:<br>({{ $langName }})</label>
+                                                        <label for='maintenance_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}:({{ $langName }})</label>
                                                         <div class='col-sm-12'>
                                                             {!! rich_text_editor('maintenance_text_'.$langCode, 5, 20, $maintenance_text) !!}
                                                         </div>
                                                     </div>
                                                 @endforeach
                                                 <hr>
-                                                <div>
-                                                    <label class='col-sm-2 control-label'><strong>{{ trans('langThemes') }}</label>
+                                                <div class='mt-3'>
+                                                    <label class='col-sm-12 control-label-notes mb-3'>{{ trans('langThemes') }}</label>
                                                     <div class='row'>
                                                         <div class='col-sm-6'>
                                                             <div class='form-check'>
