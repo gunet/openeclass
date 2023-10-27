@@ -140,7 +140,7 @@ function add_multimedia_to_certificate($element, $element_id) {
  * @param type $element
  * @param type $element_id
  */
-function add_lp_to_certificate($element, $element_id) {
+function add_lp_to_certificate($element, $element_id, $activity_type) {
 
     if (isset($_POST['lp'])) {
         foreach ($_POST['lp'] as $datakey => $data) {
@@ -148,11 +148,12 @@ function add_lp_to_certificate($element, $element_id) {
                                 SET $element = ?d,
                                 module = " . MODULE_ID_LP . ",
                                 resource = ?d,
-                                activity_type = '" . LearningPathEvent::ACTIVITY . "',
+                                activity_type = ?s,
                                 operator = ?s,
                                 threshold = ?f",
                 $element_id,
                 $_POST['lp'][$datakey],
+                $activity_type,
                 $_POST['operator'][$data],
                 $_POST['threshold'][$data]);
         }
@@ -1060,6 +1061,7 @@ function get_resource_details($element, $resource_id) {
             $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
             $langAttendance;
 
+
     $data = array('type' => '', 'title' => '');
 
     $res_data = Database::get()->querySingle("SELECT activity_type, module, resource FROM {$element}_criterion WHERE id = ?d", $resource_id);
@@ -1086,6 +1088,13 @@ function get_resource_details($element, $resource_id) {
         case LearningPathEvent::ACTIVITY:
                 $title = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource)->name;
                 $type = "$langLearnPath";
+            break;
+        case LearningPathDurationEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->name;
+            }
+            $type = "$langOfLearningPathDuration";
             break;
         case ViewingEvent::DOCUMENT_ACTIVITY:
                 $cer_res = Database::get()->queryArray("SELECT (CASE WHEN title IS NULL OR title=' ' THEN filename ELSE title END) AS file_details FROM document
@@ -1316,7 +1325,7 @@ function refresh_user_progress($element, $element_id): void
         $q = Database::get()->queryArray("SELECT * FROM {$element}_criterion WHERE $element = ?d", $element_id);
         foreach ($q as $data) {
             switch ($data->activity_type) {
-                case "assignment":
+                case AssignmentEvent::ACTIVITY:
                         $eventData = new stdClass();
                         $eventData->courseId = $course_id;
                         $eventData->uid = $u;
@@ -1343,7 +1352,8 @@ function refresh_user_progress($element, $element_id): void
                         $eventData->resource = intval($data->resource);
                         ExerciseEvent::trigger(ExerciseEvent::NEWRESULT, $eventData);
                     break;
-                case "learning path":
+                case LearningPathEvent::ACTIVITY:
+                case LearningPathDurationEvent::ACTIVITY:
                         triggerLPGame($course_id, $u, $data->resource, LearningPathEvent::UPDPROGRESS);
                     break;
                 case AttendanceEvent::ACTIVITY:

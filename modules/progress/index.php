@@ -37,6 +37,7 @@ require_once 'WikiEvent.php';
 require_once 'ForumEvent.php';
 require_once 'ForumTopicEvent.php';
 require_once 'LearningPathEvent.php';
+require_once 'LearningPathDurationEvent.php';
 require_once 'RatingEvent.php';
 require_once 'ViewingEvent.php';
 require_once 'CourseParticipationEvent.php';
@@ -217,7 +218,11 @@ if ($is_editor) {
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_lp'])) { // add learning path activity in certificate
-        add_lp_to_certificate($element, $element_id);
+        add_lp_to_certificate($element, $element_id, LearningPathEvent::ACTIVITY);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_lpduration'])) { // add learning path duration activity in certificate
+        add_lp_to_certificate($element, $element_id, LearningPathDurationEvent::ACTIVITY);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_document'])) { // add document activity in certificate

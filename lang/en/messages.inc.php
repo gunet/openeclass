@@ -4868,6 +4868,7 @@ $langOfForums = "Forum";
 $langOfBlogComments = "Blog comments";
 $langOfCourseComments = "$langsCourse comments";
 $langOfLearningPath = "Learning Path";
+$langOfLearningPathDuration = "Learning Path duration";
 $langNoCertificateUsers = "There are no $langsStudents who participate in this certificate.";
 $langUsedCertRes = "Activity has alread been used by some $langsstudent_acc";
 $langNoUserActivity = "$langStudent hasn't completed any actitivity.";
