@@ -36,6 +36,7 @@
  */
 
 require_once 'modules/progress/LearningPathEvent.php';
+require_once 'modules/progress/LearningPathDurationEvent.php';
 require_once 'modules/analytics/LpAnalyticsEvent.php';
 require_once 'include/lib/mediaresource.factory.php';
 
@@ -1684,6 +1685,9 @@ function triggerLPGame($courseId, $uid, $lpId, $eventName) {
     $eventData->resource = intval($lpId);
 
     LearningPathEvent::trigger($eventName, $eventData);
+
+    $eventData->activityType = LearningPathDurationEvent::ACTIVITY;
+    LearningPathDurationEvent::trigger($eventName, $eventData);
 }
 
 /**

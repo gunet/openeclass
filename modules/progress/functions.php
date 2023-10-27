@@ -280,7 +280,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $langOfAssignment, $langExerciseAsModuleLabel, $langOfBlog,
            $langMediaAsModuleLabel, $langOfEBook, $langOfPoll, $langWiki,
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
-           $langOfLearningPath, $langDelete, $langEditChange,
+           $langOfLearningPath, $langOfLearningPathDuration, $langDelete, $langEditChange,
            $langDocumentAsModuleLabel, $langCourseParticipation,
            $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
@@ -389,6 +389,10 @@ function display_activities($element, $id, $unit_id = 0) {
             'class' => ''),
         array('title' => $langOfLearningPath,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lp",
+            'icon' => 'fa fa-ellipsis-h fa-fw',
+            'class' => ''),
+        array('title' => $langOfLearningPathDuration,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=lpduration",
             'icon' => 'fa fa-ellipsis-h fa-fw',
             'class' => ''),
         /*array('title' => $langOfLikesSocial,
@@ -736,7 +740,8 @@ function is_unit_prereq_enabled($unit_id) {
  * @param type $unit_id
  * @param type $unit_resource_id
  */
-function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_resource_id = 0) {
+function
+insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_resource_id = 0) {
 
     switch ($activity) {
         case 'coursecompletion':
@@ -769,7 +774,10 @@ function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_r
             display_available_forumtopics($element, $element_id, $unit_id, $unit_resource_id);
             break;
         case 'lp':
-            display_available_lps($element, $element_id, $unit_id, $unit_resource_id);
+            display_available_lps($element, $element_id, LearningPathEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            break;
+        case 'lpduration':
+            display_available_lps($element, $element_id, LearningPathDurationEvent::ACTIVITY, $unit_id, $unit_resource_id);
             break;
         case 'likesocial';
         case 'likeforum';
@@ -1461,13 +1469,19 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
  * @param int $unit_id
  * @param int $unit_resource_id
  */
-function display_available_lps($element, $element_id, int $unit_id = 0, $unit_resource_id = 0) {
+function display_available_lps($element, $element_id, $activity_type, int $unit_id = 0, $unit_resource_id = 0) {
 
     global $course_id, $course_code, $urlServer, $tool_content,
-           $langNoLearningPath, $langLearningPaths, $langPercentage,
+           $langNoLearningPath, $langLearningPaths, $langPercentage, $langHours,
            $langChoice, $langAddModulesButton, $langOperator;
 
-    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $element_name = ($element == 'certificate') ? 'certificate_id' : 'badge_id';
+    $threshold_col_title = $langPercentage;
+    $form_submit_name = 'add_lp';
+    if ($activity_type == LearningPathDurationEvent::ACTIVITY) {
+        $threshold_col_title = $langHours;
+        $form_submit_name = 'add_lpduration';
+    }
 
     if ($unit_id) {
         if ($unit_resource_id) {
@@ -1520,9 +1534,10 @@ function display_available_lps($element, $element_id, int $unit_id = 0, $unit_re
                 "<thead><tr class='list-header'>" .
                 "<th>$langLearningPaths</th>" .
                 "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langPercentage</th>" .
+                "<th style='width:50px;'>$threshold_col_title</th>" .
                 "<th style='width:10px;'>$langChoice</th>" .
                 "</tr></thead>";
+
         foreach ($lpinfo as $entry) {
             $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d
                                                     AND `rank` = (SELECT MIN(`rank`) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)",
@@ -1540,8 +1555,7 @@ function display_available_lps($element, $element_id, int $unit_id = 0, $unit_re
         }
         $tool_content .= "</table></div>";
         $tool_content .= "<div class='text-end mt-3'>";
-        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='add_lp' value='$langAddModulesButton'></div></form>";
-
+        $tool_content .= "<input class='btn submitAdminBtn' type='submit' name='$form_submit_name' value='$langAddModulesButton'></div></form>";
     }
 }
 
@@ -2920,6 +2934,7 @@ function criteria_with_operators() {
     return array(AssignmentEvent::ACTIVITY,
                  ExerciseEvent::ACTIVITY,
                  LearningPathEvent::ACTIVITY,
+                 LearningPathDurationEvent::ACTIVITY,
                  WikiEvent::ACTIVITY,
                  ForumEvent::ACTIVITY,
                  ForumTopicEvent::ACTIVITY,

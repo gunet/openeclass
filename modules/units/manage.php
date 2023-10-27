@@ -43,6 +43,7 @@ require_once 'modules/progress/WikiEvent.php';
 require_once 'modules/progress/ForumEvent.php';
 require_once 'modules/progress/ForumTopicEvent.php';
 require_once 'modules/progress/LearningPathEvent.php';
+require_once 'modules/progress/LearningPathDurationEvent.php';
 require_once 'modules/progress/RatingEvent.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/progress/CourseParticipationEvent.php';
@@ -117,14 +118,13 @@ if ($is_editor) {
             'level' =>  'primary-label',
             'show'  =>  !$show_completion_button,
         )
-        
+
     ));
     //Top Menu End
 
     $allCourseUnits = Database::get()->queryArray("SELECT * FROM course_units 
                                                     WHERE course_id = ?d", $course_id);
     if (!$allCourseUnits) {
-        //Session::Messages($langNoUnits);
         Session::flash('message',$langNoUnits);
         Session::flash('alert-class', 'alert-warning');
         redirect_to_home_page("courses/$course_code/");
@@ -132,7 +132,6 @@ if ($is_editor) {
 
     if (isset($_POST['mod_cert_activity'])) { // modify certificate activity
         modify_certificate_activity($element, $element_id, $_POST['activity_id']);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
@@ -140,85 +139,75 @@ if ($is_editor) {
     // Add resources
     elseif ( isset($_POST['add_exercise']) ) {
         add_exercise_to_certificate($element, $element_id);
-        //Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif(isset($_POST['add_assignment'])) { // add assignment activity in certificate
         add_assignment_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_blogcomment'])) {
         add_blogcomment_to_certificate($element, $element_id);
-        //Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     }  elseif (isset($_POST['add_participation'])) {
         add_courseparticipation_to_certificate($element, $element_id);
-        //Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_gradebook'])) {
         add_gradebook_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_multimedia'])) { // add multimedia activity in certificate
         add_multimedia_to_certificate($element, $element_id);
-        //Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_forum'])) { // add forum activity in certificate
         add_forum_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_forumtopic'])) { // add forum activity in certificate
         add_forumtopic_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_document'])) { // add document activity in certificate
         add_document_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_lp'])) { // add learning path activity in certificate
-        add_lp_to_certificate($element, $element_id);
-     //   Session::Messages("$langQuotaSuccess", 'alert-success');
+        add_lp_to_certificate($element, $element_id, LearningPathEvent::ACTIVITY);
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
+    } elseif (isset($_POST['add_lpduration'])) { // add learning path activity in certificate
+        add_lp_to_certificate($element, $element_id, LearningPathDurationEvent::ACTIVITY);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_poll'])) { // add poll activity in certificate
         add_poll_to_certificate($element, $element_id);
-      //  Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_ebook'])) { // add ebook activity in certificate
         add_ebook_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_wiki'])) { // add wiki activity in certificate
         add_wiki_to_certificate($element, $element_id);
-       // Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_coursecompletiongrade'])) {
         add_coursecompletiongrade_to_certificate($element, $element_id);
-     //   Session::Messages("$langQuotaSuccess", 'alert-success');
         Session::flash('message',"$langQuotaSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
@@ -229,18 +218,15 @@ if ($is_editor) {
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND unit_id=?d", $course_id, $unit_id);
             $element_id = $badge->id;
             $display = FALSE;
-            //Session::Messages("$langUnitCompletionActivated", 'alert-success');
             Session::flash('message',"$langUnitCompletionActivated");
             Session::flash('alert-class', 'alert-success');
             redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id&badge_id=".$element_id);
         } elseif ( isset($_GET['deluc'])) {
-            //Session::Messages("$langGlossaryDeleted", "alert-success");
             Session::flash('message',"$langGlossaryDeleted");
             Session::flash('alert-class', 'alert-success');
             $badge = Database::get()->querySingle("SELECT * FROM badge WHERE course_id = ?d AND unit_id = ?d", $course_id, $unit_id);
             if (purge_certificate('badge', $badge->id, $unit_id)) {
                 delete_unit_prerequisite($unit_id);
-                //Session::Messages("$langGlossaryDeleted", "alert-success");
                 Session::flash('message',"$langGlossaryDeleted");
                 Session::flash('alert-class', 'alert-success');
             }
@@ -253,13 +239,11 @@ if ($is_editor) {
             $display = FALSE;
         } elseif (isset($_GET['del_cert_res'])) { // delete certificate / badge activity
             if (resource_usage($element, $_GET['del_cert_res'])) { // check if resource has been used by user
-               // Session::Messages("$langUsedCertRes", "alert-warning");
                 Session::flash('message',"$langUsedCertRes");
                 Session::flash('alert-class', 'alert-warning');
                 redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
             } else { // delete it otherwise
                 delete_activity($element, $element_id, $_GET['del_cert_res']);
-                //Session::Messages("$langAttendanceDel", "alert-success");
                 Session::flash('message',"$langAttendanceDel");
                 Session::flash('alert-class', 'alert-success');
                 redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
@@ -270,12 +254,10 @@ if ($is_editor) {
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif ( isset($_GET['del_un_prereq']) ) {
         delete_unit_prerequisite($unit_id);
-        //Session::Messages("$langDelUnitPrerequisiteSuccess", "alert-success");
         Session::flash('message',"$langDelUnitPrerequisiteSuccess");
         Session::flash('alert-class', 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } else {
-        //Session::Messages("$langGeneralError", "alert-danger");
         Session::flash('message',"$langGeneralError");
         Session::flash('alert-class', 'alert-danger');
         redirect($localhostUrl."/courses/$course_code/");

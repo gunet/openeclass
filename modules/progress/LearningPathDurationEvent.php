@@ -22,9 +22,9 @@
 
 require_once 'BasicEvent.php';
 
-class LearningPathEvent extends BasicEvent {
+class LearningPathDurationEvent extends BasicEvent {
     
-    const ACTIVITY = 'learning path';
+    const ACTIVITY = 'learning path duration';
     const UPDPROGRESS = 'learning-path-accessed';
     
     public function __construct() {
@@ -33,10 +33,11 @@ class LearningPathEvent extends BasicEvent {
         $this->on(self::UPDPROGRESS, function($data) {
             $threshold = 0;
             
-            // fetch grade from DB and use it as threshold
-            $grade = get_learnPath_combined_progress($data->resource, $data->uid);
-            if ($grade && floatval($grade) > 0) {
-                $threshold = floatval($grade);
+            // fetch time from DB, extract hours and use it as threshold
+            list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($data->resource, $data->uid);
+            list($hours, $minutes, $seconds, $primes) = extractScormTime($lpTotalTime);
+            if ($hours && intval($hours) > 0) {
+                $threshold = intval($hours);
             }
             
             $this->setEventData($data);
@@ -46,3 +47,10 @@ class LearningPathEvent extends BasicEvent {
     }
     
 }
+
+/*
+SELECT *
+FROM lp_user_module_progress lump
+JOIN lp_learnPath lp ON (lp.learnPath_id = lump.learnPath_id)
+WHERE lump.learnPath_id = 25;
+*/
