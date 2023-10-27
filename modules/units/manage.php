@@ -43,6 +43,7 @@ require_once 'modules/progress/WikiEvent.php';
 require_once 'modules/progress/ForumEvent.php';
 require_once 'modules/progress/ForumTopicEvent.php';
 require_once 'modules/progress/LearningPathEvent.php';
+require_once 'modules/progress/LearningPathDurationEvent.php';
 require_once 'modules/progress/RatingEvent.php';
 require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/progress/CourseParticipationEvent.php';
@@ -168,7 +169,11 @@ if ($is_editor) {
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_lp'])) { // add learning path activity in certificate
-        add_lp_to_certificate($element, $element_id);
+        add_lp_to_certificate($element, $element_id, LearningPathEvent::ACTIVITY);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
+    } elseif (isset($_POST['add_lpduration'])) { // add learning path activity in certificate
+        add_lp_to_certificate($element, $element_id, LearningPathDurationEvent::ACTIVITY);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect($localhostUrl.$_SERVER['SCRIPT_NAME']."?course=$course_code&manage=1&unit_id=$unit_id");
     } elseif (isset($_POST['add_poll'])) { // add poll activity in certificate
