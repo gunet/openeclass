@@ -1,4 +1,4 @@
-# The Open eClass Platform 3.13
+# The Open eClass Platform 3.15
 
 http://www.openeclass.org/
 
@@ -15,17 +15,17 @@ have contributed a great amount of work and ideas and we would like to express
 our gratitude to all of them for their support. A complete list of
 contributors can be found in the CREDITS.txt file.
 
-Installation of Open eClass requires a web server with support for PHP >= 7.4
+Installation of Open eClass requires a web server with support for PHP >= 8.0
 and a database server (MySQL or MariaDB). You can find detailed installation
 instructions as well as other manuals at the following address:
 
 https://docs.openeclass.org/en/start
 
 GUnet Asychronous e-Learning Group
-July 2022
+November 2023
 
 
-# Πλατφόρμα Open eClass 3.13
+# Πλατφόρμα Open eClass 3.15
 
 http://www.openeclass.org/
 
@@ -59,10 +59,10 @@ http://www.openeclass.org/
 και βελτίωση της πλατφόρμας. (Περισσότερες πληροφορίες στο αρχείο CREDITS.txt)
 
 Για την εγκατάσταση της πλατφόρμας απαιτείται ένας εξυπηρετητής web με υποστήριξη
-PHP >= 7.4 και μια βάση δεδομένων (MySQL or MariaDB). Αναλυτικές οδηγίες εγκατάστασης
+PHP >= 8.0 και μια βάση δεδομένων (MySQL or MariaDB). Αναλυτικές οδηγίες εγκατάστασης
 και άλλα εγχειρίδια της πλατφόρμας μπορούν να βρεθούν στη διεύθυνση:
 
 https://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Ιούλιος 2022
+Νοέμβριος 2022
