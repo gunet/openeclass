@@ -36,8 +36,8 @@ class LearningPathDurationEvent extends BasicEvent {
             // fetch time from DB, extract hours and use it as threshold
             list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($data->resource, $data->uid);
             list($hours, $minutes, $seconds, $primes) = extractScormTime($lpTotalTime);
-            if ($hours && intval($hours) > 0) {
-                $threshold = intval($hours);
+            if ($hours && $minutes && intval($hours) >= 0 && intval($minutes) >= 0) {
+                $threshold = floatval($hours + round($minutes / 60, 2));
             }
             
             $this->setEventData($data);
