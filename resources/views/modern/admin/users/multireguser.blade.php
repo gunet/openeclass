@@ -79,20 +79,13 @@
 
              <div class='col-lg-6 col-12'>
                 <div class='form-wrapper form-edit border-0 px-0'>
-
-                <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' onsubmit='return validateNodePickerForm();' >
+                <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' enctype='multipart/form-data' onsubmit='return validateNodePickerForm();' >
                 <fieldset>
-                <div class='form-group'>
-                    <label for='fields' class='col-sm-12 control-label-notes'>{{ trans('langMultiRegFields') }}</label>
-                    <div class='col-sm-12'>
-                        <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>
-                    </div>
-                </div>
 
                 <div class='form-group mt-4'>
-                    <label for='user_info' class='col-sm-12 control-label-notes'>{{ trans('langUsersData') }}</label>
+                    <label for='userfile' class='col-sm-12 control-label-notes mb-2'>{{ trans('langFileUserData') }}:</label>
                     <div class='col-sm-12'>
-                        <textarea class='auth_input form-control' name='user_info' id='user_info' rows='10'></textarea>
+                        <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>
 
@@ -101,14 +94,10 @@
                     <div class='col-sm-12'>
                         <select class='form-select' name='type' id='type'>
                             <option value='stud'>
-                                
-                                    {{ trans('langsOfStudents') }}
-                                
+                                {{ trans('langsOfStudents') }}
                             </option>
                             <option value='prof'>
-                                
-                                    {{ trans('langOfTeachers') }}
-                                
+                                {{ trans('langOfTeachers') }}
                             </option>
                         </select>
                     </div>
@@ -146,12 +135,12 @@
                     <div class='col-sm-12'>{!! selection($access_options, 'email_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                 </div>
 
-                
+
                 <div class='form-group mt-4'>
                 <label for='am_public' class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                     <div class='col-sm-12'>{!! selection($access_options, 'am_public', ACCESS_PROFS, 'class="form-control"') !!}</div>
                 </div>
-                
+
 
                 <div class='form-group mt-4'>
                 <label for='phone_public' class='col-sm-12 control-label-notes'>{{ trans('langPhone') }}</label>
@@ -181,7 +170,14 @@
                 </div>
 
                 <div class='form-group mt-4 emailbody hidden'>
-                    <label for='email_body' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmailBody') }}:</label>
+                    <div class='form-group mt-4'>
+                        <label for='email_body' class='col-sm-3 control-label-notes mb-1'>{{ trans('langSubject') }}:</label>
+                        <div class='col-sm-12'>
+                            <input class='form-control' type='text' name='emailNewSubject'>
+                        </div>
+                    </div>
+
+                    <label for='email_body' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmail') }}:</label>
                     <div class='col-sm-12'>
                         {!! $rich_text_editor !!}
                     </div>

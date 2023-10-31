@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,6 +18,8 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 define('SUFFIX_LEN', 4);
 
@@ -38,35 +40,26 @@ load_js('jstree3');
 $toolName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
-if (isset($_POST['submit'])) {
+
+if (isset($_POST['submit']) and isset($_FILES['userfile']) ) {
+    $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+    $sheet = $file->getActiveSheet();
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     register_posted_variables(array('email_public' => true,
-        'am_public' => true,
-        'phone_public' => true), 'all', 'intval');
+                                    'am_public' => true,
+                                    'phone_public' => true), 'all', 'intval');
     $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
-    $data['unparsed_lines'] = '';
-    $data['new_users_info'] = array();
-    $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
+    $unparsed_lines = '';
+    $new_users_info = array();
+    $newstatus = ($_POST['type'] == 'prof') ? USER_TEACHER : USER_STUDENT;
     $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
-    $am = $_POST['am'];
+    //$am = $_POST['am'];
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
-    $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
 
     if ($auth_methods_form != 1) {
         $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
-    }
-
-    foreach ($fields as $field) {
-        if (!in_array($field, $acceptable_fields)) {
-            //Session::Messages("$langMultiRegFieldError <b>$field)</b>", 'alert-danger');
-            Session::flash('message',"$langMultiRegFieldError <b>$field)</b>");
-            Session::flash('alert-class', 'alert-danger');
-            redirect_to_home_page('modules/admin/multireguser.php');
-            exit;
-        }
     }
 
     // validation for departments
@@ -74,63 +67,99 @@ if (isset($_POST['submit'])) {
         validateNode($dep, isDepartmentAdmin());
     }
 
-    $numfields = count($fields);
-    $line = strtok($_POST['user_info'], "\n");
-    while ($line !== false) {
-        $line = preg_replace('/#.*/', '', trim($line));
-        if (!empty($line)) {
-            $userl = preg_split('/[ \t]+/', $line);
-            if (count($userl) >= $numfields) {
-                $info = ['email' => '', 'phone' => '', 'id' => ''];
-                foreach ($fields as $field) {
-                    $info[$field] = trim(array_shift($userl));
+    $fields = [];
+    foreach ($sheet->getRowIterator() as $row) {
+        $cellIterator = $row->getCellIterator();
+        foreach ($cellIterator as $cell) {
+            $field_value = trim($cell->getValue());
+            if (!empty($field_value)) {
+                if (!in_array($field_value, $acceptable_fields)) {
+                Session::flash('message',"$langMultiRegFieldError <b>$field_value)</b>");
+                Session::flash('alert-class', 'alert-danger');
+                redirect_to_home_page('modules/admin/multireguser.php');
+                exit;
+                } else {
+                    $fields[] = $field_value;
                 }
+            }
+        }
+        break;
+    }
 
-                if ($info['email'] and !valid_email($info['email'])) {
-                    //Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
+    $i = 0;
+    $info = $user_data = $userl = [];
+    foreach ($sheet->getRowIterator() as $row) {
+        $i++;
+        if ($i == 1) { // first row contains field names
+            continue;
+        } else {
+            $info = $user_data = [];
+            $cellIterator = $row->getCellIterator();
+            foreach ($cellIterator as $cell) {
+                $user_data[] = trim($cell->getValue());
+            }
+            if (count($user_data) > count($fields)) { // we have course codes
+                $userl = array_splice($user_data, count($fields));
+            }
+            $info = array_combine($fields, $user_data);
+            if (isset($info['email'])) {
+                if (!valid_email($info['email'])) {
                     Session::flash('message',$langUsersEmailWrong . ': ' . q($info['email']));
                     Session::flash('alert-class', 'alert-danger');
-                    $info['email'] = '';
-                }
-
-                if (!empty($am)) {
-                    if (!isset($info['id']) or empty($info['id'])) {
-                        $info['id'] = $am;
-                    } else {
-                        $info['id'] = $am . ' - ' . $info['id'];
-                    }
-                }
-                $surname = isset($info['last']) ? $info['last'] : '';
-                $givenname = isset($info['first']) ? $info['first'] : '';
-                $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
-                if (!isset($info['username'])) {
-                    $info['username'] = create_username($newstatus, $departments, $surname, $givenname, $_POST['prefix']);
-                }
-                if (!isset($info['password'])) {
-                    $info['password'] = choose_password_strength();
-                }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $_POST['emailNewBodyInput']);
-                if ($new === false) {
-                    $data['unparsed_lines'] .= q($line . "\n" . $error . "\n");
+                    $email = '';
                 } else {
-                    $data['new_users_info'][] = $new;
+                    $email = $info['email'];
+                }
+            } else {
+                $email = '';
+            }
 
-                    // Now, the $userl array should contain only course codes
+            $user_am = isset($info['id']) ? $info['id'] : '';
+            if (!empty($_POST['am'])) {
+                if (!isset($info['id']) or empty($info['id'])) {
+                    $user_am = $_POST['am'];
+                } else {
+                    $user_am = $_POST['am'] . ' - ' . $info['id'];
+                }
+            }
+
+            $surname = isset($info['last']) ? $info['last'] : '';
+            $givenname = isset($info['first']) ? $info['first'] : '';
+            $phone = isset($info['phone']) ? $info['phone'] : '' ;
+            $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
+            if (isset($_POST['emailNewSubject'])) {
+                $emailNewSubject = $_POST['emailNewSubject'];
+            }
+            if (!isset($info['username'])) {
+                $info['username'] = create_username($_POST['prefix']);
+            }
+            if (!isset($info['password'])) {
+                $info['password'] = choose_password_strength();
+            }
+            $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $email, $departments, $user_am, $phone, $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $_POST['emailNewBodyInput'], $emailNewSubject);
+            if ($new === false) {
+                $unparsed_lines .= q($row->getRowIndex() . "\n". $error . "\n");
+            } else {
+                $new_users_info[] = $new;
+                // Now, the $userl array should contain only course codes
+                if (count($userl) > 0) {
                     foreach ($userl as $ccode) {
-                        if (!register($new[0], $ccode)) {
-                            $data['unparsed_lines'] .=
-                                    sprintf($langMultiRegCourseInvalid . "\n", q("$info[last] $info[first] ($info[username])"), q($ccode));
+                        if (!empty($ccode)) {
+                            if (!register($new[0], $ccode)) {
+                                $unparsed_lines .= sprintf($langMultiRegCourseInvalid . "\n", q("$info[last] $info[first] ($info[username])"), q($ccode));
+                            }
                         }
                     }
                 }
-            } else {
-                $data['unparsed_lines'] .= $line;
             }
         }
-        $line = strtok("\n");
     }
 
-    $view = 'admin.users.multireguser_result';
+$data['unparsed_lines'] = $unparsed_lines;
+$data['new_users_info'] = $new_users_info;
+
+$view = 'admin.users.multireguser_result';
+
 } else {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
@@ -154,7 +183,6 @@ if (isset($_POST['submit'])) {
         $auth_text = get_auth_info($methods);
         $data['auth_m'][$methods] = $auth_text;
     }
-
     if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"',
             'allowables' => $user->getDepartmentIds($uid)));
@@ -183,14 +211,13 @@ if (isset($_POST['submit'])) {
                 </ul></p>
             </div>
         </div>";
-
     $data['rich_text_editor'] = rich_text_editor('emailNewBodyEditor', 4, 20, "$emailNewBody");
-
     $view = 'admin.users.multireguser';
 }
+
 view($view, $data);
 
-function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $emailNewBodyInput) {
+function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $emailNewBodyInput, $emailNewSubject) {
     global $langAsProf, $langYourReg, $siteName,
         $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
         $urlServer, $langProblem, $langPassSameAuth, $langManager, $langTel,
@@ -253,6 +280,8 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
             </div>";
 
     if ($emailNewBodyInput == 1) {
+        $emailHeader = '';
+        $emailsubject = $emailNewSubject;
         $emailNewBodyEditor = str_replace("[username]", q($uname), $emailNewBodyEditor);
         $emailNewBodyEditor = str_replace("[password]", q($password), $emailNewBodyEditor);
         $emailNewBodyEditor = str_replace("[first]", q($givenname), $emailNewBodyEditor);
@@ -263,7 +292,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         $emailMain = $emailNewBodyEditor;
     } else {
         $emailMain = "
-    <!-- Body Section -->
+        <!-- Body Section -->
         <div id='mail-body' class='default-body'>
             <br>
             <div>$langSettings</div>
@@ -298,14 +327,10 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 
 /**
  * @brief create username for new user
- * @param type $status
- * @param type $departments
- * @param type $nom
- * @param type $givenname
  * @param type $prefix
  * @return string
  */
-function create_username($status, $departments, $nom, $givenname, $prefix) {
+function create_username($prefix) {
 
     $wildcard = str_pad('', SUFFIX_LEN, '_');
     $req = Database::get()->querySingle("SELECT username FROM user WHERE username LIKE ?s ORDER BY username DESC LIMIT 1", $prefix . $wildcard);
