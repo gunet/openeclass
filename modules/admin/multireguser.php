@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.6
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2017  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -18,6 +18,8 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 define('SUFFIX_LEN', 4);
 
@@ -38,36 +40,27 @@ load_js('jstree3');
 $toolName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$error = '';
 $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username', 'password');
 
-if (isset($_POST['submit'])) {
-//    var_dump($_POST['emailNewBodyEditor']);
-//    var_dump($_POST['emailNewBodyInput']);
+
+if (isset($_POST['submit']) and isset($_FILES['userfile']) ) {
+    $file = IOFactory::load($_FILES['userfile']['tmp_name']);
+    $sheet = $file->getActiveSheet();
 
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     register_posted_variables(array('email_public' => true,
-        'am_public' => true,
-        'phone_public' => true), 'all', 'intval');
+                                    'am_public' => true,
+                                    'phone_public' => true), 'all', 'intval');
     $send_mail = isset($_POST['send_mail']) && $_POST['send_mail'];
     $unparsed_lines = '';
     $new_users_info = array();
-    $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
+    $newstatus = ($_POST['type'] == 'prof') ? USER_TEACHER : USER_STUDENT;
     $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
     $am = $_POST['am'];
     $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
-    $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
 
     if ($auth_methods_form != 1) {
         $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
-    }
-
-    foreach ($fields as $field) {
-        if (!in_array($field, $acceptable_fields)) {
-            $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field) . "</b></div>";
-            draw($tool_content, 3, 'admin');
-            exit;
-        }
     }
 
     // validation for departments
@@ -75,59 +68,94 @@ if (isset($_POST['submit'])) {
         validateNode($dep, isDepartmentAdmin());
     }
 
-    $numfields = count($fields);
-    $line = strtok($_POST['user_info'], "\n");
-    while ($line !== false) {
-        $line = preg_replace('/#.*/', '', trim($line));
-        if (!empty($line)) {
-            $userl = preg_split('/[ \t]+/', $line);
-            if (count($userl) >= $numfields) {
-                $info = ['email' => '', 'phone' => '', 'id' => ''];
-                foreach ($fields as $field) {
-                    $info[$field] = trim(array_shift($userl));
-                }
-
-                if ($info['email'] and !valid_email($info['email'])) {
-                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
-                    $info['email'] = '';
-                }
-
-                if (!empty($am)) {
-                    if (!isset($info['id']) or empty($info['id'])) {
-                        $info['id'] = $am;
-                    } else {
-                        $info['id'] = $am . ' - ' . $info['id'];
-                    }
-                }
-                $surname = isset($info['last']) ? $info['last'] : '';
-                $givenname = isset($info['first']) ? $info['first'] : '';
-                $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
-                if (!isset($info['username'])) {
-                    $info['username'] = create_username($newstatus, $departments, $surname, $givenname, $_POST['prefix']);
-                }
-                if (!isset($info['password'])) {
-                    $info['password'] = choose_password_strength();
-                }
-                $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $info['email'], $departments, $info['id'], $info['phone'], $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $_POST['emailNewBodyInput']);
-                if ($new === false) {
-                    $unparsed_lines .= q($line . "\n" . $error . "\n");
+    $fields = [];
+    foreach ($sheet->getRowIterator() as $row) {
+        $cellIterator = $row->getCellIterator();
+        foreach ($cellIterator as $cell) {
+            $field_value = trim($cell->getValue());
+            if (!empty($field_value)) {
+                if (!in_array($field_value, $acceptable_fields)) {
+                    $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field_value) . "</b></div>";
+                    draw($tool_content, 3, 'admin');
+                    exit;
                 } else {
-                    $new_users_info[] = $new;
+                    $fields[] = $field_value;
+                }
+            }
+        }
+        break;
+    }
 
-                    // Now, the $userl array should contain only course codes
+    $i = 0;
+    $info = $user_data = $userl = [];
+    foreach ($sheet->getRowIterator() as $row) {
+        $i++;
+        if ($i == 1) { // first row contains field names
+            continue;
+        } else {
+            $info = $user_data = [];
+            $cellIterator = $row->getCellIterator();
+            foreach ($cellIterator as $cell) {
+                $user_data[] = trim($cell->getValue());
+            }
+            if (count($user_data) > count($fields)) { // we have course codes
+                $userl = array_splice($user_data, count($fields));
+            }
+            $info = array_combine($fields, $user_data);
+
+            if (isset($info['email'])) {
+                if (!valid_email($info['email'])) {
+                    Session::Messages($langUsersEmailWrong . ': ' . q($info['email']), 'alert-danger');
+                    $email = '';
+                } else {
+                    $email = $info['email'];
+                }
+            } else {
+                $email = '';
+            }
+
+            $user_am = isset($info['id']) ? $info['id'] : '';
+            if (!empty($am)) {
+                if (!isset($info['id']) or empty($info['id'])) {
+                    $user_am = $am;
+                } else {
+                    $user_am = $am . ' - ' . $info['id'];
+                }
+            }
+
+            $surname = isset($info['last']) ? $info['last'] : '';
+            $givenname = isset($info['first']) ? $info['first'] : '';
+            $phone = isset($info['phone']) ? $info['phone'] : '' ;
+            $emailNewBodyEditor = purify($_POST['emailNewBodyEditor']);
+            if (isset($_POST['emailNewSubject'])) {
+                $emailNewSubject = $_POST['emailNewSubject'];
+            }
+
+            if (!isset($info['username'])) {
+                $info['username'] = create_username($_POST['prefix']);
+            }
+            if (!isset($info['password'])) {
+                $info['password'] = choose_password_strength();
+            }
+            $new = create_user($newstatus, $info['username'], $info['password'], $surname, $givenname, $email, $departments, $user_am, $phone, $_POST['lang'], $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $_POST['emailNewBodyInput'], $emailNewSubject);
+            if ($new === false) {
+                $unparsed_lines .= q($row->getRowIndex() . "\n". $error . "\n");
+            } else {
+                $new_users_info[] = $new;
+                // Now, the $userl array should contain only course codes
+                if (count($userl) > 0) {
                     foreach ($userl as $ccode) {
-                        if (!register($new[0], $ccode)) {
-                            $unparsed_lines .=
-                                    sprintf($langMultiRegCourseInvalid . "\n", q("$info[last] $info[first] ($info[username])"), q($ccode));
+                        if (!empty($ccode)) {
+                            if (!register($new[0], $ccode)) {
+                                $unparsed_lines .= sprintf($langMultiRegCourseInvalid . "\n", q("$info[last] $info[first] ($info[username])"), q($ccode));
+                            }
                         }
                     }
                 }
-            } else {
-                $unparsed_lines .= $line;
             }
         }
-        $line = strtok("\n");
     }
+
     if (!empty($unparsed_lines)) {
         $tool_content .= "<p><b>$langErrors</b></p><pre>" . q($unparsed_lines) . "</pre>";
     }
@@ -160,7 +188,7 @@ if (isset($_POST['submit'])) {
                   $('#customEmailBody').prop('checked', false);
                 }
             });
-            
+
             $('#customEmailBody').change(function() {
                 if ($(this).is(':checked')) {
                   $('.emailbody, .customMailHelp').removeClass('hidden');
@@ -175,18 +203,12 @@ if (isset($_POST['submit'])) {
 
     $tool_content .= "<div class='alert alert-info'>$langMultiRegUserInfo</div>
         <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' onsubmit='return validateNodePickerForm();' >
         <fieldset>
         <div class='form-group'>
-            <label for='fields' class='col-sm-3 control-label'>$langMultiRegFields:</label>
+            <label for='userfile' class='col-sm-3 control-label'>$langFileUserData:</label>
             <div class='col-sm-9'>
-                <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='user_info' class='col-sm-3 control-label'>$langUsersData:</label>
-            <div class='col-sm-9'>
-                <textarea class='auth_input form-control' name='user_info' id='user_info' rows='10'></textarea>
+                <input type='file' id='userfile' name='userfile'>
             </div>
         </div>
         <div class='form-group'>
@@ -294,10 +316,9 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </div>
-        
+
         <div class='form-group customEmailBodyDiv hidden'>
-        
-        <label for='customEmailBody' class='col-sm-3 control-label'>$langCustomEmailBody</label>
+            <label for='customEmailBody' class='col-sm-3 control-label'>$langCustomEmailBody</label>
             <div class='col-sm-9'>
                 <div class='checkbox'>
                     <label>
@@ -306,24 +327,28 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </div>
-        
+
         <div class='form-group emailbody hidden'>
-        
-            <label for='email_body' class='col-sm-3 control-label'>$langEmailBody:</label>
+            <div class='form-group'>
+                <label for='email_body' class='col-sm-3 control-label'>$langSubject:</label>
+                <div class='col-sm-9'>
+                        <input class='form-control' type='text' name='emailNewSubject'>
+                </div>
+            </div>
+            <label for='email_body' class='col-sm-3 control-label'>$langEmail:</label>
             <div class='col-sm-9'>
                 ".rich_text_editor('emailNewBodyEditor', 4, 20, $emailNewBody)."
             </div>
             <input type='hidden' class='emailNewBodyInput' name='emailNewBodyInput' value=0>
-                        
         </div>
-        
+
         <div class='form-group customMailHelp hidden'>
             <label for='email_body' class='col-sm-3 control-label'></label>
             <div class='col-sm-9'>
                 <div class='alert alert-info'>$langCustomMailHelp</div>
             </div>
         </div>
-        
+
         <div class='form-group'>
             <div class='col-sm-9 col-sm-offset-3'>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
@@ -338,11 +363,7 @@ if (isset($_POST['submit'])) {
 
 draw($tool_content, 3, null, $head_content);
 
-function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public,$emailNewBodyEditor, $emailNewBodyInput) {
-
-//    var_dump($emailNewBodyEditor);
-//    var_dump($emailNewBodyInput);
-//    die('create_user function');
+function create_user($status, $uname, $password, $surname, $givenname, $email, $departments, $am, $phone, $lang, $send_mail, $email_public, $phone_public, $am_public, $emailNewBodyEditor, $emailNewBodyInput, $emailNewSubject) {
 
     global $langAsProf, $langYourReg, $siteName,
         $langYouAreReg, $langSettings, $langPass, $langAddress, $langIs,
@@ -405,10 +426,9 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 </div>
             </div>";
 
-
-//    $emailMain = $emailNewBodyEditor;
-
     if ($emailNewBodyInput == 1) {
+        $emailHeader = '';
+        $emailsubject = $emailNewSubject;
         $emailNewBodyEditor = str_replace("[username]", q($uname), $emailNewBodyEditor);
         $emailNewBodyEditor = str_replace("[password]", q($password), $emailNewBodyEditor);
         $emailNewBodyEditor = str_replace("[first]", q($givenname), $emailNewBodyEditor);
@@ -420,7 +440,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 
     } else {
         $emailMain = "
-    <!-- Body Section -->
+        <!-- Body Section -->
         <div id='mail-body' class='default-body'>
             <br>
             <div>$langSettings</div>
@@ -443,8 +463,6 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
         </div>";
     }
 
-
-
     $emailbody = $emailHeader.$emailMain;
 
     $emailPlainBody = html2text($emailbody);
@@ -457,14 +475,10 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 
 /**
  * @brief create username for new user
- * @param type $status
- * @param type $departments
- * @param type $nom
- * @param type $givenname
  * @param type $prefix
  * @return string
  */
-function create_username($status, $departments, $nom, $givenname, $prefix) {
+function create_username($prefix) {
 
     $wildcard = str_pad('', SUFFIX_LEN, '_');
     $req = Database::get()->querySingle("SELECT username FROM user WHERE username LIKE ?s ORDER BY username DESC LIMIT 1", $prefix . $wildcard);
