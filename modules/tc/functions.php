@@ -150,7 +150,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
         $google_meet_link = ($tc_type == 'googlemeet') ? "https://meet.google.com/" . $row->meeting_id : '';
         $microsoft_teams_link = ($tc_type == 'microsoftteams') ? "https://teams.live.com/" . $row->meeting_id : '';
-        $zoom_link = ($tc_type == 'zoom') ? "https://zoom.us/j/" . $row->meeting_id . '?pwd=' . $row->mod_pw : '';
+        if ($tc_type == 'zoom') {
+            $tc_hostname = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE type = 'zoom'")->hostname;
+            $zoom_link = $tc_hostname . "j/" . $row->meeting_id . "?pwd=" . $row->mod_pw;
+        }
+
         $webex_link = ($tc_type == 'webex') ? $row->meeting_id : '';
 
         $checked_muteOnStart = isset($options['muteOnStart']) ? 'checked' : '';
@@ -216,7 +220,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         case 'zoom':
         case 'webex':
         case 'microsoftteams':
-            $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = ?s AND enabled = 'true'", $tc_type)->id;
+            $sql = Database::get()->querySingle("SELECT id, hostname FROM tc_servers WHERE `type` = ?s AND enabled = 'true'", $tc_type);
+            $server_id = $sql->id;
+            $hostname = $sql->hostname;
             break;
         case 'bbb':
             $server_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'bbb'
@@ -255,7 +261,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'zoom') { // zoom
             $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://zoom.us/' target='_blank'>$langGoToZoomLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='$hostname' target='_blank'>$langGoToZoomLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langLink:</label>
@@ -267,7 +273,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'webex') { // webex
             $tool_content .= "<div class='alert alert-info'>$langGoToWebexLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://webex.com/' target='_blank'>$langGoToWebexLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='$hostname' target='_blank'>$langGoToWebexLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langLink:</label>

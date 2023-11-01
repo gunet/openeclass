@@ -3,12 +3,14 @@ require_once 'genericrequiredparam.php';
 
 class ZoomApp extends ExtApp
 {
+    const ZOOMURL = "url";
     const ENABLEDCOURSES = "enabledcourses";
-    const ZOOMURL = "https://zoom.us/";
+    const ZOOMDEFAULTURL = "https://zoom.us/";
 
     public function __construct()
     {
         parent::__construct();
+        $this->registerParam(new GenericRequiredParam($this->getName(), "Zoom URL", ZoomApp::ZOOMURL, ZoomApp::ZOOMDEFAULTURL));
         $this->registerParam(new GenericRequiredParam($this->getName(), "Enabled courses", ZoomApp::ENABLEDCOURSES, "0"));
     }
 

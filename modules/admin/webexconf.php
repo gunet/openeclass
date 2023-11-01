@@ -95,12 +95,19 @@ if (isset($_POST['submit'])) {
         } else {
             $all_courses = 0;
         }
-        Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
-                                            VALUES('webex', ?s, ?s, ?s, ?s)
-                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
-            $app::WEBEXURL, $app::WEBEXURL, $enabled, $all_courses, $enabled, $all_courses);
 
-        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'webex'")->id;
+        $tc_sql = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'webex'");
+        if ($tc_sql) {
+            $tc_id = $tc_sql->id;
+            Database::get()->query("UPDATE tc_servers SET hostname = ?s, api_url = ?s, enabled = ?s, all_courses = ?s WHERE id = ?d",
+                $_POST['url'], $_POST['url'], $enabled, $all_courses, $tc_id);
+        } else {
+            $tc_sql = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
+                                            VALUES('webex', ?s, ?s, ?s, ?s)",
+                $_POST['url'], $_POST['url'], $enabled, $all_courses);
+            $tc_id = $tc_sql->lastInsertID;
+        }
+
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $tc_id);
         if (($all_courses == 0) and count($_POST['tc_courses']) > 0) {
             foreach ($_POST['tc_courses'] as $tc_courses) {
@@ -126,9 +133,15 @@ $tool_content .= "
 foreach ($app->getParams() as $param) {
     if ($param->getType() == ExtParam::TYPE_BOOLEAN) {
         $checked = $param->value() == 1 ? "checked" : "";
-        $boolean_field .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
+        $boolean_field .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
         $boolean_field .= "<label><input type='checkbox' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
+    } else if ($param->name() == WebexApp::WEBEXURL) {
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "&nbsp;&nbsp;";
+        $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langWebexUrl'></span></label>";
+        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . WebexApp::WEBEXDEFAULURL . "'></div>";
+        $tool_content .= "</div>";
     } else if ($param->name() == WebexApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                 WHERE visible != " . COURSE_INACTIVE . "
@@ -142,9 +155,9 @@ foreach ($app->getParams() as $param) {
             $selected = "selected";
         }
         $tool_content .= "<div class='form-group' id='courses-list'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-3 control-label'>$langUseOfService&nbsp;&nbsp;";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>$langUseOfService&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langUseOfServiceInfo'></span></label>";
-        $tool_content .= "<div class='col-sm-9'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
+        $tool_content .= "<div class='col-sm-10'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
         $tool_content .= "<option value='0' $selected><h2>$langToAllCourses</h2></option>";
         foreach ($courses_list as $c) {
             $selected = in_array($c->id, $selections) ? "selected" : "";
@@ -154,7 +167,7 @@ foreach ($app->getParams() as $param) {
         $tool_content .= "<input type='hidden' id='enabled-courses' name='" . $param->name() . "'>";
     } else {
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-3 control-label'>" . $param->display() . "</label>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
         $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }

@@ -3,12 +3,14 @@ require_once 'genericrequiredparam.php';
 
 class WebexApp extends ExtApp
 {
+    const WEBEXURL = "url";
     const ENABLEDCOURSES = "enabledcourses";
-    const WEBEXURL = "https://webex.com/";
+    const WEBEXDEFAULURL = "https://webex.com/";
 
     public function __construct()
     {
         parent::__construct();
+        $this->registerParam(new GenericRequiredParam($this->getName(), "WebEx URL", WebexApp::WEBEXURL, WebexApp::WEBEXDEFAULURL));
         $this->registerParam(new GenericRequiredParam($this->getName(), "Enabled courses", WebexApp::ENABLEDCOURSES, "0"));
     }
 
