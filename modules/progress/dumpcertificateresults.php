@@ -47,9 +47,9 @@ $course_title = course_id_to_title($course_id);
 
 $data[] = [ "$course_title - " . get_cert_title($element, $element_id) . ""];
 $data[] = [];
-$data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langProgress ];
+$data[] = [ $langSurname, $langName, $langAm, $langUsername, $langEmail, $langProgress, $langCompletedIn ];
 
-$sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria
+$sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria, assigned
                                             FROM user_{$element}
                                             JOIN course_user ON user_{$element}.user = course_user.user_id
                                              JOIN user ON user.id = user_{$element}.user
@@ -66,13 +66,14 @@ foreach ($sql as $user_data) {
                 uid_to_am($user_data->user),
                 uid_to_name($user_data->user, 'username'),
                 uid_to_email($user_data->user),
-                round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '%'
+                round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '%',
+                format_locale_date(strtotime($user_data->assigned), 'short')
                ];
 }
 
-$sheet->mergeCells("A1:F1");
+$sheet->mergeCells("A1:G1");
 $sheet->getCell('A1')->getStyle()->getFont()->setBold(true)->setSize(13);
-for ($i = 1; $i <= 6; $i++) {
+for ($i = 1; $i <= 7; $i++) {
     $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
 }
 
