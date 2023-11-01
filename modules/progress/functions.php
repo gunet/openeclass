@@ -1506,7 +1506,7 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
                                             AND lp_learnPath.learnPath_id NOT IN
                                         (SELECT resource FROM {$element}_criterion WHERE $element = ?d
                                                     AND resource!=''
-                                                    AND activity_type = '" . LearningPathEvent::ACTIVITY . "'
+                                                    AND activity_type = '" . $activity_type . "'
                                                     AND module = " . MODULE_ID_LP . ")", $course_id, $element_id);
     }
 
