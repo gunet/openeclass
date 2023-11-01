@@ -2212,7 +2212,7 @@ function upgrade_to_3_13($tbl_options): void
         Database::get()->query("CREATE TABLE `lti_publish_lti2_consumer` (
                 `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `name` VARCHAR(50) NOT NULL,
-                `consumerkey256` VARCHAR(255) NOT NULL UNIQUE,
+                `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL UNIQUE,
                 `consumerkey` TEXT,
                 `secret` VARCHAR(1024) NOT NULL,
                 `ltiversion` VARCHAR(10),
@@ -2501,6 +2501,31 @@ function upgrade_to_3_15($tbl_options) : void
 {
     if (!DBHelper::fieldExists('course_user','course_reviewer')) {
         Database::get()->query("ALTER TABLE course_user ADD `course_reviewer` TINYINT NOT NULL DEFAULT '0' AFTER editor");
+    }
+    if (!DBHelper::tableExists('lti_publish_lti2_consumer')) {
+        Database::get()->query("CREATE TABLE `lti_publish_lti2_consumer` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name` VARCHAR(50) NOT NULL,
+                `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL UNIQUE,
+                `consumerkey` TEXT,
+                `secret` VARCHAR(1024) NOT NULL,
+                `ltiversion` VARCHAR(10),
+                `consumername` VARCHAR(255),
+                `consumerversion` VARCHAR(255),
+                `consumerguid` VARCHAR(1024),
+                `profile` TEXT,
+                `toolproxy` TEXT,
+                `settings` TEXT,
+                `protected` smallint(6) NOT NULL,
+                `enabled` smallint(6) NOT NULL,
+                `enablefrom` int(11),
+                `enableuntil` int(11),
+                `lastaccess` int(11),
+                `created` int(11) NOT NULL,
+                `updated` int(11) NOT NULL) $tbl_options");
+    } else {
+        Database::get()->query('ALTER TABLE lti_publish_lti2_consumer
+            MODIFY `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL');
     }
 }
 

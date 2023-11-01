@@ -1254,7 +1254,7 @@ $db->query("CREATE TABLE `course_lti_enrol_users` (
 $db->query("CREATE TABLE `lti_publish_lti2_consumer` (
     `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(50) NOT NULL,
-    `consumerkey256` VARCHAR(255) NOT NULL UNIQUE,
+    `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL UNIQUE,
     `consumerkey` TEXT,
     `secret` VARCHAR(1024) NOT NULL,
     `ltiversion` VARCHAR(10),
