@@ -236,7 +236,7 @@ if ($is_editor) {
                     if (!in_array($u->user_id, $already_inserted_ids)) {
                         $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid)
                                 SELECT $attendance_id, user_id FROM course_user
-                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u->user_id);
                         update_user_attendance_activities($attendance_id, $u->user_id);
                         $distinct_users_count++;
                     }
