@@ -1065,6 +1065,9 @@ a:hover{
   border-radius: 4px; 
   border: 0px;
 }
+.alert-info a{
+  color: #72b2f2;
+}
 
 .alert-warning { 
   background-color: #F57600; 
