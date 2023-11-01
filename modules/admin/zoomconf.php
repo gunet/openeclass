@@ -95,12 +95,19 @@ if (isset($_POST['submit'])) {
         } else {
             $all_courses = 0;
         }
-        Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
-                                            VALUES('zoom', ?s, ?s, ?s, ?s)
-                                        ON DUPLICATE KEY UPDATE enabled = ?s, all_courses = ?s",
-            $app::ZOOMURL, $app::ZOOMURL, $enabled, $all_courses, $enabled, $all_courses);
 
-        $tc_id = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'zoom'")->id;
+        $tc_sql = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'zoom'");
+        if ($tc_sql) {
+            $tc_id = $tc_sql->id;
+            Database::get()->query("UPDATE tc_servers SET hostname = ?s, api_url = ?s, enabled = ?s, all_courses = ?s WHERE id = ?d",
+                            $_POST['url'], $_POST['url'], $enabled, $all_courses, $tc_id);
+        } else {
+            $tc_sql = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
+                                            VALUES('zoom', ?s, ?s, ?s, ?s)",
+                                    $_POST['url'], $_POST['url'], $enabled, $all_courses);
+            $tc_id = $tc_sql->lastInsertID;
+        }
+
         Database::get()->query("DELETE FROM course_external_server WHERE external_server = ?d", $tc_id);
         if (($all_courses == 0) and count($_POST['tc_courses']) > 0) {
             foreach ($_POST['tc_courses'] as $tc_courses) {
@@ -129,6 +136,12 @@ foreach ($app->getParams() as $param) {
         $boolean_field .= "<div class='form-group mt-4'><div class='col-sm-offset-3 col-sm-9'><div class='checkbox'>";
         $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
+    } else if ($param->name() == ZoomApp::ZOOMURL) {
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "&nbsp;&nbsp;";
+        $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langZoomUrl'></span></label>";
+        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . ZoomApp::ZOOMDEFAULTURL . "'></div>";
+        $tool_content .= "</div>";
     } else if ($param->name() == ZoomApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                 WHERE visible != " . COURSE_INACTIVE . "
