@@ -282,7 +282,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $langNumInForum, $langOfBlogComments, $langConfirmDelete,
            $langOfLearningPath, $langOfLearningPathDuration, $langDelete, $langEditChange,
            $langDocumentAsModuleLabel, $langCourseParticipation,
-           $langAdd, $langExport, $langBack, $langUsers, $langOfGradebook,
+           $langAdd, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
            $langNoUnitPrerequisite;
@@ -308,13 +308,7 @@ function display_activities($element, $id, $unit_id = 0) {
                     'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;progressall=true",
                     'icon' => 'fa-users',
                     'level' => 'primary-label',
-                    'show'  =>  $unit_id ? false : true),
-                array('title' => "$langExport",
-                    'url' => "dumpcertificateresults.php?$link_id&amp;enc=UTF-8",
-                    'icon' => 'fa-file-excel',
-                    'level' => 'primary-label',
                     'show'  =>  $unit_id ? false : true)
-
             ),
             false
         );
@@ -2659,10 +2653,10 @@ function student_view_progress() {
 function display_users_progress($element, $element_id) {
 
     global $tool_content, $course_code, $course_id, $langNoCertificateUsers, $langSurnameName, $langUsersS,
-           $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults;
+           $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults, $langCompletedIn;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria, assigned
                                             FROM user_certificate
                                             JOIN course_user ON user_certificate.user=course_user.user_id
                                              JOIN user ON user.id = user_certificate.user
@@ -2681,7 +2675,7 @@ function display_users_progress($element, $element_id) {
                                                 AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
-        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria, assigned
                                             FROM user_badge
                                             JOIN course_user ON user_badge.user=course_user.user_id
                                             JOIN user ON user.id = user_badge.user
@@ -2712,7 +2706,7 @@ function display_users_progress($element, $element_id) {
                         <tr class='list-header'>
                           <th style='width:5%'>$langID</th>
                           <th>$langSurnameName</th>
-                          <th style='width: 20%;'>$langProgress</th>
+                          <th class='text-center' style='width: 30%;'>$langProgress</th>
                         </tr>
                     </thead>
                     <tbody>";
@@ -2731,10 +2725,11 @@ function display_users_progress($element, $element_id) {
                         $tool_content .= "($langAmShort: $user_am)";
                     }
             $tool_content .= "</td>
-                    <td>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;&nbsp;$icon"
-                          . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>
-                    </td>
-                    </tr>";
+                    <td class='text-center'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;$icon&nbsp;"
+                          . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>";
+            $tool_content .= "<div><small>$langCompletedIn: " . format_locale_date(strtotime($user_data->assigned), 'short') . "</small></div>";
+
+            $tool_content .= "</td></tr>";
         }
         $tool_content .= "</tbody></table></div></div>";
     } else {

@@ -1159,7 +1159,7 @@ $langBlogPostsDeleted = "Οι αναρτήσεις του ιστολογίου �
 $langWallPostsDeleted = "Οι αναρτήσεις του τοίχου διαγράφηκαν από το $langsCourse";
 $langWallPostsShow = "Αναρτήσεις";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
-$langPurgeExercise = "Διαγραφή ασκήσης";
+$langPurgeExercise = "Διαγραφή άσκησης";
 $langPurgeExerciseSuccess = "Η Άσκηση διαγράφηκε.";
 $langExerciseCompleted = "Η Άσκηση ολοκληρώθηκε με επιτυχία.";
 $langConfirmPurgeExercise = "Επιβεβαίωση διαγραφής άσκησης";
@@ -1537,6 +1537,7 @@ $langCertAuthenticity = "Αναγνωριστικό γνησιότητας";
 $langRefreshProgress = "Ανανέωση από δραστηριότητες";
 $langRefreshProgressInfo = "Η ανανέωση αφορά μόνο τις ασκήσεις, εργασίες και τις γραμμές μάθησης.";
 $langRefreshProgressResults = "Η πρόοδος των $langsOfStudents ανανεώθηκε";
+$langCompletedIn = "Ολοκληρώθηκε στις";
 //------------------------------------
 
 
