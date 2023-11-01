@@ -2657,7 +2657,9 @@ function display_users_progress($element, $element_id) {
             $tool_content .= "</td>
                     <td class='text-center'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;$icon&nbsp;"
                           . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>";
-            $tool_content .= "<div><small>$langCompletedIn: " . format_locale_date(strtotime($user_data->assigned), 'short') . "</small></div>";
+            if (!is_null($user_data->assigned)) {
+                $tool_content .= "<div><small>$langCompletedIn: " . format_locale_date(strtotime($user_data->assigned), 'short') . "</small></div>";
+            }
 
             $tool_content .= "</td></tr>";
         }
