@@ -1066,7 +1066,8 @@ a:hover{
   border: 0px;
 }
 .alert-info a{
-  color: #72b2f2;
+  color: #84bef7;
+  text-decoration: underline;
 }
 
 .alert-warning { 

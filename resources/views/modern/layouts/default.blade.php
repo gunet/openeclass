@@ -39,9 +39,9 @@
     <!-- Our css modern if we need it -->
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick.css?v=4.0-dev"/>
     <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/slick-theme.css?v=4.0-dev"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css?v=4.0-dev"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?v=4.0-dev"/>
-    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?v=4.0-dev"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/sidebar.css?<?php echo time(); ?>"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/new_calendar.css?<?php echo time(); ?>"/>
+    <link rel="stylesheet" type="text/css" href="{{ $urlAppend }}template/modern/css/default.css?<?php echo time(); ?>"/>
 
     <!-- if change eclass theme then put styles css of this theme -->
     @if (isset($styles_str) && $styles_str)
