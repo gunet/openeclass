@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.4
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2016  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,23 +33,11 @@
 include '../../include/baseTheme.php';
 include 'modules/auth/auth.inc.php';
 include 'include/sendMail.inc.php';
-$pageName = $lang_remind_pass;
-
 
 // Password reset link is valid for 1 hour = 3600 sec
 define('TOKEN_VALID_TIME', 3600);
 
-$data['emailhelpdesk'] = q(get_config('email_helpdesk'));
-
-function password_is_editable($password) {
-    global $auth_ids;
-
-    if (in_array($password, $auth_ids)) {
-        return false; // not editable, external auth method
-    } else {
-        return true;  // editable
-    }
-}
+$emailhelpdesk = q(get_config('email_helpdesk'));
 
 if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $data['change_ok'] = false;
@@ -61,62 +49,49 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         $data['is_valid'] = true;
         if (isset($_POST['newpass']) and isset($_POST['newpass1']) and
                 count($error_messages = acceptable_password($_POST['newpass'], $_POST['newpass1'])) == 0) {
-
-            $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-secondary')
-                            ),false);
-
-                            $q1 = Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d",
-                            password_hash($_POST['newpass'], PASSWORD_DEFAULT), $data['userUID']);
-                        
+                    $q1 = Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", password_hash($_POST['newpass'], PASSWORD_DEFAULT), $data['userUID']);
             if ($q1->affectedRows > 0) {
-                $data['user_pass_updated'] = true;
-
-                $data['change_ok'] = true;
+                Session::flash('message', $langAccountResetSuccess1);
+                Session::flash('alert-class', 'alert-success');
+                $change_ok = true;
             }
         } elseif (count($error_messages)) {
-            $data['user_pass_notupdate'] = true;
+            Session::flash('message', $error_messages);
+            Session::flash('alert-class', 'alert-warning');
         }
     } else {
-        $data['action_bar'] = action_bar(array(
-                                array('title' => $langBack,
-                                      'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'level' => 'primary',
-                                      'button-class' => 'btn-secondary')
-                            ),false);
+        Session::flash('message', "$langAccountResetInvalidLink");
+        Session::flash('alert-class', 'alert-danger');
     }
-    $data['error_messages'] = $error_messages;
 } elseif (isset($_POST['send_link'])) {
 
-    $data['email'] = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
-    $data['userName'] = isset($_POST['userName']) ? canonicalize_whitespace($_POST['userName']) : '';
-    /*     * *** If valid e-mail address was entered, find user and send email **** */
-    $data['res_first_attempt'] = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+    $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
+    $userName = isset($_POST['userName']) ? canonicalize_whitespace($_POST['userName']) : '';
+    /* *** If valid e-mail address was entered, find user and send email *****/
+    $res = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
                     LEFT JOIN admin a ON (a.user_id = u.id)
                     WHERE u.email = ?s AND
                     BINARY u.username = ?s AND
                     a.user_id IS NULL AND
-                    (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)", $data['email'], $data['userName']); //exclude admins and currently pending requests
+                    (u.last_passreminder IS NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) >= u.last_passreminder)", $email, $userName); //exclude admins and currently pending requests
 
-    $data['found_editable_password'] = false;
-    if ($data['res_first_attempt']) {
-        if (password_is_editable($data['res_first_attempt']->password)) {
-            $id = $data['res_first_attempt']->id;
-            $token = token_generate('password' . $id, true);
-            $resetUrl = $urlServer . "modules/auth/lostpass.php?u=$id&amp;h=$token";
-            $data['found_editable_password'] = true;
+    $found_editable_password = false;
+    if ($res) {
+        if (password_is_editable($res->password)) {
+            $found_editable_password = true;
+            //prepare instruction for password reset
+            $text = $langPassResetIntro . $emailhelpdesk;
+            $text .= $langHowToResetTitle;
+            $text .= $langPassResetGoHere;
+            $text .= $urlServer . "modules/auth/lostpass.php?u=$res->id&h=" .
+                token_generate('password' . $res->id, true);
 
             $header_html_topic_notify = "<!-- Header Section -->
             <div id='mail-header'>
                 <br>
                 <div>
                     <div id='header-title'>$langPassResetIntro</div>
-                    <div>$langPassResetIntro2 $data[emailhelpdesk]</div>
+                    <div>$langPassResetIntro2 $emailhelpdesk</div>
                 </div>
             </div>";
 
@@ -125,7 +100,9 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 <br>
                 <div><b>$langHowToResetTitle</b></div><br>
                 <div id='mail-body-inner'>
-                    $langPassResetGoHere<br><br><a href='$resetUrl'>$resetUrl</a>
+                    $langPassResetGoHere<br><br><a href='$urlServer"."modules/auth/lostpass.php?u=$res->id&h=" .
+                token_generate('password' . $res->id, true)."'>$urlServer"."modules/auth/lostpass.php?u=$res->id&h=" .
+                token_generate('password' . $res->id, true)."</a>
                 </div>
             </div>";
 
@@ -133,32 +110,63 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 
             $plainText = html2text($text);
             // store the timestamp of this action (password reminding and token generation)
-            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $id);
+            Database::get()->query("UPDATE user SET last_passreminder = CURRENT_TIMESTAMP WHERE id = ?d" , $res->id);
         } else { //other type of auth...
-            $data['auth'] = array_search($data['res_first_attempt']->password, $auth_ids) or 1;
+            $auth = array_search($res->password, $auth_ids) or 1;
+            $message = "$langPassCannotChange1 $langPassCannotChange2 " . get_auth_info($auth) . "
+             $langPassCannotChange3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a> $langPassCannotChange4";
+            Session::flash('message', $message);
+            Session::flash('alert-class', 'alert-danger');
         }
 
-        /*         * *** Account details found, now send e-mail **** */
-        if ($data['found_editable_password']) {
+        /* *** Account details found, now send e-mail **** */
+        if ($found_editable_password) {
             $emailsubject = $lang_remind_pass;
-            $data['mail_sent'] = send_mail_multipart('', '', '', $data['email'], $emailsubject, $plainText, $text);
+            if (!send_mail_multipart('', '', '', $email, $emailsubject, $plainText, $text)) {
+                $message_error = "$langAccountEmailError1 $langAccountEmailError2 $email.
+                    $langAccountEmailError3 <a href='mailto:$emailhelpdesk'>$emailhelpdesk</a>";
+                Session::flash('message', $message_error);
+                Session::flash('alert-class', 'alert-danger');
+            } elseif (!isset($auth)) {
+                $alert = "$lang_pass_email_ok " . q($email);
+                Session::flash('message', $alert);
+                Session::flash('alert-class', 'alert-success');
+            }
         }
     } else {
-        $data['res_second_attempt'] = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
+        $res = Database::get()->querySingle("SELECT u.id, u.surname, u.givenname, u.username, u.password, u.status FROM user u
                     LEFT JOIN admin a ON (a.user_id = u.id)
                     WHERE u.email = ?s AND
                     BINARY u.username = ?s AND
                     a.user_id IS NULL AND
-                    (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $data['email'], $data['userName']);
+                    (u.last_passreminder IS NOT NULL OR DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 HOUR) < u.last_passreminder)", $email, $userName);
+
+        if ($res) {
+            Session::flash('message', $langLostPassPending);
+            Session::flash('alert-class', 'alert-danger');
+        } else {
+            Session::flash('message', $langAccountNotFound);
+            Session::flash('alert-class', 'alert-danger');
+        }
     }
 }
 
 $data['action_bar'] = action_bar(array(
     array('title' => $langBack,
-          'url' => $urlServer,
-          'icon' => 'fa-reply',
-          'level' => 'primary',
-          'button-class' => 'btn-secondary')), false);
+        'url' => $urlServer,
+        'icon' => 'fa-reply',
+        'button-class' => 'btn-secondary')
+), false);
 
 $data['menuTypeID'] = 0;
 view('modules.auth.lostpass', $data);
+
+function password_is_editable($password) {
+    global $auth_ids;
+
+    if (in_array($password, $auth_ids)) {
+        return false; // not editable, external auth method
+    } else {
+        return true;  // editable
+    }
+}
