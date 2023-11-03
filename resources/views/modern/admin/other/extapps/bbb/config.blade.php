@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="col-12 main-section">
-        <div class='{{ $container }}'>
+        <div class='{{ $container }} main-container'>
             <div class="row m-auto">
 
                 @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -95,34 +95,34 @@
                              <div class='form-group mt-4'>
                                  <label class='col-12 control-label-notes mb-2'>{{ trans('langBBBLBWeights') }}</label>
                                  <div class='form-group mt-4'>
-                                     <label class='col-sm-3 control-label-notes'>{{ trans('langBBBLBWeightParticipant') }}
+                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightParticipant') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightParticipantInfo') }}'></span>
                                      </label>
-                                         <div class='col-2'>
+                                         <div class='col-12'>
                                              <input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_part' name='bbb_lb_weight_part' value='{{ $bbb_lb_weight_part }}'>
                                         </div>
                                  </div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-sm-3 control-label-notes'>{{ trans('langBBBLBWeightMic') }}
+                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightMic') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightMicInfo') }}'></span>
                                      </label>
-                                    <div class='col-2'>
+                                    <div class='col-12'>
                                         <input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_mic' name='bbb_lb_weight_mic' value='{{ $bbb_lb_weight_mic }}'>
                                     </div>
                                  </div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-sm-3 control-label-notes'>{{ trans('langBBBLBWeightCamera') }}
+                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightCamera') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightCameraInfo') }}'></span>
                                      </label>
-                                     <div class='col-2'>
+                                     <div class='col-12'>
                                          <input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_camera' name='bbb_lb_weight_camera' value='{{ $bbb_lb_weight_camera }}'>
                                      </div>
                                  </div>
                                  <div class='form-group mt-4'>
-                                     <label class='col-sm-3 control-label-notes'>{{ trans('langBBBLBWeightRoom') }}
+                                     <label class='col-12 control-label-notes'>{{ trans('langBBBLBWeightRoom') }}
                                         <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBLBWeightRoomInfo') }}'></span>
                                      </label>
-                                     <div class='col-2'>
+                                     <div class='col-12'>
                                          <input class='form-control' type='number' min='1' max='1000' step='1' pattern='\d+' id='bbb_lb_weight_room' name='bbb_lb_weight_room' value='{{ $bbb_lb_weight_room }}'>
                                      </div>
                                  </div>
@@ -199,19 +199,19 @@
                              </div>
 
                              <div class='form-group mt-4'>
-                                 <label class='col-sm-3 control-label-notes'>{{ trans('langBBBMaxDuration') }}
+                                 <label class='col-12 control-label-notes'>{{ trans('langBBBMaxDuration') }}
                                      <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langInMinutes') }}'></span>
                                  </label>
-                                 <div class='col-2'>
+                                 <div class='col-12'>
                                      <input class='form-control' type='number' min='1' max='10000' step='10' pattern='\d+' id='bbb_max_duration' name='bbb_max_duration' value='{{ $bbb_max_duration }}'>
                                  </div>
                              </div>
 
                              <div class='form-group mt-4'>
-                                 <label class='col-sm-3 control-label-notes'>{{ trans('langBBBMaxPartPerRoom') }}
+                                 <label class='col-12 control-label-notes'>{{ trans('langBBBMaxPartPerRoom') }}
                                      <span class='fa fa-info-circle p-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langBBBMaxPartPerRoomInfo') }}'></span>
                                  </label>
-                                 <div class='col-2'>
+                                 <div class='col-12'>
                                      <input class='form-control' type='number' min='1' max='1000' step='10' pattern='\d+' id='bbb_max_part_per_room' name='bbb_max_part_per_room' value='{{ $bbb_max_part_per_room }}'>
                                  </div>
                              </div>

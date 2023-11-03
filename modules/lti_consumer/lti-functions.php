@@ -150,7 +150,7 @@ function new_lti_app($course_code, $is_template = false, $lti_url_default = '') 
                                 </form>
                             </div>
                         </div>
-                        <div class='d-none d-lg-block'>
+                        <div class='col-lg-6 col-12 d-none d-lg-block'>
                             <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                         </div>
                     </div>";
@@ -342,7 +342,7 @@ function edit_lti_app($session_id) {
                     </div>
                     </fieldset>
                      ". generate_csrf_token_form_field() ."
-                    </form></div></div><div class='d-none d-lg-block'>
+                    </form></div></div><div class='col-lg-6 col-12 d-none d-lg-block'>
                     <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                 </div>
                 </div>";

@@ -450,7 +450,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                 </form>
             </div>
         </div>
-        <div class='d-none d-lg-block'>
+        <div class='col-lg-6 col-12 d-none d-lg-block'>
              <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
     </div>

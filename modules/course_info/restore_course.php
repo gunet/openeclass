@@ -43,7 +43,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     validateUploadedFile($_FILES['archiveZipped']['name'], 3);
 
-    $tool_content .= "<fieldset>
+    $tool_content .= "<fieldset class='mt-5'>
         <p class='text-center text-uppercase bg-warning text-white mb-0'>" . $langFileSent . "</p>
         <div class='table-responsive mt-0'><table class='table-default'>
                    <tr><th width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
@@ -51,7 +51,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                    <tr><th>$langFileSentType</td><td>" . q($_FILES['archiveZipped']['type']) . "</th></tr>
                    <tr><th>$langFileSentTName</td><td>" . q($_FILES['archiveZipped']['tmp_name']) . "</th></tr>
                 </table></div></fieldset>
-                        <fieldset>
+                        <fieldset class='mt-5'>
         <p class='text-center text-uppercase bg-warning text-white mt-3 mb-0'>" . $langFileUnzipping . "</p>
         <div class='table-responsive mt-0'><table class='table-default'>
                     <tr><td>" . unpack_zip_show_files($_FILES['archiveZipped']['tmp_name']) . "</td></tr>
@@ -177,7 +177,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </form>
             </div>
         </div>
-        <div class='d-none d-lg-block'>
+        <div class='col-lg-6 col-12 d-none d-lg-block'>
             <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
     </div>";

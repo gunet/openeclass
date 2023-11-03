@@ -154,7 +154,7 @@ foreach ($app->getParams() as $param) {
         } else {
             $selected = "selected";
         }
-        $tool_content .= "<div class='form-group' id='courses-list'>";
+        $tool_content .= "<div class='form-group mt-4' id='courses-list'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-12 control-label-notes'>$langUseOfService&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-bs-toggle='tooltip' data-bs-placement='right' title='$langUseOfServiceInfo'></span></label>";
         $tool_content .= "<div class='col-12'><select id='select-courses' class='form-control' name='tc_courses[]' multiple>";
