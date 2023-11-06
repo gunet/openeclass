@@ -385,7 +385,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
-        $pageName = $langGradebookBook;
+        $pageName = $langAttendanceBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
@@ -413,9 +413,9 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
-        $pageName = $langGradebookBook;
+        $pageName = $langAttendanceBook;
         $tool_content .= action_bar(array(
-            array('title' => $langGradebookBook,
+            array('title' => $langAttendanceBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label'),
