@@ -115,19 +115,25 @@ function register_user_presences($attendance_id, $actID) {
         $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
         if ($activeUsers) {
             foreach ($activeUsers as $result) {
-                $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)
-                // //check if there is record for the user for this activity
-                $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_book
-                                                        WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $result->userID);
-                if($checkForBook->count) { //update
-                    Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE attendance_activity_id = ?d AND uid = ?d", $userInp, $actID, $result->userID);
-                } else {  //insert
-                    Database::get()->query("INSERT INTO attendance_book SET uid = ?d,
-                                                    attendance_activity_id = ?d, attend = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
+                $userID = $result->userID;
+                if (isset($_POST['updateUser'][$userID])) {
+                    $attend = isset($_POST['attend'][$userID])? 1: 0;
+                    $checkForBook = Database::get()->querySingle("SELECT id, attend FROM attendance_book
+                        WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $userID);
+                    if ($checkForBook) {
+                        if ($checkForBook->attend != $attend) {
+                            Database::get()->query("UPDATE attendance_book SET attend = ?d
+                                 WHERE id = ?d", $attend, $checkForBook->id);
+                        }
+                    } else {
+                        Database::get()->query("INSERT INTO attendance_book
+                            SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ''",
+                            $userID, $actID, $attend);
+                    }
                 }
             }
-            Session::Messages($langAttendanceEdit,"alert-success");
-            redirect_to_home_page("modules/attendance/index.php");
+            Session::Messages($langAttendanceEdit, 'alert-success');
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=" . getIndirectReference($actID));
         }
     }
 
@@ -141,7 +147,12 @@ function register_user_presences($attendance_id, $actID) {
                                                 LEFT JOIN course_user ON user.id = course_user.user_id
                                                     AND `course_user`.`course_id` = ?d
                                                 ORDER BY surname, name", $attendance_id, $course_id);
-
+    $attendUsers = Database::get()->queryArray('SELECT uid, attend FROM attendance_book
+        WHERE attendance_activity_id = ?d', $actID);
+    $attended = [];
+    foreach ($attendUsers as $attendUser) {
+        $attended[$attendUser->uid] = $attendUser->attend;
+    }
     if ($resultUsers) {
         //table to display the users
         $tool_content .= "<div class='form-wrapper'>
@@ -158,31 +169,26 @@ function register_user_presences($attendance_id, $actID) {
             </thead>
             <tbody>";
 
+
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
+            $userID = $resultUser->userID;
             $classvis = '';
             if (is_null($resultUser->reg_date)) {
                 $classvis = 'not_visible';
             }
             $cnt++;
-            $tool_content .= "<tr class='$classvis'>
+            $checked = (isset($attended[$userID]) && $attended[$userID])? 'checked': '';
+            $reg_date = is_null($resultUser->reg_date)? '': format_locale_date(strtotime($resultUser->reg_date), 'short', false);
+            $tool_content .= "
+              <tr class='$classvis'>
                 <td class='text-center'>$cnt</td>
-                <td> " . display_user($resultUser->userID). "</td>
-                <td>$resultUser->am</td>
-                <td class='text-center'>";
-                if (!is_null($resultUser->reg_date)) {
-                    $tool_content .= format_locale_date(strtotime($resultUser->reg_date), 'short', false);
-                } else {
-                    $tool_content .= '';
-                }
-                $tool_content .= "</td><td class='text-center'><input type='checkbox' value='1' name='$resultUser->userID'";
-                //check if the user has attendance for this activity already OR if it should be automatically inserted here
-                $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
-                if(isset($q->attend) && $q->attend == 1) {
-                    $tool_content .= " checked";
-                }
-                $tool_content .= "><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'></td>";
-                $tool_content .= "</tr>";
+                <td>" . display_user($userID) . "</td>
+                <td>" . q($resultUser->am) . "</td>
+                <td class='text-center'>$reg_date</td>
+                <td class='text-center'><input type='checkbox' value='1' name='attend[$userID]' $checked>
+                <input type='hidden' name='updateUser[$userID]' value='1'></td>
+              </tr>";
         }
         $tool_content .= "</tbody></table>";
         $tool_content .= "<div class='form-group'>";
@@ -193,7 +199,7 @@ function register_user_presences($attendance_id, $actID) {
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langAttendanceBooking
                                 ))).
-                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn btn-default'>$langCancel</a>";
+                "<a href='index.php?course=$course_code&amp;attendance_id=$attendance_id' class='btn btn-default'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field() ."</form></div>";
         $tool_content .= "</tbody></table>";
