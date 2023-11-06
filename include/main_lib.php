@@ -3698,11 +3698,15 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
                 " title='$title'$link_attrs>" . $iconTag . $caret .
                 "</$primaryTag>$subMenu$form_end");
         }
-        array_unshift($out_secondary,
-            "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
-            " $link_attrs>" .
-            "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
 
+        if (count($options) > 1) {
+            array_unshift($out_secondary,
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+                " $link_attrs>" .
+                "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
+        } else {
+            $out_secondary = [];
+        }
         $i++;
     }
     $out = '';
@@ -3714,7 +3718,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
 
-    if (count($out_secondary)) {
+    if (count($out_secondary) > 0) {
         $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
@@ -3729,7 +3733,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     }
 
     $pageTitleActive = "";
-    if ($action_button && $i!=0) {
+    if (($action_button || $out) && $i!=0) {
         if(isset($course_code) and $course_code) {
             $titleHeader = (!empty($tmp_pageName) ? $tmp_pageName : '');
             if(!empty($titleHeader)) {
