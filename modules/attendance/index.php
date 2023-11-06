@@ -628,7 +628,7 @@ if ($is_editor) {
         $actID = intval(getDirectReference($_GET['ins']));
         $error = false;
         register_user_presences($attendance_id, $actID);
-        $display = FALSE;
+        $display = false;
     }
 
 } else if ($is_course_reviewer) {
