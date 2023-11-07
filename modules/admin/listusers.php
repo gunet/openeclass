@@ -432,9 +432,9 @@ $head_content .= "<script>
                 var column = api.column(4);
                 var select = $('<select id=\'select_role\'>'+
                                  '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
-                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langTeacher) . "</option>'+
-                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langStudent) . "</option>'+
-                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langVisitor) . "</option>'+
+                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langUsersWithTeacherRights) . "</option>'+
+                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langUsersWithNoTeacherRights) . "</option>'+
+                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langGuests) . "</option>'+
                                '</select>')
                              .appendTo( $(column.footer()).empty() );
             },
@@ -508,16 +508,16 @@ $data['action_bar'] = action_bar(array(
         'level' => 'primary'),
     array('title' => $langAllUsers,
         'url' => "$_SERVER[SCRIPT_NAME]",
-        'icon' => 'fa-search',
+        'icon' => 'fa-solid fa-users',
         'level' => 'primary-label'),
     array('title' => $langActiveUsers,
         'url' => "$_SERVER[SCRIPT_NAME]?search=active",
-        'icon' => 'fa-search',
+        'icon' => 'fa-solid fa-user-check',
         'level' => 'primary-label',
         'show' => !(isset($_GET['search']) and $_GET['search'] == 'active')),
     array('title' => $langInactiveUsers,
         'url' => "$_SERVER[SCRIPT_NAME]?search=inactive",
-        'icon' => 'fa-search',
+        'icon' => 'fa-solid fa-user-xmark',
         'level' => 'primary-label',
         'show' => !(isset($_GET['search']) and $_GET['search'] == 'inactive'))
     ));

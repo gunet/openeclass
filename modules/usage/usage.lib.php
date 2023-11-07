@@ -457,10 +457,10 @@ function get_popular_courses_stats($start = null, $end = null, $root_department 
  * @return array an array appropriate for displaying in a c3 plot when json encoded
 */
 function get_department_user_stats($root_department = 1, $total = false){
-    global $langTeachers, $langStudents, $langVisitors;
+    global $langTeachers, $langStudents, $langGuests;
 
     $statsUserStatus = array(USER_TEACHER => $langTeachers,
-        USER_STUDENT => $langStudents, USER_GUEST => $langVisitors);
+        USER_STUDENT => $langStudents, USER_GUEST => $langGuests);
     /*Simple case to get total users of the platform*/
     $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);

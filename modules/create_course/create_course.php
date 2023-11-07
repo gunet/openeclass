@@ -91,6 +91,7 @@ if (!isset($_POST['create_course'])) {
                                 array('title' => $langBack,
                                       'url' => $urlServer,
                                       'icon' => 'fa-reply',
+                                      'level' => 'primary',
                                       'button-class' => 'btn-default')
                             ),false);
 
@@ -267,6 +268,7 @@ if (!isset($_POST['create_course'])) {
         array('title' => $langEnter,
               'url' => $urlAppend . "courses/$code/",
               'icon' => 'fa-arrow-right',
+              'level' => 'primary',
               'button-class' => 'btn-success')));
 
     // logging

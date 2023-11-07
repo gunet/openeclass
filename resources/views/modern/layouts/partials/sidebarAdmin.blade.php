@@ -124,7 +124,7 @@
                             </a>
                         @else
                             <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/newuseradmin.php?type=user">
-                                {!! trans('langUserDetails') !!}
+                                {!! trans('langCreateAccount') !!}
                             </a>
                         @endif
                         </li>

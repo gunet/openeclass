@@ -56,6 +56,9 @@ $langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
 $langOfUserS = "χρήστη";
 $langUserWithRights = "Χρήστη με δικαιώματα δημιουργίας μαθημάτων";
+$langUserWithNoRights = "Χρήστη χωρίς δικαιώματα δημιουργίας μαθημάτων";
+$langUsersWithTeacherRights = "Χρήστες με δικαιώματα δημιουργίας μαθημάτων";
+$langUsersWithNoTeacherRights = "Χρήστες χωρίς δικαιώματα δημιουργίας μαθημάτων";
 $langSupportUser = "Υποστήριξη";
 $langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
@@ -395,7 +398,7 @@ $langPublicDocumentManagementExplanation = 'Επιτρέπεται αποστο�
 $langPassCode = "Συνθηματικό πρόσβασης";
 
 // listreq.php
-$langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;
+$langOpenProfessorRequests = "Ανοικτές Αιτήσεις Χρηστών";
 $langProfessorRequestClosed = "Η αίτηση του " . $langsOfTeacher . " έκλεισε!";
 $langReqHaveClosed = "Αιτήσεις που έχουν κλείσει";
 $langReqHaveBlocked = "Αιτήσεις που έχουν απορριφθεί";
@@ -551,7 +554,6 @@ $langCASRetAttr = "Ιδιότητες αντικειμένου χρήστη";
 $langMergeUserWithSelf = 'Δεν μπορείτε να συγχωνεύσετε ένα λογαριασμό με τον εαυτό του.';
 
 // other
-$langVisitors = "Επισκέπτες";
 $langVisitor = "Επισκέπτης";
 $langOther = "Άλλο";
 $langTotal = "Σύνολο";
@@ -2330,6 +2332,7 @@ $langProfLesson = "Διδάσκων του $langsOfCourse";
  * *************************************************** */
 $langAskGuest = "Πληκτρολογήστε το συνθηματικό του λογαριασμού επισκέπτη";
 $langAddGuest = "Προσθήκη χρήστη επισκέπτη";
+$langGuests = "Επισκέπτες";
 $langGuestName = "Επισκέπτης";
 $langGuestSurname = "$langOfCourse";
 $langGuestUserName = "guest";
@@ -3342,7 +3345,7 @@ $langEmailNotice = "Η διεύθυνση email δεν είναι απαραίτ
 $langAm = "Αριθμός μητρώου";
 $langAmShort = "Α.Μ.";
 $langEmailVerified = "Το e-mail έχει επιβεβαιωθεί";
-$langUserDetails = "Εγγραφή $langOfStudent";
+$langUserDetails = "Εγγραφή Χρήστη";
 $langSubmitNew = "Υποβολή Αίτησης";
 $langPassTwice = "Πληκτρολογήσατε δύο διαφορετικά συνθηματικά.";
 $langUserFree = "Το όνομα χρήστη που επιλέξατε χρησιμοποιείται.";
@@ -3694,7 +3697,7 @@ $langInfoProf = "Σύντομα θα σας σταλεί mail από την Ομ
 $langDearUser = "Αγαπητέ χρήστη";
 $langMailErrorMessage = "Παρουσιάστηκε σφάλμα κατά την αποστολή του μηνύματος.<br/>Η αίτησή σας καταχωρήθηκε στην πλατφόρμα, αλλά δεν στάλθηκε ενημερωτικό email στο διαχειριστή του συστήματος. <br/>Παρακαλούμε επικοινωνήστε με το διαχειριστή στη διεύθυνση:";
 $langUserSuccess = "Νέος λογαριασμός $langOfStudent";
-$usersuccess = "Η δημιουργία νέου λογαριασμού " . $langsOfStudent . " πραγματοποιήθηκε με επιτυχία!";
+$usersuccess = "Η δημιουργία νέου λογαριασμού πραγματοποιήθηκε με επιτυχία!";
 $langAsUser = "(Λογαριασμός $langOfStudent)";
 $langChooseReg = "Επιλογή τρόπου εγγραφής";
 $langTryAgain = "Δοκιμάστε ξανά!";

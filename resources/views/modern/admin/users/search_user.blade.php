@@ -1,5 +1,30 @@
 @extends('layouts.default')
 
+@push('head_scripts')
+    <script type='text/javascript'>
+        $(function() {
+            $('#id_user_registered_at').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ js_escape($language) }}',
+                autoclose: true
+            });
+            $('#id_user_expires_until').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ js_escape($language) }}',
+                autoclose: true
+            });
+            $('#id_user_last_login').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-right',
+                language: '{{ js_escape($language) }}',
+                autoclose: true
+            });
+        });
+    </script>
+@endpush
+
 @section('content')
 
 <div class="col-12 main-section">

@@ -175,14 +175,8 @@ if (isset($_POST['submit'])) {
         $emailbodyplain = html2text($emailbody);
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
-
-        // Session::Messages(array($message,
-        //     "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
-        //     ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
-            Session::flash('message',array($message,
-            "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
-            ((isset($auth) and $auth == 1)? " $langAndP": '')));
-                    Session::flash('alert-class', 'alert-success');
+        Session::flash('message', array($message, "$langTheU \"$givenname_form $surname_form\" $langAddedU"));
+        Session::flash('alert-class', 'alert-success');
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
             redirect_to_home_page('modules/admin/listreq.php' .
@@ -193,51 +187,13 @@ if (isset($_POST['submit'])) {
     }
 }
 
+$toolName = $langCreateAccount;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // javascript
 load_js('jstree3');
 load_js('pwstrength.js');
 load_js('bootstrap-datetimepicker');
-$head_content .= <<<hContent
-<script type="text/javascript">
-/* <![CDATA[ */
-
-    var lang = {
-hContent;
-$head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
-$head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
-$head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
-$head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
-$head_content .= <<<hContent
-    };
-
-    $(document).ready(function() {
-        $('#password').keyup(function() {
-            $('#result').html(checkStrength($('#password').val()))
-        });
-
-        $('#auth_selection').change(function() {
-            var state = $(this).find(':selected').attr('value') != '1';
-            $('#password').prop('disabled', state);
-        }).change();
-    });
-
-/* ]]> */
-</script>
-hContent;
-
-$head_content .= "<script type='text/javascript'>
-        $(function() {
-            $('#user_date_expires_at').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii',
-                pickerPosition: 'bottom-right',
-                language: '".$language."',
-                minuteStep: 10,
-                autoclose: true
-            });
-        });
-    </script>";
 
 $reqtype = '';
 
@@ -268,6 +224,7 @@ if (isset($_GET['id'])) {
 
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
+              'url' => 'index.php',
               'class' => 'back_btn',
               'icon' => 'fa-reply',
               'level' => 'primary')));
@@ -309,18 +266,22 @@ if (isset($_GET['id'])) { // if we come from prof request
         $data['cpf_context'] = array('origin' => 'teacher_register');
     }
     $data['params'] = $params = '';
+    $data['prof_selected'] = 'checked';
+    $data['user_selected'] = '';
 } elseif (@$_GET['type'] == 'user') {
     $data['pstatus'] =  $pstatus = USER_STUDENT;
     $data['cpf_context'] =  array('origin' => 'student_register');
-    $pageName = $langUserDetails;
     $title = $langInsertUserInfo;
     $data['params'] =  $params = "?type=user";
+    $data['prof_selected'] = '';
+    $data['user_selected'] = 'checked';
 } else {
     $data['pstatus'] =  $pstatus = USER_TEACHER;
     $data['cpf_context'] = array('origin' => 'teacher_register');
-    $pageName = $langProfReg;
     $title = $langNewProf;
     $data['params'] =  $params = "?type=";
+    $data['prof_selected'] = 'checked';
+    $data['user_selected'] = '';
 }
 
 

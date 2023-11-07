@@ -35,29 +35,6 @@ $user = new User();
 load_js('jstree3');
 load_js('bootstrap-datepicker');
 
-$head_content .= "<script type='text/javascript'>
-        $(function() {
-            $('#id_user_registered_at').datepicker({
-                format: 'dd-mm-yyyy',
-                pickerPosition: 'bottom-right',
-                language: '" . $language . "',
-                autoclose: true
-            });
-            $('#id_user_expires_until').datepicker({
-                format: 'dd-mm-yyyy',
-                pickerPosition: 'bottom-right',
-                language: '" . $language . "',
-                autoclose: true
-            });
-            $('#id_user_last_login').datepicker({
-                format: 'dd-mm-yyyy',
-                pickerPosition: 'bottom-right',
-                language: '" . $language . "',
-                autoclose: true
-            });
-        });
-    </script>";
-
 $navigation[] = ['url' => 'index.php', 'name' => $langAdmin];
 $toolName = $langSearchUser;
 
@@ -69,8 +46,6 @@ $data['fname'] = isset($_GET['fname']) ? $_GET['fname'] : '';
 $data['uname'] = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
 $data['am'] = isset($_GET['am']) ? $_GET['am'] : '';
 $data['verified_mail'] = isset($_GET['verified_mail']) ? intval($_GET['verified_mail']) : 3;
-//$user_type = isset($_GET['user_type']) ? intval($_GET['user_type']) : '';
-//$auth_type = isset($_GET['auth_type']) ? intval($_GET['auth_type']) : '';
 $data['email'] = isset($_GET['email']) ? mb_strtolower(trim($_GET['email'])) : '';
 $data['reg_flag'] = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $data['user_registered_at'] = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
@@ -96,24 +71,24 @@ $data['action_bar'] = action_bar(array(
                 'level' => 'primary'),
             array('title' => $langAllUsers,
                 'url' => "listusers.php?search=yes",
-                'icon' => 'fa-search',
+                'icon' => 'fa-solid fa-users',
                 'level' => 'primary-label'),
             array('title' => $langInactiveUsers,
                 'url' => "listusers.php?search=inactive",
-                'icon' => 'fa-search',
+                'icon' => 'fa-solid fa-user-xmark',
                 'level' => 'primary-label'),
             array('title' => $langWillExpireUsers,
                 'url' => "listusers.php?search=wexpire",
-                'icon' => 'fa-search',
+                'icon' => 'fa-solid fa-user-slash',
                 'level' => 'primary-label'),
             ));
 
 //Preparing form data
 $data['usertype_data'] = array(
     0 => $langAllUsers,
-    USER_TEACHER => $langTeacher,
-    USER_STUDENT => $langStudent,
-    USER_GUEST => $langGuest);
+    USER_TEACHER => $langUsersWithTeacherRights,
+    USER_STUDENT => $langUsersWithNoTeacherRights,
+    USER_GUEST => $langGuests);
 $data['verified_mail_data'] = array(
     EMAIL_VERIFICATION_REQUIRED => $m['pending'],
     EMAIL_VERIFIED => $langYes,

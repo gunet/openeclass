@@ -71,7 +71,7 @@ $tschema = "<thead><tr class='list-header'>"
     . "<th colspan='3'>$langUsers</th>"
     . "<th colspan='4'>$langCourses</th>"
     . "</tr><tr>";
-foreach(array($langTeachers, $langStudents, $langVisitors) as $us) {
+foreach(array($langTeachers, $langStudents, $langGuests) as $us) {
     $tschema .= "<th>" . q($us) . "</th>";
 }
 foreach(array($langTypesInactive, $langTypesAccessControlled, $langTypesOpen, $langTypesClosed) as $ct) {
