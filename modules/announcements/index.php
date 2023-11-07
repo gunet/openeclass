@@ -242,8 +242,8 @@ if (isset($_GET['an_id'])) {
             [ 'title' => $langAddAnn,
               'url' => $urlAppend . "modules/announcements/new.php?course=$course_code",
               'icon' => 'fa-plus-circle',
-              'level' => 'primary-label',
               'button-class' => 'btn-success',
+              'level' => 'primary',
               'show' => $is_editor ]
         ]);
 

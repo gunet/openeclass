@@ -118,8 +118,8 @@ if (isset($_POST['submit'])) {
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
-                                      'icon' => 'fa-reply',
-                                      'button-class' => 'btn-secondary')
+                                      'icon' => 'fa-reply'
+                                      )
                             ),false);
 
         $tool_content .= "<div class='col-12 mt-4'>
