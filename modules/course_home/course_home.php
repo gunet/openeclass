@@ -62,7 +62,6 @@ load_js('tools.js');
 define('QTYPE_SINGLE', 1);
 define('QTYPE_MULTIPLE', 3);
 
-
 if (isset($_POST['submitPoll'])) {
     $qtype = $_POST['qtype'];
     $answer = $_POST['answer'];
@@ -70,12 +69,13 @@ if (isset($_POST['submitPoll'])) {
     $pid = $_POST['pid'];
     $multiple_submissions = $_POST['multiple_submissions'];
 
+
     if ($multiple_submissions) {
         Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
         Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
     }
 
-    $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, NULL, 0, NULL)->lastInsertID;
+    $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, NULL, NULL, NULL)->lastInsertID;
 
     if ($qtype == QTYPE_MULTIPLE) {
         foreach ($answer[$pqid] as $aid) {
@@ -788,7 +788,7 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                                 }
                             }
                             // course statistics
-                            if ($is_editor) {
+                            if ($is_course_reviewer) {
                                 $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/index.php?course=$course_code'>
                                 <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langUsage'></span></a>";
                             } else {
@@ -1000,6 +1000,7 @@ $displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
                             ORDER BY pid DESC',
                             1,$course_id);
 
+
 if (($total_cunits > 0 or $is_editor) and $course_info->view_type == 'units') {
     $alter_layout = FALSE;
     $cunits_sidebar_columns = 4;
@@ -1067,11 +1068,23 @@ if ($course_info->view_type == 'activity') {
         $(function() {
             $('#help-btn').click(function(e) {
                 e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
+                $.get($(this).attr(\"href\"), function(data) {
+                    bootbox.alert({
+                        size: 'large',
+                        backdrop: true,
+                        message: data,
+                        buttons: {
+                            ok: {
+                                label: '" . js_escape($langClose) ."'
+                            }
+                        }
+                    });
+                });
             });
         });
         </script>
         ";
+
     $tool_content .= "<a class='pull-left add-unit-btn' id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=course_units\" data-toggle='tooltip' data-placement='top' title='$langHelp'>
             <span class='fa fa-question-circle'></span>
         </a>";
