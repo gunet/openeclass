@@ -512,7 +512,8 @@ function printPolls() {
                         $tool_content .= $uid ? $langHasNotParticipated : $langOpenParticipation;
                     }
                     $tool_content .= "</td>";
-                    $line_chart_link = ($has_participated && $thepoll->show_results && $thepoll->type==0)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "&mdash;" ;
+
+                    $line_chart_link = (($has_participated && $thepoll->show_results && ($thepoll->type == 0 || $thepoll->type == 3)))? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "&mdash;" ;
                     $tool_content .= "<td class='text-end option-btn-cell'>
                                         <div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div>
                                       </td></tr>";
