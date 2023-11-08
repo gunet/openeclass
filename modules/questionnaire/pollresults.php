@@ -122,7 +122,7 @@ if (!$is_course_reviewer && !$thePoll->show_results) {
 
 $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
 if (!$total_participants) {
-   redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+    redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 
 if (isset($_REQUEST['unit_id'])) {
@@ -153,6 +153,7 @@ $tool_content .= "<div class='col-12'>
 <div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
+
     </div>
     <div class='card-body'>
         <div class='row p-2 margin-bottom-fat'>
@@ -297,10 +298,10 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                 <td>$q_answer</td>
                                 <td>$answer->count</td>
                                 <td>$percentage%</td>" .
-                                (($thePoll->anonymized == 1) ? '' :
-                                '<td>' . $ellipsized_names_str .
-                                (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '') .
-                                '</td>
+                        (($thePoll->anonymized == 1) ? '' :
+                            '<td>' . $ellipsized_names_str .
+                            (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '') .
+                            '</td>
                                 <td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a></td>')."</tr>";
                     unset($names_array);
                 }
@@ -374,14 +375,14 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                             <td>".q($answer->answer_text)."</td>
                             <td>$answer->count</td>
                             <td>$percentage%</td>"
-                            . (($thePoll->anonymized == 1) ?
+                        . (($thePoll->anonymized == 1) ?
                             '' :
                             '<td>'.$ellipsized_names_str.
-                                (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
+                            (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
                             '</td>
                             <td class="hidden_names" style="display:none;">'
-                                . q($names_str) .
-                                ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a>
+                            . q($names_str) .
+                            ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$langViewHide.'</a>
                             </td>').
                         "</tr>";
                     unset($names_array);
@@ -437,20 +438,20 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                                                     ORDER BY s DESC
                                                 ", $theQuestion->pqid, $answer->answer_text, $theQuestion->pqid, $answer->answer_text);
                         foreach($names as $name) {
-                          $names_array[] = $name->fullname;
+                            $names_array[] = $name->fullname;
                         }
                         $names_str = implode(', ', $names_array);
                         $ellipsized_names_str = q(ellipsize($names_str, 60));
                     }
                     $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
                     $extra_column = !$thePoll->anonymized ?
-                            "<td>"
-                            . $ellipsized_names_str
-                            . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
-                            "</td>
+                        "<td>"
+                        . $ellipsized_names_str
+                        . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$langViewShow.'</a>' : '').
+                        "</td>
                             <td class='hidden_names' style='display:none;'>"
-                               . q($names_str) .
-                               " <a href='#' class='trigger_names' data-type='multiple' id='hide'>".$langViewHide."</a>
+                        . q($names_str) .
+                        " <a href='#' class='trigger_names' data-type='multiple' id='hide'>".$langViewHide."</a>
                            </td>" : "";
                     $tool_content .= "
                     <tr $row_class>

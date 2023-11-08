@@ -338,6 +338,7 @@ function printPollForm() {
     }
 }
 
+
 /**
  * @brief submit poll
  */

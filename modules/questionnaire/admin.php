@@ -37,6 +37,7 @@ if (isset($_REQUEST['pid'])) {
     $pid = intval($_REQUEST['pid']);
 }
 
+
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['assign_type'])) {
         if ($_POST['assign_type'] == 2) {
@@ -92,21 +93,21 @@ if (isset($_POST['submitPoll'])) {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
                         end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, show_front = ?d
                         WHERE course_id = ?d AND pid = ?d",
-                            $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $show_front, $course_id, $pid);
+                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
+                    $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $show_front, $course_id, $pid);
             } else {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
                             end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, show_front = ?d
                         WHERE course_id = ?d AND pid = ?d",
-                            $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $show_front, $course_id, $pid);
+                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
+                    $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $show_front, $course_id, $pid);
             }
             if ($q->affectedRows > 0) {
                 Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_MODIFY,
-                                array('id' => $pid,
-                                      'title' => $PollName,
-                                      'description' => $PollDescription)
-                            );
+                    array('id' => $pid,
+                        'title' => $PollName,
+                        'description' => $PollDescription)
+                );
             }
             Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             Session::flash('message',$langPollEdited);
@@ -116,14 +117,15 @@ if (isset($_POST['submitPoll'])) {
             $pid = Database::get()->query("INSERT INTO poll
                             (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, show_front)
                                 VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
-                                            $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
-                                            $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$show_front)->lastInsertID;
+                $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
+                $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$show_front)->lastInsertID;
 
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
-                            array('id' => $pid,
-                                  'title' => $PollName,
-                                  'description' => $PollDescription)
-                        );
+                array('id' => $pid,
+                    'title' => $PollName,
+                    'description' => $PollDescription)
+            );
+
             if ($PollSurveyType == POLL_COLLES) {
                 createcolles($pid);
             }   elseif($PollSurveyType == POLL_ATTLS) {
@@ -310,53 +312,54 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }
     </script>";
 
-        if (isset($poll) && $poll->assign_to_specific) {
-            //preparing options in select boxes for assigning to specific users/groups
-            $assignee_options='';
-            $unassigned_options='';
-            if ($poll->assign_to_specific == 2) {
-                $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
+    if (isset($poll) && $poll->assign_to_specific) {
+        //preparing options in select boxes for assigning to specific users/groups
+        $assignee_options='';
+        $unassigned_options='';
+        if ($poll->assign_to_specific == 2) {
+            $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                                        FROM poll_to_specific, `group`
                                        WHERE `group`.id = poll_to_specific.group_id
                                        AND `group`.visible = 1 
                                        AND `group`.course_id = ?d
-                                       AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid, );
-                $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` 
-                                        WHERE course_id = ?d AND `group`.visible = 1", $course_id);
-                foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
-                }
-                $unassigned = array_udiff($all_groups, $assignees,
-                  function ($obj_a, $obj_b) {
-                    return $obj_a->id - $obj_b->id;
-                  }
-                );
-                foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
-                }
+                                       AND poll_to_specific.poll_id = ?d", $course_id, $poll->pid);
+            $all_groups = Database::get()->queryArray("SELECT name, id FROM `group`
 
-            } else {
-                $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                        WHERE course_id = ?d AND `group`.visible = 1", $course_id);
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
+            }
+            $unassigned = array_udiff($all_groups, $assignees,
+                function ($obj_a, $obj_b) {
+                    return $obj_a->id - $obj_b->id;
+                }
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
+            }
+
+        } else {
+            $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                        FROM poll_to_specific, user
                                        WHERE user.id = poll_to_specific.user_id AND poll_to_specific.poll_id = ?d", $poll->pid);
-                $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
+            $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
                                         FROM user, course_user
                                         WHERE user.id = course_user.user_id
                                         AND course_user.course_id = ?d AND course_user.status = " . USER_STUDENT . "
                                         AND user.id", $course_id);
-                foreach ($assignees as $assignee_row) {
-                    $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
-                }
-                $unassigned = array_udiff($all_users, $assignees,
-                  function ($obj_a, $obj_b) {
+            foreach ($assignees as $assignee_row) {
+                $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
+            }
+            $unassigned = array_udiff($all_users, $assignees,
+                function ($obj_a, $obj_b) {
                     return $obj_a->id - $obj_b->id;
-                  }
-                );
-                foreach ($unassigned as $unassigned_row) {
-                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
                 }
+            );
+            foreach ($unassigned as $unassigned_row) {
+                $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
             }
         }
+    }
 
     $PollName = Session::has('PollName') ? Session::get('PollName') : (isset($poll) ? $poll->name : '');
     $PollDescription = Session::has('PollDescription') ? Session::get('PollDescription') : (isset($poll) ? $poll->description : '');
@@ -373,6 +376,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               'level' => 'primary',
               'url' => $link_back,
               'icon' => 'fa-reply')));
+
     $tool_content .= "
 
     <div class='d-lg-flex gap-4 mt-4'>
@@ -387,41 +391,30 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <span class='help-block Accent-200-cl'>".Session::getError('PollName')."</span>
               </div>
             </div>
-
-            
-            
+  
+            <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
+                <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langStart</label>
                 
-                    <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")." mt-4' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
-                        <label for='PollStart' class='col-sm-12 control-label-notes mb-1'>$langPollStart</label>
-                        
-                        <div class='input-group'>
-                                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                                <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
-                                <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
-                               
-                        </div>
-                            
-                        
-                    </div>
-               
-
-            
+                <div class='input-group'>
+                        <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                        <input class='form-control mt-0 border-start-0' name='PollStart' id='PollStart' type='text' value='$PollStart'>
+                        <span class='help-block Accent-200-cl'>".Session::getError('PollStart')."</span>
+                      
+                </div>
                 
-                    <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
-                        <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd</label>
-                        
-                        <div class='input-group'>
-                            <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
-                            <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
-                            <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
-                            
-                        </div>
-                    </div>
+            </div>               
                 
-            
-
-           
-
+            <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+                <label for='PollEnd' class='col-sm-12 control-label-notes mb-1'>$langPollEnd</label>
+                
+                <div class='input-group'>
+                    <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                    <input class='form-control mt-0 border-start-0' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                    <span class='help-block Accent-200-cl'>".Session::getError('PollEnd')."</span>
+                    
+                </div>
+            </div>
+                
             <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langResults</label>
                 <div class='col-sm-12'>
@@ -439,11 +432,28 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             $langPollShowResults
                         </label>
                     </div>
-              </div>
+                </div>
             </div>
-
-       
-
+            
+            <div class='form-group mt-4'>
+                <label class='col-sm-2 control-label-notes mb-2'>$langAnswers:</label>
+                <div class='col-sm-12'>
+                    <div class='checkbox mb-2'>
+                        <label class='label-container'>
+                            <input type='checkbox' name='MulSubmissions' id='MulSubmissions' value='1'" .
+                                ((isset($poll->multiple_submissions) && $poll->multiple_submissions) ? ' checked' : '') .">
+                            $langActivateMulSubmissions
+                        </label>
+                    </div>
+                    <div class='checkbox'>
+                        <label class='label-container'>
+                            <input type='checkbox' name='DefaultAnswer' id='DefaultAnswer' value='1'" .
+                                ((isset($poll->default_answer) && $poll->default_answer) ? ' checked' : '') . ">
+                            $langActivateDefaultAnswer
+                        </label>
+                    </div>
+                </div>
+            </div>
 
             <div class='form-group mt-4'>
               <label for='PollDescription' class='col-sm-6 control-label-notes'>$langDescription</label>
@@ -451,8 +461,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
             </div>
-
-            
             
             <div class='form-group mt-4'>
               <label for='PollEndMessage' class='col-sm-6 control-label-notes'>$langPollEndMessage</label>
@@ -460,9 +468,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
             </div>
-
-            
-
 
             <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes mb-2'>$m[WorkAssignTo]</label>
@@ -534,8 +539,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input type='radio' id='general_type' name='survey_type' value='3'".($PollSurveyType == POLL_QUICK ? " checked" : "").">
                         <span>$langQuickSurvey</span>
                       </label>
-                    </div>
-                                        
+                    </div>                                        
                     <div class='radio mb-2'>
                       <label>
                         <input class='input-Questionnaire' type='radio' id='colles_type' name='survey_type' value='1'".($PollSurveyType == POLL_COLLES ? " checked" : "").">
@@ -543,6 +547,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             <span class='fa fa-info-circle fa-ls fa-fw  ' data-bs-toggle='tooltip' data-bs-placement='top' title='$colles_desc'></span>
                             $langCollesSurvey
                         </label>
+
                       </label>
                     </div>
                     
@@ -566,7 +571,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "<span class='help-block'>".Session::getError('survey_type')."</span>
                     </div>
                 </div>
-
             </div>
             <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langShowFront:</label>
@@ -575,6 +579,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <label>
                             <input type='checkbox' name='show_front' id='show_front' value='1'" .
                             ((isset($poll->show_front) && $poll->show_front) ? ' checked' : '') . ">
+
                             $langYes
                         </label>
                     </div>
@@ -584,7 +589,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true AND type = ?s', LIMESURVEY_LTI_TYPE);
         $lti_template_options = "";
         foreach ($lti_templates as $lti) {
-            $lti_template_options .= "<option value='$lti->id'". ((isset($poll) && $poll->lti_template == $lti->id) ? " selected": "") .">$lti->title</option>";
+            $lti_template_options .= "<option value='$lti->id'" . ((isset($poll) && $poll->lti_template == $lti->id) ? " selected" : "") . ">$lti->title</option>";
         }
         $lti_hidden = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' hidden';
         $lti_disabled = ($PollSurveyType == POLL_LIMESURVEY) ? '' : ' disabled';
@@ -599,41 +604,69 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                       </select>
                     </div>
                 </div>
-            </div>
+            </div>";
+        $head_content .= "<script type='text/javascript'>
+            $(function() {
+                $('input[name=survey_type]').on('change', function(e) {
+                    let choice = $(this).val();
+                    if (choice == " . POLL_LIMESURVEY . ") {
+                        // lti fields
+                        $('#lti_label')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                        $('#lti_templates')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                        $('#lti_launchcontainer')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    } else {
+                        // lti fields
+                        $('#lti_label')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                        $('#lti_templates')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                        $('#lti_launchcontainer')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    }
+                });
+            });
+        </script>";
+    }
 
-           
-
-
-            <div class='form-group mt-5'>
-              <div class='col-12 d-flex justify-content-end align-items-center'>
-                
-                  
-                     "
-                     .
-                                 form_buttons(array(
-                                     array(
-                                         'class' => 'submitAdminBtn',
-                                         'text'  => $langSave,
-                                         'name'  => 'submitPoll',
-                                         'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
-                                         'javascript' => "selectAll('assignee_box',true)"
-                                     ),
-                                     array(
-                                        'class' => 'cancelAdminBtn ms-1',
-                                        'href' => "index.php?course=$course_code",
-                                    )
-                                 ))
-                                 ."
-                   
-                   
-               
-              </div>
-            </div>        
-        </form>
-    </div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
-</div>
-</div>";
+        $tool_content .= "<div class='form-group mt-5'>
+              <div class='col-12 d-flex justify-content-end align-items-center'>"
+                . form_buttons(array(
+                    array(
+                        'class' => 'submitAdminBtn',
+                        'text' => $langSave,
+                        'name' => 'submitPoll',
+                        'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
+                        'javascript' => "selectAll('assignee_box',true)"
+                    ),
+                    array(
+                        'class' => 'cancelAdminBtn ms-1',
+                        'href' => "index.php?course=$course_code",
+                    )
+                )) . "
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>";
+    $tool_content .= "<div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>";
 } elseif (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid",
@@ -681,7 +714,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-    <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>    
+    <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>
             <div class='form-group $questionNameErrorClass'>
                 <label for='questionName' class='col-sm-6 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)."</label>
                 <div class='col-sm-12'>
@@ -706,7 +739,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         });
         </script>";
         $tool_content .= "
-        
             <div class='form-group mt-4'>
                 <label for='answerType' class='col-sm-6 control-label-notes mb-2'>$langType</label>
                 <div class='col-sm-12'>
@@ -721,7 +753,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <input type='radio' name='answerType' class='answerType' value='".QTYPE_MULTIPLE."' ".($answerType == QTYPE_MULTIPLE ? 'checked' : '').">
                         ". $aType[QTYPE_MULTIPLE - 1] . "
                       </label>
-                    </div>
+                    </div>";
+        if (isset($_GET['quickpoll'])) {
+            $tool_content .= "</div></div>";
+        } else {
+            $tool_content .= "
                     <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='answerType' class='answerType' value='".QTYPE_FILL."' ".($answerType == QTYPE_FILL ? 'checked' : '').">
@@ -737,9 +773,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            
-
-
             <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
                 <label for='questionScale' class='col-sm-6 control-label-notes'>$langMax $langScale (1-..):</label>
                 <div class='col-12'>
@@ -751,13 +784,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     }
 
     $tool_content .= "
-
-   
-
             <div class='form-group mt-5'>
                 <div class='col-12 d-flex justify-content-end align-items-center'>
-                  
-                     
                          ".
                          form_buttons(array(
                              array(
@@ -772,9 +800,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                              )
                          ))
                      ."
-                     
-                     
-                   
                 </div>
             </div>
     </form></div></div><div class='d-none d-lg-block'>
@@ -803,8 +828,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         'name' => $langPollManagement
     );
     $tool_content .= "
-
- 
     <div class='col-12 mt-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
@@ -819,32 +842,29 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     </div>";
 
     $tool_content .= "
-    
+
     <div class='col-12 mt-3'>
         <div class='card panelCard px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>$langQuestionAnswers</h3>
             </div>
             <div class='card-body'>
-                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>                    
-                    
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>
+
                     <div class='form-group'>
-                       
-                            
+
+
                             <div class='col-9 control-label-notes d-inline-flex'>
                                <span class='mt-1 me-1'>$langPollAddAnswer: </span><input class='btn submitAdminBtn' type='submit' name='MoreAnswers' value='+'>
                             </div>
-                       
+
                     </div><hr><br>";
+
         if (count($answers) > 0) {
             foreach ($answers as $answer) {
               $tool_content .="
-             
-
                   <div class='form-group input-group mt-3'>
-                        
                         <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
-                        
                         <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
@@ -852,43 +872,27 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               }
         } else {
             $tool_content .="
-                    
                     <div class='form-group input-group mt-3'>
-                       
                             <input class='form-control mt-0' type='text' name='answers[]' value=''>
-                     
                             <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
                                 " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                             </div>
                     </div>
-
-                   
-              
                   <div class='form-group input-group mt-3'>
-                       
                         <input class='form-control mt-0' type='text' name='answers[]' value=''>
-                      
                         <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
+
         }
         $tool_content .= "
-       
                     <div class='form-group mt-4'>
                         <div class='col-12 d-flex justify-content-center align-items-center'>
-                            
-                               
-                                 <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
-                              
-                              
-                                 <a class='btn cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
-                              
-                          
-                            
-                            
+                             <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$langCreate'>
+                             <a class='btn cancelAdminBtn ms-1' href='admin.php?course=$course_code&amp;pid=$pid'>$langCancel</a>
                         </div>
-                    </div>                    
+                    </div>
                     </form>
             </div>
         </div>
@@ -931,7 +935,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             'button-class' => 'btn-danger',
             'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid",
             'icon' => 'fa-play-circle')
-
         ));
 
     $tool_content .= "
@@ -969,16 +972,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     ". format_locale_date(strtotime($poll->end_date)) ."
                 </div>
             </div>
-            
+
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$m[WorkAssignTo]:</strong>
                 </div>
                 <div class='col-sm-9'>
                     ". $assign_to_users_message ."
-                </div>                                        
-            </div>                                            
-            
+                </div>
+            </div>
+
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langResults:</strong>
@@ -1031,16 +1034,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if($poll->type == 0) {
         $tool_content .= action_bar(array(
             array('title' => $langNewQu,
-                  'level' => 'primary-label',
-                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes",
-                  'icon' => 'fa-plus-circle',
-                  'button-class' => 'btn-success'),
+                'level' => 'primary-label',
+                'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes",
+                'icon' => 'fa-plus-circle',
+                'button-class' => 'btn-success'),
             array('title' => $langNewLa,
-                  'level' => 'primary-label',
-                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
-                  'icon' => 'fa-tag',
-                  'button-class' => 'btn-success')
-            ),false);
+                'level' => 'primary-label',
+                'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
+                'icon' => 'fa-tag',
+                'button-class' => 'btn-success')
+        ),false);
         if ($questions) {
 
             load_js('sortable/Sortable.min.js');
@@ -1112,6 +1115,85 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "<div class='col-12'><div class='alert alert-info' role='alert'><i class='fa-solid fa-circle-info fa-lg'></i><span>$colles_desc</span></div></div>";
     } elseif ($poll->type==2) {
         $tool_content .= "<div class='col-12'><div class='alert alert-info' role='alert'><i class='fa-solid fa-circle-info fa-lg'></i><span>$rate_scale</span></div></div>";
+    } elseif ($poll->type==3) {
+        if (count($questions) < 1) {
+            $tool_content .= action_bar(array(
+                array('title' => $langNewQu,
+                    'level' => 'primary-label',
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&quickpoll",
+                    'icon' => 'fa-plus-circle',
+                    'button-class' => 'btn-success'),
+            ),false);
+        }
+        if ($questions) {
+
+            load_js('sortable/Sortable.min.js');
+
+            $head_content .= "<script>
+                $(document).ready(function(){
+                    Sortable.create(pollAnswers,{
+                        handle: '.fa-arrows',
+                        animation: 150,
+                        onEnd: function (evt) {
+                            var itemEl = $(evt.item);
+                            var idReorder = itemEl.attr('data-id');
+                            var prevIdReorder = itemEl.prev().attr('data-id');
+                            $.ajax({
+                              type: 'post',
+                              dataType: 'text',
+                              data: {
+                                    toReorder: idReorder,
+                                    prevReorder: prevIdReorder,
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>";
+
+            $tool_content .= "<table class='table-default'>
+                        <tbody id='pollAnswers'>
+                            <tr class='list-header'>
+                              <th colspan='2'>$langQuesList</th>
+                              <th class='text-center'>".icon('fa-gears', $langActions)."</th>
+                            </tr>";
+            $i=1;
+            $nbrQuestions = count($questions);
+            foreach ($questions as $question) {
+                $tool_content .= "<tr class='even' data-id='$question->pqid'>
+                                <td align='text-right' width='1'>$i.</td>
+                                <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
+                    $aType[$question->qtype - 1]."</td>
+                                <td style='padding: 10px 0; width: 85px;'>
+                                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                            <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
+                                    </div>
+                                <div class='pull-left'>".action_button(array(
+                        array(
+                            'title' => $langEditChange,
+                            'icon' => 'fa-edit',
+                            'url' => (($question->qtype != QTYPE_LABEL) and ($question->qtype != QTYPE_FILL) and ($question->qtype != QTYPE_SCALE))?
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question->pqid" :
+                                "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyQuestion=$question->pqid",
+                        ),
+                        array(
+                            'title' => $langDelete,
+                            'icon' => 'fa-times',
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
+                            'class' => 'delete',
+                            'confirm' => $langConfirmYourChoice
+                        )
+                    ))."</div></td></tr>";
+                $i++;
+            }
+            $tool_content .= "</tbody></table>";
+        } else {
+            $tool_content .= "<div class='alert alert-warning'>$langPollEmpty</div>";
+        }
+    } elseif ($poll->type==1) {
+        $tool_content .= "<div class='alert alert-info' role='alert'>$colles_desc</div>";
+    } elseif ($poll->type==2) {
+        $tool_content .= "<div class='alert alert-info' role='alert'>$rate_scale</div>";
     } elseif ($poll->type==3) {
         if (count($questions) < 1) {
             $tool_content .= action_bar(array(
