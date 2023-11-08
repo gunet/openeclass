@@ -75,7 +75,7 @@ if (isset($_POST['submitPoll'])) {
         Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
     }
 
-    $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, '', '', '')->lastInsertID;
+    $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, NULL, NULL, NULL)->lastInsertID;
 
     if ($qtype == QTYPE_MULTIPLE) {
         foreach ($answer[$pqid] as $aid) {
@@ -993,14 +993,6 @@ $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course
                             WHERE course_id = ?d AND module_id = ' . MODULE_ID_ANNOUNCE,
                             $course_id)->visible;
 
-$displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
-                            WHERE show_front = ?d
-                            AND course_id = ?d
-                            ORDER BY pid DESC',
-                            1,$course_id);
-
-//$temp_CurrentDate = date("Y-m-d H:i:s");
-//var_dump($temp_CurrentDate);
 $displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
                             WHERE show_front = ?d
                             AND course_id = ?d

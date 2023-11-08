@@ -200,7 +200,8 @@ $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid 
 $j=1;
 $chart_data = [];
 $chart_counter = 0;
-if ($PollType == POLL_NORMAL) {
+
+if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
     foreach ($questions as $theQuestion) {
         $this_chart_data = array();
         if ($theQuestion->qtype == QTYPE_LABEL) {
