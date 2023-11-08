@@ -783,7 +783,7 @@ if ($action == "showBlog") {
                         array('title' => $langBlogAddPost,
                               'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=createPost",
                               'icon' => 'fa-plus-circle',
-                              'level' => 'primary-label',
+                              'level' => 'primary',
                               'button-class' => 'btn-success',
                               'show' => $allow_to_create),
                         array('title' => $langConfig,

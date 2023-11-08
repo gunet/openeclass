@@ -4736,6 +4736,7 @@ function assignment_details($id, $row, $x =false) {
                 'title' => $langDelAssign,
                 'icon' => 'fa-xmark',
                 'url' => "{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=do_delete",
+                'text-class' => 'text-danger',
                 'button-class' => "deleteAdminBtn",
                 'confirm' => "$langWorksDelConfirm"
             )

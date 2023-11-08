@@ -9,12 +9,12 @@
         $actionBarArray = array(
             array('title' => $GLOBALS['langAddV'],
                   'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=file",
-                  'icon' => 'fa-plus-circle',
+                  'icon' => 'fa-regular fa-file-video',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success'),
             array('title' => $GLOBALS['langAddVideoLink'],
                   'url' => $urlAppend . "modules/video/edit.php?course=" . $course_code . "&amp;form_input=url",
-                  'icon' => 'fa-plus-circle',
+                  'icon' => 'fa-link',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success'),
             array('title' => $GLOBALS['langCategoryAdd'],
@@ -44,14 +44,14 @@
 <div class='{{ $container }} module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+            <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                 <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                 </div>
             </div>
 
             <div class="col_maincontent_active">
-                    
+
                 <div class="row">
 
                     @if(!$is_in_tinymce)
@@ -77,7 +77,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -89,7 +89,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -99,7 +99,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -123,7 +123,7 @@
                                 </table>
                             </div>
                         </div>
-                                
+
                         @endif
 
                         @if ($num_of_categories > 0)
@@ -193,7 +193,7 @@
                                     </table>
                                 </div>
                             </div>
-                                
+
                         @endif
                     @else
                         <div class='col-sm-12'><div class='alert alert-warning' role='alert'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoVideo') }}</span></div></div>
@@ -203,7 +203,7 @@
             </div>
 
         </div>
-   
+
 </div>
 </div>
 @endsection

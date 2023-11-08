@@ -33,14 +33,11 @@ if ($is_admin) {
     $urlback = "../admin/listusers.php";
 }
 $tool_content .= action_bar(array(
-    array('title' => $langBack,
-    'url' => $urlback,
-    'icon' => 'fa-reply',
-    'level' => 'primary'),
     array('title' => $langDurationVisitsPerCourse,
         'url' => "$_SERVER[SCRIPT_NAME]?t=u$add_link&amp;per_course_dur=TRUE",
-        'level' => 'primary-label')
-   
+        'icon' => 'fa-solid fa-timeline',
+        'level' => 'primary'
+    )
 ),false);
 
 if ($is_admin) {

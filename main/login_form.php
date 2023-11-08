@@ -162,15 +162,15 @@ $tool_content .= "<div class='col-12 mt-5'>";
                                                     </div>
                                                   ";
                               }
-                                
+
                               if($counter == count($authLink) - 1){
                                   $tool_content .= "</div>";
                               }
 
-                               
+
                               $counter++;
                             }
-    
+
 
        $tool_content .= "
                       </div>

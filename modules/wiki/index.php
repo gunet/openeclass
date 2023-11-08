@@ -148,11 +148,11 @@ switch ($action) {
             if ($wikiStore->wikiIdExists($wikiId)) {
                 $wiki = $wikiStore->deleteWiki($wikiId);
               //  Session::Messages($langWikiDeletionSucceed, 'alert-success');
-                Session::flash('message',$langWikiDeletionSucceed); 
+                Session::flash('message',$langWikiDeletionSucceed);
                 Session::flash('alert-class', 'alert-success');
             } else {
               //  Session::Messages($langWikiInvalidWikiId);
-                Session::flash('message',$langWikiInvalidWikiId); 
+                Session::flash('message',$langWikiInvalidWikiId);
                 Session::flash('alert-class', 'alert-warning');
             }
 
@@ -338,11 +338,6 @@ switch ($action) {
             }
             if ($is_editor) {
                 $tool_content .= action_bar(array(
-                        array('title' => $langBack,
-                              'url' => "$_SERVER[SCRIPT_NAME]'?course=$course_code",
-                              'icon' => 'fa-reply',
-                              'level' => 'primary',
-                              'show' => isset($_GET['action'])),
                         array('title' => $langWikiCreateWiki,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;action=rqEdit",
                               'icon' => 'fa-plus-circle',

@@ -178,7 +178,7 @@ function xAxisTicksAdjust()
 $toolName = $langUsage;
 $pageName = $langOldStats;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-
+$navigation[] = array('url' => 'index.php?course=' . $course_code .'&gc_stats=true', 'name' => $langPlatformGenStats);
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
