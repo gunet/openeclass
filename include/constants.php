@@ -178,11 +178,13 @@ define('ASSIGNMENT_SCALING_GRADE', 1);
 define('ASSIGNMENT_RUBRIC_GRADE', 2);
 define('ASSIGNMENT_PEER_REVIEW_GRADE', 3);
 
-// questionnaire (aka poll) types
+// questionnaire ( aka poll ) types
 define('POLL_NORMAL', 0);
 define('POLL_COLLES', 1);
 define('POLL_ATTLS', 2);
+define('POLL_QUICK', 3);
 define('POLL_LIMESURVEY', 99);
+
 
 // gradebook activity type
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);

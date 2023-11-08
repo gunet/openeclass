@@ -59,6 +59,37 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 
+define('QTYPE_SINGLE', 1);
+define('QTYPE_MULTIPLE', 3);
+
+
+if (isset($_POST['submitPoll'])) {
+    $qtype = $_POST['qtype'];
+    $answer = $_POST['answer'];
+    $pqid = $_POST['pqid'];
+    $pid = $_POST['pid'];
+    $multiple_submissions = $_POST['multiple_submissions'];
+
+    if ($multiple_submissions) {
+        Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
+        Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
+    }
+
+    $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, NULL, 0, NULL)->lastInsertID;
+
+    if ($qtype == QTYPE_MULTIPLE) {
+        foreach ($answer[$pqid] as $aid) {
+            $aid = intval($aid);
+            Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                            VALUES (?d, ?d, ?d, '', NOW())", $user_record_id, $pqid, $aid);
+        }
+    } else {
+        Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                            VALUES (?d, ?d, ?d, '', NOW())", $user_record_id, $pqid, $answer);
+    }
+
+}
+
 $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
                                                view_type, start_date, end_date, description, home_layout, course_image, password
                                           FROM course WHERE id = ?d", $course_id);
@@ -757,7 +788,7 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                                 }
                             }
                             // course statistics
-                            if ($is_course_reviewer) {
+                            if ($is_editor) {
                                 $tool_content .= "&nbsp;<a href = '{$urlAppend}modules/usage/index.php?course=$course_code'>
                                 <span class='fa fa-area-chart fa-fw' data-toggle='tooltip' data-placement='top' title='$langUsage'></span></a>";
                             } else {
@@ -962,6 +993,13 @@ $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course
                             WHERE course_id = ?d AND module_id = ' . MODULE_ID_ANNOUNCE,
                             $course_id)->visible;
 
+$displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
+                            WHERE show_front = ?d
+                            AND course_id = ?d
+                            AND CURRENT_DATE BETWEEN start_date AND end_date
+                            ORDER BY pid DESC',
+                            1,$course_id);
+
 if (($total_cunits > 0 or $is_editor) and $course_info->view_type == 'units') {
     $alter_layout = FALSE;
     $cunits_sidebar_columns = 4;
@@ -1029,23 +1067,11 @@ if ($course_info->view_type == 'activity') {
         $(function() {
             $('#help-btn').click(function(e) {
                 e.preventDefault();
-                $.get($(this).attr(\"href\"), function(data) {
-                    bootbox.alert({
-                        size: 'large',
-                        backdrop: true,
-                        message: data,
-                        buttons: {
-                            ok: {
-                                label: '" . js_escape($langClose) ."'
-                            }
-                        }
-                    });
-                });
+                $.get($(this).attr(\"href\"), function(data) {bootbox.alert(data);});
             });
         });
         </script>
         ";
-
     $tool_content .= "<a class='pull-left add-unit-btn' id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?language=$language&amp;topic=course_units\" data-toggle='tooltip' data-placement='top' title='$langHelp'>
             <span class='fa fa-question-circle'></span>
         </a>";
@@ -1123,6 +1149,116 @@ if (isset($level) && !empty($level)) {
 if ($displayWall) {
     show_post_form();
     show_wall_posts();
+}
+
+if (!$displayWall && $displayQuickPoll) {
+
+    $pid = $displayQuickPoll->pid;
+    $multiple_submissions = $displayQuickPoll->multiple_submissions;
+    $show_results = $displayQuickPoll->show_results;
+    $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
+
+    $theQuestion = Database::get()->querySingle("SELECT * FROM poll_question
+            WHERE pid = ?d ORDER BY q_position ASC", $pid);
+    $pqid = $theQuestion->pqid;
+    $qtype = $theQuestion->qtype;
+
+    $user_answers = null;
+
+    if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
+
+        $user_answers = Database::get()->queryArray("SELECT a.aid
+                                FROM poll_user_record b, poll_answer_record a
+                                LEFT JOIN poll_question_answer c
+                                    ON a.aid = c.pqaid
+                                WHERE a.poll_user_record_id = b.id
+                                    AND a.qid = ?d
+                                    AND b.uid = ?d", $pqid, $uid);
+
+    }
+
+    $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
+                                WHERE pqid = ?d ORDER BY pqaid", $pqid);
+    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+
+
+    $tool_content .= "
+        <div class='col-md-$cunits_sidebar_subcolumns'>
+            <div class=''>
+                <div class='content-title'>$langQuickSurvey</div>
+                
+                <div class='panel'>";
+    $tool_content .= "
+            <div class='alert alert-warning' role='alert' style='margin-bottom: 0'>
+                <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
+            </div>";
+
+    if ($show_results) {
+        $tool_content .= "<div class='panel-body'>";
+        $tool_content .= "results";
+        $tool_content .= "</div>";
+    }
+
+    if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
+        $tool_content .= "<div class='panel-body'>$langPollAlreadyParticipated</div>";
+    } else {
+
+        $tool_content .= "
+                <div class='panel-body'>
+                    <form class='form-horizontal' role='form' action='' id='poll' method='post'>";
+
+        foreach ($answers as $theAnswer) {
+            $checked = '';
+            if ($user_answers) {
+                if (count($user_answers) > 1) { // multiple answers
+                    foreach ($user_answers as $ua) {
+                        if ($ua->aid == $theAnswer->pqaid) {
+                            $checked = 'checked';
+                        }
+                    }
+                } else {
+                    if (count($user_answers) == 1) { // single answer
+                        if ($user_answers[0]->aid == $theAnswer->pqaid) {
+                            $checked = 'checked';
+                        }
+                    }
+                }
+            }
+            $tool_content .= "
+                        <div class='form-group'>
+                            <div class='col-sm-11'>
+                                <div class='$type_attr'>
+                                    <label>
+                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."
+                                        <!---<input type='$type_attr' name='answer[]' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."--->
+                                    </label>
+                                </div>
+                            </div>
+                        </div>";
+        }
+
+        $tool_content .= "<input name='qtype' type='hidden' value='" . q($qtype) . "'>";
+        $tool_content .= "<input name='pid' type='hidden' value='" . q($pid) . "'>";
+        $tool_content .= "<input name='pqid' type='hidden' value='" . q($pqid) . "'>";
+        $tool_content .= "<input name='multiple_submissions' type='hidden' value='" . q($multiple_submissions) . "'>";
+        $tool_content .= "<input class='btn btn-primary blockUI' name='submitPoll' type='submit' value='" . q($langSubmit) . "'>";
+
+        $tool_content .= "
+                    </form>
+                </div>";
+
+    }
+
+
+
+
+
+    $tool_content .= "
+                </div>
+            </div>
+        </div>
+    ";
 }
 
 if (!$displayWall && $displayCalendar) {

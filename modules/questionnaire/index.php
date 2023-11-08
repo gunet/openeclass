@@ -143,7 +143,7 @@ if ($is_editor) {
         if(!$p){
             redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
         }
-        // activate / deactivate polls
+        // activate / dectivate polls
         if (isset($_GET['visibility'])) {
             switch ($_GET['visibility']) {
                 case 'activate':
@@ -301,7 +301,7 @@ draw($tool_content, 2, null, $head_content);
 function printPolls() {
     global $tool_content, $course_id, $course_code, $urlAppend,
         $langTitle, $langCancel, $langOpenParticipation,
-        $langFrom, $langTill, $langPollNone, $is_editor, $is_course_reviewer, $langAnswers,
+        $langFrom, $langTill, $langPollNone, $is_editor, $langAnswers,
         $langEditChange, $langDelete, $langSurveyNotStarted, $langResourceAccessLock,
         $langDeactivate, $langHasExpired, $langActivate, $langResourceAccessUnlock,
         $langParticipate,  $langHasParticipated, $langSee,
@@ -314,7 +314,7 @@ function printPolls() {
     $query = "SELECT * FROM poll WHERE course_id = ?d";
     $query_params[] = $course_id;
     // Bring only those assigned to the student
-    if (!$is_course_reviewer) {
+    if (!$is_editor) {
         $gids = user_group_info($uid, $course_id);
         if (!empty($gids)) {
             $gids_sql_ready = implode(',',array_keys($gids));
@@ -347,7 +347,7 @@ function printPolls() {
                     <th style='min-width: 55%;'><div align='left'>&nbsp;$langTitle</div></th>
                     <th class='text-center col-sm-4'>$langDate</th>";
 
-        if ($is_course_reviewer) {
+        if ($is_editor) {
             $tool_content .= "<th class='text-center'>$langAnswers</th>";
         } else {
             $tool_content .= "<th class='text-center'>$langParticipate</th>";
@@ -365,7 +365,7 @@ function printPolls() {
                     $visibility_css = "";
                     $visibility_func = "deactivate";
                 } else {
-                    $visibility_css = " class='not_visible'";
+                    $visibility_css = " class=\"not_visible\"";
                     $visibility_func = "activate";
                 }
                 $tool_content .= "<tr $visibility_css>";
@@ -473,15 +473,6 @@ function printPolls() {
                           'confirm' => $langConfirmDelete ],
                     ]) . "
                     </td></tr>";
-                } else if ($is_course_reviewer) {
-                    $total_participants = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_user_record WHERE pid = ?d AND (email_verification = 1 OR email_verification IS NULL)", $pid)->total;
-                    $tool_content .= "<td class='text-center'>$total_participants";
-                    $tool_content .= "</td>";
-                    $tool_content .= "<td class='text-center option-btn-cell'>
-                                    <div style='padding-top:7px;padding-bottom:7px;'>
-                                        <a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>
-                                    </div>
-                                </td></tr>";
                 } else {
                     $tool_content .= "<td class='text-center'>";
                     if ($poll_not_started == 1) {
@@ -494,7 +485,8 @@ function printPolls() {
                         $tool_content .= $uid ? $langHasNotParticipated : $langOpenParticipation;
                     }
                     $tool_content .= "</td>";
-                    $line_chart_link = ($has_participated && $thepoll->show_results && $thepoll->type==0)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "&mdash;" ;
+
+                    $line_chart_link = (($has_participated && $thepoll->show_results && ($thepoll->type == 0 || $thepoll->type == 3)))? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "&mdash;" ;
                     $tool_content .= "<td class='text-center option-btn-cell'>
                                         <div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div>
                                       </td></tr>";
