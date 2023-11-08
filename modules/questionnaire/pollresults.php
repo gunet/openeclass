@@ -475,5 +475,6 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
 } elseif ($PollType == POLL_ATTLS) {
     redirect_to_home_page("modules/questionnaire/attls.php?course=$course_code&pid=$pid");
 }
+
 // display page
 draw($tool_content, 2, null, $head_content);

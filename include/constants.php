@@ -185,6 +185,7 @@ define('POLL_ATTLS', 2);
 define('POLL_QUICK', 3);
 define('POLL_LIMESURVEY', 99);
 
+
 // gradebook activity type
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);

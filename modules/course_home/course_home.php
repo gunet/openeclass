@@ -70,7 +70,6 @@ if (isset($_POST['submitPoll'])) {
     $pid = $_POST['pid'];
     $multiple_submissions = $_POST['multiple_submissions'];
 
-
     if ($multiple_submissions) {
         Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
         Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
