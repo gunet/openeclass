@@ -86,7 +86,6 @@ if (isset($_POST['submitPoll'])) {
         $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
         $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
         $show_front = (isset($_POST['show_front'])) ? $_POST['show_front'] : 0;
-
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
