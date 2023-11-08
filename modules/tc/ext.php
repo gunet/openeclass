@@ -106,7 +106,7 @@ if ($server_type == 'bbb') { // bbb server
         display_message($langBBBMaxUsersJoinError);
         exit;
     } else {
-        $name = $names[$_GET['username']] ?? $_GET['username'];
+        $name = (isset($names[$_GET['username']]) && $names[$_GET['username']])? $names[$_GET['username']]: $_GET['username'];
         header('Location: ' . bbb_join_user($meeting_id, $att_pw, $name, ''));
     }
 } elseif ($server_type == 'jitsi' or $server_type == 'googlemeet') { // jitsi server
