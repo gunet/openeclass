@@ -182,6 +182,7 @@ define('ASSIGNMENT_PEER_REVIEW_GRADE', 3);
 define('POLL_NORMAL', 0);
 define('POLL_COLLES', 1);
 define('POLL_ATTLS', 2);
+define('POLL_QUICK', 3);
 define('POLL_LIMESURVEY', 99);
 
 // gradebook activity type
