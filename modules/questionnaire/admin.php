@@ -566,6 +566,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "<span class='help-block'>".Session::getError('survey_type')."</span>
                     </div>
                 </div>
+
             </div>
             <div class='form-group mt-4'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langShowFront:</label>
