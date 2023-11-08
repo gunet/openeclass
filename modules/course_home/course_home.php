@@ -62,6 +62,38 @@ add_units_navigation(TRUE);
 
 load_js('tools.js');
 
+define('QTYPE_SINGLE', 1);
+define('QTYPE_MULTIPLE', 3);
+
+if (isset($_POST['submitPoll'])) {
+    $qtype = $_POST['qtype'];
+    $answer = $_POST['answer'];
+    $pqid = $_POST['pqid'];
+    $pid = $_POST['pid'];
+    $multiple_submissions = $_POST['multiple_submissions'];
+
+    if ($multiple_submissions) {
+        Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
+        Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
+    }
+
+    $user_record_id = Database::get()->query("INSERT INTO poll_user_record (pid, uid, email, email_verification, verification_code) VALUES (?d, ?d, ?s, ?d, ?s)", $pid, $uid, NULL, NULL, NULL)->lastInsertID;
+
+    if ($qtype == QTYPE_MULTIPLE) {
+        foreach ($answer[$pqid] as $aid) {
+            $aid = intval($aid);
+            Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                            VALUES (?d, ?d, ?d, '', NOW())", $user_record_id, $pqid, $aid);
+        }
+    } else {
+        Database::get()->query("INSERT INTO poll_answer_record (poll_user_record_id, qid, aid, answer_text, submit_date)
+                            VALUES (?d, ?d, ?d, '', NOW())", $user_record_id, $pqid, $answer);
+    }
+
+}
+
+
+
 $data['course_info'] = $course_info = Database::get()->querySingle("SELECT title, keywords, visible, prof_names, public_code, course_license,
                                                view_type, start_date, end_date, description, home_layout, course_image, flipped_flag, password
                                           FROM course WHERE id = ?d", $course_id);
@@ -467,7 +499,7 @@ if (!$is_editor) {
     }
 }
 
-/****************** TEST CAROUSEL OR ROW UNITS PREFERASION ******************/
+/****************** CAROUSEL OR ROW UNITS PREFERENCE ******************/
 if ($is_editor){
     if (isset($_GET['viewUnit'])){
         Database::get()->query("UPDATE course SET view_units = ?d  WHERE id = ?d", $_GET['viewUnit'], $course_id);
@@ -476,6 +508,14 @@ if ($is_editor){
 $show_course = Database::get()->querySingle("SELECT view_units FROM course WHERE id =  ?d", $course_id);
 $carousel_or_row = $show_course->view_units;
 /***************************************************************************/
+
+/** Quick Poll */
+$displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
+                            WHERE display_position = ?d
+                            AND course_id = ?d
+                            AND CURRENT_DATE BETWEEN start_date AND end_date
+                            ORDER BY pid DESC',
+    1,$course_id);
 
 $total_cunits = count($all_units);
 $data['total_cunits'] = $total_cunits;
