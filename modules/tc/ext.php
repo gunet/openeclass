@@ -47,11 +47,13 @@ if ($q) {
     $unlock_interval = $q->unlock_interval;
     $external_users = $q->external_users;
     // External user details are now stored as JSON...
+    $names = [];
     try {
         $external_user_details = json_decode($external_users, true, 512, JSON_THROW_ON_ERROR);
         $r_group = [];
         foreach ($external_user_details as $item) {
             $r_group[] = $item[0];
+            $names[$item[0]] = $item[1];
         }
     } catch (Exception $e) {
         // If they're not, they used to be stored as comma-delimited e-mails
@@ -104,7 +106,8 @@ if ($server_type == 'bbb') { // bbb server
         display_message($langBBBMaxUsersJoinError);
         exit;
     } else {
-        header('Location: ' . bbb_join_user($meeting_id,$att_pw,$_GET['username'],""));
+        $name = $names[$_GET['username']] ?? $_GET['username'];
+        header('Location: ' . bbb_join_user($meeting_id, $att_pw, $name, ''));
     }
 } elseif ($server_type == 'jitsi' or $server_type == 'googlemeet') { // jitsi server
     $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
