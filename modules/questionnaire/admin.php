@@ -547,6 +547,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "<span class='help-block'>".Session::getError('survey_type')."</span>
                     </div>
                 </div>
+            
             </div>";
     if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
         $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true AND type = ?s', LIMESURVEY_LTI_TYPE);
