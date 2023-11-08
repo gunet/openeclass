@@ -408,6 +408,7 @@ function printPollForm() {
     }
 }
 
+
 /**
  * @brief limesurvey integration
  * @param $thePoll

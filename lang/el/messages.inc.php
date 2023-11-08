@@ -3139,6 +3139,7 @@ $langATTLSSurvey = "A.T.T.L.S.";
 $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 $langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
+$langQuickSurvey = "Γρήγορη δημοσκόπηση";
 
 //COLLES survey
 $qcolles1 = "Σε αυτή την ενότητα εστιάζω μόνο σε ό,τι με ενδιαφέρει";
@@ -3296,6 +3297,8 @@ $langActivateDefaultAnswer = "Ενεργοποίηση απάντησης 'δε�
 $langPollOutcomeClose = "Μπορείτε να κλείσετε αυτό το παράθυρο ή να επιστρέψετε στην προηγούμενη σελίδα.";
 $langOnlySubmissions = 'Μόνο συμμετέχοντες';
 $langOnlyNonSubmissions = 'Μόνο μη συμμετέχοντες';
+$langShowFront = 'Εμφάνιση στην αρχική';
+
 
 /* * **********************************************************
  * registration.php

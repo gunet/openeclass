@@ -62,6 +62,7 @@ load_js('tools.js');
 define('QTYPE_SINGLE', 1);
 define('QTYPE_MULTIPLE', 3);
 
+
 if (isset($_POST['submitPoll'])) {
     $qtype = $_POST['qtype'];
     $answer = $_POST['answer'];
