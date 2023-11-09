@@ -216,9 +216,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $user_role_string = implode(',<br>', $user_roles);
 
         if (!get_user_email_notification($myrow->id, $course_id)) {
-            $email_exlamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='bottom' data-bs-html='true' data-bs-title='$langNoUserEmailLegend'></span>";
+            $email_exclamation_icon = "&nbsp;&nbsp;" . icon('fa-exclamation-triangle', $langNoUserEmailLegend);
         } else {
-            $email_exlamation_icon = '';
+            $email_exclamation_icon = '';
         }
 
         $nameColumn = "
@@ -228,7 +228,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         </div>
                         <div class='pull-left'>
                             <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
-                            <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>$email_exlamation_icon</small></div>
+                            <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>$email_exclamation_icon</small></div>
                             <div class='text-muted'><small>$am_message</small></div>
                         </div>";
         $roleColumn = "<div class='text-muted'>$user_role_string</div>";

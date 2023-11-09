@@ -22,8 +22,8 @@
         @else
             <input id='showWarningModal' type='hidden' value='0'>
         @endif
-       
-    
+
+
         @if(!get_config('show_only_loginScreen'))
             <div class="jumbotron jumbotron-login">
                 <div class='{{ $container }} jumbotron-container'>
@@ -49,7 +49,7 @@
                             <div class='row row-cols-1'>
                                 @if(get_config('enable_mobileapi') || $eclass_banner_value == 1)
                                     <div class="col-12 d-flex justify-content-between align-items-center mt-3">
-                                        
+
                                         @if(get_config('enable_mobileapi'))
                                             <div class='d-flex gap-3 pe-3'>
                                                 <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
@@ -67,7 +67,7 @@
                                                     <div class='card-body banner-body border-0 bg-default border-radius-default py-lg-2 py-1'>
                                                         <a href="http://www.openeclass.org/" target="_blank">
                                                             <img style='width:150px;' src="{{ $themeimg }}/Open-Eclass-Banner.svg" alt="Open eClass Banner">
-                                                        </a> 
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -83,7 +83,6 @@
 
 
 
-        
         <div class="{{ $container }} homepage-container @if(get_config('show_only_loginScreen')) onlyLoginContainer pt-5 @endif my-0">
             <div class='row m-auto'>
 
@@ -199,7 +198,7 @@
                                                                 <div class="col-12 text-center mt-2">
                                                                     <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                         {{$pop_course->title}} ({{$pop_course->public_code}})
-                                                                        
+
                                                                     </a>
                                                                     <p class='TextRegular msmall-text Neutral-800-cl'>{{$pop_course->prof_names}}</p>
                                                                 </div>
@@ -255,12 +254,12 @@
                                     <h3>{{ trans('langSaidForUs') }}</h3>
                                 </div>
                                 <div class='card-body px-3'>
-                                    
+
                                     <div class="d-flex justify-content-center">
                                         <div class="col-12 testimonials my-0">
                                             @foreach($testimonials as $t)
                                                 <div class="d-flex align-items-start flex-column testimonial">
-                                                    
+
                                                         <div class="testimonial-body mb-auto">
                                                             <p class="Neutral-800-cl">{!! $t->body !!}</p>
                                                         </div>
@@ -268,7 +267,7 @@
                                                             <div class="form-label text-end mt-4">{!! $t->title !!}</div>
                                                         </div>
                                                     </div>
-                                                
+
                                             @endforeach
                                         </div>
                                     </div>
@@ -343,7 +342,7 @@
                     </div>
                 @endif
 
-                
+
 
 
                 @if(!get_config('show_only_loginScreen'))
@@ -352,7 +351,7 @@
                             <div class='row row-cols-1'>
                                 <div class='col-12'>
                                     <div class='row row-cols-1'>
-                                        
+
                                         @if ($openCoursesExtraHTML)
                                             <h3 class='mb-4'>{{ trans('langOpenCourses') }}</h3>
                                             {!! $openCoursesExtraHTML !!}
@@ -365,21 +364,21 @@
                 @endif
 
 
-                
+
 
 
             </div>
         </div>
-        
+
 
 </div>
-        
+
 
 
 <script>
 
     $('.basic-content').removeClass('container');
-   
+
     $('.testimonials').slick({
 		autoplay:true,
 		autoplaySpeed:4000,
@@ -418,7 +417,7 @@
         var myModal = new bootstrap.Modal(document.getElementById('WarningModal'));
         myModal.show();
     }
-   
+
 
 </script>
 

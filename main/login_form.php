@@ -72,14 +72,6 @@ foreach ($q as $l) {
 $columns = 12 / count($authLink);
 $pageName = $langUserLogin;
 
-// $tool_content .= action_bar(array(
-//     array('title' => $langBack,
-//           'url' => "$urlServer",
-//           'icon' => 'fa-reply',
-//           'level' => 'primary',
-//           'button-class' => 'btn-primary')), false);
-
-//print_a($authLink);
 $tool_content .= "<div class='col-12'>
                     <h1>$langUserLogin</h1>
                   </div>";
@@ -87,94 +79,88 @@ $tool_content .= "<div class='col-12'>
 $tool_content .= "<div class='col-12 mt-5'>";
   $tool_content .= "<div class='row m-auto'>";
     $tool_content .= "<div class='col-12 px-0'>";
-                          $counter = 0;
-                          $active = '';
-      $tool_content .= "";
-                            foreach ($authLink as $authInfo) {
+      $counter = 0;
+      $active = '';
+        foreach ($authLink as $authInfo) {
 
-                                if (Session::has('login_error') and $authInfo[0]) {
-                                    $tool_content .= "<div class='col-12'>
-                                                        
-                                                        <input id='showWarningModal2' type='hidden' value='1'>
-                                                        <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
-                                                            <div class='modal-dialog modal-dialog-centered'>
-                                                                <div class='modal-content border-0 p-0'>
-                                                                    <div class='modal-header bgOrange d-flex justify-content-between align-items-center'>
-                                                                        <h5 class='modal-title text-white'>$langError</h5>
-                                                                        <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
-                                                                    </div>
-                                                                    <div class='modal-body bg-default'>
-                                                                      ".Session::get('login_error')."
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                      </div>";
-                                }
+            if (Session::has('login_error') and $authInfo[0]) {
+                $tool_content .= "<div class='col-12'>                                 
+                                    <input id='showWarningModal2' type='hidden' value='1'>
+                                    <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                        <div class='modal-dialog modal-dialog-centered'>
+                                            <div class='modal-content border-0 p-0'>
+                                                <div class='modal-header bgOrange d-flex justify-content-between align-items-center'>
+                                                    <h5 class='modal-title text-white'>$langError</h5>
+                                                    <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                </div>
+                                                <div class='modal-body bg-default'>
+                                                  ".Session::get('login_error')."
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                  </div>";
+            }
 
-                                if($counter == 0){
-                                  $active = 'active';
-                                }else{
-                                  $active = '';
-                                }
+            if($counter == 0){
+              $active = 'active';
+            }else{
+              $active = '';
+            }
 
-                                if($counter == 0){
-                                  $tool_content .= "<ul class='nav nav-tabs ms-auto me-auto'>";
-                                }
+            if($counter == 0){
+              $tool_content .= "<ul class='nav nav-tabs ms-auto me-auto'>";
+            }
 
-                                if($counter >= 0){
-                                  $tool_content .= "
-                                    <li class='nav-item' role='presentation'>
-                                        <button class='nav-link $active' id='reg-student$counter' data-bs-toggle='tab' data-bs-target='#regStudent$counter' type='button' role='tab' aria-controls='regStudent$counter' aria-selected='true' aria-current='page'>
-                                            " . q($authInfo[2]) . "
-                                        </button>
-                                    </li>
-                                  ";
-                                }
+            if($counter >= 0){
+              $tool_content .= "
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link $active' id='reg-student$counter' data-bs-toggle='tab' data-bs-target='#regStudent$counter' type='button' role='tab' aria-controls='regStudent$counter' aria-selected='true' aria-current='page'>
+                        " . q($authInfo[2]) . "
+                    </button>
+                </li>
+              ";
+            }
 
-                                if($counter == count($authLink) - 1){
-                                  $tool_content .= "</ul>";
-                                }
+            if($counter == count($authLink) - 1){
+              $tool_content .= "</ul>";
+            }
 
-                                $counter++;
-                            }
+            $counter++;
+        }
 
-                            $counter = 0;
-                            $active = '';
-                            foreach ($authLink as $authInfo) {
+        $counter = 0;
+        $active = '';
+        foreach ($authLink as $authInfo) {
 
-                              if($counter == 0){
-                                $active = 'active show';
-                              }else{
-                                $active = '';
-                              }
+          if($counter == 0) {
+            $active = 'active show';
+          } else {
+            $active = '';
+          }
 
 
-                              if($counter == 0){
-                                $tool_content .= "<div class='col-lg-6 tab-content cardLogin p-4 ms-auto me-auto mt-5'>";
-                              }
+          if($counter == 0) {
+            $tool_content .= "<div class='col-lg-6 tab-content cardLogin p-4 ms-auto me-auto mt-5'>";
+          }
 
-                              if($counter >= 0){
-                                $tool_content .= "
-                                                    <div class='tab-pane fade $active' id='regStudent$counter' role='tabpanel' aria-labelledby='reg-student$counter'>
-                                                      <h2 class='mb-4'>" . q($authInfo[2]) . "</h2>
-                                                      " . $authInfo[1] . "
-                                                    </div>
-                                                  ";
-                              }
+          if($counter >= 0) {
+            $tool_content .= "
+                                <div class='tab-pane fade $active' id='regStudent$counter' role='tabpanel' aria-labelledby='reg-student$counter'>
+                                  <h2 class='mb-4'>" . q($authInfo[2]) . "</h2>
+                                  " . $authInfo[1] . "
+                                </div>
+                              ";
+          }
 
-                              if($counter == count($authLink) - 1){
-                                  $tool_content .= "</div>";
-                              }
-
-
-                              $counter++;
-                            }
-
+          if($counter == count($authLink) - 1){
+              $tool_content .= "</div>";
+          }
+          $counter++;
+        }
 
        $tool_content .= "
                       </div>
-
                     </div>
                   </div>";
 

@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    
+
 
                     @include('layouts.partials.legend_view')
 
@@ -20,7 +20,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -32,7 +32,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -42,7 +42,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     </div>
                     <div class='col-12 mt-4'>
                         <!--Edit all function-->
-                        <form action='multiedituser.php' method='post' class='d-flex'> 
+                        <form action='multiedituser.php' method='post' class='d-flex'>
                         <!--redirect all request vars towards delete all action-->
                         @foreach ($_REQUEST as $key => $value)
                             <input type='hidden' name='{{ $key }}' value='{{ $value }}'>
@@ -89,9 +89,9 @@
                         <input class='btn submitAdminBtn' type='submit' name='activate_submit' value='{{ trans('langAddSixMonths') }}'>
                         {!! generate_csrf_token_form_field() !!}
                         </form>
-                    </div>   
-                
+                    </div>
+
         </div>
 </div>
-</div>         
+</div>
 @endsection
