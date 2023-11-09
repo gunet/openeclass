@@ -176,9 +176,7 @@ if (isset($_POST['submit'])) {
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
 
-        Session::Messages(array($message,
-            "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
-            ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
+        Session::Messages(array($message, "$langTheU \"$givenname_form $surname_form\" $langAddedU"), 'alert-success');
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
             redirect_to_home_page('modules/admin/listreq.php' .
@@ -303,18 +301,24 @@ if (isset($_GET['id'])) { // if we come from prof request
         $cpf_context = array('origin' => 'teacher_register');
     }
     $params = '';
+    $prof_selected = 'checked';
+    $user_selected = '';
 } elseif (@$_GET['type'] == 'user') {
-    $pstatus = 5;
+    $pstatus = USER_STUDENT;
     $cpf_context = array('origin' => 'student_register');
-    $pageName = $langUserDetails;
+    $pageName = $langCreateAccount;
     $title = $langInsertUserInfo;
     $params = "?type=user";
+    $prof_selected = '';
+    $user_selected = 'checked';
 } else {
-    $pstatus = 1;
+    $pstatus = USER_TEACHER;
     $cpf_context = array('origin' => 'teacher_register');
-    $pageName = $langProfReg;
+    $pageName = $langCreateAccount;
     $title = $langNewProf;
     $params = "?type=";
+    $prof_selected = 'checked';
+    $user_selected = '';
 }
 
 $tool_content .= "<div class='form-wrapper'>
@@ -375,7 +379,18 @@ formGroup('phone_form', $langPhone,
     getValue('phone_form', $pphone) . " placeholder='" . q($langPhone) . "'>");
 formGroup('faculty', $langFaculty, $tree_html);
 
-if ($pstatus == 5) { // only for students
+formGroup('user_rights_form', $langUserPermitions,
+    "<div class='col-sm-10'>
+        <div class='radio'>
+            <input type='radio' name='pstatus' value='" . USER_STUDENT . "' id='norights-option' $user_selected>$langUserWithNoRights
+        </div>
+        <div class='radio'>
+            <input type='radio' name='pstatus' value='" . USER_TEACHER . "' id='rights-option' $prof_selected>$langUserWithRights
+        </div>
+    </div>
+");
+
+if ($pstatus == USER_STUDENT) { // only for students
     if (get_config('am_required')) {
         $am_message = $langCompulsory;
     } else {

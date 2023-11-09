@@ -364,7 +364,7 @@ else {
                     $authmethod = "($langViaCAS)";
                     break;
                 default:
-                    $link = "newuseradmin.php?id=$req->id";
+                    $link = "newuseradmin.php?id=$req->id&type=prof";
                     $authmethod = '';
                     break;
             }

@@ -215,13 +215,13 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
 
     // user status
-    if (!empty($_GET['sSearch_4'])) {
+    if (!empty($_GET['sSearch_0'])) {
         if ($c) { // listing course users, get user's status in this course
             $criteria[] = '(course_user.status = ?d)';
         } else { // listing all users, get user's global status
             $criteria[] = '(user.status = ?d)';
         }
-        $terms[] = $_GET['sSearch_4'];
+        $terms[] = $_GET['sSearch_0'];
     }
 
     // internal search
@@ -337,11 +337,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         switch ($myrow->status) {
             case USER_TEACHER:
                 $icon = 'fa-university';
-                $tip = $langTeacher;
+                $tip = $langUsersWithRightsS;
                 break;
             case USER_STUDENT:
                 $icon = 'fa-graduation-cap';
-                $tip = $langStudent;
+                $tip = $langUsersWithNoRightsS;
                 break;
             case USER_GUEST:
                 $icon = 'fa-male';
@@ -429,12 +429,12 @@ $head_content .= "<script>
         var table = $('#search_results_table').DataTable ({
             initComplete: function () {
                 var api = this.api();
-                var column = api.column(4);
+                var column = api.column(0);
                 var select = $('<select id=\'select_role\'>'+
                                  '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
-                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langTeacher) . "</option>'+
-                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langStudent) . "</option>'+
-                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langVisitor) . "</option>'+
+                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langUsersWithRightsS) . "</option>'+
+                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langUsersWithNoRightsS) . "</option>'+
+                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langGuests) . "</option>'+
                                '</select>')
                              .appendTo( $(column.footer()).empty() );
             },
