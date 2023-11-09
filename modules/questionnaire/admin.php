@@ -85,21 +85,24 @@ if (isset($_POST['submitPoll'])) {
         $PollSurveyType = $_POST['survey_type'];
         $lti_template = isset($_POST['lti_template']) ? $_POST['lti_template'] : NULL;
         $launchcontainer = isset($_POST['lti_launchcontainer']) ? $_POST['lti_launchcontainer'] : NULL;
-        $show_front = (isset($_POST['show_front'])) ? $_POST['show_front'] : 0;
+        $display_position = (isset($_POST['display_position'])) ? $_POST['display_position'] : 0;
+
+
         if (isset($pid)) {
             $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS `count` FROM poll_user_record WHERE pid = ?d", $pid)->count;
             if ($attempt_counter > 0) {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                        end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, show_front = ?d
+                        end_message = ?s, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d
                         WHERE course_id = ?d AND pid = ?d",
-                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                    $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $show_front, $course_id, $pid);
+                            $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollShowResults, $MulSubmissions, $DefaultAnswer,
+                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $course_id, $pid);
             } else {
                 $q = Database::get()->query("UPDATE poll SET name = ?s, start_date = ?t, end_date = ?t, description = ?s,
-                            end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, show_front = ?d
+                            end_message = ?s, anonymized = ?d, show_results = ?d, multiple_submissions = ?d, default_answer = ?d, type = ?d, assign_to_specific = ?d, lti_template = ?d, launchcontainer = ?d, display_position = ?d
                         WHERE course_id = ?d AND pid = ?d",
-                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
-                    $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $show_front, $course_id, $pid);
+                            $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $MulSubmissions, $DefaultAnswer,
+                            $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer, $display_position, $course_id, $pid);
+
             }
             if ($q->affectedRows > 0) {
                 Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_MODIFY,
@@ -114,10 +117,11 @@ if (isset($_POST['submitPoll'])) {
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                            (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, show_front)
+                            (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, multiple_submissions, default_answer, type, assign_to_specific, lti_template, launchcontainer, display_position)
                                 VALUES (?d, ?d, ?s, ". DBHelper::timeAfter() . ", ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)",
-                $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
-                $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$show_front)->lastInsertID;
+                                $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults,
+                                $MulSubmissions, $DefaultAnswer, $PollSurveyType, $PollAssignToSpecific, $lti_template, $launchcontainer ,$display_position)->lastInsertID;
+
 
             Log::record($course_id, MODULE_ID_QUESTIONNAIRE, LOG_INSERT,
                 array('id' => $pid,
@@ -576,9 +580,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                         <label>
-                            <input type='checkbox' name='show_front' id='show_front' value='1'" .
-                            ((isset($poll->show_front) && $poll->show_front) ? ' checked' : '') . ">
-
+                            <input type='checkbox' name='display_position' id='display_position' value='1'" .
+                            ((isset($poll->display_position) && $poll->display_position) ? ' checked' : '') . ">
                             $langYes
                         </label>
                     </div>
@@ -1005,7 +1008,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <strong>$langShowFront:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    ".(($poll->show_front) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langYes <br>
+                    ".(($poll->display_position) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langYes <br>
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
