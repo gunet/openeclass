@@ -539,6 +539,15 @@ function triggerGame($courseId, $uid, $assignId) {
     AssignmentEvent::trigger(AssignmentEvent::UPGRADE, $eventData);
 }
 
+function triggerAssignmentSubmit($courseId, $uid, $assignId) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = AssignmentSubmitEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_ASSIGN;
+    $eventData->resource = intval($assignId);
+    AssignmentSubmitEvent::trigger(AssignmentSubmitEvent::UPDATE, $eventData);
+}
 
 function triggerAssignmentAnalytics($courseId, $uid, $assignmentId, $eventname) {
     $data = new stdClass();
