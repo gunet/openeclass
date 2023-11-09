@@ -22,6 +22,12 @@
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
+
+if (get_config('dont_display_courses_menu')) {
+    redirect_to_home_page();
+}
+
+
 $redirectUrl = "modules/auth/opencourses.php?fc=";
 $countCallback = null;
 $showEmpty = true;
@@ -55,7 +61,7 @@ if (count($roots) <= 0) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-    
+
     $tool_content .= "
     <div class='row'>
         <div class='col-xs-12'>

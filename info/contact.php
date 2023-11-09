@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2014  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,16 +22,19 @@
 
 $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
+
+if (get_config('dont_display_contact_menu')) {
+    redirect_to_home_page();
+}
 $toolName = $contactpoint;
 
 $postaddress = nl2br(q(get_config('postaddress')));
 $Institution = q(get_config('institution'));
 $phone = q(get_config('phone'));
-$fax = q(get_config('fax'));
 $phonemessage = empty($phone) ? "<label>$langPhone:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langPhone:&nbsp;</label>$phone<br>";
 $faxmessage = empty($fax) ? "<label>$langFax</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langFax&nbsp;</label>$fax<br>";
 $emailhelpdesk = get_config('email_helpdesk');
-$emailhelpdesk = empty($emailhelpdesk) ? "<label>$langEmail:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langEmail: </label>&nbsp;<a href='mailto:$emailhelpdesk'>".str_replace('@', ' &lt;at> ', $emailhelpdesk)."</a>";       
+$emailhelpdesk = empty($emailhelpdesk) ? "<label>$langEmail:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langEmail: </label>&nbsp;<a href='mailto:$emailhelpdesk'>".str_replace('@', ' &lt;at> ', $emailhelpdesk)."</a>";
 
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
@@ -44,7 +47,7 @@ $tool_content .= "<div class='row'>
                     <div class='col-xs-12'>
                         <div class='panel'>
                             <div class='panel-body'>
-                                <label>$langPostMail&nbsp;</label>$Institution<br> $postaddress<br> $phonemessage $faxmessage $emailhelpdesk                                
+                                <label>$langPostMail&nbsp;</label>$Institution<br> $postaddress<br> $phonemessage $emailhelpdesk                                
                             </div>
                         </div>
                     </div>

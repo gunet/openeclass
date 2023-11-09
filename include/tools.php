@@ -182,34 +182,41 @@ function loggedInMenu($rich=true) {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
     $arrMenuType['class'] = 'basic';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
-    array_push($sideMenuText, $GLOBALS['langListCourses']);
-    array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
-
-    array_push($sideMenuText, $GLOBALS['langManuals']);
-    array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "fa-file-video-o");
-
-    array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
-    array_push($sideMenuLink, $urlServer . "info/about.php");
-    array_push($sideMenuImg, "fa-credit-card");
-
-    if (faq_exist()) {
-        array_push($sideMenuText, $GLOBALS['langFaq']);
-        array_push($sideMenuLink, $urlServer . "info/faq.php");
-        array_push($sideMenuImg, "fa-question-circle");
+    if (!get_config('dont_display_courses_menu')) {
+        $sideMenuText[] = $GLOBALS['langListCourses'];
+        $sideMenuLink[] = $urlServer . "modules/auth/courses.php";
+        $sideMenuImg[] = "fa-graduation-cap";
     }
 
-    array_push($sideMenuText, $GLOBALS['langContact']);
-    array_push($sideMenuLink, $urlServer . "info/contact.php");
-    array_push($sideMenuImg, "fa-phone");
+    if (!get_config('dont_display_manual_menu')) {
+        $sideMenuText[] = $GLOBALS['langManuals'];
+        $sideMenuLink[] = $urlServer . "info/manual.php";
+        $sideMenuImg[] = "fa-file-video-o";
+    }
 
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    if (!get_config('dont_display_about_menu')) {
+        $sideMenuText[] = $GLOBALS['langPlatformIdentity'];
+        $sideMenuLink[] = $urlServer . "info/about.php";
+        $sideMenuImg[] = "fa-credit-card";
+    }
+
+    if (faq_exist()) {
+        $sideMenuText[] = $GLOBALS['langFaq'];
+        $sideMenuLink[] = $urlServer . "info/faq.php";
+        $sideMenuImg[] = "fa-question-circle";
+    }
+    if (!get_config('dont_display_contact_menu')) {
+        $sideMenuText[] = $GLOBALS['langContact'];
+        $sideMenuLink[] = $urlServer . "info/contact.php";
+        $sideMenuImg[] = "fa-phone";
+    }
+
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
+    $sideMenuGroup[] = $sideMenuSubGroup;
 
     $sideMenuSubGroup = array();
     $sideMenuText = array();
@@ -220,93 +227,93 @@ function loggedInMenu($rich=true) {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langUserOptions'];
     $arrMenuType['class'] = 'user';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
     $res2 = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
     if ($res2) {
         $status = $res2->status;
     }
     if ((isset($status) and $status == USER_TEACHER) or $is_departmentmanage_user) {
-        array_push($sideMenuText, $GLOBALS['langCourseCreate']);
-        array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
-        array_push($sideMenuImg, "fa-plus-circle");
+        $sideMenuText[] = $GLOBALS['langCourseCreate'];
+        $sideMenuLink[] = $urlServer . "modules/create_course/create_course.php";
+        $sideMenuImg[] = "fa-plus-circle";
     }
 
     require_once 'modules/message/class.mailbox.php';
 
-    array_push($sideMenuText, $GLOBALS['langMyCourses']);
-    array_push($sideMenuLink, $urlServer . "main/my_courses.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
+    $sideMenuText[] = $GLOBALS['langMyCourses'];
+    $sideMenuLink[] = $urlServer . "main/my_courses.php";
+    $sideMenuImg[] = "fa-graduation-cap";
 
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
     if (!$rich or $new_msgs == 0) {
-        array_push($sideMenuText, $GLOBALS['langMyDropBox']);
+        $sideMenuText[] = $GLOBALS['langMyDropBox'];
     } else {
-        array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>");
+        $sideMenuText[] = "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>";
     }
-    array_push($sideMenuLink, $urlServer . "modules/message/index.php");
-    array_push($sideMenuImg, "fa-envelope-o");
+    $sideMenuLink[] = $urlServer . "modules/message/index.php";
+    $sideMenuImg[] = "fa-envelope-o";
 
-    array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
-    array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
-    array_push($sideMenuImg, "fa-bullhorn");
+    $sideMenuText[] = $GLOBALS['langMyAnnouncements'];
+    $sideMenuLink[] = $urlServer . "modules/announcements/myannouncements.php";
+    $sideMenuImg[] = "fa-bullhorn";
 
-    array_push($sideMenuText, $GLOBALS['langMyAgenda']);
-    array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
-    array_push($sideMenuImg, "fa-calendar");
+    $sideMenuText[] = $GLOBALS['langMyAgenda'];
+    $sideMenuLink[] = $urlServer . "main/personal_calendar/index.php";
+    $sideMenuImg[] = "fa-calendar";
 
-    array_push($sideMenuText, $GLOBALS['langNotes']);
-    array_push($sideMenuLink, $urlServer . "main/notes/index.php");
-    array_push($sideMenuImg, "fa-edit");
+    $sideMenuText[] = $GLOBALS['langNotes'];
+    $sideMenuLink[] = $urlServer . "main/notes/index.php";
+    $sideMenuImg[] = "fa-edit";
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
-        array_push($sideMenuText, $GLOBALS['langGradeTotal']);
-        array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "gradebook");
+        $sideMenuText[] = $GLOBALS['langGradeTotal'];
+        $sideMenuLink[] = $urlServer . "main/gradebookUserTotal/index.php";
+        $sideMenuImg[] = "gradebook";
     }
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
-        array_push($sideMenuText, $GLOBALS['langMyCertificates']);
-        array_push($sideMenuLink, $urlServer . "main/mycertificates.php");
-        array_push($sideMenuImg, "fa-trophy");
+        $sideMenuText[] = $GLOBALS['langMyCertificates'];
+        $sideMenuLink[] = $urlServer . "main/mycertificates.php";
+        $sideMenuImg[] = "fa-trophy";
     }
 
     if (get_config('personal_blog')) {
-        array_push($sideMenuText, $GLOBALS['langMyBlog']);
-        array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
-        array_push($sideMenuImg, "blog");
+        $sideMenuText[] = $GLOBALS['langMyBlog'];
+        $sideMenuLink[] = $urlServer . "modules/blog/index.php";
+        $sideMenuImg[] = "blog";
     }
 
     if (get_config('eportfolio_enable')) {
-        array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
-        array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=".token_generate('eportfolio' . $uid));
-        array_push($sideMenuImg, "fa-star");
+        $sideMenuText[] = $GLOBALS['langMyePortfolio'];
+        $sideMenuLink[] = $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=" . token_generate('eportfolio' . $uid);
+        $sideMenuImg[] = "fa-star";
     }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
-        array_push($sideMenuText, q($GLOBALS['langMyDocs']));
-        array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'docs.png');
+        $sideMenuText[] = q($GLOBALS['langMyDocs']);
+        $sideMenuLink[] = q($urlServer . 'main/mydocs/index.php');
+        $sideMenuImg[] = 'docs.png';
     }
 
-    array_push($sideMenuText, $GLOBALS['langMyProfile']);
-    array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
-    array_push($sideMenuImg, "fa-user");
+    $sideMenuText[] = $GLOBALS['langMyProfile'];
+    $sideMenuLink[] = $urlServer . "main/profile/display_profile.php";
+    $sideMenuImg[] = "fa-user";
 
-    array_push($sideMenuText, $GLOBALS['langMyStats']);
-    array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
-    array_push($sideMenuImg, "fa-area-chart");
+    $sideMenuText[] = $GLOBALS['langMyStats'];
+    $sideMenuLink[] = $urlServer . "modules/usage/?t=u";
+    $sideMenuImg[] = "fa-area-chart";
 
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
+    $sideMenuGroup[] = $sideMenuSubGroup;
 
     if ($openCoursesSubGroup = openCoursesExtra()) {
-        array_push($sideMenuGroup, $openCoursesSubGroup);
+        $sideMenuGroup[] = $openCoursesSubGroup;
     }
 
     displayExtrasLeft();
@@ -334,43 +341,51 @@ function loggedOutMenu() {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
     $arrMenuType['class'] = 'basic';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
-    array_push($sideMenuText, $GLOBALS['langListCourses']);
-    array_push($sideMenuLink, $urlServer . "modules/auth/listfaculte.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
+    if (!get_config('dont_display_courses_menu')) {
+        $sideMenuText[] = $GLOBALS['langListCourses'];
+        $sideMenuLink[] = $urlServer . "modules/auth/listfaculte.php";
+        $sideMenuImg[] = "fa-graduation-cap";
+    }
 
     if (get_config('user_registration') and get_config('registration_link') != 'hide') {
-        array_push($sideMenuText, $GLOBALS['langRegistration']);
-        array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
-        array_push($sideMenuImg, "fa-pencil-square-o");
+        $sideMenuText[] = $GLOBALS['langRegistration'];
+        $sideMenuLink[] = $urlServer . "modules/auth/registration.php";
+        $sideMenuImg[] = "fa-pencil-square-o";
     }
-    array_push($sideMenuText, $GLOBALS['langManuals']);
-    array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "fa-file-video-o");
+    if (!get_config('dont_display_manual_menu')) {
+        $sideMenuText[] = $GLOBALS['langManuals'];
+        $sideMenuLink[] = $urlServer . "info/manual.php";
+        $sideMenuImg[] = "fa-file-video-o";
+    }
 
-    array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
-    array_push($sideMenuLink, $urlServer . "info/about.php");
-    array_push($sideMenuImg, "fa-credit-card");
+    if (!get_config('dont_display_about_menu')) {
+        $sideMenuText[] = $GLOBALS['langPlatformIdentity'];
+        $sideMenuLink[] = $urlServer . "info/about.php";
+        $sideMenuImg[] = "fa-credit-card";
+    }
 
     if (faq_exist()) {
-        array_push($sideMenuText, $GLOBALS['langFaq']);
-        array_push($sideMenuLink, $urlServer . "info/faq.php");
-        array_push($sideMenuImg, "fa-question-circle");
+        $sideMenuText[] = $GLOBALS['langFaq'];
+        $sideMenuLink[] = $urlServer . "info/faq.php";
+        $sideMenuImg[] = "fa-question-circle";
     }
 
-    array_push($sideMenuText, $GLOBALS['langContact']);
-    array_push($sideMenuLink, $urlServer . "info/contact.php");
-    array_push($sideMenuImg, "fa-phone");
+    if (!get_config('dont_display_contact_menu')) {
+        $sideMenuText[] = $GLOBALS['langContact'];
+        $sideMenuLink[] = $urlServer . "info/contact.php";
+        $sideMenuImg[] = "fa-phone";
+    }
 
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
 
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    $sideMenuGroup[] = $sideMenuSubGroup;
 
     if ($openCoursesSubGroup = openCoursesExtra()) {
-        array_push($sideMenuGroup, $openCoursesSubGroup);
+        $sideMenuGroup[] = $openCoursesSubGroup;
     }
 
     displayExtrasLeft();
@@ -380,11 +395,6 @@ function loggedOutMenu() {
 
 /**
  * @brief Creates the administrator menu
- * @global type $language
- * @global type $urlServer
- * @global type $is_admin
- * @global type $is_power_user
- * @global type $is_departmentmanage_user
  * @return array
  */
 function adminMenu() {
@@ -400,70 +410,70 @@ function adminMenu() {
     $sideMenuImg = array();
 
     // user administration
-    array_push($sideMenuSubGroup, array(
+    $sideMenuSubGroup[] = array(
         'type' => 'text',
         'text' => $GLOBALS['langAdminUsers'],
-        'class' => 'user_admin'));
+        'class' => 'user_admin');
 
-    array_push($sideMenuText, $GLOBALS['langSearchUser']);
-    array_push($sideMenuLink, '../admin/search_user.php');
-    array_push($sideMenuImg, 'fa-caret-right');
+    $sideMenuText[] = $GLOBALS['langSearchUser'];
+    $sideMenuLink[] = '../admin/search_user.php';
+    $sideMenuImg[] = 'fa-caret-right';
 
     // link to prof requests if enabled, else directly to new prof page
     if (get_config('eclass_prof_reg') == 1 or get_config('alt_auth_prof_reg') == 1) {
-        array_push($sideMenuText, $GLOBALS['langProfOpen']);
-        array_push($sideMenuLink, '../admin/listreq.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langProfOpen'];
+        $sideMenuLink[] = '../admin/listreq.php';
+        $sideMenuImg[] = 'fa-caret-right';
     } else {
-        array_push($sideMenuText, $GLOBALS['langProfReg']);
-        array_push($sideMenuLink, '../admin/newuseradmin.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langProfReg'];
+        $sideMenuLink[] = '../admin/newuseradmin.php';
+        $sideMenuImg[] = 'fa-caret-right';
     }
 
     // link to user requests if enabled, else directly to new user page
     if (get_config('eclass_stud_reg') == 1 or get_config('alt_auth_stud_reg') == 1) {
-        array_push($sideMenuText, $GLOBALS['langUserOpen']);
-        array_push($sideMenuLink, '../admin/listreq.php?type=user');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langUserOpen'];
+        $sideMenuLink[] = '../admin/listreq.php?type=user';
+        $sideMenuImg[] = 'fa-caret-right';
     } else {
-        array_push($sideMenuText, $GLOBALS['langUserDetails']);
-        array_push($sideMenuLink, '../admin/newuseradmin.php?type=user');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langUserDetails'];
+        $sideMenuLink[] = '../admin/newuseradmin.php?type=user';
+        $sideMenuImg[] = 'fa-caret-right';
     }
 
     if (isset($is_admin) and $is_admin) {
-        array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
-        array_push($sideMenuLink, '../admin/auth.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langUserAuthentication'];
+        $sideMenuLink[] = '../admin/auth.php';
+        $sideMenuImg[] = 'fa-caret-right';
 
-        array_push($sideMenuText, $GLOBALS['langMailVerification']);
-        array_push($sideMenuLink, '../admin/mail_ver_settings.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langMailVerification'];
+        $sideMenuLink[] = '../admin/mail_ver_settings.php';
+        $sideMenuImg[] = 'fa-caret-right';
 
-        array_push($sideMenuText, $GLOBALS['langChangeUser']);
-        array_push($sideMenuLink, '../admin/change_user.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langChangeUser'];
+        $sideMenuLink[] = '../admin/change_user.php';
+        $sideMenuImg[] = 'fa-caret-right';
 
-        array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
-        array_push($sideMenuLink, '../admin/custom_profile_fields.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langCPFAdminSideMenuLink'];
+        $sideMenuLink[] = '../admin/custom_profile_fields.php';
+        $sideMenuImg[] = 'fa-caret-right';
 
-        array_push($sideMenuText, $GLOBALS['langEPFAdminSideMenuLink']);
-        array_push($sideMenuLink, '../admin/eportfolio_fields.php');
-        array_push($sideMenuImg, 'fa-caret-right');
+        $sideMenuText[] = $GLOBALS['langEPFAdminSideMenuLink'];
+        $sideMenuLink[] = '../admin/eportfolio_fields.php';
+        $sideMenuImg[] = 'fa-caret-right';
     }
 
-    array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
-    array_push($sideMenuLink, '../admin/multireguser.php');
-    array_push($sideMenuImg, 'fa-caret-right');
+    $sideMenuText[] = $GLOBALS['langMultiRegUser'];
+    $sideMenuLink[] = '../admin/multireguser.php';
+    $sideMenuImg[] = 'fa-caret-right';
 
-    array_push($sideMenuText, $GLOBALS['langMultiRegCourseUser']);
-    array_push($sideMenuLink, '../admin/multicourseuser.php');
-    array_push($sideMenuImg, 'fa-caret-right');
+    $sideMenuText[] = $GLOBALS['langMultiRegCourseUser'];
+    $sideMenuLink[] = '../admin/multicourseuser.php';
+    $sideMenuImg[] = 'fa-caret-right';
 
-    array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
-    array_push($sideMenuLink, '../admin/multiedituser.php');
-    array_push($sideMenuImg, 'fa-caret-right');
+    $sideMenuText[] = $GLOBALS['langMultiDelUser'];
+    $sideMenuLink[] = '../admin/multiedituser.php';
+    $sideMenuImg[] = 'fa-caret-right';
 
     array_push($sideMenuText, $GLOBALS['langInfoMail']);
     array_push($sideMenuLink, '../admin/mailtoprof.php');

@@ -469,6 +469,10 @@ if (isset($_POST['submit'])) {
         'activate_privacy_policy_text' => true,
         'activate_privacy_policy_consent' => true,
         'maintenance' => true,
+        'dont_display_courses_menu' => true,
+        'dont_display_about_menu' => true,
+        'dont_display_contact_menu' => true,
+        'dont_display_manual_menu' => true,
         );
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -795,6 +799,10 @@ else {
         $sel = array();
         $selectable_langs = array();
         $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
+        $cbox_dont_display_courses_menu = get_config('dont_display_courses_menu') ? 'checked' : '';
+        $cbox_dont_display_about_menu = get_config('dont_display_about_menu') ? 'checked' : '';
+        $cbox_dont_display_manual_menu = get_config('dont_display_manual_menu') ? 'checked' : '';
+        $cbox_dont_display_contact_menu = get_config('dont_display_contact_menu') ? 'checked' : '';
         $cbox_hide_login_link = get_config('hide_login_link') ? 'checked' : '';
         foreach ($language_codes as $langcode => $langname) {
             if (in_array($langcode, $langdirs)) {
@@ -906,6 +914,35 @@ else {
                                     </label>
                                 </div>
                            </div>
+                           
+                           <label for='theme' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageMenuSettings: </label>
+                           <div class='col-sm-9'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dont_display_courses_menu' value='1' $cbox_dont_display_courses_menu>
+                                        $lang_dont_display_courses_menu
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dont_display_contact_menu' value='1' $cbox_dont_display_contact_menu>
+                                        $lang_dont_display_contact_menu
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dont_display_about_menu' value='1' $cbox_dont_display_about_menu>
+                                        $lang_dont_display_about_menu
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dont_display_manual_menu' value='1' $cbox_dont_display_manual_menu>
+                                        $lang_dont_display_manual_menu
+                                    </label>
+                                </div>
+                           </div>
+                           
                         </div>
                             </div>
                         </div>

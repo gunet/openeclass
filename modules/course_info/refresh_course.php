@@ -51,6 +51,11 @@ if (isset($_REQUEST['from_user'])) { // checks if we are coming from /modules/us
     $from_user = true;
 }
 
+$url = "modules/course_info/refresh_course.php?course=$course_code";
+if ($from_user) {
+    $url .= "&from_user=true";
+}
+
 if (!$from_user) {
     $toolName = $langCourseInfo;
     $pageName = $langRefreshCourse;
@@ -111,17 +116,13 @@ if (isset($_POST['submit'])) {
             Session::Messages($msg, 'alert-info');
         }
 
-        $url = "modules/course_info/refresh_course.php?course=$course_code";
-        if ($from_user) {
-            $url .= "&from_user=true";
-        }
         redirect_to_home_page($url);
     }
 } else {
 
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "#",
+                  'url' => "$url",
                   'class' => 'back_btn',
                   'icon' => 'fa-reply',
                   'level' => 'primary-label'
