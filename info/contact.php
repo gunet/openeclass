@@ -24,6 +24,10 @@ $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
 $toolName = $contactpoint;
 
+if (get_config('dont_display_contact_menu')) {
+    redirect_to_home_page();
+}
+
 $data['postaddress'] = get_config('postaddress');
 $data['phone'] = get_config('phone');
 if (get_config('emailhelpdesk')) {

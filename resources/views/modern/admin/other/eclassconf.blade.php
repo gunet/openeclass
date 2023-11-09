@@ -482,6 +482,41 @@
                                                                     </div>
                                                             </div>
                                                         </div>
+
+                                                        <div class='form-group mt-4'>
+                                                            <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('langHomePageMenuSettings')}}: </label>
+                                                        </div>
+                                                        <div class='col-sm-12'>
+                                                            <div class='checkbox'>
+                                                                <label class='label-container'>
+                                                                    <input id='hide_login_check' type='checkbox' name='dont_display_courses_menu' value='1' {{ $cbox_dont_display_courses_menu }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{trans('lang_dont_display_courses_menu')}}
+                                                                </label>
+                                                            </div>
+                                                            <div class='checkbox'>
+                                                                <label class='label-container'>
+                                                                    <input id='hide_login_check' type='checkbox' name='dont_display_contact_menu' value='1' {{ $cbox_dont_display_contact_menu }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{trans('lang_dont_display_contact_menu')}}
+                                                                </label>
+                                                            </div>
+                                                            <div class='checkbox'>
+                                                                <label class='label-container'>
+                                                                    <input id='hide_login_check' type='checkbox' name='dont_display_about_menu' value='1' {{ $cbox_dont_display_about_menu }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{trans('lang_dont_display_about_menu')}}
+                                                                </label>
+                                                            </div>
+                                                            <div class='checkbox'>
+                                                                <label class='label-container'>
+                                                                    <input id='hide_login_check' type='checkbox' name='dont_display_manual_menu' value='1' {{ $cbox_dont_display_manual_menu }}>
+                                                                    <span class='checkmark'></span>
+                                                                    {{trans('lang_dont_display_manual_menu')}}
+                                                                </label>
+                                                            </div>
+                                                        </div>
+
                                                         <div class='form-group mt-4'>
                                                             <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{trans('lang_testimonials')}}: </label>
                                                             <div class='col-sm-12'>

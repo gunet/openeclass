@@ -22,6 +22,10 @@
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
 
+if (get_config('dont_display_courses_menu')) {
+    redirect_to_home_page();
+}
+
 $redirectUrl = "modules/auth/opencourses.php?fc=";
 $countCallback = null;
 $showEmpty = true;
@@ -48,19 +52,12 @@ if (count($roots) <= 0) {
     header("Location:" . $urlServer . $redirectUrl . intval($roots[0]->id));
     exit();
 } else {
-    // $tool_content = action_bar(array(
-    //                             array('title' => $langBack,
-    //                                   'url' => $urlServer,
-    //                                   'icon' => 'fa-reply',
-    //                                   'level' => 'primary',
-    //                                   'button-class' => 'btn-secondary')
-    //                         ),false);
 
     $margin = '';
     if(isset($_SESSION['uid'])){
         $margin = 'mt-4';
     }
-    
+
     $tool_content .= "
         <div class='col-12 $margin'>
             <h1>$langCourses</h1>
@@ -68,12 +65,9 @@ if (count($roots) <= 0) {
         <div class='col-12 mt-4'>
             <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
                 <div class='col-lg-6 col-12'>
-                    <ul class='list-group list-group-flush'>
-                        
-                        ";
+                    <ul class='list-group list-group-flush'>";
                 $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, array('showEmpty' => $showEmpty, 'respectVisibility' => true), $subtrees);
-                $tool_content .= "
-                       
+                $tool_content .= "                       
                     </ul>
                 </div>
                 <div class='col-lg-6 col-12'>
@@ -82,6 +76,5 @@ if (count($roots) <= 0) {
             </div>
         </div>";
 }
-
 
 draw($tool_content, (isset($uid) and $uid) ? 1 : 0);

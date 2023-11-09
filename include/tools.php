@@ -189,22 +189,22 @@ function loggedInMenu($rich=true) {
         } else {
             $arrMenuType['class'] = '';
         }
-        array_push($sideMenuSubGroup, $arrMenuType);
+        $sideMenuSubGroup[] = $arrMenuType;
 
         if ((isset($is_admin) and $is_admin) or
                 (isset($is_power_user) and $is_power_user) or
                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                 (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-            array_push($sideMenuText, "$GLOBALS[langAdminTool]");
-            array_push($sideMenuLink, $urlServer . 'modules/admin/');
+            $sideMenuText[] = "$GLOBALS[langAdminTool]";
+            $sideMenuLink[] = $urlServer . 'modules/admin/';
         }
 
-        array_push($sideMenuImg, "fa-caret-right");
+        $sideMenuImg[] = "fa-caret-right";
 
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
+        $sideMenuSubGroup[] = $sideMenuText;
+        $sideMenuSubGroup[] = $sideMenuLink;
+        $sideMenuSubGroup[] = $sideMenuImg;
+        $sideMenuGroup[] = $sideMenuSubGroup;
     }
 
     $sideMenuSubGroup = array();
@@ -216,39 +216,51 @@ function loggedInMenu($rich=true) {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
     $arrMenuType['class'] = 'basic';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
-    array_push($sideMenuText, $GLOBALS['langListCourses']);
-    array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
-
-    array_push($sideMenuText, $GLOBALS['langManuals']);
-    array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "fa-solid fa-file-video");
-
-    array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
-    array_push($sideMenuLink, $urlServer . "info/about.php");
-    array_push($sideMenuImg, "fa-credit-card");
-
-    if (faq_exist()) {
-        array_push($sideMenuText, $GLOBALS['langFaq']);
-        array_push($sideMenuLink, $urlServer . "info/faq.php");
-        array_push($sideMenuImg, "fa-question-circle");
+    if (!get_config('dont_display_courses_menu')) {
+        $sideMenuText[] = $GLOBALS['langListCourses'];
+        $sideMenuLink[] = $urlServer . "modules/auth/courses.php";
+        $sideMenuImg[] = "fa-graduation-cap";
     }
 
-    array_push($sideMenuText, $GLOBALS['langContact']);
-    array_push($sideMenuLink, $urlServer . "info/contact.php");
-    array_push($sideMenuImg, "fa-phone");
+    if (!get_config('dont_display_manual_menu')) {
+        $sideMenuText[] = $GLOBALS['langManuals'];
+        $sideMenuLink[] = $urlServer . "info/manual.php";
+        $sideMenuImg[] = "fa-solid fa-file-video";
+    }
+
+    if (!get_config('dont_display_about_menu')) {
+        $sideMenuText[] = $GLOBALS['langPlatformIdentity'];
+        $sideMenuLink[] = $urlServer . "info/about.php";
+        $sideMenuImg[] = "fa-credit-card";
+    }
+
+    if (faq_exist()) {
+        $sideMenuText[] = $GLOBALS['langFaq'];
+        $sideMenuLink[] = $urlServer . "info/faq.php";
+        $sideMenuImg[] = "fa-question-circle";
+    }
+    if (!get_config('dont_display_contact_menu')) {
+        $sideMenuText[] = $GLOBALS['langContact'];
+        $sideMenuLink[] = $urlServer . "info/contact.php";
+        $sideMenuImg[] = "fa-phone";
+    }
+
+    $sideMenuText[] = $GLOBALS['langContact'];
+    $sideMenuLink[] = $urlServer . "info/contact.php";
+    $sideMenuImg[] = "fa-phone";
 
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
         }
     }
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
+    $sideMenuGroup[] = $sideMenuSubGroup;
+
 
     $sideMenuSubGroup = array();
     $sideMenuText = array();
@@ -259,98 +271,99 @@ function loggedInMenu($rich=true) {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langUserOptions'];
     $arrMenuType['class'] = 'user';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
     $res2 = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid);
     if ($res2) {
         $status = $res2->status;
     }
     if ((isset($status) and $status == USER_TEACHER) or $is_departmentmanage_user) {
-        array_push($sideMenuText, $GLOBALS['langCourseCreate']);
-        array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
-        array_push($sideMenuImg, "fa-plus-circle");
+        $sideMenuText[] = $GLOBALS['langCourseCreate'];
+        $sideMenuLink[] = $urlServer . "modules/create_course/create_course.php";
+        $sideMenuImg[] = "fa-plus-circle";
     }
 
     require_once 'modules/message/class.mailbox.php';
 
-    array_push($sideMenuText, $GLOBALS['langMyCourses']);
-    array_push($sideMenuLink, $urlServer . "main/my_courses.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
+    $sideMenuText[] = $GLOBALS['langMyCourses'];
+    $sideMenuLink[] = $urlServer . "main/my_courses.php";
+    $sideMenuImg[] = "fa-graduation-cap";
 
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
     if (!$rich or $new_msgs == 0) {
-        array_push($sideMenuText, $GLOBALS['langMyDropBox']);
+        $sideMenuText[] = $GLOBALS['langMyDropBox'];
     } else {
-        array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge float-end'>$new_msgs</span></b>");
+        $sideMenuText[] = "<b>$GLOBALS[langMyDropBox]<span class='badge float-end'>$new_msgs</span></b>";
     }
-    array_push($sideMenuLink, $urlServer . "modules/message/index.php");
-    array_push($sideMenuImg, "fa-envelope-open");
 
-    array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
-    array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
-    array_push($sideMenuImg, "fa-bullhorn");
+    $sideMenuLink[] = $urlServer . "modules/message/index.php";
+    $sideMenuImg[] = "fa-envelope-open";
 
-    array_push($sideMenuText, $GLOBALS['langMyAgenda']);
-    array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
-    array_push($sideMenuImg, "fa-calendar");
+    $sideMenuText[] = $GLOBALS['langMyAnnouncements'];
+    $sideMenuLink[] = $urlServer . "modules/announcements/myannouncements.php";
+    $sideMenuImg[] = "fa-bullhorn";
 
-    array_push($sideMenuText, $GLOBALS['langNotes']);
-    array_push($sideMenuLink, $urlServer . "main/notes/index.php");
-    array_push($sideMenuImg, "fa-edit");
+    $sideMenuText[] = $GLOBALS['langMyAgenda'];
+    $sideMenuLink[] = $urlServer . "main/personal_calendar/index.php";
+    $sideMenuImg[] = "fa-calendar";
+
+    $sideMenuText[] = $GLOBALS['langNotes'];
+    $sideMenuLink[] = $urlServer . "main/notes/index.php";
+    $sideMenuImg[] = "fa-edit";
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_GRADEBOOK)) {
-        array_push($sideMenuText, $GLOBALS['langGradeTotal']);
-        array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "fa-sort-numeric-desc");
+        $sideMenuText[] = $GLOBALS['langGradeTotal'];
+        $sideMenuLink[] = $urlServer . "main/gradebookUserTotal/index.php";
+        $sideMenuImg[] = "fa-sort-numeric-desc";
     }
 
     if (isset($status) and $status == USER_STUDENT and !is_module_disable(MODULE_ID_PROGRESS)) {
-        array_push($sideMenuText, $GLOBALS['langMyCertificates']);
-        array_push($sideMenuLink, $urlServer . "main/mycertificates.php");
-        array_push($sideMenuImg, "fa-trophy");
+        $sideMenuText[] = $GLOBALS['langMyCertificates'];
+        $sideMenuLink[] = $urlServer . "main/mycertificates.php";
+        $sideMenuImg[] = "fa-trophy";
     }
 
     if (get_config('personal_blog')) {
-        array_push($sideMenuText, $GLOBALS['langMyBlog']);
-        array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
-        array_push($sideMenuImg, "fa-columns");
+        $sideMenuText[] = $GLOBALS['langMyBlog'];
+        $sideMenuLink[] = $urlServer . "modules/blog/index.php";
+        $sideMenuImg[] = "fa-columns";
     }
 
     if (get_config('eportfolio_enable')) {
-        array_push($sideMenuText, $GLOBALS['langMyePortfolio']);
-        array_push($sideMenuLink, $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=".token_generate('eportfolio' . $uid));
-        array_push($sideMenuImg, "fa-star");
+        $sideMenuText[] = $GLOBALS['langMyePortfolio'];
+        $sideMenuLink[] = $urlServer . "main/eportfolio/index.php?id=$uid&amp;token=" . token_generate('eportfolio' . $uid);
+        $sideMenuImg[] = "fa-star";
     }
 
     // link for my documents
     if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
         ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
-        array_push($sideMenuText, q($GLOBALS['langMyDocs']));
-        array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
-        array_push($sideMenuImg, 'fa-folder');
+        $sideMenuText[] = q($GLOBALS['langMyDocs']);
+        $sideMenuLink[] = q($urlServer . 'main/mydocs/index.php');
+        $sideMenuImg[] = 'fa-folder';
     }
 
-    array_push($sideMenuText, $GLOBALS['langMyProfile']);
-    array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
-    array_push($sideMenuImg, "fa-user");
+    $sideMenuText[] = $GLOBALS['langMyProfile'];
+    $sideMenuLink[] = $urlServer . "main/profile/display_profile.php";
+    $sideMenuImg[] = "fa-user";
 
-    array_push($sideMenuText, $GLOBALS['langMyStats']);
-    array_push($sideMenuLink, $urlServer . "modules/usage/index.php?t=u");
-    array_push($sideMenuImg, "fa-area-chart");
+    $sideMenuText[] = $GLOBALS['langMyStats'];
+    $sideMenuLink[] = $urlServer . "modules/usage/index.php?t=u";
+    $sideMenuImg[] = "fa-area-chart";
 
     foreach ($sideMenuLink as $module_link) {
         if ($current_module_dir == module_path($module_link)) {
             $sideMenuSubGroup[0]['class'] = ' in';
         }
     }
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
+    $sideMenuGroup[] = $sideMenuSubGroup;
 
     if ($openCoursesSubGroup = openCoursesExtra()) {
-        array_push($sideMenuGroup, $openCoursesSubGroup);
+        $sideMenuGroup[] = $openCoursesSubGroup;
     }
 
     displayExtrasLeft();
@@ -359,7 +372,7 @@ function loggedInMenu($rich=true) {
 }
 
 /**
- * @brief Creates a multi-dimensional array of the user's tools/links
+ * @brief Creates a multidimensional array of the user's tools/links
  * for the menu presented when the user is not logged in.
  * @return array
  */
@@ -378,43 +391,51 @@ function loggedOutMenu() {
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
     $arrMenuType['class'] = 'basic';
-    array_push($sideMenuSubGroup, $arrMenuType);
+    $sideMenuSubGroup[] = $arrMenuType;
 
-    array_push($sideMenuText, $GLOBALS['langListCourses']);
-    array_push($sideMenuLink, $urlServer . "modules/auth/listfaculte.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
+    if (!get_config('dont_display_courses_menu')) {
+        $sideMenuText[] = $GLOBALS['langListCourses'];
+        $sideMenuLink[] = $urlServer . "modules/auth/listfaculte.php";
+        $sideMenuImg[] = "fa-graduation-cap";
+    }
 
     if (get_config('user_registration') and get_config('registration_link') != 'hide') {
-        array_push($sideMenuText, $GLOBALS['langRegister']);
-        array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
-        array_push($sideMenuImg, "fa-square-pen");
+        $sideMenuText[] = $GLOBALS['langRegister'];
+        $sideMenuLink[] = $urlServer . "modules/auth/registration.php";
+        $sideMenuImg[] = "fa-square-pen";
     }
-    array_push($sideMenuText, $GLOBALS['langManuals']);
-    array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "fa-solid fa-file-video");
+    if (!get_config('dont_display_manual_menu')) {
+        $sideMenuText[] = $GLOBALS['langManuals'];
+        $sideMenuLink[] = $urlServer . "info/manual.php";
+        $sideMenuImg[] = "fa-solid fa-file-video";
+    }
 
-    array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
-    array_push($sideMenuLink, $urlServer . "info/about.php");
-    array_push($sideMenuImg, "fa-credit-card");
+    if (!get_config('dont_display_about_menu')) {
+        $sideMenuText[] = $GLOBALS['langPlatformIdentity'];
+        $sideMenuLink[] = $urlServer . "info/about.php";
+        $sideMenuImg[] = "fa-credit-card";
+    }
 
     if (faq_exist()) {
-        array_push($sideMenuText, $GLOBALS['langFaq']);
-        array_push($sideMenuLink, $urlServer . "info/faq.php");
-        array_push($sideMenuImg, "fa-question-circle");
+        $sideMenuText[] = $GLOBALS['langFaq'];
+        $sideMenuLink[] = $urlServer . "info/faq.php";
+        $sideMenuImg[] = "fa-question-circle";
     }
 
-    array_push($sideMenuText, $GLOBALS['langContact']);
-    array_push($sideMenuLink, $urlServer . "info/contact.php");
-    array_push($sideMenuImg, "fa-phone");
+    if (!get_config('dont_display_contact_menu')) {
+        $sideMenuText[] = $GLOBALS['langContact'];
+        $sideMenuLink[] = $urlServer . "info/contact.php";
+        $sideMenuImg[] = "fa-phone";
+    }
 
-    array_push($sideMenuSubGroup, $sideMenuText);
-    array_push($sideMenuSubGroup, $sideMenuLink);
-    array_push($sideMenuSubGroup, $sideMenuImg);
+    $sideMenuSubGroup[] = $sideMenuText;
+    $sideMenuSubGroup[] = $sideMenuLink;
+    $sideMenuSubGroup[] = $sideMenuImg;
 
-    array_push($sideMenuGroup, $sideMenuSubGroup);
+    $sideMenuGroup[] = $sideMenuSubGroup;
 
     if ($openCoursesSubGroup = openCoursesExtra()) {
-        array_push($sideMenuGroup, $openCoursesSubGroup);
+        $sideMenuGroup[] = $openCoursesSubGroup;
     }
 
     displayExtrasLeft();
@@ -432,8 +453,7 @@ function loggedOutMenu() {
 function lessonToolsMenu($rich=true): array
 {
     global $uid, $is_editor, $is_course_admin, $is_course_reviewer, $courses,
-           $course_code, $langAdministrationTools,
-           $modules, $admin_modules, $urlAppend, $status, $course_id;
+           $course_code, $modules, $urlAppend, $status, $course_id;
 
     $current_module_dir = module_path($_SERVER['REQUEST_URI']);
 
@@ -564,34 +584,6 @@ function lessonToolsMenu($rich=true): array
         $sideMenuGroup[] = $sideMenuSubGroup;
     }
 
-    /*if ($is_course_admin) {  // display course admin tools
-        $sideMenuSubGroup = array();
-        $sideMenuText = array();
-        $sideMenuLink = array();
-        $sideMenuImg = array();
-        $sideMenuID = array();
-        $arrMenuType = array('type' => 'text',
-                             'text' => $langAdministrationTools,
-                             'class' => 'course_admin');
-        $sideMenuSubGroup[] = $arrMenuType;
-
-        foreach ($admin_modules as $adm_mod) {
-
-            $module_link = $urlAppend . 'modules/' . $adm_mod['link'] .
-                            '/index.php?course=' . $course_code;
-            if (module_path($module_link) == $current_module_dir) {
-                $sideMenuSubGroup[0]['class'] = ' in';
-            }
-            array_push($sideMenuText, $adm_mod['title']);
-            array_push($sideMenuLink, q($module_link));
-            array_push($sideMenuImg, $adm_mod['image']);
-        }
-        array_push($sideMenuSubGroup, $sideMenuText);
-        array_push($sideMenuSubGroup, $sideMenuLink);
-        array_push($sideMenuSubGroup, $sideMenuImg);
-        array_push($sideMenuSubGroup, $sideMenuID);
-        array_push($sideMenuGroup, $sideMenuSubGroup);
-    }*/
     return $sideMenuGroup;
 }
 

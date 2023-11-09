@@ -33,18 +33,12 @@ require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/log.class.php';
 
-$data['action_bar'] = action_bar(array(
-            array('title' => $langBack,
-                  'url' => "#",
-                  'class' => 'back_btn',
-                  'icon' => 'fa-reply',
-                  'level' => 'primary'
-                 )));
-
 $from_user = false;
 if (isset($_REQUEST['from_user'])) { // checks if we are coming from /modules/user/index.php
     $from_user = true;
 }
+
+$url = "modules/course_info/refresh_course.php?course=$course_code";
 
 if (!$from_user) {
     $toolName = $langCourseInfo;
@@ -54,7 +48,17 @@ if (!$from_user) {
     $toolName = $langUsers;
     $pageName = $langDelUsers;
     $navigation[] = array('url' => "../user/index.php?course=$course_code", 'name' => $langUsers);
+    $url .= "&from_user=true";
 }
+
+$data['action_bar'] = action_bar(array(
+    array('title' => $langBack,
+        'url' => "$url",
+        'class' => 'back_btn',
+        'icon' => 'fa-reply',
+        'level' => 'primary'
+    )));
+
 
 if (isset($_POST['reg_flag'])) {
     $reg_flag = $_POST['reg_flag'];

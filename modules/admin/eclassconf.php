@@ -164,8 +164,12 @@ if (isset($_POST['submit'])) {
         'mydocs_teacher_enable' => true,
         'offline_course' => true,
         'activate_privacy_policy_consent' => true,
-        'maintenance' => true
-    ];
+        'maintenance' => true,
+        'dont_display_courses_menu' => true,
+        'dont_display_about_menu' => true,
+        'dont_display_contact_menu' => true,
+        'dont_display_manual_menu' => true
+        ];
 
     register_posted_variables($config_vars, 'all', 'intval');
 
@@ -276,6 +280,7 @@ else {
         $data['disable_display_captcha'] = 'disabled';
         $data['message_display_captcha'] = '<div>' . $lang_display_captcha_unsupported . '</div>';
     }
+
     $active_ui_languages = explode(' ', get_config('active_ui_languages'));
     $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
     $data['maintenance_theme'] = $maintenance_theme = get_config('maintenance_theme');
@@ -349,6 +354,10 @@ else {
     $data['cbox_disable_log_system_actions'] = get_config('disable_log_system_actions') ? 'checked' : '';
     $data['cbox_offline_course'] = get_config('offline_course') ? 'checked' : '';
     $data['cbox_maintenance'] = get_config('maintenance') ? 'checked' : '';
+    $data['cbox_dont_display_courses_menu'] = get_config('dont_display_courses_menu') ? 'checked' : '';
+    $data['cbox_dont_display_about_menu'] = get_config('dont_display_about_menu') ? 'checked' : '';
+    $data['cbox_dont_display_manual_menu']= get_config('dont_display_manual_menu') ? 'checked' : '';
+    $data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu') ? 'checked' : '';
 }
 
 view('admin.other.eclassconf', $data);

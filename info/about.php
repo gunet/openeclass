@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.0
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -26,6 +26,10 @@
  */
 
 require_once '../include/baseTheme.php';
+
+if (get_config('dont_display_about_menu')) {
+    redirect_to_home_page();
+}
 
 $toolName = $langInfo;
 

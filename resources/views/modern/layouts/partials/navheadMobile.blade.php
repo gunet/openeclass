@@ -3,7 +3,7 @@
         <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
             <div class='d-flex justify-content-start align-items-center gap-2'>
-                
+
                 <button class="btn small-basic-size mobile-btn bg-default d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
                     <i class='fa-solid fa-bars'></i>
                 </button>
@@ -12,7 +12,7 @@
                     <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}">
                 </a>
             </div>
-            
+
             @if (!isset($_SESSION['uid']))
                 <div class='d-flex justify-content-start align-items-center'>
                     @if(get_config('dont_display_login_form'))
@@ -24,8 +24,8 @@
                     {!! lang_selections_Mobile() !!}
                 </div>
             @endif
-            
-            
+
+
             @if(isset($_SESSION['uid']))
                 <div>
                     <button class="btn btn-transparent p-0 dropdown-toogle d-flex justify-content-end align-items-center" type="button"
@@ -42,7 +42,7 @@
                                         <h4 class='mb-0'>{{ $_SESSION['givenname'] }}&nbsp{{ $_SESSION['surname'] }}</h4>
                                         <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
                                     </div>
-                                    
+
                                 </a>
                             </li>
                             @if ((isset($is_admin) and $is_admin) or
@@ -117,13 +117,10 @@
                     </div>
                 </div>
             @endif
-            
+
         </div>
     </div>
 </nav>
-
-
-
 
 <script type='text/javascript'>
     $(document).ready(function() {

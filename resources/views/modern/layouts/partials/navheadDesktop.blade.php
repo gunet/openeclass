@@ -25,11 +25,13 @@
                             </a>
                         </li>
                     @endif
-                    <li class="nav-item">
-                        <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
-                            {{ trans('langCourses') }}
-                        </a>
-                    </li>
+                    @if (!get_config('dont_display_courses_menu'))
+                        <li class="nav-item">
+                            <a id="link-lessons" class="nav-link menu-item mx-lg-2" href="{{ $urlServer }}modules/auth/listfaculte.php">
+                                {{ trans('langCourses') }}
+                            </a>
+                        </li>
+                    @endif
 
                     <li class="nav-item">
                         <a id="link-faq" class="nav-link menu-item mx-lg-2 " href="{{$urlAppend}}info/faq.php">

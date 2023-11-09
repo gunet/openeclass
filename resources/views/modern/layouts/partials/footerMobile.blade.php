@@ -5,12 +5,18 @@
 
             <div class="col-12 px-0">
                 <ul class="ul_tools_site_footer">
-                    <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
-                    <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">{{ trans('langContact') }}</a></li>
+                    @if (!get_config('dont_display_about_menu'))
+                        <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
+                    @endif
+                    @if (!get_config('dont_display_contact_menu'))
+                        <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">{{ trans('langContact') }}</a></li>
+                    @endif
                     @if (get_config('activate_privacy_policy_text'))
                         <li  class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php">{{ trans('langPrivacyPolicy') }}</a></li>
                     @endif
-                    <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/manual.php">{{ trans('langManuals') }}</a></li>
+                    @if (!get_config('dont_display_manual_menu'))
+                        <li class='mb-1'><a class="a_tools_site_footer" href="{{$urlAppend}}info/manual.php">{{ trans('langManuals') }}</a></li>
+                    @endif
                     <li class='mb-3'><a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php">{{ trans('langUsageTerms') }}</a></li>
                 </ul>
             </div>

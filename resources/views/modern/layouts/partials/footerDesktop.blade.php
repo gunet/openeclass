@@ -3,9 +3,15 @@
 <div class='{{ $container }} footer-container py-0 d-flex align-items-center'>
     <div class='col-12 d-flex justify-content-between align-items-center'>
         <ul class="container-items-footer nav">
-            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
-            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/contact.php">{{ trans('langContact') }}</a></li>
-            <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/manual.php">{{ trans('langManuals') }}</a></li>
+            @if (!get_config('dont_display_about_menu'))
+                <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
+            @endif
+            @if (!get_config('dont_display_contact_menu'))
+                <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/contact.php">{{ trans('langContact') }}</a></li>
+            @endif
+            @if (!get_config('dont_display_manual_menu'))
+                <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/manual.php">{{ trans('langManuals') }}</a></li>
+            @endif
             <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/terms.php">{{ trans('langUsageTerms') }}</a></li>
             @if (get_config('activate_privacy_policy_text'))
                 <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php">{{ trans('langPrivacyPolicy') }}</a>
