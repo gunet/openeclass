@@ -37,6 +37,7 @@ require_once 'modules/progress/functions.php';
 require_once 'functions.php';
 require_once 'modules/progress/ExerciseEvent.php';
 require_once 'modules/progress/AssignmentEvent.php';
+require_once 'modules/progress/AssignmentSubmitEvent.php';
 require_once 'modules/progress/CommentEvent.php';
 require_once 'modules/progress/BlogEvent.php';
 require_once 'modules/progress/WikiEvent.php';

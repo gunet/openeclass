@@ -34,7 +34,6 @@
  * @return type
  */
 function add_assignment_to_certificate($element, $element_id) {
-
     if (isset($_POST['assignment'])) {
         foreach ($_POST['assignment'] as $datakey => $data) {
             Database::get()->query("INSERT INTO {$element}_criterion
@@ -50,7 +49,18 @@ function add_assignment_to_certificate($element, $element_id) {
                 $_POST['threshold'][$data]);
         }
     }
-    return;
+    if (isset($_POST['assignment_participation'])) {
+        foreach ($_POST['assignment_participation'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d,
+                                        module = " . MODULE_ID_ASSIGN . ",
+                                        resource = ?d,
+                                        activity_type = '". AssignmentSubmitEvent::ACTIVITY ."',
+                                        operator = 'get',
+                                        threshold = 1.0",
+                $element_id, $data);
+        }
+    }
 }
 
 
@@ -1036,7 +1046,7 @@ function get_resource_details($element, $resource_id) {
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
-            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration;
+            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
@@ -1060,6 +1070,13 @@ function get_resource_details($element, $resource_id) {
                     $title = $q->title;
                 }
                 $type = "$langAssignment";
+            break;
+        case AssignmentSubmitEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->title;
+            }
+            $type = "$langAssignmentParticipation";
             break;
         case LearningPathEvent::ACTIVITY:
                 $q = Database::get()->querySingle("SELECT name FROM lp_learnPath WHERE lp_learnPath.course_id = ?d AND lp_learnPath.learnPath_id = ?d", $course_id, $resource);
@@ -1302,6 +1319,7 @@ function refresh_user_progress($element, $element_id): void
 
     require_once "modules/exercise/exercise.class.php";
     require_once "modules/progress/AssignmentEvent.php";
+    require_once "modules/progress/AssignmentSubmitEvent.php";
     require_once "modules/progress/ExerciseEvent.php";
     require_once "modules/progress/LearningPathEvent.php";
     require_once "modules/progress/LearningPathDurationEvent.php";
@@ -1320,6 +1338,15 @@ function refresh_user_progress($element, $element_id): void
                         $eventData->module = MODULE_ID_ASSIGN;
                         $eventData->resource = intval($data->resource);
                         AssignmentEvent::trigger(AssignmentEvent::UPGRADE, $eventData);
+                    break;
+                case AssignmentSubmitEvent::ACTIVITY:
+                        $eventData = new stdClass();
+                        $eventData->courseId = $course_id;
+                        $eventData->uid = $u;
+                        $eventData->activityType = AssignmentSubmitEvent::ACTIVITY;
+                        $eventData->module = MODULE_ID_ASSIGN;
+                        $eventData->resource = intval($data->resource);
+                        AssignmentSubmitEvent::trigger(AssignmentSubmitEvent::UPDATE, $eventData);
                     break;
                 case ExerciseEvent::ACTIVITY:
                         $eventData = new stdClass();
