@@ -30,6 +30,7 @@ require_once 'functions.php';
 require_once 'process_functions.php';
 require_once 'ExerciseEvent.php';
 require_once 'AssignmentEvent.php';
+require_once 'AssignmentSubmitEvent.php';
 require_once 'CommentEvent.php';
 require_once 'BlogEvent.php';
 require_once 'WikiEvent.php';

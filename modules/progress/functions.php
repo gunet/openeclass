@@ -557,13 +557,17 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='col-sm-7'>".$resource_data['title']."</div>
                     <div class='col-sm-2'>". $resource_data['type']."</div>
                     <div class='col-sm-2'>";
-                if (!empty($details->operator)) {
+                if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
                     $op = get_operators();
                     $tool_content .= $op[$details->operator];
                 } else {
                     $tool_content .= "&mdash;";
                 }
-                $tool_content .= "&nbsp;$details->threshold</div>";
+                if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                    $tool_content .= "&nbsp;</div>";
+                } else {
+                    $tool_content .= "&nbsp;$details->threshold</div>";
+                }
                 $tool_content .= "<div class='col-sm-1 text-center'>".
                     action_button(array(
                         array('title' => $langEditChange,
@@ -629,13 +633,17 @@ function display_activities($element, $id, $unit_id = 0) {
                     <div class='col-sm-7'>".$resource_data['title']."</div>
                     <div class='col-sm-2'>". $resource_data['type']."</div>
                     <div class='col-sm-2'>";
-                if (!empty($details->operator)) {
+                if (!empty($details->operator) && $details->activity_type != AssignmentSubmitEvent::ACTIVITY) {
                     $op = get_operators();
                     $tool_content .= $op[$details->operator];
                 } else {
                     $tool_content .= "&mdash;";
                 }
-                $tool_content .= "&nbsp;$details->threshold</div>";
+                if ($details->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+                    $tool_content .= "&nbsp;</div>";
+                } else {
+                    $tool_content .= "&nbsp;$details->threshold</div>";
+                }
                 $tool_content .= "<div class='col-sm-1 text-center'>".
                     action_button(array(
                         array('title' => $langEditChange,
@@ -881,73 +889,105 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
-           $langAddModulesButton, $langChoice,
+           $langAddModulesButton, $langChoice, $langParticipateSimple,
            $langOperator, $langGradebookGrade, $urlServer;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+    $notInSqlGrad = "(SELECT resource FROM {$element}_criterion WHERE $element = ?d
+                         AND resource != ''
+                         AND activity_type = '" . AssignmentEvent::ACTIVITY . "'
+                         AND module = " . MODULE_ID_ASSIGN . ")";
+    $notInSqlPart = "(SELECT resource FROM {$element}_criterion WHERE $element = ?d
+                         AND resource != ''
+                         AND activity_type = '" . AssignmentSubmitEvent::ACTIVITY . "'
+                         AND module = " . MODULE_ID_ASSIGN . ")";
 
     if ($unit_id) {
         if ($unit_resource_id) {
-            $result = Database::get()->queryArray("SELECT assignment.id, assignment.title, assignment.description, submission_date
-                                            FROM assignment, unit_resources 
-                                            WHERE assignment.id = unit_resources.res_id
-                                                AND unit_id = ?d
-                                                AND unit_resources.id = ?d",
-                                            $unit_id, $unit_resource_id);
+            $resWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
+                              FROM assignment, unit_resources 
+                             WHERE assignment.id = unit_resources.res_id
+                               AND unit_id = ?d
+                               AND unit_resources.id = ?d";
+            $resGrad = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSqlGrad ORDER BY assignment.title", $unit_id, $unit_resource_id, $element_id);
+            $resPart = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSqlPart ORDER BY assignment.title", $unit_id, $unit_resource_id, $element_id);
         } else {
-            $result = Database::get()->queryArray("SELECT assignment.id, assignment.title, assignment.description, submission_date
-                                            FROM assignment, unit_resources 
-                                            WHERE assignment.id = unit_resources.res_id
-                                                AND unit_id = ?d 
-                                                AND unit_resources.type = 'work'
-                                                AND visible = 1", $unit_id);
+            $unitWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
+                               FROM assignment, unit_resources 
+                              WHERE assignment.id = unit_resources.res_id
+                                AND unit_id = ?d 
+                                AND unit_resources.type = 'work'
+                                AND visible = 1";
+            $resGrad = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSqlGrad ORDER BY assignment.title", $unit_id, $element_id);
+            $resPart = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSqlPart ORDER BY assignment.title", $unit_id, $element_id);
         }
-
     } else {
-        $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d
-                                    AND active = 1
-                                    AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")
-                                    AND id NOT IN
-                                    (SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                                        AND resource != ''
-                                        AND activity_type = '" . AssignmentEvent::ACTIVITY . "'
-                                        AND module = " . MODULE_ID_ASSIGN . ")
-                                    ORDER BY title", $course_id, $element_id);
+        $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
+                              AND active = 1
+                              AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
+        $resGrad = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSqlGrad ORDER BY title", $course_id, $element_id);
+        $resPart = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSqlPart ORDER BY title", $course_id, $element_id);
     }
 
-    if (count($result) == 0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
+    if ($unit_id) {
+        $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
     } else {
-        if ($unit_id) {
-            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
-        } else {
-            $action = "index.php?course=$course_code";
-        }
+        $action = "index.php?course=$course_code";
+    }
 
-        $tool_content .= "<form action=$action method='post'>" .
-                "<input type='hidden' name = '$element_name' value='$element_id'>" .
-                "<table class='table-default'>" .
-                "<tr class='list-header'>" .
-                "<th class='text-left'>&nbsp;$langTitle</th>" .
-                "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th style='width:5px;'>$langOperator</th>" .
-                "<th style='width:50px;'>$langGradebookGrade</th>" .
-                "<th style='width:10px;' class='text-center'>$langChoice</th>" .
-                "</tr>";
-        foreach ($result as $row) {
+    $tool_content .= "<form action=$action method='post'>" .
+            "<input type='hidden' name = '$element_name' value='$element_id'>" .
+            "<table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-left'>&nbsp;$langTitle</th>" .
+            "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
+            "<th style='width:5px;'>$langOperator</th>" .
+            "<th style='width:50px;'>$langGradebookGrade</th>" .
+            "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+            "</tr>";
+    if (count($resGrad) == 0) {
+        $tool_content .= "<tr><td colspan='6'><div class='alert alert-warning'>$langNoAssign</div></td></tr>";
+    } else {
+        foreach ($resGrad as $row) {
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
-                    "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                    "<td class='text-center'>".format_locale_date(strtotime($row->submission_date), 'short')."</td>
-                    <td>". selection(get_operators(), "operator[$assignment_id]") . "</td>".
-                    "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
-                    "<td class='text-center'><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
-                    "</tr>";
+                "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
+                "<td class='text-center'>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>
+                <td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
+                "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
+                "<td class='text-center'><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
+                "</tr>";
         }
-        $tool_content .= "</table>" .
-                "<div align='right'><input class='btn btn-primary' type='submit' name='add_assignment' value='$langAddModulesButton'></div></th></form>";
     }
+
+    $tool_content .= "</table>" .
+        "<div><h4>$langParticipateSimple</h4></div>" .
+        "<table class='table-default'>" .
+        "<tr class='list-header'>" .
+        "<th class='text-left'>&nbsp;$langTitle</th>" .
+        "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
+        "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+        "</tr>";
+    if (count($resPart) == 0) {
+        $tool_content .= "<tr><td colspan='4'><div class='alert alert-warning'>$langNoAssign</div></td></tr>";
+    } else {
+        foreach ($resPart as $row) {
+            $assignment_id = $row->id;
+            $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
+            $tool_content .= "<tr>" .
+                "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
+                "<td class='text-center'>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>" .
+                "<td class='text-center'><input name='assignment_participation[]' value='$assignment_id' type='checkbox'></td>" .
+                "</tr>";
+        }
+    }
+
+    $tool_content .= "</table>";
+    if (count($resGrad) != 0 || count($resPart) != 0) {
+        $tool_content .= "<div align='right'><input class='btn btn-primary' type='submit' name='add_assignment' value='$langAddModulesButton'></div>";
+    }
+    $tool_content .= "</form>";
 }
 
 
@@ -2755,7 +2795,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                                 AND certificate_criterion.certificate = ?d
                                                                 AND user = ?d", $element_id, $user_id);
         // incomplete user resources
-        $sql2 = Database::get()->queryArray("SELECT id, threshold, operator FROM certificate_criterion WHERE certificate = ?d
+        $sql2 = Database::get()->queryArray("SELECT id, activity_type, threshold, operator FROM certificate_criterion WHERE certificate = ?d
                                                     AND id NOT IN
                                             (SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion
                                                 ON user_certificate_criterion.certificate_criterion = certificate_criterion.id
@@ -2769,7 +2809,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                                                 AND badge_criterion.badge = ?d
                                                                 AND user = ?d", $element_id, $user_id);
         // incomplete user resources
-        $sql2 = Database::get()->queryArray("SELECT id, threshold, operator FROM badge_criterion WHERE badge = ?d
+        $sql2 = Database::get()->queryArray("SELECT id, activity_type, threshold, operator FROM badge_criterion WHERE badge = ?d
                                                     AND id NOT IN
                                             (SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion
                                                 ON user_badge_criterion.badge_criterion = badge_criterion.id
@@ -2864,16 +2904,20 @@ function display_user_progress_details($element, $element_id, $user_id) {
 	foreach ($sql2 as $user_criterion) {
 		$resource_data = get_resource_details($element, $user_criterion->id);
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
-        if (!empty($user_criterion->operator)) {
+        if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
             $op = get_operators();
             $op_content = $op[$user_criterion->operator];
         } else {
             $op_content = "&mdash;";
         }
+        $threshold = $user_criterion->threshold;
+        if ($user_criterion->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+            $threshold = "";
+        }
 		$tool_content .= "
                 <div class='row res-table-row not_visible'>
                     <div class='col-sm-9'>$activity</div>
-                    <div class='col-sm-3 text-center'>$op_content&nbsp;" . $user_criterion->threshold . "</div>
+                    <div class='col-sm-3 text-center'>$op_content&nbsp;" . $threshold . "</div>
                 </div>";
 	}
 	$tool_content .= "

@@ -42,6 +42,7 @@ require_once 'modules/tags/moduleElement.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/plagiarism/plagiarism.php';
 require_once 'modules/progress/AssignmentEvent.php';
+require_once 'modules/progress/AssignmentSubmitEvent.php';
 require_once 'modules/analytics/AssignmentAnalyticsEvent.php';
 require_once 'modules/lti_consumer/lti-functions.php';
 require_once 'modules/admin/extconfig/turnitinapp.php';
@@ -1453,6 +1454,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
 
             triggerGame($course_id, $user_id, $row->id);
+            triggerAssignmentSubmit($course_id, $user_id, $row->id);
             triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $user_id, $row->id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
@@ -3708,6 +3710,7 @@ function delete_assignment($id) {
         $uids = Database::get()->queryArray("SELECT uid FROM assignment_submit WHERE assignment_id = ?d", $id);
         foreach ($uids as $user_id) {
             triggerGame($course_id, $user_id->uid, $id);
+            triggerAssignmentSubmit($course_id, $user_id->uid, $id);
             triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
             triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
         }
@@ -3747,6 +3750,7 @@ function purge_assignment_subs($id) {
 
     foreach ($uids as $user_id) {
         triggerGame($course_id, $user_id->uid, $id);
+        triggerAssignmentSubmit($course_id, $user_id->uid, $id);
         triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
         triggerAssignmentAnalytics($course_id, $user_id->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
     }
@@ -3794,6 +3798,7 @@ function delete_user_assignment($id) {
             rmdir($userdir);
         }
         triggerGame($course_id, $info->uid, $id);
+        triggerAssignmentSubmit($course_id, $info->uid, $id);
         triggerAssignmentAnalytics($course_id, $info->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTDL);
         triggerAssignmentAnalytics($course_id, $info->uid, $id, AssignmentAnalyticsEvent::ASSIGNMENTGRADE);
     }
