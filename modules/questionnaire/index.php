@@ -414,6 +414,14 @@ function printPolls() {
                     }
                 }
 
+                if ($thepoll->type = POLL_QUICK) {
+                    $tool_content .= "
+                    <div class='text-muted' style='font-size: 12px;'>
+                      Quick Poll
+                    </div>                    
+                    ";
+                }
+
                 $tool_content .= "</div>
                                     <div class='table_td_body'>" . standard_text_escape($thepoll->description) . "</div>
                                     </div></td>";

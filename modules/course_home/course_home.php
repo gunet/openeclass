@@ -994,7 +994,7 @@ $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course
                             $course_id)->visible;
 
 $displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
-                            WHERE show_front = ?d
+                            WHERE display_position = ?d
                             AND course_id = ?d
                             AND CURRENT_DATE BETWEEN start_date AND end_date
                             ORDER BY pid DESC',
@@ -1173,14 +1173,17 @@ if (!$displayWall && $displayQuickPoll) {
 
     $theQuestion = Database::get()->querySingle("SELECT * FROM poll_question
             WHERE pid = ?d ORDER BY q_position ASC", $pid);
-    $pqid = $theQuestion->pqid;
-    $qtype = $theQuestion->qtype;
 
-    $user_answers = null;
+    if ($theQuestion) {
 
-    if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
+        $pqid = $theQuestion->pqid;
+        $qtype = $theQuestion->qtype;
 
-        $user_answers = Database::get()->queryArray("SELECT a.aid
+        $user_answers = null;
+
+        if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
+
+            $user_answers = Database::get()->queryArray("SELECT a.aid
                                 FROM poll_user_record b, poll_answer_record a
                                 LEFT JOIN poll_question_answer c
                                     ON a.aid = c.pqaid
@@ -1188,57 +1191,57 @@ if (!$displayWall && $displayQuickPoll) {
                                     AND a.qid = ?d
                                     AND b.uid = ?d", $pqid, $uid);
 
-    }
+        }
 
-    $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
+        $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
                                 WHERE pqid = ?d ORDER BY pqaid", $pqid);
-    $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
-    $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+        $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+        $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
 
 
-    $tool_content .= "
+        $tool_content .= "
         <div class='col-md-$cunits_sidebar_subcolumns'>
             <div class=''>
                 <div class='content-title'>$langQuickSurvey</div>
                 
                 <div class='panel'>";
-    $tool_content .= "
+        $tool_content .= "
             <div class='alert alert-warning' role='alert' style='margin-bottom: 0'>
                 <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
             </div>";
 
-    if ($show_results) {
-        $tool_content .= "<div class='panel-body'>";
-        $tool_content .= "results";
-        $tool_content .= "</div>";
-    }
+        if ($show_results) {
+            $tool_content .= "<div class='panel-body'>";
+            $tool_content .= "results";
+            $tool_content .= "</div>";
+        }
 
-    if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
-        $tool_content .= "<div class='panel-body'>$langPollAlreadyParticipated</div>";
-    } else {
+        if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
+            $tool_content .= "<div class='panel-body'>$langPollAlreadyParticipated</div>";
+        } else {
 
-        $tool_content .= "
+            $tool_content .= "
                 <div class='panel-body'>
                     <form class='form-horizontal' role='form' action='' id='poll' method='post'>";
 
-        foreach ($answers as $theAnswer) {
-            $checked = '';
-            if ($user_answers) {
-                if (count($user_answers) > 1) { // multiple answers
-                    foreach ($user_answers as $ua) {
-                        if ($ua->aid == $theAnswer->pqaid) {
-                            $checked = 'checked';
+            foreach ($answers as $theAnswer) {
+                $checked = '';
+                if ($user_answers) {
+                    if (count($user_answers) > 1) { // multiple answers
+                        foreach ($user_answers as $ua) {
+                            if ($ua->aid == $theAnswer->pqaid) {
+                                $checked = 'checked';
+                            }
                         }
-                    }
-                } else {
-                    if (count($user_answers) == 1) { // single answer
-                        if ($user_answers[0]->aid == $theAnswer->pqaid) {
-                            $checked = 'checked';
+                    } else {
+                        if (count($user_answers) == 1) { // single answer
+                            if ($user_answers[0]->aid == $theAnswer->pqaid) {
+                                $checked = 'checked';
+                            }
                         }
                     }
                 }
-            }
-            $tool_content .= "
+                $tool_content .= "
                         <div class='form-group'>
                             <div class='col-sm-11'>
                                 <div class='$type_attr'>
@@ -1249,29 +1252,31 @@ if (!$displayWall && $displayQuickPoll) {
                                 </div>
                             </div>
                         </div>";
-        }
+            }
 
-        $tool_content .= "<input name='qtype' type='hidden' value='" . q($qtype) . "'>";
-        $tool_content .= "<input name='pid' type='hidden' value='" . q($pid) . "'>";
-        $tool_content .= "<input name='pqid' type='hidden' value='" . q($pqid) . "'>";
-        $tool_content .= "<input name='multiple_submissions' type='hidden' value='" . q($multiple_submissions) . "'>";
-        $tool_content .= "<input class='btn btn-primary blockUI' name='submitPoll' type='submit' value='" . q($langSubmit) . "'>";
+            $tool_content .= "<input name='qtype' type='hidden' value='" . q($qtype) . "'>";
+            $tool_content .= "<input name='pid' type='hidden' value='" . q($pid) . "'>";
+            $tool_content .= "<input name='pqid' type='hidden' value='" . q($pqid) . "'>";
+            $tool_content .= "<input name='multiple_submissions' type='hidden' value='" . q($multiple_submissions) . "'>";
+            $tool_content .= "<input class='btn btn-primary blockUI' name='submitPoll' type='submit' value='" . q($langSubmit) . "'>";
 
-        $tool_content .= "
+            $tool_content .= "
                     </form>
                 </div>";
 
-    }
+        }
 
 
 
 
 
-    $tool_content .= "
+        $tool_content .= "
                 </div>
             </div>
         </div>
     ";
+
+    }
 }
 
 if (!$displayWall && $displayCalendar) {

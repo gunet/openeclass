@@ -948,6 +948,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
     `end_message` MEDIUMTEXT NULL DEFAULT NULL,
     `anonymized` INT(1) NOT NULL DEFAULT 0,
     `show_results` INT(1) NOT NULL DEFAULT 0,
+    `display_position` INT(1) NOT NULL DEFAULT 0,
     `multiple_submissions` TINYINT NOT NULL DEFAULT '0',
     `default_answer` TINYINT NOT NULL DEFAULT '0',
     `type` TINYINT NOT NULL DEFAULT 0,
