@@ -19,7 +19,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -31,7 +31,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -41,23 +41,23 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
-                    
-                    
+
+
 
                     <div class='col-lg-6 col-12'>
                         <div class='form-wrapper form-edit border-0 px-0'>
-                            
+
                             <form role='form' class='form-horizontal' method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}{{ isset($mynode) ? '?action=edit' : '?action=add' }}' onsubmit='return validateNodePickerForm();'>
                             <fieldset>
                                 <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
-                                    <div class='col-sm-12'>
-                                        <input class='form-control' placeholder="{{ trans('langNodeCode1') }}" type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}'>
+                                    <div class='col-sm-6'>
+                                        <input class='form-control' placeholder="{{ trans('langNodeCode1') }}" type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}' maxlength="30">
                                         &nbsp;<i>{{ trans('langCodeFaculte2') }}</i>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                             <span class='checkmark'></span>
                                             {{ trans('langNodeAllowCourse2') }}
                                         </label>
-                                        
+
                                     </div>
                                 </div>
                                 <div class='form-group mt-4'>
@@ -111,16 +111,16 @@
                                             <span class='checkmark'></span>
                                             {{ trans('langNodeAllowUser2') }}
                                         </label>
-                                       
+
                                     </div>
                                 </div>
                             <div class='form-group mt-4'>
                                 <label class='col-sm-12 control-label-notes'>{{ trans('langNodeOrderPriority') }}</label>
                                 <div class='col-sm-12'>
-                                    
+
                                         <input class='form-control' type='text' name='order_priority' value='{{ isset($mynode) ? $mynode->order_priority : '' }}'>
                                         <div class='help-block'>{{ trans('langNodeOrderPriority2') }}</div>
-                                    
+
                                 </div>
                             </div>
 
@@ -134,8 +134,8 @@
                                             {{ trans('langNodePublic') }}
                                         </label>
                                         <div class='help-block'>{{ trans('langNodePublic2') }}</div>
-                                    </div> 
-                                   
+                                    </div>
+
 
                                     <div class='radio mb-3'>
                                         <label>
@@ -148,7 +148,7 @@
                                         </label>
                                         <div class='help-block'>{{ trans('langNodeSubscribed2') }}</div>
                                     </div>
-                                    
+
 
                                     <div class='radio'>
                                         <label>
@@ -158,7 +158,7 @@
                                         </label>
                                          <div class='help-block'>{{ trans('langNodeHidden2') }}</div>
                                     </div>
-                                   
+
                                 </div>
                             </div>
 
@@ -171,8 +171,8 @@
                             {!! showSecondFactorChallenge() !!}
                             <div class='form-group mt-5'>
                                 <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    
-                                        
+
+
                                         {!! form_buttons([
                                             [
                                                 'class' => 'submitAdminBtn',
@@ -181,16 +181,16 @@
                                                 'value'=> isset($mynode) ? trans('langAcceptChanges') : trans('langAdd')
                                             ]
                                         ]) !!}
-                                        
-                                       
+
+
                                         {!! form_buttons([
                                             [
                                                 'class' => 'cancelAdminBtn ms-1',
                                                 'href' => $_SERVER['SCRIPT_NAME']
                                             ]
                                         ]) !!}
-                                        
-                                   
+
+
                                 </div>
                             </div>
                             </fieldset>
@@ -201,8 +201,8 @@
                     <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                     <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                     </div>
-               
-        
+
+
         </div>
     </div>
 </div>
