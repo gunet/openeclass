@@ -263,18 +263,23 @@ function show_edit_form($id, $sid, $assign) {
                     $tool_content.= "
                             <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
                                 <input type='hidden' name='assignment' value='$id' />
-                                <input type='hidden' name='submission' value='$sid' />
-                                <div class='form-group'>
-                                    <div class='col-sm-9 col-sm-offset-3'>
-                                        <div class='checkbox'>
-                                            <label>
-                                                <input type='checkbox' value='1' id='email_button' name='email' checked>
-                                                $m[email_users]
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class='form-group'>
+                                <input type='hidden' name='submission' value='$sid' />";
+
+                                if (get_user_email_notification($sub->uid, $course_id)) {
+                                    $tool_content .= "<div class='form-group'>
+                                            <div class='col-sm-9 col-sm-offset-3'>
+                                                <div class='checkbox'>
+                                                    <label>
+                                                        <input type='checkbox' value='1' id='email_button' name='email' checked>
+                                                        $m[email_users]
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>";
+                                }
+
+                                $tool_content .= "
+                                 <div class='form-group'>
                                     <div class='col-sm-9 col-sm-offset-3'>
                                         <input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
                                         <a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
@@ -456,17 +461,22 @@ function show_edit_form($id, $sid, $assign) {
 							<input type='file' name='comments_file' id='comments_file' size='35'>
 							" . fileSizeHidenInput() . "
 						</div>
-					</div>
-					<div class='form-group'>
-						<div class='col-sm-9 col-sm-offset-3'>
-							<div class='checkbox'>
-								<label>
-									<input type='checkbox' value='1' id='email_button' name='email' checked>
-									$m[email_users]
-								</label>
-							</div>
-						</div>
-					</div>
+					</div>";
+
+                    if (get_user_email_notification($sub->uid, $course_id)) {
+                        $tool_content .= "<div class='form-group'>
+                            <div class='col-sm-9 col-sm-offset-3'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' value='1' id='email_button' name='email' checked>
+                                        $m[email_users]
+                                    </label>
+                                </div>
+                            </div>
+                        </div>";
+					}
+
+					$tool_content .= "
 					<div class='form-group'>
 						<div class='col-sm-9 col-sm-offset-3'>
 							<input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
