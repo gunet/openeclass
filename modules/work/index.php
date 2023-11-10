@@ -5696,16 +5696,10 @@ function show_assignments() {
 
 /**
  * @brief submit grade and comment for student submission
- * @global type $langGrades
- * @global type $course_id
- * @global type $langTheField
- * @global type $langGradebookGrade
- * @global type $course_code
- * @global type $langFormErrors
- * @global type $workPath
  * @param type $args
  */
 function submit_grade_comments($args) {
+
     global $langGrades, $course_id, $langTheField, $course_code,
             $langFormErrors, $workPath, $langGradebookGrade;
 
@@ -5729,6 +5723,7 @@ function submit_grade_comments($args) {
     $v->labels(array(
         'grade' => "$langTheField $langGradebookGrade"
     ));
+
     if($v->validate()) {
         $grade_rubric = '';
         if ($grading_type == ASSIGNMENT_SCALING_GRADE) {
@@ -5818,7 +5813,7 @@ function submit_grade_comments($args) {
                 update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             }
         }
-        if (isset($args['send_email'])) {
+        if (isset($args['email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
         }
         Session::Messages($langGrades, 'alert-success');
