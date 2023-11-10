@@ -78,11 +78,11 @@ if (isset($_GET['ass_id']) ) { // delete student review
     $a_id = intval($_GET['a_id']);
     if (delete_review($ass_id)) {
         //Session::Messages($langStudentReviewDeleted, 'alert-success');
-        Session::flash('message',$langStudentReviewDeleted); 
+        Session::flash('message',$langStudentReviewDeleted);
         Session::flash('alert-class', 'alert-success');
     } else {
         //Session::Messages($langDelError, 'alert-danger');
-        Session::flash('message',$langDelError); 
+        Session::flash('message',$langDelError);
         Session::flash('alert-class', 'alert-danger');
     }
     redirect_to_home_page('modules/work/grade_edit.php?course='.$course_code.'&assignment='.$id.'&submission='.$a_id);
@@ -279,19 +279,22 @@ function show_edit_form($id, $sid, $assign) {
                     $tool_content.= "
                             <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code' enctype='multipart/form-data'>
                                 <input type='hidden' name='assignment' value='$id' />
-                                <input type='hidden' name='submission' value='$sid' />
-                                <div class='form-group'>
-                                    <div class='col-sm-9 col-sm-offset-3'>
-                                        <div class='checkbox'>
-                                            <label class='label-container'>
-                                                <input type='checkbox' value='1' id='email_button' name='email' checked>
-                                                <span class='checkmark'></span>
-                                                $m[email_users]
-                                            </label>
+                                <input type='hidden' name='submission' value='$sid' />";
+
+                                if (get_user_email_notification($sub->uid, $course_id)) {
+                                    $tool_content .= "<div class='form-group'>
+                                        <div class='col-sm-9 col-sm-offset-3'>
+                                            <div class='checkbox'>
+                                                <label class='label-container'>
+                                                    <input type='checkbox' value='1' id='email_button' name='email' checked>
+                                                    <span class='checkmark'></span>
+                                                    $m[email_users]
+                                                </label>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class='form-group'>
+                                    </div>";
+                                }
+                                $tool_content .= "<div class='form-group'>
                                     <div class='col-12 d-inline-flex justify-content-end'>
                                         <input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
                                         <a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
@@ -436,8 +439,6 @@ function show_edit_form($id, $sid, $assign) {
 				<input type='hidden' name='submission' value='$sid'>
 				<fieldset>
                
-                    
-
 					<div class='row form-group'>
 						<label class='col-12 control-label-notes'>$m[username]</label>
 						<div class='col-12'>
@@ -445,27 +446,20 @@ function show_edit_form($id, $sid, $assign) {
 						</div>
 					</div>
 
-                   
-
 					<div class='row form-group mt-4'>
 						<label class='col-12 control-label-notes'>$m[sub_date]</label>
 						<div class='col-12'>
 							".format_locale_date(strtotime($sub->submission_date))."
 						</div>
 					</div>
-
-                    
+					                    
 					$submission
-
-                    
 
 					<div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>
 						<label for='grade' class='col-12 control-label-notes'>$langGradebookGrade</label>
 							$grade_field
 							<span class='help-block Accent-200-cl'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>
 					</div>
-
-                   
 
 					<div class='row form-group mt-4'>
 						<label for='comments' class='col-12 control-label-notes'>$m[gradecomments]</label>
@@ -474,20 +468,16 @@ function show_edit_form($id, $sid, $assign) {
 						</div>
 					</div>
 
-                    
-
-
 					<div class='row form-group mt-4'>
 						<label for='comments_file' class='col-12 control-label-notes'>$langCommentsFile</label>
 						<div class='col-12'>
 							<input type='file' name='comments_file' id='comments_file' size='35'>
 							" . fileSizeHidenInput() . "
 						</div>
-					</div>
+					</div>";
 
-                   
-
-					<div class='form-group mt-4'>
+                   if (get_user_email_notification($sub->uid, $course_id)) {
+                       $tool_content .= "<div class='form-group mt-4'>
 						<div class='col-12'>
 							<div class='checkbox'>
                             <label class='label-container'>
@@ -497,30 +487,28 @@ function show_edit_form($id, $sid, $assign) {
 								</label>
 							</div>
 						</div>
-					</div>
+					</div>";
+                   }
 
-                   
-
-
+                    $tool_content .= "
 					<div class='form-group mt-5'>
 						<div class='col-12 d-inline-flex justify-content-end'>
 							<input class='btn submitAdminBtn' type='submit' name='grade_comments' value='$langGradeOk'>
 							<a class='btn cancelAdminBtn ms-1' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+
 						</div>
 					</div>
 
-                    
-                    
 				</fieldset>
 				</form>
-			</div></div><div class='d-none d-lg-block'>
-            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
-        </div>
+			</div></div>
+			<div class='d-none d-lg-block'>
+                <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+            </div>
         </div>";
 		}
     } else {
-        //Session::Messages($m['WorkNoSubmission'], 'alert-danger');
-        Session::flash('message',$m['WorkNoSubmission']); 
+        Session::flash('message',$m['WorkNoSubmission']);
         Session::flash('alert-class', 'alert-danger');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     }
