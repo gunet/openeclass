@@ -2503,8 +2503,13 @@ function upgrade_to_3_14($tbl_options) : void {
 */
 function upgrade_to_3_15($tbl_options) : void
 {
+    // course reviewer
     if (!DBHelper::fieldExists('course_user','course_reviewer')) {
         Database::get()->query("ALTER TABLE course_user ADD `course_reviewer` TINYINT NOT NULL DEFAULT '0' AFTER editor");
+    }
+    //quick poll
+    if (!DBHelper::fieldExists('poll', 'display_position')) {
+        Database::get()->query("ALTER TABLE poll ADD `display_position` INT(1) NOT NULL DEFAULT 0 AFTER show_results");
     }
     if (!DBHelper::tableExists('lti_publish_lti2_consumer')) {
         Database::get()->query("CREATE TABLE `lti_publish_lti2_consumer` (
