@@ -173,7 +173,7 @@ $db->query("CREATE TABLE `agenda` (
 
 $db->query("CREATE TABLE `course` (
   `id` INT(11) NOT NULL auto_increment,
-  `code` VARCHAR(20) NOT NULL,
+  `code` VARCHAR(40) NOT NULL,
   `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
   `title` VARCHAR(255) NOT NULL DEFAULT '',
   `keywords` TEXT NOT NULL,

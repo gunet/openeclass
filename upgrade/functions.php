@@ -2532,6 +2532,8 @@ function upgrade_to_3_15($tbl_options) : void
         Database::get()->query('ALTER TABLE lti_publish_lti2_consumer
             MODIFY `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL');
     }
+    Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
+
 }
 
 /**

@@ -220,9 +220,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
         }
-        // Check for greek letters
+        // only latin characters are allowed
         elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
-            $tool_content .= "<div class='alert alert-danger'>" . $langGreekCode . "</div><br>";
+            $tool_content .= "<div class='alert alert-danger text-center'>" . $langGreekCode . "</div><br>";
             $tool_content .= action_bar(array(
                 array('title' => $langReturnToAddNode,
                     'url' => $_SERVER['SCRIPT_NAME'] . "?a=1",
@@ -242,8 +242,8 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             <fieldset>
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langNodeCode1:</label>
-                <div class='col-sm-9'>
-                    <input class='form-control' type='text' name='code' placeholder='$langCodeFaculte2'>
+                <div class='col-sm-4'>
+                    <input class='form-control' type='text' name='code' placeholder='$langCodeFaculte2' maxlength='30'>
                 </div>
             </div>";
 
@@ -393,8 +393,8 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
         } elseif (!empty($code) && !preg_match("/^[A-Z0-9a-z_-]+$/", $code)) {
-            // Check for greek letters
-            $tool_content .= "<div class='alert alert-danger'>" . $langGreekCode . "</div><br>";
+            // only latin characters are allowed
+            $tool_content .= "<div class='alert alert-danger text-center'>" . $langGreekCode . "</div><br>";
             $tool_content .= action_bar(array(
                 array('title' => $langReturnToEditNode,
                     'url' => $_SERVER['SCRIPT_NAME'] . "?action=edit&amp;id=$id",
@@ -422,8 +422,8 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                     <fieldset>
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langNodeCode1:</label>
-                            <div class='col-sm-9'>
-                                <input class='form-control' type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
+                            <div class='col-sm-4'>
+                                <input class='form-control' type='text' name='code' value='" . q($mynode->code) . "'  maxlength='30'>&nbsp;<i>" . $langCodeFaculte2 . "</i>
                             </div>
                         </div>";
 
