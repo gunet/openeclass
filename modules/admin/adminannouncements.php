@@ -534,7 +534,9 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
 
     $checked_public = "checked";
 
-    if (!isset($contentToModify)) {
+    if (Session::has('newContent')) {
+        $contentToModify = Session::get('newContent');
+    } elseif (!isset($contentToModify)) {
         $contentToModify = '';
     }
     if (!isset($titleToModify)) {
@@ -546,38 +548,36 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $tool_content .= "<input type='hidden' name='id' value='$id' />";
     }
     $antitle_error = Session::getError('title', "<span class='help-block'>:message</span>");
-    $tool_content .= "<div class='form-group".($antitle_error ? " has-error" : "")."'>";
-    $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                        <div class='col-sm-10'><input class='form-control' type='text' name='title' value='$titleToModify' size='50' /></div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='newContent' class='col-sm-2 control-label'>$langAnnouncement:</label>
-                    <div class='col-sm-10'>" . rich_text_editor('newContent', 5, 40, $contentToModify) . "</div></div>";
-    $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langLanguage:</label>";
+    if (Session::has('antitle')) {
+        $titleToModify = Session::get('antitle');
+    }
+    if (Session::has('newContent')) {
+        $contentToModify = Session::get('newContent');
+    }
     if (isset($_GET['modify'])) {
         if ($myrow->visible == 1) {
-            $checked_public = "checked";
+            $checked_public = 'checked';
         } else {
-            $checked_public = "";
+            $checked_public = '';
         }
         if (isset($begindate)) {
-            $start_checkbox = "checked";
-            $start_text_disabled = "";
-            $end_disabled = "";
+            $start_checkbox = 'checked';
+            $start_text_disabled = '';
+            $end_disabled = '';
             $startdate = $begindate;
             if (isset($enddate)) {
-                $end_checkbox = "checked";
-                $end_text_disabled = "";
+                $end_checkbox = 'checked';
+                $end_text_disabled = '';
             } else {
-                $end_checkbox = "";
-                $end_text_disabled = "disabled";
+                $end_checkbox = '';
+                $end_text_disabled = 'disabled';
             }
         } else {
-            $start_checkbox = "";
-            $start_text_disabled = "disabled";
-            $end_checkbox = "";
-            $end_disabled = "disabled";
-            $end_text_disabled = "disabled";
+            $start_checkbox = '';
+            $start_text_disabled = 'disabled';
+            $end_checkbox = '';
+            $end_disabled = 'disabled';
+            $end_text_disabled = 'disabled';
             $startdate = '';
         }
         if (isset($enddate)) {
@@ -586,18 +586,53 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             $end_checkbox = '';
             $enddate = '';
         }
-        $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'", $myrow->lang) . "</div>";
     } else {
         $start_checkbox = $end_checkbox = '';
-        $start_text_disabled = "disabled";
-        $end_disabled = "disabled";
-        $end_text_disabled = "disabled";
+        $start_text_disabled = 'disabled';
+        $end_disabled = 'disabled';
+        $end_text_disabled = 'disabled';
 
         $startdate = '';
         $enddate = '';
-        $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'") . "</div>";
     }
-    $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
+    if (Session::has('lang_admin_ann')) {
+        $lang_admin_ann = Session::get('lang_admin_ann');
+    } elseif (isset($myrow)) {
+        $lang_admin_ann = $myrow->lang;
+    } else {
+        $lang_admin_ann = '';
+    }
+    if (Session::has('startdate_active')) {
+        $start_checkbox = 'checked';
+        $end_disabled = '';
+    }
+    if (Session::has('enddate_active')) {
+        $end_checkbox = 'checked';
+    }
+    if (Session::has('show_public')) {
+        $checked_public = 'checked';
+    }
+    if (Session::has('startdate')) {
+        $startdate = Session::get('startdate');
+    }
+    if (Session::has('enddate')) {
+        $enddate = Session::get('enddate');
+        $end_text_disabled = '';
+    }
+    $tool_content .= "
+        <div class='form-group" . ($antitle_error ? ' has-error' : '') . "'>
+            <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+            <div class='col-sm-10'><input class='form-control' type='text' name='title' value='" . q($titleToModify) . "' size='50' /></div>
+        </div>
+        <div class='form-group'>
+            <label for='newContent' class='col-sm-2 control-label'>$langAnnouncement:</label>
+            <div class='col-sm-10'>" . rich_text_editor('newContent', 5, 40, $contentToModify) . "</div>
+        </div>
+        <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langLanguage:</label>
+            <div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'", $lang_admin_ann) . "</div>
+            <small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small>
+        </div>
         <div class='form-group'>
             <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
             <div class='col-sm-10'>
@@ -605,7 +640,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <span class='input-group-addon'>
                         <input type='checkbox' name='startdate_active' $start_checkbox>
                     </span>
-                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "' $start_text_disabled>
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '$startdate' $start_text_disabled>
                 </div>
             </div>
         </div>
@@ -616,7 +651,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <span class='input-group-addon'>
                         <input type='checkbox' name='enddate_active' $end_checkbox $end_disabled>
                     </span>
-                    <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "' $end_text_disabled>
+                    <input class='form-control' name='enddate' id='enddate' type='text' value = '$enddate' $end_text_disabled>
                 </div>
             </div>
         </div>
@@ -633,8 +668,8 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
             <div class='col-sm-offset-2 col-sm-10'>
                 <input id='submitAnnouncement' class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
             </div>
-        </div>
-        ". generate_csrf_token_form_field() ."
+        </div>" .
+        generate_csrf_token_form_field() . "
         </form>
     </div>";
 }
