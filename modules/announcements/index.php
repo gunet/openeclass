@@ -617,6 +617,7 @@ if ($is_editor) {
             $end_disabled = Session::has('startdate_active') ? '' : 'disabled';
             $showUntil = Session::has('enddate') ? Session::get('enddate') : '';
             $titleToModify = Session::has('antitle') ? Session::get('antitle') : '';
+            $contentToModify = Session::has('newContent') ? Session::get('newContent') : '';
         }
         $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAnnouncements);
 
@@ -634,17 +635,17 @@ if ($is_editor) {
                 $('#startdate').datetimepicker({
                     format: 'dd-mm-yyyy hh:ii',
                     pickerPosition: 'bottom-right',
-                    language: '".$language."',
+                    language: '$language',
                     autoclose: true
                 });
                 $('#enddate').datetimepicker({
                     format: 'dd-mm-yyyy hh:ii',
                     pickerPosition: 'bottom-right',
-                    language: '".$language."',
+                    language: '$language',
                     autoclose: true
                 });
-            });"
-            . "</script>";
+            });
+            </script>";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
