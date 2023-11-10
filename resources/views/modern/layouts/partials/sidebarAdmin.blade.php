@@ -325,13 +325,11 @@
                                 </li>
                             @endif
                             @if (isset($is_admin) and $is_admin)
-                                {{--
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a class='TextBold link_admin_tool' href="{{$urlAppend}}modules/admin/adminannouncements.php">
-                                        {!! trans('langAdminAn') !!}
+                                        {!! trans('langAnnouncements') !!}
                                     </a>
-                                </li>--}}
-
+                                </li>
                                 @php $manual_language = ($language == 'el')? $language: 'en'; @endphp
                                 <li class="list-group-item admin-list-group px-0 border-bottom-default">
                                     <a class='TextBold link_admin_tool' href="http://docs.openeclass.org/{{$manual_language}}/admin">

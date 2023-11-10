@@ -25,7 +25,6 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.class.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'manage_home.php', 'name' => $langAdminManageHomepage);
 $toolName = $langAdminAn;
 
 // modify visibility
@@ -218,7 +217,6 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     }
     if (isset($announcement)) {
         $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, standard_text_escape($data['announcement']->body));
-
         $begindate = NULL;
         if(!is_null($announcement->begin) and !empty($announcement->begin)){
             $begindate = DateTime::createFromFormat('Y-m-d H:i:s', $announcement->begin);
@@ -244,11 +242,29 @@ if (isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         }
 
     } else {
-        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, "");
+        $newContent = '';
+        if (Session::has('newContent')) {
+            $newContent = Session::get('newContent');
+        }
+        $data['newContentTextarea'] = rich_text_editor('newContent', 5, 40, $newContent);
+
         $data['checked_public'] = " checked";
         $data['start_checkbox'] = $data['end_checkbox'] = '';
         $data['startdate'] = date('d-m-Y H:i', strtotime('now'));
         $data['enddate'] = date('d-m-Y H:i', strtotime('now +1 month'));
+
+        if (Session::has('startdate_active')) {
+            $data['start_checkbox'] = ' checked';
+        }
+        if (Session::has('enddate_active')) {
+            $data['end_checkbox'] = ' checked';
+        }
+        if (Session::has('startdate')) {
+            $data['startdate'] = Session::get('startdate');
+        }
+        if (Session::has('enddate')) {
+            $data['enddate'] = Session::get('enddate');
+        }
     }
     $view = 'admin.other.announcements.create';
 }
@@ -290,7 +306,7 @@ else {
                                     'level' => 'primary-label',
                                     'button-class' => 'btn-success'
                                 ]
-                                
+
                             ]);
     $data['announcements'] = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
     $view = 'admin.other.announcements.index';
