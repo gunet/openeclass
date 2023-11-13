@@ -204,7 +204,11 @@ if ($is_editor) {
     }
         // add resources to certificate
     elseif(isset($_POST['add_assignment'])) { // add assignment activity in certificate
-        add_assignment_to_certificate($element, $element_id);
+        add_assignment_to_certificate($element, $element_id, AssignmentEvent::ACTIVITY);
+        Session::Messages("$langQuotaSuccess", 'alert-success');
+        redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
+    } elseif (isset($_POST['add_assignment_participation'])) { // add assignment participation activity in certificate
+        add_assignment_to_certificate($element, $element_id, AssignmentSubmitEvent::ACTIVITY);
         Session::Messages("$langQuotaSuccess", 'alert-success');
         redirect_to_home_page("modules/progress/index.php?course=$course_code&$param_name=$element_id");
     } elseif (isset($_POST['add_exercise'])) { // add exercise activity in certificate
