@@ -33,32 +33,27 @@
  * @param type $element_id
  * @return type
  */
-function add_assignment_to_certificate($element, $element_id) {
+function add_assignment_to_certificate($element, $element_id, $activity_type) {
     if (isset($_POST['assignment'])) {
+        $operator = 'get';
+        $threshold = 1.0;
         foreach ($_POST['assignment'] as $datakey => $data) {
+            if ($activity_type == AssignmentEvent::ACTIVITY) {
+                $operator = $_POST['operator'][$data];
+                $threshold = $_POST['threshold'][$data];
+            }
             Database::get()->query("INSERT INTO {$element}_criterion
                                     SET $element = ?d,
                                         module= " . MODULE_ID_ASSIGN . ",
                                         resource = ?d,
-                                        activity_type = '" . AssignmentEvent::ACTIVITY . "',
+                                        activity_type = ?s,
                                         operator = ?s,
                                         threshold = ?f",
                 $element_id,
                 $_POST['assignment'][$datakey],
-                $_POST['operator'][$data],
-                $_POST['threshold'][$data]);
-        }
-    }
-    if (isset($_POST['assignment_participation'])) {
-        foreach ($_POST['assignment_participation'] as $datakey => $data) {
-            Database::get()->query("INSERT INTO {$element}_criterion
-                                    SET $element = ?d,
-                                        module = " . MODULE_ID_ASSIGN . ",
-                                        resource = ?d,
-                                        activity_type = '". AssignmentSubmitEvent::ACTIVITY ."',
-                                        operator = 'get',
-                                        threshold = 1.0",
-                $element_id, $data);
+                $activity_type,
+                $operator,
+                $threshold);
         }
     }
 }
