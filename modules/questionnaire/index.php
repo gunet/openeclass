@@ -326,7 +326,7 @@ function printPolls() {
         $langHasNotParticipated, $uid, $langConfirmDelete,
         $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate,
         $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langDate,
-        $langUserDuration, $m;
+        $langUserDuration, $m, $langQuickSurvey;
 
     $poll_check = 0;
     $query = "SELECT * FROM poll WHERE course_id = ?d";
@@ -432,12 +432,8 @@ function printPolls() {
                     }
                 }
 
-                if ($thepoll->type = POLL_QUICK) {
-                    $tool_content .= "
-                    <div class='text-muted' style='font-size: 12px;'>
-                      Quick Poll
-                    </div>                    
-                    ";
+                if ($thepoll->type == POLL_QUICK) {
+                    $tool_content .= "<div class='text-muted' style='font-size: 12px;'>$langQuickSurvey</div>";
                 }
 
                 $tool_content .= "</div>
