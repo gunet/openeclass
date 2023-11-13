@@ -285,7 +285,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $langAdd, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
-           $langNoUnitPrerequisite;
+           $langNoUnitPrerequisite, $langAssignmentParticipation;
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -352,6 +352,10 @@ function display_activities($element, $id, $unit_id = 0) {
             'show' => !$cc_enable),
         array('title' => $langOfAssignment,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentEvent::ACTIVITY,
+            'icon' => 'fa fa-flask space-after-icon',
+            'class' => ''),
+        array('title' => $langAssignmentParticipation,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AssignmentSubmitEvent::ACTIVITY,
             'icon' => 'fa fa-flask space-after-icon',
             'class' => ''),
         array('title' => $langExerciseAsModuleLabel,
@@ -754,7 +758,10 @@ insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_resource_i
             break;
         case AssignmentEvent::ACTIVITY:
         case 'work':
-            display_available_assignments($element, $element_id, $unit_id, $unit_resource_id);
+            display_available_assignments($element, $element_id, AssignmentEvent::ACTIVITY, $unit_id, $unit_resource_id);
+            break;
+        case AssignmentSubmitEvent::ACTIVITY:
+            display_available_assignments($element, $element_id, AssignmentSubmitEvent::ACTIVITY, $unit_id, $unit_resource_id);
             break;
         case ExerciseEvent::ACTIVITY:
             display_available_exercises($element, $element_id, $unit_id, $unit_resource_id);
@@ -880,7 +887,7 @@ function display_modification_activity($element, $element_id, $activity_id, $uni
  * @param int $unit_id
  * @param int $unit_resource_id
  */
-function display_available_assignments($element, $element_id, $unit_id = 0, $unit_resource_id = 0) {
+function display_available_assignments($element, $element_id, $activity_type, $unit_id = 0, $unit_resource_id = 0) {
 
     global $course_id, $tool_content, $langNoAssign, $course_code,
            $langTitle, $langGroupWorkDeadline_of_Submission,
@@ -888,14 +895,14 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
            $langOperator, $langGradebookGrade, $urlServer;
 
     $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
-    $notInSqlGrad = "(SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                         AND resource != ''
-                         AND activity_type = '" . AssignmentEvent::ACTIVITY . "'
-                         AND module = " . MODULE_ID_ASSIGN . ")";
-    $notInSqlPart = "(SELECT resource FROM {$element}_criterion WHERE $element = ?d
-                         AND resource != ''
-                         AND activity_type = '" . AssignmentSubmitEvent::ACTIVITY . "'
-                         AND module = " . MODULE_ID_ASSIGN . ")";
+    $form_submit_name = 'add_assignment';
+    if ($activity_type == AssignmentSubmitEvent::ACTIVITY) {
+        $form_submit_name = 'add_assignment_participation';
+    }
+    $notInSql = "(SELECT resource FROM {$element}_criterion WHERE $element = ?d
+                     AND resource != ''
+                     AND activity_type = '" . $activity_type . "'
+                     AND module = " . MODULE_ID_ASSIGN . ")";
 
     if ($unit_id) {
         if ($unit_resource_id) {
@@ -904,8 +911,7 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
                              WHERE assignment.id = unit_resources.res_id
                                AND unit_id = ?d
                                AND unit_resources.id = ?d";
-            $resGrad = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSqlGrad ORDER BY assignment.title", $unit_id, $unit_resource_id, $element_id);
-            $resPart = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSqlPart ORDER BY assignment.title", $unit_id, $unit_resource_id, $element_id);
+            $result = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $unit_id, $unit_resource_id, $element_id);
         } else {
             $unitWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
                                FROM assignment, unit_resources 
@@ -913,79 +919,56 @@ function display_available_assignments($element, $element_id, $unit_id = 0, $uni
                                 AND unit_id = ?d 
                                 AND unit_resources.type = 'work'
                                 AND visible = 1";
-            $resGrad = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSqlGrad ORDER BY assignment.title", $unit_id, $element_id);
-            $resPart = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSqlPart ORDER BY assignment.title", $unit_id, $element_id);
+            $result = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $unit_id, $element_id);
         }
-
     } else {
         $courseWorksSql = "SELECT * FROM assignment WHERE course_id = ?d
                               AND active = 1
                               AND (deadline IS NULL OR deadline >= ". DBHelper::timeAfter() . ")";
-        $resGrad = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSqlGrad ORDER BY title", $course_id, $element_id);
-        $resPart = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSqlPart ORDER BY title", $course_id, $element_id);
+        $result = Database::get()->queryArray("$courseWorksSql AND id NOT IN $notInSql ORDER BY title", $course_id, $element_id);
     }
 
-//    if (count($result) == 0) {
-//        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
-    if ($unit_id) {
-        $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+    if (count($result) == 0) {
+        $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></div>";
     } else {
-        $action = "index.php?course=$course_code";
-    }
-
-    $tool_content .= "<form action=$action method='post'>" .
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
             "<thead><tr class='list-header'>" .
             "<th>&nbsp;$langTitle</th>" .
-            "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
+            "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>";
+        if ($activity_type == AssignmentEvent::ACTIVITY) {
             "<th style='width:5px;'>$langOperator</th>" .
-            "<th style='width:50px;'>$langGradebookGrade</th>" .
+            "<th style='width:50px;'>$langGradebookGrade</th>";
+        }
+        $tool_content .=
             "<th style='width:10px;'>$langChoice</th>" .
             "</tr></thead>";
-    if (count($resGrad) == 0) {
-        $tool_content .= "<tr><td colspan='6'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></td></tr>";
-    } else {
-        foreach ($resGrad as $row) {
+        foreach ($result as $row) {
             $assignment_id = $row->id;
             $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
             $tool_content .= "<tr>" .
                 "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>
-                 <td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
-                "<td><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>" .
+                "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>";
+            if ($activity_type == AssignmentEvent::ACTIVITY) {
+                $tool_content .=
+                "<td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
+                "<td><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>";
+            }
+            $tool_content .=
                 "<td><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
                 "</tr>";
         }
+        $tool_content .= "</table></div>
+                          <div class='text-end mt-3'>
+                            <input class='btn submitAdminBtn' type='submit' name='$form_submit_name' value='$langAddModulesButton'>
+                          </div></form>";
     }
-
-    $tool_content .= "</table></div>" .
-        "<div><h4>$langParticipateSimple</h4></div>" .
-        "<div class='table-responsive'><table class='table-default'>" .
-        "<thead><tr class='list-header'>" .
-        "<th>&nbsp;$langTitle</th>" .
-        "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>" .
-        "<th style='width:10px;'>$langChoice</th>" .
-        "</tr></thead>";
-    if (count($resPart) == 0) {
-        $tool_content .= "<tr><td colspan='6'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoAssign</span></div></td></tr>";
-    } else {
-        foreach ($resPart as $row) {
-            $assignment_id = $row->id;
-            $description = empty($row->description) ? '' : "<div style='margin-top: 10px;' class='text-muted'>$row->description</div>";
-            $tool_content .= "<tr>" .
-                "<td><a href='{$urlServer}modules/work/?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a>$description</td>" .
-                "<td>" . format_locale_date(strtotime($row->submission_date), 'short') . "</td>" .
-                "<td><input name='assignment_participation[]' value='$assignment_id' type='checkbox'></td>" .
-                "</tr>";
-        }
-    }
-
-    $tool_content .= "</table></div>";
-    if (count($resGrad) != 0 || count($resPart) != 0) {
-        $tool_content .= "<div class='text-end mt-3'><input class='btn submitAdminBtn' type='submit' name='add_assignment' value='$langAddModulesButton'></div>";
-    }
-    $tool_content .= "</form>";
 }
 
 
