@@ -22,52 +22,52 @@
 require_once '../../../modules/create_course/functions.php';
 
 
-
 function api_method($access) {
 
-    if ( isset($_GET['test']) ) {
+    //Create course with post request
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        $session = new Session();
+//        if (!$access->isValid) {
+//            Access::error(100, "Authentication required");
+//        }
 
-        $activeLanguages = $session->active_ui_languages;
+        $ok = register_posted_variables([
+            'title'             => true,
+            'category'          => true,
+            'description'       => false,
+            'password'          => false,
+            'prof_names'        => false,
+            'flipped_flag'      => false,
+            'public_code'       => false,
+            'doc_quota'         => false,
+            'group_quota'       => false,
+            'video_quota'       => false,
+            'dropbox_quota'     => false,
+            'lang'              => false,
+            'visible'           => false,
+            'course_license'    => false,
+            'view_type'         => false,
+        ]);
 
-        header('Content-Type: application/json');
-        echo json_encode($session->active_ui_languages, JSON_UNESCAPED_UNICODE);
-        exit();
-
-    }
-
-    if ( isset($_GET['create']) ) {
-
-        $missingInputs = [];
-
-        if (!isset($_GET['category'])) {
-            $missingInputs[] = 'category';
+        if (!$ok) {
+            Access::error(2, 'For creating a cousre, the following inputs are mandatory: title, category');
         }
 
-        if (!isset($_GET['title'])) {
-            $missingInputs[] = 'title';
-        }
-
-        if (!empty($missingInputs)) {
-            Access::error(20, 'The following inputs are mandatory: ' . implode(', ', $missingInputs));
-        }
-
-        $title = $_GET['title'];
-        $category = $_GET['category'];
+        $title = $GLOBALS['title'];
+        $category = $GLOBALS['category'];
 
         $code = strtoupper(new_code($category));
         $code = str_replace(' ', '', $code);
 
-        $description = isset($_GET['description']) ? $_GET['description'] : "";
-        $password = isset($_GET['password']) ? $_GET['password'] : "";
-        $prof_names = isset($_GET['prof_names']) ? $_GET['prof_names'] : '';
-        $flipped_flag = isset($_GET['flipped_flag']) ? $_GET['flipped_flag'] : 0;
-        $public_code = isset($_GET['public_code']) ? $_GET['public_code'] : $code;
+        $description = isset($_POST['description']) ? $GLOBALS['description'] : "";
+        $password = isset($_POST['password']) ? $_POST['password'] : "";
+        $prof_names = isset($_POST['prof_names']) ? $GLOBALS['prof_names'] : '';
+        $flipped_flag = isset($_POST['flipped_flag']) ? $GLOBALS['flipped_flag'] : 0;
+        $public_code = isset($_POST['public_code']) ? $GLOBALS['public_code'] : $code;
 
-        if (isset($_GET['doc_quota'])) {
-            if (is_numeric($_GET['doc_quota']) && $_GET['doc_quota'] > 0) {
-                $doc_quota = $_GET['doc_quota'];
+        if (isset($_POST['doc_quota'])) {
+            if (intval($GLOBALS['doc_quota']) > 0) {
+                $doc_quota = $GLOBALS['doc_quota'];
             } else {
                 Access::error(20, 'doc_quota input must be a number and higher than zero');
             }
@@ -75,9 +75,9 @@ function api_method($access) {
             $doc_quota = get_config('doc_quota');
         }
 
-        if (isset($_GET['group_quota'])) {
-            if (is_numeric($_GET['group_quota']) && $_GET['group_quota'] > 0) {
-                $group_quota = $_GET['group_quota'];
+        if (isset($_POST['group_quota'])) {
+            if (intval($GLOBALS['group_quota']) > 0) {
+                $group_quota = intval($GLOBALS['group_quota']);
             } else {
                 Access::error(20, 'group_quota input must be a number and higher than zero');
             }
@@ -85,9 +85,9 @@ function api_method($access) {
             $group_quota = get_config('group_quota');
         }
 
-        if (isset($_GET['video_quota'])) {
-            if (is_numeric($_GET['video_quota']) && $_GET['video_quota'] > 0) {
-                $video_quota = $_GET['video_quota'];
+        if (isset($_POST['video_quota'])) {
+            if (intval($GLOBALS['video_quota']) > 0) {
+                $video_quota = intval($GLOBALS['video_quota']);
             } else {
                 Access::error(20, 'video_quota input must be a number and higher than zero');
             }
@@ -95,9 +95,9 @@ function api_method($access) {
             $video_quota = get_config('video_quota');
         }
 
-        if (isset($_GET['dropbox_quota'])) {
-            if (is_numeric($_GET['dropbox_quota']) && $_GET['dropbox_quota'] > 0) {
-                $dropbox_quota = $_GET['dropbox_quota'];
+        if (isset($_POST['dropbox_quota'])) {
+            if (intval($GLOBALS['dropbox_quota']) > 0) {
+                $dropbox_quota = intval($GLOBALS['dropbox_quota']);
             } else {
                 Access::error(20, 'dropbox_quota input must be a number and higher than zero');
             }
@@ -105,12 +105,11 @@ function api_method($access) {
             $dropbox_quota = get_config('dropbox_quota');
         }
 
-
-        if (isset($_GET['lang'])) {
+        if (isset($_POST['lang'])) {
             $session = new Session();
             $valid_languages = $session->active_ui_languages;
-            if (in_array($_GET['lang'], $valid_languages)) {
-                $lang = $_GET['lang'];
+            if (in_array($_POST['lang'], $valid_languages)) {
+                $lang = $_POST['lang'];
             } else {
                 Access::error(20, 'lang input must be one of the following: ' . implode(", ", $valid_languages));
             }
@@ -118,10 +117,10 @@ function api_method($access) {
             $lang = 'el';
         }
 
-        if (isset($_GET['visible'])) {
+        if (isset($_POST['visible'])) {
             $valid_visible = ['0','1','2','3'];
-            if (in_array($_GET['visible'], $valid_visible)) {
-                $visible = $_GET['visible'];
+            if (in_array($_POST['visible'], $valid_visible)) {
+                $visible = $_POST['visible'];
             } else {
                 Access::error(20, 'visible input must be one of the following: 0 (Closed course) / 1 (Registration is required) / 2 (Open course) / 3 (Inactive course)');
             }
@@ -129,10 +128,10 @@ function api_method($access) {
             $visible = '2';
         }
 
-        if (isset($_GET['course_license'])) {
+        if (isset($_POST['course_license'])) {
             $valid_course_license = ['0', '10', 'cc'];
-            if (in_array($_GET['course_license'], $valid_course_license)) {
-                $course_license = $_GET['course_license'];
+            if (in_array($_POST['course_license'], $valid_course_license)) {
+                $course_license = $_POST['course_license'];
             } else {
                 Access::error(20, 'course_license input must be one of the following: 0 (Not defined) / 10 (All rights reserved) / cc (Creative Commons license-CC)');
             }
@@ -140,10 +139,10 @@ function api_method($access) {
             $course_license = '0';
         }
 
-        if (isset($_GET['view_type'])) {
+        if (isset($_POST['view_type'])) {
             $valid_view_types = ['simple', 'units', 'wall', 'flippedclassroom'];
-            if (in_array($_GET['view_type'], $valid_view_types)) {
-                $view_type = $_GET['view_type'];
+            if (in_array($_POST['view_type'], $valid_view_types)) {
+                $view_type = $_POST['view_type'];
             } else {
                 Access::error(20, 'view_type input must be one of the following: simple (Simple form) / units (Course with modules (weekly, thematic)) / wall (Wall form) / flippedclassroom (Inverted Classroom Model)');
             }
@@ -168,7 +167,7 @@ function api_method($access) {
                         group_quota = ?f,
                         dropbox_quota = ?f,
                         password = ?s,
-						flipped_flag = ?s,
+                        flipped_flag = ?s,
                         view_type = ?s,
                         start_date = " . DBHelper::timeAfter() . ",
                         keywords = '',
@@ -187,28 +186,27 @@ function api_method($access) {
         course_index($code);
 
         header('Content-Type: application/json');
-
         echo json_encode([
-            'title' => $title,
-            'code' => $code,
-            'category id' => $category,
-            'lang' => $lang,
-            'visible' => $visible,
-            'course_license' => $course_license,
-            'prof_names' => $prof_names,
-            'public_code' => $public_code,
-            'view_type' => $view_type,
-            'description' => $description,
+            'title'             => $title,
+            'code'              => $code,
+            'category id'       => $category,
+            'password'          => $password,
+            'lang'              => $lang,
+            'visible'           => $visible,
+            'course_license'    => $course_license,
+            'prof_names'        => $prof_names,
+            'public_code'       => $public_code,
+            'view_type'         => $view_type,
+            'description'       => $description,
+            'doc_quota'         => $doc_quota,
+            'group_quota'       => $group_quota,
+            'video_quota'       => $video_quota,
+            'dropbox_quota'     => $dropbox_quota,
+
 
         ], JSON_UNESCAPED_UNICODE);
         exit();
-
     }
-
-    if ( isset($_GET['create']) ) {
-
-    }
-
 
     if ( isset($_GET['course_id']) && isset($_GET['uname']) ) {
 
