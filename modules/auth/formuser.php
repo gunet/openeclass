@@ -466,7 +466,7 @@ $tool_content .= "
                 </div>
             </div>
             <div class='row'>";
-            
+
 $tool_content .= "<div class='col-lg-6 col-12 px-3'>
                     <div class='form-group mt-4'>
                         <label for='ProfComments' class='col-sm-12 control-label-notes'>$langFaculty</label>
@@ -477,7 +477,7 @@ $tool_content .= "<div class='col-lg-6 col-12 px-3'>
       $tool_content .= "</div>
                     </div>
                 </div>";
-            
+
 $tool_content .= "
                 <div class='col-lg-6 col-12 px-3'>
                     <div class='form-group mt-4'>
@@ -538,12 +538,12 @@ $tool_content .= "
                             </div>
                         </div>
                     </div>
-</form>
-</div>
-</div>
-<div class='col-lg-6 col-12'>
-<img class='form-image' src='{$urlAppend}template/modern/img/RegImg.png' />
-</div>
+            </form>
+        </div>
+    </div>
+    <div class='col-lg-6 col-12'>
+        <img class='form-image' src='{$urlAppend}template/modern/img/RegImg.png' />
+    </div>
 </div>
 </div>";
 }
