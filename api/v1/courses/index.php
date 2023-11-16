@@ -21,10 +21,7 @@
 
 require_once '../../../modules/create_course/functions.php';
 
-
-
 function api_method($access) {
-
 
     //Create course with post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -67,44 +64,24 @@ function api_method($access) {
         $flipped_flag = isset($_POST['flipped_flag']) ? $GLOBALS['flipped_flag'] : 0;
         $public_code = isset($_POST['public_code']) ? $GLOBALS['public_code'] : $code;
 
-        if (isset($_POST['doc_quota'])) {
-            if (intval($GLOBALS['doc_quota']) > 0) {
-                $doc_quota = $GLOBALS['doc_quota'];
-            } else {
-                Access::error(20, 'doc_quota input must be a number and higher than zero');
-            }
-        } else {
-            $doc_quota = get_config('doc_quota');
+        $doc_quota = isset($_POST['doc_quota']) && intval($GLOBALS['doc_quota']) > 0 ? $GLOBALS['doc_quota'] : get_config('doc_quota');
+        if (isset($_POST['doc_quota']) && intval($GLOBALS['doc_quota']) <= 0) {
+            Access::error(20, 'doc_quota input must be a number and higher than zero');
         }
 
-        if (isset($_POST['group_quota'])) {
-            if (intval($GLOBALS['group_quota']) > 0) {
-                $group_quota = intval($GLOBALS['group_quota']);
-            } else {
-                Access::error(20, 'group_quota input must be a number and higher than zero');
-            }
-        } else {
-            $group_quota = get_config('group_quota');
+        $group_quota = isset($_POST['group_quota']) && intval($GLOBALS['group_quota']) > 0 ? $GLOBALS['group_quota'] : get_config('group_quota');
+        if (isset($_POST['group_quota']) && intval($GLOBALS['group_quota']) <= 0) {
+            Access::error(20, 'group_quota input must be a number and higher than zero');
         }
 
-        if (isset($_POST['video_quota'])) {
-            if (intval($GLOBALS['video_quota']) > 0) {
-                $video_quota = intval($GLOBALS['video_quota']);
-            } else {
-                Access::error(20, 'video_quota input must be a number and higher than zero');
-            }
-        } else {
-            $video_quota = get_config('video_quota');
+        $video_quota = isset($_POST['video_quota']) && intval($GLOBALS['video_quota']) > 0 ? $GLOBALS['video_quota'] : get_config('video_quota');
+        if (isset($_POST['video_quota']) && intval($GLOBALS['video_quota']) <= 0) {
+            Access::error(20, 'video_quota input must be a number and higher than zero');
         }
 
-        if (isset($_POST['dropbox_quota'])) {
-            if (intval($GLOBALS['dropbox_quota']) > 0) {
-                $dropbox_quota = intval($GLOBALS['dropbox_quota']);
-            } else {
-                Access::error(20, 'dropbox_quota input must be a number and higher than zero');
-            }
-        } else {
-            $dropbox_quota = get_config('dropbox_quota');
+        $dropbox_quota = isset($_POST['dropbox_quota']) && intval($GLOBALS['dropbox_quota']) > 0 ? $GLOBALS['dropbox_quota'] : get_config('dropbox_quota');
+        if (isset($_POST['dropbox_quota']) && intval($GLOBALS['dropbox_quota']) <= 0) {
+            Access::error(20, 'dropbox_quota input must be a number and higher than zero');
         }
 
         if (isset($_POST['lang'])) {
@@ -120,23 +97,38 @@ function api_method($access) {
         }
 
         if (isset($_POST['visible'])) {
-            $valid_visible = ['0','1','2','3'];
-            if (in_array($_POST['visible'], $valid_visible)) {
-                $visible = $_POST['visible'];
+            $visible_mapping = array(
+                'closed' => 0,
+                'registration' => 1,
+                'open' => 2,
+                'inactive' => 3
+            );
+            if (array_key_exists($_POST['visible'], $visible_mapping)) {
+                $visible = $visible_mapping[$_POST['visible']];
             } else {
-                Access::error(20, 'visible input must be one of the following: 0 (Closed course) / 1 (Registration is required) / 2 (Open course) / 3 (Inactive course)');
+                Access::error(20, 'visible input must be one of the following: closed / registration / open / inactive');
             }
         } else {
             $visible = '2';
         }
 
         if (isset($_POST['course_license'])) {
-            $valid_course_license = ['0', '10', 'cc'];
-            if (in_array($_POST['course_license'], $valid_course_license)) {
-                $course_license = $_POST['course_license'];
+            $license_mapping = array(
+                'No' => 0,
+                'CC' => 1,
+                'CC-ShareAlike' => 2,
+                'CC-NoDerivatives' => 3,
+                'CC-NonCommercial' => 4,
+                'CC-NonCommercialShareAlike' => 5,
+                'CC-NonCommercialNoDerivatives' => 6,
+                'AllRights' => 10
+            );
+            if (array_key_exists($_POST['course_license'], $license_mapping)) {
+                $course_license = $license_mapping[$_POST['course_license']];
             } else {
-                Access::error(20, 'course_license input must be one of the following: 0 (Not defined) / 10 (All rights reserved) / cc (Creative Commons license-CC)');
+                Access::error(20, 'course_license input must be one of the following: No (No license specified) / AllRights (All rights reserved) / CC (CC - Attribution) / CC-ShareAlike (CC - Attribution-ShareAlike) / CC-NoDerivatives (CC - Attribution-NoDerivatives) / CC-NonCommercial (CC - Attribution-NonCommercial) / CC-NonCommercialShareAlike (CC - Attribution-NonCommercial-ShareAlike) / CC-NonCommercialNoDerivatives (CC - Attribution-NonCommercial-NoDerivatives)');
             }
+
         } else {
             $course_license = '0';
         }
