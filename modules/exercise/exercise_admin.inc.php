@@ -211,7 +211,6 @@ if (isset($_POST['submitExercise'])) {
 
 // shows the form to modify the exercise
 if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
-
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 

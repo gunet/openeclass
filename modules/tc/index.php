@@ -376,20 +376,10 @@ elseif(isset($_GET['choice']))
             } elseif ($serv->type == 'jitsi' or $serv->type == 'googlemeet' or $serv->type == 'microsoftteams') { // if tc server is `jitsi` or Google Meet' or 'Microsoft Teams'
                 header("Location: " . $serv->hostname . $sess->meeting_id);
             } elseif ($serv->type == 'zoom') { // zoom
-                header("Location: " . $serv->hostname . 'j/'. $sess->meeting_id . '/?pwd=' . $sess->mod_pw);
+                header("Location: " . $sess->meeting_id  . '/?pwd=' . $sess->mod_pw);
             } elseif ($serv->type == 'webex') { // webex
                 header("Location: " . $sess->meeting_id);
             }
-            /* elseif ($tc_type == 'om') { // if tc server is `om`
-               if (om_session_running($_GET['meeting_id']) == false) { // create meeting
-                   create_om_meeting($_GET['title'],$_GET['meeting_id'],$_GET['record']);
-               }
-               if(isset($_GET['mod_pw'])) { // join moderator (== $is_editor)
-                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 1));
-               } else { // join user
-                   header('Location: ' . om_join_user($_GET['meeting_id'],$_SESSION['uname'], $_SESSION['uid'], $_SESSION['email'], $_SESSION['surname'], $_SESSION['givenname'], 0));
-               }
-           } */
             break;
         case 'import_video':
             publish_video_recordings($course_code, getDirectReference($_GET['id']));
