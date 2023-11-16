@@ -35,7 +35,7 @@ $head_content .= "<script type='text/javascript'>
         }
         $('#enabled-courses').val(csvSelection);
         
-        // remove allcourses selection when selected other courses
+        // remove 'all courses' selection when selected other courses
         if (selectedVals.length > 1) {
             let index = selectedVals.indexOf('0');
             if (index > -1) {
@@ -50,7 +50,16 @@ $head_content .= "<script type='text/javascript'>
         }
     }
     
-    $(document).ready(function () {                
+    $(document).ready(function () {
+        
+        $('#custom_webex_url').change(function() {
+            if($(this).prop('checked')) {
+                $('#default_webex_url').prop('disabled', true);
+            } else {
+                $('#default_webex_url').prop('disabled', false);
+            }
+        });
+        
         $('#select-courses').select2();
         $('#selectAll').click(function(e) {
             e.preventDefault();
@@ -95,16 +104,21 @@ if (isset($_POST['submit'])) {
         } else {
             $all_courses = 0;
         }
+        if (isset($_POST['custom_webex_url'])) {
+            $hostname = 'webex';
+        } else {
+            $hostname = $_POST['url'];
+        }
 
         $tc_sql = Database::get()->querySingle("SELECT id FROM tc_servers WHERE `type` = 'webex'");
         if ($tc_sql) {
             $tc_id = $tc_sql->id;
             Database::get()->query("UPDATE tc_servers SET hostname = ?s, api_url = ?s, enabled = ?s, all_courses = ?s WHERE id = ?d",
-                $_POST['url'], $_POST['url'], $enabled, $all_courses, $tc_id);
+                $hostname, $hostname, $enabled, $all_courses, $tc_id);
         } else {
             $tc_sql = Database::get()->query("INSERT INTO tc_servers (`type`, hostname, api_url, enabled, all_courses) 
                                             VALUES('webex', ?s, ?s, ?s, ?s)",
-                $_POST['url'], $_POST['url'], $enabled, $all_courses);
+                $hostname, $hostname, $enabled, $all_courses);
             $tc_id = $tc_sql->lastInsertID;
         }
 
@@ -137,11 +151,26 @@ foreach ($app->getParams() as $param) {
         $boolean_field .= "<label class='label-container'><input type='checkbox' name='" . $param->name() . "' value='1' $checked><span class='checkmark'></span>" . $param->display() . "</label>";
         $boolean_field .= "</div></div></div>";
     } else if ($param->name() == WebexApp::WEBEXURL) {
+        $extra = '';
+        $q = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE type = 'webex'");
+        if ($q) {
+            $webex_host = $q->hostname;
+            if ($webex_host == 'webex') {
+                $extra = 'disabled';
+            } else {
+                $extra = '';
+            }
+        }
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "&nbsp;&nbsp;";
         $tool_content .= "<span class='fa fa-info-circle' data-toggle='tooltip' data-placement='right' title='$langWebexUrl'></span></label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . WebexApp::WEBEXDEFAULURL . "'></div>";
+        $tool_content .= "<div class='col-sm-10'><input class='form-control' id='default_webex_url' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "' placeholder='" . WebexApp::WEBEXDEFAULURL . "' $extra></div>";
         $tool_content .= "</div>";
+    } else if ($param->name() == WebexApp::WEBEXCUSTOMURL) {
+        $checked = $param->value() == 1 ? "checked" : "";
+        $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>";
+        $tool_content .= "<label><input type='checkbox' id='custom_webex_url' name='" . $param->name() . "' value='1' $checked>" . $param->display() . "</label>";
+        $tool_content .= "</div></div></div>";
     } else if ($param->name() == WebexApp::ENABLEDCOURSES) {
         $courses_list = Database::get()->queryArray("SELECT id, code, title FROM course
                                                                 WHERE visible != " . COURSE_INACTIVE . "

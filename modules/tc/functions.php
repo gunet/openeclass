@@ -224,6 +224,12 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             break;
     }
 
+    if (isset($_GET['choice']) and $_GET['choice'] == 'edit') {
+        $disabled = 'disabled';
+    } else {
+        $disabled = '';
+    }
+
     $tool_content .= "
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
@@ -237,7 +243,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='form-group'>
                 <label for='title' class='col-12 control-label-notes'>$langLink:</label>
                 <div class='col-12'>
-                    <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50'>
+                    <input class='form-control' type='text' name='google_meet_link' value='$google_meet_link' placeholder='$langLink Google Meet' size='50' $disabled>                
                 </div>
             </div>";
         }
@@ -249,33 +255,35 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             $tool_content .= "<div class='form-group'>
                             <label for='title' class='col-sm-2 control-label'>$langLink:</label>
                             <div class='col-sm-10'>
-                                <input class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50'>
+                                <input class='form-control' type='text' name='microsoft_teams_link' value='$microsoft_teams_link' placeholder='$langLink Microsoft Teams' size='50' $disabled>
                             </div>
                         </div>";
         }
 
         if ($tc_type == 'zoom') { // zoom
-            if ($hostname != 'zoom') { // zoom url supplied by the administrator
+            if ($hostname != 'zoom') { // zoom url supplied by end user
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
                 $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank'>$langGoToZoomLinkText</a></div>";
             }
             $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-12 control-label-notes'>$langLink:</label>
                     <div class='col-12'>
-                        <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50'>
+                        <input class='form-control' type='text' name='zoom_link' value='$zoom_link' placeholder='Zoom $langLink' size='50' $disabled>
                     </div>
                 </div>";
         }
 
         if ($tc_type == 'webex') { // webex
-            $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
-            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank'>$langGoToWebexLinkText</a></div>";
+            if ($hostname != 'webex') { // webex url supplied by end user
+                $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
+                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank'>$langGoToWebexLinkText</a></div>";
+            }
             $tool_content .= "<div class='form-group'>
-                    <label for='title' class='col-sm-2 control-label-notes'>$langLink:</label>
-                    <div class='col-12'>
-                        <input class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50'>
-                    </div>
-                </div>";
+                <label for='title' class='col-sm-2 control-label-notes'>$langLink:</label>
+                <div class='col-12'>
+                    <input class='form-control' type='text' name='webex_link' value='$webex_link' placeholder='Webex $langLink' size='50' $disabled>
+                </div>
+            </div>";
         }
 
         $tool_content .= "<div class='form-group mt-4'>
@@ -839,6 +847,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
     } else {
         $r_group = '0';
     }
+
     if (isset($update) and $update) { // update existing BBB session
         Database::get()->querySingle("UPDATE tc_session SET title=?s, description=?s, start_date=?t, end_date=?t,
                                         public=?s, active=?s, unlock_interval=?d, external_users=?s,
@@ -955,12 +964,8 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'zoom') {
             $data = parse_url($options);
-            //var_dump($data);
             $meeting_id = $data['path'];
-            //var_dump("meetiing_id: $meeting_id");
             $mod_pw = preg_replace('/pwd=/','', $data['query']);
-            //var_dump("mod_pw: $mod_pw");
-            //die;
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1004,7 +1009,6 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $meeting_id, '', '',
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         }
-
 
         // logging
         Log::record($course_id, MODULE_ID_TC, LOG_INSERT, array('id' => $q->lastInsertID,
@@ -1057,7 +1061,7 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 // we check if email notification are enabled for each user
                 if (get_user_email_notification($user_id)) {
                     //and add user to recipients
-                    array_push($recipients, $emailTo);
+                    $recipients[] = $emailTo;
                 }
             }
             if (count($recipients) > 0) {

@@ -6,12 +6,14 @@ class WebexApp extends ExtApp
     const WEBEXURL = "url";
     const ENABLEDCOURSES = "enabledcourses";
     const WEBEXDEFAULURL = "https://webex.com/";
+    const WEBEXCUSTOMURL = 'custom_webex_url';
 
     public function __construct()
     {
         parent::__construct();
         $this->registerParam(new GenericRequiredParam($this->getName(), "WebEx URL", WebexApp::WEBEXURL, WebexApp::WEBEXDEFAULURL));
         $this->registerParam(new GenericRequiredParam($this->getName(), "Enabled courses", WebexApp::ENABLEDCOURSES, "0"));
+        $this->registerParam(new GenericRequiredParam($this->getName(), "Οι χρήστες συμπληρώνουν το WebEx URL", WebexApp::WEBEXCUSTOMURL, "0"));
     }
 
     public function getDisplayName()
