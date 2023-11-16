@@ -151,8 +151,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $google_meet_link = ($tc_type == 'googlemeet') ? "https://meet.google.com/" . $row->meeting_id : '';
         $microsoft_teams_link = ($tc_type == 'microsoftteams') ? "https://teams.live.com/" . $row->meeting_id : '';
         if ($tc_type == 'zoom') {
-            $tc_hostname = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE type = 'zoom'")->hostname;
-            $zoom_link = $tc_hostname . "j/" . $row->meeting_id . "?pwd=" . $row->mod_pw;
+            $zoom_link = $row->meeting_id . "?pwd=" . $row->mod_pw;
         }
 
         $webex_link = ($tc_type == 'webex') ? $row->meeting_id : '';
@@ -260,8 +259,10 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         }
 
         if ($tc_type == 'zoom') { // zoom
-            $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='$hostname' target='_blank'>$langGoToZoomLinkText</a></div>";
+            if ($hostname != 'zoom') { // zoom url supplied by the administrator
+                $tool_content .= "<div class='alert alert-info'>$langGoToZoomLink</div>";
+                $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='$hostname' target='_blank'>$langGoToZoomLinkText</a></div>";
+            }
 
             $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-sm-2 control-label'>$langLink:</label>
@@ -962,8 +963,12 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
                 $minutes_before, $external_users, $r_group, $sessionUsers);
         } elseif ($tc_type == 'zoom') {
             $data = parse_url($options);
-            $meeting_id = preg_replace('/\/j\//','', $data['path']);
+            //var_dump($data);
+            $meeting_id = $data['path'];
+            //var_dump("meetiing_id: $meeting_id");
             $mod_pw = preg_replace('/pwd=/','', $data['query']);
+            //var_dump("mod_pw: $mod_pw");
+            //die;
             $q = Database::get()->query("INSERT INTO tc_session SET course_id = ?d,
                                                             title = ?s,
                                                             description = ?s,
@@ -1098,7 +1103,6 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
 
     // Notify external users for new tc session
     if ($notifyExternalUsers == "1") {
-//        die($mailinglist);
         if (isset($mailinglist)) {
             $recipients = explode(',', $mailinglist);
             $emailsubject = $langBBBScheduledSession;
