@@ -1,6 +1,6 @@
 
-<div class='d-lg-flex gap-4 mt-4'>
-    <div class='flex-grow-1'>
+<div class='@if(isset($module_id) and $module_id) d-lg-flex gap-4 @else row m-auto @endif mt-4'>
+    <div class='@if(isset($module_id) and $module_id) flex-grow-1 @else col-lg-6 col-12 px-0 @endif'>
         <div class='form-wrapper form-edit mt-2 border-0 px-0'>
 			<form class='form-horizontal' role='form' method='post' action='{{ $base_url }}'>
 				<fieldset>
@@ -26,7 +26,7 @@
 			</form>
         </div>
     </div>
-	<div class='form-content-modules d-none d-lg-block'>
+	<div class='@if(isset($module_id) and $module_id) form-content-modules @else col-lg-6 col-12 @endif d-none d-lg-block'>
 		<img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>
 	</div>
 </div>

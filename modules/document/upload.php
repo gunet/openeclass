@@ -112,8 +112,24 @@ if ($can_upload) {
         </div>";
     }
 
-$tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
-                    <div class='flex-grow-1'>";
+
+    $flex_content = '';
+    $flex_grow = '';
+    $column_content = '';
+
+    if(isset($module_id) and $module_id){
+      $flex_content = 'd-lg-flex gap-4';
+      $flex_grow = 'flex-grow-1';
+      $column_content = 'form-content-modules';
+    }else{
+      $flex_content = 'row m-auto'; 
+      $flex_grow = 'col-lg-6 col-12 px-0';
+      $column_content = 'col-lg-6 col-12';
+    }
+
+
+$tool_content .= "<div class='$flex_content mt-4'>
+                    <div class='$flex_grow'>";
 
     $tool_content .= "<div class='form-wrapper form-edit border-0 px-0'>
 
@@ -280,7 +296,7 @@ $tool_content .= "<div class='d-lg-flex gap-4 mt-4'>
                     </div>
                   </div>
 
-                  <div class='form-content-modules d-none d-lg-block'>
+                  <div class='$column_content d-none d-lg-block'>
                       <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                   </div>
             </div>
