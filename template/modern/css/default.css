@@ -2194,9 +2194,7 @@ body .form-action-button-popover{
 .openCourseImg{
   width: 100%;
   max-height: 280px;
-  background-size: cover ;
-  background-repeat: no-repeat ;
-  background-position: center ;
+  object-fit: cover;
   margin: auto;
   display: block;
 }
