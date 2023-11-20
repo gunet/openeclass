@@ -4,7 +4,7 @@
  * Open eClass
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2019  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -23,7 +23,6 @@
 // For creating bbb urls & params
 $guest_allow = true;
 require_once 'bbb-api.php';
-//require_once 'om-api.php';
 require_once 'functions.php';
 require_once '../../include/init.php';
 
@@ -113,29 +112,11 @@ if ($server_type == 'bbb') { // bbb server
     $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
     header("Location: " . $host . $meeting_id);
 } elseif ($server_type == 'zoom') { // zoom
-    $host = Database::get()->querySingle("SELECT hostname FROM tc_servers WHERE id = ?s", $server_id)->hostname;
-    header("Location: " . $host . 'j/'. $meeting_id . '/?pwd=' . $mod_pw);
+    header("Location: " . $meeting_id  . '/?pwd=' . $mod_pw);
     } elseif ($server_type == 'webex') { // webex
     header("Location: " . $meeting_id);
 }
-/*
-if ($server_type == 'om') { // OM server
-    if (om_session_running($meeting_id) == false) {
-        create_om_meeting($title, $meeting_id, $record);
-    }
-    # Get session capacity
-    $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session where meeting_id=?s",$meeting_id);
-    $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
-    if ($sess->sessionUsers < get_om_connected_users($server_id))
-    {
-        display_message($langBBBMaxUsersJoinError);
-        exit;
-    } else {
-        header('Location: ' . om_join_user($meeting_id, $_GET['username'], -1, "", $_GET['username'], "", 0));
-    }
-}
-*/
 /**
  * @brief display message
  * @param message
