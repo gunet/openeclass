@@ -57,7 +57,7 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
 }, $course_id);
 
 if (isset($_GET['cat'])) {
-    $cat_id = intval(getDirectReference($_GET['cat']));
+    $cat_id = intval($_GET['cat']);
     $edit_url .= "&amp;cat=$cat_id";
 } else {
     $cat_id = false;
@@ -238,19 +238,19 @@ if ($is_editor) {
         $tool_content .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' action='$base_url' method='post'>
                     <div class='form-group'>
-                        <div class='col-sm-12'>            
+                        <div class='col-sm-12'>
                             <div class='checkbox'>
                               <label>
-                                <input type='checkbox' name='index' value='yes'$checked_index>$langGlossaryIndex                               
+                                <input type='checkbox' name='index' value='yes'$checked_index>$langGlossaryIndex
                               </label>
                             </div>
                         </div>
                     </div>
                     <div class='form-group'>
-                        <div class='col-sm-12'>            
+                        <div class='col-sm-12'>
                             <div class='checkbox'>
                               <label>
-                                <input type='checkbox' name='expand' value='yes'$checked_expand>$langGlossaryExpand                               
+                                <input type='checkbox' name='expand' value='yes'$checked_expand>$langGlossaryExpand
                               </label>
                             </div>
                         </div>
@@ -267,8 +267,8 @@ if ($is_editor) {
                                 )
                             ))
                             ."</div>
-                    </div>   
-                ". generate_csrf_token_form_field() ."                
+                    </div>
+                ". generate_csrf_token_form_field() ."
                 </form>
               </div>";
     }
@@ -325,14 +325,14 @@ if ($is_editor) {
                         <label for='term' class='col-sm-2 control-label'>$langGlossaryDefinition: </label>
                         <div class='col-sm-10'>
                             " . @text_area('definition', 4, 60, $definition) . "
-                            <span class='help-block'>".Session::getError('definition')."</span>    
+                            <span class='help-block'>".Session::getError('definition')."</span>
                         </div>
                    </div>
                    <div class='form-group".(Session::getError('url') ? " has-error" : "")."'>
                         <label for='url' class='col-sm-2 control-label'>$langGlossaryUrl: </label>
                         <div class='col-sm-10'>
                             <input type='text' class='form-control' id='url' name='url' value='$url'>
-                            <span class='help-block'>".Session::getError('url')."</span>     
+                            <span class='help-block'>".Session::getError('url')."</span>
                         </div>
                    </div>
                    <div class='form-group'>
@@ -342,7 +342,7 @@ if ($is_editor) {
                         </div>
                    </div>
                    $category_selection
-                   <div class='form-group'>    
+                   <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
                                     array(
                                         'text' => $langSave,
@@ -388,7 +388,7 @@ if (isset($_GET['edit'])) {
     $navigation[] = array('url' => $base_url,
         'name' => $langGlossary);
     $where = "AND id = ?d";
-    $terms[] = intval(getDirectReference($_GET['id']));
+    $terms[] = intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
     $where = "AND term LIKE ?s";
     $terms[] = $_GET['prefix'] . '%';
@@ -442,7 +442,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             if (!empty($g->category_id)) {
-                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=" . getIndirectReference($g->category_id) . "'>" . q($categories[$g->category_id]) . "</a></span>";
+                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat={$g->category_id}'>" . q($categories[$g->category_id]) . "</a></span>";
             } else {
                 $cat_descr = '';
             }
@@ -458,7 +458,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             $tool_content .= "<tr>
-                     <td width='150'><strong><a href='$base_url&amp;id=" . getIndirectReference($g->id) . "'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
+                     <td width='150'><strong><a href='$base_url&amp;id={$g->id}'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
                      <td><em>$definition_data</em>$urllink</td>";
 
             if ($is_editor) {
