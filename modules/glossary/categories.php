@@ -165,7 +165,7 @@ if ($is_editor) {
                          <label for='name' class='col-sm-2 control-label'>$langCategoryName: </label>
                          <div class='col-sm-10'>
                              <input type='text' class='form-control' id='term' name='name' placeholder='$langCategoryName' value='$name'>
-                             <span class='help-block'>".Session::getError('name')."</span>    
+                             <span class='help-block'>".Session::getError('name')."</span>
                          </div>
                     </div>
                     <div class='form-group'>
@@ -174,7 +174,7 @@ if ($is_editor) {
                              " . rich_text_editor('description', 4, 60, $description) . "
                          </div>
                     </div>
-                   <div class='form-group'>    
+                   <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>".
                                     form_buttons(array(
                                     array(
@@ -187,7 +187,7 @@ if ($is_editor) {
                                     )
                                 ))."</div>
                     </div>
-                ". generate_csrf_token_form_field() ."                              
+                ". generate_csrf_token_form_field() ."
                 </form>
             </div>";
     }
@@ -200,7 +200,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
 
     if ($q and count($q)) {
             $tool_content .= "
-        <div class='table-responsive glossary-categories'>    
+        <div class='table-responsive glossary-categories'>
             <table class='table-default'>
                 <tr class='list-header'><th class='text-left'>$langName</th>" .
              ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
@@ -212,7 +212,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
             } else {
                 $desc = '';
             }
-            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=" . getIndirectReference($cat->id) . "'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";
+            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat={$cat->id}'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
