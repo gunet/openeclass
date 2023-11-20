@@ -108,7 +108,7 @@ $tool_content .= "<div class='table-responsive'>
         <table id='lp_users_progress' class='table-default'>
         <thead>
             <tr class='list-header'>
-                <th>$langStudent</th>
+                <th class='col-student'>$langStudent</th>
                 <th>$langEmail</th>
                 <th>$langAm</th>
                 <th>$langGroup</th>
@@ -153,7 +153,7 @@ foreach ($usersList as $user) {
     }
     $tool_content .= "<tr>";
     if (!isset($_GET['pdf'])) {
-        $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>";
+        $tool_content .= "<td class='col-student'><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>";
     } else {
         $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
     }

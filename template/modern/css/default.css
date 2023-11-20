@@ -1728,7 +1728,7 @@ input[type="submit"].warningAdminBtn:hover {
 
 .helpAdminBtn {
   border: solid thin;
-  border-color: #B3D1FF;
+  border-color: #4F6893;
   color: #ffffff	;
   font-size: 14px;
   height:40px;
@@ -1738,14 +1738,14 @@ input[type="submit"].warningAdminBtn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #B3D1FF;
+  background-color: #4F6893;
   letter-spacing: 0px;
   line-height: 16px;
 }
 
 .helpAdminBtn:hover {
-  background-color: #a9c5ef;
-  border-color: #a9c5ef;
+  background-color: #465c82;
+  border-color: #465c82;
   color: #ffffff;
 }
 
@@ -3128,6 +3128,11 @@ tr.danger{
   .table-default tbody tr td.user-col{
     width: 25% !important;
   }
+
+  .table-default thead tr th.col-student,
+  .table-default tbody tr td.col-student{
+    width: 15% !important;
+  }
 }
 @media(min-width:1200px){
   .table-default thead tr th:first-child,
@@ -3148,6 +3153,11 @@ tr.danger{
   .table-default thead tr th.user-col,
   .table-default tbody tr td.user-col{
     width: 25% !important;
+  }
+
+  .table-default thead tr th.col-student,
+  .table-default tbody tr td.col-student{
+    width: 15% !important;
   }
 }
 

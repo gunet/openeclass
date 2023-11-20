@@ -5448,7 +5448,7 @@ function show_non_submitted($id) {
                 foreach ($groups as $row => $value){
 
                     $tool_content .= "<tr>
-                            <td>$i.</td>
+                            <td class='count-col'>$i.</td>
                             <td><a href='../group/group_space.php?course=$course_code&amp;group_id=$row'>$value</a></td>
                             </tr>";
                     $i++;
