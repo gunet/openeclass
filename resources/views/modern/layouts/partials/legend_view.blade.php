@@ -56,12 +56,12 @@
                                 <input type="hidden" name="prev_url" value="{{$go_back_url}}">
                                 @if (display_activation_link($module_id))
                                     @if($visible_module == 0)
-                                        <a class='btn submitAdminBtn' href="javascript:$('#form_id').submit();"
+                                        <a class='btn deleteAdminBtn text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}">
                                             <i class="fa-regular fa-eye-slash"></i>
                                         </a>
                                     @else
-                                        <a class='btn submitAdminBtn' href="javascript:$('#form_id').submit();"
+                                        <a class='btn successAdminBtn text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}">
                                             <i class="fa-regular fa-eye"></i>
                                         </a>
@@ -73,20 +73,20 @@
                     @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                         @php $getToken = generate_csrf_token_link_parameter(); @endphp
                         @if($module_id == MODULE_ID_ANNOUNCE)
-                            <a class='btn submitAdminBtn' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
+                            <a class='btn warningAdminBtn text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}">
                                 <i class="fa-solid fa-rss"></i>
                             </a>
                         @else
-                            <a class='btn submitAdminBtn' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
+                            <a class='btn warningAdminBtn text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}">
                                 <i class="fa-solid fa-rss"></i>
                             </a>
                         @endif
                     @endif
                     @if($toolName)
-                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn submitAdminBtn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                            <i class="fa-solid fa-circle-question"></i>
+                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                            <i class="fa-solid fa-question"></i>
                         </a>
                     @endif
                 </div>

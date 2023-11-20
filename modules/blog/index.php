@@ -207,11 +207,24 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $checkSharingEn = "";
         }
 
+        $flex_content = '';
+        $flex_grow = '';
+        $column_content = '';
+
+        if(isset($course_id) and $course_id){
+            $flex_content = 'd-lg-flex gap-4';
+            $flex_grow = 'flex-grow-1';
+            $column_content = 'form-content-modules';
+        }else{
+            $flex_content = 'row m-auto'; 
+            $flex_grow = 'col-lg-6 col-12 px-0';
+            $column_content = 'col-lg-6 col-12';
+        }
 
         $tool_content .= "
             
-            <div class='d-lg-flex gap-4 mt-4'>
-                <div class='flex-grow-1'>
+            <div class='$flex_content mt-4'>
+                <div class='$flex_grow'>
                     <div class='form-wrapper form-edit rounded border-0 px-0'>
                         <form class='form-horizontal' action='' role='form' method='post'>
                             <fieldset>                               
@@ -304,7 +317,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
                         </form>
                     </div>
                 </div>
-                <div class='d-none d-lg-block'>
+                <div class='$column_content d-none d-lg-block'>
                     <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
                 </div>
             </div>
@@ -392,11 +405,24 @@ if ($action == "createPost") {
         }
 
 
+        $flex_content = '';
+        $flex_grow = '';
+        $column_content = '';
+
+        if(isset($course_id) and $course_id){
+            $flex_content = 'd-lg-flex gap-4';
+            $flex_grow = 'flex-grow-1';
+            $column_content = 'form-content-modules';
+        }else{
+            $flex_content = 'row m-auto'; 
+            $flex_grow = 'col-lg-6 col-12 px-0';
+            $column_content = 'col-lg-6 col-12';
+        }
 
         $tool_content .= "
 <div class='col-12'>
-    <div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'>
+    <div class='$flex_content mt-4'>
+        <div class='$flex_grow'>
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                     <fieldset>
@@ -447,7 +473,7 @@ if ($action == "createPost") {
                 </form>
             </div>
         </div>
-        <div class='d-none d-lg-block'>
+        <div class='$column_content d-none d-lg-block'>
             <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
     </div>
@@ -507,10 +533,24 @@ if ($action == "editPost") {
                                        </div>";
             }
 
+            $flex_content = '';
+            $flex_grow = '';
+            $column_content = '';
+
+            if(isset($course_id) and $course_id){
+                $flex_content = 'd-lg-flex gap-4';
+                $flex_grow = 'flex-grow-1';
+                $column_content = 'form-content-modules';
+            }else{
+                $flex_content = 'row m-auto'; 
+                $flex_grow = 'col-lg-6 col-12 px-0';
+                $column_content = 'col-lg-6 col-12';
+            }
+
             $tool_content .= "
 <div class='col-12'>
-    <div class='d-lg-flex gap-4 mt-4'>
-        <div class='flex-grow-1'>
+    <div class='$flex_content mt-4'>
+        <div class='$flex_grow'>
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                     <fieldset>
@@ -563,7 +603,7 @@ if ($action == "editPost") {
             </div>
         </div>
 
-        <div class='form-content-modules d-none d-lg-block'>
+        <div class='$column_content d-none d-lg-block'>
             <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
     </div>

@@ -258,7 +258,7 @@ function tools($id, $vis) {
     } else {
         $content = "
             <td class='option-btn-cell '>
-                <div class='d-flex justify-content-center align-items-center gap-2'>
+                <div class='d-flex justify-content-end align-items-center gap-2'>
                     <div class='reorder-btn' style='font-size: 16px; cursor: pointer;'>
                         <span class='fa fa-arrows' style='cursor: pointer;'></span>
                     </div>

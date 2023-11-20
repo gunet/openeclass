@@ -172,8 +172,23 @@ if (!isset($_GET['from_other'])) {
     }
 }
 
-$tool_content .= '<div class="d-lg-flex gap-4 mt-4">
-<div class="flex-grow-1"><div class="form-wrapper form-edit rounded">';
+
+$flex_content = '';
+$flex_grow = '';
+$column_content = '';
+
+if(!isset($_GET['from_admin']) and !isset($_GET['from_other'])){
+    $flex_content = 'd-lg-flex gap-4';
+    $flex_grow = 'flex-grow-1';
+    $column_content = 'form-content-modules';
+}else{
+    $flex_content = 'row m-auto'; 
+    $flex_grow = 'col-lg-6 col-12 px-0';
+    $column_content = 'col-lg-6 col-12';
+}
+
+$tool_content .= '<div class="'.$flex_content.' mt-4">
+<div class="'.$flex_grow.'"><div class="form-wrapper form-edit rounded">';
 if (isset($_GET['from_other'])) {
     $tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?from_other=TRUE">';
 } else {
@@ -281,7 +296,7 @@ $tool_content .= "<div class='row form-group mt-5'><div class='col-12 d-flex jus
     ))."
   
 
-</div></div></form></div></div><div class='form-content-modules d-none d-lg-block'>
+</div></div></form></div></div><div class='$column_content d-none d-lg-block'>
 <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
 </div>
 </div>";

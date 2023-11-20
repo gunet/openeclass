@@ -48,7 +48,7 @@
 
                         <div class='col-12'>
                             <div class='table-responsive mt-0'>
-                                <table id='ann_table_my_ann' class='table-default'>
+                                <table id='ann_table_my_ann' class='table-default annn_table_my_ann'>
                                     <thead>
                                     <tr class='list-header'>
                                         <th>{{ trans('langAnnouncement') }}</th>

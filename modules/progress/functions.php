@@ -940,14 +940,14 @@ function display_available_assignments($element, $element_id, $activity_type, $u
             "<input type='hidden' name = '$element_name' value='$element_id'>" .
             "<div class='table-responsive'><table class='table-default'>" .
             "<thead><tr class='list-header'>" .
-            "<th>&nbsp;$langTitle</th>" .
-            "<th style='width:160px;'>$langGroupWorkDeadline_of_Submission</th>";
+            "<th>$langTitle</th>" .
+            "<th>$langGroupWorkDeadline_of_Submission</th>";
         if ($activity_type == AssignmentEvent::ACTIVITY) {
-            "<th style='width:5px;'>$langOperator</th>" .
-            "<th style='width:50px;'>$langGradebookGrade</th>";
+            "<th>$langOperator</th>" .
+            "<th>$langGradebookGrade</th>";
         }
         $tool_content .=
-            "<th style='width:10px;'>$langChoice</th>" .
+            "<th>$langChoice</th>" .
             "</tr></thead>";
         foreach ($result as $row) {
             $assignment_id = $row->id;
@@ -958,7 +958,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
             if ($activity_type == AssignmentEvent::ACTIVITY) {
                 $tool_content .=
                 "<td>" . selection(get_operators(), "operator[$assignment_id]") . "</td>" .
-                "<td><input style='width:50px;' type='text' name='threshold[$assignment_id]' value=''></td>";
+                "<td><input class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
             }
             $tool_content .=
                 "<td><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
@@ -2253,7 +2253,7 @@ function certificate_settings($element, $element_id = 0) {
     global $tool_content, $head_content, $course_code,
            $langTemplate, $course_id, $language, $langMessage,
            $langTitle, $langSave, $langInsert, $langCertDeadlineHelp,
-           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlServer;
+           $langDescription, $langpublisher, $langIcon, $langCertificateDeadline, $urlServer, $urlAppend;
 
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -2414,13 +2414,13 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='message' class='col-sm-2 control-label-notes'>$langMessage</label>
-                    <div class='col-sm-10'>
+                    <label for='message' class='col-sm-12 control-label-notes'>$langMessage</label>
+                    <div class='col-sm-12'>
                         <textarea class='form-control' name='message' rows='3' maxlength='200'>$message</textarea>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langpublisher</label>
+                    <label for='title' class='col-sm-12 control-label-notes'>$langpublisher</label>
                     <div class='col-sm-12'>
                         <input class='form-control' type='text' name='issuer' value='$issuer'>
                     </div>

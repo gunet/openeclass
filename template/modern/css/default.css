@@ -1582,6 +1582,17 @@ label:has(input[type="checkbox"]:disabled){
   margin-bottom: 6px;
 }
 
+.submitAdminBtn,
+.submitAdminBtnDefault,
+.login-form-submit,
+.cancelAdminBtn,
+.successAdminBtn,
+.deleteAdminBtn,
+.warningAdminBtn,
+.helpAdminBtn{
+  transition: 0.3s ease;
+}
+
 .submitAdminBtn, .cancelAdminBtn {
   border: solid thin;
   border-color: #0073E6;
@@ -1712,6 +1723,29 @@ button[type="submit"].warningAdminBtn:hover,
 input[type="submit"].warningAdminBtn:hover {
   background-color: #F57600;
   border-color: #F57600;
+  color: #ffffff;
+}
+
+.helpAdminBtn {
+  border: solid thin;
+  border-color: #B3D1FF;
+  color: #ffffff	;
+  font-size: 14px;
+  height:40px;
+  min-width: 40px;
+  font-weight: 700; font-style: normal;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #B3D1FF;
+  letter-spacing: 0px;
+  line-height: 16px;
+}
+
+.helpAdminBtn:hover {
+  background-color: #a9c5ef;
+  border-color: #a9c5ef;
   color: #ffffff;
 }
 
@@ -3000,12 +3034,12 @@ tr td{
 }
 
 
-thead tr th{
+/* thead tr th{
   max-width: 150px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
+} */
 
 thead tr th, 
 tfoot tr th{
@@ -3023,7 +3057,8 @@ tbody tr{
 }
 
 
-tbody tr td{
+tbody tr td,
+thead tr th{
   padding: 10px 10px 10px 10px;
 }
 
@@ -3073,6 +3108,48 @@ tr.danger{
   background-color: #FDEFE9;
 }
 
+
+@media(min-width:992px) and (max-width:1199px){
+  .table-default thead tr th:first-child,
+  .table-default tbody tr td:first-child{
+    width: 35% !important;
+  }
+  .annn_table_my_ann thead tr th:first-child,
+  .annn_table_my_ann tbody tr td:first-child{
+    width: 80% !important;
+  }
+
+  .table-default thead tr th.count-col,
+  .table-default tbody tr td.count-col{
+    width: 5% !important;
+  }
+
+  .table-default thead tr th.user-col,
+  .table-default tbody tr td.user-col{
+    width: 25% !important;
+  }
+}
+@media(min-width:1200px){
+  .table-default thead tr th:first-child,
+  .table-default tbody tr td:first-child{
+    width: 40% !important;
+  }
+
+  .annn_table_my_ann thead tr th:first-child,
+  .annn_table_my_ann tbody tr td:first-child{
+    width: 80% !important;
+  }
+
+  .table-default thead tr th.count-col,
+  .table-default tbody tr td.count-col{
+    width: 5% !important;
+  }
+
+  .table-default thead tr th.user-col,
+  .table-default tbody tr td.user-col{
+    width: 25% !important;
+  }
+}
 
 /**********************************************************************************************************************/
 /**************************************************** TEMP LABELS *****************************************************/

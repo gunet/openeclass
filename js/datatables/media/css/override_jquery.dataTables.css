@@ -64,7 +64,8 @@
     }
   }
 
-  table.dataTable tbody tr td{
+  table.dataTable tbody tr td,
+  table.dataTable thead tr th{
     padding: 10px 10px 10px 10px;
   }
 
