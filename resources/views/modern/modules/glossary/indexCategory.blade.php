@@ -6,14 +6,14 @@
     <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
 
                 <div class="col_maincontent_active">
-                
+
                         <div class="row">
 
                             @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
@@ -27,7 +27,7 @@
                                     @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                                 </div>
                             </div>
-                                    
+
                             @include('layouts.partials.legend_view')
 
 
@@ -37,7 +37,7 @@
                             @if(Session::has('message'))
                             <div class='col-12 all-alerts'>
                                 <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                    @php 
+                                    @php
                                         $alert_type = '';
                                         if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                             $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -49,7 +49,7 @@
                                             $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                         }
                                     @endphp
-                                    
+
                                     @if(is_array(Session::get('message')))
                                         @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                         {!! $alert_type !!}<span>
@@ -59,7 +59,7 @@
                                     @else
                                         {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                     @endif
-                                    
+
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                                 </div>
                             </div>
@@ -67,9 +67,9 @@
 
                             @if (count($categories))
                             <div class='col-12'>
-                                <div class='table-responsive'>    
+                                <div class='table-responsive'>
                                     <table class='table-default' id="glossary_table">
-                                         <thead>   
+                                         <thead>
                                             <tr class='list-header'>
                                             <th>{{ trans('langName') }}</th>
                                             <th>{{ trans('langDescription')}}</th>
@@ -81,7 +81,7 @@
                                             @foreach ($categories as $category)
                                             <tr>
                                                 <td>
-                                                    <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($category->id) }}'>
+                                                    <a href='{{ $base_url }}&amp;cat={{ $category->id }}'>
                                                          {{ $category->name }}
                                                     </a>
                                                 </td>
@@ -101,7 +101,7 @@
                                                             'confirm' => trans('langConfirmDelete')
                                                             )
                                                         )
-                                                    ) !!}    
+                                                    ) !!}
                                                 </td>
                                                 @endif
                                             </tr>
@@ -110,16 +110,16 @@
                                     </table>
                                 </div>
                             </div>
-                            @else 
+                            @else
                                 <div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{trans('langAnalyticsNotAvailable')}} {{trans('langGlossary')}}.</span></div></div>
                             @endif
-                                   
-                            
+
+
                         </div>
-                   
+
                 </div>
             </div>
-        
+
     </div>
     </div>
 @endsection

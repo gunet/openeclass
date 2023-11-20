@@ -37,7 +37,7 @@
                                     @if(Session::has('message'))
                                     <div class='col-12 all-alerts'>
                                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                            @php 
+                                            @php
                                                 $alert_type = '';
                                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -49,7 +49,7 @@
                                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                                 }
                                             @endphp
-                                            
+
                                             @if(is_array(Session::get('message')))
                                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                                 {!! $alert_type !!}<span>
@@ -59,7 +59,7 @@
                                             @else
                                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                             @endif
-                                            
+
                                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     </div>
@@ -93,16 +93,16 @@
                                     <div class='col-12'>
                                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-2 g-4">
                                             @foreach($glossary_terms as $glossary_term)
-                                               
+
                                                 <div class="col">
                                                     <div class="card panelCard px-lg-4 py-lg-3 h-100">
-                                                        <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">                   
-                                                           
-                                                           
-                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&amp;id=" . getIndirectReference($glossary_term->id) }}'>
+                                                        <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">
+
+
+                                                                <a class='ViewGroup TextBold' href='{{ $base_url."&amp;id=" . $glossary_term->id }}'>
                                                                     {{ $glossary_term->term }}
                                                                 </a>
-                                                           
+
 
                                                             @if($is_editor)
                                                                 <div>
@@ -121,7 +121,7 @@
                                                                     !!}
                                                                 </div>
                                                             @endif
-                                                          
+
                                                         </div>
                                                         <div class="card-body">
                                                             <p class="card-text">
@@ -138,7 +138,7 @@
                                                                 <p class='mb-0 TextBold'>{{ trans('langCategory') }}</p>
                                                                 <p class='small-text'>
                                                                     @if ($glossary_term->category_id)
-                                                                        <a href='{{ $base_url }}&amp;cat={{ getIndirectReference($glossary_term->category_id) }}'>
+                                                                        <a href='{{ $base_url }}&amp;cat={{ $glossary_term->category_id }}'>
                                                                             {{ $categories[$glossary_term->category_id] }}
                                                                         </a>
                                                                     @else
@@ -168,11 +168,11 @@
                                                                     @endif
                                                                 </p>
                                                             </p>
-                                                            
-                                                            
+
+
                                                         </div>
                                                         <div class='card-footer d-flex justify-content-center align-items-center bg-default border-0 mb-2'>
-                                                           
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -188,7 +188,7 @@
                         </div>
                 </div>
             </div>
-        
+
     </div>
     </div>
 @endsection

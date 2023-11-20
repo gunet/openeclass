@@ -58,7 +58,7 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
 $data['categories'] = $categories;
 
 if (isset($_GET['cat'])) {
-    $data['cat_id'] = $cat_id = intval(getDirectReference($_GET['cat']));
+    $data['cat_id'] = $cat_id = intval($_GET['cat']);
     $data['edit_url'] = $base_url."&amp;cat=$cat_id";
 } else {
     $data['cat_id'] = $cat_id = false;
@@ -334,7 +334,7 @@ if (isset($_GET['edit'])) {
     $navigation[] = array('url' => $base_url,
         'name' => $langGlossary);
     $where = "AND id = ?d";
-    $terms[] = intval(getDirectReference($_GET['id']));
+    $terms[] = intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
     $where = "AND term LIKE ?s";
     $terms[] = $_GET['prefix'] . '%';
