@@ -98,13 +98,16 @@ if (isset($_POST['submit'])) {
             $line = strtok("\n");
         }
     }
+
     if (isset($success_mgs)) {
         Session::flash('message',$success_mgs);
-        Session::flash('alert-class', 'alert-success'); }
+        Session::flash('alert-class', 'alert-success');
+    }
     if (isset($error_mgs)) {
         Session::flash('message',$error_mgs);
-        Session::flash('alert-class', 'alert-danger');}
-    redirect_to_home_page('modules/admin/multiedituser.php');
+        Session::flash('alert-class', 'alert-danger');
+    }
+   redirect_to_home_page('modules/admin/index.php');
 } else {
 
     $usernames = '';
@@ -263,10 +266,9 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['activate_submit'])) {
         $infoText = $langActivateUserInfo;
         $monthsField = "
-        
                 <div class='form-group mt-3'>
-                    <label class='col-sm-12 control-label-notes' for='months-id'>$langActivateMonths:</label>
-                    <div class='col-sm-12'>
+                    <label class='col-sm-2 control-label-notes' for='months-id'>$langActivateMonths:</label>
+                    <div class='col-sm-2'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
                     </div>
                 </div>";
