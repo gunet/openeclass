@@ -275,22 +275,29 @@ function view($view_file, $view_data = array()) {
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 
+        $cl_cache = time();
         //Get .css files in order to export more info about themes
         if($theme_options->name == 'Default Dark'){
             $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?v=4.0-dev'/>
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".$cl_cache."'/>
             ";
         }
 
         if($theme_options->name == 'Crimson'){
             $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?v=4.0-dev'/>
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".$cl_cache."'/>
             ";
         }
 
         if($theme_options->name == 'Emerald'){
             $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?v=4.0-dev'/>
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".$cl_cache."'/>
+            ";
+        }
+
+        if($theme_options->name == 'Wood'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".$cl_cache."'/>
             ";
         }
 

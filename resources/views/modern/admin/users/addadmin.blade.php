@@ -150,7 +150,7 @@
                 <div class='table-responsive'>
                     <table class='table-default'>
                         <thead><tr class='list-header'>
-                            <th class='center'>ID</th>
+                            <th class='count-col'>ID</th>
                             <th>{{ trans('langSurnameName') }}</th>
                             <th>{{ trans('langUsername') }}</th>
                             <th>{{ trans('langRole') }}</th>
@@ -159,7 +159,7 @@
 
                         @foreach ($admins as $admin)
                             <tr>
-                                <td>{{ $admin->id }}</td>
+                                <td class='count-col'>{{ $admin->id }}</td>
                                 <td>{{ $admin->givenname }} {{ $admin->surname }}</td>
                                 <td>{{ $admin->username }}</td>
                                 <td>

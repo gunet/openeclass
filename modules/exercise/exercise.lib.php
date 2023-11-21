@@ -452,7 +452,7 @@ function display_exercise($exercise_id) {
                     }
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
-                            $tool_content .= "<tr><td style='width: 70px;'><div align='center'>";
+                            $tool_content .= "<tr><td style='width: 70px;'><div align='start'>";
                             if ($answerCorrect) {
                                 $icon_choice = "fa-square-check";
                             } else {

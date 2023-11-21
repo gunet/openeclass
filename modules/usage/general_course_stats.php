@@ -57,7 +57,7 @@ $tschema = "<thead><tr class='list-header'>"
     . "</tr></thead>"
     . "<tbody></tbody>"
     . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
-$tool_content .= table_placeholder("cdetails1", "table-default table-striped table-bordered", $tschema, "$langHits $langAnd $langDuration");
+$tool_content .= table_placeholder("cdetails1", "table-default table-striped table-bordered table-logs", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
 
 if (!isset($_GET['id'])) {
@@ -70,7 +70,7 @@ if (!isset($_GET['id'])) {
         . "<th>$langEmail</th>"
         . "</tr></thead>"
         . "<tbody></tbody>";
-    $tool_content .= table_placeholder("cdetails2", "table-default table-striped table-bordered", $tschema, $langMonthlyCourseRegistrations);
+    $tool_content .= table_placeholder("cdetails2", "table-default table-striped table-bordered table-logs", $tschema, $langMonthlyCourseRegistrations);
     $tool_content .= "</div></div>";
 }
 
@@ -86,5 +86,5 @@ $tschema = "<thead><tr>"
     . "<th>$langEmail</th>"
     . "</tr></thead>"
     . "<tbody></tbody>";
-$tool_content .= table_placeholder("cdetails3", "table-default table-striped table-bordered", $tschema, $langUsersLog);
+$tool_content .= table_placeholder("cdetails3", "table-default table-striped table-bordered table-logs", $tschema, $langUsersLog);
 $tool_content .= "</div></div>";

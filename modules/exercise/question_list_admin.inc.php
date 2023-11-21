@@ -484,7 +484,7 @@ if ($nbrQuestions) {
         <table class='table-default'>
         <thead class='list-header'>        
             <tr>
-                <th>#</th>
+                <th class='count-col'>#</th>
                  <th>$langQuestionList $info_random_text</th>
                  <th></th>
             </tr>
@@ -549,7 +549,7 @@ if ($nbrQuestions) {
         }
 
         $tool_content .= "<tr data-id='$ewq_id'>
-            <td>" . $i . ".</td>
+            <td class='count-col'>" . $i . ".</td>
             <td>" . $legend . "</td>";
         $tool_content .= "<td class='option-btn-cell'>";
         $tool_content .= "

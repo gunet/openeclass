@@ -69,7 +69,7 @@ if (!in_array($language, $session->active_ui_languages)) {
 if (!isset($_REQUEST['action'])) {
     $data['action_bar'] = action_bar(array(
         array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
+                'url' => "index.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary'),
             array('title' => $langAdd,
@@ -81,7 +81,7 @@ if (!isset($_REQUEST['action'])) {
 } else {
     $data['action_bar'] = action_bar(array(
             array('title' => $langBack,
-                'url' => "$_SERVER[SCRIPT_NAME]",
+                'url' => "index.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary')));
 }

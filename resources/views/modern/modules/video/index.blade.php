@@ -168,7 +168,7 @@
                                                 @endif
                                             </th>
                                             @if ($display_tools)
-                                                <td class='option-btn-cell text-center'>
+                                                <td class='option-btn-cell text-end'>
                                                     {!!
                                                     action_button(array(
                                                         array('title' => $GLOBALS['langEditChange'],

@@ -19,7 +19,7 @@ $tool_content .= action_bar(array(
                     ));
 
 $tool_content .= "<div class='table-responsive'>
-                    <table class='table-default'>            
+                    <table class='table-default table-logs'>            
                     <thead><tr class='list-header'>
                         <th>$langFaculties</th>
                         <th>$langTeachers</th>

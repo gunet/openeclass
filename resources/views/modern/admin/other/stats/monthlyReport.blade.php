@@ -26,7 +26,7 @@
 
                     <div class='col-12'>
                         <div class='table-responsive'>
-                            <table class='table-default'>
+                            <table class='table-default table-logs'>
                                 <thead><tr>
                                     <th>{{ trans('langMonth') }}</th>
                                     <th>{{ trans('langTeachers') }}</th>

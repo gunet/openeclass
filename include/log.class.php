@@ -143,7 +143,7 @@ class Log {
                     $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langModule: " . $modules[$module_id]['title'] . "</span></div></div>";
                 }
             }
-            $tool_content .= "<div class='col-12'><div class='table-responsive'><table id = 'log_results_table' class='table-default'>";
+            $tool_content .= "<div class='col-12'><div class='table-responsive'><table id = 'log_results_table' class='table-default table-logs'>";
             $tool_content .= "<thead>";
             // log header
             $tool_content .= "<tr class='list-header'>

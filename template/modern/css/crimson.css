@@ -195,7 +195,7 @@
     background-color: #B70A0A;
   }
   .radio:has(.input-StatusCourse:checked) .fa{
-    color: #2B3944;
+    color: #ffffff;
   }
   
   label:has(input[type="radio"]:disabled){
@@ -409,6 +409,13 @@
     background-color: #B70A0A;
     color: #ffffff;
   }
+
+  .submitAdminBtn:focus,
+.submitAdminBtn:active{
+  border-color: #B70A0A;
+  color: #B70A0A;
+  background-color: #ffffff;
+}
   
   .submitAdminBtnDefault, input[type="submit"], button[type="submit"]{
     background-color: #B70A0A;
@@ -416,7 +423,7 @@
     border-color: #B70A0A;
   }
   .submitAdminBtnDefault:hover, input[type="submit"]:hover, button[type="submit"]:hover {
-    background-color: #B70A0A;
+    background-color: #9e0909;
     color: #ffffff;
   }
   
@@ -681,8 +688,8 @@
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover{
-    background-color: #B70A0A;
-    border-color: #B70A0A;
+    background-color: #9e0909;
+    border-color: #9e0909;
     color: #ffffff;
   }
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before,
@@ -700,8 +707,8 @@
   .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
   .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover{
     background-color: #ffffff;
-    border-color: #B70A0A;
-    color: #B70A0A;
+    border-color: #9e0909;
+    color: #9e0909;
   }
   
   .submitAdminBtnClassic.active,
@@ -925,7 +932,7 @@
     color: #ffffff;
   }
   .myProfileBtn:hover{
-    background-color: #B70A0A;
+    background-color: #9e0909;
     color: #ffffff;
   }
 
@@ -935,7 +942,7 @@
   }
 
   .row-course:hover td:first-child, .row-course:hover td:last-child{
-    background-color: #EFF2FB ;
+    background-color: #EFF6FF ;
   }
 
   .showCoursesBars, .showCoursesPics{
@@ -1163,7 +1170,7 @@
 
 
   .visibleFile{ 
-    color: #ffffff; 
+    color: #2B3944; 
   }
 
   .docPanel{ 
@@ -1656,6 +1663,11 @@ color:#ffffff;
     .module-container{
       background-color: #F7F9FE;
     }
+  }
+
+  .alert-info a{
+    color: #84bef7;
+    text-decoration: underline;
   }
 
 

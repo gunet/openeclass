@@ -336,13 +336,15 @@ $tool_content .= "<div class='col-12'>
 
                                                 
                                                 $tool_content .= "<tr>
-                                                                    <td class='d-flex justify-content-between align-items-center'>
-                                                                        <a type='button' href='group_space.php?course=$course_code&amp;group_id=$gr->id'>" . q($gr->name) . "
-                                                                            &nbsp<span class='$link_class text-danger'></span>
-                                                                        </a>
-                                                                        <button class='btn submitAdminBtn btn-sm showSettings' type='button' data-bs-toggle='collapse' data-bs-target='#CollapseGroup_$gr->id'>
-                                                                            <span class='fa fa-cogs'></span>
-                                                                        </button>
+                                                                    <td>
+                                                                        <div class='d-flex justify-content-between align-items-center'>
+                                                                            <a type='button' href='group_space.php?course=$course_code&amp;group_id=$gr->id'>" . q($gr->name) . "
+                                                                                &nbsp<span class='$link_class text-danger'></span>
+                                                                            </a>
+                                                                            <button class='btn submitAdminBtn btn-sm showSettings' type='button' data-bs-toggle='collapse' data-bs-target='#CollapseGroup_$gr->id'>
+                                                                                <span class='fa fa-cogs'></span>
+                                                                            </button>
+                                                                        </div>
                                                                     </td>
                                                                     ";
                                                 $tool_content .= "</tr>";

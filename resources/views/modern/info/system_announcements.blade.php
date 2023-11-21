@@ -17,7 +17,7 @@
 
                     <div class='col-12'>
                         <div class='table-responsive'>
-                            <table id='ann_table_admin_logout' class='table-default'>
+                            <table id='ann_table_admin_logout' class='table-default annn_table_my_ann'>
                                 <thead>
                                 <tr class='list-header'>
                                     <th>{{ trans('langAnnouncement') }}</th>

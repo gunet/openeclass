@@ -170,14 +170,14 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg text-white"></span> </a></div>';
+        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></div>';
     } else {
-        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left text-white'></span></a></div>";
+        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left'></span></a></div>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg text-white"></span></a></div>';
+        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></div>';
     } else {
-        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right text-white'></span></a></div>";
+        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></div>";
     }
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
@@ -251,18 +251,18 @@ echo "<!DOCTYPE HTML>
     </script>
 </head>
 <body>
-   <nav class='navbar navbar-expand-md navbar-dark fixed-top bg-dark'>
-      <div class='container-fluid'>
-        
-            <div class='col-2'>
-                <a id='leftTOCtoggler' class='btn text-white'><span class='fa fa-bars fa-lg'></span></a>
+   <nav class='navbar navbar-eclass py-0 bg-light'>
+      <div class='container-fluid header-container py-0'>
+        <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
+            <div>
+                <a id='leftTOCtoggler' class='btn text-dark'><span class='fa fa-bars fa-lg text-dark'></span></a>
                 <a id='toc_logo' class='navbar-brand hidden-xs ms-5' href='#'><img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'></a>
             </div>
-            <div class='col-10'>
+            <div>
                     <div class='row'>
                         <div id='navigation-btns' class='col-9 d-inline-flex justify-content-end align-items-top'>
                             $prevNextString
-                            <div id='close-btn'><a class='ms-5 text-white' href='$returl' target='_top'><span class='fa-solid fa-xmark fa-lg text-warning'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></div>
+                            <div id='close-btn'><a class='ms-5' href='$returl' target='_top'><span class='fa-solid fa-xmark fa-lg text-warning'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></div>
                         </div>
                         <div class='col-3 d-flex justify-content-end progressbar-plr'>";
 
@@ -274,7 +274,7 @@ echo "<!DOCTYPE HTML>
                             }
                 echo "</div></div>
             </div>
-         
+        </div>
       </div>
    </nav>
 </body>

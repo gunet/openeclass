@@ -202,7 +202,7 @@ foreach ($result as $row) {
         $tool_content .= "</td>
                 </tr>
                 <tr class='list-header'>
-                  <th>" . $langStart . "</th>
+                  <th style='width:20% !important;'>" . $langStart . "</th>
                   <th>" . $langExerciseDuration . "</th>
                   <th>" . $langTotalScore . "</th>
                   <th>" . $langCurrentStatus. "</th>
@@ -277,7 +277,7 @@ foreach ($result as $row) {
                 $row_class = " class='danger' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptCanceled''";
             }
 
-            $tool_content .= "<tr$row_class><td>" . q($row2->record_start_date) . "</td>";
+            $tool_content .= "<tr$row_class><td style='width:20% !important;'>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' || empty($row2->time_duration) || $row2->attempt_status == ATTEMPT_ACTIVE) { // for compatibility
                 $tool_content .= "<td>$langNotRecorded</td>";
             } else {

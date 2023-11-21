@@ -38,7 +38,7 @@
                                         <table class='table-default nocategory-links'>
                                             <tr class='list-header'>
                                                 <th>{{ trans('langVideoDirectory') }}</th>
-                                                <th class='text-center' style='width:134px'>{{ trans('langDate') }}</th>
+                                                <th>{{ trans('langDate') }}</th>
                                             </tr>
                                             @include('modules.video.common.videoList')
                                         </table>
@@ -56,7 +56,7 @@
                                                 <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
                                                     {!! icon('fa-folder-open', $GLOBALS['langViewShow']) !!}
                                                 </th>
-                                                <th class='text-center' style='width:100px;'>{{ trans('langDate') }}</th>
+                                                <th>{{ trans('langDate') }}</th>
                                             </tr>
                                         @foreach ($categories as $myrow)
                                             <?php

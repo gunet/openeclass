@@ -120,7 +120,7 @@ switch ($cmd) {
                         <table class='table-default'>
                         <tr>
                         <td width=\"160\"><label class='control-label-notes' for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
-                        <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
+                        <td><input class=\"form-control\" type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
                                 <input class='btn submitAdminBtn btn-sm mt-2' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
                                 <input type=\"hidden\" name=\"module_id\" value=\"" . (int) $_GET['module_id'] . "\">

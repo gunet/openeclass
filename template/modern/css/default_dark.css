@@ -840,6 +840,13 @@
     background-color: #74AFE9;
     color: #ffffff;
   }
+
+  .submitAdminBtn:focus,
+  .submitAdminBtn:active{
+    border-color: #74AFE9;
+    color: #74AFE9;
+    background-color: #212D37;
+  }
   
   .submitAdminBtnDefault, input[type="submit"], button[type="submit"]{
     background-color: #74AFE9;
@@ -847,8 +854,9 @@
     border-color: #74AFE9;
   }
   .submitAdminBtnDefault:hover, input[type="submit"]:hover, button[type="submit"]:hover {
-    background-color: #74AFE9;
+    background-color: #6fa6dd;
     color: #ffffff;
+    border-color: #6fa6dd;
   }
   
   .deleteAdminBtn, 
@@ -1235,8 +1243,8 @@
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover{
-    background-color: #74AFE9;
-    border-color: #74AFE9;
+    background-color: #6fa6dd;
+    border-color: #6fa6dd;
     color: #ffffff;
   }
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn:hover .settings-icons::before,
@@ -1798,8 +1806,9 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #ffffff;
   }
   .myProfileBtn:hover{
-    background-color: #74AFE9;
+    background-color: #6fa6dd;
     color: #ffffff;
+    border-color: #6fa6dd;
   }
 
 
@@ -2033,7 +2042,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
 
   .visibleFile{ 
-    color: #ffffff; 
+    color: #2B3944; 
   }
 
   .docPanel{ 
@@ -2639,6 +2648,11 @@ tr.warning:hover{
   }
   .ContentLeftNav {
       background: #212D37;
+  }
+
+  .alert-info a{
+    color: #84bef7;
+    text-decoration: underline;
   }
 
 

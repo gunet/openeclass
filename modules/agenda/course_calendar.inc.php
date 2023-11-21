@@ -623,7 +623,7 @@ require_once 'include/lib/references.class.php';
             }
             $eventlist .= "</td>";
             if ($type == 'admin' and $is_admin == true) {
-               $eventlist .= "<td class='option-btn-cell'>";
+               $eventlist .= "<td class='option-btn-cell text-end'>";
                $eventlist .= action_button([
                    [ 'title' => $langEditChange,
                      'url' => "?admin=1&amp;modify=$myrow->id",
@@ -643,7 +643,7 @@ require_once 'include/lib/references.class.php';
               $eventlist .= "</td>";
             } else {
                if ($is_editor) {
-                    $eventlist .= "<td class='option-btn-cell'>";
+                    $eventlist .= "<td class='option-btn-cell text-end'>";
                     $eventlist .= action_button([
                         [ 'title' => $langEditChange,
                           'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
@@ -665,7 +665,7 @@ require_once 'include/lib/references.class.php';
                     ]);
                     $eventlist .= "</td>";
                 } elseif ($type == 'personal') { // personal or admin event
-                    $eventlist .= "<td class='option-btn-cell'>";
+                    $eventlist .= "<td class='option-btn-cell text-end'>";
                     $eventlist .= action_button([
                         [ 'title' => $langEditChange,
                           'url' => "?modify=$myrow->id",

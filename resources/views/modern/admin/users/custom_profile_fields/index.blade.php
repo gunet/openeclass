@@ -55,7 +55,7 @@
                         
                         @foreach ($result as $res)
                             <div id='cat_{{ getIndirectReference($res->id) }}' class='table-responsive'>
-                                <table class='table-default'>
+                                <table class='table-default table-custom-profile'>
                                 <caption class='tile__name ps-1 pe-1'>
                                     <strong>{{ trans('langCategory') }} :</strong> {{ $res->name }}
                                     <div class='float-end'>

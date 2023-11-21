@@ -244,7 +244,7 @@ function expanded_faculte($facid, $uid) {
 
     $retString .= "<div class='table-responsive mt-4'><table class='table-default'>";
     $retString .= "<thead><tr class='list-header'>";
-    $retString .= "<th>$langRegistration</th>";
+    $retString .= "<th style='width:10% !important;'>$langRegistration</th>";
     $retString .= "<th>$langCourseCode</th>";
     $retString .= "<th>$langTeacher</th>";
     $retString .= "<th>$langType</th>";
@@ -307,7 +307,7 @@ function expanded_faculte($facid, $uid) {
             $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
         }
 
-        $retString .= "<td>";
+        $retString .= "<td style='width:10% !important;'>";
         $requirepassword = '';
         $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {

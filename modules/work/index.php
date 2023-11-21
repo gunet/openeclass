@@ -5476,14 +5476,14 @@ function show_non_submitted($id) {
                             <div class='table-responsive mt-0'>
                             <table class='table-default'>
                             <thead><tr class='list-header'>
-                          <th width='3'>#</th>";
+                          <th class='count-col'>#</th>";
                 sort_link($m['username'], 'username');
                 sort_link($m['am'], 'am');
                 $tool_content .= "</tr></thead>";
                 $i=1;
                 foreach ($users as $row => $value){
                     $tool_content .= "<tr>
-                    <td>$i.</td>
+                    <td class='count-col'>$i.</td>
                     <td>".display_user($row)."</td>
                     <td>".  uid_to_am($row) ."</td>
                     </tr>";
