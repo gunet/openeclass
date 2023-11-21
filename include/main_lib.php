@@ -455,6 +455,12 @@ function get_course_users($cid) {
 function user_icon($user_id, $size = IMAGESIZE_SMALL) {
     global $webDir, $themeimg, $urlAppend, $course_id, $is_editor, $uid;
 
+    if (isset($_SESSION['profile_image_cache_buster'])) {
+        $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
+    } else {
+        $suffix = '';
+    }
+
     $user = Database::get()->querySingle("SELECT has_icon, pic_public
         FROM user WHERE id = ?d", $user_id);
     if ($user and
@@ -469,7 +475,7 @@ function user_icon($user_id, $size = IMAGESIZE_SMALL) {
            return "{$urlAppend}courses/userimg/{$user_id}_$size.jpg";
         }
     }
-    return "$themeimg/default_$size.png";
+    return "$themeimg/default_$size.png$suffix";
 }
 
 /**
@@ -2753,6 +2759,12 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 function profile_image($user_id, $size, $class=null) {
     global $urlServer, $themeimg, $uid, $course_id, $is_editor;
 
+    if (isset($_SESSION['profile_image_cache_buster'])) {
+        $suffix = '?v=' . $_SESSION['profile_image_cache_buster'];
+    } else {
+        $suffix = '';
+    }
+
     // makes $class argument optional
 
     $class_attr = ($class == null)? '': (" class='" . q($class) . "'");
@@ -2781,7 +2793,7 @@ function profile_image($user_id, $size, $class=null) {
     if (!$imageurl) {
         $imageurl = "$themeimg/default_$size.png";
     }
-    return "<img src='$imageurl' $class_attr title='$username' alt='$username' $size_width>";
+    return "<img src='$imageurl$suffix' $class_attr title='$username' alt='$username' $size_width>";
 }
 
 /**
@@ -2792,7 +2804,7 @@ function profile_image($user_id, $size, $class=null) {
 function profile_image_hash($uid) {
     static $code_key;
 
-    if (!isset($secret_key)) {
+    if (!isset($code_key)) {
         $code_key = get_config('code_key');
     }
     return str_replace(['/', '+', '='], ['-', '.', ''],
@@ -4340,6 +4352,9 @@ function reindex_array_keys_from_one($a) {
  * @return array|string|string[]
  */
 function fix_float($str) {
+    if (!$str) {
+        return 0.0;
+    }
     return str_replace(',', '.', $str);
 }
 

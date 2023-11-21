@@ -92,14 +92,9 @@ if ((get_config('email_prevent_autoset_change') and isset($_SESSION['auth_user_i
 
 // Handle AJAX profile image delete
 if (isset($_POST['delimage'])) {
-    $hash = profile_image_hash($uid);
-    $images = [
-        $image_path . '_' . IMAGESIZE_LARGE . '.jpg',
-        $image_path . '_' . IMAGESIZE_SMALL . '.jpg',
-        "{$image_path}_{$hash}_" . IMAGESIZE_LARGE . '.jpg',
-        "{$image_path}_{$hash}_" . IMAGESIZE_SMALL . '.jpg'];
+    $images = glob($image_path . '_*');
     foreach ($images as $image) {
-        @unlink($image);
+        unlink($image);
     }
     Database::get()->query("UPDATE user SET has_icon = 0 WHERE id = ?d", $uid);
     Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
@@ -168,6 +163,7 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("main/profile/profile.php");
         }
         Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);
+        $_SESSION['profile_image_cache_buster'] = time();
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                              'addimage' => 1,
                                              'imagetype' => $type));
@@ -255,7 +251,7 @@ if (isset($_POST['submit'])) {
                          WHERE id = ?d",
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $pic_public, $uid);
 
-    //fill custom profile fields
+    // fill custom profile fields
     process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
 
     if ($q->affectedRows > 0 or isset($departments)) {
@@ -277,18 +273,16 @@ if (isset($_POST['submit'])) {
         $_SESSION['givenname'] = $givenname_form;
         $_SESSION['email'] = $email_form;
         if ($need_email_verification) { // email has been changed and needs verification
-            redirect_to_home_page("modules/auth/mail_verify_change.php?from_profile=true");
+            $redirect_to = "modules/auth/mail_verify_change.php?from_profile=true";
         } else {
             Session::flash('message',$langProfileReg);
             Session::flash('alert-class', 'alert-success');
             redirect_to_home_page("main/profile/display_profile.php");
         }
     }
-    if ($old_language != $language) {
-        Session::flash('message',$langProfileReg);
-        Session::flash('alert-class', 'alert-success');
-        redirect_to_home_page("main/profile/display_profile.php");
-    }
+    Session::flash('message',$langProfileReg);
+    Session::flash('alert-class', 'alert-success');
+    redirect_to_home_page($redirect_to ?? "main/profile/display_profile.php");
 }
 
 use Hybridauth\Exception\Exception;
@@ -314,17 +308,17 @@ if (isset($_GET['provider'])) {
 
             $config = get_hybridauth_config();
             $user_data = '';
-	    $provider = @trim(strip_tags(strtolower($_GET['provider'])));
-	    if($_GET['provider'] == 'Live') {
-		$_GET['provider'] = 'WindowsLive';
-	    }
-	    $hybridauth = new Hybridauth($config);
+            $provider = @trim(strip_tags(strtolower($_GET['provider'])));
+            if($_GET['provider'] == 'Live') {
+                $_GET['provider'] = 'WindowsLive';
+            }
+            $hybridauth = new Hybridauth($config);
         $allProviders = $hybridauth->getProviders();
 
-	    if (count($allProviders) && in_array($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
+            if (count($allProviders) && in_array($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
                 try {
                     if (in_array($provider, $hybridAuthMethods)) {
-			            $providerAuthId = array_search(strtolower($provider), $auth_ids);
+                        $providerAuthId = array_search(strtolower($provider), $auth_ids);
 
                         if(isset($_SESSION['hybridauth_callback']) && $_SESSION['hybridauth_callback'] == 'profile') {
                             unset($_SESSION['hybridauth_callback']);
