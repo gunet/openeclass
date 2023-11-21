@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
     }
     if (isset($success_mgs)) Session::Messages($success_mgs, 'alert-success');
     if (isset($error_mgs)) Session::Messages($error_mgs, 'alert-danger');
-    redirect_to_home_page('modules/admin/multiedituser.php');
+    redirect_to_home_page('modules/admin/index.php');
 } else {
 
     $usernames = '';
@@ -119,17 +119,17 @@ if (isset($_POST['submit'])) {
         $email = isset($_POST['email']) ? mb_strtolower(trim($_POST['email'])) : '';
         $reg_flag = isset($_POST['reg_flag']) ? intval($_POST['reg_flag']) : '';
         $user_registered_at = isset($_POST['user_registered_at']) ? $_POST['user_registered_at'] : '';
-        $user_expires_until = isset($_POST['user_expires_until']) ? $_POST['user_expires_until'] : '';        
+        $user_expires_until = isset($_POST['user_expires_until']) ? $_POST['user_expires_until'] : '';
         // Criteria/Filters
         $criteria = array();
         $terms = array();
-        
+
         if (!empty($user_registered_at)) {
             $criteria[] = 'registered_at ' . (($reg_flag === 1) ? '>=' : '<=') . ' ?s';
             $date_user_registered_at = DateTime::createFromFormat("d-m-Y", $user_registered_at);
             $terms[] = $date_user_registered_at->format("Y-m-d");
         }
-        
+
         if (!empty($_user_expires_until)) {
             $criteria[] = 'expires_at > CURRENT_DATE() AND expires_at < ?s';
             $date_user_expires_until = DateTime::createFromFormat("d-m-Y", $user_expires_until);
@@ -183,10 +183,10 @@ if (isset($_POST['submit'])) {
         if ($search == 'inactive') {
             $criteria[] = 'expires_at < ' . DBHelper::timeAfter();
         }
-        
+
         // search for users with their account being expired in one month
         if ($search == 'wexpire') {
-            $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';            
+            $criteria[] = 'expires_at between CURRENT_DATE() and date_add(CURRENT_DATE(), INTERVAL 1 MONTH)';
         }
 
         // Department search
@@ -242,7 +242,7 @@ if (isset($_POST['submit'])) {
             }
             $qry = 'SELECT DISTINCT username ' . $qry_base . ' ORDER BY username ASC';
         }
-        
+
         Database::get()->queryFunc($qry
                 , function($users) use(&$usernames) {
             $usernames .= $users->username . "\n";
@@ -260,7 +260,7 @@ if (isset($_POST['submit'])) {
         $monthsField = "
                 <div class='form-group'>
                     <label class='col-sm-2 control-label' for='months-id'>$langActivateMonths:</label>
-                    <div class='col-sm-9'>
+                    <div class='col-sm-2'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
                     </div>
                 </div>";
