@@ -138,7 +138,7 @@ if (isset($_GET['add'])) {
         if ($result) {
             $results = "<div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
                                 <thead><tr class='list-header'>
-                                  <th>$langID</th>
+                                  <th class='count-col'>$langID</th>
                                   <th>$langName</th>
                                   <th>$langSurname</th>
                                   <th>$langUsername</th>
@@ -155,7 +155,7 @@ if (isset($_GET['add'])) {
                     $dep_content .= $tree->getPath($dep) . $br;
                     $j++;
                 }
-                $results .= "<td class='text-start'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
+                $results .= "<td class='count-col'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         $dep_content . "</td><td class='text-center'>" .
                         icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";

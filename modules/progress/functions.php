@@ -2730,7 +2730,7 @@ function display_users_progress($element, $element_id) {
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'><table class='table-default custom_list_order'>";
             $tool_content .= "<thead>
                         <tr class='list-header'>
-                          <th style='width:5%'>$langID</th>
+                          <th class='count-col'>$langID</th>
                           <th>$langSurnameName</th>
                           <th class='text-center' style='width: 30%;'>$langProgress</th>
                         </tr>
@@ -2745,7 +2745,7 @@ function display_users_progress($element, $element_id) {
             }
             $user_am = uid_to_am($user_data->user);
             $tool_content .= "<tr>
-                    <td>". $cnt++ . "</td>
+                    <td class='count-col'>". $cnt++ . "</td>
                     <td>" . display_user($user_data->user). "<br>";
                     if ($user_am) {
                         $tool_content .= "($langAmShort: $user_am)";

@@ -91,7 +91,7 @@ if (isset($_GET['delete'])) {
           <table class='table-default'>
           <thead>
           <tr class='list-header'>
-            <th>$langID</th>
+            <th class='count-col'>$langID</th>
             <th>$langTitle</th>
             <th>$langActions</th>
           </tr></thead>";
@@ -139,7 +139,7 @@ if (isset($_GET['delete'])) {
             }
             $tool_content .= "
             <tr>
-              <td>$section_id</td>
+              <td class='count-col'>$section_id</td>
               <td>$section_title</td>
               <td>$section_tools</td>
             </tr>";

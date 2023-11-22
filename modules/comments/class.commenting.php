@@ -115,7 +115,7 @@ Class Commenting {
             foreach ($comments as $comment) {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
-                        $post_actions = '<div class="d-flex flex-wrap">';
+                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa-solid fa-xmark text-danger pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
@@ -126,7 +126,7 @@ Class Commenting {
                     }
                 } else {
                     if ($comment->permEdit($isEditor, $uid)) {
-                        $post_actions = '<div class="d-flex flex-wrap">';
+                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
 
                         if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
                             $head_content .= abuse_report_add_js();

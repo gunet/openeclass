@@ -602,7 +602,7 @@ function display_all_users_grades($gradebook_id) {
         $tool_content .= "<div class='table-responsive'><table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                  <th>$langID</th>
+                  <th class='count-col'>$langID</th>
                   <th>$langName $langSurname</th>
                   <th>$langAm</th>
                   <th>$langRegistrationDateShort</th>
@@ -622,7 +622,7 @@ function display_all_users_grades($gradebook_id) {
             $cnt++;
             $tool_content .= "
                 <tr class='$classvis'>
-                <td>$cnt</td>
+                <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>" . $resultUser->am . "</td>
                 <td>";

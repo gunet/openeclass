@@ -270,17 +270,17 @@ if (!$conference_activity) {
         $tool_content .= "<table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th style='width:5%'>$langID</th>
+                    <th class='count-col'>$langID</th>
                     <th>$langColmoocModerator</th>
                     <th>$langColmoocPartner</th>
-                    <th width='250'>$langNewBBBSessionStatus</th>
-                    <th width='200'>$langDate</th>";
+                    <th>$langNewBBBSessionStatus</th>
+                    <th>$langDate</th>";
         $tool_content .="</tr></thead>";
 
         $cnt = 1;
         foreach ($q as $cpl) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>". $cnt++ . "</td>";
+            $tool_content .= "<td class='count-col'>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cpl->moderator_id) . "</td>";
             $tool_content .= "<td>" . display_user($cpl->partner_id) . "</td>";
             $tool_content .= "<td'>" . display_session_status($cpl->session_status) . "</td>";
@@ -307,7 +307,7 @@ if (!$conference_activity) {
         $tool_content .= "<table class='table-default'>
             <thead>
                 <tr class='list-header'>
-                    <th style='width:5%'>$langID</th>
+                    <th class='count-col'>$langID</th>
                     <th>$langSurname $langName</th>
                     <th width='250'>$langNewBBBSessionStatus</th>
                     <th width='200'>$langDate</th>
@@ -317,7 +317,7 @@ if (!$conference_activity) {
         $cnt = 1;
         foreach ($q1 as $cus) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>". $cnt++ . "</td>";
+            $tool_content .= "<td class='count-col'>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
             $tool_content .= "<td>" . display_session_status($cus->session_status) . "</td>";
             $tool_content .= "<td>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";
@@ -326,7 +326,7 @@ if (!$conference_activity) {
         }
         foreach ($q2 as $cus) {
             $tool_content .= "<tr>";
-            $tool_content .= "<td>". $cnt++ . "</td>";
+            $tool_content .= "<td class='count-col'>". $cnt++ . "</td>";
             $tool_content .= "<td>" . display_user($cus->user_id) . "</td>";
             $tool_content .= "<td>" . display_session_status($cus->session_status) . "</td>";
             $tool_content .= "<td>" . format_locale_date(strtotime($cus->session_status_updated), 'short') . "</td>";

@@ -164,7 +164,7 @@ function register_user_presences($attendance_id, $actID) {
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                  <th>$langID</th>
+                  <th class='count-col'>$langID</th>
                   <th>$langName $langSurname</th>
                   <th>$langAmShort</th>
                   <th>$langRegistrationDateShort</th>
@@ -187,17 +187,17 @@ function register_user_presences($attendance_id, $actID) {
             $reg_date = is_null($resultUser->reg_date)? '': format_locale_date(strtotime($resultUser->reg_date), 'short', false);
             $tool_content .= "
               <tr class='$classvis'>
-                <td class='text-center'>$cnt</td>
+                <td class='count-col'>$cnt</td>
                 <td>" . display_user($userID) . "</td>
                 <td>" . q($resultUser->am) . "</td>
-                <td class='text-center'>$reg_date</td>
-                <td class='text-center'><input type='checkbox' value='1' name='attend[$userID]' $checked>
+                <td>$reg_date</td>
+                <td><input type='checkbox' value='1' name='attend[$userID]' $checked>
                 <input type='hidden' name='updateUser[$userID]' value='1'></td>
               </tr>";
         }
         $tool_content .= "</tbody></table>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center mt-5'>" .
+        $tool_content .= "<div class='col-12 d-flex justify-content-end align-items-center mt-5'>" .
                         form_buttons(array(
                             array(
                                 'class' => 'submitAdminBtn',
@@ -963,7 +963,7 @@ function display_all_users_presences($attendance_id) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead class='list-header'>
                 <tr>
-                  <th>$langID</th>
+                  <th class='count-col'>$langID</th>
                   <th>$langName $langSurname</th>
                   <th>$langAmShort</th>
                   <th>$langRegistrationDateShort</th>
@@ -980,7 +980,7 @@ function display_all_users_presences($attendance_id) {
             }
             $cnt++;
             $tool_content .= "<tr class='$classvis'>
-                <td>$cnt</td>
+                <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID) . "</td>
                 <td>$resultUser->am</td>
                 <td>";

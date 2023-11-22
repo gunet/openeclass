@@ -101,7 +101,7 @@
     <script type="text/javascript" src="{{ $urlAppend }}js/slick.min.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/custom.js"></script>
     <script type="text/javascript" src="{{ $urlAppend }}js/viewStudentTeacher.js"></script>
-    <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js"></script>
+    <script type="text/javascript" src="{{ $urlAppend }}js/sidebar_slider_action.js?<?php echo time(); ?>"></script>
 
     {!! $head_content !!}
 

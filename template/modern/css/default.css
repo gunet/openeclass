@@ -1728,7 +1728,7 @@ input[type="submit"].warningAdminBtn:hover {
 
 .helpAdminBtn {
   border: solid thin;
-  border-color: #2B3944;
+  border-color: #9BA9C1;
   color: #ffffff	;
   font-size: 14px;
   height:40px;
@@ -1738,14 +1738,14 @@ input[type="submit"].warningAdminBtn:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2B3944;
+  background-color: #9BA9C1;
   letter-spacing: 0px;
   line-height: 16px;
 }
 
 .helpAdminBtn:hover {
-  background-color: #465c82;
-  border-color: #465c82;
+  background-color: #8e9bb0;
+  border-color: #8e9bb0;
   color: #ffffff;
 }
 
