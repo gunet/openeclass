@@ -65,7 +65,7 @@ if (isset($_GET['mid'])) {
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
-                $recipients .= display_user($r, false, false, "outtabs").' ,&nbsp';
+                $recipients .= display_user($r, false, false, "outtabs").' ,&nbsp;';
             }
         }
         $recipients = rtrim($recipients, ',&nbsp;'); // remove the last comma
@@ -85,27 +85,27 @@ if (isset($_GET['mid'])) {
                                                     </div>
                                                     <div class='col-12'>
                                                         ".q($msg->subject)."
-                                                    </div>                
+                                                    </div>
                                                 </div>";
                             if ($msg->course_id != 0 && $course_id == 0) {
-                                $out .= "      
+                                $out .= "
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-12'>
                                                         <strong class='control-label-notes'>$langCourse:</strong>
                                                     </div>
                                                     <div class='col-12'>
                                                         <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
-                                                    </div>                
+                                                    </div>
                                                 </div>";
                             }
-                            $out .= "       
+                            $out .= "
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-12'>
                                                         <strong class='control-label-notes'>$langDate:</strong>
                                                     </div>
                                                     <div class='col-12'>
                                                         ". format_locale_date($msg->timestamp, 'short') ."
-                                                    </div>                
+                                                    </div>
                                                 </div>
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-12'>
@@ -113,7 +113,7 @@ if (isset($_GET['mid'])) {
                                                     </div>
                                                     <div class='col-12'>
                                                         ".display_user($msg->author_id, false, false, "outtabs")."
-                                                    </div>                
+                                                    </div>
                                                 </div>
                                                 <div class='row p-2 margin-bottom-thin'>
                                                     <div class='col-12'>
@@ -121,8 +121,8 @@ if (isset($_GET['mid'])) {
                                                     </div>
                                                     <div class='col-12'>
                                                         $recipients
-                                                    </div>                
-                                                </div>                        
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +147,7 @@ if (isset($_GET['mid'])) {
                                                                 </div>
                                                                 <div class='col-12'>
                                                                     <a href=\"message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
-                                                                        &nbsp<i class='fa fa-save'></i>
+                                                                        &nbsp;<i class='fa fa-save'></i>
                                                                     </a>
                                                                     &nbsp;&nbsp;(".format_file_size($msg->filesize).")
                                                                 </div>
@@ -160,26 +160,26 @@ if (isset($_GET['mid'])) {
                     </div>";
 
         $out .= '<script>
-            
+
         $(".row.title-row").next(".row").hide();
         $("#dropboxTabs .nav.nav-tabs").hide();
-        
+
         $(".back_index").on("click", function(){
                                 $(".row.title-row").next(".row").show();
                                 $("#dropboxTabs .nav.nav-tabs").show();
                             });
-            
+
         $(function() {
-        $("#out_msg_body").find("a").addClass("outtabs"); 
-        
+        $("#out_msg_body").find("a").addClass("outtabs");
+
         $(document).off( "click",".delete_out");
-        
+
         $(document).on( "click",".delete_out_inner", function (e) {
             e.preventDefault();
             var id = $(this).children("a").data("id");
-            var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";  
+            var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
 
-            // bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {                       
+            // bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
             //     if(result) {
             //         $.ajax({
             //             type: "POST",
@@ -191,10 +191,10 @@ if (isset($_GET['mid'])) {
             //                 $(".alert-success").delay(3000).fadeOut(1500);
             //                 $("#out_msg_area").remove();
             //         }});
-            //     }              
+            //     }
             // });
 
-            bootbox.confirm({ 
+            bootbox.confirm({
                 closeButton: false,
                 title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
                 message: "<p class=\"text-center\">'.js_escape($langConfirmDelete).'</p>",
@@ -219,19 +219,19 @@ if (isset($_GET['mid'])) {
                                 $("#out_del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
                                 $(".alert-success").delay(3000).fadeOut(1500);
                                 $("#out_msg_area").remove();
-                        }});   
+                        }});
                     }
                 }
-            });     
+            });
 
 
 
          });
-                      
+
         $(".delete").click(function() {
             if (confirm("' . js_escape($langConfirmDelete) . '")) {
                 var rowContainer = $(this).parent().parent();
-                var id = rowContainer.attr("id");                
+                var id = rowContainer.attr("id");
                 var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
                 $.ajax({
                        type: "POST",
@@ -318,11 +318,11 @@ if (isset($_GET['mid'])) {
                             }
                         }
                     });
-                    
+
                     $(document).off( 'click','.delete_out_inner');
                     $(document).on( 'click','.delete_out', function (e) {
                         e.preventDefault();
-                        var id = $(this).data('id');                        
+                        var id = $(this).data('id');
                         var string = 'mid='+id+'&". generate_csrf_token_link_parameter() ."';
 
                         // bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
@@ -347,10 +347,10 @@ if (isset($_GET['mid'])) {
                         //             oTable2.fnPageChange(page_number);
                         //           }
                         //        });
-                        //      }                            
+                        //      }
                         // })
 
-                        bootbox.confirm({ 
+                        bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
                             message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
@@ -388,14 +388,14 @@ if (isset($_GET['mid'])) {
                                     });
                                 }
                             }
-                        });         
+                        });
 
                      });
-                     
+
                     $('.delete_all_out').click(function() {
                         // bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
                         //     if(result) {
-                        //         var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';                            
+                        //         var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';
                         //         $.ajax({
                         //             type: 'POST',
                         //             url: '$ajax_url',
@@ -409,7 +409,7 @@ if (isset($_GET['mid'])) {
                         //                 if(page_number!=0) {
                         //                     page_number--;
                         //                 }
-                        //                 }     
+                        //                 }
                         //                 $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                         //                 $('.alert-success').delay(3000).fadeOut(1500);
                         //                 oTable2.fnPageChange(page_number);
@@ -418,7 +418,7 @@ if (isset($_GET['mid'])) {
                         //     }
                         // })
 
-                        bootbox.confirm({ 
+                        bootbox.confirm({
                             closeButton: false,
                             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
                             message: '<p class=\'text-center\'>".js_escape($langConfirmDeleteAllMsgs)."</p>',
@@ -434,7 +434,7 @@ if (isset($_GET['mid'])) {
                             },
                             callback: function (result) {
                                 if(result) {
-                                    var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';                            
+                                    var string = 'all_outbox=1&". generate_csrf_token_link_parameter() ."';
                                     $.ajax({
                                         type: 'POST',
                                         url: '$ajax_url',
@@ -448,7 +448,7 @@ if (isset($_GET['mid'])) {
                                             if(page_number!=0) {
                                                 page_number--;
                                             }
-                                            }     
+                                            }
                                             $('#out_del_msg').html('<p class=\'alert alert-success\'><i class=\'fa-solid fa-circle-check fa-lg\'></i><span>".js_escape($langMessageDeleteAllSuccess)."</span></p>');
                                             $('.alert-success').delay(3000).fadeOut(1500);
                                             oTable2.fnPageChange(page_number);
@@ -456,9 +456,9 @@ if (isset($_GET['mid'])) {
                                     });
                                 }
                             }
-                        });     
+                        });
                     });
-               
+
                });
              </script>";
 }

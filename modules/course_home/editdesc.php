@@ -82,7 +82,7 @@ if (isset($_GET['delete_image'])) {
         if ((!$copied)) {
             echo "Error : Not Copied";
         }
-        else{ 
+        else{
             $extra_sql = ", course_image = ?s";
             $db_vars[] = $image_without_ext.".".$ext;
         }
@@ -107,9 +107,9 @@ if (isset($_GET['delete_image'])) {
                 } else {
                     $('#image_field').addClass('hidden');
                 }
-            });      
-            
-            
+            });
+
+
             $('.chooseCourseImage').on('click',function(){
                 var id_img = this.id;
                 alert('Selected image: '+id_img);
@@ -129,7 +129,7 @@ $layout = $course->home_layout;
 if (isset($course->course_image)) {
     $course_image = "
         <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-            <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;'> 
+            <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;'>
             <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
         </div>
         <input type='hidden' name='course_image' value='".q($course->course_image)."'>
@@ -137,7 +137,7 @@ if (isset($course->course_image)) {
 } else {
     enableCheckFileSize();
     $course_image = fileSizeHidenInput() . "
-                   
+
 
                     <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
                         <li class='nav-item' role='presentation'>
@@ -153,7 +153,7 @@ if (isset($course->course_image)) {
                         </div>
                         <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
                             <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#CoursesImagesModal'>
-                                <i class='fa-solid fa-image settings-icons'></i>&nbsp$langSelect
+                                <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                             </button>
                             <input type='hidden' id='choose_from_list' name='choose_from_list'>
                             <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
@@ -189,7 +189,7 @@ $tool_content = "
                             <div class='col-12'>
                                 $course_image
                             </div>
-                        </div>                  
+                        </div>
                         <div class='row form-group mt-4'>
                             <label for='description' class='col-12 control-label-notes'>$langDescription</label>
                             <div class='col-12'>
@@ -202,7 +202,7 @@ $tool_content = "
                                     <a href='{$urlAppend}courses/$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                             </div>
                         </div>
-        
+
                     </fieldset>
 
 
@@ -220,54 +220,35 @@ $tool_content = "
                                                 $extension = pathinfo($image, PATHINFO_EXTENSION);
                                                 $imgExtArr = ['jpg', 'jpeg', 'png'];
                                                 if(in_array($extension, $imgExtArr)){
-                                                    $tool_content .= " 
+                                                    $tool_content .= "
                                                         <div class='col'>
                                                             <div class='card h-100'>
                                                                 <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
                                                                 <div class='card-body'>
                                                                     <p class='form-value'>$image</p>
-                                                                    
+
                                                                     <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
                                                                 </div>
                                                             </div>
-                                                        </div>    
+                                                        </div>
                                                     ";
                                                 }
-                                                
+
                                             }
-                                        
-                $tool_content .= "      
+
+                $tool_content .= "
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-
-
-
-
-
-
-
-                  ". generate_csrf_token_form_field() ."
+                    </div>" .
+                    generate_csrf_token_form_field() . "
                 </form>
             </div>
         </div>
         <div class='d-none d-lg-block'>
             <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
         </div>
-    </div>
-    
-    
-    
-
-    
-
-
-
-    
-    
-    ";
+    </div>";
 
 draw($tool_content, 2, null, $head_content);

@@ -49,7 +49,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -61,7 +61,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -71,7 +71,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
                                         <div class='col-9 d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
-                                                &nbsp&nbsp{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
+                                                &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
                                             @endif
                                             @if ($curDirName and $dirComment)
                                                 {{ $dirComment }}
@@ -125,7 +125,7 @@
 
                                     <thead>
                                         <tr class="list-header">
-                                            
+
                                             <th>{!! headlink(trans('langName'), 'name') !!}</th>
                                             <th>{!! headlink(trans('langType'), 'type') !!}</th>
                                             <th>{{ trans('langSize') }}</th>
@@ -145,7 +145,7 @@
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
 
-                                                
+
 
                                                 <td>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
@@ -239,7 +239,7 @@
 
 
                                                 @endif
-                                                
+
                                                 @unless ($is_in_tinymce)
                                                     <td class='text-end {{ $can_upload? 'option-btn-cell': '' }}'>
                                                         {!! $file->action_button !!}
@@ -274,7 +274,7 @@
                 </div>
             </div>
         </div>
-    
+
 </div>
 </div>
 

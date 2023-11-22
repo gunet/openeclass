@@ -43,8 +43,8 @@
 
 
                     <div class='col-lg-4 col-md-6 col-12 mb-4'>
-                        <input id='searchCourse' type="text" class="form-control" 
-                                    placeholder="&#xf002&nbsp&nbsp{{ trans('langSearch') }}..." aria-label="{{ trans('langSearch') }}">
+                        <input id='searchCourse' type="text" class="form-control"
+                                    placeholder="&#xf002&nbsp;&nbsp;{{ trans('langSearch') }}..." aria-label="{{ trans('langSearch') }}">
                     </div>
 
                     <div id='MyCourses'></div>
@@ -52,7 +52,6 @@
                 </div>
             </div>
         </div>
-
 
         <script type='text/javascript'>
             jQuery(document).ready(function() {
@@ -65,7 +64,7 @@
                         }
                     }
                 });
-                $('#searchCourse').keyup(function() {   
+                $('#searchCourse').keyup(function() {
                     var searchval = $('#searchCourse').val();
                     $.ajax({
                         type: 'POST',
@@ -80,11 +79,4 @@
             });
         </script>
 
-
-
-        
-
-
 @endsection
-
-

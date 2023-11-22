@@ -462,7 +462,7 @@ if (isset($_POST['optionsSave'])) {
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> 
+                <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             </div>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
@@ -484,14 +484,14 @@ if (isset($_POST['optionsSave'])) {
                 </div>
                 <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
                     <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#JumbotronImagesModal'>
-                        <i class='fa-solid fa-image settings-icons'></i>&nbsp$langSelect
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_jumbotronlist' name='choose_from_jumbotronlist'>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
                 </div>
             </div>
 
-            
+
         ";
     }
 
@@ -505,7 +505,7 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $login_image_fieldL = "
-       
+
             <ul class='nav nav-tabs' id='nav-tab2' role='tablist'>
                 <li class='nav-item' role='presentation'>
                     <button class='nav-link active' id='tabs-upload-tab2' data-bs-toggle='tab' data-bs-target='#tabs-upload2' type='button' role='tab' aria-controls='tabs-upload2' aria-selected='true'>$langUpload</button>
@@ -520,15 +520,15 @@ if (isset($_POST['optionsSave'])) {
                 </div>
                 <div class='tab-pane fade' id='tabs-selectImage2' role='tabpanel' aria-labelledby='tabs-selectImage-tab2'>
                     <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#LoginImagesModal'>
-                        <i class='fa-solid fa-image settings-icons'></i>&nbsp$langSelect
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
                     </button>
                     <input type='hidden' id='choose_from_loginlist' name='choose_from_loginlist'>
                     <input type='text'class='form-control border-0 pe-none px-0' id='selectedImageLogin'>
                 </div>
             </div>
-       
-       
-       
+
+
+
        ";
     }
 
@@ -548,15 +548,15 @@ if (isset($_POST['optionsSave'])) {
     if (isset($preview_theme)) {
         $tool_content .= "
                 <div class='alert alert-warning d-flex justify-content-between align-items-center'>
-                    
+
                         <div>
                         <i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langPreviewState &nbsp;".$themes_arr[$preview_theme].".</span>
                         </div>
                         <div class='d-lg-flex'>
-                            <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a> 
+                            <a href='#' class='theme_enable btn submitAdminBtn'>$langActivate</a>
                             <a href='theme_options.php?reset_theme_options=true' class='btn cancelAdminBtn ms-lg-2 mt-lg-0 mt-2'>$langLogout</a>
                         </div>
-                    
+
                 </div>
                 ";
     }
@@ -705,7 +705,7 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColorHeader' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColorHeader' type='text' class='form-control colorpicker' id='bgColorHeader' value='$theme_options_styles[bgColorHeader]'>
-              
+
             </div>
 
             <hr>
@@ -714,7 +714,7 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColorFooter' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColorFooter' type='text' class='form-control colorpicker' id='bgColorFooter' value='$theme_options_styles[bgColorFooter]'>
-              
+
             </div>
 
             <hr>
@@ -724,7 +724,7 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColorHeaderFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColorHeaderFooter' type='text' class='form-control colorpicker' id='linkColorHeaderFooter' value='$theme_options_styles[linkColorHeaderFooter]'>
-              
+
             </div>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkHoverColorHeaderFooter' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
@@ -738,7 +738,7 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='buttonBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='buttonBgColor' type='text' class='form-control colorpicker' id='buttonBgColor' value='$theme_options_styles[buttonBgColor]'>
-              
+
             </div>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='buttonTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
@@ -747,7 +747,7 @@ $tool_content .= "
 
             <hr>
 
-            
+
             <h3 class='theme_options_legend mt-2'>$langButtonsColorWhiteCongiguration</h3>
 
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -770,7 +770,7 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
-              
+
             </div>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkHoverColor' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
@@ -790,12 +790,12 @@ $tool_content .= "
             <div class='form-group mt-4'>
                 <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                 <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
-               
+
             </div>
             <div class='form-group mt-4'>
                 <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText:</label>
                 <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
-               
+
             </div>
 
 
@@ -849,20 +849,20 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
               <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
-             
+
             </div>
 
             <hr>
 
             <h3 class='theme_options_legend mt-2'>$langMainMenuConfiguration</h3>
-            
-            <!-- DISABLE 
+
+            <!-- DISABLE
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuBgColor' class='control-label-notes me-2 mb-2'>$langMainMenuBgColor:</label>
               <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
             </div> -->
-            
-            
+
+
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuLinkColor:</label>
               <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
@@ -872,7 +872,7 @@ $tool_content .= "
               <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
             </div>
 
-            <!-- DISABLE 
+            <!-- DISABLE
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftMenuSelectedFontColor' class='control-label-notes mb-2 me-2'>$langMainMenuActiveLinkColor:</label>
               <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
@@ -934,23 +934,23 @@ $tool_content .= "
                             $extension = pathinfo($image, PATHINFO_EXTENSION);
                             $imgExtArr = ['jpg', 'jpeg', 'png'];
                             if(in_array($extension, $imgExtArr)){
-                                $tool_content .= " 
+                                $tool_content .= "
                                     <div class='col'>
                                         <div class='card h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/jumbotron_images/$image' alt='image jumbotron'/>
                                             <div class='card-body'>
                                                 <p class='form-value'>$image</p>
-                                                
+
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseJumbotronImage mt-3' value='$langSelect'>
                                             </div>
                                         </div>
-                                    </div>    
+                                    </div>
                                 ";
                             }
 
                         }
 
-$tool_content .= "      
+$tool_content .= "
                 </div>
             </div>
         </div>
@@ -972,23 +972,23 @@ $tool_content .= "
                             $extension = pathinfo($image, PATHINFO_EXTENSION);
                             $imgExtArr = ['jpg', 'jpeg', 'png'];
                             if(in_array($extension, $imgExtArr)){
-                                $tool_content .= " 
+                                $tool_content .= "
                                     <div class='col'>
                                         <div class='card h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/login_images/$image' alt='image login'/>
                                             <div class='card-body'>
                                                 <p class='form-value'>$image</p>
-                                                
+
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseLoginImage mt-3' value='$langSelect'>
                                             </div>
                                         </div>
-                                    </div>    
+                                    </div>
                                 ";
                             }
 
                         }
 
-$tool_content .= "      
+$tool_content .= "
                 </div>
             </div>
         </div>

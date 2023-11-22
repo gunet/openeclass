@@ -55,9 +55,9 @@ if(isset($_GET['term'])){
                       course_user.status status,
                       course_user.favorite favorite
                 FROM course JOIN course_user
-                      ON course.id = course_user.course_id 
-                      AND course_user.user_id = ?d 
-                      AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
+                      ON course.id = course_user.course_id
+                      AND course_user.user_id = ?d
+                      AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
                   ORDER BY favorite DESC, status ASC, visible ASC, title ASC", $uid);
   }else{//Get all courses from search-component which user has registered
     $myCourses = Database::get()->queryArray("SELECT course.id course_id,
@@ -71,10 +71,10 @@ if(isset($_GET['term'])){
                    course_user.status status,
                    course_user.favorite favorite
              FROM course JOIN course_user
-                  ON course.id = course_user.course_id 
+                  ON course.id = course_user.course_id
                   WHERE title LIKE ?s
-                  AND course_user.user_id = ?d 
-                  AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ") 
+                  AND course_user.user_id = ?d
+                  AND (course.visible != " . COURSE_INACTIVE . " OR course_user.status = " . USER_TEACHER . ")
               ORDER BY favorite DESC, status ASC, visible ASC, title ASC","%$q%",  $uid);
   }
 
@@ -138,11 +138,11 @@ if(isset($_GET['term'])){
                                 <img src='{$courseImage}' class='card-img-top cardImgCourse rounded-0 $invisibleCourse' alt='course image'>
                                 <div class='card-text mt-3'>
                                     <p class='d-inline form-value $invisibleCourse mb-0 vsmall-text'>$langCode:</p>
-                                    &nbsp<p class='d-inline form-value $invisibleCourse vsmall-text'>".q($course->public_code)."</p>
+                                    &nbsp;<p class='d-inline form-value $invisibleCourse vsmall-text'>".q($course->public_code)."</p>
                                 </div>
                                 <div class='card-text'>
                                     <p class='d-inline form-value $invisibleCourse mb-0'>$langTeacher:</p>
-                                    &nbsp<p class='d-inline form-value $invisibleCourse vsmall-text'>".q($course->professor)."</p>
+                                    &nbsp;<p class='d-inline form-value $invisibleCourse vsmall-text'>".q($course->professor)."</p>
                                 </div>
 
                             </div>
@@ -172,14 +172,14 @@ if(isset($_GET['term'])){
                             <div class='modal-dialog modal-md'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        
+
                                         <div class='modal-title' id='exampleModalLabel{$course->course_id}'>
                                             <div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div>
                                             <h3 class='modal-title-default text-center text-center mb-0'>$langUnCourse</h3>
                                         </div>
                                     </div>
                                     <div class='modal-body text-center'>
-                                        $langConfirmUnregCours<strong class='text-capitalize'>&nbsp{$course->title}</strong>;
+                                        $langConfirmUnregCours<strong class='text-capitalize'>&nbsp;" . q($course->title) . "</strong>;
                                         <input type='hidden' name='fromMyCoursesPage' value='1'>
                                     </div>
                                     <div class='modal-footer d-flex justify-content-center align-items-center'>
@@ -321,7 +321,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
 
             <script type='text/javascript'>
-  
+
                 var arrayLeftRight = [];
 
                 // init page1
@@ -358,7 +358,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         prevPage = number-1;
 
                         arrayLeftRight.push(number);
-        
+
                         var totalCourses = $('#KeyallCourse').val();
                         var totalPages = $('#KeypagesCourse').val();
                         for(i=1; i<=totalCourses; i++){
@@ -388,7 +388,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                             $('#KeystartLi').removeClass('d-none');
                             $('#KeystartLi').addClass('d-block');
-                            
+
                             for(i=2; i<=totalPages-1; i++){
                                 $('#KeypageCenter'+i).removeClass('d-block');
                                 $('#KeypageCenter'+i).addClass('d-none');
@@ -421,7 +421,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                             $('#KeycloseLi').removeClass('d-none');
                             $('#KeycloseLi').addClass('d-block');
 
-                            
+
                             for(i=1; i<=number; i++){
                                 $('#KeypageCenter'+i).removeClass('d-none');
                                 $('#KeypageCenter'+i).addClass('d-block');
@@ -448,10 +448,10 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         var delPageActive = nextPage-1;
                         $('#Keypage'+delPageActive).removeClass('active');
                         $('#Keypage'+nextPage).addClass('active');
-                    
+
                         var totalCourses = $('#KeyallCourse').val();
                         var totalPages = $('#KeypagesCourse').val();
-                        
+
                         for(i=1; i<=totalCourses; i++){
                             if(i == nextPage){
                                 $('.cardCourse'+i).removeClass('d-none');
@@ -479,7 +479,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                             $('#KeystartLi').removeClass('d-none');
                             $('#KeystartLi').addClass('d-block');
-                            
+
                             for(i=2; i<=totalPages-1; i++){
                                 $('#KeypageCenter'+i).removeClass('d-block');
                                 $('#KeypageCenter'+i).addClass('d-none');
@@ -529,7 +529,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                             }
                         }
 
-                        
+
                     });
                 });
 
@@ -538,7 +538,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                 // page-link except prev-next button
                 $('.page-item-pages .page-link').on('click',function(){
-                    
+
                     var IDCARD = this.id;
                     var number = parseInt(IDCARD.match(/\d+/g));
 
@@ -575,7 +575,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                         }
                     }
 
-                
+
                     if(number>=1 && number<=4 && totalPages>=12){
 
                         $('#KeystartLi').removeClass('d-block');
@@ -583,7 +583,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
 
                         for(i=1; i<=5; i++){
                             $('#KeypageCenter'+i).removeClass('d-none');
-                            $('#KeypageCenter'+i).addClass('d-block'); 
+                            $('#KeypageCenter'+i).addClass('d-block');
                         }
                         for(i=6; i<=totalPages-1; i++){
                             $('#KeypageCenter'+i).removeClass('d-block');
@@ -679,7 +679,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
                     $(this).addClass('active');
 
                 });
-            
+
         </script>";
 
         return $pagination;

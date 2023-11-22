@@ -16,7 +16,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -28,7 +28,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -38,13 +38,13 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
-                                        
-                    
+
+
                         <div class="col-12">
                             <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
                             <hr>
@@ -52,12 +52,12 @@
                             <div id="widgets">
                                 @foreach ($installed_widgets as $key => $installed_widget)
                                         <div class="panel panel-success widget mt-3" data-widget-id="{{ $installed_widget->id }}">
-                                            <div class="panel-heading">                   
-                                                <a class='text-white TextMedium collapsed' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
+                                            <div class="panel-heading">
+                                                <a class='text-white TextMedium collapsed' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}"
                                                 href="#widget_desc_{{ $key }}" class="widget_title">
                                                     {{ $installed_widget->getName() }} <span></span> <span class="float-end"></span>
                                                     <span class='fa fa-arrow-down ps-2 fs-6'></span>
-                                                </a>                     
+                                                </a>
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
                                                 <div class="panel-body text-muted NoBorders">
@@ -71,9 +71,9 @@
                                                         </form>
                                                         <a class='btn deleteAdminBtn' href="#" onclick="$('#uninstallForm{{ $key }}').submit();">
                                                             {{ trans('langWidgetUninstall') }}
-                                                        </a>                               
-                                                    </div>                      
-                                                </div>                        
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="panel-collapse collapse in hidden">
                                                 <div class="panel-body">
@@ -86,26 +86,26 @@
                                                     <div class="float-end">
                                                         <a href="#" class="btn submitAdminBtn submitOptions">
                                                             {{ trans('langSubmit') }}
-                                                        </a>                                
-                                                    </div>                    
-                                                </div>                        
-                                            </div>                    
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                             @endforeach
-                            </div>   
+                            </div>
                             @else
                             <div class='orangeText margin-bottom-fat'>
                                 {{ trans('langNoInstalledWidgets') }}
-                            </div>       
+                            </div>
                             @endif
-                            
+
                             <h3 class="control-label-notes mt-5">{{ trans('langAvailableWidgets') }}</h3>
                             <hr>
                             @if (count($uninstalled_widgets))
-                            <div>           
+                            <div>
                                 @foreach ($uninstalled_widgets as $key => $uninstalled_widget)
                                     <div class="panel panel-default panel-default-admin mt-3">
-                                        <div class="panel-heading">                   
+                                        <div class="panel-heading">
                                             <h3 class='mb-0'>
                                                 {{ $uninstalled_widget->getName() }}
                                             </h3>
@@ -124,7 +124,7 @@
                                                 </form>
                                                 <a class='btn submitAdminBtn submitAdminBtnDefault' href="#" onclick="$('#installForm{{ $key }}').submit();">
                                                     {{ trans('langWidgetInstall') }}
-                                                </a>                               
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -133,16 +133,16 @@
                             @else
                             <div class='orangeText margin-bottom-fat'>
                                 {{ trans('langNoAvailableWidgets') }}
-                            </div>       
-                            @endif        
-                        </div>    
+                            </div>
+                            @endif
+                        </div>
                         <div class="col-12 mt-5">
 
                                 <!-- Nav tabs -->
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li role="presentation" class="nav-item"><a class='nav-link active' href="#home" aria-controls="home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}} </a></li>
                                     <li role="presentation" class='nav-item'><a class='nav-link' href="#portfolio" aria-controls="portfolio" role="tab" data-bs-toggle="tab">{{ trans('langPortfolio')}}</a></li>
-                                    <li role="presentation" class='nav-item'><a class='nav-link' href="#course_home" aria-controls="course_home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}}&nbsp{{ trans('langOfCourse')}}</a></li>
+                                    <li role="presentation" class='nav-item'><a class='nav-link' href="#course_home" aria-controls="course_home" role="tab" data-bs-toggle="tab">{{ trans('langHome')}}&nbsp;{{ trans('langOfCourse')}}</a></li>
                                 </ul>
 
                             <!-- Tab panes -->
@@ -153,21 +153,20 @@
                                     </div>
                                     <div role="tabpanel" class="tab-pane" id="portfolio">
                                         @include('admin.widgets.common.portfolioMain')
-                                        @include('admin.widgets.common.portfolioSide')                  
-                                    </div>                  
+                                        @include('admin.widgets.common.portfolioSide')
+                                    </div>
                                     <div role="tabpanel" class="tab-pane" id="course_home">
                                         @include('admin.widgets.common.courseHomeMain')
-                                        @include('admin.widgets.common.courseHomeSide')                    
+                                        @include('admin.widgets.common.courseHomeSide')
                                     </div>
                                 </div>
-                        </div>    
-                    
+                        </div>
 
-                
+
+
         </div>
-   
+
 </div>
-</div>                          
+</div>
 
 @endsection
-

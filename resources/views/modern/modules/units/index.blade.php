@@ -181,7 +181,7 @@
                                 <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
                                     <div class='form-value'>
-                                        <small>{{ $course_start_week }}&nbsp{{ $course_finish_week }}</small>
+                                        <small>{{ $course_start_week }}&nbsp;{{ $course_finish_week }}</small>
                                     </div>
                                 @endif
                             </div>
@@ -206,7 +206,7 @@
                             <input type='hidden' name='course' value='{{ $course_code }}'>
                             <div class='mb-0'>
                                 <div class="d-inline-flex align-items-center">
-                                    <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp{{ trans('langGoTo') }}:</label>
+                                    <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
                                     <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
                                         @foreach ($units as $unit)
                                             <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
@@ -774,7 +774,7 @@
                                                 @php $counterUnits++; @endphp
                                             @endforeach
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -788,4 +788,3 @@
 </div>
 
 @endsection
-

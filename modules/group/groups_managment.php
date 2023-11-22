@@ -45,7 +45,7 @@ $head_content .= "
 <script>
     $(function () {
         $('#group-name').select2({
-                
+
             minimumInputLength: 2,
             tags: true,
             tokenSeparators: [','],
@@ -95,7 +95,7 @@ $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, 
 
 // Display all available groups
 
-$num_of_groups = 0; 
+$num_of_groups = 0;
 
 //Search groups by names
 if(isset($_POST['submitGroupNames'])){
@@ -110,7 +110,7 @@ if(isset($_POST['submitGroupNames'])){
         if(count($idsGroups) > 0){
             $values = implode(',', $idsGroups);
             $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE (id) IN ($values) AND course_id = ?d ORDER BY name", $course_id);
-            $num_of_groups = count($groupSelect); 
+            $num_of_groups = count($groupSelect);
         }else{
             $num_of_groups = 0;
         }
@@ -123,17 +123,17 @@ if(isset($_POST['submitGroupNames'])){
 if(isset($_POST['searchGroupByCategory'])){
     if($_POST['searchGroupByCategory'] == -1){
         $selectedCategory2 = 'selected';
-        $num_of_groups = 0; 
+        $num_of_groups = 0;
     }elseif($_POST['searchGroupByCategory'] == 0){
         $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND category_id = ?d ORDER BY name", $course_id,0);
         $selectedCategory3 = 'selected';
-        $num_of_groups = count($groupSelect); 
+        $num_of_groups = count($groupSelect);
     }else{
         $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND category_id = ?d ORDER BY name", $course_id,$_POST['searchGroupByCategory']);
         $selectedCategory = $_POST['searchGroupByCategory'];
-        $num_of_groups = count($groupSelect); 
+        $num_of_groups = count($groupSelect);
     }
-     
+
 }
 
 
@@ -144,7 +144,7 @@ $tool_content .= "<div class='row mb-4'>
                                             <div class='col-12 d-flex justify-content-start'>
                                                 <button type='submit' name='submitGroupNames' class='btn btn-sm searchGroupBtn h-40px'><span class='fa fa-search fs-6'></span></button>
                                                 <select id='group-name' class='form-select' name='groupNames[]' multiple></select>
-                                                
+
                                             </div>
                                          </form>";
 $tool_content .= "  </div>
@@ -212,7 +212,7 @@ if(isset($_POST['group_id'])){
             $public_users_list = 1;
         }
         $private_forum = $_POST[$private_forum_group_id];
-        
+
 
         Database::get()->query("UPDATE group_properties SET
                                 self_registration = ?d,
@@ -243,7 +243,7 @@ if(isset($_POST['group_id'])){
         }
         $category_id = intval($_POST[$selectcategory_group_id]);
         Database::get()->query("UPDATE `group`
-                                        SET 
+                                        SET
                                             max_members = ?d,
                                             category_id = ?d
                                         WHERE id = ?d", $maxStudents, $category_id, $group_id);
@@ -263,7 +263,7 @@ if(isset($_POST['group_id'])){
         }
 
     }
-    
+
     if(empty($message)){
         Session::flash('message',$langGroupSettingsModified);
         Session::flash('alert-class', 'alert-success');
@@ -273,7 +273,7 @@ if(isset($_POST['group_id'])){
     }
 
     redirect_to_home_page("modules/group/groups_managment.php?course=$course_code");
-    
+
 }
 
 // Display groups by result
@@ -299,7 +299,7 @@ $tool_content .= "<div class='col-12'>
                                                 }
 
                                                 initialize_group_info($gr->id);
-                                                
+
                                                 $head_content .= "<script type='text/javascript'>
                                                     $(document).ready(function () {
                                                         $('#select-tutor_$gr->id').select2();
@@ -334,12 +334,12 @@ $tool_content .= "<div class='col-12'>
                                                 $public_users_list = "public_users_list_$gr->id";
                                                 $checked[$public_users_list] = ($group->public_users_list? 'checked':'');
 
-                                                
+
                                                 $tool_content .= "<tr>
                                                                     <td>
                                                                         <div class='d-flex justify-content-between align-items-center'>
                                                                             <a type='button' href='group_space.php?course=$course_code&amp;group_id=$gr->id'>" . q($gr->name) . "
-                                                                                &nbsp<span class='$link_class text-danger'></span>
+                                                                                &nbsp;<span class='$link_class text-danger'></span>
                                                                             </a>
                                                                             <button class='btn submitAdminBtn btn-sm showSettings' type='button' data-bs-toggle='collapse' data-bs-target='#CollapseGroup_$gr->id'>
                                                                                 <span class='fa fa-cogs'></span>
@@ -386,10 +386,10 @@ $tool_content .= "<div class='col-12'>
                                                                                             $membersAvailable = Database::get()->querySingle("SELECT COUNT(*) AS count FROM group_members
                                                                                                                                             WHERE group_id = ?d
                                                                                                                                             AND is_tutor = 0", $gr->id)->count;
-                                                                        $tool_content .= "  <div class='help-block mt-1'>$langGroupMembers:&nbsp<span class='badge bg-info'>$membersAvailable</span></div>
+                                                                        $tool_content .= "  <div class='help-block mt-1'>$langGroupMembers:&nbsp;<span class='badge bg-info'>$membersAvailable</span></div>
                                                                                         </div>";
 
-                                                                                    
+
                                                                     $tool_content .= "  <div class='col-12 form-group mt-4'>
                                                                                             <label for='selectcategory_$gr->id' class='col-12 control-label-notes'>$langCategory</label>
                                                                                             <div class='col-sm-12'>
@@ -410,7 +410,7 @@ $tool_content .= "<div class='col-12'>
                                                                                         </div>";
                                                                     $tool_content .= "</div>
                                                                                 </div>
-                                                                                    
+
                                                                                 <div class='col-lg-4 col-12 col-12 mt-lg-0 mt-4'>
                                                                                     <div class='row'>";
                                                                         $tool_content .="<div class='col-12 form-group'>
@@ -425,7 +425,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                    
+
                                                                                             <div class='col-12 form-group mt-4'>
                                                                                                 <p class='control-label-notes mb-1'>$langGroupAllowUnregister</p>
                                                                                                 <div class='col-sm-12'>
@@ -438,7 +438,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                     </div>
                                                                                                 </div>
                                                                                             </div>
-                                                                                    
+
                                                                                             <div class='col-12 form-group mt-4'>
                                                                                                 <p class='control-label-notes mb-1'>$langPrivate_1</p>
                                                                                                 <div class='col-sm-12'>
@@ -462,7 +462,7 @@ $tool_content .= "<div class='col-12'>
                                                                                 <div class='col-lg-4 col-12 col-12 mt-lg-0 mt-4'>
                                                                                     <p class='control-label-notes mb-1'>$langTools</p>
                                                                                     <div class='row'>";
-                                                                                                
+
                                                                     $tool_content .= "  <div class='col-12 form-group'>
                                                                                             <div class='checkbox'>
                                                                                                 <label class='label-container'>
@@ -472,7 +472,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
-                                                                        
+
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label class='label-container'>
@@ -480,9 +480,9 @@ $tool_content .= "<div class='col-12'>
                                                                                                     <span class='checkmark'></span>
                                                                                                     $langGroupForum
                                                                                                 </label>
-                                                                                            </div> 
+                                                                                            </div>
                                                                                         </div>
-                                                                            
+
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label class='label-container'>
@@ -492,7 +492,7 @@ $tool_content .= "<div class='col-12'>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
-                                                                            
+
                                                                                         <div class='col-12 form-group mt-2'>
                                                                                             <div class='checkbox'>
                                                                                                 <label class='label-container'>
@@ -502,14 +502,14 @@ $tool_content .= "<div class='col-12'>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div>";    
+                                                                                    </div>";
 
                                                                 $tool_content .="</div>
                                                                             </div>
                                                                         </div>
                                                                     </td>
                                                                 </tr>";
-                                                                                                        
+
                                                 $tool_content .= "<input type='hidden' name='group_id[]' value='$gr->id'></input>";
 
                                             }
@@ -517,7 +517,7 @@ $tool_content .= "<div class='col-12'>
                      $tool_content .= "</tbody>
                                     </table>
                                 </div>
-                                
+
                                  <div class='col-12 mt-5'><input type='button' class='btn submitAdminBtn mx-auto' value='$langModify' onClick='submitDetailsForm()' /></div>
                                 ";
 
@@ -525,9 +525,9 @@ $tool_content .= "<div class='col-12'>
                                 $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGroupAvailable</span></div></div>";
                             }
 
-$tool_content .= "      
+$tool_content .= "
 
-                           
+
                     </form>
                   </div>";
 
@@ -537,6 +537,6 @@ $head_content .= "<script type='text/javascript'>
                         $('#formId').submit();
                     }
                   </script>
-              ";                  
+              ";
 
 draw($tool_content, 2, null, $head_content);

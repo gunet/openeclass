@@ -169,11 +169,11 @@ $head_content .= "<script type='text/javascript'>
                   class : 'form-control input-sm ms-0 mb-3',
                   placeholder : '$langSearch...'
                 });
-            
+
             $(document).on('click', '.assigned_to', function(e) {
                   e.preventDefault();
                   var ass_id = $(this).data('ass_id');
-                  url = '$urlAppend' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;                  
+                  url = '$urlAppend' + 'modules/work/index.php?ass_info_assigned_to=true&ass_id='+ass_id;
                   $.ajax({
                     url: url,
                     success: function(data) {
@@ -309,7 +309,7 @@ if ($is_editor) {
                 // });
 
 
-                bootbox.confirm({ 
+                bootbox.confirm({
                     closeButton: false,
                     title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
                     message: '<p class=\'text-center\'>".js_escape($langDelWarnUserAssignment)."</p>',
@@ -325,7 +325,7 @@ if ($is_editor) {
                     },
                     callback: function (result) {
                         if(result) {
-                            document.location.href = link;     
+                            document.location.href = link;
                         }
                     }
                 });
@@ -423,7 +423,7 @@ if ($is_editor) {
     ";
     }
     $head_content .= "
-    $(function() {        
+    $(function() {
         $('input[name=group_submissions]').click(changeAssignLabel);
         $('input[id=assign_button_some]').click(ajaxAssignees);
         $('input[id=assign_button_group]').click(ajaxAssignees);
@@ -2387,7 +2387,7 @@ function new_assignment() {
                              <input class='mt-0' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
                              <span class='checkmark'></span></label>
                              </span>
-                           <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                           <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                            <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")." </span>
@@ -2404,7 +2404,7 @@ function new_assignment() {
                              <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
                              <span class='checkmark'></span></label>
                              </span>
-                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                           <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                            <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
                        </div>
                        <span class='help-block'>".(Session::hasError('WorkEnd_review') ? Session::getError('WorkEnd_review') : "<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
@@ -2447,7 +2447,7 @@ function new_assignment() {
                          <input class='mt-0' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
                          <span class='checkmark'></span></label>
                          </span>
-                       <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                       <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                        <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
                    </div>
                    <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
@@ -2458,11 +2458,11 @@ function new_assignment() {
                 <div class='col-12'>
                    <div class='input-group'>
                        <span class='input-group-addon'>
-                        <label class='label-container'>  
+                        <label class='label-container'>
                             <input class='mt-0' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
                         <span class='checkmark'></span></label>
                        </span>
-                       <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                       <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                        <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
                    </div>
                    <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
@@ -3479,7 +3479,7 @@ function show_edit_assignment($id) {
                                  <input class='mt-0' type='checkbox' id='enableWorkStart_review' name='enableWorkStart_review' value='1'".($enableWorkStart_review ? ' checked' : '').">
                                  <span class='checkmark'></span></label>
                                  </span>
-                               <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                               <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                <input class='form-control mt-0 border-start-0' name='WorkStart_review' id='WorkStart_review' type='text' value='$WorkStart_review'".($enableWorkStart_review ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkStart_review') ? Session::getError('WorkStart_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langReviewDateHelpBlock")."</span>
@@ -3495,7 +3495,7 @@ function show_edit_assignment($id) {
                                  <input class='mt-0' type='checkbox' id='enableWorkEnd_review' name='enableWorkEnd_review' value='1'".($enableWorkEnd_review ? ' checked' : '').">
                                  <span class='checkmark'></span></label>
                                  </span>
-                               <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                               <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                <input class='form-control mt-0 border-start-0' name='WorkEnd_review' id='WorkEnd_review' type='text' value='$WorkEnd_review'".($enableWorkEnd_review ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkEnd_review') ? Session::getError('WorkEnd_review') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
@@ -3541,7 +3541,7 @@ function show_edit_assignment($id) {
                                     <input class='mt-0' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
                                     <span class='checkmark'></span></label>
                                 </span>
-                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                <span class='add-on1 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
@@ -3557,7 +3557,7 @@ function show_edit_assignment($id) {
                                     <input class='mt-0' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
                                     <span class='checkmark'></span></label>
                                     </span>
-                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>  
+                                <span class='add-on2 input-group-text h-40px input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                 <input class='form-control mt-0 border-start-0' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">
                             </div>
                             <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
@@ -3601,7 +3601,7 @@ function show_edit_assignment($id) {
                         <div class='checkbox'>
                         <label class='label-container'>
                             <input type='checkbox' name='notify_submission' value='1' $checked>
-                            <span class='checkmark'></span>    
+                            <span class='checkmark'></span>
                             $langNotifyAssignmentSubmission
                           </label>
                         </div>
@@ -5064,7 +5064,7 @@ function show_assignment($id) {
             $tool_content .= "
                 <div class='table-responsive mt-3'>
                 <table class='table table-default'>
-                
+
                 <thead><tr class='list-header'>
                 <th class='count-col'>#</th>";
                 sort_link($langSurnameName, 'username', 'class="user-col"');

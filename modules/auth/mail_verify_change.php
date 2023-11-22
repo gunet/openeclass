@@ -99,7 +99,7 @@ if (!empty($_POST['submit'])) {
         $emailhelpdesk = get_config('email_helpdesk');
         $emailAdministrator = get_config('email_sender');
         if (!send_mail_multipart($siteName, $emailAdministrator, '', $email, $subject, $plainMailMessage, $MailMessage)) {
-            $mail_ver_error = sprintf("<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</span></div>");
+            $mail_ver_error = sprintf("<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>" . $langMailVerificationError, $email, $urlServer . "modules/auth/mail_verify_change.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</span></div>");
             $tool_content .= $mail_ver_error;
         } else {
             $tool_content .=

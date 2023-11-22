@@ -78,8 +78,8 @@ function getUserCourseInfo($uid) {
 			        <td class='border-top-0 border-start-0 border-end-0'>
                         <div>
                             <a class='TextBold' href='{$urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "
-                                &nbsp(" . q($data->public_code) . ")
-                            </a>                            
+                                &nbsp;(" . q($data->public_code) . ")
+                            </a>
                         </div>
 			            <div>
                             <small class='vsmall-text Neutral-900-cl TextRegular'>" . q($data->professor) . "</small>
@@ -103,12 +103,13 @@ function getUserCourseInfo($uid) {
                                                 <span class='settings-icons mt-1 Neutral-600-cl'>" . course_access_icon($data->visible) . "</span>
                                                 {$data->title}
                                             </h2>
-                                            <p class='course-professor-code'>{$data->public_code}&nbsp - &nbsp{$data->professor}</p>
+                                            <p class='course-professor-code'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</p>
+;
                                         </div>
                                         <div>
                                             <button type='button' class='close border-0 bg-default mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                         </div>
-                                    </div>                                    
+                                    </div>
                                     <div class='course-content mt-4'>
                                         <div class='col-12 d-flex justify-content-center align-items-start'>";
                                             if($data->course_image == NULL) {
@@ -251,7 +252,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                         <li class='list-group-item ps-0 pe-0'>
                             <div class='item-wholeline text-start'>
                                 <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                                    
+
                                 <p class='TextBold mb-0'>$course_title</p>
                                 <div class='TextRegular Neutral-800-cl'>$ann_date</div>
                             </div>
@@ -263,7 +264,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     <li class='list-group-item ps-0 pe-0'>
                         <div class='item-wholeline text-start'>
                             <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-                            
+
                             <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
                             <div class='TextRegular Neutral-800-cl'>$ann_date</div>
                         </div>
@@ -307,9 +308,9 @@ function getUserMessages() {
             $message_content .= "<li class='list-group-item ps-0 pe-0'>
                                     <div class='item-wholeline text-start'>
                                         <div class='text-title TextBold'><span>$langFrom:</span><span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span></div>
-                                        
+
                                         <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
-                                        
+
                                         <p class='TextBold mb-0'>$course_title</p>
                                         <div class='TextRegular Neutral-800-cl'>$message_date</div>
                                     </div>

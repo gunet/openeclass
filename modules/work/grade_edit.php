@@ -45,7 +45,7 @@ $head_content .= '
                 //     }
                 // });
 
-                bootbox.confirm({ 
+                bootbox.confirm({
                     closeButton: false,
                     title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
                     message: "<p class=\"text-center\">'.js_escape($langConfirmDeleteStudentReview).'</p>",
@@ -61,7 +61,7 @@ $head_content .= '
                     },
                     callback: function (result) {
                         if(result) {
-                            document.location.href = link;   
+                            document.location.href = link;
                         }
                     }
                 });
@@ -247,7 +247,7 @@ function show_edit_form($id, $sid, $assign) {
                                     </div>
                                     <div class='row form-group mt-4'>
                                         <label class='col-12 control-label-notes'>$m[username]</label>
-                                        $uid_2_name &nbsp $message
+                                        $uid_2_name &nbsp; $message
                                     </div>
 
                                     <div class='row form-group mt-4'>
@@ -375,11 +375,11 @@ function show_edit_form($id, $sid, $assign) {
 				} elseif ($grading_type == ASSIGNMENT_RUBRIC_GRADE) {
 					$rubric = Database::get()->querySingle("SELECT * FROM rubric WHERE course_id = ?d AND id = ?d ", $course_id, $assign->grading_scale_id);
 					$criteria = unserialize($rubric->scales);
-					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a 
-                                                                                JOIN assignment as b 
-                                                                              WHERE course_id = ?d 
-                                                                              AND a.assignment_id = b.id 
-                                                                              AND b.id = ?d 
+					$submitted_grade = Database::get()->querySingle("SELECT * FROM assignment_submit as a
+                                                                                JOIN assignment as b
+                                                                              WHERE course_id = ?d
+                                                                              AND a.assignment_id = b.id
+                                                                              AND b.id = ?d
                                                                               AND a.id = ?d", $course_id, $id, $sid);
 					if (!empty($submitted_grade->grade_rubric)) {
                         $sel_criteria = unserialize($submitted_grade->grade_rubric);
@@ -438,7 +438,7 @@ function show_edit_form($id, $sid, $assign) {
 				<input type='hidden' name='assignment' value='$id'>
 				<input type='hidden' name='submission' value='$sid'>
 				<fieldset>
-               
+
 					<div class='row form-group'>
 						<label class='col-12 control-label-notes'>$m[username]</label>
 						<div class='col-12'>
@@ -452,7 +452,7 @@ function show_edit_form($id, $sid, $assign) {
 							".format_locale_date(strtotime($sub->submission_date))."
 						</div>
 					</div>
-					                    
+
 					$submission
 
 					<div class='row form-group".(Session::getError('grade') ? " has-error" : "")." mt-4'>

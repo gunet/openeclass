@@ -39,7 +39,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -51,7 +51,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -61,7 +61,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -70,16 +70,16 @@
 
                     <div class='col-12'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            
+
                             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                 <h3>
                                     {{ $request->title }}
                                     @if ($request->type_id)
-                                        <small>&nbsp->&nbsp{{ $type->name }}</small>
+                                        <small>&nbsp;->&nbsp;{{ $type->name }}</small>
                                     @endif
                                 </h3>
                             </div>
-                            
+
 
                             <div class='card-body'>
 
@@ -117,7 +117,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                
+
                                 <hr>
 
                                 @if ($field_data)
@@ -218,7 +218,7 @@
                                         <div class='form-group mt-5'>
                                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                                 <button class='btn submitAdminBtn' type='submit'>{{ trans('langSubmit') }}</button>
-                                                <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a> 
+                                                <a class='btn cancelAdminBtn ms-1' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                             </div>
                                         </div>
                                         {!! generate_csrf_token_form_field() !!}
@@ -239,14 +239,14 @@
                                         <div class="col">
                                             <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                                                 <div class='panel-body'>
-                                                    
-                                                    
+
+
                                                     <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langFrom') }}</p>
                                                     <p class='card-text'>{!! display_user($comment->user_id) !!}</p>
-                                                    
+
                                                     <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langDate') }}</p>
                                                     <p class='card-text'>{{ format_locale_date(strtotime($comment->ts)) }}</p>
-                                                    
+
                                                     @if ($comment->old_state != $comment->new_state)
 
                                                         <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langChangeState') }}</p>
@@ -254,19 +254,19 @@
                                                             {{ $states[$comment->new_state] }}
                                                             <span>({{ trans('langFrom') }}:</span> {{ $states[$comment->old_state] }})
                                                         </p>
-                                                        
+
                                                     @endif
                                                     @if ($comment->real_filename)
 
                                                         <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langAttachedFile') }}</p>
                                                         <p class='card-text'><a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a></p>
-                                                        
+
                                                     @endif
                                                     @if ($comment->comment)
 
                                                         <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langComment') }}</p>
                                                         {!! standard_text_escape($comment->comment) !!}
-                                                        
+
                                                     @endif
                                                 </div>
                                             </div>
@@ -283,11 +283,11 @@
                         @include('modules.request.modals')
                     @endif
 
-                    
+
                 </div>
             </div>
         </div>
-    
+
 </div>
 </div>
 @endsection

@@ -514,7 +514,7 @@
                         <img class="user-detals-photo m-auto d-block" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                         <div class='col-lg-12 col-md-3 col-6 ms-auto me-auto'>
                             <a class='btn submitAdminBtn myProfileBtn mt-2' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                                <i class='fa-solid fa-user'></i>&nbsp&nbsp{{ trans('langMyProfile') }}
+                                <i class='fa-solid fa-user'></i>&nbsp;&nbsp;{{ trans('langMyProfile') }}
                             </a>
                         </div>
                     </div>
@@ -530,7 +530,7 @@
                             @endif
                         </p>
                         <p class='vsmall-text Neutral-800-cl mb-0'>
-                            {{ trans('langProfileLastVisit') }}&nbsp:&nbsp{{ format_locale_date(strtotime($lastVisit->when)) }}
+                            {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
                         </p>
                     </div>
                 </div>
@@ -581,7 +581,7 @@
                         <div class='card border-0 bg-transparent'>
                             <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
                                 @php $totalCourses = $student_courses_count + $teacher_courses_count; @endphp
-                                <h2>{{ trans('langMyCoursesSide') }}&nbsp({{ $totalCourses }})</h2>
+                                <h2>{{ trans('langMyCoursesSide') }}&nbsp;({{ $totalCourses }})</h2>
                                 <div class='d-flex'>
                                     <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
                                         <i class="fa-regular fa-pen-to-square"></i>&nbsp
@@ -589,7 +589,7 @@
                                     </a>
                                     @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user)
                                         <a id="btn_create_course" class="btn submitAdminBtnDefault" href="{{ $urlAppend }}modules/create_course/create_course.php">
-                                            <i class="fa-solid fa-plus"></i>&nbsp{{ trans('langCreate') }}
+                                            <i class="fa-solid fa-plus"></i>&nbsp;{{ trans('langCreate') }}
                                         </a>
                                     @endif
                                 </div>
@@ -689,7 +689,7 @@
 
                                                         <div class="lesson-title">
                                                             <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
-                                                                {{ $course->title }}&nbsp({{ $course->public_code }})
+                                                                {{ $course->title }}&nbsp;({{ $course->public_code }})
                                                             </a>
                                                         </div>
 
@@ -697,7 +697,7 @@
                                                     </div>
 
                                                     <div class='card-footer bg-default border-0'>
-                                                        <a class='ClickCoursePortfolio me-3' href='#' id='{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp{{ trans('langOfCourse') }}">
+                                                        <a class='ClickCoursePortfolio me-3' href='#' id='{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                             <i class='fa-solid fa-display'></i>
                                                         </a>
                                                        {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}

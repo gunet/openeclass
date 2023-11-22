@@ -146,13 +146,13 @@ function show_post_form() {
             <div class="col-12">
                 <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
                     <div class="card-header border-0 bg-default">
-                        
-                            <h3>'.$langWall.'&nbsp'.$langOfCourse.'</h3>
-                        
+
+                            <h3>'.$langWall.'&nbsp;'.$langOfCourse.'</h3>
+
                     </div>
                     <div class="card-body">
                         <form id="wall_form" method="post" action="'.$urlServer.'modules/wall/index.php?course='.$course_code.'" enctype="multipart/form-data">
-                            <fieldset> 
+                            <fieldset>
                                 <div class="form-group">
                                     <textarea style="min-height:100px;" id="textr" onfocus="expand_form();" class="form-control" placeholder="'.$langTypeOutMessage.'" rows="1" name="message" id="message_input">'.$content.'</textarea>
                                 </div>
@@ -196,8 +196,8 @@ function show_post_form() {
                                         'value' =>  $langSubmit
                                     )
                                 ))
-                                .'</div></div>  
-                            </fieldset>      
+                                .'</div></div>
+                            </fieldset>
                         </form>
                     </div>
                 </div>

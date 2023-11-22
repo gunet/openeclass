@@ -176,7 +176,7 @@ function generate_single_post_html($post) {
                             //       }
                             //   });
 
-                            bootbox.confirm({ 
+                            bootbox.confirm({
                                 closeButton: false,
                                 title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
                                 message: "<p class=\"text-center\">'.js_escape($langWallPostDelConfirm).'</p>",
@@ -192,7 +192,7 @@ function generate_single_post_html($post) {
                                 },
                                 callback: function (result) {
                                     if(result) {
-                                        document.location.href = link;     
+                                        document.location.href = link;
                                     }
                                 }
                             });
@@ -243,13 +243,13 @@ function generate_single_post_html($post) {
                                         <div class="card-header bg-default border-0">
                                             <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
                                                 '. profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') .'
-                                                &nbsp<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                                &nbsp;<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                             </a>
                                             '.$post_actions.'
                                         </div>
                                         <div class="card-body bubble overflow-auto Borders">
                                             <p class="blackBlueText TextBold">'.$datetime.'</p>
-                                            
+
 
                                             <div class="margin-top-thin" style="padding:20px">
                                                 '.$extvideo_block.'
@@ -282,7 +282,7 @@ function generate_infinite_container_html($posts, $next_page) {
                             //   });
 
 
-                            bootbox.confirm({ 
+                            bootbox.confirm({
                                 closeButton: false,
                                 title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
                                 message: "<p class=\"text-center\">'.js_escape($langWallPostDelConfirm).'</p>",
@@ -309,9 +309,9 @@ function generate_infinite_container_html($posts, $next_page) {
     $ret = '
         <div class="card panelCard panelCardDefault border-0 mt-5">
           <div class="card-header card-header-default px-0 py-0 border-0 bg-default d-md-flex justify-content-md-between align-items-md-center">
-            
+
                 <h3>'.$langWallPostsShow.'</h3>
-            
+
           </div>
           <div class="card-body card-body-default p-0">
             <div class="infinite-container">';
@@ -399,14 +399,14 @@ function generate_infinite_container_html($posts, $next_page) {
                       <div class="card-header bg-default border-0">
                         <a class="media-left p-0" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">' .
                           profile_image($user_id, IMAGESIZE_SMALL, 'img-circle rounded-circle') . '
-                          &nbsp<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                          &nbsp;<small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                         </a>' .
                         $post_actions . '
                       </div>
 
                       <div class="card-body bubble overflow-auto Borders">
                         <p class="form-value">'.$datetime.'</p>
-                       
+
                         <div class="margin-top-thin" style="padding:20px">' .
                           $extvideo_block . '
                         <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>

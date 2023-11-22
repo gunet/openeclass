@@ -99,7 +99,7 @@ if (isset($_GET['mid'])) {
                                             </div>
                                         </div>";
                                     if ($msg->course_id != 0 && $course_id == 0) {
-                                        $out .= "       
+                                        $out .= "
                                         <div class='row p-2 margin-bottom-thin'>
                                             <div class='col-12'>
                                                 <strong class='control-label-notes'>$langCourse:</strong>
@@ -134,7 +134,7 @@ if (isset($_GET['mid'])) {
                                                 $recipients
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +161,7 @@ if (isset($_GET['mid'])) {
                                                             course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank'>" .
                                                             q($msg->real_filename) . "
                                                         </a>
-                                                        &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
+                                                        &nbsp;<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
                                                             format_file_size($msg->filesize). ")
                                                         </div>
                                                     </div>";
@@ -169,8 +169,8 @@ if (isset($_GET['mid'])) {
                             $out .= "</div>
                                 </div>
                             </div>
-                    
-                    
+
+
                         </div>";
 
         /*****Reply Form****/
@@ -179,7 +179,7 @@ if (isset($_GET['mid'])) {
         } else {
             if($course_id == 0){
                 $out .= "<div class='row mt-4'>
-                      
+
                         <div class='col-lg-6 col-12'>";
             }else{
                 $out .= "<div class='col-12 mt-4'>";
@@ -194,7 +194,7 @@ if (isset($_GET['mid'])) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             $out .= generate_csrf_token_form_field() . "
-          
+
                 <fieldset>
                 <h4 class='TextBold text-center'>$langReply</h4>
                     <div class='form-group mt-4'>
@@ -205,7 +205,7 @@ if (isset($_GET['mid'])) {
                     </div>";
 
             $out .= "
-      
+
             <div class='form-group mt-4'>
             <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
             <div class='col-sm-12'>
@@ -220,7 +220,7 @@ if (isset($_GET['mid'])) {
             </div>
         </div>";
         $out .= "
-     
+
         <div class='form-group mt-4'>
                     <label for='message_title' class='col-sm-6 control-label-notes'>$langSubject</label>
                     <div class='col-sm-12'>
@@ -228,7 +228,7 @@ if (isset($_GET['mid'])) {
                             q($langMsgRe . ' ' . $msg->subject) . "'>
                     </div>
                 </div>
-                
+
                 <div class='form-group mt-4'>
                     <label for='body' class='col-sm-6 control-label-notes'>$langMessage</label>
                     <div class='col-sm-12'>
@@ -239,7 +239,7 @@ if (isset($_GET['mid'])) {
         if ($course_id != 0) {
             enableCheckFileSize();
             $out .= "
-           
+
             <div class='form-group mt-4'>
                         <label for='body' class='col-sm-6 control-label-notes'>$langFileName</label>
                         <div class='col-sm-12'>" .
@@ -250,7 +250,7 @@ if (isset($_GET['mid'])) {
         }
 
         $out .= "
-     
+
                 <div class='form-group mt-4'>
                     <div class='col-sm-10 col-sm-offset-2'>
                             <div class='checkbox'>
@@ -263,11 +263,11 @@ if (isset($_GET['mid'])) {
 
                     </div>
                 </div>
-              
+
                 <div class='form-group mt-5'>
                     <div class='col-12 d-flex justify-content-end align-items-center'>
-                       
-                          
+
+
                             ".
                             form_buttons(array(
                                 array(
@@ -283,9 +283,9 @@ if (isset($_GET['mid'])) {
                                 )
                             ))
                             ."
-                         
-                         
-                       
+
+
+
                     </div>
                 </div>
             </fieldset>";
@@ -300,7 +300,7 @@ if (isset($_GET['mid'])) {
             // forward form
             if($course_id == 0){
                 $out .= "<div class='row'>
-                        
+
                         <div class='col-lg-6 col-12'>";
             }else{
                 $out .= "<div class='col-12 mt-4'>";
@@ -315,7 +315,7 @@ if (isset($_GET['mid'])) {
                 $out .= "<form method='post' class='form-horizontal' role='form' action='message_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             $out .= generate_csrf_token_form_field() . "
-           
+
                 <fieldset>
                 <h4 class='TextBold text-center'>$langForward</h4>
                     <div class='form-group mt-4'>
@@ -324,7 +324,7 @@ if (isset($_GET['mid'])) {
                             <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
                         </div>
                     </div>
-                   
+
                 <div class='form-group mt-4'>
                 <label for='title' class='col-sm-6 control-label-notes'>$langSendTo</label>
                 <div class='col-sm-12'>
@@ -335,7 +335,7 @@ if (isset($_GET['mid'])) {
             $out .= "</select><a href='#' id='removeAllForward'>$langJQUncheckAll</a>
                 </div>
             </div>
-            
+
             <div class='form-group mt-4'>
                 <label for='message_title' class='col-sm-6 control-label-notes'>$langSubject</label>
                 <div class='col-sm-12'>
@@ -343,7 +343,7 @@ if (isset($_GET['mid'])) {
                         q($langMsgFw . ' ' . $msg->subject) . "'>
                 </div>
             </div>
-          
+
             <div class='form-group mt-4'>
                 <label for='body' class='col-sm-6 control-label-notes'>$langMessage</label>
                 <div class='col-sm-12'>
@@ -353,7 +353,7 @@ if (isset($_GET['mid'])) {
 
             if ($msg->filename and $msg->filesize != 0) {
                 $out .= "
-                
+
                     <div class='form-group attachment-section mt-4'>
                         <label class='col-sm-6 control-label-notes'>$langAttachedFile</label>
                         <div class='col-sm-8'>
@@ -361,7 +361,7 @@ if (isset($_GET['mid'])) {
                                 <input type='hidden' name='keepAttachment' value='{$msg->id}'>
                                 <a href='message_download.php?course=" .
                                 course_id_to_code($msg->course_id) . "&amp;id={$msg->id}' class='outtabs' target='_blank'>" .
-                                q($msg->real_filename) . "</a>&nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
+                                q($msg->real_filename) . "</a>&nbsp;<i class='fa fa-save'></i></a>&nbsp;&nbsp;(" .
                                 format_file_size($msg->filesize) . ")
                             </p>
                         </div>
@@ -371,7 +371,7 @@ if (isset($_GET['mid'])) {
                     </div>";
             } elseif ($course_id != 0) {
                 enableCheckFileSize();
-                
+
                 $out .= "<div class='form-group mt-4'>
                             <label for='body' class='col-sm-6 control-label-notes'>$langFileName</label>
                             <div class='col-sm-12'>" .
@@ -381,7 +381,7 @@ if (isset($_GET['mid'])) {
                         </div>";
             }
             $out .= "
-           
+
                     <div class='form-group mt-4'>
                         <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
@@ -393,11 +393,11 @@ if (isset($_GET['mid'])) {
                                 </div>
                         </div>
                     </div>
-                   
+
                     <div class='form-group mt-5'>
                         <div class='col-12 d-flex justify-content-end align-items-center'>
-                        
-                             
+
+
                                  ".
                                  form_buttons(array(
                                      array(
@@ -413,9 +413,9 @@ if (isset($_GET['mid'])) {
                                     )
                                  ))
                                  ."
-                             
-                              
-                          
+
+
+
                         </div>
                     </div>
                 </fieldset>";
@@ -456,7 +456,7 @@ if (isset($_GET['mid'])) {
                             }, 500);
                             $('#select-recipients-forward').select2({
                                 placeholder: '".js_escape($langSearch)."',
-                                multiple: true,                                
+                                multiple: true,
                                 cache: true
                             });
                             return false;
@@ -508,7 +508,7 @@ if (isset($_GET['mid'])) {
                     $(document).on("click", ".delete_in_inner", function (e) {
                         e.preventDefault();
                         var id = $(this).children("a").data("id");
-                        var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";   
+                        var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
 
                         // bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
                         //     if(result) {
@@ -521,11 +521,11 @@ if (isset($_GET['mid'])) {
                         //                 $("#del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
                         //                 $(".alert-success").delay(3000).fadeOut(1500);
                         //                 $("#msg_area").remove();
-                        //         }});                             
+                        //         }});
                         //     }
                         // });
 
-                        bootbox.confirm({ 
+                        bootbox.confirm({
                             closeButton: false,
                             title: "<div class=\"icon-modal-default\"><i class=\"fa-regular fa-trash-can fa-xl Accent-200-cl\"></i></div><h3 class=\"modal-title-default text-center mb-0\">'.js_escape($langConfirmDelete).'</h3>",
                             message: "<p class=\"text-center\">'.js_escape($langConfirmDelete).'</p>",
@@ -550,20 +550,20 @@ if (isset($_GET['mid'])) {
                                             $("#del_msg").html("<p class=\"alert alert-success\"><i class=\"fa-solid fa-circle-check fa-lg\"></i><span>'.js_escape($langMessageDeleteSuccess).'</span></p>");
                                             $(".alert-success").delay(3000).fadeOut(1500);
                                             $("#msg_area").remove();
-                                    }});      
+                                    }});
                                 }
                             }
-                        });     
+                        });
 
 
-                        
+
 
                     });
 
                     $(".delete").click(function() {
                       if (confirm("' . js_escape($langConfirmDelete) . '")) {
                         var rowContainer = $(this).parent().parent();
-                        var id = rowContainer.attr("id");                        
+                        var id = rowContainer.attr("id");
                         var string = "mid="+id+"&'. generate_csrf_token_link_parameter() .'";
                         $.ajax({
                           type: "POST",
@@ -647,7 +647,7 @@ if (isset($_GET['mid'])) {
                         }
                     }
                  });
-                
+
                 $(document).off( 'click','.delete_in_inner');
                 $(document).on( 'click','.delete_in', function (e) {
                     e.preventDefault();
@@ -684,7 +684,7 @@ if (isset($_GET['mid'])) {
                     //     }
                     // });
 
-                    bootbox.confirm({ 
+                    bootbox.confirm({
                         closeButton: false,
                         title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDelete)."</p>',
@@ -727,7 +727,7 @@ if (isset($_GET['mid'])) {
                                 });
                             }
                         }
-                    });         
+                    });
                 });
 
                 $('.delete_all_in').click(function() {
@@ -756,7 +756,7 @@ if (isset($_GET['mid'])) {
                     //     }
                     // })
 
-                    bootbox.confirm({ 
+                    bootbox.confirm({
                         closeButton: false,
                         title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',
                         message: '<p class=\'text-center\'>".js_escape($langConfirmDeleteAllMsgs)."</p>',
@@ -794,7 +794,7 @@ if (isset($_GET['mid'])) {
                                 });
                             }
                         }
-                    });         
+                    });
 
                 });
 

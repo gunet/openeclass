@@ -39,7 +39,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -51,7 +51,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -61,7 +61,7 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
@@ -77,19 +77,19 @@
                                     <div class="card border-card h-100 Borders border-0 bg-transparent">
                                         <div class="card-body p-0">
 
-                                            
+
                                             @if (isset($buildRoots))
                                                 {!! $buildRoots !!}
                                             @endif
-                                           
-                                            
+
+
                                             <div class='col-12 mt-4' id='accordion'>
                                                 <ul class='list-group list-group-flush list-group-default'>
                                                     <li class="list-group-item">
                                                         <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#Category'>
                                                             <i class='fa-solid fa-chevron-down'></i>
-                                                            &nbsp&nbsp{!! $tree->getFullPath($fc) !!}
-                                                            
+                                                            &nbsp;&nbsp;{!! $tree->getFullPath($fc) !!}
+
                                                             {{-- {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!} --}}
                                                         </a>
                                                     </li>
@@ -98,8 +98,8 @@
                                                     </div>
                                                 </ul>
                                             </div>
-                                               
-                                           
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                         </div>
                     </div>
 
-                    
+
 
 
                     @if (count($courses) > 0)
@@ -172,7 +172,7 @@
                                                                         <span class='settings-icons mt-1 Neutral-600-cl'>{!! course_access_icon($mycourse->visible) !!}</span>
                                                                         {{$mycourse->i}}
                                                                     </h2>
-                                                                    <p class='course-professor-code'>{{$mycourse->c}}&nbsp - &nbsp{{$mycourse->t}}</p>
+                                                                    <p class='course-professor-code'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</p>
                                                                 </div>
                                                                 <div>
                                                                     <button type='button' class="close border-0 bg-default mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
@@ -199,7 +199,7 @@
                                                         </div>
 
                                                     </div>
-                                                
+
                                                 </td>
                                                 <td>
                                                     {!! $mycourse->t !!}
@@ -223,10 +223,10 @@
                             <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses')}}</span></div>
                         </div>
                     @endif
-                
+
         </div>
-    
-</div>
+
+    </div>
 </div>
 
 <script type="text/javascript">
@@ -243,7 +243,7 @@
         // Get the button that opens the modal
         btn = document.getElementById(idCourse);
 
-        // When the user clicks the button, open the modal 
+        // When the user clicks the button, open the modal
         modal.style.display = "block";
 
         $('[data-bs-toggle="tooltip"]').tooltip("hide");
@@ -269,5 +269,3 @@
 </script>
 
 @endsection
-
-

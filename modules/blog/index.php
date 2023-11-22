@@ -216,21 +216,21 @@ if ($blog_type == 'course_blog' && $is_editor) {
             $flex_grow = 'flex-grow-1';
             $column_content = 'form-content-modules';
         }else{
-            $flex_content = 'row m-auto'; 
+            $flex_content = 'row m-auto';
             $flex_grow = 'col-lg-6 col-12 px-0';
             $column_content = 'col-lg-6 col-12';
         }
 
         $tool_content .= "
-            
+
             <div class='$flex_content mt-4'>
                 <div class='$flex_grow'>
                     <div class='form-wrapper form-edit rounded border-0 px-0'>
                         <form class='form-horizontal' action='' role='form' method='post'>
-                            <fieldset>                               
+                            <fieldset>
                                 <div class='form-group mt-4'>
                                     <label class='col-sm-12 control-label-notes'>$langBlogPerm</label>
-                                    <div class='col-sm-12'> 
+                                    <div class='col-sm-12'>
                                         <div class='radio'>
                                             <label>
                                                 <input type='radio' value='0' name='1_radio' $checkTeach> $langBlogPermTeacher
@@ -292,9 +292,9 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                                
-                                 
-                                      
+
+
+
                                          ".
                                          form_buttons(array(
                                              array(
@@ -309,10 +309,10 @@ if ($blog_type == 'course_blog' && $is_editor) {
                                              )
                                          ))
                                          ."
-                                      
-                                      
-                                   
-                                
+
+
+
+
                             </div>
                         </form>
                     </div>
@@ -387,7 +387,7 @@ if ($action == "createPost") {
         if ($comments_enabled) {
             $commenting_setting = "<div class='form-group mt-4'>
                                        <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
-                                       
+
                                            <div class='radio mb-2'>
                                                 <label>
                                                     <input type='radio' value='1' name='commenting' checked>
@@ -400,7 +400,7 @@ if ($action == "createPost") {
                                                     $langCommentsDis
                                                 </label>
                                            </div>
-                                       
+
                                    </div>";
         }
 
@@ -414,7 +414,7 @@ if ($action == "createPost") {
             $flex_grow = 'flex-grow-1';
             $column_content = 'form-content-modules';
         }else{
-            $flex_content = 'row m-auto'; 
+            $flex_content = 'row m-auto';
             $flex_grow = 'col-lg-6 col-12 px-0';
             $column_content = 'col-lg-6 col-12';
         }
@@ -426,7 +426,7 @@ if ($action == "createPost") {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                     <fieldset>
-                    
+
 
                         <div class='form-group'>
                             <label for='blogPostTitle' class='col-sm-12 control-label-notes'>$langBlogPostTitle:</label>
@@ -435,7 +435,7 @@ if ($action == "createPost") {
                             </div>
                         </div>
 
-                    
+
 
                         <div class='form-group mt-4'>
                             <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
@@ -444,11 +444,11 @@ if ($action == "createPost") {
                             </div>
                         </div>
                         $commenting_setting
-                        
+
                         <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                        
-                            
-                                
+
+
+
                                     ".
                                     form_buttons(array(
                                         array(
@@ -463,10 +463,10 @@ if ($action == "createPost") {
                                         )
                                     ))
                                     ."
-                                
-                                
-                            
-                        
+
+
+
+
                         </div>
                         <input type='hidden' name='action' value='savePost' />
                     </fieldset>
@@ -513,10 +513,10 @@ if ($action == "editPost") {
                     $checkCommentDis = 'checked';
                 }
                 $commenting_setting = "
-                
+
                                         <div class='form-group mt-4'>
                                               <label class='col-sm-12 control-label-notes mb-2'>$langBlogPostCommenting:</label>
-                                           
+
                                                <div class='radio mb-2'>
                                                     <label>
                                                         <input type='radio' value='1' name='commenting' $checkCommentEn>
@@ -529,7 +529,7 @@ if ($action == "editPost") {
                                                         $langCommentsDis
                                                     </label>
                                                </div>
-                                          
+
                                        </div>";
             }
 
@@ -542,7 +542,7 @@ if ($action == "editPost") {
                 $flex_grow = 'flex-grow-1';
                 $column_content = 'form-content-modules';
             }else{
-                $flex_content = 'row m-auto'; 
+                $flex_content = 'row m-auto';
                 $flex_grow = 'col-lg-6 col-12 px-0';
                 $column_content = 'col-lg-6 col-12';
             }
@@ -561,7 +561,7 @@ if ($action == "editPost") {
                             </div>
                         </div>
 
-                    
+
 
                         <div class='form-group mt-4'>
                             <label for='newContent' class='col-sm-12 control-label-notes'>$langBlogPostBody:</label>
@@ -571,12 +571,12 @@ if ($action == "editPost") {
                         </div>
                         $commenting_setting
 
-                        
+
 
                         <div class='form-group mt-5 d-flex justify-content-end align-items-center'>
-                        
-                            
-                            
+
+
+
                                 ".
                                 form_buttons(array(
                                     array(
@@ -591,10 +591,10 @@ if ($action == "editPost") {
                                     )
                                 ))
                                 ."
-                                
-                                
-                            
-                            
+
+
+
+
                         </div>
                         <input type='hidden' name='action' value='savePost'>
                         <input type='hidden' name='pId' value='".$post->getId()."'>
@@ -740,12 +740,12 @@ if ($action == "showPost") {
                             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
 
-                                    
-                                       
+
+
                                             <h3>
                                                 ".q($post->getTitle())."
                                             </h3>
-                                       
+
                                             <div>
                                                 ". action_button(array(
                                                     array(
@@ -770,20 +770,20 @@ if ($action == "showPost") {
                                                     ),
                                                 ))."
                                             </div>
-                                        
-                                        
-                                   
 
 
-                               
+
+
+
+
                             </div>
                             <div class='card-body'>" . format_locale_date(strtotime($post->getTime())). "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
                             <div class='card-footer bg-default border-0 d-flex justify-content-between align-items-center'>
 
-                               
+
                                     <div>$rating_content</div>
                                     <div>$sharing_content</div>
-                             
+
                             </div>
                         </div>
                     </div>";
@@ -877,7 +877,7 @@ if ($action == "showBlog") {
 
                 $comment_content = "<a class='commentPress float-end mt-3 pe-0' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>
                                             <i class='fa-regular fa-comment-dots'></i>
-                                            &nbsp|&nbsp;
+                                            &nbsp;|&nbsp;
                                             <span class='vsmall-text text-decoration-underline'>$langComments (".$comm->getCommentsNum().")</span>
                                     </a>";
 
@@ -887,12 +887,12 @@ if ($action == "showBlog") {
             }
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3 mt-2' style='border-radius:3px !important;'>
                                 <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
-                                   
-                                       
-                                     
+
+
+
                                         <a class='TextBold fs-6' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
-                                       
-                                       
+
+
                                         <div>
                                             ". action_button(array(
                                                 array(
@@ -917,19 +917,19 @@ if ($action == "showBlog") {
                                                 ),
                                             ))."
                                         </div>
-                                       
-                                        
-                                   
+
+
+
                                 </div>
                                 <div class='card-body'>
                                     <p class='TextBold mb-2'>" . format_locale_date(strtotime($post->getTime())) . "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
                                 <div class='card-footer bg-default d-flex justify-content-between align-items-center pt-lg-3'>
-                                    
+
                                         <div>$rating_content</div>
                                         <div>$sharing_content</div>
-                                    
+
                                 </div>
                              </div>";
         }

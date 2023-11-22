@@ -181,7 +181,7 @@ function commentBox($type, $mode) {
 
             if ($is_editor) {
                 $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
-                $output .= "&nbsp;&nbsp;&nbsp";
+                $output .= "&nbsp;&nbsp;&nbsp;";
                 $output .= icon('fa-xmark', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
 
             }
@@ -713,7 +713,7 @@ function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
 }
 
 function get_learnPath_combined_progress($lpid, $lpUid): float {
-    $sql = "SELECT 
+    $sql = "SELECT
                    MAX(LPM.`learnPath_module_id`) as learnPath_module_id,
                    MAX(LPM.`parent`) as parent,
                    MAX(LPM.`lock`) as `lock`,
@@ -1428,7 +1428,7 @@ function disp_progress_bar($progress, $factor) {
 
     $progressBar = "
     <div role='progressbar' aria-valuenow=$progress aria-valuemin='0' aria-valuemax='100' style='--value: $progress; --size: 6rem;'></div>";
-    
+
     return $progressBar;
 }
 

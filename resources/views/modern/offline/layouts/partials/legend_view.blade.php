@@ -1,7 +1,7 @@
 
 <div class='d-none d-md-none d-lg-block mt-0'>
     <div class='col-12 px-0 py-3 bg-body rounded bg-primary'>
-        
+
             @if($course_code)
                 @if($is_editor)
                     <div class='row'>
@@ -15,12 +15,12 @@
                                 <div class='row'>
                                     <span class='control-label-notes'>
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
-                                    </span> 
+                                    </span>
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
-                                        <span>{{course_id_to_public_code($course_id)}}</span>                                     
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
+                                        <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
                                 </div>
                             @else
@@ -29,10 +29,10 @@
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
-                                <div class='row'>      
+                                <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
-                                        <span>{{course_id_to_public_code($course_id)}}</span>                              
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
+                                        <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
                                 </div>
                             @endif
@@ -54,8 +54,8 @@
                                 </div>
                                 <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
-                                        <span>{{course_id_to_public_code($course_id)}}</span>                                     
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
+                                        <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
                                 </div>
                             @else
@@ -64,10 +64,10 @@
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
-                                <div class='row'>      
+                                <div class='row'>
                                     <span class='control-label-notes'>
-                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp - &nbsp
-                                        <span>{{course_id_to_public_code($course_id)}}</span>                              
+                                        <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
+                                        <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
                                 </div>
                             @endif
@@ -75,18 +75,18 @@
                     </div>
                 @endif
             @endif
-        
+
     </div></br>
 </div>
 
 <div class='d-block d-md-block d-lg-none mt-3'>
     <div class='col-12 p-3 bg-body rounded'>
-        
+
             @if($course_code)
                 @if($is_editor)
                     <div class='row'>
                         <div class='col-12 border border-top-0 border-start-0 border-end-0 border-bottom-secondary px-0'>
-                           
+
                                 <table class='table'>
                                     <thead>
                                         @if($toolName)
@@ -98,14 +98,14 @@
                                                 </th>
                                             </tr>
                                         @endif
-                                       
+
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <a class='fs-3' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                             </th>
                                         </tr>
-                                        
-                                            
+
+
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <span>
@@ -121,19 +121,19 @@
                                                 </span>
                                             </th>
                                         </tr>
-                                        
-                                        
+
+
                                         <tbody>
                                         </tbody>
                                     </thead>
                                 </table>
-                            
+
                         </div>
                     </div>
                 @else
                     <div class='row'>
                         <div class='col-12'>
-                            
+
                                 <table class='table'>
                                     <thead>
                                         @if($toolName)
@@ -145,14 +145,14 @@
                                                 </th>
                                             </tr>
                                         @endif
-                                       
+
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <a class='fs-3' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                             </th>
                                         </tr>
-                                        
-                                            
+
+
                                         <tr class='border-0'>
                                             <th class='border-0'>
                                                 <span>
@@ -168,17 +168,17 @@
                                                 </span>
                                             </th>
                                         </tr>
-                                        
-                                        
+
+
                                         <tbody>
                                         </tbody>
                                     </thead>
                                 </table>
-                            
+
                         </div>
                     </div>
                 @endif
             @endif
-        
+
     </div></br>
 </div>

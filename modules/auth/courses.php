@@ -137,7 +137,7 @@ if (isset($_POST['submit'])) {
                                         $tool_content .= "<ul class='list-group list-group-flush list-group-default'>
                                                                 <li class='list-group-item'>
                                                                     <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#RegisterCourses'>
-                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp&nbsp" .$tree->getFullPath($fc) . "
+                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp;&nbsp;" .$tree->getFullPath($fc) . "
                                                                     </a>
                                                                 </li>";
                                             $tool_content .= "<div id='RegisterCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionRegister'>";

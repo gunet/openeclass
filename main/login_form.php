@@ -29,7 +29,7 @@ foreach ($q as $l) {
             $authUrl .= '?next=' . urlencode($_GET['next']);
         }
         $authLink[] = array(false, "
-            
+
               <div class='col-12'><a class='btn w-100 login-form-submit d-flex justify-content-center align-items-center mt-4' href='$authUrl'>$langEnter</a></div>
             ", $authTitle);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
@@ -57,9 +57,9 @@ foreach ($q as $l) {
               <div>
                   <label for='username_id' class='form-label'>$langUsername</label>
                   <input id='username_id' class='login-input w-100' placeholder='&#xf007' type='text' id='uname' name='uname' autocomplete='on' />
-                  <label for='password_id' class='form-label mt-4'>$langPassword&nbsp(password)</label>
-                  <input id='password_id' class='login-input w-100' placeholder='&#xf084' type='password' id='pass' name='pass' autocomplete='on' />
-                  <input class='btn w-100 login-form-submit mt-4' type='submit' name='submit' value='$langEnter' />
+                  <label for='password_id' class='form-label mt-4'>$langPassword&nbsp;(password)</label>
+                  <input id='password_id' class='login-input w-100' placeholder='&#xf084' type='password' id='pass' name='pass' autocomplete='on'>
+                  <input class='btn w-100 login-form-submit mt-4' type='submit' name='submit' value='$langEnter'>
               </div>
             </form>
             <div class='col-12 text-center mt-4'>
@@ -84,7 +84,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
         foreach ($authLink as $authInfo) {
 
             if (Session::has('login_error') and $authInfo[0]) {
-                $tool_content .= "<div class='col-12'>                                 
+                $tool_content .= "<div class='col-12'>
                                     <input id='showWarningModal2' type='hidden' value='1'>
                                     <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
                                         <div class='modal-dialog modal-dialog-centered'>

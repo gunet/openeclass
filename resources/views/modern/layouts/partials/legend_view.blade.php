@@ -16,7 +16,7 @@
                 @if($toolName)
                     <div class='col-12 mb-2'>
                         <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                        <p>{{ course_id_to_public_code($course_id) }}&nbsp - &nbsp{{ course_id_to_prof($course_id) }}</p>
+                        <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
                     </div>
                     <div class='col-12 d-inline-flex'>
                         <!-- toolName -->
@@ -32,7 +32,7 @@
                             @endif
                         </div>
                         <div class='d-flex justify-content-start align-items-center gap-2'>
-                            <p>{{ course_id_to_public_code($course_id) }}&nbsp - &nbsp{{ course_id_to_prof($course_id) }}</p>
+                            <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
                         </div>
                     </div>
                 @endif
@@ -94,4 +94,3 @@
         </div>
     </div>
 @endif
-

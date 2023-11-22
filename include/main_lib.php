@@ -3734,7 +3734,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
-                                <span class='hidden-xs TextBold'>$secondary_title</span> 
+                                <span class='hidden-xs TextBold'>$secondary_title</span>
                                 <span class='caret'></span><span class='hidden'></span>
                             </button>";
         $action_button .= " <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='toolDropdown'>
@@ -3895,7 +3895,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
                 <a tabindex='1' role='button' class='menu-popover btn $secondary_btn_class d-flex justify-content-center align-items-center' data-bs-toogle='popover' data-bs-container='body' data-bs-placement='left' data-bs-html='true' data-bs-trigger='manual' data-bs-content='$action_list'>
                     <span class='fa $secondary_icon'></span>
                     $tmp_class_title
-                    
+
                 </a>";
     }
 
@@ -3949,8 +3949,8 @@ function setOpenCoursesExtraHTML() {
 
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
-            
-        
+
+
             <div class='col-12 ms-auto me-auto banner_openCourses'>
                 <div class='card border-card h-100'>
                     <div class='card-body card-body d-flex justify-content-center align-items-center'>
@@ -3959,7 +3959,7 @@ function setOpenCoursesExtraHTML() {
                             <div class='col-12 d-flex justify-content-center align-items-center'>
                                 <img class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
                             </div>
-            
+
                             <div class='col-12'>
                                 <div class='row'>
                                     <div class='col-12 ps-0 mt-3'>
@@ -3982,10 +3982,10 @@ function setOpenCoursesExtraHTML() {
                     </div>
                 </div>
             </div>
-            
-            
-            
-            
+
+
+
+
             ";
 
 }

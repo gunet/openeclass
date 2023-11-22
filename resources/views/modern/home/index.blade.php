@@ -99,7 +99,7 @@
                                             <div>
                                                 <label for='username_id' class='form-label'>{{ trans('langUsername') }}</label>
                                                 <input id='username_id' class="login-input w-100" placeholder="&#xf007" type="text" id="uname" name="uname" autocomplete="on" />
-                                                <label for='password_id' class='form-label mt-4'>{{ trans('langPassword') }}&nbsp(password)</label>
+                                                <label for='password_id' class='form-label mt-4'>{{ trans('langPassword') }}&nbsp;(password)</label>
                                                 <input id='password_id' class="login-input w-100" placeholder="&#xf084" type="password" id="pass" name="pass" autocomplete="on" />
                                                 <input class="btn w-100 login-form-submit mt-4" type="submit" name="submit" value="{{ trans('langLogin') }}" />
                                             </div>
