@@ -2,10 +2,10 @@
 
 @push('head_scripts')
 <script type='text/javascript'>
-    var lang =
-        {
-            addPicture: '" . js_escape({{ trans('langAddPicture') }}) . "',
-            confirmDelete: '" . js_escape({{ trans('langConfirmDelete') }}) . "'
+    var urlAppend = '{{ js_escape($urlAppend) }}',
+        lang = {
+            addPicture: '{{ js_escape(trans('langAddPicture')) }}',
+            confirmDelete: '{{ js_escape(trans('langConfirmDelete')) }}'
         };
     $(profile_init);
 </script>
@@ -132,7 +132,7 @@
                                     </div>
                                 </div>
 
-                                
+
                                     <div class='form-group mt-4'>
                                         <label for='emailfromcourses' class='col-sm-12 control-label-notes mb-1'>{{ trans('langEmailFromCourses') }}</label>
                                         <div class='col-sm-12 d-inline-flex'>
@@ -148,7 +148,7 @@
                                             </div>
                                         </div>
                                     </div>
-                               
+
 
                                 @if (get_config('email_verification_required'))
 
@@ -160,14 +160,14 @@
 
 
                                 @if (!get_config('restrict_owndep'))
-                                    
+
                                         <div class='form-group mt-4'>
                                             <label for='faculty' class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                             <div class='col-sm-12 form-control-static'>
                                                     {!! $html !!}
                                             </div>
                                         </div>
-                                    
+
                                 @endif
 
 
