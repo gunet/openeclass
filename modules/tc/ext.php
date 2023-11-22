@@ -46,7 +46,7 @@ if ($q) {
     $active = $q->active;
     $unlock_interval = $q->unlock_interval;
     $external_users = $q->external_users;
-    // External user details are now stored as JSON...
+    // External user details are now stored as JSON array of ['e-mail', 'Display Name']...
     $names = [];
     try {
         $external_user_details = json_decode($external_users, true, 512, JSON_THROW_ON_ERROR);
@@ -101,8 +101,7 @@ if ($server_type == 'bbb') { // bbb server
     $sess = Database::get()->querySingle("SELECT sessionUsers, mod_pw, running_at FROM tc_session WHERE meeting_id=?s",$meeting_id);
     $serv = Database::get()->querySingle("SELECT * FROM tc_servers WHERE id=?d", $sess->running_at);
 
-    if ($sess->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$meeting_id,$sess->mod_pw))
-    {
+    if ($sess->sessionUsers < get_meeting_users($serv->server_key, $serv->api_url, $meeting_id, $sess->mod_pw)) {
         display_message($langBBBMaxUsersJoinError);
         exit;
     } else {
