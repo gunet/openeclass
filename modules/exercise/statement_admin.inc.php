@@ -189,28 +189,44 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     ));
     $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d ORDER BY question_cat_name", $course_id);
 
+    if (Session::has('questionName')) {
+        $questionName = Session::get('questionName');
+    }
+    if (Session::has('questionDescription')) {
+        $questionDescription = Session::get('questionDescription');
+    }
+    if (Session::has('questionFeedback')) {
+        $questionFeedback = Session::get('questionFeedback');
+    }
+    if (Session::has('category')) {
+        $category = Session::get('category');
+    }
+    if (Session::has('difficulty')) {
+        $difficulty = Session::get('difficulty');
+    }
+    if (Session::has('answerType')) {
+        $answerType = Session::get('answerType');
+    }
     $options = "<option value='0'>-- $langQuestionWithoutCat --</option>\n";
     foreach ($q_cats as $q_cat) {
-        $options .= "<option value='$q_cat->question_cat_id' ". (($category == $q_cat->question_cat_id) ? "selected" : "") .">$q_cat->question_cat_name</option>\n";
+        $options .= "<option value='{$q_cat->question_cat_id}' " . (($category == $q_cat->question_cat_id) ? 'selected' : '') . '>' . q($q_cat->question_cat_name) . "</option>\n";
     }
     enableCheckFileSize();
     $tool_content .= "
-
     <div class='d-lg-flex gap-4 mt-4'>
-   <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
-        <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
-                  
-            
+        <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
+            <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>                              
             <div class='row form-group ".(Session::getError('questionName') ? "has-error" : "")."'>
                 <label for='questionName' class='col-12 control-label-notes mb-1'>$langQuestion</label>
                 <div class='col-12'>
-                  <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
-                  <span class='help-block Accent-200-cl'>".Session::getError('questionName')."</span>
+                      <input name='questionName' type='text' class='form-control' id='questionName' placeholder='$langQuestion' value='" . q($questionName) . "'>
+                      <span class='help-block Accent-200-cl'>".Session::getError('questionName')."</span>
                 </div>
             </div>
             <div class='row form-group mt-4'>
                 <label for='imageUpload' class='col-12 control-label-notes mb-1'>".(($okPicture) ? $langReplacePicture : $langAddPicture)."</label>
                 <div class='col-12'>" .
+
                 (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
                 fileSizeHidenInput() . "
                   <input type='file' name='imageUpload' id='imageUpload'>
@@ -234,6 +250,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 <div class='row form-group mt-4'>
                     <label for='questionDescription' class='col-12 control-label-notes mb-1'>$langQuestionDescription</label>
                     <div class='col-12'>
+
                       ". rich_text_editor('questionDescription', 4, 50, $questionDescription) ."
                     </div>
                 </div>
@@ -310,24 +327,24 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='".MATCHING."' ". (($answerType == MATCHING) ? "checked" : "") .">
-                       $langMatching
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='answerType' value='".TRUE_FALSE. "' ". (($answerType == TRUE_FALSE) ? "checked" : "") .">
-                       $langTrueFalse
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='free_text_selector' name='answerType' value='".FREE_TEXT."' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
-                       $langFreeText
-                      </label>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='answerType' value='".MATCHING."' ". (($answerType == MATCHING) ? "checked" : "") .">
+                           $langMatching
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='answerType' value='".TRUE_FALSE. "' ". (($answerType == TRUE_FALSE) ? "checked" : "") .">
+                           $langTrueFalse
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='free_text_selector' name='answerType' value='".FREE_TEXT."' ". (($answerType == FREE_TEXT) ? "checked" : "") .">
+                           $langFreeText
+                          </label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -338,23 +355,15 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
                 </div>
             </div>
             <div class='row'>
-                <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>
-                    
-                      
-                        <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>
-                     
-                        <a href='$link_back' class='btn cancelAdminBtn ms-1'>$langCancel</a>
-                       
-                    
-                    
-                    
+                <div class='col-12 mt-5 d-flex justify-content-end align-items-center'>                                          
+                        <input type='submit' class='btn submitAdminBtn' name='submitQuestion' value='$langCreate'>                     
+                        <a href='$link_back' class='btn cancelAdminBtn ms-1'>$langCancel</a>                    
                 </div>
-
             </div>
           </fieldset>
-    </form>
-    </div></div><div class='d-none d-lg-block'>
-    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
-</div>
-</div>";
+        </form>
+        </div></div><div class='d-none d-lg-block'>
+            <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+        </div>
+    </div>";
 }

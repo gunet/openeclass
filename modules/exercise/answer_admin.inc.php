@@ -67,14 +67,14 @@ if (isset($submitAnswers) || isset($buttonBack)) {
             if ($goodAnswer) {
                 $nbrGoodAnswers++;
                 // a good answer can't have a negative weighting
-                $weighting[$i] = abs($weighting[$i]);
+                $weighting[$i] = abs(fix_float($weighting[$i]));
                 // calculates the sum of answer weighting
                 if ($weighting[$i]) {
                     $questionWeighting += $weighting[$i];
                 }
             } else {
                 // a bad answer can't have a positive weighting
-                $weighting[$i] = -abs($weighting[$i]);
+                $weighting[$i] = -abs(fix_float($weighting[$i]));
             }
 
             // check if field is empty
