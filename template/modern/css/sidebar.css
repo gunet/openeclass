@@ -95,6 +95,8 @@
   background: #ffffff;
   border-radius: 0px;
   border: 0px;
+  margin-left: auto;
+  margin-right: auto;
 }
 @media(max-width:991px){
   .course-wrapper{
@@ -104,8 +106,8 @@
 }
 @media(min-width:992px){
   .course-wrapper:not(:has(.active-cont)) .ContentLeftNav{
-    padding-left: 16px;
-    padding-right: 4px;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 
@@ -179,6 +181,100 @@
     transition: all 0.5s ease-in-out;
   }
 
+  .course-wrapper:has(.active-nav) #sidebar-accordion{
+    min-width:182px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
+    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeader {
+    to {
+        pointer-events: none;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeader {
+      to {
+        pointer-events: none;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeaderTitle {
+    to {
+        opacity: 0;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeaderTitle {
+      to {
+        opacity: 0;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-items{
+    animation: cssAnimationMenuItems 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuItems {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuItems {
+      to {
+          width:0;
+          height:0;
+          visibility:hidden;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool{
+    animation: cssModule 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule {
+    to {
+        width:36px;
+        height:32px;
+        margin-left: 3px;
+    }
+  }
+  @-webkit-keyframes cssModule {
+      to {
+          width:36px;
+          height:32px;
+          margin-left: 3px;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
+    animation: cssModule_i 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule_i {
+    to {
+        margin-left: 8px;
+    }
+  }
+  @-webkit-keyframes cssModule_i {
+      to {
+          margin-left: 8px;
+      }
+  }
+  .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
+    min-width:182px;
+    margin: auto;
+    display: block;
+  }
+
   .col_sidebar_active.active-nav .menu-items, 
   .col_sidebar_active.active-nav .menu-header{
     transition: visibility 0s, opacity 0.5s ease-in-out;
@@ -227,6 +323,99 @@
   .course-wrapper:not(:has(.active-nav)) #background-cheat-leftnav,
   .course-wrapper:not(:has(.active-nav)) .ContentLeftNav{
     transition: all 0.5s ease-in-out;
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion{
+    min-width:182px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
+    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeader {
+    to {
+        pointer-events: none;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeader {
+      to {
+        pointer-events: none;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeaderTitle {
+    to {
+        opacity: 0;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeaderTitle {
+      to {
+        opacity: 0;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-items{
+    animation: cssAnimationMenuItems 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuItems {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuItems {
+      to {
+          width:0;
+          height:0;
+          visibility:hidden;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool{
+    animation: cssModule 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule {
+    to {
+        width:36px;
+        height:32px;
+        margin-left: 3px;
+    }
+  }
+  @-webkit-keyframes cssModule {
+      to {
+          width:36px;
+          height:32px;
+          margin-left: 3px;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
+    animation: cssModule_i 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule_i {
+    to {
+        margin-left: 8px;
+    }
+  }
+  @-webkit-keyframes cssModule_i {
+      to {
+          margin-left: 8px;
+      }
+  }
+  .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
+    min-width:182px;
+    margin: auto;
+    display: block;
   }
 
   .col_sidebar_active.active-nav .menu-items, 
@@ -281,6 +470,100 @@
     transition: all 0.5s ease-in-out;
   }
 
+  .course-wrapper:has(.active-nav) #sidebar-accordion{
+    min-width:188px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
+    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeader {
+    to {
+        pointer-events: none;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeader {
+      to {
+        pointer-events: none;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeaderTitle {
+    to {
+        opacity: 0;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeaderTitle {
+      to {
+        opacity: 0;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-items{
+    animation: cssAnimationMenuItems 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuItems {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuItems {
+      to {
+          width:0;
+          height:0;
+          visibility:hidden;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool{
+    animation: cssModule 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule {
+    to {
+        width:36px;
+        height:32px;
+        margin-left: 3px;
+    }
+  }
+  @-webkit-keyframes cssModule {
+      to {
+          width:36px;
+          height:32px;
+          margin-left: 3px;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
+    animation: cssModule_i 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule_i {
+    to {
+        margin-left: 8px;
+    }
+  }
+  @-webkit-keyframes cssModule_i {
+      to {
+          margin-left: 8px;
+      }
+  }
+  .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
+    min-width:188px;
+    margin: auto;
+    display: block;
+  }
+
   .col_sidebar_active.active-nav .menu-items, 
   .col_sidebar_active.active-nav .menu-header{
     transition: visibility 0s, opacity 0.5s ease-in-out;
@@ -325,13 +608,107 @@
 
   .course-wrapper:has(.active-nav) #background-cheat-leftnav,
   .course-wrapper:has(.active-nav) .ContentLeftNav{
-    width: 70px;
+    width: 50px;
     transition: all 0.5s ease-in-out;
     z-index: 0;
   }
   .course-wrapper:not(:has(.active-nav)) #background-cheat-leftnav,
   .course-wrapper:not(:has(.active-nav)) .ContentLeftNav{
     transition: all 0.5s ease-in-out;
+  }
+
+  .course-wrapper:has(.active-nav) #sidebar-accordion{
+    min-width:238px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header{
+    animation: cssAnimationMenuHeader 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeader {
+    to {
+        pointer-events: none;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeader {
+      to {
+        pointer-events: none;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-header .panel-title{
+    animation: cssAnimationMenuHeaderTitle 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuHeaderTitle {
+    to {
+        opacity: 0;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuHeaderTitle {
+      to {
+        opacity: 0;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .menu-items{
+    animation: cssAnimationMenuItems 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssAnimationMenuItems {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+  }
+  @-webkit-keyframes cssAnimationMenuItems {
+      to {
+          width:0;
+          height:0;
+          visibility:hidden;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool{
+    animation: cssModule 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule {
+    to {
+        width:36px;
+        height:32px;
+        margin-left: 3px;
+    }
+  }
+  @-webkit-keyframes cssModule {
+      to {
+          width:36px;
+          height:32px;
+          margin-left: 3px;
+      }
+  }
+  .course-wrapper:has(.active-nav) #sidebar-accordion .module-tool i{
+    animation: cssModule_i 0s ease-in 0.45s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+  }
+  @keyframes cssModule_i {
+    to {
+        margin-left: 8px;
+    }
+  }
+  @-webkit-keyframes cssModule_i {
+      to {
+          margin-left: 8px;
+      }
+  }
+  .course-wrapper:not(:has(.active-nav)) #sidebar-accordion{
+    min-width:238px;
+    margin: auto;
+    display: block;
   }
 
   .col_sidebar_active.active-nav .menu-items, 
