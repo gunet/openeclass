@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2023  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -41,7 +41,7 @@ if (isset($_GET['delete_image'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     Database::get()->query("UPDATE course SET course_image = NULL WHERE id = ?d", $course_id);
     unlink("$webDir/courses/$course_code/image/$course->course_image");
-    header("Location: {$urlServer}modules/course_home/editdesc.php?course=$course_code");
+    header("Location: {$urlAppend}courses/$course_code/");
 } elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $db_vars = array(purify($_POST['description']), $_POST['layout']);
@@ -94,10 +94,10 @@ if (isset($_GET['delete_image'])) {
     // update index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    header("Location: {$urlServer}courses/$course_code/");
+    header("Location: {$urlAppend}courses/$course_code/");
     exit;
 }
-    $head_content .= "
+$head_content .= "
     <script>
         $(function(){
             $('select[name=layout]').change(function ()
@@ -108,8 +108,6 @@ if (isset($_GET['delete_image'])) {
                     $('#image_field').addClass('hidden');
                 }
             });
-
-
             $('.chooseCourseImage').on('click',function(){
                 var id_img = this.id;
                 alert('Selected image: '+id_img);
@@ -118,7 +116,6 @@ if (isset($_GET['delete_image'])) {
                 document.getElementById('selectedImage').value = '$langSelect:'+id_img;
 
             });
-
         });
     </script>";
 $layouts = array(1 => $langCourseLayout1, 3 => $langCourseLayout3);
@@ -137,32 +134,27 @@ if (isset($course->course_image)) {
 } else {
     enableCheckFileSize();
     $course_image = fileSizeHidenInput() . "
-
-
-                    <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
-                        <li class='nav-item' role='presentation'>
-                            <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'>$langUpload</button>
-                        </li>
-                        <li class='nav-item' role='presentation'>
-                            <button class='nav-link' id='tabs-selectImage-tab' data-bs-toggle='tab' data-bs-target='#tabs-selectImage' type='button' role='tab' aria-controls='tabs-selectImage' aria-selected='false'>$langAddPicture</button>
-                        </li>
-                    </ul>
-                    <div class='tab-content mt-3' id='tabs-tabContent'>
-                        <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
-                             <input type='file' name='course_image' id='course_image'>
-                        </div>
-                        <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
-                            <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#CoursesImagesModal'>
-                                <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
-                            </button>
-                            <input type='hidden' id='choose_from_list' name='choose_from_list'>
-                            <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
-                        </div>
-                    </div>
-
-
-
-    ";
+            <ul class='nav nav-tabs' id='nav-tab' role='tablist'>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link active' id='tabs-upload-tab' data-bs-toggle='tab' data-bs-target='#tabs-upload' type='button' role='tab' aria-controls='tabs-upload' aria-selected='true'>$langUpload</button>
+                </li>
+                <li class='nav-item' role='presentation'>
+                    <button class='nav-link' id='tabs-selectImage-tab' data-bs-toggle='tab' data-bs-target='#tabs-selectImage' type='button' role='tab' aria-controls='tabs-selectImage' aria-selected='false'>$langAddPicture</button>
+                </li>
+            </ul>
+            <div class='tab-content mt-3' id='tabs-tabContent'>
+                <div class='tab-pane fade show active' id='tabs-upload' role='tabpanel' aria-labelledby='tabs-upload-tab'>
+                     <input type='file' name='course_image' id='course_image'>
+                </div>
+                <div class='tab-pane fade' id='tabs-selectImage' role='tabpanel' aria-labelledby='tabs-selectImage-tab'>
+                    <button type='button' class='btn submitAdminBtn' data-bs-toggle='modal' data-bs-target='#CoursesImagesModal'>
+                        <i class='fa-solid fa-image settings-icons'></i>&nbsp;$langSelect
+                    </button>
+                    <input type='hidden' id='choose_from_list' name='choose_from_list'>
+                    <input type='text'class='form-control border-0 pe-none px-0' id='selectedImage'>
+                </div>
+            </div>
+        ";
 }
 
 
@@ -202,10 +194,7 @@ $tool_content = "
                                     <a href='{$urlAppend}courses/$course_code' class='btn cancelAdminBtn ms-1'>$langCancel</a>
                             </div>
                         </div>
-
                     </fieldset>
-
-
 
                     <div class='modal fade' id='CoursesImagesModal' tabindex='-1' aria-labelledby='CoursesImagesModalLabel' aria-hidden='true'>
                         <div class='modal-dialog modal-lg'>
@@ -216,26 +205,24 @@ $tool_content = "
                                 </div>
                                 <div class='modal-body'>
                                     <div class='row row-cols-1 row-cols-md-2 g-4'>";
-                                            foreach($dir_images as $image) {
-                                                $extension = pathinfo($image, PATHINFO_EXTENSION);
-                                                $imgExtArr = ['jpg', 'jpeg', 'png'];
-                                                if(in_array($extension, $imgExtArr)){
-                                                    $tool_content .= "
-                                                        <div class='col'>
-                                                            <div class='card h-100'>
-                                                                <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
-                                                                <div class='card-body'>
-                                                                    <p class='form-value'>$image</p>
+                                        foreach($dir_images as $image) {
+                                            $extension = pathinfo($image, PATHINFO_EXTENSION);
+                                            $imgExtArr = ['jpg', 'jpeg', 'png'];
+                                            if(in_array($extension, $imgExtArr)){
+                                                $tool_content .= "
+                                                    <div class='col'>
+                                                        <div class='card h-100'>
+                                                            <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/courses_images/$image' alt='image course'/>
+                                                            <div class='card-body'>
+                                                                <p class='form-value'>$image</p>
 
-                                                                    <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
-                                                                </div>
+                                                                <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseCourseImage mt-3' value='$langSelect'>
                                                             </div>
                                                         </div>
-                                                    ";
-                                                }
-
+                                                    </div>
+                                                ";
                                             }
-
+                                        }
                 $tool_content .= "
                                     </div>
                                 </div>
