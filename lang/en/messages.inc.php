@@ -5,6 +5,7 @@
 // Generated 2023-03-24 12:20:02
 $langYes = "Yes";
 $langNo = "No";
+$langSelectReq = "Please select at least one option!";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
 $langAboutText = "The platform version is";

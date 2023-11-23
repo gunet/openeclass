@@ -40,6 +40,7 @@ $langInCoursesL = "στο $langsCourse";
 $langResourceBrowser = 'Αναζήτηση πόρων';
 $langYes = "Ναι";
 $langNo = "Όχι";
+$langSelectReq = "Διαλέξτε τουλάχιστον μία επιλογή!";
 
 // For the logged-out user:
 $langAnd = "και";

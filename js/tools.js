@@ -784,7 +784,7 @@ function unit_password_bootbox(e) {
 }
 
 //checks on a form if is checked at least one radiobox or checkbox
-function formReqChecker(formID) {
+function formReqChecker(formID,alertMSG) {
 
     $(formID).submit(function(event) {
         const checkboxesChecked = $('input[type=checkbox]:checked').length > 0;
@@ -792,7 +792,7 @@ function formReqChecker(formID) {
 
         if (!checkboxesChecked && !radiosChecked) {
             event.preventDefault();
-            alert('Please select at least one option!');
+            alert(alertMSG);
         } else {
             $(formID).submit();
         }
