@@ -49,6 +49,7 @@ require_once 'modules/progress/ViewingEvent.php';
 require_once 'modules/progress/CourseParticipationEvent.php';
 require_once 'modules/progress/GradebookEvent.php';
 require_once 'modules/progress/CourseCompletionEvent.php';
+require_once 'modules/progress/AttendanceEvent.php';
 
 $toolName = $langManage;
 $element = "badge";
