@@ -41,7 +41,7 @@ if (isset($_GET['delete_image'])) {
     if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
     Database::get()->query("UPDATE course SET course_image = NULL WHERE id = ?d", $course_id);
     unlink("$webDir/courses/$course_code/image/$course->course_image");
-    header("Location: {$urlServer}courses/$course_code");
+    header("Location: {$urlAppend}courses/$course_code/");
 } elseif (isset($_POST['submit'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $db_vars = array(purify($_POST['description']), $_POST['layout']);
@@ -73,10 +73,10 @@ if (isset($_GET['delete_image'])) {
     // update index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    header("Location: {$urlServer}courses/$course_code");
+    header("Location: {$urlAppend}courses/$course_code/");
     exit;
 }
-    $head_content .= "
+$head_content .= "
     <script>
         $(function(){
             $('select[name=layout]').change(function ()
@@ -86,7 +86,7 @@ if (isset($_GET['delete_image'])) {
                 } else {
                     $('#image_field').addClass('hidden');
                 }
-            });          
+            });
         });
     </script>";
 $layouts = array(1 => $langCourseLayout1, 3 => $langCourseLayout3);
@@ -129,7 +129,7 @@ $tool_content = action_bar(array(
                         <div class='col-sm-10'>
                             $course_image
                         </div>
-                    </div>                  
+                    </div>
                     <div class='form-group'>
                         <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
                         <div class='col-sm-10'>
