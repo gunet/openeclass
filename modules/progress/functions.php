@@ -292,7 +292,7 @@ function display_activities($element, $id, $unit_id = 0) {
            $langAdd, $langBack, $langUsers, $langOfGradebook,
            $langValue, $langNumInForumTopic, $langOfCourseCompletion, $langOfUnitCompletion,
            $course_id, $langUnitCompletion, $langUnitPrerequisites, $langNewUnitPrerequisite,
-           $langNoUnitPrerequisite, $langAssignmentParticipation;
+           $langNoUnitPrerequisite, $langAssignmentParticipation, $langAttendance;
 
     if ($unit_id) {
         $link_id = "course=$course_code&amp;manage=1&amp;unit_id=$unit_id&amp;badge_id=$id";
@@ -440,7 +440,12 @@ function display_activities($element, $id, $unit_id = 0) {
         array('title' => $langOfCourseCompletion,
             'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . CourseCompletionEvent::ACTIVITY,
             'icon' => 'fa fa-trophy',
-            'show' => $cc_enable && !$cc_is_current)),
+            'show' => $cc_enable && !$cc_is_current),
+        array('title' => $langAttendance,
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=" . AttendanceEvent::ACTIVITY,
+            'icon' => 'fa fa-sort-numeric-desc space-after-icon',
+            'show' => ($unit_id == 0),
+            'class' => '')),
         array(
             'secondary_title' => $langAdd,
             'secondary_icon' => '',
@@ -697,8 +702,7 @@ function is_unit_prereq_enabled($unit_id) {
  * @param type $unit_id
  * @param type $unit_resource_id
  */
-function
-insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_resource_id = 0) {
+function insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_resource_id = 0) {
 
     switch ($activity) {
         case 'coursecompletion':
@@ -767,6 +771,9 @@ insert_activity($element, $element_id, $activity, $unit_id = 0, $unit_resource_i
             break;
         case CourseCompletionEvent::ACTIVITY:
             display_available_coursecompletiongrade($element, $element_id, $unit_id);
+            break;
+        case AttendanceEvent::ACTIVITY:
+            display_available_attendances($element, $element_id, $unit_id);
             break;
         default: break;
         }
@@ -2073,6 +2080,69 @@ function display_available_coursecompletiongrade($element, $element_id, $unit_id
     }
 }
 
+/**
+ * @brief gradebooks display form
+ * @param string $element
+ * @param int $element_id
+ * @param int $unit_id
+ */
+function display_available_attendances($element, $element_id, $unit_id = 0) {
+
+    global $course_id, $tool_content, $langNoAttendances, $course_code, $urlServer,
+           $langAvailableAttendances, $langStart, $langFinish, $langChoice,
+           $langAddModulesButton, $langOperator, $langAttendanceAbsences;
+
+    $element_name = ($element == 'certificate')? 'certificate_id' : 'badge_id';
+
+    $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d
+                                    AND active = 1
+                                    AND end_date > " . DBHelper::timeAfter() . "
+                                    AND id NOT IN
+                                    (SELECT resource FROM {$element}_criterion WHERE $element = ?d
+                                        AND resource != ''
+                                        AND activity_type = '" . AttendanceEvent::ACTIVITY . "'
+                                        AND module = " . MODULE_ID_ATTENDANCE . ")
+                                    ORDER BY title", $course_id, $element_id);
+
+    if (count($result) == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoAttendances</div>";
+    } else {
+
+        if ($unit_id) {
+            $action = "manage.php?course=$course_code&manage=1&unit_id=$unit_id";
+        } else {
+            $action = "index.php?course=$course_code";
+        }
+        $tool_content .= "<form action=$action method='post'>" .
+            "<input type='hidden' name = '$element_name' value='$element_id'>" .
+            "<table class='table-default'>" .
+            "<tr class='list-header'>" .
+            "<th class='text-left'>$langAvailableAttendances</th>" .
+            "<th style='width:160px;'>$langStart</th>" .
+            "<th style='width:160px;'>$langFinish</th>" .
+            "<th style='width:5px;'>$langOperator</th>" .
+            "<th style='width:50px;'>$langAttendanceAbsences</th>" .
+            "<th style='width:10px;' class='text-center'>$langChoice</th>" .
+            "</tr>";
+
+        foreach ($result as $row) {
+            $attendance_id = $row->id;
+            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date)->format('d/m/Y H:i');
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date)->format('d/m/Y H:i');
+            $tool_content .= "<tr>" .
+                "<td><a href ='{$urlServer}modules/attendance/index.php?course=$course_code&amp;attendance_id=$attendance_id'>" . q($row->title) . "</a></td>" .
+                "<td class='text-center'>" . $start_date . "</td>" .
+                "<td class='text-center'>" . $end_date . "</td>" .
+                "<td>". selection(get_operators(), "operator[$attendance_id]") . "</td>".
+                "<td class='text-center'><input style='width:50px;' type='text' name='threshold[$attendance_id]' value=''></td>" .
+                "<td class='text-center'><input name='attendance[]' value='$attendance_id' type='checkbox'></td>" .
+                "</tr>";
+        }
+
+        $tool_content .= "</table>" .
+            "<div align='right'><input class='btn btn-primary' type='submit' name='add_attendance' value='$langAddModulesButton'></div></th></form>";
+    }
+}
 
 /**
  * @brief display badge / certificate settings
@@ -2899,5 +2969,6 @@ function criteria_with_operators() {
                  BlogEvent::ACTIVITY,
                  CommentEvent::BLOG_ACTIVITY,
                  GradebookEvent::ACTIVITY,
-                 CourseCompletionEvent::ACTIVITY);
+                 CourseCompletionEvent::ACTIVITY,
+                 AttendanceEvent::ACTIVITY);
 }

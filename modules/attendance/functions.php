@@ -20,6 +20,8 @@
  * ========================================================================
  */
 
+require_once 'modules/progress/AttendanceEvent.php';
+
 /**
  * @brief admin available attendances
  */
@@ -130,6 +132,7 @@ function register_user_presences($attendance_id, $actID) {
                             SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ''",
                             $userID, $actID, $attend);
                     }
+                    triggerAttendanceGame($course_id, $userID, $attendance_id, AttendanceEvent::UPDATE);
                 }
             }
             Session::Messages($langAttendanceEdit, 'alert-success');
@@ -1340,7 +1343,7 @@ function attendForAutoActivities($userID, $exeID, $exeType) {
  */
 function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
     $params = [$activity, $id];
-    $sql = "SELECT attendance_activities.id, attendance_activities.attendance_id
+    $sql = "SELECT attendance_activities.id, attendance_activities.attendance_id, attendance.course_id
                             FROM attendance_activities, attendance
                             WHERE attendance.start_date < NOW()
                             AND attendance.end_date > NOW()
@@ -1370,6 +1373,7 @@ function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
             $attendance_book = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = $attendanceActivity->id AND uid = ?d", $uid);
             if(!$attendance_book) {
                 Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $attendanceActivity->id, uid = ?d, attend = 1, comments = ''", $uid);
+                triggerAttendanceGame($attendanceActivity->course_id, $uid, $attendanceActivity->attendance_id, AttendanceEvent::UPDATE);
             }
 
     }
@@ -1494,4 +1498,14 @@ function get_attendance_limit($attendance_id) {
 
     return $at_limit;
 
+}
+
+function triggerAttendanceGame($courseId, $uid, $attendanceId, $eventName) {
+    $eventData = new stdClass();
+    $eventData->courseId = $courseId;
+    $eventData->uid = $uid;
+    $eventData->activityType = AttendanceEvent::ACTIVITY;
+    $eventData->module = MODULE_ID_ATTENDANCE;
+    $eventData->resource = intval($attendanceId);
+    AttendanceEvent::trigger($eventName, $eventData);
 }
