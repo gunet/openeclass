@@ -3173,7 +3173,7 @@ $langATTLSSurvey = "A.T.T.L.S.";
 $langLimeSurvey = "Lime Survey";
 $langPollNoQuestions = "Στο ερωτηματολόγιο δεν έχουν οριστεί ερωτήσεις!";
 $langActivateParticipation = "Ενεργοποίηση Παρουσιολογίου";
-$langQuickSurvey = "Γρήγορη δημοσκόπηση";
+$langQuickSurvey = "Γρήγορη ερώτηση";
 
 
 //COLLES survey

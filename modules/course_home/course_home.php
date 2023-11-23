@@ -69,7 +69,6 @@ if (isset($_POST['submitPoll'])) {
     $pid = $_POST['pid'];
     $multiple_submissions = $_POST['multiple_submissions'];
 
-
     if ($multiple_submissions) {
         Database::get()->query("DELETE FROM poll_answer_record WHERE poll_user_record_id IN (SELECT id FROM poll_user_record WHERE uid = ?d AND pid = ?d)", $uid, $pid);
         Database::get()->query("DELETE FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid);
@@ -133,6 +132,18 @@ $head_content .= "<style>
       background: white;
       font-size: 2rem;
       text-align: center;
+    }
+    .c3-tooltip {
+        border: 1px solid #c3c3c3;
+        padding: 5px 10px;
+        display: block;
+        background-color: #f1f1f1;
+    }
+    .c3-tooltip td.name {
+        display: none;
+    }
+    .c3-tooltip td.value {
+        text-align: center;
     }
 </style>";
 
@@ -1205,15 +1216,167 @@ if (!$displayWall && $displayQuickPoll) {
                 <div class='content-title'>$langQuickSurvey</div>
                 
                 <div class='panel'>";
+
         $tool_content .= "
-            <div class='alert alert-warning' role='alert' style='margin-bottom: 0'>
-                <strong>" . standard_text_escape($theQuestion->question_text) . "</strong>
-            </div>";
+            <div class='alert alert-warning row' role='alert' style='margin: 0'>
+                <div class='col-sm-10'><strong>" . standard_text_escape($theQuestion->question_text) . "</strong></div>
+            ";
 
         if ($show_results) {
-            $tool_content .= "<div class='panel-body'>";
-            $tool_content .= "results";
-            $tool_content .= "</div>";
+            $tool_content .= "<div class='col-sm-2'><span class='fa fa-bar-chart showResults'></span> <span class='fa fa-list-alt fa-fw showPoll hide'></span></div>";
+        }
+
+        $tool_content .= "</div>";
+
+        $head_content .= "
+            <script>
+            $(document).ready(function(){
+                              
+               formReqChecker('#homePollForm')
+                
+            });
+            </script>
+        ";
+
+        if ($show_results) {
+
+            load_js('d3/d3.min.js');
+            load_js('c3-0.4.10/c3.min.js');
+            $default_answer = $displayQuickPoll->default_answer;
+            $head_content .= "
+            <link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />
+            <script type='text/javascript'>
+                pollChartData = new Array();
+        
+                $(document).ready(function(){
+                
+                    $('.showResults').on('click', function() {
+                      $(this).toggleClass('hide');
+                      $('.showPoll, .pollResultsDiv').toggleClass('hide');
+                      $('.pollQuestionDiv').toggleClass('hide');
+                    });
+                    
+                    $('.showPoll').on('click', function() {
+                      $(this).toggleClass('hide');
+                      $('.showResults, .pollResultsDiv').toggleClass('hide');
+                      $('.pollQuestionDiv').toggleClass('hide');
+                    });
+                    
+                    draw_plots();
+                });
+        
+            function draw_plots(){
+                
+                var options = null;
+                for(var i=0;i<pollChartData.length;i++){
+                    
+                    pollChartData[0]['answer'].unshift('x')
+                    pollChartData[0]['count'].unshift('Votes')
+                    let chartHeight = pollChartData[0]['count'].length * 32
+                    
+                    options = {
+                        size: {
+                            height: chartHeight,
+                        },
+                        padding: {
+                            right: 25,
+                        },
+                        
+                        data: {
+                            x: 'x',
+                            columns: [
+                                pollChartData[0]['answer'],
+                                pollChartData[0]['count'],
+                            ],
+                            type: 'bar',
+                            labels: true,
+                            color: function(inColor, data) {
+                                var colors = ['#3498db', '#2ecc71', '#e74c3c', '#9b59b6', '#1abc9c', '#d35400', '#34495e','#f39c12', '#c0392b', '#27ae60'];
+                                if(data.index !== undefined) {
+                                    return colors[data.index];
+                                }
+        
+                                return inColor;
+                            },
+                        },
+                        legend:{show:false},
+                        bar: {
+                            width: 15,
+                            space: 2
+                        },
+                        axis: {
+                            rotated: true,
+                            x: {
+//                                show: false,
+                                type: 'category'
+                            },
+                            y: {
+                                show: false,
+                                tick: {
+                                    format: function (d) {
+                                        return (parseInt(d) == d) ? d : null;
+                                    }
+                                }
+                            }
+                        },
+                        bindto: '#poll_chart'+i
+                    };
+                    
+                    c3.generate(options);
+                }
+        }
+        
+        </script>";
+
+            $names_array = [];
+            $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
+            foreach ($all_answers as $row) {
+                $this_chart_data['answer'][] = q($row->answer_text);
+                $this_chart_data['percentage'][] = 0;
+                $this_chart_data['count'][] = 0;
+            }
+            $set_default_answer = false;
+            $answers_r = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
+                            FROM poll_user_record c, poll_answer_record a
+                            LEFT JOIN poll_question_answer b
+                            ON a.aid = b.pqaid
+                            WHERE a.qid = ?d
+                            AND a.poll_user_record_id = c.id
+                            AND (c.email_verification = 1 OR c.email_verification IS NULL)
+                            GROUP BY a.aid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
+            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record
+                                                                        WHERE poll_user_record_id = id
+                                                                        AND (email_verification=1 OR email_verification IS NULL)
+                                                                        AND qid= ?d", $theQuestion->pqid)->total;
+
+            foreach ($answers_r as $answer) {
+                $percentage_r = round(100 * ($answer->count / $answer_total),2);
+                if (isset($answer->answer_text)) {
+                    $q_answer = q_math($answer->answer_text);
+                    $aid = $answer->aid;
+                } else {
+                    $q_answer = $langPollUnknown;
+                    $aid = -1;
+                }
+                if (!$set_default_answer and (($theQuestion->qtype == QTYPE_SINGLE && $default_answer) or $aid == -1)) {
+                    $this_chart_data['answer'][] = $langPollUnknown;
+                    $this_chart_data['percentage'][] = 0;
+                }
+
+                if (isset($this_chart_data['answer'])) { // skip answers that don't exist
+                    $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage_r;
+                }
+
+                $this_chart_data['count'][array_search($q_answer,$this_chart_data['answer'])] = $answer->count;
+            }
+
+            $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
+            /****   C3 plot   ****/
+            $tool_content .= "<div class='row plotscontainer'>";
+            $tool_content .= "<div class='col-lg-12'>";
+            $tool_content .= "</div></div>";
+            $tool_content .= "<div class='panel-body pollResultsDiv hide'><div id='poll_chart0'></div></div>";
+
         }
 
         if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions) {
@@ -1221,8 +1384,8 @@ if (!$displayWall && $displayQuickPoll) {
         } else {
 
             $tool_content .= "
-                <div class='panel-body'>
-                    <form class='form-horizontal' role='form' action='' id='poll' method='post'>";
+                <div class='panel-body pollQuestionDiv'>
+                    <form id='homePollForm' class='form-horizontal' role='form' action='' id='poll' method='post'>";
 
             foreach ($answers as $theAnswer) {
                 $checked = '';
@@ -1247,7 +1410,6 @@ if (!$displayWall && $displayQuickPoll) {
                                 <div class='$type_attr'>
                                     <label>
                                         <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."
-                                        <!---<input type='$type_attr' name='answer[]' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."--->
                                     </label>
                                 </div>
                             </div>
@@ -1258,17 +1420,13 @@ if (!$displayWall && $displayQuickPoll) {
             $tool_content .= "<input name='pid' type='hidden' value='" . q($pid) . "'>";
             $tool_content .= "<input name='pqid' type='hidden' value='" . q($pqid) . "'>";
             $tool_content .= "<input name='multiple_submissions' type='hidden' value='" . q($multiple_submissions) . "'>";
-            $tool_content .= "<input class='btn btn-primary blockUI' name='submitPoll' type='submit' value='" . q($langSubmit) . "'>";
+            $tool_content .= "<input class='btn btn-primary' name='submitPoll' type='submit' value='" . q($langSubmit) . "'>";
 
             $tool_content .= "
                     </form>
                 </div>";
 
         }
-
-
-
-
 
         $tool_content .= "
                 </div>

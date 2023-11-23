@@ -780,3 +780,20 @@ function unit_password_bootbox(e) {
     }
   });
 }
+
+//checks on a form if is checked at least one radiobox or checkbox
+function formReqChecker(formID) {
+
+    $(formID).submit(function(event) {
+        const checkboxesChecked = $('input[type=checkbox]:checked').length > 0;
+        const radiosChecked = $('input[type=radio]:checked').length > 0;
+
+        if (!checkboxesChecked && !radiosChecked) {
+            event.preventDefault();
+            alert('Please select at least one option!');
+        } else {
+            $(formID).submit();
+        }
+    });
+
+}
