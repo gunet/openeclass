@@ -248,6 +248,11 @@ if ($fromExercise) {
           'icon' => 'fa-eraser',
           'class' => 'delete',
           'confirm' => $langConfirmQuestionPoolPurge ],
+        [ 'title' => $langImportAiken,
+            'url' => "admin.php?course=$course_code&amp;importAiken=yes",
+            'icon' => 'fa-upload',
+            'button-class' => 'btn-success'
+        ],
         [ 'title' => $langImportQTI,
           'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
           'icon' => 'fa-download',

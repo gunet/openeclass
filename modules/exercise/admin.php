@@ -154,7 +154,13 @@ if ($is_editor) {
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
         );
         include 'imsqti.inc.php';
-
+    } elseif (isset($_GET['importAiken'])) {
+        $pageName = $langNewQu;
+        $navigation[] = array(
+            'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"),
+            'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
+        );
+        include 'import_aiken.php';
     } else {
         if (isset($_GET['NewExercise'])) {
             $pageName = $langNewEx;
