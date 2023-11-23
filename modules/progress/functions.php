@@ -968,7 +968,7 @@ function display_available_assignments($element, $element_id, $activity_type, $u
                 "<td><input class='form-control' type='text' name='threshold[$assignment_id]' value=''></td>";
             }
             $tool_content .=
-                "<td><input name='assignment[]' value='$assignment_id' type='checkbox'></td>" .
+                "<td><label class='label-container'><input name='assignment[]' value='$assignment_id' type='checkbox'><span class='checkmark'></span></label></td>" .
                 "</tr>";
         }
         $tool_content .= "</table></div>
@@ -1903,7 +1903,7 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
                 "<div class='table-responsive'><table class='table-default'>" .
                 "<thead><tr class='list-header'>" .
                 "<th>$langQuestionnaire</th>" .
-                "<th style='width:80px;>$langChoice</th>" .
+                "<th>$langChoice</th>" .
                 "</tr></thead>";
         foreach ($pollinfo as $entry) {
             $description = empty($entry['description']) ? '' : "<div style='margin-top: 10px;' class='text-muted'>". $entry['description']. "</div>";
@@ -2243,7 +2243,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                                     $langProgressBasicInfo
                                 </h3>";
                             if ($is_editor) {
-                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn'>"
+                                $tool_content .= "<div><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;{$element}_id=$element_id&amp;edit=1' class='btn submitAdminBtn gap-2'>"
                                             . "<span class='fa fa-pencil'></span><span class='hidden-xs'>$langEditChange</span>
                                             </a>
                                         </div>";

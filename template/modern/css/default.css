@@ -3124,7 +3124,7 @@ tr.danger{
 
   .table-default thead tr th.count-col,
   .table-default tbody tr td.count-col{
-    width: 5% !important;
+    width: 10% !important;
   }
 
   .table-default thead tr th.user-col,
@@ -3170,7 +3170,7 @@ tr.danger{
 
   .table-default thead tr th.count-col,
   .table-default tbody tr td.count-col{
-    width: 5% !important;
+    width: 10% !important;
   }
 
   .table-default thead tr th.user-col,
@@ -3201,6 +3201,9 @@ tr.danger{
     width: 15% !important;
   }
   
+  .count-col-secondary{
+    width:5% !important;
+  }
 }
 
 
