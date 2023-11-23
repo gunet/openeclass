@@ -519,6 +519,23 @@ function add_coursecompletiongrade_to_certificate($element, $element_id) {
     }
 }
 
+function add_attendance_to_certificate($element, $element_id) {
+    if (isset($_POST['attendance'])) {
+        foreach ($_POST['attendance'] as $datakey => $data) {
+            Database::get()->query("INSERT INTO {$element}_criterion
+                                    SET $element = ?d,
+                                        module= " . MODULE_ID_ATTENDANCE . ",
+                                        resource = ?d,
+                                        activity_type = '" . AttendanceEvent::ACTIVITY . "',
+                                        operator = ?s,
+                                        threshold = ?f",
+                $element_id,
+                $_POST['attendance'][$datakey],
+                $_POST['operator'][$data],
+                $_POST['threshold'][$data]);
+        }
+    }
+}
 
 /**
  * @brief get certificate title
@@ -1043,7 +1060,8 @@ function get_resource_details($element, $resource_id) {
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
             $langPersoValue, $langCourseSocialBookmarks, $langForumRating, $langCourseHoursParticipation, $langGradebook,
-            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation;
+            $langGradeCourseCompletion, $langCourseCompletion, $langOfLearningPathDuration, $langAssignmentParticipation,
+            $langAttendance;
 
     $data = array('type' => '', 'title' => '');
     $type = $title = '';
@@ -1191,9 +1209,16 @@ function get_resource_details($element, $resource_id) {
             $title = "$langGradeCourseCompletion";
             $type = "$langCourseCompletion";
             break;
+        case AttendanceEvent::ACTIVITY:
+            $q = Database::get()->querySingle("SELECT title FROM attendance WHERE attendance.course_id = ?d AND attendance.id = ?d", $course_id, $resource);
+            if ($q) {
+                $title = $q->title;
+            }
+            $type = "$langAttendance";
+            break;
         default:
             $title = "$langAllActivities";
-        break;
+            break;
     }
     $data['type'] = $type;
     $data['title'] = $title;
@@ -1320,7 +1345,9 @@ function refresh_user_progress($element, $element_id): void
     require_once "modules/progress/ExerciseEvent.php";
     require_once "modules/progress/LearningPathEvent.php";
     require_once "modules/progress/LearningPathDurationEvent.php";
+    require_once "modules/progress/AttendanceEvent.php";
     require_once "include/lib/learnPathLib.inc.php";
+    require_once "modules/attendance/functions.php";
 
     $users = get_course_users($course_id);
     foreach ($users as $u) {
@@ -1357,6 +1384,9 @@ function refresh_user_progress($element, $element_id): void
                 case LearningPathEvent::ACTIVITY:
                 case LearningPathDurationEvent::ACTIVITY:
                         triggerLPGame($course_id, $u, $data->resource, LearningPathEvent::UPDPROGRESS);
+                    break;
+                case AttendanceEvent::ACTIVITY:
+                        triggerAttendanceGame($course_id, $u, $data->resource, AttendanceEvent::UPDATE);
                     break;
             }
         }
