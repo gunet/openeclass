@@ -1177,6 +1177,16 @@ if ($displayWall) {
 
 if (!$displayWall && $displayQuickPoll) {
 
+    $head_content .= "
+            <script>
+            $(document).ready(function(){
+               console.log('$langSelectReq');
+               formReqChecker('#homePollForm','$langSelectReq')
+                
+            });
+            </script>
+        ";
+
     $pid = $displayQuickPoll->pid;
     $multiple_submissions = $displayQuickPoll->multiple_submissions;
     $show_results = $displayQuickPoll->show_results;
@@ -1227,16 +1237,6 @@ if (!$displayWall && $displayQuickPoll) {
         }
 
         $tool_content .= "</div>";
-
-        $head_content .= "
-            <script>
-            $(document).ready(function(){
-                              
-               formReqChecker('#homePollForm')
-                
-            });
-            </script>
-        ";
 
         if ($show_results) {
 
