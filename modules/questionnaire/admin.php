@@ -392,7 +392,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
               <label for='PollName' class='col-sm-2 control-label'>$langTitle:</label>
               <div class='col-sm-10'>
-                <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
+                <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='" . q($PollName) . "'>
                 <span class='help-block'>".Session::getError('PollName')."</span>
               </div>
             </div>
@@ -415,7 +415,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='col-xs-2 col-sm-1'>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
-            </div>            
+            </div>
             <div class='form-group'>
               <label for='PollDescription' class='col-sm-2 control-label'>$langDescription:</label>
               <div class='col-sm-10'>
@@ -465,8 +465,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         </label>
                     </div>
                 </div>
-            </div>            
-            
+            </div>
+
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
                 <div class='col-sm-10'>
@@ -941,7 +941,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <div class='col-sm-9'>
                     ". $assign_to_users_message ."
                 </div>
-            </div>                        
+            </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langResults:</strong>
@@ -957,7 +957,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
                 <div class='col-sm-9'>
                     ".(($poll->multiple_submissions) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langActivateMulSubmissions <br>
-                    ".(($poll->default_answer) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langActivateDefaultAnswer 
+                    ".(($poll->default_answer) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langActivateDefaultAnswer
                 </div>
             </div>
             <div class='row margin-bottom-fat'>
