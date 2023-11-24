@@ -255,7 +255,7 @@ if (isset($_GET['group_as'])) {
                 <div class='col-xl-7 col-lg-6 col-12'>
                     <div class='card panelCard px-lg-4 py-lg-3 h-100'>
                         <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
-                            <h3>$langGroupInfo</h3>
+                            <h3>$group_name</h3>
                         </div>
                         <div class='card-body'>
                         
