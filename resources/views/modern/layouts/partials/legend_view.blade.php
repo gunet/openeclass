@@ -56,14 +56,14 @@
                                 <input type="hidden" name="prev_url" value="{{$go_back_url}}">
                                 @if (display_activation_link($module_id))
                                     @if($visible_module == 0)
-                                        <a class='btn deleteAdminBtn text-decoration-none' href="javascript:$('#form_id').submit();"
+                                        <a class='btn successAdminBtn gap-2 text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}">
-                                            <i class="fa-regular fa-eye-slash"></i>
+                                            <i class="fa-regular fa-eye-slash"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langActivate') }}</span>
                                         </a>
                                     @else
-                                        <a class='btn successAdminBtn text-decoration-none' href="javascript:$('#form_id').submit();"
+                                        <a class='btn deleteAdminBtn gap-2 text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}">
-                                            <i class="fa-regular fa-eye"></i>
+                                            <i class="fa-regular fa-eye"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langDeactivate') }}</span>
                                         </a>
                                     @endif
                                 @endif
@@ -73,20 +73,20 @@
                     @if($module_id == MODULE_ID_ANNOUNCE or $module_id == MODULE_ID_BLOG)
                         @php $getToken = generate_csrf_token_link_parameter(); @endphp
                         @if($module_id == MODULE_ID_ANNOUNCE)
-                            <a class='btn warningAdminBtn text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
+                            <a class='btn warningAdminBtn gap-2 text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}">
-                                <i class="fa-solid fa-rss"></i>
+                                <i class="fa-solid fa-rss"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langRSSFeed') }}</span>
                             </a>
                         @else
-                            <a class='btn warningAdminBtn text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
+                            <a class='btn warningAdminBtn gap-2 text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}">
-                                <i class="fa-solid fa-rss"></i>
+                                <i class="fa-solid fa-rss"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langRSSFeed') }}</span>
                             </a>
                         @endif
                     @endif
                     @if($toolName)
-                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                            <i class="fa-solid fa-question"></i>
+                        <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none gap-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                            <i class="fa-solid fa-question"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langHelp') }}</span>
                         </a>
                     @endif
                 </div>

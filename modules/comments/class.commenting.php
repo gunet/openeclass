@@ -100,7 +100,7 @@ Class Commenting {
                            
                               
                           </div>
-                          <div class='modal-body' id='comments-$this->rid'>";
+                          <div class='modal-body px-0' id='comments-$this->rid'>";
         } else {
             $comments_title = "<h5 id='comments_title' class='badge Primary-200-bg form-value'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
@@ -126,7 +126,7 @@ Class Commenting {
                     }
                 } else {
                     if ($comment->permEdit($isEditor, $uid)) {
-                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
+                        $post_actions = '<div class="d-flex flex-wrap gap-2">';
 
                         if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
                             $head_content .= abuse_report_add_js();
