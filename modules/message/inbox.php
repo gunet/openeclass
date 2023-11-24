@@ -54,25 +54,28 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = action_bar(array(
-                            array('title' => $langBack,
-                                  'url' => "inbox.php".$urlstr,
-                                  'icon' => 'fa-reply',
-                                  'button-class' => 'back_index btn-secondary',
-                                  'level' => 'primary'),
-                            array('title' => $langReply,
-                                  'icon' => 'fa-edit',
-                                  'button-class' => 'btn-reply btn-secondary',
-                                  'level' => 'primary-label'),
-                            array('title' => $langForward,
-                                  'icon' => 'fa-forward',
-                                  'button-class' => 'btn-forward btn-secondary',
-                                  'level' => 'primary-label'),
-                            array('title' => $langDelete,
-                                  'url' => 'javascript:void(0)',
-                                  'icon' => 'fa-xmark',
-                                  'class' => 'delete_in_inner',
-                                  'link-attrs' => "data-id='$msg->id'")
-                        ));
+            array('title' => $langBack,
+                  'url' => "inbox.php".$urlstr,
+                  'icon' => 'fa-reply',
+                  'button-class' => 'back_index btn-secondary',
+                  'temporary-button-class' => '',
+                  'level' => 'primary'),
+            array('title' => $langReply,
+                  'icon' => 'fa-edit',
+                  'button-class' => 'btn-reply btn-secondary',
+                  'temporary-button-class' => 'btn-reply',
+                  'level' => 'primary-label'),
+            array('title' => $langForward,
+                  'icon' => 'fa-forward',
+                  'button-class' => 'btn-forward btn-secondary',
+                  'temporary-button-class' => 'btn-forward',
+                  'level' => 'primary-label'),
+            array('title' => $langDelete,
+                  'url' => 'javascript:void(0)',
+                  'icon' => 'fa-xmark',
+                  'class' => 'delete_in_inner',
+                  'link-attrs' => "data-id='$msg->id'")
+        ));
 
         $recipients = '';
         foreach ($msg->recipients as $r) {
