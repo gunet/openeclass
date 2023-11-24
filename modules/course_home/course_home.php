@@ -444,7 +444,7 @@ if ($uid) {
 }
 
 
-// display opencourses level in bar
+// display open-courses level in bar
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 $data['level'] = $level;
 if (isset($level) && !empty($level)) {
@@ -511,12 +511,124 @@ $carousel_or_row = $show_course->view_units;
 /***************************************************************************/
 
 /** Quick Poll */
-$displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
-                            WHERE display_position = ?d
+$data['displayQuickPoll'] = $displayQuickPoll = Database::get()->querySingle("SELECT * FROM poll
+                            WHERE display_position = 1
                             AND course_id = ?d
                             AND CURRENT_DATE BETWEEN start_date AND end_date
-                            ORDER BY pid DESC',
-    1,$course_id);
+                            ORDER BY pid DESC", $course_id);
+
+if ($displayQuickPoll) {
+    $data['pid'] = $pid = $displayQuickPoll->pid;
+    $data['multiple_submissions'] = $multiple_submissions = $displayQuickPoll->multiple_submissions;
+    $data['show_results'] = $show_results = $displayQuickPoll->show_results;
+    $data['has_participated'] = $has_participated = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_user_record WHERE uid = ?d AND pid = ?d", $uid, $pid)->count;
+    $data['theQuestion'] = $theQuestion = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position ASC", $pid);
+
+    if ($theQuestion) {
+        $data['pqid'] = $pqid = $theQuestion->pqid;
+        $data['qtype'] = $qtype = $theQuestion->qtype;
+        $user_answers = null;
+
+        if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
+            $user_answers = Database::get()->queryArray("SELECT a.aid
+                                FROM poll_user_record b, poll_answer_record a
+                                LEFT JOIN poll_question_answer c
+                                    ON a.aid = c.pqaid
+                                WHERE a.poll_user_record_id = b.id
+                                    AND a.qid = ?d
+                                    AND b.uid = ?d", $pqid, $uid);
+        }
+        $answers = Database::get()->queryArray("SELECT * FROM poll_question_answer
+                                WHERE pqid = ?d ORDER BY pqaid", $pqid);
+        $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';
+        $type_attr = ($qtype == QTYPE_SINGLE)? "radio": "checkbox";
+
+        if ($show_results) {
+            load_js('d3/d3.min.js');
+            load_js('c3-0.4.10/c3.min.js');
+            $default_answer = $displayQuickPoll->default_answer;
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />";
+
+            $names_array = [];
+            $all_answers = Database::get()->queryArray("SELECT * FROM poll_question_answer WHERE pqid = ?d", $theQuestion->pqid);
+            foreach ($all_answers as $row) {
+                $this_chart_data['answer'][] = q($row->answer_text);
+                $this_chart_data['percentage'][] = 0;
+                $this_chart_data['count'][] = 0;
+            }
+            $set_default_answer = false;
+            $answers_r = Database::get()->queryArray("SELECT a.aid AS aid, MAX(b.answer_text) AS answer_text, count(a.aid) AS count
+                            FROM poll_user_record c, poll_answer_record a
+                            LEFT JOIN poll_question_answer b
+                            ON a.aid = b.pqaid
+                            WHERE a.qid = ?d
+                            AND a.poll_user_record_id = c.id
+                            AND (c.email_verification = 1 OR c.email_verification IS NULL)
+                            GROUP BY a.aid ORDER BY MIN(a.submit_date) DESC", $theQuestion->pqid);
+            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record, poll_user_record
+                                                                        WHERE poll_user_record_id = id
+                                                                        AND (email_verification=1 OR email_verification IS NULL)
+                                                                        AND qid= ?d", $theQuestion->pqid)->total;
+
+            foreach ($answers_r as $answer) {
+                $percentage_r = round(100 * ($answer->count / $answer_total),2);
+                if (isset($answer->answer_text)) {
+                    $q_answer = q_math($answer->answer_text);
+                    $aid = $answer->aid;
+                } else {
+                    $q_answer = $langPollUnknown;
+                    $aid = -1;
+                }
+                if (!$set_default_answer and (($theQuestion->qtype == QTYPE_SINGLE && $default_answer) or $aid == -1)) {
+                    $this_chart_data['answer'][] = $langPollUnknown;
+                    $this_chart_data['percentage'][] = 0;
+                }
+
+                if (isset($this_chart_data['answer'])) { // skip answers that don't exist
+                    $this_chart_data['percentage'][array_search($q_answer,$this_chart_data['answer'])] = $percentage_r;
+                }
+
+                $this_chart_data['count'][array_search($q_answer,$this_chart_data['answer'])] = $answer->count;
+            }
+            $data['this_chart_data'] = $this_chart_data;
+
+        }
+
+        $quick_poll_answers_content = '';
+        foreach ($answers as $theAnswer) {
+            $checked = '';
+            if ($user_answers) {
+                if (count($user_answers) > 1) { // multiple answers
+                    foreach ($user_answers as $ua) {
+                        if ($ua->aid == $theAnswer->pqaid) {
+                            $checked = 'checked';
+                        }
+                    }
+                } else {
+                    if (count($user_answers) == 1) { // single answer
+                        if ($user_answers[0]->aid == $theAnswer->pqaid) {
+                            $checked = 'checked';
+                        }
+                    }
+                }
+            }
+            $quick_poll_answers_content .= "
+                    <div class='form-group'>
+                        <div class='col-sm-12'>
+                            <div class='$type_attr'>
+                                <label>
+                                    <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>".q_math($theAnswer->answer_text)."
+                                </label>
+                            </div>
+                        </div>
+                    </div>";
+        }
+        $data['quick_poll_answers_content'] = $quick_poll_answers_content;
+    }
+}
+
+/** end of quick poll --------------------------- */
+
 
 $total_cunits = count($all_units);
 $data['total_cunits'] = $total_cunits;
@@ -530,7 +642,7 @@ if ($total_cunits > 0) {
     if($carousel_or_row == 0){
         $cunits_content .= "<div id='carouselUnitsControls' class='carousel slide' data-bs-ride='carousel'>";
 
-        //this is foreach for indicatoras carousel-units
+        //this is foreach for indicators carousel-units
         $counterIndicator = 0;
 
         $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";

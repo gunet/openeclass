@@ -26,7 +26,10 @@ $require_help = TRUE;
 $helpTopic = 'questionnaire';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/log.class.php';
 require_once 'functions.php';
+require_once 'modules/lti_consumer/lti-functions.php';
+require_once 'modules/admin/extconfig/limesurveyapp.php';
 
 load_js('tools.js');
 
@@ -70,7 +73,8 @@ if (isset($_POST['submitPoll'])) {
     $v->labels(array(
         'PollName' => "$langTheField $langTitle",
         'PollStart' => "$langTheField $langTitle",
-        'PollEnd' => "$langTheField $langTitle"
+        'PollEnd' => "$langTheField $langTitle",
+        'survey_type' => "$langTheField $langType",
     ));
     if($v->validate()) {
         $PollName = $_POST['PollName'];
@@ -80,6 +84,8 @@ if (isset($_POST['submitPoll'])) {
         $PollEndMessage = purify($_POST['PollEndMessage']);
         $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;
         $PollShowResults = (isset($_POST['PollShowResults'])) ? $_POST['PollShowResults'] : 0;
+        $MulSubmissions = (isset($_POST['MulSubmissions'])) ? $_POST['MulSubmissions'] : 0;
+        $DefaultAnswer = (isset($_POST['DefaultAnswer'])) ? $_POST['DefaultAnswer'] : 0;
         $PollAssignToSpecific = $_POST['assign_to_specific'];
         $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $PollSurveyType = $_POST['survey_type'];
@@ -384,13 +390,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
 
     <div class='d-lg-flex gap-4 mt-4'>
     <div class='flex-grow-1'>
-
     <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
               <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle</label>
               <div class='col-sm-12'>
-                <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
+                <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='" . q($PollName) . "'>
                 <span class='help-block Accent-200-cl'>".Session::getError('PollName')."</span>
               </div>
             </div>
