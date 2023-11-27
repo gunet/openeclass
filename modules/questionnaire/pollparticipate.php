@@ -273,8 +273,11 @@ function printPollForm() {
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
-                                    <label>
-                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>".q_math($theAnswer->answer_text)."
+                                    <label class='label-container'>
+                                        <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid'>
+                                        <span class='checkmark'></span>
+                                        ".q_math($theAnswer->answer_text)."
+                                       
                                     </label>
                                 </div>
                             </div>
@@ -285,8 +288,11 @@ function printPollForm() {
                         <div class='form-group'>
                             <div class='col-sm-offset-1 col-sm-11'>
                                 <div class='$type_attr'>
-                                    <label>
-                                        <input type='$type_attr' name='answer[$pqid]' value='-1' checked>$langPollUnknown
+                                    <label class='label-container'>
+                                        <input type='$type_attr' name='answer[$pqid]' value='-1' checked>
+                                        <span class='checkmark'></span>
+                                        $langPollUnknown
+                                        
                                     </label>
                                 </div>
                             </div>

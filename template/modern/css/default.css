@@ -4287,7 +4287,7 @@ div[role="progressbar"]::before {
   font-size: 14px;
   position: absolute;
   top: 50%;
-  left: 3%;
+  left: 11%;
   transform: translate(-213%, -50%); 
 }
 

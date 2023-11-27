@@ -424,7 +424,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
                 
             <div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes mb-2'>$langResults</label>
+                <label class='col-sm-12 control-label-notes mb-2'>$langResults</label>
                 <div class='col-sm-12'>
                     <div class='checkbox mb-2'>
                          <label class='label-container'>
@@ -444,20 +444,24 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
             
             <div class='form-group mt-4'>
-                <label class='col-sm-2 control-label-notes mb-2'>$langAnswers:</label>
+                <label class='col-sm-12 control-label-notes mb-2'>$langAnswers:</label>
                 <div class='col-sm-12'>
                     <div class='checkbox mb-2'>
                         <label class='label-container'>
                             <input type='checkbox' name='MulSubmissions' id='MulSubmissions' value='1'" .
                                 ((isset($poll->multiple_submissions) && $poll->multiple_submissions) ? ' checked' : '') .">
+                                <span class='checkmark'></span>
                             $langActivateMulSubmissions
+                            
                         </label>
                     </div>
                     <div class='checkbox'>
                         <label class='label-container'>
                             <input type='checkbox' name='DefaultAnswer' id='DefaultAnswer' value='1'" .
                                 ((isset($poll->default_answer) && $poll->default_answer) ? ' checked' : '') . ">
+                                <span class='checkmark'></span>
                             $langActivateDefaultAnswer
+                            
                         </label>
                     </div>
                 </div>
@@ -584,10 +588,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 <label class='col-sm-6 control-label-notes mb-2'>$langShowFront:</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
-                        <label>
+                        <label class='label-container'>
                             <input type='checkbox' name='display_position' id='display_position' value='1'" .
                             ((isset($poll->display_position) && $poll->display_position) ? ' checked' : '') . ">
+                            <span class='checkmark'></span>
                             $langYes
+                            
                         </label>
                     </div>
                 </div>
@@ -1092,11 +1098,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <td align='text-end' width='1'>$i.</td>
                                 <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                                 $aType[$question->qtype - 1]."</td>
-                                <td style='padding: 10px 0; width: 85px;'>
-                                    <div class='reorder-btn pull-left mb-3' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                <td>
+                                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                                    <div class='reorder-btn pull-left' style=' font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                                             <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                                     </div>
-                                <div class='pull-left'>".action_button(array(
+                                    <div class='pull-left'>".action_button(array(
                                     array(
                                         'title' => $langEditChange,
                                         'icon' => 'fa-edit',
@@ -1111,7 +1118,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                         'class' => 'delete',
                                         'confirm' => $langConfirmYourChoice
                                     )
-                                ))."</div></td></tr>";
+                                ))."</div></div></td></tr>";
                 $i++;
             }
             $tool_content .= "</tbody></table></div>";
@@ -1171,8 +1178,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <td align='text-right' width='1'>$i.</td>
                                 <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                     $aType[$question->qtype - 1]."</td>
-                                <td style='padding: 10px 0; width: 85px;'>
-                                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                <td>
+                                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                                    <div class='reorder-btn pull-left' style=' font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                                             <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
                                     </div>
                                 <div class='pull-left'>".action_button(array(
@@ -1190,7 +1198,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             'class' => 'delete',
                             'confirm' => $langConfirmYourChoice
                         )
-                    ))."</div></td></tr>";
+                    ))."</div></διω></td></tr>";
                 $i++;
             }
             $tool_content .= "</tbody></table>";
@@ -1250,8 +1258,9 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <td align='text-right' width='1'>$i.</td>
                                 <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                     $aType[$question->qtype - 1]."</td>
-                                <td style='padding: 10px 0; width: 85px;'>
-                                    <div class='reorder-btn pull-left' style='padding:5px 10px 0; font-size: 16px; cursor: pointer; vertical-align: bottom;'>
+                                <td>
+                                <div class='d-flex justify-content-center align-items-center gap-2'>
+                                    <div class='reorder-btn pull-left' style=' font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                                             <span class='fa fa-arrows' data-toggle='tooltip' data-placement='top' title='$langReorder'></span>
                                     </div>
                                 <div class='pull-left'>".action_button(array(
@@ -1269,7 +1278,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             'class' => 'delete',
                             'confirm' => $langConfirmYourChoice
                         )
-                    ))."</div></td></tr>";
+                    ))."</div></div></td></tr>";
                 $i++;
             }
             $tool_content .= "</tbody></table>";

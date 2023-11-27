@@ -2782,6 +2782,13 @@ function upgrade_to_4_0($tbl_options): void {
 
 
 
+    //quick poll
+    if (!DBHelper::fieldExists('poll', 'display_position')) {
+        Database::get()->query("ALTER TABLE poll ADD `display_position` INT(1) NOT NULL DEFAULT 0 AFTER show_results");
+    }
+
+
+
 }
 
 
