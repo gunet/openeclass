@@ -100,11 +100,10 @@ function getUserCourseInfo($uid) {
                                     <div class='col-12 d-flex justify-content-between align-items-start'>
                                         <div>
                                             <h2 class='d-flex justify-content-start align-items-start gap-3 TextBold mb-0'>
-                                                <span class='settings-icons mt-1 Neutral-600-cl'>" . course_access_icon($data->visible) . "</span>
-                                                {$data->title}
+                                                <span class='settings-icons mt-1 Neutral-600-cl'>" . course_access_icon($data->visible) . "</span>" .
+                                                q($data->title) . "
                                             </h2>
                                             <p class='course-professor-code'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</p>
-;
                                         </div>
                                         <div>
                                             <button type='button' class='close border-0 bg-default mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
@@ -112,34 +111,34 @@ function getUserCourseInfo($uid) {
                                     </div>
                                     <div class='course-content mt-4'>
                                         <div class='col-12 d-flex justify-content-center align-items-start'>";
-                                            if($data->course_image == NULL) {
-                                                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
-                                            } else {
-                                                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
-                                            }
-                $lesson_content .= "</div>
+            if($data->course_image == NULL) {
+                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
+            } else {
+                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
+            }
+            $lesson_content .= "</div>
                 <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
-                    if(empty($data->description)) {
-                        $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
-                    } else {
-                        $lesson_content .= "{$data->description}";
-                    }
-                    $lesson_content .= "</div>
+            if(empty($data->description)) {
+                $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+            } else {
+                $lesson_content .= "{$data->description}";
+            }
+            $lesson_content .= "</div>
                                     </div>
                                 </div>
                             </div>";
 
-                    $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
-                    if ($data->status == USER_STUDENT) {
-                        if (get_config('disable_student_unregister_cours') == 0) {
-                            $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
-                            $student_courses_count++;
-                        }
-                    } elseif ($data->status == USER_TEACHER) {
-                        $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
-                        $teacher_courses_count++;
-                    }
-        $lesson_content .= "</div>
+            $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
+            if ($data->status == USER_STUDENT) {
+                if (get_config('disable_student_unregister_cours') == 0) {
+                    $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                    $student_courses_count++;
+                }
+            } elseif ($data->status == USER_TEACHER) {
+                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                $teacher_courses_count++;
+            }
+            $lesson_content .= "</div>
                         </div>
                     </td>
                 </tr>";
