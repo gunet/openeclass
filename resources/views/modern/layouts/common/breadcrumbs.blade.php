@@ -26,15 +26,15 @@
             @endif
                 <ol class="breadcrumb mb-0 @if(!$course_code) py-1 @endif">
                     @foreach ($breadcrumbs as $key => $item)
-                    @if (isset($item['bread_href']))
+                        @if (isset($item['bread_href']))
                             <li class="breadcrumb-item d-flex justify-content-center align-items-center">
                                 <a class='text-wrap text-decoration-none vsmall-text' href='{{ $item['bread_href'] }}'>
                                     {!! $session->status != USER_GUEST && isset($uid) && $key == 0 ? '<i class="fa-solid fa-house pe-1"></i> ' : "" !!}
-                                    {!! $item['bread_text'] !!}
+                                    {{ $item['bread_text'] }}
                                 </a>
                             </li>
                         @else
-                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><a class='pe-none Neutral-900-cl vsmall-text'>{!! $item['bread_text'] !!}</a></li>
+                            <li class="breadcrumb-item active d-flex justify-content-center align-items-center TextMedium" aria-current="page"><span class='pe-none Neutral-900-cl'>{{ $item['bread_text'] }}</span></li>
                         @endif
                     @endforeach
                 </ol>
@@ -42,7 +42,7 @@
             @if(!$course_code)
             </div>
             @endif
-            
+
         @endif
 
     </div>

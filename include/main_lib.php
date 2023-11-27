@@ -3600,6 +3600,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $out_primary = $out_secondary = array();
     $i=0;
     $page_title = "";
+
+    $temporary_button_class = "";
+
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
         $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
     }
@@ -3607,6 +3610,11 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($tmp_pageName)."</h6>";
     }
     foreach (array_reverse($options) as $option) {
+
+        if(isset($option['temporary-button-class'])){
+            $temporary_button_class = $option['temporary-button-class'];
+        }
+
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
@@ -3713,7 +3721,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 
         if (count($options) > 1) {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $confirm_modal_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$text_class $confirm_modal_class $temporary_button_class list-group-item d-flex justify-content-start align-items-start gap-2 py-3'" . $href .
                 " $link_attrs>" .
                 "<span class='fa $option[icon] settings-icons'></span> $title</a>$form_end</li>");
         } else {
