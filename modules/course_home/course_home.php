@@ -1179,10 +1179,8 @@ if (!$displayWall && $displayQuickPoll) {
 
     $head_content .= "
             <script>
-            $(document).ready(function(){
-               console.log('$langSelectReq');
+            $(document).ready(function() {
                formReqChecker('#homePollForm','$langSelectReq')
-                
             });
             </script>
         ";
@@ -1265,8 +1263,7 @@ if (!$displayWall && $displayQuickPoll) {
                     draw_plots();
                 });
         
-            function draw_plots(){
-                
+            function draw_plots(){                
                 var options = null;
                 for(var i=0;i<pollChartData.length;i++){
                     
@@ -1427,13 +1424,10 @@ if (!$displayWall && $displayQuickPoll) {
                 </div>";
 
         }
-
         $tool_content .= "
                 </div>
             </div>
-        </div>
-    ";
-
+        </div>";
     }
 }
 
