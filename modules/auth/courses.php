@@ -137,7 +137,7 @@ if (isset($_POST['submit'])) {
                                         $tool_content .= "<ul class='list-group list-group-flush list-group-default'>
                                                                 <li class='list-group-item'>
                                                                     <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#RegisterCourses'>
-                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp;&nbsp;" .$tree->getFullPath($fc) . "
+                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp;&nbsp;" .$tree->getFullPath($fc,false) . "
                                                                     </a>
                                                                 </li>";
                                             $tool_content .= "<div id='RegisterCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionRegister'>";
@@ -148,6 +148,24 @@ if (isset($_POST['submit'])) {
                                         $tool_content .= "</ul>
                                                     </div>
                                                 </form>
+
+
+                                                <div class='col-12 mt-4'>
+                                                    <div class='card bg-transparent border-card'>
+                                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-3 py-2'>
+                                                            <div class='d-flex justify-content-start align-items-center'>
+                                                                <h3 class='mb-0'>
+                                                                    $langCategory
+                                                                </h3>
+                                                            </div>
+                                                        </div>
+                                                        <div class='card-body pt-0'>
+                                                           ". $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') ."
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
                                             </div>
                                         </div>
                                     </div>

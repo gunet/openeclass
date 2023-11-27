@@ -86,17 +86,31 @@
                                             <div class='col-12 mt-4' id='accordion'>
                                                 <ul class='list-group list-group-flush list-group-default'>
                                                     <li class="list-group-item">
-                                                        <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#Category'>
+                                                        <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0 gap-2' role='button' data-bs-toggle='collapse' href='#Category'>
                                                             <i class='fa-solid fa-chevron-down'></i>
-                                                            &nbsp;&nbsp;{!! $tree->getFullPath($fc) !!}
-
-                                                            {{-- {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!} --}}
+                                                            {!! $tree->getFullPath($fc,false) !!}
                                                         </a>
                                                     </li>
                                                     <div id='Category' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
                                                         {!! $childHTML !!}
                                                     </div>
                                                 </ul>
+                                                
+                                            </div>
+
+                                            <div class='col-12 mt-4'>
+                                               <div class='card bg-transparent border-card'>
+                                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-3 py-2'>
+                                                        <div class='d-flex justify-content-start align-items-center'>
+                                                            <h3 class='mb-0'>
+                                                                {{ trans('langCategory') }}
+                                                            </h3>
+                                                        </div>
+                                                    </div>
+                                                    <div class='card-body pt-0'>
+                                                        {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
+                                                    </div>
+                                                </div>
                                             </div>
 
 
@@ -220,7 +234,7 @@
                         </div>
                     @else
                         <div class='col-12 mt-5'>
-                            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses')}}</span></div>
+                            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses')}} </br> ( {!! $tree->getFullPath($fc,false) !!})</span></div>
                         </div>
                     @endif
 

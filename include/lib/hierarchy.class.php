@@ -582,13 +582,13 @@ jContent;
                     $html .= '<p id="nd_' . $i . '">';
                     $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
                     $html .= $this->getFullPath($def);
-                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa-solid fa-xmark" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
+                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa-solid fa-xmark" data-bs-toggle="tooltip" data-bs-original-title="'.$langNodeDel.'" data-bs-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
             }
 
             $html .= '</div>';
-            $html .= '<div><p><a id="ndAdd" href="#add"><span class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></span></a></p></div>';
+            $html .= '<div><p><a id="ndAdd" href="#add"><span class="fa fa-plus" data-bs-toggle="tooltip" data-bs-placement="top" title="'.q($langNodeAdd).'"></span></a></p></div>';
 
             // Unused for multi usecase, however present to use a unique generic JS event function
             $html .= '<input id="dialog-set-key" type="hidden" onchange="" />';
