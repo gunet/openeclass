@@ -256,13 +256,13 @@ if ($fromExercise) {
         [ 'title' => $langImportQTI,
           'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
           'icon' => 'fa-download',
-          'button-class' => 'btn-success',
-          'show' => false ],
+          'button-class' => 'btn-success'
+        ],
         [ 'title' => $langExportQTI,
           'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
           'icon' => 'fa-upload',
-          'button-class' => 'btn-success',
-          'show' => false ],
+          'button-class' => 'btn-success'
+        ],
     ];
 }
 
@@ -364,7 +364,7 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
         $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                         ON question_id = exercise_question.id WHERE course_id = ?d AND exercise_id IS NULL$extraSql ORDER BY question";
     } else { // if user selected all questions
-        if ($fromExercise) { // if is coming to question pool from an exercise
+        if ($fromExercise) { // if it is coming to question pool from an exercise
             $result_query = "SELECT exercise_question.id, question, `type` FROM `exercise_question` LEFT JOIN `exercise_with_questions`
                             ON question_id = exercise_question.id WHERE course_id = ?d$extraSql AND (exercise_id IS NULL OR exercise_id <> ?d AND
                             question_id NOT IN (SELECT question_id FROM `exercise_with_questions` WHERE exercise_id = ?d))
@@ -382,7 +382,7 @@ if (isset($exerciseId) && $exerciseId > 0) { //If user selected specific exercis
 if (isset($_GET['exportIMSQTI'])) { // export to IMS QTI xml format
     $result = Database::get()->queryArray($result_query, $result_query_vars);
     header('Content-type: text/xml');
-    header('Content-Disposition: attachment; filename="exportQTI.xml"');
+    header("Content-Disposition: attachment; filename=" . $course_code . "_questions.xml");
     exportIMSQTI($result);
     exit();
 

@@ -1964,6 +1964,14 @@ $langAikenFormatExplain = "
 <li>Όταν όλα είναι σωστά, πατάμε το κουμπί 'Εισαγωγή'.</li>
 </ul>
 ";
+$langQtiImportNote = "Μπορείτε να ανεβάσετε το αρχείο των ερωτήσεων σε μορφή <strong>QTI</strong>. 
+<br><br>Σημειώστε ότι υποστηρίζονται <strong>μόνο</strong>
+<ul>
+<li>οι ερωτήσεις πολλαπλής επιλογής με <strong>μοναδική απάντηση</strong>.</li>
+<li>οι ερωτήσεις πολλαπλής επιλογής με <strong>πολλαπλές απαντήσεις</strong>.</li>
+<li>οι ερωτήσεις <strong>σωστού - λάθους</strong>.</li>
+</ul>
+";
 $langImportWithSuccess = "Η εισαγωγή ολοκληρώθηκε με επιτυχία";
 $langAikenWithNoGrades = "εφαρμόζεται στις ερωτήσεις που δεν έχουν μονάδες";
 $langExportWithAnswers = 'με απαντήσεις';
