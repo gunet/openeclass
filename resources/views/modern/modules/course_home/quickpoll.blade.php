@@ -16,10 +16,12 @@
 @endpush
 @if ($theQuestion)
     <div class='card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home'>
-        <h3 class='mb-0'>{{ trans('langQuickSurvey') }}</h3>
-        <div class='panel'>
-            <div class='alert alert-success row mt-1' role='alert' style='margin: 0'>
-                <div class='col-sm-10'><strong>{!! standard_text_escape($theQuestion->question_text) !!} </strong></div>
+        <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
+            <h3 class='mb-0'>{{ trans('langQuickSurvey') }}</h3>
+        </div>
+        <div class='card-body card-body-default px-0'>
+            <div class='d-flex justify-content-between align-items-start' role='alert' style='margin: 0'>
+                <div>{!! standard_text_escape($theQuestion->question_text) !!}</div>
                 @if ($show_results)
                     <script type = 'text/javascript'>
                         pollChartData = [];
@@ -99,28 +101,36 @@
                         pollChartData.push({!! json_encode($this_chart_data) !!})
                     </script>
 
-                    <div class='col-sm-2'><span class='fa fa-bar-chart showResults'></span> <span class='fa fa-list-alt fa-fw showPoll'></span></div>
+                    <div class='btn submitAdminBtn'>
+                        <i class='fa-solid fa-chart-bar showResults'></i> 
+                        <i class='fa-regular fa-rectangle-list showPoll'></i>
+                    </div>
             </div>
 
-            <div class='panel-body pollResultsDiv'>
+            <div class='panel-body pollResultsDiv bg-transparent'>
                 <div id='poll_chart0'></div>
             </div>
             @endif
+
+
+
+            @if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions)
+                <div class='panel-body p-0 mt-3 bg-transparent'>{{ trans('langPollAlreadyParticipated') }}</div>
+            @else
+                <div class='panel-body pollQuestionDiv p-0 mt-3 bg-transparent'>
+                    <form id='homePollForm' class='form-horizontal' role='form' action='' id='poll' method='post'>
+                        {!! $quick_poll_answers_content !!}
+                        <input name='qtype' type='hidden' value='{{ $qtype }}'>
+                        <input name='pid' type='hidden' value='{{ $pid }}'>
+                        <input name='pqid' type='hidden' value='{{ $pqid }}'>
+                        <input name='multiple_submissions' type='hidden' value='{{ $multiple_submissions }}'>
+                        <input class='btn submitAdminBtn mt-3' name='submitPoll' type='submit' value='{{ trans('langSubmit') }}'>
+                    </form>
+                </div>
+            @endif
+
         </div>
     </div>
-    @if ($uid && $has_participated > 0 && !$is_editor && !$multiple_submissions)
-        <div class='panel-body'>{{ trans('langPollAlreadyParticipated') }}</div>
-    @else
-        <div class='panel-body pollQuestionDiv'>
-            <form id='homePollForm' class='form-horizontal' role='form' action='' id='poll' method='post'>
-                {!! $quick_poll_answers_content !!}
-                <input name='qtype' type='hidden' value='{{ $qtype }}'>
-                <input name='pid' type='hidden' value='{{ $pid }}'>
-                <input name='pqid' type='hidden' value='{{ $pqid }}'>
-                <input name='multiple_submissions' type='hidden' value='{{ $multiple_submissions }}'>
-                <input class='btn submitAdminBtn' name='submitPoll' type='submit' value='{{ trans('langSubmit') }}'>
-            </form>
-        </div>
-    @endif
+    
 
 @endif

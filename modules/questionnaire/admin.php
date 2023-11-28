@@ -523,7 +523,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 </select>
                               </td>
                               <td class='text-center'>
-                                <input class='btn-outline-primary h-40px rounded-2' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn-outline-primary h-40px rounded-2 mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                <input class='btn btn-outline-primary h-40px rounded-2' type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input class='btn btn-outline-primary h-40px rounded-2 mt-3' type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
                               </td>
                               <td width='40%'>
                                 <select class='form-select h-100 rounded-0' id='assignee_box' name='ingroup[]' size='10' multiple>
@@ -878,7 +878,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               $tool_content .="
                   <div class='form-group input-group mt-3'>
                         <input type='text' class='form-control mt-0' name='answers[]' value='$answer->answer_text'>
-                        <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
+                        <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
@@ -887,13 +887,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             $tool_content .="
                     <div class='form-group input-group mt-3'>
                             <input class='form-control mt-0' type='text' name='answers[]' value=''>
-                            <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
+                            <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                                 " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                             </div>
                     </div>
                   <div class='form-group input-group mt-3'>
                         <input class='form-control mt-0' type='text' name='answers[]' value=''>
-                        <div class='form-control-static input-group-text h-40px input-bg-color input-border-color'>
+                        <div class='form-control-static input-group-text h-40px bg-white input-border-color'>
                             " . icon('fa-xmark Accent-200-cl', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";

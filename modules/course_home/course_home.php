@@ -595,6 +595,8 @@ if ($displayQuickPoll) {
         }
 
         $quick_poll_answers_content = '';
+        $labelContainer = '';
+        $checkMark = '';
         foreach ($answers as $theAnswer) {
             $checked = '';
             if ($user_answers) {
@@ -612,13 +614,20 @@ if ($displayQuickPoll) {
                     }
                 }
             }
+            if($type_attr == 'checkbox'){
+                $labelContainer = 'label-container';
+                $checkMark = '<span class="checkmark"></span>';
+            }else{
+                $labelContainer = '';
+                $checkMark = '';
+            }
             $quick_poll_answers_content .= "
                     <div class='form-group'>
                         <div class='col-sm-12'>
                             <div class='$type_attr'>
-                                <label class='label-container'>
+                                <label class='$labelContainer'>
                                     <input type='$type_attr' name='answer[$pqid]$name_ext' value='$theAnswer->pqaid' $checked>
-                                     <span class='checkmark'></span>
+                                    $checkMark
                                     ".q_math($theAnswer->answer_text)."
                                    
                                 </label>

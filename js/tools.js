@@ -574,7 +574,7 @@ function poll_init() {
     $('input[type=submit][value="+"]').on('click', function (e) {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
-        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0' type='text' name='answers[]' value=''><div class='form-control-static input-group-text h-40px input-bg-color input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark'></i></a></div></div>").next().find('input').removeAttr('value');
+        last_form_group.before("<div class='form-group input-group mt-3'><input class='form-control mt-0' type='text' name='answers[]' value=''><div class='form-control-static input-group-text h-40px bg-white input-border-color'><a href='#' style='cursor: pointer;' class='del_btn'><i class='fa-solid fa-xmark Accent-200-cl'></i></a></div></div>").next().find('input').removeAttr('value');
         delete_init();
     });
 }

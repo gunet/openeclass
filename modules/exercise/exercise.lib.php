@@ -502,7 +502,7 @@ function display_exercise($exercise_id) {
             }
 
             $tool_content .= "<tr class='active'><th colspan='$colspan'>";
-            $tool_content .= "<span>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span>";
+            $tool_content .= "<div class='px-2'><span>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span></div>";
             $tool_content .= "</th></tr>";
         }
         $tool_content .= "</table></div></div>";

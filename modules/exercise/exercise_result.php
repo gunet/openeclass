@@ -355,7 +355,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "
             <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise mb-4'>
             <thead><tr class='active'>
-              <td class='px-0'>
+              <td>
                 <strong><u>$langQuestion</u>: $i</strong>";
 
         if ($answerType == FREE_TEXT) {
@@ -382,7 +382,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "<small>($questionType)</small>"; // question type
         $tool_content .= "</td></tr></thead>";
 
-        $tool_content .= "<tr><td class='px-0'>";
+        $tool_content .= "<tr><td>";
         $tool_content .= "<p>" . q_math($questionName) . "</p>" . standard_text_escape($questionDescription);
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
             $tool_content .= "<div style='padding: 20px;' class='text-center'>
@@ -393,7 +393,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "</td></tr>";
 
         if (!is_null($choice)) {
-            $tool_content .= "<tr class='active'><th class='px-0'><u>$langAnswer</u></th></tr>";
+            $tool_content .= "<tr class='active'><th><u>$langAnswer</u></th></tr>";
         }
 
         $questionScore = 0;
@@ -665,7 +665,7 @@ if (count($exercise_question_ids) > 0) {
         }
 
         if (!is_null($questionFeedback)) {
-            $tool_content .= "<tr><td class='px-0'>";
+            $tool_content .= "<tr><td>";
             $tool_content .= "<div><strong>$langQuestionFeedback:</strong><br>" . standard_text_escape($questionFeedback) . "</div>";
             $tool_content .= "</td></tr>";
         }

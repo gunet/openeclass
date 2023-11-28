@@ -1538,7 +1538,7 @@ select.form-select {
   font-family: 'Manrope' , sans-serif; font-weight: 400; font-style: normal;
   height:40px;
   color:#687DA3;
-  padding-top: 8px;
+  padding-top: 5px;
   margin-top: 5px;
 }
 
@@ -1721,9 +1721,9 @@ input[type="submit"].warningAdminBtn {
 .warningAdminBtn:hover,
 button[type="submit"].warningAdminBtn:hover,
 input[type="submit"].warningAdminBtn:hover {
-  background-color: #F57600;
-  border-color: #F57600;
-  color: #ffffff;
+  background-color: #ece1bc;
+  border-color: #ece1bc;
+  color: #2B3944;
 }
 
 .helpAdminBtn {
@@ -2796,6 +2796,35 @@ body .form-action-button-popover{
   height:auto; 
   overflow-y: auto;
   border-radius: 4px;
+}
+
+
+.panel-body::-webkit-scrollbar {
+  width: 20px;
+}
+
+.panel-body::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+.panel-body::-webkit-scrollbar-thumb:hover {
+  background-color: #B4BED1;
 }
 
 .panel-body-calendar { 

@@ -58,12 +58,12 @@
                                     @if($visible_module == 0)
                                         <a class='btn successAdminBtn gap-2 text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langActivate') }}">
-                                            <i class="fa-regular fa-eye-slash"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langActivate') }}</span>
+                                            <i class="fa-regular fa-eye-slash"></i>
                                         </a>
                                     @else
                                         <a class='btn deleteAdminBtn gap-2 text-decoration-none' href="javascript:$('#form_id').submit();"
                                             data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{ trans('langDeactivate') }}">
-                                            <i class="fa-regular fa-eye"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langDeactivate') }}</span>
+                                            <i class="fa-regular fa-eye"></i>
                                         </a>
                                     @endif
                                 @endif
@@ -75,18 +75,18 @@
                         @if($module_id == MODULE_ID_ANNOUNCE)
                             <a class='btn warningAdminBtn gap-2 text-decoration-none' href="{{$urlAppend}}modules/announcements/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-original-title="{{trans('langRSSFeed')}}">
-                                <i class="fa-solid fa-rss"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langRSSFeed') }}</span>
+                                <i class="fa-solid fa-rss"></i>
                             </a>
                         @else
                             <a class='btn warningAdminBtn gap-2 text-decoration-none' href="{{$urlAppend}}modules/blog/rss.php?c={{$course_code}}&uid={{$uid}}&{{$getToken}}"
                                 data-bs-toggle="tooltip" data-bs-placement="bottom" data-original-title="{{trans('langRSSFeed')}}">
-                                <i class="fa-solid fa-rss"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langRSSFeed') }}</span>
+                                <i class="fa-solid fa-rss"></i>
                             </a>
                         @endif
                     @endif
                     @if($toolName)
                         <a id='help-btn' href='{{ $urlServer }}modules/help/help.php?language={{ $language }}&topic={{ $helpTopic }}' class='btn helpAdminBtn text-decoration-none gap-2' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
-                            <i class="fa-solid fa-question"></i><span class='hidden-xs hidden-md TextBold'>{{ trans('langHelp') }}</span>
+                            <i class="fa-solid fa-circle-info"></i>
                         </a>
                     @endif
                 </div>

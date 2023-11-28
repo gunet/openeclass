@@ -466,9 +466,9 @@ input[type="submit"].warningAdminBtn {
 .warningAdminBtn:hover,
 button[type="submit"].warningAdminBtn:hover,
 input[type="submit"].warningAdminBtn:hover {
-  background-color: #F57600;
-  border-color: #F57600;
-  color: #ffffff;
+  background-color: #ece1bc;
+  border-color: #ece1bc;
+  color: #2B3944;
 }
 
 .submitAdminBtn span{
@@ -512,6 +512,17 @@ input[type="submit"].warningAdminBtn:hover {
   background-color: #1E7E0E;
 }
 .btn.btn-primary:hover{
+  border-color: #1E7E0E;
+  color: #ffffff;
+  background-color: #1E7E0E;
+}
+
+.btn.btn-outline-primary{
+  border-color: #1E7E0E;
+  color: #1E7E0E;
+  background-color: #ffffff;
+}
+.btn.btn-outline-primary:hover{
   border-color: #1E7E0E;
   color: #ffffff;
   background-color: #1E7E0E;
@@ -600,7 +611,7 @@ input[type="submit"].warningAdminBtn:hover {
 
 .menu-popover.submitAdminBtn,
 .btn-group-default .submitAdminBtn{
-  color: #9BA9C1;
+  color: #1E7E0E;
   background-color: transparent;
 }
 .menu-popover.submitAdminBtn:hover,

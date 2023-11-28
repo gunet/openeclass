@@ -71,21 +71,23 @@
     @stack('head_styles')
 
 </head>
-<body class='p-5'>
-    <div class="container">
+<body class='py-5 px-3'>
+    <div class="container p-0">
         <div class="row m-auto" id="Frame">
-            <div id="leftnav" class="col-2 sidebar embeded bg-default pt-5">
+            <div id="leftnav" class="col-2 sidebar embeded bg-default pt-5 ps-0">
                 <div class="panel-group accordion mt-1" id="sidebar-accordion">
-                    <div class="panel">
-                        @foreach ($toolArr as $key => $tool_group)
-                            <div id="collapse{{ $key }}" class="panel-collapse Primary-600-bg list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
-                                @foreach ($tool_group[1] as $key2 => $tool)
-                                    <a href="{{ $tool_group[2][$key2] }}" class="leftMenuToolCourse list-group-item {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
-                                        <span class="toolSidebarTxt">{!! $tool !!}</span>
-                                    </a>
-                                @endforeach
-                            </div>
-                        @endforeach
+                    <div class="m-0 p-0 contextual-sidebar w-auto border-0">
+                        <ul class="list-group list-group-flush">
+                            @foreach ($toolArr as $key => $tool_group)
+                                <div id="collapse{{ $key }}" class="panel-collapse list-group accordion-collapse collapse{{ $tool_group[0]['class'] }}">
+                                    @foreach ($tool_group[1] as $key2 => $tool)
+                                        <a href="{{ $tool_group[2][$key2] }}" class="list-group-item d-flex justify-content-start align-items-start module-tool gap-2 py-1 border-0 {{ module_path($tool_group[2][$key2]) == $current_module_dir ? " active" : ""}}">
+                                            <span class='menu-items TextBold w-100'>{!! $tool !!}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
