@@ -155,7 +155,6 @@ function qti_extract_info($file) {
             $out = strip_tags($newdoc->html()); // This leaves off XML declaration.
         }
         else {
-            //$out = strip_tags($body->text());
             $out = node_to_text($body, false);
         }
 
@@ -261,7 +260,7 @@ function exportIMSQTI($result) {
         <item title="' . $row->id . '" ident="question' . $row->id . '">
             <presentation>
                 <material>
-                    <mattext>'. $row->question .'</mattext>
+                    <mattext>'. q($row->question) .'</mattext>
                 </material>
             </presentation>
             <response_lid rcardinality = "Single" rtiming = "No">
@@ -275,6 +274,11 @@ function exportIMSQTI($result) {
 
     foreach ($result as $row) {
 
+        $supported_question_types = array(UNIQUE_ANSWER, MULTIPLE_ANSWER, TRUE_FALSE);
+        if (!in_array($row->type, $supported_question_types)) {
+            continue;
+        }
+
         $objAnswerTmp = new Answer($row->id);
 
         $responses = "";
@@ -284,7 +288,7 @@ function exportIMSQTI($result) {
             $responses .= '
             <response_label ident="question' . $row->id . 'answer'. $i .'">
             <material>
-                <mattext>'. $objAnswerTmp->answer[$i] .'</mattext>
+                <mattext>'. q($objAnswerTmp->answer[$i]) .'</mattext>
             </material>
             </response_label>';
 
@@ -300,7 +304,7 @@ function exportIMSQTI($result) {
                 $itemfeedbacks .= '
                 <itemfeedback ident = "question' . $row->id . 'feedback'. $i .'" view = "Candidate">
                     <material>
-                        <mattext>'. $objAnswerTmp->comment[$i] .'</mattext>
+                        <mattext>'. q($objAnswerTmp->comment[$i]) .'</mattext>
                     </material>
                 </itemfeedback>
                 ';

@@ -31,7 +31,7 @@ require_once "imsqtilib.php";
 
 $pwd = getcwd();
 
-$pageName = $langImportQTI;
+$toolName = $langImportQTI;
 
 // error handling
 $errorFound = false;
@@ -79,21 +79,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langError&nbsp;" . $msg[1] . "</span></div>";
           }
       }
-      
+
       $tool_content .= "<div class='text-center' style='margin-top:15px;'><a href='question_pool.php?course=$course_code'>$langBack</a></div>";
 
 } else {
-    // if method == 'post'
-    // don't display the form if user already sent it
     /* --------------------------------------
       UPLOAD FORM
       -------------------------------------- */
-    $tool_content .= 
-        "<div class='d-lg-flex gap-4 mt-4'>
+    $tool_content .=
+        "<div class='alert alert-info'>$langQtiImportNote</div>
+        <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes' method='post'>
-                <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >
-                    <h5>$langImport</h5>
+                <input type='hidden' name='qtiFormId' value='" . uniqid('') . "' >                    
                     <div class='form-group'>
                         <label class='col-sm-12 control-label-notes'>$langIMSQTIUploadFile:</label>
                         <div class='col-sm-12'>
