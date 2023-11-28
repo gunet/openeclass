@@ -5709,7 +5709,8 @@ function submit_grade_comments($args) {
             $langFormErrors, $workPath, $langGradebookGrade;
 
     if (isset($args['grade'])) {
-        $args['grade'] = fix_float($args['grade']);
+        $args['grade'] = trim($args['grade']);
+        $args['grade'] = $args['grade'] === '' ? null : fix_float($args['grade']);
     }
 
     $id = $args['assignment']; // assignment=id_ergasias hidden pedio sto grade_edit arxeio
