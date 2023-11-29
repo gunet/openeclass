@@ -1040,9 +1040,9 @@ if ($is_editor) {
         $aantalcategories = count($cat);
         $tool_content .= "<div class='col-sm-12'><div class='table-responsive'>";
         if($cat){
-           $tool_content .= "<div class='margin-bottom-thin border-bottom-table-head py-2'>";
+           $tool_content .= "<div class='margin-bottom-thin border-bottom-table-head py-2 px-2'>";
         }else{
-            $tool_content .= "<div class='margin-bottom-thin border-bottom-table-head py-2'>";
+            $tool_content .= "<div class='margin-bottom-thin border-bottom-table-head py-2 px-2'>";
         }
         if ($aantalcategories > 0) {
             $tool_content .= "<span class='form-label'>$langCategorisedGroups</span>&nbsp;";
@@ -1074,7 +1074,7 @@ if ($is_editor) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'>
-                                    <th class = 'text-start category-link' colspan='4'>
+                                    <th class = 'text-start category-link px-2' colspan='4'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>".icon('fa-solid fa-minus-square', $langViewHide)."&nbsp;&nbsp;". q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
@@ -1096,7 +1096,7 @@ if ($is_editor) {
             } else {
                 $tool_content .= "
                         <tr class='link-subcategory-title'>
-                            <th class = 'text-start category-link' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                            <th class = 'text-start category-link px-2' colspan='4'>&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
                 $tool_content .= "' class='open-category'>".icon('fa-plus-square', $langViewShow)
                     . "&nbsp;&nbsp;" . q($myrow->name) . "</a>";

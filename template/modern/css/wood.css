@@ -1237,7 +1237,7 @@ border-color: #867F72;
 }
 
 .wallWrapper{
-background-clip: border-box !important; border: 1px solid #ffffff !important;
+background-clip: border-box !important; border: 1px solid #EFF6FF !important;
 }
 
 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
@@ -1289,8 +1289,17 @@ background-color: #B4BED1;
 /*************************************************** WIDGETS **********************************************************/
 /**********************************************************************************************************************/
 
+.nav-link-widgets:not(:has(.active)){
+  color: #867F72 !important;
+  font-weight: 700;
+}
 .nav-link-widgets.active{
-border: solid 1px #867F72;
+  border-radius: 0px;
+  border: 0px;
+  border-bottom: solid 2px #867F72;
+  background-color: transparent !important;
+  color: #867F72 !important;
+  font-weight: 700;
 }
 
 

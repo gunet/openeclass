@@ -54,7 +54,7 @@
                         <table class='table-default'>
                             <thead><th class='list-header' colspan='2'>{{ trans('langCourseInfo') }}{!! icon('fa-gear orangeText ps-2',trans('langModify'), "infocours.php?c=".$c) !!}</th></thead>
                             <tr>
-                                <th width='250'>{{ trans('langFaculty') }}</th>
+                                <th class='px-2' width='250'>{{ trans('langFaculty') }}</th>
                                 <td>
                                 @foreach ($departments as $key => $department)
                                     @if ($key > 0)
@@ -65,17 +65,17 @@
                                 </td>
                             </tr>
                             <tr>
-                                <th>{{ trans('langCode') }}:</th>
+                                <th class='px-2'>{{ trans('langCode') }}</th>
                                 <td>{{ $course->code }}</td>
                             </tr>
                             <tr>
-                                <th><b>{{ trans('langTitle') }}:</b></th>
+                                <th class='px-2'>{{ trans('langTitle') }}</th>
                                 <td>{{ $course->title }}</td>
                             </tr>
                             <tr>
-                                <th>
-                                        <b>{{ trans('langTutor') }}:</b>
-                                    </th>
+                                <th class='px-2'>
+                                    {{ trans('langTutor') }}
+                                </th>
                                 <td>{{ $course->prof_names }}</td>
                             </tr>
                         </table>    
@@ -120,7 +120,7 @@
                                 {{ trans('langCourseStatus') }} {!! icon('fa-gear orangeText ps-2', trans('langModify'), "statuscours.php?c=".$c) !!}
                             </th></thead>
                             <tr>
-                                <th width='250'>{{ trans('langCurrentStatus') }}:</th>
+                                <th class='px-2' width='250'>{{ trans('langCurrentStatus') }}:</th>
                                 <td>{{ course_status_message($cId) }}</td>
                             </tr>
                         </table>

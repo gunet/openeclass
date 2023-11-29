@@ -1233,7 +1233,7 @@ border-color: #1E7E0E;
 }
 
 .wallWrapper{
-background-clip: border-box !important; border: 1px solid #ffffff !important;
+background-clip: border-box !important; border: 1px solid #EFF6FF !important; background-color: #ffffff !important;
 }
 
 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
@@ -1284,9 +1284,17 @@ background-color: #B4BED1;
 /**********************************************************************************************************************/
 /*************************************************** WIDGETS **********************************************************/
 /**********************************************************************************************************************/
-
+.nav-link-widgets:not(:has(.active)){
+  color: #1E7E0E !important;
+  font-weight: 700;
+}
 .nav-link-widgets.active{
-border: solid 1px #1E7E0E;
+  border-radius: 0px;
+  border: 0px;
+  border-bottom: solid 2px #1E7E0E;
+  background-color: transparent !important;
+  color: #1E7E0E !important;
+  font-weight: 700;
 }
 
 

@@ -2111,7 +2111,7 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 .wallWrapper{
-  background-clip: border-box !important; border: 1px solid #ffffff !important;
+  background-clip: border-box !important; border: 1px solid #4F6893 !important;
 }
 
 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
@@ -2163,8 +2163,18 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /*************************************************** WIDGETS **********************************************************/
 /**********************************************************************************************************************/
 
+
+.nav-link-widgets:not(:has(.active)){
+  color: #74AFE9 !important;
+  font-weight: 700;
+}
 .nav-link-widgets.active{
-  border: solid 1px #74AFE9;
+  border-radius: 0px;
+  border: 0px;
+  border-bottom: solid 2px #74AFE9;
+  background-color: transparent !important;
+  color: #74AFE9 !important;
+  font-weight: 700;
 }
 
 

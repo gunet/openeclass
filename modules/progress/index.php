@@ -127,6 +127,10 @@ if ($is_editor) {
         $pageName = "$langProgress $langsOfStudents";
         $info_title = $langRefreshProgressInfo;
         $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
             array('title' => $langRefreshProgress,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id&amp;refresh=true",
                   'icon' => 'fa-refresh',
@@ -134,12 +138,8 @@ if ($is_editor) {
                   'level' => 'primary-label'),
             array('title' => "$langExport",
                 'url' => "dumpcertificateresults.php?course=$course_code&amp;$param_name=$element_id",
-                'icon' => 'fa-file-excel-o',
-                'level' => 'primary-label'),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;$param_name=$element_id",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary')
+                'icon' => 'fa-file-excel',
+                'level' => 'primary-label')
             ));
 
     } elseif (isset($_GET['preview'])) { // certificate preview
