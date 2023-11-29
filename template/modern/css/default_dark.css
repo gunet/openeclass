@@ -1859,6 +1859,13 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #74AFE9;
   }
   .showCoursesBars.active, .showCoursesPics.active{
+    height:38px;
+  width:38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  text-decoration: none;
     background-color: #74AFE9;
     color: #ffffff;
   }

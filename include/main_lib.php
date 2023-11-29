@@ -3602,6 +3602,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $page_title = "";
 
     $temporary_button_class = "";
+    $modal_class = "";
 
     if (isset($pageName) and !empty($pageName) and $page_title_flag) {
         $page_title = "<h6 class='form-label TextBold text-capitalize mb-0'><span class='fas fa-check text-success pe-2'></span>".q($pageName)."</h6>";
@@ -3642,8 +3643,13 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $text_class = '';
         }
+        if(isset($option['modal-class'])){
+            $modal_class = $option['modal-class'];
+        }else{
+            $modal_class = '';
+        }
         if (!isset($option['button-class'])) {
-            $button_class = 'submitAdminBtn';
+            $button_class = 'submitAdminBtn '.$modal_class.'';
         } else {
             $oldButton = '';
 
@@ -3671,7 +3677,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if($oldButton == 'btn-danger'){
                 $new_button = str_replace($oldButton,'deleteAdminBtn',$button_class);
             }else{
-                $new_button = str_replace($oldButton,'submitAdminBtn',$button_class);
+                $new_button = str_replace($oldButton,'submitAdminBtn '.$modal_class.'',$button_class);
             }
 
             $button_class = $new_button;

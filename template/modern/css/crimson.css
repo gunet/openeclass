@@ -963,6 +963,13 @@
     color: #B70A0A;
   }
   .showCoursesBars.active, .showCoursesPics.active{
+    height:38px;
+    width:38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    text-decoration: none;
     background-color: #B70A0A;
     color: #ffffff;
   }

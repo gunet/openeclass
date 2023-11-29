@@ -32,7 +32,7 @@
 
 
 
-                            <div class="col-12 bg-default">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
+                            <div class="col-12 bg-transparent">{!! isset($action_bar) ?  $action_bar : '' !!}</div>
 
                             @if(Session::has('message'))
                             <div class='col-12 all-alerts'>

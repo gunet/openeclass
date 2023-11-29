@@ -478,7 +478,7 @@ if (isset($_GET['rubric_id'])) {
                 $table_content .= "<tr>
                             <td style='padding-left:15px;'><a href='rubrics.php?course=$course_code&amp;preview=$rubric_id'>$rubric->name</a></td>
 							<td>$rubric->description</td>";
-                $table_content .= "<td style='float:right' class='option-btn-cell'>
+                $table_content .= "<td class='option-btn-cell text-end'>
                             ".action_button(array(
                                 array(
                                     'title' => $langEdit,

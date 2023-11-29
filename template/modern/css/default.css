@@ -3940,7 +3940,13 @@ body .delThemeBtn{
   color: #9BA9C1;
 }
 .showCoursesBars.active, .showCoursesPics.active{
+  height:38px;
+  width:38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 50%;
+  text-decoration: none;
   background-color: #EFF6FF;
   color: #0073E6;
 }

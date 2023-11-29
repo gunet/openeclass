@@ -95,6 +95,7 @@ $data['action_bar'] = action_bar(
             'class' => 'expand',
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
+            'modal-class' => 'expand',
             'show' => !isset($_GET['faq'])
         ]
         

@@ -98,6 +98,7 @@ $showScore = $displayScore == 1
             'title' => $langCheckGrades,
             'icon' => 'fa-bar-chart',
             'class' => 'check-grades',
+            'modal-class' => 'check-grades',
             'level' => 'primary-label',
             'button-class' => 'btn-success',
             'show' => $is_editor

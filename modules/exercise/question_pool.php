@@ -243,7 +243,7 @@ if ($fromExercise) {
           'icon' => 'fa-copy',
           'level' => 'primary-label',
           'class' => 'warnDup',
-          'class' => 'warnDup',
+          'modal-class' => 'warnDup',
           'button-class' => 'btn-success' ],
         [ 'title' => $langDumpPDF,
           'url' => $exportUrl . '&amp;format=pdf',

@@ -959,8 +959,16 @@ tr.danger{
   color: #1E7E0E;
 }
 .showCoursesBars.active, .showCoursesPics.active{
+  height:38px;
+  width:38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  text-decoration: none;
   background-color: #1E7E0E;
   color: #ffffff;
+  
 }
 
 /**********************************************************************************************************************/
