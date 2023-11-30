@@ -2,10 +2,10 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 /* ========================================================================
- * Open eClass 3.12
+ * Open eClass 4.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2021 Greek Universities Network - GUnet
+ * Copyright 2003-2023 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -177,12 +177,6 @@ function hidden_vars($names) {
     return $out;
 }
 
-function checkbox_input($name) {
-    $GLOBALS['input_fields'][$name] = true;
-    return "<label class='label-container'><input type='checkbox' name='$name' value='1'" .
-            ($GLOBALS[$name] ? ' checked="1"' : '') . "><span class='checkmark'></span></label>";
-}
-
 function text_input($name, $size) {
     $GLOBALS['input_fields'][$name] = true;
     return "<input class='form-control' type='text' size='$size' name='$name' value='" .
@@ -284,23 +278,43 @@ elseif (isset($_POST['install3'])) {
        <form class='form-horizontal form-wrapper form-edit p-3 rounded' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
+<<<<<<< local
              <label for='dbHostForm' class='col-sm-12 control-label-notes'>$langdbhost</label>
              <div class='row'>
               <div class='col-sm-12'>" . text_input('dbHostForm', 25) . "</div>
               <div class='col-sm-12 help-block'>$langEG localhost</div>
              </div>
+=======
+             <label for='dbHostForm' class='col-sm-3 control-label'>$langdbhost</label>
+             <div class='col-sm-6'>" . text_input('dbHostForm', 25) . "</div>
+             <div class='col-sm-3'>$langEG localhost</div>
+>>>>>>> graft
            </div>
+<<<<<<< local
            <div class='form-group mt-3'>
              <label for='dbUsernameForm' class='col-sm-12 control-label-notes'>$langDBLogin</label>
              <div class='row'>
               <div class='col-sm-12'>" . text_input('dbUsernameForm', 25) . "</div>
               <div class='col-sm-12 help-block'>$langEG root</div>
             </div>
+=======
+           <div class='form-group'>
+             <label for='dbUsernameForm' class='col-sm-3 control-label'>$langDBLogin</label>
+             <div class='col-sm-6'>" . text_input('dbUsernameForm', 25) . "</div>
+             <div class='col-sm-3'>$langEG root</div>
+>>>>>>> graft
            </div>
+<<<<<<< local
            <div class='form-group mt-3'>
              <label for='dbPassForm' class='col-sm-12 control-label-notes'>$langDBPassword</label>
              <div class='col-sm-12'>" . text_input('dbPassForm', 25) . "</div>
+=======
+           <div class='form-group'>
+             <label for='dbPassForm' class='col-sm-3 control-label'>$langDBPassword</label>
+             <div class='col-sm-6'>" . text_input('dbPassForm', 25) . "</div>
+>>>>>>> graft
            </div>
+<<<<<<< local
            <div class='form-group mt-3'>
              <label for='dbNameForm' class='col-sm-12 control-label-notes'>$langMainDB</label>
              <div class='row'>
@@ -314,7 +328,14 @@ elseif (isset($_POST['install3'])) {
               <div class='col-sm-12'>" . text_input('dbMyAdmin', 25) . "</div>
               <div class='col-sm-12 help-block'>$langOptional</div>
           </div>
+=======
+           <div class='form-group'>
+             <label for='dbNameForm' class='col-sm-3 control-label'>$langMainDB</label>
+             <div class='col-sm-6'>" . text_input('dbNameForm', 25) . "</div>
+             <div class='col-sm-3'>$langNeedChangeDB</div>
+>>>>>>> graft
            </div>
+<<<<<<< local
            <div class='form-group mt-5'>
              <div class='col-12'>
               <div class='row'>
@@ -326,6 +347,12 @@ elseif (isset($_POST['install3'])) {
                   </div>
                 </div>
             </div>
+=======
+           <div class='form-group'>
+             <label for='dbMyAdmin' class='col-sm-3 control-label'>$langphpMyAdminURL</label>
+             <div class='col-sm-6'>" . text_input('dbMyAdmin', 25) . "</div>
+             <div class='col-sm-3'>$langOptional</div>
+>>>>>>> graft
            </div>
            <div class='form-group mt-3'>
              <div class='col-sm-12'>$langAllFieldsRequired</div>
@@ -656,7 +683,6 @@ elseif (isset($_POST['install1'])) {
         'el' => 'Ελληνικά (el)',
         'en' => 'English (en)');
 
-    // <title>$langWelcomeWizard</title>
     $tool_content .= "
     <div class='row'>
       <div class='col-sm-12 text-center'>

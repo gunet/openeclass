@@ -3,7 +3,7 @@
 http://www.openeclass.org/
 
 **Warning**: This is the next major release, currently under development. The
-current stable release is in the 3.14.x branch.
+current stable release is in the 3.15.x branch.
 
 The Open eClass platform (formerly known as GUnet eClass) is a complete Course
 Management System, used to store and present educational materials. It is the
@@ -33,7 +33,7 @@ June 2023
 http://www.openeclass.org/
 
 **Σημείωση**: Αυτή είναι η υπό ανάπτυξη επόμενη μείζων έκδοση της πλατφόρμας.
-Η τρέχουσα σταθερή έκδοση βρίσκεται στο branch 3.14.x.
+Η τρέχουσα σταθερή έκδοση βρίσκεται στο branch 3.15.x.
 
 Η πλατφόρμα Open eClass (παλιότερη ονομασία: GUnet eClass) είναι ένα
 ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί την
@@ -71,4 +71,5 @@ PHP >= 8.0 και μια βάση δεδομένων (MySQL ή MariaDB). Ανα�
 http://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Ιούνιος 2023
+Νοέμβριος 2023
+
