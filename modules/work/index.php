@@ -4770,29 +4770,29 @@ function assignment_details($id, $row, $x =false) {
         </div>
         <div class='panel-body'>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langTitle:</strong>
                 </div>
-                <div class='col-sm-8' id='assignment_title'>
+                <div class='col-sm-9' id='assignment_title'>
                     " . q($row->title) . "
                 </div>
             </div>";
         if (!empty($row->description)) {
             $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langDescription:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     " . mathfilter($row->description, 12 , "../../courses/mathimg/") . "
                 </div>
             </div>";
         }
         if (!empty($row->comments)) {
             $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$m[comments]:</strong>
                 </div>
-                <div class='col-sm-8' style='white-space: pre-wrap'>
+                <div class='col-sm-9' style='white-space: pre-wrap'>
                     $row->comments
                 </div>
             </div>";
@@ -4806,28 +4806,28 @@ function assignment_details($id, $row, $x =false) {
         if (!empty($row->file_name)) {
             $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
             $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langWorkFile:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     $filelink
                 </div>
             </div>";
         }
         $tool_content .= "
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$m[max_grade]:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     $row->max_grade
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-4'>
+            <div class='col-sm-3'>
                 <strong class='control-label-notes mb-1'>$langGradeType:</strong>
             </div>
-            <div class='col-sm-8'>";
+            <div class='col-sm-9'>";
             if ($preview_rubric == 1) {
                 $tool_content .= "
                     <a class='' role='button' data-bs-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
@@ -4856,34 +4856,34 @@ function assignment_details($id, $row, $x =false) {
                     </div></div>";
             }
         $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$m[start_date]:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     " . format_locale_date(strtotime($row->submission_date)) . "
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langGroupWorkDeadline_of_Submission:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$m[group_or_user]:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
                 </div>
             </div>
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong>$m[WorkAssignTo]:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     $assign_to_users_message
                 </div>
             </div>
@@ -4892,10 +4892,10 @@ function assignment_details($id, $row, $x =false) {
         if ($tags_list) {
             $tool_content .= "
             <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-4'>
+                <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langTags:</strong>
                 </div>
-                <div class='col-sm-8'>
+                <div class='col-sm-9'>
                     $tags_list
                 </div>
             </div> ";
@@ -4904,18 +4904,18 @@ function assignment_details($id, $row, $x =false) {
 		if ($grade_type == 3 && !$x){
 			$tool_content .= "
 				<div class='row p-2 margin-bottom-fat'>
-					<div class='col-sm-4'>
+					<div class='col-sm-3'>
 						<strong class='control-label-notes'>$langReviewStart:</strong>
 					</div>
-					<div class='col-sm-8'>
+					<div class='col-sm-9'>
 						$start_date_review ".(isset($start_date_review_notice) ? $start_date_review_notice: "")."
 					</div>
 				</div>
 				<div class='row p-2 margin-bottom-fat'>
-					<div class='col-sm-4'>
+					<div class='col-sm-3'>
 						<strong class='control-label-notes'>$langReviewEnd:</strong>
 					</div>
-					<div class='col-sm-8'>
+					<div class='col-sm-9'>
 						$due_date_review ".(isset($due_date_review_notice) ? $due_date_review_notice: "")."
 					</div>
 				</div>
@@ -5583,8 +5583,8 @@ function show_student_assignments() {
                       <tr class='list-header'>
                           <th style='width:45%'>$langTitle</th>
                           <th style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
-                          <th>$m[submitted]</th>
-                          <th>$langGradebookGrade</th>
+                          <th class='text-center'>$m[submitted]</th>
+                          <th class='text-center'>$langGradebookGrade</th>
                           $add_eportfolio_res_th
                       </tr>
                   </thead>
@@ -5647,7 +5647,7 @@ function show_student_assignments() {
             }   else if($row->deadline) {
                 $tool_content .= "<br>(<small><span class='text-danger'>$langHasExpiredS</span></small>)";
             }
-            $tool_content .= "</td><td>";
+            $tool_content .= "</td><td class='text-center'>";
 
             $eportfolio_action_array = [];
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
@@ -5671,7 +5671,7 @@ function show_student_assignments() {
             } else {
                 $tool_content .= "<i class='fa fa-square'></i><br>";
             }
-            $tool_content .= "</td><td>";
+            $tool_content .= "</td><td class='text-center'>";
             foreach ($submission as $sub) {
                 $grade = submission_grade($sub->id);
                 $tool_content .= '<div>' . ($grade? $grade: '-') . '</div>';
@@ -5680,7 +5680,7 @@ function show_student_assignments() {
 
             if (get_config('eportfolio_enable')) {
                 if ($eportfolio_action_array) {
-                    $tool_content .= "<td>" .
+                    $tool_content .= "<td class='text-end'>" .
                         action_button($eportfolio_action_array) . "</td>";
                 } else {
                     $tool_content .= '<td>&nbsp;</td>';

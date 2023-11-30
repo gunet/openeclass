@@ -345,7 +345,7 @@ foreach ($flatElementList as $module) {
 
 if ($uid && $moduleNb > 0) {
     // add a blank line between module progression and global progression
-    $tool_content .= "<tr><th colspan='" . ($maxDeep + 2) . "'>$langGlobalProgress</th> 
+    $tool_content .= "<tr><th class='px-2' colspan='" . ($maxDeep + 2) . "'>$langGlobalProgress</th> 
                           <th>" . disp_progress_bar(round($globalProg / ($moduleNb)), 1) . "</th> 
                       </tr>";
 }
