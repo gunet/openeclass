@@ -199,7 +199,6 @@ elseif (isset($_GET['recup']) and $fromExercise) {
     // if the question exists, add it into the list of questions for the
     // current exercise
     if ($objQuestionTmp->read($recup) and $objExercise->addToList($recup)) {
-        //Session::Messages($langQuestionReused, 'alert-success');
         Session::flash('message',$langQuestionReused);
         Session::flash('alert-class', 'alert-success');
         $objExercise->save();
@@ -207,13 +206,11 @@ elseif (isset($_GET['recup']) and $fromExercise) {
     redirect_to_home_page("modules/exercise/question_pool.php?course=$course_code" . ($fromExercise? "&fromExercise=$fromExercise": '') . "&exerciseId=$exerciseId");
 } elseif (isset($_REQUEST['clone_pool'])) {
     clone_question_pool($_POST['clone_pool_to_course_id']);
-    //Session::Messages($langCopySuccess, 'alert-success');
     Session::flash('message',$langCopySuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");
 } elseif (isset($_REQUEST['purge'])) {
     purge_question_pool($course_id);
-    //Session::Messages($langQuestionPoolPurgeSuccess, 'alert-success');
     Session::flash('message',$langQuestionPoolPurgeSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/exercise/index.php?course=$course_code");

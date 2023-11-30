@@ -88,7 +88,8 @@ if ($is_editor) {
             }
             // if question not found
             if (!$objQuestion->read($question_id)) {
-                Session::Messages($langQuestionNotFound);
+                Session::flash('message', $langQuestionNotFound);
+                Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId");
             }
             if (isset($_GET['modifyAnswers'])) {
