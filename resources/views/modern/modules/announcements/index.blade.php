@@ -78,13 +78,43 @@
         $('[data-bs-toggle="tooltip"]').tooltip({container: 'body'});
     }
 
+    let checkboxStates = [];
+
     $(document).ready(function(){
+
+        $('#ann_table{{ $course_id }}').on('change', 'input[type="checkbox"]', function() {
+            let cbid = $(this).attr('cbid');
+            checkboxStates[cbid] = this.checked;
+
+            let selectedCbidValues = $('#selectedcbids').val().split(',');
+            let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+            if (this.checked && cbidIndex === -1) {
+                selectedCbidValues.push(cbid);
+            } else if (!this.checked && cbidIndex !== -1) {
+                selectedCbidValues.splice(cbidIndex, 1);
+            }
+            $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+
+        });
+
+        function restoreCheckboxStates() {
+            $('#ann_table{{ $course_id }} tbody tr').each(function(index) {
+                let checkbox = $(this).find('input[type="checkbox"]');
+                let cbid = checkbox.attr('cbid');
+                if (cbid in checkboxStates) {
+                    checkbox.prop('checked', checkboxStates[cbid]);
+                } else {
+                    checkbox.prop('checked', false);
+                }
+            });
+        }
+
         var langEmptyGroupName = "{{ trans('langEmptyAnTitle') }}";
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-            'aoColumnDefs':[{'sClass':'option-btn-cell text-end',
-                'aTargets':[-1]}],
+            'aoColumnDefs':[{'sClass':'option-btn-cell text-end','aTargets':[-1]},
+            ],
             @endif
             bStateSave: true,
             bProcessing: true,
@@ -107,6 +137,7 @@
                         fill: '&hellip;<div class="clearfix"></div><a style="float:right;" href="{{ $_SERVER['SCRIPT_NAME'] }}?course={{ $course_code }}&an_id='+ $(this).data('id')+'">{{ trans('langMore') }}</div>'
                     })
                 });
+                restoreCheckboxStates();
                 $('#ann_table{{ $course_id }}_filter label input').attr({
                     class : 'form-control input-sm mb-3 ms-0',
                     placeholder : '{{ trans('langSearch') }}...'
@@ -379,10 +410,30 @@
                     @endif
 
                     <div class='col-12'>
+
+                        @if ($is_editor)
+                            <div>
+                                <h5>{{ trans('langBulkProcessing') }}</h5>
+                                <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' class="d-flex gap-3">
+                                    <select name="bulk_action" class="px-3">
+                                        <option value="delete">{{ trans('langDelete') }}</option>
+                                        <option value="visible">{{ trans('langVisible') }}</option>
+                                        <option value="invisible">{{ trans('langInvisible') }}</option>
+                                    </select>
+                                    <input type="submit" class="px-3" name="bulk_submit" value="{{ trans('langSubmit') }}">
+                                    <input type="hidden" id="selectedcbids" name="selectedcbids" value="">
+                                </form>
+                            </div>
+                        @endif
+
                         <div class="table-responsive">
                             <table id='ann_table{{ $course_id }}' class='table-default'>
                                 <thead>
                                     <tr>
+                                        @if ($is_editor)
+                                            <th></th>
+                                        @endif
+
                                         <th>{{ trans('langAnnouncement') }}</th>
                                         <th>{{ trans('langDate') }}</th>
                                         @if ($is_editor)
@@ -393,8 +444,6 @@
                                 </thead>
                                 <tbody></tbody>
                             </table>
-
-                            
                         </div>
                     </div>
                 

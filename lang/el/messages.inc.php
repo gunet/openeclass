@@ -41,6 +41,7 @@ $langResourceBrowser = 'Αναζήτηση πόρων';
 $langYes = "Ναι";
 $langNo = "Όχι";
 $langSelectReq = "Διαλέξτε τουλάχιστον μία επιλογή!";
+$langBulkProcessing = "Μαζική Επεξεργασία";
 
 // For the logged-out user:
 $langAnd = "και";

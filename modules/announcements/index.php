@@ -42,6 +42,40 @@ define_rss_link();
 load_js('datatables');
 
 if ($is_editor) {
+
+    if (isset($_POST['bulk_submit'])) {
+
+        $cbids = explode(',', $_POST['selectedcbids']);
+
+        if ($_POST['bulk_action'] == 'delete') {
+            
+            foreach ($cbids as $row_id) {
+                $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
+                Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
+                    'title' => $announce->title,
+                    'content' => $txt_content));
+            }
+            
+        }
+        if ($_POST['bulk_action'] == 'visible') {
+            foreach ($cbids as $row_id) {
+                Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 1, $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            }
+        }
+        if ($_POST['bulk_action'] == 'invisible') {
+            foreach ($cbids as $row_id) {
+                Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 0, $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            }
+        }
+                
+    }
+    
+    
     // Pin sticky announcement
     if (isset($_POST['pin_announce'])) {
         if (isset($_GET['pin']) && ($_GET['pin'] == 1)) {
@@ -147,7 +181,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => "<div class='table_td'>
+                '0' => "<div class='bulk_select'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /></div>",
+                '1' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
                             <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>
@@ -158,9 +193,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
                 //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
-                '1' => format_locale_date(strtotime($myrow->date)),
-                '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
-                '3' => action_button(array(
+                '2' => format_locale_date(strtotime($myrow->date)),
+                '3' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
+                '4' => action_button(array(
                     array('title' => $langEditChange,
                         'icon' => 'fa-edit',
                         'url' => $urlAppend . "modules/announcements/edit.php?course=$course_code&amp;modify=$myrow->id"),
