@@ -113,8 +113,12 @@
 
         var oTable = $('#ann_table{{ $course_id }}').DataTable ({
             @if ($is_editor)
-            'aoColumnDefs':[{'sClass':'option-btn-cell text-end','aTargets':[-1]},
+            'aoColumnDefs':[
+                {'sClass':'option-btn-cell text-end','aTargets':[-1]},
+                {'sClass':'width-5','aTargets':[0]},
+                {'sClass':'width-40','aTargets': [1] }
             ],
+            'autoWidth': false,
             @endif
             bStateSave: true,
             bProcessing: true,
@@ -328,6 +332,12 @@
 
 @push('head_styles')
 <link rel='stylesheet' type='text/css' href="{{ $urlServer }}/js/datatables/media/css/jquery.dataTables.css" />
+    @if ($is_editor)
+        <style>
+            .checkbox-table .width-5 { width: 5% !important;}
+            .checkbox-table .width-40 {width: 40% !important;}
+        </style>
+    @endif
 @endpush
 
 @section('content')
@@ -417,8 +427,8 @@
                                 <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' class="d-flex gap-3">
                                     <select name="bulk_action" class="px-3">
                                         <option value="delete">{{ trans('langDelete') }}</option>
-                                        <option value="visible">{{ trans('langVisible') }}</option>
-                                        <option value="invisible">{{ trans('langInvisible') }}</option>
+                                        <option value="visible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
+                                        <option value="invisible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>
                                     </select>
                                     <input type="submit" class="px-3" name="bulk_submit" value="{{ trans('langSubmit') }}">
                                     <input type="hidden" id="selectedcbids" name="selectedcbids" value="">
@@ -427,7 +437,7 @@
                         @endif
 
                         <div class="table-responsive">
-                            <table id='ann_table{{ $course_id }}' class='table-default'>
+                            <table id='ann_table{{ $course_id }}' class='checkbox-table'>
                                 <thead>
                                     <tr>
                                         @if ($is_editor)
