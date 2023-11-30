@@ -177,12 +177,6 @@ function hidden_vars($names) {
     return $out;
 }
 
-function checkbox_input($name) {
-    $GLOBALS['input_fields'][$name] = true;
-    return "<input type='checkbox' name='$name' value='1'" .
-            ($GLOBALS[$name] ? ' checked="1"' : '') . ">";
-}
-
 function text_input($name, $size) {
     $GLOBALS['input_fields'][$name] = true;
     return "<input class='form-control' type='text' size='$size' name='$name' value='" .
@@ -278,28 +272,28 @@ elseif (isset($_POST['install3'])) {
        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
          <fieldset>
            <div class='form-group'>
-             <label for='dbHostForm' class='col-sm-2 control-label'>$langdbhost</label>
-             <div class='col-sm-8'>" . text_input('dbHostForm', 25) . "</div>
-             <div class='col-sm-2'>$langEG localhost</div>
+             <label for='dbHostForm' class='col-sm-3 control-label'>$langdbhost</label>
+             <div class='col-sm-6'>" . text_input('dbHostForm', 25) . "</div>
+             <div class='col-sm-3'>$langEG localhost</div>
            </div>
            <div class='form-group'>
-             <label for='dbUsernameForm' class='col-sm-2 control-label'>$langDBLogin</label>
-             <div class='col-sm-8'>" . text_input('dbUsernameForm', 25) . "</div>
-             <div class='col-sm-2'>$langEG root</div>
+             <label for='dbUsernameForm' class='col-sm-3 control-label'>$langDBLogin</label>
+             <div class='col-sm-6'>" . text_input('dbUsernameForm', 25) . "</div>
+             <div class='col-sm-3'>$langEG root</div>
            </div>
            <div class='form-group'>
-             <label for='dbPassForm' class='col-sm-2 control-label'>$langDBPassword</label>
-             <div class='col-sm-8'>" . text_input('dbPassForm', 25) . "</div>
+             <label for='dbPassForm' class='col-sm-3 control-label'>$langDBPassword</label>
+             <div class='col-sm-6'>" . text_input('dbPassForm', 25) . "</div>
            </div>
            <div class='form-group'>
-             <label for='dbNameForm' class='col-sm-2 control-label'>$langMainDB</label>
-             <div class='col-sm-8'>" . text_input('dbNameForm', 25) . "</div>
-             <div class='col-sm-2'>$langNeedChangeDB</div>
+             <label for='dbNameForm' class='col-sm-3 control-label'>$langMainDB</label>
+             <div class='col-sm-6'>" . text_input('dbNameForm', 25) . "</div>
+             <div class='col-sm-3'>$langNeedChangeDB</div>
            </div>
            <div class='form-group'>
-             <label for='dbMyAdmin' class='col-sm-2 control-label'>$langphpMyAdminURL</label>
-             <div class='col-sm-8'>" . text_input('dbMyAdmin', 25) . "</div>
-             <div class='col-sm-2'>$langOptional</div>
+             <label for='dbMyAdmin' class='col-sm-3 control-label'>$langphpMyAdminURL</label>
+             <div class='col-sm-6'>" . text_input('dbMyAdmin', 25) . "</div>
+             <div class='col-sm-3'>$langOptional</div>
            </div>
            <div class='form-group'>
              <input type='submit' class='btn btn-default' name='install2' value='&laquo; $langPreviousStep'>
@@ -607,7 +601,6 @@ elseif (isset($_POST['install1'])) {
         'el' => 'Ελληνικά (el)',
         'en' => 'English (en)');
 
-    // <title>$langWelcomeWizard</title>
     $tool_content .= "
     <div class='row'>
       <div class='col-sm-12 text-center'>

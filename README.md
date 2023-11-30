@@ -65,4 +65,4 @@ PHP >= 8.0 και μια βάση δεδομένων (MySQL or MariaDB). Ανα�
 https://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Νοέμβριος 2022
+Νοέμβριος 2023
