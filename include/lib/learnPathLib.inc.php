@@ -621,7 +621,8 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
             ORDER BY UMP.`attempt`, LPM.`rank`";
     $modules = Database::get()->queryArray($sql, $lpUid, $lpid, $course_id, CTLABEL_);
     $totalProgress = 0;
-    $totalTime = $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
+    $totalStarted = $totalAccessed = $totalStatus = $maxAttempt = "";
+    $totalTime = "0000:00:00";
 
     if (is_array($modules) && !empty($modules)) {
         $maxAttempt = 1; // discover number of attempts
@@ -670,6 +671,7 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
             if ($global_status[$module->attempt] === "" || (enum_lesson_status($module->STATUS) < enum_lesson_status($global_status[$module->attempt]))) {
                 $global_status[$module->attempt] = $module->STATUS;
             }
+            $totalTime = addScormTime($totalTime, $global_time[$module->attempt]);
         }
 
         $bestAttempt = 1; // discover best attempt
@@ -680,7 +682,6 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
         }
 
         $totalProgress = $global_progress[$bestAttempt];
-        $totalTime = $global_time[$bestAttempt];
         $totalStarted = $global_started[$bestAttempt];
         $totalAccessed = $global_accessed[$bestAttempt];
         $totalStatus = $global_status[$bestAttempt];
@@ -715,7 +716,7 @@ function get_learnPath_bestAttempt_progress($lpid, $lpUid): array {
 }
 
 function get_learnPath_combined_progress($lpid, $lpUid): float {
-    $sql = "SELECT 
+    $sql = "SELECT
                    MAX(LPM.`learnPath_module_id`) as learnPath_module_id,
                    MAX(LPM.`parent`) as parent,
                    MAX(LPM.`lock`) as `lock`,
