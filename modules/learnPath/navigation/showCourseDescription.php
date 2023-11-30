@@ -35,16 +35,41 @@ require_once '../../../include/init.php';
 
 $pageName = $langCourseProgram;
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$cssFile = '';
+if($theme_options->name == 'Default Dark'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='../../../template/modern/css/default_dark.css?".time()."'/>";
+}
+
+if($theme_options->name == 'Crimson'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='../../../template/modern/css/crimson.css?".time()."'/>";
+}
+
+if($theme_options->name == 'Emerald'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='../../../template/modern/css/emerald.css?".time()."'/>";
+}
+
+if($theme_options->name == 'Wood'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='../../../template/modern/css/wood.css?".time()."'/>";
+}
+
 ?>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>">
         <link href='../../../template/modern/css/bootstrap.min.css' rel='stylesheet' type="text/css">
-        <link href="../../../template/modern/css/default.css" rel="stylesheet" type="text/css" />
-        <link href="../../../template/modern/css/lp.css" rel="stylesheet" type="text/css" />
+        <link href="../../../template/modern/css/lp.css?<?php echo time() ?>" rel="stylesheet" type="text/css" />
+        <link href="../../../template/modern/css/default.css?<?php echo time() ?>" rel="stylesheet" type="text/css" />
+
+        <?php
+            echo $cssFile;
+        ?>
+
+        
         <title><?php echo $langCourseProgram ?></title>
     </head>
-    <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
+    <body class='body-learningPath' style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">
         <div id="content" style="width:800px; margin: 0 auto;">
         <?php
             $q = Database::get()->queryArray("SELECT id, title, comments FROM course_description WHERE course_id = ?d ORDER BY `order`", $course_id);

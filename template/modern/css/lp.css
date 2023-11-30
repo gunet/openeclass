@@ -95,6 +95,7 @@ a img {
     font-weight: bold;
     text-decoration: none;
     color: #8597A5;
+    font-size: 12px;
 }
 
 .menu_left a:hover {
@@ -117,7 +118,7 @@ a img {
 .menu_left li.category {
     border-bottom: 1px dashed #DFDFDF;
     color: #687A92;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     line-height: 22px;
     list-style-type: none;
@@ -129,6 +130,7 @@ a img {
     color:#8a6d3b;
     font-weight: bold;
     font-style: normal;
+    font-size: 12px;
 }
 
 .menu_left ul>li{

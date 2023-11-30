@@ -32,9 +32,11 @@ require_once '../../../include/init.php';
         <title>-</title>
         <link href="../../../template/modern/css/lp.css" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="../../../template/modern/css/bootstrap.min.css">
+        <link href='../../../template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
+        <link rel="stylesheet" href="../../../template/modern/css/default.css">
         <script src="../../../js/bootstrap.bundle.min.js"></script>
     </head>
-    <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
+    <body class='body-learningPath' style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">
         <div id="content" style="width:800px; margin: 0 auto;">
             <br /><br /><br />
             <?php

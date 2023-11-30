@@ -39,19 +39,39 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/exercise/game.php';
 ModalBoxHelper::loadModalBox();
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+$cssFile = '';
+if($theme_options->name == 'Default Dark'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default_dark.css?".time()."'/>";
+}
+
+if($theme_options->name == 'Crimson'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/crimson.css?".time()."'/>";
+}
+
+if($theme_options->name == 'Emerald'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/emerald.css?".time()."'/>";
+}
+
+if($theme_options->name == 'Wood'){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/wood.css?".time()."'/>";
+}
+
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'
  . "\n<html>\n"
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
     <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
-    <link href='{$urlAppend}template/$theme/css/lp.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/css/default.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/css/font-awesome-4.7.0/css/font-awesome.min.css' rel='stylesheet'>\n"
+    <link href='{$urlAppend}template/$theme/css/lp.css?".time()."' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/css/default.css?".time()."' rel='stylesheet'>\n"
+ . "$cssFile\n"
+ . "<link href='{$urlAppend}template/$theme/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>\n"
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
- . '<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">' . "\n"
+ . '<body class="body-learningPath" style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto;">' . "\n"
  . '<div id="content"  style="padding:20px;">';
 
 $pageName = $langExercicesResult;

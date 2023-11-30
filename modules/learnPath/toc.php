@@ -34,6 +34,10 @@ require_once 'include/constants.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
+
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head><title>-</title>
@@ -51,11 +55,31 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.min.css' rel='stylesheet'>  
+    <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>  
         
-    <link href='{$urlAppend}template/modern/css/lp.css?v=".ECLASS_VERSION."' rel='stylesheet' type='text/css' />
+    <link href='{$urlAppend}template/modern/css/lp.css?".time()."' rel='stylesheet' type='text/css' />
+
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".time()."'>";
+
+
+    if($theme_options->name == 'Default Dark'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".time()."'/>";
+     }
+
+    if($theme_options->name == 'Crimson'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Emerald'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Wood'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".time()."'/>";
+    }
+
     
-    <script>
+    echo "<script>
     
 </script>
 </head>
@@ -166,20 +190,20 @@ foreach ($flatElementList as $module) {
     }
 
     if ($module['contentType'] == CTLABEL_) { // chapter head
-        echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: normal\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "fa-edit";
+            $moduleImg = "fa-edit text-dark";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "fa-link";
+            $moduleImg = "fa-link text-dark";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "fa-info-circle";
+            $moduleImg = "fa-info-circle text-dark";
         } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
         } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "fa-file-code-o";
+            $moduleImg = "fa-file-code-o text-dark";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "fa-film";
+            $moduleImg = "fa-film text-dark";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -190,16 +214,16 @@ foreach ($flatElementList as $module) {
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-                $moduleImg = 'fa-file-code-o';
-                $imagePassed = "<span style='color:green'>".icon('fa-check')."</span>";
+                $moduleImg = 'fa-file-code-o text-dark';
+                $imagePassed = "<span style='color:green'>".icon('fa-check text-success')."</span>";
             } else {
-                $imagePassed = "<span style='color:green'>".icon('fa-check', $module['lesson_status'])."</span>";
+                $imagePassed = "<span style='color:green'>".icon('fa-check text-success', $module['lesson_status'])."</span>";
             }
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
-            $moduleImg = 'fa-file-code-o';
-            $imagePassed = "<span style='color:red'>".icon('fa-xmark')."</span>";
+            $moduleImg = 'fa-file-code-o text-dark';
+            $imagePassed = "<span style='color:red'>".icon('fa-xmark text-danger')."</span>";
         }
 
         echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg);

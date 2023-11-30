@@ -170,21 +170,21 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-left fa-lg"></span> </a></div>';
+        $prevNextString .= '<div class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath"></span> </a></div>';
     } else {
-        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-left'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive'><span class='fa-solid fa-circle-arrow-left fa-lg prev-next-learningPath'></span></a></div>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<div class="prevnext ps-3 pe-3"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa fa-arrow-circle-right fa-lg"></span></a></div>';
+        $prevNextString .= '<div class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . $unitParam . '" target="scoFrame"><span class="fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath"></span></a></div>';
     } else {
-        $prevNextString .= "<div class='prevnext ps-3 pe-3'><a href='#' class='inactive'><span class='fa fa-arrow-circle-right'></span></a></div>";
+        $prevNextString .= "<div class='prevnext'><a href='#' class='inactive'><span class='fa-solid fa-circle-arrow-right fa-lg prev-next-learningPath'></span></a></div>";
     }
 }
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 $theme_options_styles = unserialize($theme_options->styles);
 $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
-$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo-small.png" ;
+$logoUrl = isset($theme_options_styles['imageUploadSmall']) ? $urlThemeData."/".$theme_options_styles['imageUploadSmall'] : $themeimg."/eclass-new-logo.svg" ;
 
 echo "<!DOCTYPE HTML>
 <html>
@@ -212,9 +212,29 @@ echo "<!DOCTYPE HTML>
     <link rel='stylesheet' href='{$urlAppend}template/modern/css/bootstrap.min.css?v=".ECLASS_VERSION."'>
 
     <!-- Font Awesome - A font of icons -->
-    <link href='{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css' rel='stylesheet'>
+    <link href='{$urlAppend}template/modern/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
 
-    <script type='text/javascript'>
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css?".time()."'>
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css?".time()."'>
+    <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".time()."'>";
+
+    if($theme_options->name == 'Default Dark'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Crimson'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Emerald'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Wood'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".time()."'/>";
+    }
+
+    echo " <script type='text/javascript'>
     /* <![CDATA[ */
 
     $(document).ready(function() {
@@ -251,20 +271,27 @@ echo "<!DOCTYPE HTML>
     </script>
 </head>
 <body>
-   <nav class='navbar navbar-eclass py-0 bg-light'>
-      <div class='container-fluid header-container py-0'>
-        <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
-            <div>
-                <a id='leftTOCtoggler' class='btn text-dark'><span class='fa fa-bars fa-lg text-dark'></span></a>
-                <a id='toc_logo' class='navbar-brand hidden-xs ms-5' href='#'><img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'></a>
-            </div>
-            <div>
-                    <div class='row'>
-                        <div id='navigation-btns' class='col-9 d-inline-flex justify-content-end align-items-top'>
+    <nav class='navbar navbar-eclass navbar-learningPath py-0'>
+        <div class='container-fluid header-container-learningPath py-0'>
+            <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
+                <div>
+                    <a id='leftTOCtoggler' class='btn'><span class='fa fa-bars fa-lg'></span></a>
+                    <a id='toc_logo' class='navbar-brand hidden-xs' href='#'>
+                        <img class='img-responsive' src='$logoUrl' alt='Logo' style='height:20px;'>
+                    </a>
+                </div>
+                <div>
+                    <div class='d-flex gap-3'>
+                        <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
                             $prevNextString
-                            <div id='close-btn'><a class='ms-5' href='$returl' target='_top'><span class='fa-solid fa-xmark fa-lg text-warning'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></div>
+                            <div id='close-btn'>
+                                <a class='d-flex justify-content-start align-items-center gap-1 text-decoration-none' href='$returl' target='_top'>
+                                    <span class='fa-solid fa-xmark fa-sm Accent-200-cl'></span>
+                                    <span class='hidden-xs Accent-200-cl'>$langLogout</span>
+                                </a>
+                            </div>
                         </div>
-                        <div class='col-3 d-flex justify-content-end progressbar-plr'>";
+                        <div class='d-flex justify-content-end progressbar-plr'>";
 
                             if ($uid) {
                                 $path_id = (int) $_SESSION['path_id'];
@@ -272,10 +299,11 @@ echo "<!DOCTYPE HTML>
                                 update_gradebook_book($uid, $path_id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP);
                                 echo disp_progress_bar($lpProgress, 1);
                             }
-                echo "</div></div>
+                echo "  </div>
+                    </div>
+                </div>
             </div>
         </div>
-      </div>
    </nav>
 </body>
 </html>";

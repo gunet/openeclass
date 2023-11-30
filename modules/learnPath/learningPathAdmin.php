@@ -522,7 +522,7 @@ $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 if (count($result) == 0) {
     // handle exceptional requirement to add label before exiting early
     if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div>";
+        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default'>" . $createLabelHTML . "</table></div></div></div>";
     } else {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoModule</span></div></div></div>";
     }
@@ -573,7 +573,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .= "<div class='table-responsive'><table class='table-default'>";
+$tool_content .= "<div class='table-responsive mt-0'><table class='table-default'>";
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
     $tool_content .= $createLabelHTML;

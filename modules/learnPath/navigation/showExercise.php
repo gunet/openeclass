@@ -215,17 +215,41 @@ if (@$_POST['questionNum']) {
 
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 
+$theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+$theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
+
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.org/TR/html4/frameset.dtd'>
  <html>
  <head>
      <meta http-equiv='Content-Type' content='text/html' charset='" . $charset . "'>
      <link href='{$urlAppend}template/$theme/css/bootstrap.min.css' rel='stylesheet'>
-     <link href='{$urlAppend}template/$theme/css/default.css' rel='stylesheet'>
-     <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
      <link href='{$urlAppend}template/$theme/css/all.css' rel='stylesheet'>
+
+     <link href='{$urlAppend}template/$theme/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
+     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default.css?".time()."'>";
+
+     if($theme_options->name == 'Default Dark'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default_dark.css?".time()."'/>";
+     }
+
+    if($theme_options->name == 'Crimson'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/crimson.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Emerald'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/emerald.css?".time()."'/>";
+    }
+
+    if($theme_options->name == 'Wood'){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/wood.css?".time()."'/>";
+    }
+
+    echo "
+     <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>
+     
      <title>$langExercice</title>" . $head_content ."
  </head>
- <body style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;'>
+ <body class='body-learningPath' style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto;'>
  <div id='content' style='padding:20px;'>";
 
 echo "<div class='panel panel-primary mb-4'>
@@ -290,13 +314,13 @@ foreach ($questionList as $questionId) {
 if (!$questionList) {
     echo "<div class='alert alert-alert'>$langNoQuestion</div>";
 } else {
-    echo "<div class='panel'><div class='panel-body'><input class='btn submitAdminBtn' type='submit' value=\"";
+    echo "<div class='panel mt-4'><div class='panel-body p-0 bg-transparent d-flex justify-content-between align-items-center'><input class='btn submitAdminBtn' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         echo "$langContinue\" />&nbsp;";
     } else {
         echo $langNext . " &gt;&nbsp;" . "\" />&nbsp;";
     }
-    echo "<input class='btn submitAdminBtn' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
+    echo "<input class='btn cancelAdminBtn' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
 }
 echo "</form>";
 echo "</div></body>" . "\n";
@@ -342,9 +366,9 @@ function showQuestion($questionId, $onlyAnswers = false) {
         $select = array();
         echo "<table class='table-default'>
               <tr class='even'>
-                    <th width='200'>$langColumnA</th>
-                    <th width='130'>$langMakeCorrespond</th>
-                    <th width='200'>$langColumnB</th>
+                    <th width='200' style='padding: 10px 10px 10px 10px;'>$langColumnA</th>
+                    <th class='text-center' width='130' style='padding: 10px 10px 10px 10px;'>$langMakeCorrespond</th>
+                    <th class='text-start' width='200' style='padding: 10px 10px 10px 10px;'>$langColumnB</th>
                   </tr>
                   ";
     }
@@ -358,12 +382,12 @@ function showQuestion($questionId, $onlyAnswers = false) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
-            $answer = preg_replace('/\[[^]]+\]/', '<input type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
+            $answer = preg_replace('/\[[^]]+\]/', '<input class="form-control" type="text" name="choice[' . $questionId . '][]" size="10" />', standard_text_escape($answer));
         }
 
         if ($answerType == UNIQUE_ANSWER) { // unique answer
             echo "
-                  <div class='radio'>
+                  <div class='radio mb-2'>
                       <label>
                         <input type='radio' name='choice[$questionId]' value='$answerId'>
                         " . $answer . "
@@ -405,8 +429,8 @@ function showQuestion($questionId, $onlyAnswers = false) {
             } else {
                 echo "<tr class='even'>
                     <td width='200'><b>$cpt2.</b> $answer</td>
-                    <td width='130'><div align='center'>
-                     <select name='choice[$questionId][$answerId]'>
+                    <td width='130'><div>
+                     <select class='form-select' name='choice[$questionId][$answerId]'>
                        <option value='0'>--</option>";
 
                 // fills the list-box
@@ -438,7 +462,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
             }
 
         } elseif ($answerType == TRUE_FALSE) {
-            echo "<div class='radio'>
+            echo "<div class='radio mb-2'>
                           <label>
                             <input type='radio' name='choice[$questionId]' value='$answerId'>
                             " . $answer . "
