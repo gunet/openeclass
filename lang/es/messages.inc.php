@@ -5625,6 +5625,7 @@ $langUseOfService = "Use service in";
 $langUseOfServiceInfo = "Select in which $langsCourses the service will be available";
 $langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
 $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
+$langInfoBulkProcessing = "Seleccione de la columna (#) de la tabla los anuncios que desea editar.";
 $langSubjectArea = "Subject Area";
 $langTypeOutMessage = "Escribe tu mensaje...";
 $langDateHasExpire = "La fecha ha pasado. Intentar otra vez.";

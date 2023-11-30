@@ -5550,6 +5550,7 @@ $langCalculateNewDuration = "Berechnung der neuen Dauer";
 $langChooseDayAgain = "Sie können keine unterschiedlichen Tage auswählen. Versuchen Sie es erneut.";
 $langMessageInfo = "Nachrichteninformationen";
 $langMessageContent = "Nachrichteninhalt";
+$langInfoBulkProcessing = "Wählen Sie aus der Spalte (#) der Tabelle die Ankündigungen aus, die Sie bearbeiten möchten.";
 
 
 $langCreateCourseLeftForm = "Das Erstellen eines Kurses ist die wichtigste Aktion des Benutzers – Dozenten auf der Plattform.</br></br>

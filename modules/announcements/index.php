@@ -181,8 +181,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => "<div class='bulk_select'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /></div>",
-                '1' => "<div class='table_td'>
+                '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
+                '1' => "<div class='table_td announceContent'>
                         <div class='table_td_header clearfix'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
                             <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>

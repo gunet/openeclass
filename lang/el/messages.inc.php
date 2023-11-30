@@ -897,6 +897,7 @@ $langAnnouncementActivePeriod = "Διάστημα εμφάνισης";
 $langAnnHasPublished = "Έχει δημοσιευθεί ανακοίνωση στο $langsCourse";
 $langInvalidEmailRecipients = 'Παραλήπτες με μη έγκυρη διεύθυνση e-mail';
 $langDisabledEmailRecipients = 'Παραλήπτες με απενεργοποιημένη λήψη e-mail';
+$langInfoBulkProcessing = "Επιλέξτε από την στήλη (#) του πίνακα τις ανακοινώσεις τις οποίες θέλετε να επεξεργαστείτε.";
 
 /* * *****************************************
  * archive_course.php

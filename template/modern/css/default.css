@@ -3183,6 +3183,22 @@ tr.danger{
   .table-custom-profile tbody tr td:first-child{
     width: 15% !important;
   }
+
+  .table-announcements-indexes thead tr th:first-child,
+  .table-announcements-indexes thead tr td:first-child,
+  .table-announcements-indexes tbody tr td:first-child{
+    width: 5% !important;
+  }
+
+  .table-announcements-indexes thead tr th.announceContent,
+  .table-announcements-indexes tbody tr td:has(.announceContent){
+    width: 35% !important;
+  }
+
+  .table-announcements-indexes thead tr th.btn-cell-content,
+  .table-announcements-indexes tbody tr td.option-btn-cell{
+    width: 3% !important;
+  }
 }
 @media(min-width:1200px){
   .table-default thead tr th:first-child,
@@ -3233,6 +3249,23 @@ tr.danger{
   .count-col-secondary{
     width:5% !important;
   }
+
+  .table-announcements-indexes thead tr th:first-child,
+  .table-announcements-indexes thead tr td:first-child,
+  .table-announcements-indexes tbody tr td:first-child{
+    width: 5% !important;
+  }
+
+  .table-announcements-indexes thead tr th.announceContent,
+  .table-announcements-indexes tbody tr td:has(.announceContent){
+    width: 45% !important;
+  }
+
+  .table-announcements-indexes thead tr th.btn-cell-content,
+  .table-announcements-indexes tbody tr td.option-btn-cell{
+    width: 3% !important;
+  }
+
 }
 
 
