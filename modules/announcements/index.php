@@ -221,7 +221,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             }
 
             $data['aaData'][] = array(
-                '0' => "<div class='table_td'>
+                '0' => "<div class='table_td announceContentStudent'>
                         <div class='table_td_header clearfix'>
                             <a href='".$_SERVER['SCRIPT_NAME']."?course=".$course_code."&an_id=".$myrow->id."'>".standard_text_escape($myrow->title)."</a>
                             $pinned

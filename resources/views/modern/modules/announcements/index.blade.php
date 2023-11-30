@@ -478,7 +478,7 @@
                                             <th>#</th>
                                         @endif
 
-                                        <th class='announceContent'>{{ trans('langAnnouncement') }}</th>
+                                        <th class='@if($is_editor) announceContent @else announceContentStudent @endif'>{{ trans('langAnnouncement') }}</th>
                                         <th>{{ trans('langDate') }}</th>
                                         @if ($is_editor)
                                             <th>{{ trans('langNewBBBSessionStatus') }}</th>

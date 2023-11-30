@@ -3266,6 +3266,10 @@ tr.danger{
     width: 3% !important;
   }
 
+  .table-announcements-indexes thead tr th.announceContentStudent,
+  .table-announcements-indexes tbody tr td:has(.announceContentStudent){
+    width: 65% !important;
+  }
 }
 
 
