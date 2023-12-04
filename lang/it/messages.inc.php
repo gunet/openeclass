@@ -416,7 +416,7 @@ $langSaveErrorMessage = "Errore. La chiacchierata non è salvata.";
 $langNoGuest = "Gli utenti ospiti non possono utilizzare il modulo 'Chiacchierata'!";
 $langCopyright = "Avviso di copyright";
 $langCopyrightNotice = ' 
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2011<br> &nbsp; <br> 
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003-2023<br> &nbsp; <br> 
 La piattaforma '. $siteName. ' è basata sulla piattaforma di sorgente di codice aperta <a href="http://www.openeclass.org" target=_blank>Open eClass</a> che è un sistema integrato di gestione di corsi elettronici ed è la proposta della Rete Accademica GUnet  per il supporto del servizio e-learning asincrono. È sviluppata e supportata attivamente dal gruppo di E-leargning Asincrono di GUnet ed è <a href="http://download.eclass.gunet.gr" target="blank">gratuitamente distribuito</a> come software di sorgente di codice aperto (open source) conformato  alla GNU General Public License (GNU GPL). <br><br> 
 Il contenuto dei corsi elettronici che sono ospitati dalla piattaforma  '. $siteName. ', ed anche i diritti (copyright) di questo materiale, appartengono ai loro autori e la GUnet non ci pretende dei diritti. Per qualsiasi utilizzo o ripubblica del contenuto ti preghiamo di contattare i responsabili dei corsi rispettivi.
 ';

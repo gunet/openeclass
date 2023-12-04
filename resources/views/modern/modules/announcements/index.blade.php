@@ -443,7 +443,7 @@
                                     {{ trans('langBulkProcessing') }}
                                 </h5>
                                 <form method='post' action="{{ $_SERVER['SCRIPT_NAME'] }}" class="d-flex gap-3">
-                                    <select name="bulk_action" class="px-3">
+                                    <select class='form-select mt-0' name="bulk_action" class="px-3" style='max-width:250px;'>
                                         <option value="delete">{{ trans('langDelete') }}</option>
                                         <option value="visible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>
                                         <option value="invisible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>

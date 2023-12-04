@@ -28,8 +28,12 @@ function display_learning_analytics() {
             $description = $data->description;
 
             $results .= "
-            <div class='row res-table-row border-0'>
-                <div class='col-12 text-start'>".
+            <div class='row res-table-row border-0 mb-4 g-3'>
+                <div class='col-md-9 col-12'>
+                    <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
+                    <small class='text-start text-muted'>$description</small>
+                </div>
+                <div class='col-md-3 col-12 text-start'>".
                 action_bar(array(
                     array('title' => $langAnalyticsTotalAnalytics,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$id&amp;mode=courseStatistics",
@@ -56,10 +60,7 @@ function display_learning_analytics() {
                         'confirm' => $langAnalyticsConfirm)
                 ))
                 ."</div>
-                <div class='col-12 mt-3'>
-                    <strong>$title</strong> <span class='$active_vis'>($active_msg)</span><br/>
-                    <small class='text-start text-muted'>$description</small>
-                </div>
+                
             </div>";
         }
     }
@@ -177,27 +178,31 @@ function display_general_lists($analytics_id) {
 
         $tool_content .= "
                 <div class='col-12 mt-3'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>
-                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
-                            
-                                <h3>
-                                    
-                                        <a data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
-                                        <i class='fa fa-arrow-down'>" . get_resource_info($resource, $module_id) . "</a></i>
-                                   
-                                </h3>
-                            
-                        </div>          
+                    <div class='card panelCard px-lg-4 py-lg-3'>      
                         <div class='card-body'>         
-                            <div class='col-sm-12 collapse' id='LearnAnalyticsResource$module_id'>
-                                <h6 class='text-success'>$message_advanced</h6>
-                                <div class='res-table-wrapper'>
-                                    $good_results
-                                </div>                                                    
-                                <h6 class='text-danger'>$message_critical</h6>
-                                <div class='res-table-wrapper'>
-                                    $bad_results
-                                </div>                            
+                            <div class='panel'>
+                                <div class='panel-group group-section px-0' id='accordionDes$module_id'>
+                                    <ul class='list-group list-group-flush'>
+                                        <li class='list-group-item px-0 mb-4 bg-transparent'>
+                                            <div class='d-flex justify-content-between border-bottom-default'>
+                                                <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#LearnAnalyticsResource$module_id' aria-expanded='false' aria-controls='LearnAnalyticsResource$module_id'>
+                                                    <i class='fa-solid fa-chevron-down settings-icon'></i>
+                                                    " . get_resource_info($resource, $module_id) . "
+                                                </a>
+                                            </div>
+                                            <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='LearnAnalyticsResource$module_id' data-bs-parent='#accordionDes$module_id'>
+                                                <h6 class='text-success'>$message_advanced</h6>
+                                                <div class='res-table-wrapper'>
+                                                    $good_results
+                                                </div>                                                    
+                                                <h6 class='text-danger'>$message_critical</h6>
+                                                <div class='res-table-wrapper'>
+                                                    $bad_results
+                                                </div>       
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -703,16 +708,16 @@ function display_user_info($user_id) {
                 </div>
                 <div class='card-body'>
                     
-                        <div class='row'>
-                            <div class='col-md-5 col-12'>
+                        <div class='row g-3'>
+                            <div class='col-md-4 col-12'>
                                 <div class='pn-info-title-sct control-label-notes'>$langEmail</div>
                                 $email
                             </div>
-                            <div class='col-md-3 col-12 mt-md-0 mt-3'>
+                            <div class='col-md-4 col-12'>
                                 <div class='pn-info-title-sct control-label-notes'>$langAm</div>
                                 $am
                             </div>
-                            <div class='col-md-4 col-12 mt-md-0 mt-3'>
+                            <div class='col-md-4 col-12'>
                                 <div class='pn-info-title-sct control-label-notes'>$langPhone</div>
                                 $phone
                             </div>

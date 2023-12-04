@@ -109,7 +109,7 @@ function new_publish_ltiapp() {
                     </form>
                 </div>
             </div>
-            <div class='d-none d-lg-block'>
+            <div class='form-content-modules d-none d-lg-block'>
                 <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
             </div>
         </div>";
@@ -194,7 +194,7 @@ function edit_publish_ltiapp($id) {
         </div>
         </fieldset>
          ". generate_csrf_token_form_field() ."
-        </form></div></div><div class='d-none d-lg-block'>
+        </form></div></div><div class='form-content-modules d-none d-lg-block'>
         <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
     </div>
 </div>";

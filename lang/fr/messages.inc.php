@@ -444,7 +444,7 @@ $langSaveErrorMessage = "Erreur. La conversation (chat) n'a pas pu être sauvega
 $langNoGuest = "Les utilisateurs-visiteurs ne sont pas autorisés à utiliser le sous-système 'Conversation (Chat)' !";
 $langCopyright = "Notice de Copyright";
 $langCopyrightNotice = '
-Copyright © 2003 - 2013 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Copyright © 2003 - 2023 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.

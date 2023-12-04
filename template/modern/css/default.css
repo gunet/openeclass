@@ -4014,6 +4014,23 @@ body .delThemeBtn{
 /************************************************* COURSEHOME *********************************************************/
 /**********************************************************************************************************************/
 
+@media(min-width:992px){
+  .container-fluid.module-container .course-wrapper{
+    padding-left: 24px;
+  }
+}
+
+@media(min-width:992px) and (max-width:1199px){
+  .container.module-container .course-wrapper{
+    padding-left: 16px;
+  }
+}
+@media(min-width:1200px){
+  .container.module-container .course-wrapper{
+    padding-left: 16px;
+  }
+}
+
 .course-wrapper-courseHome #help-btn{
   display: none;
 }

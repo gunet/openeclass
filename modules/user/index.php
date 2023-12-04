@@ -221,15 +221,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $email_exclamation_icon = '';
         }
 
-        $nameColumn = "
-                        <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
-                            <img style='width:32px; height:32px; border-radius:50%; border:solid 2px #e8e8e8; 'class='img-circle' src='".user_icon($myrow->id) . "' />
-                            <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
-                        </div>
-                        <div class='pull-left'>
-                            <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
-                            <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>$email_exclamation_icon</small></div>
-                            <div class='text-muted'><small>$am_message</small></div>
+        $nameColumn = "<div class='d-flex justify-content-start align-items-start gap-2'>
+                            <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
+                                <img style='width:32px; height:32px; border-radius:50%; border:solid 2px #e8e8e8; 'class='img-circle' src='".user_icon($myrow->id) . "' />
+                                <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
+                            </div>
+                            <div class='pull-left'>
+                                <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
+                                <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>$email_exclamation_icon</small></div>
+                                <div class='text-muted'><small>$am_message</small></div>
+                            </div>
                         </div>";
         $roleColumn = "<div class='text-muted'>$user_role_string</div>";
         // search for inactive users
