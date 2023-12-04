@@ -178,7 +178,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => $myrow->editor == '0' ? "fa-square" : "fa-square-check"
             ),
             array(
-                'title' => $langCourseAdmin,
+                'title' => $langCourseAdminTeacher,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
                 'icon' => $myrow->status != '1' ? "fa-square" : "fa-square-check",
                 'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
@@ -200,7 +200,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         } elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
             $user_roles = array($langCourseReviewer);
         } elseif ($myrow->status == USER_TEACHER) {
-            $user_roles = array($langCourseAdmin);
+            $user_roles = array($langCourseAdminTeacher);
         } elseif ($myrow->status == USER_GUEST) {
             $user_roles = array($langGuestName);
         } else {
