@@ -122,9 +122,14 @@ if (isset($_POST['submit'])) {
                                       )
                             ),false);
 
+        $collapsed = '';
+        if(isset($_GET['fc']) and $_GET['fc'] != 1){
+            $collapsed = 'collapsed'; 
+        }
+
         $tool_content .= "<div class='col-12 mt-4'>
                             <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
-                                <div class='col-lg-6 col-12'>
+                                <div class='col-12'>
                                     <div class='col-12'>
                                         <div class='card border-card h-100 Borders border-0'>
                                             <div class='card-body p-0'>";
@@ -135,12 +140,13 @@ if (isset($_POST['submit'])) {
                                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>
                                                     <div class='col-12' id='accordionRegister'>";
                                         $tool_content .= "<ul class='list-group list-group-flush list-group-default'>
-                                                                <li class='list-group-item'>
-                                                                    <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#RegisterCourses'>
-                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp;&nbsp;" .$tree->getFullPath($fc,false) . "
+                                                                <li class='list-group-item d-flex justify-content-between align-items-start gap-5'>
+                                                                    <a class='btn list-group-btn $collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#RegisterCourses'>
+                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp;&nbsp;$langOpenOptions
                                                                     </a>
+                                                                    <div class='pt-1 pb-1'>".$tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=')."</div>
                                                                 </li>";
-                                            $tool_content .= "<div id='RegisterCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordionRegister'>";
+                                            $tool_content .= "<div id='RegisterCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0 show' role='tabpanel' data-bs-parent='#accordionRegister'>";
                                                                     list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
                                                                     $tool_content .= $childHTML;
                                                                     $subTrees = $tree->buildSubtrees(array($fc));
@@ -150,28 +156,9 @@ if (isset($_POST['submit'])) {
                                                 </form>
 
 
-                                                <div class='col-12 mt-4'>
-                                                    <div class='card bg-transparent border-card'>
-                                                        <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-3 py-2'>
-                                                            <div class='d-flex justify-content-start align-items-center'>
-                                                                <h3 class='mb-0'>
-                                                                    $langCategory
-                                                                </h3>
-                                                            </div>
-                                                        </div>
-                                                        <div class='card-body pt-0'>
-                                                           ". $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') ."
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class='col-lg-6 col-12'>
-                                    <img class='form-image' src='{$urlAppend}template/modern/img/CoursesImg.png' />
                                 </div>
                             </div>";
        $tool_content .= "</div>";

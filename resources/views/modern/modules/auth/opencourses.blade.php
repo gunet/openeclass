@@ -72,7 +72,7 @@
                     </div>
                     <div class='col-12 mt-4'>
                         <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
-                            <div class='col-lg-6 col-12'>
+                            <div class='col-12'>
                                 <div class='col-12'>
                                     <div class="card border-card h-100 Borders border-0 bg-transparent">
                                         <div class="card-body p-0">
@@ -85,41 +85,23 @@
 
                                             <div class='col-12 mt-4' id='accordion'>
                                                 <ul class='list-group list-group-flush list-group-default'>
-                                                    <li class="list-group-item">
-                                                        <a class='btn list-group-btn collapsed d-flex justify-content-start align-items-start px-0 gap-2' role='button' data-bs-toggle='collapse' href='#Category'>
+                                                    <li class="list-group-item d-flex justify-content-between align-items-start gap-5">
+                                                        <a class="btn list-group-btn @if(isset($_GET['fc']) and $_GET['fc'] != 1) collapsed @endif d-flex justify-content-start align-items-start px-0 gap-2" role='button' data-bs-toggle='collapse' href='#Category'>
                                                             <i class='fa-solid fa-chevron-down'></i>
-                                                            {!! $tree->getFullPath($fc,false) !!}
+                                                            {{ trans('langOpenOptions') }}
                                                         </a>
+                                                        <div class='pt-1 pb-1'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</div>
                                                     </li>
-                                                    <div id='Category' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
+                                                    <div id='Category' class="panel-collapse accordion-collapse collapse border-0 rounded-0 @if(isset($_GET['fc']) and $_GET['fc'] == 1) show @endif" role='tabpanel' data-bs-parent='#accordion'>
                                                         {!! $childHTML !!}
                                                     </div>
                                                 </ul>
                                                 
                                             </div>
 
-                                            <div class='col-12 mt-4'>
-                                               <div class='card bg-transparent border-card'>
-                                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-3 py-2'>
-                                                        <div class='d-flex justify-content-start align-items-center'>
-                                                            <h3 class='mb-0'>
-                                                                {{ trans('langCategory') }}
-                                                            </h3>
-                                                        </div>
-                                                    </div>
-                                                    <div class='card-body pt-0'>
-                                                        {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class='col-lg-6 col-12'>
-                                <img class='form-image' src='{{ $urlAppend }}template/modern/img/CoursesImg.png' />
                             </div>
                         </div>
                     </div>
@@ -231,10 +213,6 @@
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    @else
-                        <div class='col-12 mt-5'>
-                            <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoCourses')}} </br> ( {!! $tree->getFullPath($fc,false) !!})</span></div>
                         </div>
                     @endif
 
