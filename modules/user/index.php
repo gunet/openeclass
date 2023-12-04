@@ -52,17 +52,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             Database::get()->query("DELETE FROM course_user
                                             WHERE user_id = ?d AND
                                                 course_id = ?d", $unregister_gid, $course_id);
-            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND 
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND
                                     badge_criterion IN
                                            (SELECT id FROM badge_criterion WHERE badge IN
                                            (SELECT id FROM badge WHERE course_id = ?d))", $unregister_gid, $course_id);
-            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND                 
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND
                                       badge IN (SELECT id FROM badge WHERE course_id = ?d)", $unregister_gid, $course_id);
-            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND 
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND
                                     certificate_criterion IN
                                     (SELECT id FROM certificate_criterion WHERE certificate IN
                                         (SELECT id FROM certificate WHERE course_id = ?d))", $unregister_gid, $course_id);
-            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND 
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND
                                  certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $unregister_gid, $course_id);
 
             if (check_guest($unregister_gid)) {
@@ -479,6 +479,9 @@ $tool_content .=
                   'icon' => 'fa-child',
                   'level' => 'primary-label',
                   'show' => $course_user_requests),
+            array('title' => 'Πρόσκληση εξωτερικών χρηστών',
+                'url' => "invite.php?course=$course_code",
+                'icon' => 'fa-plus-circle'),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),

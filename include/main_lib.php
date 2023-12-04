@@ -2203,6 +2203,11 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 ";
         }
         load_js('tinymce/tinymce.min.js');
+        if (isset($GLOBALS['rich_text_editor_style'])) {
+            $rich_text_editor_style = $GLOBALS['rich_text_editor_style'];
+        } else {
+            $rich_text_editor_style = 'body { margin: 8px; background: none !important; }';
+        }
         $head_content .= "
 <script type='text/javascript'>
 
@@ -2247,7 +2252,7 @@ tinymce.init({
         '{$urlAppend}template/default/CSS/bootstrap-custom.css',
         '{$urlAppend}template/default/CSS/font-awesome-4.7.0/css/font-awesome.css',
     ],
-    content_style: 'body { margin: 8px; background: none !important; }',
+    content_style: '$rich_text_editor_style',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
