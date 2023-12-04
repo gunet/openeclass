@@ -2426,7 +2426,7 @@ function certificate_settings($element, $element_id = 0) {
                 <div class='form-group'>
                     <label for='message' class='col-sm-2 control-label'>$langMessage</label>
                     <div class='col-sm-10'>
-                        <textarea class='form-control' name='message' rows='3' maxlength='200'>$message</textarea>
+                        <textarea class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
                     </div>
                 </div>
                 <div class='form-group'>
