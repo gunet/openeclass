@@ -1,0 +1,305 @@
+<?php
+/* ========================================================================
+ * Open eClass 3.15
+ * E-learning and Course Management System
+ * ========================================================================
+ * Copyright 2003-2023  Greek Universities Network - GUnet
+ * A full copyright notice can be read in "/info/copyright.txt".
+ * For a full list of contributors, see "credits.txt".
+ *
+ * Open eClass is an open platform distributed in the hope that it will
+ * be useful (without any warranty), under the terms of the GNU (General
+ * Public License) as published by the Free Software Foundation.
+ * The full license can be read in "/info/license/license_gpl.txt".
+ *
+ * Contact address: GUnet Asynchronous eLearning Group,
+ *                  Network Operations Center, University of Athens,
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  e-mail: info@openeclass.org
+ * ======================================================================== */
+
+/**
+ * @file: invite.php
+ * @brief: course invitation page
+ */
+$guest_allowed = true;
+
+require_once '../include/baseTheme.php';
+require_once 'include/course_settings.php';
+require_once 'include/log.class.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/course.class.php';
+require_once 'modules/auth/auth.inc.php';
+
+$id = isset($_GET['id'])? $_GET['id']: null;
+$q = Database::get()->querySingle('SELECT * FROM course_invitation WHERE identifier = ?s AND registered_at IS NULL', $id);
+
+if (!$q) {
+    Session::Messages('Ο σύνδεσμος που ακολουθήσατε δεν είναι πλέον έγκυρος.', 'alert-info');
+    redirect_to_home_page();
+}
+$course = Database::get()->querySingle('SELECT * FROM course WHERE id = ?d', $q->course_id);
+$course_id = $course->id;
+$course_code = $course->code;
+if ($uid) {
+    if (!isset($_SESSION['courses'][$course_code]) or !$_SESSION['courses'][$course_code]) {
+        handle_invitations_for_email($uid, $q->email);
+    }
+    redirect_to_home_page("courses/$course_code/");
+}
+$professor = q($course->prof_names);
+$langUserPortfolio = q($course->title);
+
+if ($course->visible == COURSE_INACTIVE) {
+    redirect_to_home_page();
+}
+
+$auth = 7; // CAS
+$cas = get_auth_settings($auth);
+phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], false);
+phpCAS::setNoCasServerValidation();
+
+$user_id = null;
+if (isset($_POST['no_cas'])) {
+    $surname = canonicalize_whitespace($_POST['surname_form']);
+    $givenname = canonicalize_whitespace($_POST['givenname_form']);
+    $user = Database::get()->query("INSERT IGNORE INTO user
+        SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
+            email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
+            expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
+            lang = ?s, am = '', email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
+            description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
+            $surname, $givenname, $q->email, password_hash($_POST['password1'], PASSWORD_DEFAULT), $q->email, USER_STUDENT,
+            get_config('default_language'));
+    if ($user) {
+        $user_id = $user->lastInsertID;
+        Database::get()->query('INSERT IGNORE INTO user_department
+                SET user = ?d, department = ?d',
+                $user_id, 1);
+        handle_invitations_for_email($user_id, $q->email);
+        $ip = Log::get_client_ip();
+        Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
+                      VALUES (?d, ?s, NOW(), 'LOGIN')", $user_id, $ip);
+        $session->setLoginTimestamp();
+        resetLoginFailure();
+        $_SESSION['uid'] = $user_id;
+        $_SESSION['uname'] = $q->email;
+        $_SESSION['surname'] = $surname;
+        $_SESSION['givenname'] = $givenname;
+        $_SESSION['email'] = $q->email;
+        $_SESSION['status'] = USER_STUDENT;
+        redirect_to_home_page("courses/$course_code/");
+    }
+}
+if (isset($_POST['submit'])) {
+    phpCAS::forceAuthentication();
+    if ($uid) {
+        $user_id = $uid;
+    }
+}
+if (!$uid and phpCAS::checkAuthentication()) {
+    $_SESSION['cas_attributes'] = phpCAS::getAttributes();
+    $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
+    $username = phpCAS::getUser();
+    $user = Database::get()->querySingle('SELECT id FROM user WHERE username = ?s', $username);
+    if ($user) {
+        $user_id = $user->id;
+    } else {
+        $user = Database::get()->query("INSERT IGNORE INTO user
+                    SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
+                        email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
+                        expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
+                        lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
+                        description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
+                    $attrs['surname'], $attrs['givenname'], $username, 'cas',
+                    mb_strtolower(trim($attrs['email'])), USER_STUDENT, get_config('default_language'),
+                    $attrs['studentid']);
+        if ($user) {
+            $user_id = $user->lastInsertID;
+            Database::get()->query('INSERT IGNORE INTO user_department
+                SET user = ?d, department = ?d',
+                $user_id, 1);
+        }
+    }
+}
+if ($user_id) {
+    handle_invitations_for_email($user_id, $q->email);
+    if ($uid) {
+        redirect_to_home_page("courses/$course_code/");
+    } else {
+        redirect_to_home_page('modules/auth/cas.php?next=%2Fcourses%2F' . $course_code . '%2F');
+    }
+}
+
+$pageName = 'Πρόσκληση εγγραφής στο μάθημα';
+$pageTitle = $langRegCourses;
+
+$tree = new Hierarchy();
+$courseObject = new Course();
+$departments = [];
+foreach ($courseObject->getDepartmentIds($course_id) as $dep) {
+    $departments[] = q($tree->getFullPath($dep));
+}
+$departments = implode('<br>', $departments);
+
+load_js('pwstrength.js');
+$head_content .= <<<hContent
+  <script type="text/javascript">
+  /* <![CDATA[ */
+
+      var lang = {
+  hContent;
+  $head_content .= "pwStrengthTooShort: '" . js_escape($langPwStrengthTooShort) . "', ";
+  $head_content .= "pwStrengthWeak: '" . js_escape($langPwStrengthWeak) . "', ";
+  $head_content .= "pwStrengthGood: '" . js_escape($langPwStrengthGood) . "', ";
+  $head_content .= "pwStrengthStrong: '" . js_escape($langPwStrengthStrong) . "'";
+  $head_content .= <<<hContent
+      };
+      var form_error = false;
+
+      $(document).ready(function() {
+          $('#password_field, #password_field_2').keyup(function() {
+              var pass = $('#password_field').val(),
+                  pass2 = $('#password_field_2').val();
+              if (pass && pass2 && pass != pass2) {
+                  $('.pw-group').addClass('has-error');
+                  form_error = true;
+                  $('#result').html('<span id="result" class="label label-error">Έχετε πληκτρολογήσει δύο διαφορετικούς κωδικούς πρόσβασης</span>');
+              } else {
+                  $('.pw-group').removeClass('has-error');
+                  form_error = false;
+                  $('#result').html(checkStrength(pass));
+              }
+          });
+          $('#register_form').on('submit',function(e) {
+              if (form_error) {
+                  e.preventDefault();
+              }
+          });
+      });
+
+  /* ]]> */
+  </script>
+  hContent;
+
+if ($uid) {
+    $message = 'Επιλέξτε το παρακάτω κουμπί για να εγγραφείτε και να μεταβείτε στο μάθημα.';
+    $label = 'Εγγραφή';
+    $eclass_login = $eclass_form = '';
+} else {
+    $message = 'Εφόσον διαθέτετε λογαριασμό στο κεντρικό σύστημα πιστοποίησης του ΕΚΠΑ, παρακαλούμε
+        συνδεθείτε με τον ιδρυματικό σας λογαριασμό επιλέγοντας το παρακάτω κουμπί.';
+    $label = 'Σύνδεση και εγγραφή (λογαριασμός ΕΚΠΑ)';
+    $givenname = q($q->givenname);
+    $surname = q($q->surname);
+    $eclass_login = "
+        <div class='row'>
+            <div class='panel'>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                            <div class='col-sm-8 col-sm-offset-2'>
+                                <p class='form-control-static'>
+                                    Εναλλακτικά, <strong>εφόσον δε διαθέτετε ιδρυματικό λογαριασμό στο ΕΚΠΑ</strong>, παρακαλούμε εισαγάγετε
+                                    παρακάτω τα στοιχεία που χρειάζονται για να δημιουργήσετε λογαριασμό επισκέπτη
+                                    στην πλατφόρμα.
+                                <p>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='name_field' class='col-sm-2 control-label'>$langName:</label>
+                            <div class='col-sm-10'>
+                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='surname_field' class='col-sm-2 control-label'>$langSurname:</label>
+                            <div class='col-sm-10'>
+                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langUsername:</label>
+                            <div class='col-sm-10'>
+                                <p class='form-control-static'>" . q($q->email) . " (ταυτίζεται με τη διεύθυνση e-mail σας)</p>
+                            </div>
+                        </div>
+                        <div class='form-group pw-group'>
+                            <label for='password_field' class='col-sm-2 control-label'>$langPass:</label >
+                            <div class='col-sm-10' >
+                                <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice'><span id='result'></span>
+                            </div>
+                        </div >
+                        <div class='form-group pw-group'>
+                            <label for='password_field_2' class='col-sm-2 control-label'>$langConfirmation:</label >
+                            <div class='col-sm-10' >
+                                <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off'>
+                            </div >
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-12 text-center'>
+                                <button type='submit' name='no_cas' class='btn btn-primary'>Εγγραφή ως επισκέπτης</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>";
+}
+
+$tool_content .= "
+    <form id='register_form' class='form-horizontal' method='post' action='invite.php?id=$id'>" .
+        generate_csrf_token_form_field() . "
+        <div class='row'>
+            <div class='panel'>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langFaculty:</label>
+                            <div class='col-sm-10'>
+                                <p class='form-control-static'>$departments</p>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langCode:</label>
+                            <div class='col-sm-10'>
+                                <p class='form-control-static'>" . q($course->public_code) . "</p>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-8 col-sm-offset-2'>
+                                <p class='form-control-static'>
+                                    Έχετε λάβει πρόσκληση συμμετοχής στο ανωτέρω μάθημα.
+                                    $message
+                                </p>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-12 text-center'>
+                                <button type='submit' name='submit' class='btn btn-primary'>$label</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        $eclass_login
+    </form>";
+
+draw($tool_content, 1, null, $head_content);
+
+function handle_invitations_for_email($user_id, $email) {
+    $invites = Database::get()->queryArray('SELECT * FROM course_invitation
+        WHERE email = ?s AND registered_at IS NULL', $email);
+    foreach ($invites as $invite) {
+        Database::get()->query('INSERT IGNORE INTO course_user
+            SET course_id = ?d, user_id = ?d, status = '  . USER_STUDENT . ',
+            reg_date = NOW(), document_timestamp = NOW()',
+            $invite->course_id, $user_id) &&
+            Database::get()->query('UPDATE course_invitation
+            SET registered_at = NOW() WHERE id = ?d',
+            $invite->id) &&
+            Log::record($invite->course_id, MODULE_ID_USERS, LOG_INSERT,
+                ['uid' => $user_id, 'right' => '+5']);
+    }
+}
