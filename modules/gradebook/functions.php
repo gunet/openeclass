@@ -1218,12 +1218,12 @@ function register_user_grades($gradebook_id, $actID) {
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                    <th width='2'>$langID</th>
+                    <th class='count-col'>$langID</th>
                     <th>$langName $langSurname</th>
                     <th>$langAm</th>
-                    <th width='120'>$langRegistrationDateShort</th>
-                    <th width='50'>$langGradebookGrade</th>
-                    <th width='50'>$langGradebookTotalGrade</th>
+                    <th>$langRegistrationDateShort</th>
+                    <th>$langGradebookGrade</th>
+                    <th>$langGradebookTotalGrade</th>
                 </tr>
             </thead>
             <tbody>";
@@ -1243,7 +1243,7 @@ function register_user_grades($gradebook_id, $actID) {
             $total_grade = is_numeric($grade) ? round($grade * $result->weight / 100, 2) : ' - ';
             $tool_content .= "
             <tr class='$classvis'>
-                <td>$cnt</td>
+                <td class='count-col'>$cnt</td>
                 <td>" . display_user($resultUser->userID). "</td>
                 <td>$resultUser->am</td><td>";
                 if (!empty($resultUser->reg_date)) {

@@ -349,7 +349,7 @@ $tool_content .= "<div class='col-12'>
                                                                     ";
                                                 $tool_content .= "</tr>";
 
-                                                $tool_content .= "<tr class='collapse w-100' id='CollapseGroup_$gr->id' style='background-color:#ffffff !important;'>
+                                                $tool_content .= "<tr class='collapse w-100' id='CollapseGroup_$gr->id' style='background-color:transparent !important;'>
                                                                     <td class=' p-xl-4'>";
                                                                     $tool_content .= "
                                                                         <div class='col-12'>

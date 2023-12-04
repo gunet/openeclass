@@ -50,15 +50,17 @@ function select_tc_server($course_id) {
             $tool_content .= "
                 <table class='table-default dataTable no-footer extapp-table mb-3 border-0'>
                   <tr>
-                    <td style='width:90px; padding:0px;'>
-                      <div style='padding:10px;'>
+                    <td>
+                      <div>
                         <img height='50' width='89' src='{$urlAppend}template/icons/$icon.png' alt=''>
                         $title
                       </div>
                     </td>
-                    <td class='text-muted clearfix'>
-                      <span style='padding-right: 170px;'>$description</span>
-                      <span class='float-end'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn submitAdminBtn'>$langNewBBBSession</a></span>
+                    <td>
+                        <div class='d-flex justify-content-end align-items-center gap-3 flex-wrap'>
+                            <span>$description</span>
+                            <span><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn submitAdminBtn'>$langNewBBBSession</a></span>
+                        </div>
                     </td>
                   </tr>
                 </table>";

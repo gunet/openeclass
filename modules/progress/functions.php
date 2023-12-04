@@ -2252,7 +2252,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                         <div class='card-body'>
                             <div class='row'>
                                 <div class='col-md-4 col-12'>
-                                    <img style='box-shadow: 0 0 15px 1px #bbb' class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
+                                    <img class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
                                 </div>
                                 <div class='col-md-8 col-12 mt-md-0 mt-3'>
                                     <div class='row p-2'>
