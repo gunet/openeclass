@@ -45,34 +45,38 @@ if ($is_editor) {
 
     if (isset($_POST['bulk_submit'])) {
 
-        $cbids = explode(',', $_POST['selectedcbids']);
+        if ($_POST['selectedcbids']) {
 
-        if ($_POST['bulk_action'] == 'delete') {
-            
-            foreach ($cbids as $row_id) {
-                $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
-                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
-                Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
-                Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
-                Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
-                    'title' => $announce->title,
-                    'content' => $txt_content));
+            $cbids = explode(',', $_POST['selectedcbids']);
+
+            if ($_POST['bulk_action'] == 'delete') {
+
+                foreach ($cbids as $row_id) {
+                    $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+                    $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
+                    Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                    Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
+                        'title' => $announce->title,
+                        'content' => $txt_content));
+                }
+
             }
-            
-        }
-        if ($_POST['bulk_action'] == 'visible') {
-            foreach ($cbids as $row_id) {
-                Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 1, $row_id);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            if ($_POST['bulk_action'] == 'visible') {
+                foreach ($cbids as $row_id) {
+                    Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 1, $row_id);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                }
             }
-        }
-        if ($_POST['bulk_action'] == 'invisible') {
-            foreach ($cbids as $row_id) {
-                Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 0, $row_id);
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            if ($_POST['bulk_action'] == 'invisible') {
+                foreach ($cbids as $row_id) {
+                    Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 0, $row_id);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                }
             }
+
         }
-                
+
     }
     
     
@@ -279,7 +283,13 @@ if (isset($_GET['an_id'])) {
               'icon' => 'fa-plus-circle',
               'button-class' => 'btn-success',
               'level' => 'primary',
-              'show' => $is_editor ]
+              'show' => $is_editor ],
+            [ 'title' => $langBulkProcessing,
+//                  'url' => "",
+                  'class' => 'bulk-processing',
+                  'icon' => 'fa-hat-wizard',
+                  'button-class' => 'btn-success',
+                  'show' => $is_editor ],
         ]);
 
     $data['subscribeUrl'] = $urlAppend . 'main/profile/emailunsubscribe.php?cid=' . $course_id;
