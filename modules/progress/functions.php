@@ -2483,12 +2483,14 @@ function certificate_settings($element, $element_id = 0) {
                         <img id='selected_icon' src='' alt=''>
                     </div>
                 </div>
+
                 <div class='form-group mt-4'>
                     <label for='message' class='col-sm-12 control-label-notes'>$langMessage</label>
                     <div class='col-sm-12'>
-                        <textarea class='form-control' name='message' rows='3' maxlength='200'>$message</textarea>
+                        <textarea class='form-control' name='message' rows='3' maxlength='1200'>$message</textarea>
                     </div>
                 </div>
+                
                 <div class='form-group mt-4'>
                     <label for='title' class='col-sm-12 control-label-notes'>$langpublisher</label>
                     <div class='col-sm-12'>
