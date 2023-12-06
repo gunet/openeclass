@@ -2543,6 +2543,23 @@ function upgrade_to_3_15($tbl_options) : void
 
     Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
 
+    if (!DBHelper::tableExists('course_invitation')) {
+        Database::get()->query("CREATE TABLE `course_invitation` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `surname` varchar(255) NOT NULL DEFAULT '',
+            `givenname` varchar(255) NOT NULL DEFAULT '',
+            `email` varchar(255) CHARACTER SET ascii NOT NULL DEFAULT '',
+            `identifier` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '',
+            `created_at` datetime NOT NULL,
+            `expires_at` datetime DEFAULT NULL,
+            `registered_at` datetime DEFAULT NULL,
+            `course_id` int(11) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `identifier` (`identifier`),
+            UNIQUE KEY `course_email` (`course_id`,`email`),
+            CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
 }
 
 /**
