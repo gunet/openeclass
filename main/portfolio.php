@@ -177,6 +177,7 @@ $tool_content .= action_bar(array(
               'url' => $urlAppend . 'modules/auth/courses.php',
               'icon' => 'fa-check',
               'level' => 'primary-label',
+              'show' => is_enabled_course_registration($uid),
               'button-class' => 'btn-success'),
     array('title' => $langCourseCreate,
               'url' => $urlAppend . 'modules/create_course/create_course.php',

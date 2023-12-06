@@ -3635,6 +3635,7 @@ $langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
 $langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
 $langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 $langCustomEmailBody = "Προσαρμοσμένο email";
+$langInfoEnableCourseRegistration = "Ο χρήστης μπορεί να εγγραφεί σε $langsCourses";
 
 // list requests
 $langDateRequest = "Ημ/νία αίτησης";
@@ -3693,7 +3694,7 @@ $langUnregTeacher = "Είναι " . $langsTeacher . " στα παρακάτω $l
 $langPlease = "Παρακαλούμε";
 $langOtherDepartments = "Εγγραφή σε $langsCourses άλλων τμημάτων/σχολών";
 $langNoLessonsAvailable = "Δεν υπάρχουν Διαθέσιμα $langCourses.";
-$langUserPermitions = "Δικαιώματα";
+$langUserPermissions = "Δικαιώματα";
 $langUserWhitelist = "Whitelist Χρήστη";
 $langUserHasConsent = "Έχει συναινέσει";
 $langUserHasNoConsent = "Δεν έχει συναινέσει";

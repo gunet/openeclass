@@ -312,7 +312,8 @@ $db->query("CREATE TABLE `user` (
     pic_public TINYINT(1) NOT NULL DEFAULT 0,
     whitelist TEXT,
     eportfolio_enable TINYINT(1) NOT NULL DEFAULT 0,
-    last_passreminder DATETIME DEFAULT NULL) $tbl_options");
+    last_passreminder DATETIME DEFAULT NULL,
+    disable_course_registration TINYINT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE `login_failure` (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

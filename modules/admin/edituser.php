@@ -74,7 +74,7 @@ if ($u) {
 
     $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am,
-                              verified_mail, whitelist
+                              verified_mail, whitelist, disable_course_registration
                          FROM user WHERE id = ?s", $u);
     if (isset($_POST['submit_editauth'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -243,6 +243,20 @@ if ($u) {
                 USER_STUDENT => $langStudent), 'newstatus', intval($info->status), "class='form-control'");
         }
         $tool_content .= "</div></div>";
+
+        $checked = (!$info->disable_course_registration) ? 'checked' : '';
+        $tool_content .= "
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langUserPermissions:</label>
+                    <div class='col-sm-10'>
+                        <div class='col-sm-10'>
+                            <div class='checkbox'>
+                                <input type='checkbox' name='enable_course_registration' value='1' $checked>$langInfoEnableCourseRegistration
+                            </div>
+                        </div>
+                    </div>
+                </div>";
+
         $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $reg_date_format = $reg_date? $reg_date->format("d-m-Y H:i"): '-';
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
@@ -404,6 +418,13 @@ if ($u) {
             $user_date_expires_at = $expires_at->format("d-m-Y H:i");
         }
 
+        if (isset($_POST['enable_course_registration'])) {
+            $disable_course_registration = 0;
+        } else {
+            $disable_course_registration = 1;
+        }
+
+
         $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
         $user_exist = FALSE;
         // check if username is free
@@ -462,6 +483,7 @@ if ($u) {
         }
         $user->refresh(intval($u), $departments);
         user_hook($u);
+        var_dump($disable_course_registration);
         $qry = Database::get()->query("UPDATE user SET surname = ?s,
                                 givenname = ?s,
                                 username = ?s,
@@ -471,8 +493,9 @@ if ($u) {
                                 expires_at = ?t,
                                 am = ?s,
                                 verified_mail = ?d,
-                                whitelist = ?s
-                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
+                                whitelist = ?s,
+                                disable_course_registration = ?d
+                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $u);
             //update custom profile fields
             $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
             if ($qry->affectedRows > 0 || $cpf_updated === true) {

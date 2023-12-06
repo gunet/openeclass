@@ -40,6 +40,10 @@ $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", $co
 $professor = $course->prof_names;
 $langUserPortfolio = q($course->title);
 
+if (!is_enabled_course_registration($uid)) {
+    redirect_to_home_page();
+}
+
 if (isset($_POST['register'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if ($course->visible == COURSE_REGISTRATION or $course->visible == COURSE_OPEN) {

@@ -89,6 +89,11 @@ if (isset($_POST['submit'])) {
             $password_encrypted = $auth_ids[$_POST['auth_form']];
         }
 
+        if (isset($_POST['enable_course_registration'])) {
+            $disable_course_registration = 0;
+        } else {
+            $disable_course_registration = 1;
+        }
         if (isset($_POST['user_date_expires_at'])) {
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
             $user_expires_at = $expires_at->format("Y-m-d H:i");
@@ -97,13 +102,14 @@ if (isset($_POST['submit'])) {
             $expires_at = DateTime::createFromFormat("Y-m-d H:i", date('Y-m-d H:i', strtotime("now + 1 year")));
             $user_expires_at = $expires_at->format("Y-m-d H:i");
         }
+
         $uid = Database::get()->query("INSERT INTO user
-                (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
-                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '')",
+                (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist, disable_course_registration)
+                VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, " . DBHelper::timeAfter() . ", ?t, ?s, '', ?s, '', ?d)",
                     $surname_form, $givenname_form, $uname_form,
                     $password_encrypted, $email_form,
                     $pstatus, $phone_form, $am_form,
-                    $user_expires_at, $language_form, $verified_mail)->lastInsertID;
+                    $user_expires_at, $language_form, $verified_mail, $disable_course_registration)->lastInsertID;
         // update personal calendar info table
         // we don't check if trigger exists since it requires `super` privilege
         Database::get()->query("INSERT IGNORE INTO personal_calendar_settings(user_id) VALUES (?d)", $uid);
@@ -379,13 +385,16 @@ formGroup('phone_form', $langPhone,
     getValue('phone_form', $pphone) . " placeholder='" . q($langPhone) . "'>");
 formGroup('faculty', $langFaculty, $tree_html);
 
-formGroup('user_rights_form', $langUserPermitions,
+formGroup('user_rights_form', $langUserPermissions,
     "<div class='col-sm-10'>
         <div class='radio'>
             <input type='radio' name='pstatus' value='" . USER_STUDENT . "' id='norights-option' $user_selected>$langUserWithNoRights
         </div>
         <div class='radio'>
             <input type='radio' name='pstatus' value='" . USER_TEACHER . "' id='rights-option' $prof_selected>$langUserWithRights
+        </div>
+        <div class='checkbox'>
+            <input type='checkbox' name='enable_course_registration' value='1' checked>$langInfoEnableCourseRegistration
         </div>
     </div>
 ");

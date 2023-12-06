@@ -285,7 +285,7 @@ function expanded_faculte($facid, $uid) {
 
         $retString .= "<td align='center'>";
         $requirepassword = '';
-        $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
+        $vis_class = ($mycours->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
@@ -305,7 +305,7 @@ function expanded_faculte($facid, $uid) {
                 $requirepassword = '';
             }
 
-            $disabled = ($mycours->visible == 0) ? 'disabled' : '';
+            $disabled = (!is_enabled_course_registration($uid) or $mycours->visible == COURSE_CLOSED) ? 'disabled' : '';
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
