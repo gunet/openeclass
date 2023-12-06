@@ -209,31 +209,33 @@ if ($uid) {
                         <div class='form-group'>
                             <label for='name_field' class='col-sm-2 control-label'>$langName:</label>
                             <div class='col-sm-10'>
-                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName'>
+                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='surname_field' class='col-sm-2 control-label'>$langSurname:</label>
                             <div class='col-sm-10'>
-                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname'>
+                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
                             </div>
                         </div>
                         <div class='form-group'>
                             <label class='col-sm-2 control-label'>$langUsername:</label>
                             <div class='col-sm-10'>
-                                <p class='form-control-static'>" . q($q->email) . " (ταυτίζεται με τη διεύθυνση e-mail σας)</p>
+                                <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
+                                <span class='help-text'>(ταυτίζεται με τη διεύθυνση e-mail σας)</span>
                             </div>
                         </div>
                         <div class='form-group pw-group'>
                             <label for='password_field' class='col-sm-2 control-label'>$langPass:</label >
                             <div class='col-sm-10' >
-                                <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice'><span id='result'></span>
+                                <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice' required>
+                                <span id='result'></span>
                             </div>
                         </div >
                         <div class='form-group pw-group'>
                             <label for='password_field_2' class='col-sm-2 control-label'>$langConfirmation:</label >
                             <div class='col-sm-10' >
-                                <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off'>
+                                <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off' required>
                             </div >
                         </div>
                         <div class='form-group'>
