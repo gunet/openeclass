@@ -7,7 +7,7 @@
         <div class="row m-auto">
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
-                    
+
 
                     @include('layouts.partials.legend_view')
 
@@ -21,7 +21,7 @@
                     @if(Session::has('message'))
                     <div class='col-12 all-alerts'>
                         <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                            @php 
+                            @php
                                 $alert_type = '';
                                 if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                     $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -33,7 +33,7 @@
                                     $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                 }
                             @endphp
-                            
+
                             @if(is_array(Session::get('message')))
                                 @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                 {!! $alert_type !!}<span>
@@ -43,13 +43,13 @@
                             @else
                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                             @endif
-                            
+
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     </div>
                     @endif
 
-                    
+
 
 
                         <div class='col-lg-6 col-12'>
@@ -96,41 +96,51 @@
                                                 {!! selection($verified_mail_data, "verified_mail", intval($info->verified_mail), "class='form-control'") !!}
                                             </div>
                                         </div>
-                                       
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langAm') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='am' value='{{ $info->am }}'>
                                             </div>
                                         </div>
-                                        
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langTel') }}</label>
                                             <div class='col-sm-12'>
                                                 <input  class='form-control' type='text' name='phone' value='{{ $info->phone }}'>
                                             </div>
                                         </div>
-                                        
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langFaculty') }}</label>
                                             <div class='col-sm-12'>
                                                 {!! $html !!}
                                             </div>
                                         </div>
-                                        
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langProperty') }}</label>
                                             <div class='col-sm-12'>
-                                               
+
                                                     @if ($info->status == USER_GUEST)
                                                         {!! selection(array(USER_GUEST => trans('langGuest')), 'newstatus', intval($info->status), "class='form-control'") !!}
                                                     @else
                                                         {!! selection(array(USER_TEACHER => trans('langTeacher'),
                                                             USER_STUDENT => trans('langStudent')), 'newstatus', intval($info->status), "class='form-control'") !!}
                                                     @endif
-                                                
+
                                             </div>
                                         </div>
+
+                                        <div class='form-group mt-4'>
+                                            <label class='label-container'>
+                                                <div class='checkbox mb-2 d-flex justify-content-start align-items-center'>
+                                                    <input type='checkbox' name='enable_course_registration' value='1' {!! $checked !!}>
+                                                    <span class='checkmark'></span>&nbsp;{{ trans('langInfoEnableCourseRegistration') }}
+                                                </div>
+                                            </label>
+                                        </div>
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langRegistrationDate') }}</label>
                                             <div class='col-sm-12'>
@@ -143,7 +153,7 @@
                                                 <div class='input-group'>
                                                     <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                                     <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='user_date_expires_at' type='text' value='{{ $exp_date->format("d-m-Y H:i") }}'>
-                                                    
+
                                                 </div>
                                             </div>
                                         </div>
@@ -153,14 +163,14 @@
                                                 <p class='form-control-static'>{{ $u }}</p>
                                             </div>
                                         </div>
-                                       
+
                                         <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langUserWhitelist') }}</label>
                                             <div class='col-sm-12'>
                                                 <textarea class='w-100' rows='6' name='user_upload_whitelist'>{{ $info->whitelist }}</textarea>
                                             </div>
                                         </div>
-                                        
+
                                         @if ($ext_uid)
                                             <div class='form-group mt-4'>
                                                 <label class='col-sm-12 control-label-notes'>{{trans('langProviderConnectWith')}}</label>
@@ -198,13 +208,13 @@
                                 </form>
                             </div>
                         </div>
-                        
+
                         <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                         <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
                         </div>
 
                         <!--user is registered to courses-->
-                        
+
                             @if (count($sql) > 0)
                                 <div class='col-12 mt-3'>
                                     <div class='shadow-sm p-3 rounded'>
@@ -261,10 +271,10 @@
                             @else
                             <div class='col-12 mt-4'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNoStudentParticipation') }}</span></div></div>
                             @endif
-                        
 
-                
+
+
         </div>
-</div>    
+</div>
 </div>
 @endsection

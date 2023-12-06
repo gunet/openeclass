@@ -182,7 +182,7 @@
                         </div>
 
                         <div class="form-group mt-4">
-                            <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langUserPermitions') }}</label>
+                            <label class='col-sm-12 control-label-notes mb-2'> {{ trans('langUserPermissions') }}</label>
                             <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                 <input type='radio' name='pstatus' value='5' id='norights-option' {!! $user_selected !!}>
                                 {{ trans('langUserWithNoRights') }}
@@ -190,6 +190,12 @@
                             <div class="radio mb-2 d-flex justify-content-start align-items-center">
                                 <input type="radio" name="pstatus" value="1" id="rights-option" {!! $prof_selected !!}>
                                 {{ trans('langUserWithRights') }}
+                            </div>
+                            <div class='checkbox mb-2 d-flex justify-content-start align-items-center'>
+                                <label class='label-container'>
+                                    <input type='checkbox' name='enable_course_registration' value='1' checked>
+                                    <span class='checkmark'></span>{{ trans('langInfoEnableCourseRegistration') }}
+                                </label>
                             </div>
                         </div>
 

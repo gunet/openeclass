@@ -2536,6 +2536,11 @@ function upgrade_to_3_15($tbl_options) : void
         Database::get()->query('ALTER TABLE lti_publish_lti2_consumer
             MODIFY `consumerkey256` VARCHAR(255) CHARACTER SET ascii COLLATE ascii_bin NOT NULL');
     }
+
+    if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
+        Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
+    }
+
     Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
 
 }

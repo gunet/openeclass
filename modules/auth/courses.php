@@ -124,7 +124,7 @@ if (isset($_POST['submit'])) {
 
         $collapsed = '';
         if(isset($_GET['fc']) and $_GET['fc'] != 1){
-            $collapsed = 'collapsed'; 
+            $collapsed = 'collapsed';
         }
 
         $tool_content .= "<div class='col-12 mt-4'>
@@ -314,7 +314,7 @@ function expanded_faculte($facid, $uid) {
 
         $retString .= "<td style='width:10% !important;'>";
         $requirepassword = '';
-        $vis_class = ($mycours->visible == 0) ? 'class="reg_closed"' : '';
+        $vis_class = ($mycours->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {
             if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
@@ -334,7 +334,7 @@ function expanded_faculte($facid, $uid) {
                 $requirepassword = '';
             }
 
-            $disabled = ($mycours->visible == 0) ? 'disabled' : '';
+            $disabled = (!is_enabled_course_registration($uid) or $mycours->visible == COURSE_CLOSED) ? 'disabled' : '';
             $retString .= "<label class='label-container'><input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class /><span class='checkmark'></span></label>";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>

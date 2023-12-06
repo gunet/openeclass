@@ -2905,10 +2905,6 @@ function course_status($course_id) {
 
 /**
  * @brief return message concerning course visibility
- * @global type $langTypeOpen
- * @global type $langTypeClosed
- * @global type $langTypeInactive
- * @global type $langTypeRegistration
  * @param type $course_id
  * @return type
  */
@@ -2938,7 +2934,7 @@ function get_mail_ver_status($uid) {
     return $q;
 }
 
-// check if username match for both case sensitive/insensitive
+// check if username match for both case-sensitive/insensitive
 function check_username_sensitivity($posted, $dbuser) {
     if (get_config('case_insensitive_usernames')) {
         if (mb_strtolower($posted) == mb_strtolower($dbuser)) {
@@ -2955,6 +2951,22 @@ function check_username_sensitivity($posted, $dbuser) {
     }
     return false;
 }
+
+
+function is_enabled_course_registration($uid) {
+    $q = Database::get()->querySingle("SELECT disable_course_registration FROM user WHERE id = ?d", $uid);
+    if ($q) {
+        $disable_course_reg = $q->disable_course_registration;
+        if ($disable_course_reg) {
+            return false;
+        } else {
+            return true;
+        }
+    } else {
+        return true;
+    }
+}
+
 
 /**
  * @brief checks if user is notified via email from a given course

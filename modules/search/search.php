@@ -182,7 +182,7 @@ foreach ($courses as $course) {
                 $requirepassword = "<br />$m[code]: <input type='password' name='pass" . $course->id . "' autocomplete='off' />";
             }
 
-            $disabled = ($course->visible == COURSE_CLOSED) ? 'disabled' : '';
+            $disabled = (!is_enabled_course_registration($uid) or $course->visible == COURSE_CLOSED) ? 'disabled' : '';
             $vis_class = ($course->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
             $tool_content .= "<td align='center'><label class='label-container'><input type='checkbox' name='selectCourse[]' value='" . $course->id . "' $disabled $vis_class /><span class='checkmark'></span></label>"
                     . "<input type='hidden' name='changeCourse[]' value='" . $course->id . "' /></td>";

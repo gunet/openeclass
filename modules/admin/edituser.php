@@ -73,7 +73,7 @@ if ($u) {
 
    $data['info'] = $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am,
-                              verified_mail, whitelist
+                              verified_mail, whitelist, disable_course_registration 
                          FROM user WHERE id = ?s", $u);
     if (isset($_POST['submit_editauth'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -90,7 +90,6 @@ if ($u) {
 
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
-        //Session::Messages($langQuotaSuccess.$extra_msg, 'alert-success');
         Session::flash('message',$langQuotaSuccess.$extra_msg);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php');
@@ -101,7 +100,6 @@ if ($u) {
         checkSecondFactorChallenge();
         Database::get()->query('DELETE FROM user_ext_uid WHERE user_id = ?d AND auth_id = ?d',
             $u, $_POST['delete_ext_uid']);
-        //Session::Messages($langSuccessfulUpdate, 'alert-success');
         Session::flash('message',$langSuccessfulUpdate);
         Session::flash('alert-class', 'alert-success');
         redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
@@ -174,6 +172,7 @@ if ($u) {
         $data['reg_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $data['exp_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
 
+        $data['checked'] = (!$info->disable_course_registration) ? 'checked' : '';
         // Show HybridAuth provider data
         $data['ext_uid'] = Database::get()->queryArray('SELECT * FROM user_ext_uid WHERE user_id = ?d', $u);
 
@@ -199,7 +198,6 @@ if ($u) {
         $registered_at = isset($_POST['registered_at']) ? $_POST['registered_at'] : '';
         if (isset($_POST['user_date_expires_at'])) {
             if ( empty($_POST['user_date_expires_at']) || "" == trim($_POST['user_date_expires_at']) ) {
-                //Session::Messages($langUserExpiresFieldEmpty, 'alert-warning');
                 Session::flash('message',$langUserExpiresFieldEmpty);
                 Session::flash('alert-class', 'alert-warning');
                 redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
@@ -207,6 +205,12 @@ if ($u) {
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
             $user_expires_at = $expires_at->format("Y-m-d H:i");
             $user_date_expires_at = $expires_at->format("d-m-Y H:i");
+        }
+
+        if (isset($_POST['enable_course_registration'])) {
+            $disable_course_registration = 0;
+        } else {
+            $disable_course_registration = 1;
         }
 
         $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
@@ -223,12 +227,10 @@ if ($u) {
 
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
-            //Session::Messages($langFieldsMissing, 'alert-danger');
             Session::flash('message',$langFieldsMissing);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif (isset($user_exist) and $user_exist == true) {
-            //Session::Messages($langUserFree, 'alert-danger');
             Session::flash('message',$langUserFree);
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
@@ -238,14 +240,12 @@ if ($u) {
             foreach ($cpf_check as $cpf_error) {
                 $cpf_error_str .= $cpf_error;
             }
-            //Session::Messages("$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>", 'alert-danger');
             Session::flash('message',"$cpf_error_str<br><a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a>");
             Session::flash('alert-class', 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         }
 
         if ($registered_at > $user_expires_at) {
-            //Session::Messages($langExpireBeforeRegister, 'alert-warning');
             Session::flash('message',$langExpireBeforeRegister);
             Session::flash('alert-class', 'alert-warning');
         }
@@ -284,16 +284,15 @@ if ($u) {
                                 expires_at = ?t,
                                 am = ?s,
                                 verified_mail = ?d,
-                                whitelist = ?s
-                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
+                                whitelist = ?s,
+                                disable_course_registration = ?d
+                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $disable_course_registration, $u);
             //update custom profile fields
             $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
             if ($qry->affectedRows > 0 || $cpf_updated === true) {
-                //Session::Messages($langSuccessfulUpdate, 'alert-info');
                 Session::flash('message',$langSuccessfulUpdate);
                 Session::flash('alert-class', 'alert-info');
         } else {
-            //Session::Messages($langUpdateNoChange, 'alert-warning');
             Session::flash('message',$langUpdateNoChange);
             Session::flash('alert-class', 'alert-warning');
         }
