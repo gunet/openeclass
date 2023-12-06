@@ -92,13 +92,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     if (!empty($_GET['sSearch_1'])) {
         $filter = $_GET['sSearch_1'];
         if ($filter == 'editor') {
-            $search_sql .= ' AND course_user.editor = 1 AND course_user.status = ' . USER_STUDENT;
+            $search_sql .= ' AND ((course_user.editor = 1 AND course_user.status = ' . USER_STUDENT . ') OR course_user.status = ' . USER_TEACHER . ')';
         } elseif ($filter == 'teacher') {
             $search_sql .= ' AND course_user.status = ' . USER_TEACHER;
         } elseif ($filter == 'student') {
             $search_sql .= ' AND course_user.editor <> 1 AND course_user.status = ' . USER_STUDENT;
-        } elseif ($filter == 'tutor') {
-            $search_sql .= ' AND course_user.tutor = 1';
         } elseif ($filter == 'guest') {
             $search_sql .= ' AND course_user.status = ' . USER_GUEST;
         } elseif ($filter == 'course_reviewer') {
@@ -107,9 +105,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $search_sql .= ' AND course_user.reviewer = 1';
         }
     }
-    $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
-    $order_sql = 'ORDER BY ' .
-        (($_GET['iSortCol_0'] == 0) ? "user.surname $sortDir, user.givenname $sortDir" : "course_user.reg_date $sortDir");
+
+    if (isset($_GET['iSortCol_0']) and $_GET['iSortCol_0'] == 0) {
+        $sortDir = ($_GET['sSortDir_0'] == 'desc') ? 'DESC' : '';
+        $order_sql = "ORDER BY user.surname $sortDir, user.givenname $sortDir";
+    } else {
+        $sortDir = ($_GET['sSortDir_0'] == 'desc') ? 'DESC' : '';
+        $order_sql = "ORDER BY course_user.reg_date $sortDir";
+    }
 
     $limit_sql = ($limit > 0) ? "LIMIT $offset,$limit" : "";
 
@@ -127,6 +130,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     WHERE `user`.`id` = `course_user`.`user_id`
                     AND `course_user`.`course_id` = ?d
                     $search_sql $order_sql $limit_sql", $course_id, $search_values);
+
 
     $data['iTotalRecords'] = $all_users;
     $data['iTotalDisplayRecords'] = $filtered_users;
@@ -146,7 +150,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         } else {
             $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
         }
-        // opencourses reviewer right
+        // open-courses reviewer right
         if (get_config('opencourses_enable')) {
             if ($myrow->reviewer == '1') {
                 $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
@@ -264,11 +268,9 @@ $head_content .= "
                     var column = api.column(1);
                     var select = $('<select id=\'select_role\'>'+
                                         '<option value=\'0\'>-- $langAllUsers --</option>'+
-                                        '<option value=\'teacher\'>$langCourseAdminTeacher</option>'+
                                         '<option value=\'editor\'>$langTeacher</option>'+
                                         '<option value=\'course_reviewer\'>$langCourseReviewer</option>'+
-                                        '<option value=\'tutor\'>$langGroupTutor</option>'+
-                                        '<option value=\'student\'>$langStudent</option>'+                                        
+                                        '<option value=\'student\'>$langStudent</option>'+
                                         '<option value=\'guest\'>$langGuestName</option>'+
                                         ".(get_config('opencourses_enable') ? "'<option value=\'reviewer\'>$langOpenCoursesReviewer</option>'+" : "")."
                                     '</select>')
@@ -293,9 +295,13 @@ $head_content .= "
                    [10, 25, 50, '$langAllOfThem'] // change per page values here
                ],
                 'sPaginationType': 'full_numbers',
-                'bSort': true,
-                'aaSorting': [[0, 'desc']],
-                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, {'bSortable': false, 'aTargets': [ 1 ] }, { 'sClass':'text-center', 'bSortable': false, 'aTargets': [ 2 ] }, { 'bSortable': false, 'aTargets': [ 4 ] }],
+                'aoColumnDefs': [
+                    { 'sClass':'option-btn-cell', 'aTargets':[-1]},
+                    { 'bSortable': true, 'aTargets': [ 0 ] },
+                    { 'bSortable': false, 'aTargets': [ 1 ] },
+                    { 'sClass':'text-center', 'bSortable': false, 'aTargets': [ 2 ] },
+                    { 'bSortable': false, 'aTargets': [ 4 ] }
+                ],
                 'oLanguage': {
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',

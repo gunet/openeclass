@@ -2540,7 +2540,7 @@ function upgrade_to_3_15($tbl_options) : void
     Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
 
     if (!DBHelper::tableExists('course_invitation')) {
-        Database->query("CREATE TABLE `course_invitation` (
+        Database::get()->query("CREATE TABLE `course_invitation` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `surname` varchar(255) NOT NULL DEFAULT '',
             `givenname` varchar(255) NOT NULL DEFAULT '',
