@@ -784,7 +784,7 @@ function display_gradebook($gradebook) {
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langGradebookAddActivity, $langInsertWorkCap, $langExercise, $langLearnPath,
-           $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade,
+           $langBack, $langNoRegStudent, $langStudents, $langRefreshGrade, $langRefreshGrades,
            $langExportGradebook, $langExportGradebookWithUsers,
            $is_editor, $is_course_reviewer;
 
@@ -825,7 +825,7 @@ function display_gradebook($gradebook) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
                       'icon' => 'fa-users',
                       'level' => 'primary-label'),
-                array('title' => $GLOBALS['langRefreshGrades'],
+                array('title' => $langRefreshGrades,
                       'url' => "refreshgrades.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
                       'icon' => 'fa-refresh'),
                 array('title' => $langExportGradebook,
@@ -834,9 +834,6 @@ function display_gradebook($gradebook) {
                 array('title' => $langExportGradebookWithUsers,
                       'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id",
                       'icon' => 'fa-file-excel'),
-                array('title' => "$langExport ($langcsvenc2)",
-                      'url' => "dumpgradebook.php?course=$course_code&amp;t=2&amp;gradebook_id=$gradebook_id&amp;enc=UTF-8",
-                      'icon' => 'fa-file-excel')
                 ),
                 true
             );
