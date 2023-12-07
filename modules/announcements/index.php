@@ -261,10 +261,10 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 $('.td-bulk-select').toggleClass('hide');
                 $('.bulk-processing-box').toggleClass('hide');
     
-                if ($(this).find('span.fa-solid.fa-check').length) {
-                    $(this).find('span.fa-solid.fa-check').remove();
+                if ($(this).find('span.fa.fa-check').length) {
+                    $(this).find('span.fa.fa-check').remove();
                 } else {
-                    $(this).append('<span class=\'fa fa-check text-success\'></span>');
+                    $(this).append('<span class=\'fa fa-check text-success\' style=\'margin-left: 5px;\'></span>');
                 }
             });
                 
