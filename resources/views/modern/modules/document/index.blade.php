@@ -144,9 +144,6 @@
                                         @if($file->visible == 1 or $can_upload)
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
-
-
-
                                                 <td>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>
@@ -201,42 +198,47 @@
                                                     @endif
                                                 </td>
 
-
                                                 <td>
                                                     @if($file->visible == 1)
-                                                        <span class='visibleFile'>{{ $file->format }}</span>
+                                                        @if ($file->is_dir)
+                                                            <span class='visibleFile'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
+                                                        @else
+                                                            <span class='visibleFile'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                        @endif
                                                     @else
-                                                        <span class='invisibleFile'>{{ $file->format }}</span>
+                                                        @if ($file->is_dir)
+                                                            <span class='invisibleFile'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
+                                                        @else
+                                                            <span class='invisibleFile'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                       @endif
                                                     @endif
                                                 </td>
-
 
                                                 @if ($file->is_dir)
                                                     <td>&nbsp;</td>
                                                     @if($file->visible == 1)
-                                                        <td>{{ $file->date }}</td>
+                                                        <td>{{ format_locale_date(strtotime($file->date), 'short', false) }}</td>
                                                     @else
-                                                        <td><span class="opacity-50 text-secondary">{{ $file->date }}</span></td>
+                                                        <td><span class="opacity-50 text-secondary">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @elseif ($file->format == '.meta')
                                                     @if($file->visible == 1)
-                                                        <td>{{ $file->size }}</td>
+                                                        <td>{{ format_file_size($file->size) }}</td>
                                                         <td>{{ $file->date }}</td>
                                                     @else
-                                                        <td><span class="opacity-50">{{ $file->size }}</span></td>
-                                                        <td><span class="opacity-50">{{ $file->date }}</span></td>
+                                                        <td><span class="opacity-50">{{ format_file_size($file->size) }}</span></td>
+                                                        <td><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @else
                                                     @if($file->visible == 1)
-                                                        <td>{{ $file->size }}</td>
+                                                        <td>{{ format_file_size($file->size) }}</td>
                                                         <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
                                                     @else
-                                                        <td><span style="opacity-50">{{ $file->size }}</span></td>
+                                                        <td><span style="opacity-50">{{ format_file_size($file->size) }}</span></td>
                                                         <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
                                                     @endif
-
 
                                                 @endif
 
@@ -247,7 +249,6 @@
                                                 @endif
                                             </tr>
                                         @endif
-
 
 
                                     @empty
