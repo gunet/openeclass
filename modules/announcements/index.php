@@ -257,7 +257,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
             
             $('li.bulk-processing a').on('click', function(event) {
                 event.preventDefault();
-                $('.table-responsive').toggleClass('checkboxes-on');
+                $('.dataTables_wrapper').toggleClass('checkboxes-on');
                 $('.td-bulk-select').toggleClass('hide');
                 $('.bulk-processing-box').toggleClass('hide');
     
@@ -280,6 +280,12 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 });
             }
             
+            function checkCheckboxes() {
+                if ($('.dataTables_wrapper').hasClass('checkboxes-on')) {
+                    $('.td-bulk-select').removeClass('hide');
+                }
+            }
+            
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[
                 {'sClass':'option-btn-cell', 'aTargets':[-1]},
@@ -300,6 +306,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     popover_init();
                     tooltip_init();
                     restoreCheckboxStates();
+                    checkCheckboxes();
                     $('.table_td_body').each(function() {
                 $(this).trunk8({
                     lines: '3',
