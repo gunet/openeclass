@@ -3983,13 +3983,13 @@ function setOpenCoursesExtraHTML() {
                         <div class='row m-auto w-100 ms-0'>
 
                             <div class='col-12 d-flex justify-content-center align-items-center'>
-                                <img class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
+                                <img style='max-height:200px;' class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
                             </div>
 
                             <div class='col-12'>
                                 <div class='row'>
-                                    <div class='col-12 ps-0 mt-3'>
-                                        <a target='_blank' href='$openFacultiesUrl'>
+                                    <div class='col-12 ps-0 mt-3 d-flex justify-content-end'>
+                                        <a class='text-decoration-underline' target='_blank' href='$openFacultiesUrl'>
                                             <span class='text-uppercase TextBold lightBlueText fs-5'>$openCoursesNum</span>
                                             <span class='text-uppercase TextBold lightBlueText fs-5'>" .
                                             (($openCoursesNum == 1)? $langCourses: $langCourse) . "
