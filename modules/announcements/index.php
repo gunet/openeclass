@@ -78,8 +78,8 @@ if ($is_editor) {
         }
 
     }
-    
-    
+
+
     // Pin sticky announcement
     if (isset($_POST['pin_announce'])) {
         if (isset($_GET['pin']) && ($_GET['pin'] == 1)) {
@@ -188,7 +188,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
                 '1' => "<div class='table_td announceContent'>
                         <div class='table_td_header clearfix'>
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".q($myrow->title)."</a>
                             <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>
                                 <span class='fa fa-thumb-tack $pinned_class float-end' $tooltip></span>
                             </a>
@@ -196,7 +196,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                         </div>
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
-                //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
                 '2' => format_locale_date(strtotime($myrow->date)),
                 '3' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
                 '4' => action_button(array(
@@ -266,7 +265,7 @@ if (isset($_GET['an_id'])) {
 
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
 
-    $data['title'] = standard_text_escape($row->title);
+    $data['title'] = q($row->title);
     $data['date'] = format_locale_date(strtotime($row->date));
     $data['content'] = standard_text_escape($row->content);
 
@@ -298,4 +297,3 @@ if (isset($_GET['an_id'])) {
 
     view('modules.announcements.index', $data);
 }
-
