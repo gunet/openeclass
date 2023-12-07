@@ -48,6 +48,42 @@ if ($is_editor && isset($_POST['pin_announce'])) {
     exit();
 }
 
+if ($is_editor && isset($_POST['bulk_submit'])) {
+
+    if ($_POST['selectedcbids']) {
+
+        $cbids = explode(',', $_POST['selectedcbids']);
+
+        if ($_POST['bulk_action'] == 'delete') {
+
+            foreach ($cbids as $row_id) {
+                $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
+                $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
+                Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+                Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
+                    'title' => $announce->title,
+                    'content' => $txt_content));
+            }
+
+        }
+        if ($_POST['bulk_action'] == 'visible') {
+            foreach ($cbids as $row_id) {
+                Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 1, $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            }
+        }
+        if ($_POST['bulk_action'] == 'invisible') {
+            foreach ($cbids as $row_id) {
+                Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", 0, $row_id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
+            }
+        }
+
+    }
+
+}
+
 // Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['action']) && $is_editor) {
@@ -139,7 +175,8 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => "<div class='table_td'>
+                '0' => "<div class='bulk_select'><div class='checkbox'><label class='label-container'><input type='checkbox' name='$myrow->id' cbid='$myrow->id' /><span class='checkmark'></span></label></div></div>",
+                '1' => "<div class='table_td'>
                         <div class='table_td_header clearfix'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&an_id=$myrow->id'>".standard_text_escape($myrow->title)."</a>
                             <a class='reorder' href='$_SERVER[SCRIPT_NAME]?course=$course_code&pin_an_id=$myrow->id&pin=$pinned'>
@@ -150,9 +187,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                         <div class='table_td_body' data-id='$myrow->id'>".standard_text_escape($myrow->content)."</div>
                         </div>",
                 //'0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
-                '1' => format_locale_date(strtotime($myrow->date)),
-                '2' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
-                '3' => action_button(array(
+                '2' => format_locale_date(strtotime($myrow->date)),
+                '3' => '<ul class="list-unstyled">'.$status_icon_list.'</ul>',
+                '4' => action_button(array(
                     array('title' => $langEditChange,
                         'icon' => 'fa-edit',
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
@@ -198,10 +235,56 @@ load_js('tools.js');
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
     load_js('datatables');
     $head_content .= "<script type='text/javascript'>
+
+        let checkboxStates = [];
+
         $(document).ready(function() {
 
+            $('#ann_table{$course_id}').on('change', 'input[type=checkbox]', function() {
+                let cbid = $(this).attr('cbid');
+                checkboxStates[cbid] = this.checked;
+    
+                let selectedCbidValues = $('#selectedcbids').val().split(',');
+                let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
+                if (this.checked && cbidIndex === -1) {
+                    selectedCbidValues.push(cbid);
+                } else if (!this.checked && cbidIndex !== -1) {
+                    selectedCbidValues.splice(cbidIndex, 1);
+                }
+                $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
+    
+            });
+            
+            $('li.bulk-processing a').on('click', function(event) {
+                event.preventDefault();
+                $('.table-responsive').toggleClass('checkboxes-on');
+                $('.td-bulk-select').toggleClass('hide');
+                $('.bulk-processing-box').toggleClass('hide');
+    
+                if ($(this).find('span.fa-solid.fa-check').length) {
+                    $(this).find('span.fa-solid.fa-check').remove();
+                } else {
+                    $(this).append('<span class=\'fa fa-check text-success\'></span>');
+                }
+            });
+                
+            function restoreCheckboxStates() {
+                $('#ann_table{$course_id} tbody tr').each(function(index) {
+                    let checkbox = $(this).find('input[type=checkbox]');
+                    let cbid = checkbox.attr('cbid');
+                    if (cbid in checkboxStates) {
+                        checkbox.prop('checked', checkboxStates[cbid]);
+                    } else {
+                        checkbox.prop('checked', false);
+                    }
+                });
+            }
+            
            var oTable = $('#ann_table{$course_id}').DataTable ({
-                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."
+                ".(($is_editor)?"'aoColumnDefs':[
+                {'sClass':'option-btn-cell', 'aTargets':[-1]},
+                {'sClass':'hide td-bulk-select','aTargets':[0]},
+                ],":"")."
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
@@ -216,6 +299,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                 'fnDrawCallback': function( oSettings ) {
                     popover_init();
                     tooltip_init();
+                    restoreCheckboxStates();
                     $('.table_td_body').each(function() {
                 $(this).trunk8({
                     lines: '3',
@@ -763,7 +847,14 @@ if (isset($_GET['an_id'])) {
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
             'button-class' => 'btn-success',
-            'show' => $is_editor)));
+            'show' => $is_editor),
+        array('title' => $langBulkProcessing,
+            'url' => '',
+            'icon' => 'fa-folder',
+//            'level' => 'primary-label',
+            'class' => 'bulk-processing',
+            'show' => $is_editor),
+    ));
 }
 
 /* display announcements */
@@ -791,6 +882,27 @@ if (isset($_GET['an_id'])) {
                     </div>
                 </div></div></div>";
 }
+
+
+if ($is_editor) {
+    $tool_content .= "<div class='bulk-processing-box hide' style='margin:0 0 30px;'>
+                                <strong>
+                                    <i class='fa fa-folder'></i>
+                                    $langBulkProcessing
+                                </strong>
+                                <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' style='display: flex;gap: 5px;margin: 10px 0 0'>
+                                    <select class='form-control' name='bulk_action' class='px-3' style='max-width:250px;'>
+                                        <option value='delete'>$langDelete</option>
+                                        <option value='visible'>$langNewBBBSessionStatus: $langVisible</option>
+                                        <option value='invisible'>$langNewBBBSessionStatus: $langInvisible</option>
+                                    </select>
+                                    <input type='submit' class='btn btn-default' name='bulk_submit' value='$langSubmit'>
+                                    <input type='hidden' id='selectedcbids' name='selectedcbids' value=''>
+                                </form>
+                            </div>
+                            ";
+}
+
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
     $tool_content .= "<table id='ann_table{$course_id}' class='table-default'>";
 
@@ -801,7 +913,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
 
     if ($is_editor) {
         $tool_content .= "<thead>";
-        $tool_content .= "<tr class='list-header'><th>$langAnnouncement</th>";
+        $tool_content .= "<tr class='list-header'><th>#</th><th>$langAnnouncement</th>";
         $tool_content .= "<th>$langDate</th><th>$langNewBBBSessionStatus</th><th class='text-center'><i class='fa fa-cogs'></i></th>";
     }
     $tool_content .= "</tr></thead><tbody></tbody></table>";

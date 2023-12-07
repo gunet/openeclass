@@ -6,6 +6,7 @@
 $langYes = "Yes";
 $langNo = "No";
 $langSelectReq = "Please select at least one option!";
+$langBulkProcessing = "Bulk Processing";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";
 $langAboutText = "The platform version is";
