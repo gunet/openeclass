@@ -93,7 +93,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'url' => '#',
               'icon' => 'fa-times',
               'btn_class' => 'delete_btn btn-default' ],
-            [ 'title' => 'Send Reminder',
+            [ 'title' => $langSendReminder,
               'url' => '#',
               'icon' => 'fa-check-square-o' ],
         ]);
@@ -109,7 +109,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     exit();
 }
 
-$toolName = 'Πρόσκληση χρηστών στο μάθημα';
+$toolName = $langCourseUsersInvitation;
 load_js('tools.js');
 load_js('datatables');
 $head_content .= "
@@ -156,7 +156,7 @@ $head_content .= "
           \"<'row'<'col-sm-12'tr>>\" +
           \"<'row'<'col-sm-5'i><'col-sm-7'p>>\",
       });
-      $('#dtFilter').html('<select id=dtFilterSelect><option value=all>Όλοι</option><option value=unreg>Μη εγγεγραμμένοι</option><option value=reg>Εγγεγραμμένοι</option></select>');
+      $('#dtFilter').html('<select id=dtFilterSelect><option value=all>$langAll</option><option value=unreg>$langNotRegistered</option><option value=reg>$langRegistered</option></select>');
       $('#dtFilterSelect').change(function () {
         displayFilter = $(this).val();
         oTable.draw();
@@ -164,7 +164,7 @@ $head_content .= "
       $(document).on('click', '.delete_btn', function (e) {
         e.preventDefault();
         var row_id = $(this).closest('tr').attr('id');
-        bootbox.confirm('Διαγραφή πρόσκλησης;', function(result) {
+        bootbox.confirm('" . js_escape($langDeleteInvitation) . "', function(result) {
           if (result) {
             $.ajax({
               type: 'POST',
@@ -182,7 +182,7 @@ $head_content .= "
                   page_number--;
                 }
               }
-              $('#tool_title').after('<p class=\"success\">Η πρόσκληση διαγράφτηκε</p>');
+              $('#tool_title').after('<p class=\"success\">" . js_escape($langDeleteInvitationSuccess) . "</p>');
               $('.success').delay(3000).fadeOut(1500);
               oTable.page(page_number).draw(false);
             },
@@ -220,9 +220,9 @@ $tool_content .= "
             <tr>
               <th>e-mail</th>
               <th class='text-center'>$langSurnameName</th>
-              <th class='text-center' width='80'>$langDate</th>
-              <th class='text-center' width='80'>Εγγραφή</th>
-              <th class='text-center'>".icon('fa-gears')."</th>
+              <th class='text-center' style='width: 80px;'>$langDate</th>
+              <th class='text-center'>$langRegistration</th>
+              <th class='text-center' style='width: 60px;'>".icon('fa-gears')."</th>
             </tr>
         </thead>
         <tbody>

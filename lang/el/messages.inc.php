@@ -293,7 +293,7 @@ $langDisableEclassProfRegNo = "Οι $langsTeachers μπορούν να εγγρ�
 $langUserNotLogin = "Χρήστες που δεν έχουν εισέλθει";
 $langParams = 'Παράμετροι';
 
-// listusers
+// users list
 $langBegin = "αρχή";
 $langEnd = "τέλος";
 $langPreced50 = "Προηγούμενοι";
@@ -303,7 +303,7 @@ $langNoSuchUsers = "Δεν υπάρχουν χρήστες σύμφωνα με �
 $langAsInactive = "ως μη ενεργοί";
 $langChanges = "αλλαγές";
 
-// listcours
+// courses list
 $langOpenCourse = "Ανοικτό $langsCourse";
 $langClosedCourse = "Κλειστό $langsCourse";
 $langClosedCourses = "Κλειστά $langsCourses";
@@ -312,7 +312,7 @@ $langInactiveCourse = "Ανενεργό $langsCourse";
 $langTcCourseEnabled = "Η δυνατότητα τηλεσυνεργασίας ενεργοποιήθηκε.";
 $langTcCourseDisabled = "Η δυνατότητα τηλεσυνεργασίας απενεργοποιήθηκε.";
 
-// quotacours
+// courses quota
 $langQuotaAdmin = "Διαχείριση Αποθηκευτικού Χώρου $langOfCourse";
 $langQuotaSuccess = "Η αλλαγή έγινε με επιτυχία";
 $langQuotaFail = "Η αλλαγή δεν έγινε!";
@@ -320,13 +320,12 @@ $langMaxQuota = "έχει μέγιστο επιτρεπτό αποθηκευτι
 $langLegend = "Για το υποσύστημα";
 $langVideo = "Πολυμέσα";
 
-// Added by vagpits
 // General
 $langReturnToSearch = "Επιστροφή στα αποτελέσματα αναζήτησης";
 $langReturnSearch = "Επιστροφή στην αναζήτηση";
 $langNoChangeHappened = "Δεν πραγματοποιήθηκε καμία αλλαγή!";
 
-// addfaculte
+// add faculty
 $langReturnToAddFaculte = "Επιστροφή στην προσθήκη";
 $langReturnToEditFaculte = "Επιστροφή στην επεξεργασία";
 $langFaculteAdd = "Προσθήκη $langOfFaculty";
@@ -1069,6 +1068,7 @@ $langEnter = "Είσοδος";
 $langUpdate = "Αλλαγή Τίτλου";
 $langIcon = "Εικονίδιο";
 $langRegistered = "εγγεγραμμένοι";
+$langNotRegistered = "μη εγγεγραμμένοι";
 $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα $langOfCourse";
 $langCourseS = $langsCourse;
@@ -3644,10 +3644,10 @@ $langDateReject = "Ημ/νία απόρριψης";
 $langDateClosed = "Ημ/νία κλεισίματος";
 $langDateCompleted = "Ημ/νία ολοκλήρωσης";
 
-$langDateRequest_small = "Aίτησης";
-$langDateReject_small = "Aπόρριψης";
-$langDateClosed_small = "Kλεισίματος";
-$langDateCompleted_small = "Oλοκλήρωσης";
+$langDateRequest_small = "Αίτησης";
+$langDateReject_small = "Απόρριψης";
+$langDateClosed_small = "Κλεισίματος";
+$langDateCompleted_small = "Ολοκλήρωσης";
 
 $langRejectRequest = "Απόρριψη";
 $langListRequest = "Λίστα Αιτήσεων";
@@ -6151,3 +6151,32 @@ $langMaintenanceChange = "Αλλαγή κειμένου συντήρησης";
 $langMaintenanceMode = "Λειτουργία συντήρησης";
 
 $langAccountStatus = "Κατάσταση λογαριασμού";
+
+// course user invitation
+$langCourseUsersInvitation = "Πρόσκληση χρηστών στο μάθημα";
+$langCourseInviteOne = "Πρόσκληση χρήστη";
+$langCourseInviteMany = "Πρόσκληση χρηστών";
+$langDeleteInvitation = "Διαγραφή πρόσκλησης";
+$langDeleteInvitationSuccess = "Η πρόσκληση διαγράφτηκε";
+$langCourseInvitationSubject = "Πρόσκληση εγγραφής στην πλατφόρμα";
+$langCourseInvitationBody1 = "Έχετε λάβει πρόσκληση εγγραφής στην πλατφόρμα $siteName προκειμένου να συμμετάσχετε στο μάθημα";
+$langCourseInvitationBody2 = "Για να προχωρήσετε στην εγγραφή, παρακαλούμε ακολουθήστε τον παρακάτω σύνδεσμο.";
+$langCourseInvitationSent = "Η πρόσκληση στάλθηκε!";
+$langCourseInvitationsSent = "Οι προσκλήσεις στάλθηκαν σε";
+$langUserWithEmail = "Ο χρήστης με e-mail";
+$langAlreadyAccount = "είχε ήδη λογαριασμό στην πλατφόρμα και προστέθηκε στο μάθημά σας.";
+$langAlreadyRegistered = "ήταν ήδη εγγεγραμμένος στο μάθημά σας.";
+$langAlreadyRegisteredUsers = "Οι παρακάτω χρήστες είχαν ήδη λογαριασμό στην πλατφόρμα και προστέθηκαν στο μάθημα";
+$langInvitationCustomEmail = "
+            <p>Placeholder μεταβλητών </p>
+                <br>
+                <ul>
+                 <li>[email] : Διεύθυνση e-mail</li>
+                 <li>[link] : Σύνδεσμος εγγραφής</li>
+                </ul>";
+$langErrorInserting = "Οι παρακάτω εγγραφές του αρχείου που αποστείλατε είχαν κάποιο πρόβλημα. Είτε το e-mail δεν είναι έγκυρο, είτε τα πεδία ήταν περισσότερα από τα αναμενόμενα:";
+$langCourseInvitationUsersExcelInfo = "Μπορείτε να αποστείλετε ένα αρχείο λογιστικού φύλλου (π.χ. xls, xlsx, csv) με μία ή τρείς στήλες. 
+Η πρώτη στήλη πρέπει να περιέχει τα e-mail των χρηστών που επιθυμείτε να προσκαλέσετε στο μάθημα. 
+Η δεύτερη και τρίτη στήλη μπορούν προαιρετικά να περιέχουν το επίθετο και όνομα κάθε χρήστη. 
+Σημειώστε ότι χρήστες που υπάρχουν ήδη στην πλατφόρμα με το e-mail θα προστεθούν αμέσως στο μάθημα χωρίς να λάβουν πρόσκληση και χωρίς άλλη ειδοποίηση.";
+$langSendReminder = "Αποστολή υπενθύμισης";

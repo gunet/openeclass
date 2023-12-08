@@ -92,31 +92,31 @@ if (isset($_POST['submit']) and isset($_FILES['userfile'])) {
         send_invitation($email, $token, $email_subject, $email_body);
         $count++;
     }
-    Session::Messages("Οι προσκλήσεις στάλθηκαν σε $count χρήστες!", 'alert-success');
+    Session::Messages("$langCourseInvitationsSent $count $langUsersS!", 'alert-success');
     if ($errorLines) {
         $errorList = '<ul>' . implode('', array_map(function ($item) {
             return '<li>' . q(implode(' ', $item)) . '</li>';
         }, $errorLines)) . '</ul>';
-        Session::Messages("Οι παρακάτω εγγραφές του αρχείου που αποστείλατε είχαν κάποιο πρόβλημα. Είτε το e-mail δεν είναι έγκυρο, είτε τα πεδία ήταν περισσότερα από τα αναμενόμενα:" .
+        Session::Messages("$langErrorInserting" .
             $errorList, 'alert-danger');
     }
     if ($existingLines) {
         $existingList = '<ul>' . implode('', array_map(function ($item) {
             return '<li>' . q(implode(' ', $item)) . '</li>';
         }, $existingLines)) . '</ul>';
-        Session::Messages("Οι παρακάτω χρήστες είχαν ήδη λογαριασμό στην πλατφόρμα και προστέθηκαν στο μάθημα:" .
+        Session::Messages("$langAlreadyRegisteredUsers:" .
             $existingList, 'alert-success');
     }
     redirect_to_home_page('modules/user/invite.php?course=' . $course_code);
 }
 
-$pageName = 'Πρόσκληση πολλών χρηστών';
+$toolName = $langCourseInviteMany;
 $navigation[] = ['url' => "{$urlAppend}modules/user/?course=$course_code", 'name' => $langUsers];
-$navigation[] = ['url' => "invite.php?course=$course_code", 'name' => 'Προσκλήσεις χρηστών στο μάθημα'];
+$navigation[] = ['url' => "invite.php?course=$course_code", 'name' => $langCourseUsersInvitation];
 
 $tool_content .= action_bar([
     [ 'title' => $langBack,
-      'url' => "user.php?course=$course_code",
+      'url' => "invite.php?course=$course_code",
       'icon' => 'fa-reply',
       'level' => 'primary-label' ],
     ]);
@@ -131,7 +131,7 @@ $tool_content .= "
                     <fieldset>
                         <div class='form-group'>
                             <div class='col-sm-12'>
-                                <p class='form-control-static'>Μπορείτε να αποστείλετε ένα αρχείο λογιστικού φύλλου (π.χ. xls, xlsx, csv) με μία ή τρείς στήλες. Η πρώτη στήλη πρέπει να περιέχει τα e-mail των χρηστών που επιθυμείτε να προσκαλέσετε στο μάθημα. Η δεύτερη και τρίτη στήλη μπορούν προαιρετικά να περιέχουν το επίθετο και όνομα κάθε χρήστη. Σημειώστε ότι χρήστες που υπάρχουν ήδη στην πλατφόρμα με το e-mail θα προστεθούν αμέσως στο μάθημα χωρίς να λάβουν πρόσκληση και χωρίς άλλη ειδοποίηση.</p>
+                                <p class='form-control-static'>$langCourseInvitationUsersExcelInfo</p>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -141,7 +141,7 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>Ημερομηνία λήξης:</label>
+                            <label class='col-sm-2 control-label'>$langExpirationDate:</label>
                             <div class='col-sm-10'>
                                 <div class='input-group'>
                                     <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='22-09-2027 16:59'>
@@ -154,21 +154,21 @@ $tool_content .= "
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input name='customEmailBody' id='customEmailBody' type='checkbox'> Προσαρμοσμένο κείμενο πρόσκλησης
+                                        <input name='customEmailBody' id='customEmailBody' type='checkbox'> $langCustomEmailBody
                                     </label>
                                 </div>
                             </div>
                         </div>
 
                         <div class='form-group emailsubject hidden'>
-                            <label for='email_subject' class='col-sm-2 control-label'>Θέμα μηνύματος</label>
+                            <label for='email_subject' class='col-sm-2 control-label'>$langTopic</label>
                             <div class='col-sm-10'>
                                     <input class='form-control' id='email_subject' name='email_subject' type='text' value='" . q($default_email_subject) . "'>
                             </div>
                         </div>
 
                         <div class='form-group emailbody hidden'>
-                            <label for='email_body' class='col-sm-2 control-label'>Κείμενο μηνύματος πρόσκλησης</label>
+                            <label for='email_body' class='col-sm-2 control-label'>$langBodyMessage</label>
                             <div class='col-sm-10'>" .
                                 rich_text_editor('emailNewBodyEditor', 4, 20, $default_email_body) . "
                             </div>
@@ -179,12 +179,7 @@ $tool_content .= "
                             <label for='email_body' class='col-sm-2 control-label'></label>
                             <div class='col-sm-10'>
                                 <div class='alert alert-info'>
-                                    <p>Placeholder μεταβλητών</p>
-                                    <br>
-                                    <ul>
-                                      <li>[email] : Διεύθυνση e-mail</li>
-                                      <li>[link] : Σύνδεσμος εγγραφής</li>
-                                    </ul>
+                                    $langInvitationCustomEmail
                                 </div>
                             </div>
                         </div>

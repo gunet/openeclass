@@ -42,12 +42,12 @@ if (isset($_POST['submit'])) {
             $course_user = Database::get()->querySingle('SELECT * FROM course_user
                 WHERE user_id = ?d AND course_id = ?d', $user->id, $course_id);
             if ($course_user) {
-                Session::Messages(sprintf('Ο χρήστης με e-mail <b>%s</b> ήταν ήδη εγγεγραμμένος στο μάθημά σας.', q($_POST['email_form'])), 'alert-info');
+                Session::Messages(sprintf("$langUserWithEmail <b>%s</b> $langAlreadyRegistered", q($_POST['email_form'])), 'alert-info');
             } else {
                 Database::get()->query('INSERT INTO course_user
                     SET user_id = ?d, course_id = ?d, status = ?d, reg_date = NOW(), document_timestamp = NOW()',
                     $user->id, $course_id, USER_STUDENT);
-                Session::Messages(sprintf('Ο χρήστης με e-mail <b>%s</b> (%s) είχε ήδη λογαριασμό στην πλατφόρμα και προστέθηκε στο μάθημά σας.',
+                Session::Messages(sprintf("$langUserWithEmail <b>%s</b> (%s) $langAlreadyAccount",
                     q($_POST['email_form']), q("{$user->surname} {$user->givenname}")), 'alert-info');
             }
             redirect_to_home_page('modules/user/invite_one.php?course=' . $course_code);
@@ -77,14 +77,14 @@ if (isset($_POST['submit'])) {
             $email_subject = $default_email_subject;
         }
         send_invitation($email, $token, $email_subject, $email_body);
-        Session::Messages('Η πρόσκληση στάλθηκε!', 'alert-success');
+        Session::Messages($langCourseInvitationSent, 'alert-success');
         redirect_to_home_page('modules/user/invite_one.php?course=' . $course_code);
     }
 }
 
-$pageName = 'Πρόσκληση χρήστη';
+$toolName = $langCourseInviteOne;
 $navigation[] = ['url' => "{$urlAppend}modules/user/?course=$course_code", 'name' => $langUsers];
-$navigation[] = ['url' => "invite.php?course=$course_code", 'name' => 'Προσκλήσεις χρηστών στο μάθημα'];
+$navigation[] = ['url' => "invite.php?course=$course_code", 'name' => $langCourseUsersInvitation];
 
 $tool_content .= action_bar([
     [ 'title' => $langBack,
@@ -111,7 +111,7 @@ $tool_content .= "
             <div class='col-sm-10'><input class='form-control' id='email_form' type='text' name='email_form' placeholder='user@example.com'></div>
           </div>
           <div class='form-group'>
-            <label class='col-sm-2 control-label'>Ημερομηνία λήξης:</label>
+            <label class='col-sm-2 control-label'>$langExpirationDate:</label>
             <div class='col-sm-10'>
               <div class='input-group'>
                 <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' value='22-09-2027 16:59'>
@@ -124,19 +124,19 @@ $tool_content .= "
             <div class='col-sm-10 col-sm-offset-2'>
               <div class='checkbox'>
                 <label>
-                  <input name='customEmailBody' id='customEmailBody' type='checkbox'> Προσαρμοσμένο κείμενο πρόσκλησης
+                  <input name='customEmailBody' id='customEmailBody' type='checkbox'> $langCustomEmailBody
                 </label>
               </div>
             </div>
           </div>
           <div class='form-group emailsubject hidden'>
-            <label for='email_subject' class='col-sm-2 control-label'>Θέμα μηνύματος</label>
+            <label for='email_subject' class='col-sm-2 control-label'>$langTopic</label>
             <div class='col-sm-10'>
                 <input class='form-control' id='email_subject' name='email_subject' type='text' value='" . q($default_email_subject) . "'>
             </div>
           </div>
           <div class='form-group emailbody hidden'>
-            <label for='email_body' class='col-sm-2 control-label'>Κείμενο μηνύματος πρόσκλησης</label>
+            <label for='email_body' class='col-sm-2 control-label'>$langBodyMessage</label>
             <div class='col-sm-10'>" .
               rich_text_editor('emailNewBodyEditor', 4, 20, $default_email_body) . "
             </div>
@@ -146,12 +146,7 @@ $tool_content .= "
             <label for='email_body' class='col-sm-2 control-label'></label>
             <div class='col-sm-10'>
               <div class='alert alert-info'>
-                <p>Placeholder μεταβλητών</p>
-                <br>
-                <ul>
-                 <li>[email] : Διεύθυνση e-mail</li>
-                 <li>[link] : Σύνδεσμος εγγραφής</li>
-                </ul>
+                $langInvitationCustomEmail
               </div>
             </div>
           </div>

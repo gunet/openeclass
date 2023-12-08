@@ -21,27 +21,22 @@
 
 require_once 'include/sendMail.inc.php';
 
-$default_email_subject = "Πρόσκληση εγγραφής στην πλατφόρμα τηλεκπαίδευσης eduspace.uoa.gr";
+$default_email_subject = $GLOBALS['langCourseInvitationSubject'] . "  " . $GLOBALS['siteName'];
 $default_email_body = "
         <!-- Header Section -->
         <div id='mail-header'>
             <div>
-                <div id='header-title'>
-                    Πρόσκληση εγγραφής στην πλατφόρμα τηλεκπαίδευσης eduspace.uoa.gr
-                </div>
+                <div id='header-title'>" .
+                    $GLOBALS['langCourseInvitationSubject'] . "  " . $GLOBALS['siteName']
+                . "</div>
             </div>
         </div>
         <!-- Body Section -->
         <div id='mail-body'>
             <div id='mail-body-inner'>
-                <p>
-                    Έχετε λάβει πρόσκληση εγγραφής στην πλατφόρμα τηλεκπαίδευσης eduspace.uoa.gr, προκειμένου να
-                    συμμετάσχετε στο μάθημα:
-                </p>
-                <p><strong>" . q($course_title) . "</strong>
-                <p>
-                    Για να προχωρήσετε στην εγγραφή, παρακαλούμε ακολουθήστε τον παρακάτω σύνδεσμο.
-                </p>
+                <p>" . $GLOBALS['langCourseInvitationBody1'] . "</p
+                <p><strong>" . q($GLOBALS['currentCourseName']) . "</strong>
+                <p>" . $GLOBALS['langCourseInvitationBody2'] . "</p>
                 <p style='text-align: center'>
                     [link]
                 </p>
@@ -66,9 +61,10 @@ $rich_text_editor_style =
     '#mail-footer-right { float: left; width: 90%; }' .
     'b.notice { color: #555; }';
 
-
 function send_invitation(string $email, string $token, string $email_subject = null, string $email_body = null) {
-    $course_title = q($GLOBALS['currentCourseName']);
+
+    global $default_email_subject, $default_email_body;
+
     $url = $GLOBALS['urlServer'] . 'main/invite.php?id=' . $token;
 
     if (!$email_subject) {

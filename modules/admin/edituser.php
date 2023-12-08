@@ -483,7 +483,6 @@ if ($u) {
         }
         $user->refresh(intval($u), $departments);
         user_hook($u);
-        var_dump($disable_course_registration);
         $qry = Database::get()->query("UPDATE user SET surname = ?s,
                                 givenname = ?s,
                                 username = ?s,
