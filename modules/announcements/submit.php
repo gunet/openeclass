@@ -85,6 +85,11 @@ if (isset($_POST['submitAnnouncement'])) {
                 $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
             $log_type = LOG_MODIFY;
             $message = $langAnnModify;
+            if (isset($_POST['tags'])) {
+                $tagsArray = $_POST['tags'];
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->syncTags($tagsArray);
+            }
         } else { // add new announcement
             $id = Database::get()->query("INSERT INTO announcement
                                              SET content = ?s,
@@ -95,11 +100,11 @@ if (isset($_POST['submitAnnouncement'])) {
                                                  visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
             $log_type = LOG_INSERT;
             $message = $langAnnAdd;
-        }
-        if (isset($_POST['tags'])) {
-            $tagsArray = $_POST['tags'];
-            $moduleTag = new ModuleElement($id);
-            $moduleTag->syncTags($tagsArray);
+            if (isset($_POST['tags'])) {
+                $tagsArray = $_POST['tags'];
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->syncTags($tagsArray);
+            }
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
