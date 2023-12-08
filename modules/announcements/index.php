@@ -192,6 +192,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     array('title' => $langEditChange,
                         'icon' => 'fa-edit',
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
+                    array('title' => $langCopy,
+                        'icon' => 'fa-copy',
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id&amp;copy_ann"),
                     array('title' => !$myrow->visible == '0' ? $langViewHide : $langViewShow,
                         'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
                         'icon-class' => 'vis_btn',
@@ -500,6 +503,7 @@ if ($is_editor) {
 
     /* submit */
     if (isset($_POST['submitAnnouncement'])) { // modify announcement
+
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('antitle'));
         $v->labels(array('antitle' => "$langTheField $langAnnTitle"));
@@ -534,27 +538,8 @@ if ($is_editor) {
                 $stop_display = null;
             }
 
-            if (!empty($_POST['id'])) {
-                $id = intval($_POST['id']);
-                Database::get()->query("UPDATE announcement
-                    SET content = ?s,
-                        title = ?s,
-                        `date` = " . DBHelper::timeAfter() . ",
-                        start_display = ?t,
-                        stop_display = ?t,
-                        visible = ?d
-                    WHERE id = ?d",
-                    $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
-                $log_type = LOG_MODIFY;
-                $message = "<div class='alert alert-success'>$langAnnModify</div>";
-                if (isset($_POST['tags'])) {
-                    $tagsArray = $_POST['tags'];
-                    $moduleTag = new ModuleElement($id);
-                    $moduleTag->syncTags($tagsArray);
-                }
-            } else { // add new announcement
-
-                // insert
+            if (isset($_POST['copy_ann'])) {
+                // insert the copy
                 $id = Database::get()->query("INSERT INTO announcement
                                              SET content = ?s,
                                                  title = ?s, `date` = " . DBHelper::timeAfter() . ",
@@ -567,7 +552,45 @@ if ($is_editor) {
                     $moduleTag = new ModuleElement($id);
                     $moduleTag->attachTags($_POST['tags']);
                 }
+            } else {
+
+                if (!empty($_POST['id'])) {
+                    $id = intval($_POST['id']);
+                    Database::get()->query("UPDATE announcement
+                    SET content = ?s,
+                        title = ?s,
+                        `date` = " . DBHelper::timeAfter() . ",
+                        start_display = ?t,
+                        stop_display = ?t,
+                        visible = ?d
+                    WHERE id = ?d",
+                        $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
+                    $log_type = LOG_MODIFY;
+                    $message = "<div class='alert alert-success'>$langAnnModify</div>";
+                    if (isset($_POST['tags'])) {
+                        $tagsArray = $_POST['tags'];
+                        $moduleTag = new ModuleElement($id);
+                        $moduleTag->syncTags($tagsArray);
+                    }
+                } else { // add new announcement
+
+                    // insert
+                    $id = Database::get()->query("INSERT INTO announcement
+                                             SET content = ?s,
+                                                 title = ?s, `date` = " . DBHelper::timeAfter() . ",
+                                                 course_id = ?d, `order` = 0,
+                                                 start_display = ?t,
+                                                 stop_display = ?t,
+                                                 visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
+                    $log_type = LOG_INSERT;
+                    if (isset($_POST['tags'])) {
+                        $moduleTag = new ModuleElement($id);
+                        $moduleTag->attachTags($_POST['tags']);
+                    }
+                }
+
             }
+
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
             Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type, array('id' => $id,
@@ -742,6 +765,7 @@ if ($is_editor) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
         $tool_content .= "<div class='form-wrapper'>";
+
         $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."'>
         <fieldset>
         <div class='form-group".($antitle_error ? " has-error" : "")."'>
@@ -830,7 +854,11 @@ if ($is_editor) {
             ))."</div>
         <input type='hidden' name='id' value='$AnnouncementToModify'>
         </div>
-        </fieldset>
+        ";
+        if (isset($_GET['copy_ann'])) {
+            $tool_content .= "<input type='hidden' name='copy_ann'>";
+        }
+        $tool_content .= "</fieldset>
         </form>
         </div>";
     }
