@@ -245,7 +245,7 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
             $('#ann_table{$course_id}').on('change', 'input[type=checkbox]', function() {
                 let cbid = $(this).attr('cbid');
                 checkboxStates[cbid] = this.checked;
-    
+
                 let selectedCbidValues = $('#selectedcbids').val().split(',');
                 let cbidIndex = selectedCbidValues.indexOf(cbid.toString());
                 if (this.checked && cbidIndex === -1) {
@@ -254,22 +254,22 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     selectedCbidValues.splice(cbidIndex, 1);
                 }
                 $('#selectedcbids').val(selectedCbidValues.filter(Boolean).join(','));
-    
+
             });
-            
+
             $('li.bulk-processing a').on('click', function(event) {
                 event.preventDefault();
                 $('.dataTables_wrapper').toggleClass('checkboxes-on');
                 $('.td-bulk-select').toggleClass('hide');
                 $('.bulk-processing-box').toggleClass('hide');
-    
+
                 if ($(this).find('span.fa.fa-check').length) {
                     $(this).find('span.fa.fa-check').remove();
                 } else {
                     $(this).append('<span class=\'fa fa-check text-success\' style=\'margin-left: 5px;\'></span>');
                 }
             });
-                
+
             function restoreCheckboxStates() {
                 $('#ann_table{$course_id} tbody tr').each(function(index) {
                     let checkbox = $(this).find('input[type=checkbox]');
@@ -281,13 +281,13 @@ if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_
                     }
                 });
             }
-            
+
             function checkCheckboxes() {
                 if ($('.dataTables_wrapper').hasClass('checkboxes-on')) {
                     $('.td-bulk-select').removeClass('hide');
                 }
             }
-            
+
            var oTable = $('#ann_table{$course_id}').DataTable ({
                 ".(($is_editor)?"'aoColumnDefs':[
                 {'sClass':'option-btn-cell', 'aTargets':[-1]},
@@ -538,25 +538,9 @@ if ($is_editor) {
                 $stop_display = null;
             }
 
-            if (isset($_POST['copy_ann'])) {
-                // insert the copy
-                $id = Database::get()->query("INSERT INTO announcement
-                                             SET content = ?s,
-                                                 title = ?s, `date` = " . DBHelper::timeAfter() . ",
-                                                 course_id = ?d, `order` = 0,
-                                                 start_display = ?t,
-                                                 stop_display = ?t,
-                                                 visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
-                $log_type = LOG_INSERT;
-                if (isset($_POST['tags'])) {
-                    $moduleTag = new ModuleElement($id);
-                    $moduleTag->attachTags($_POST['tags']);
-                }
-            } else {
-
-                if (!empty($_POST['id'])) {
-                    $id = intval($_POST['id']);
-                    Database::get()->query("UPDATE announcement
+            if (isset($_POST['id']) and !isset($_POST['copy_ann'])) { // modify existing announcement
+                $id = intval($_POST['id']);
+                Database::get()->query("UPDATE announcement
                     SET content = ?s,
                         title = ?s,
                         `date` = " . DBHelper::timeAfter() . ",
@@ -564,31 +548,26 @@ if ($is_editor) {
                         stop_display = ?t,
                         visible = ?d
                     WHERE id = ?d",
-                        $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
-                    $log_type = LOG_MODIFY;
-                    $message = "<div class='alert alert-success'>$langAnnModify</div>";
-                    if (isset($_POST['tags'])) {
-                        $tagsArray = $_POST['tags'];
-                        $moduleTag = new ModuleElement($id);
-                        $moduleTag->syncTags($tagsArray);
-                    }
-                } else { // add new announcement
-
-                    // insert
-                    $id = Database::get()->query("INSERT INTO announcement
-                                             SET content = ?s,
-                                                 title = ?s, `date` = " . DBHelper::timeAfter() . ",
-                                                 course_id = ?d, `order` = 0,
-                                                 start_display = ?t,
-                                                 stop_display = ?t,
-                                                 visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
-                    $log_type = LOG_INSERT;
-                    if (isset($_POST['tags'])) {
-                        $moduleTag = new ModuleElement($id);
-                        $moduleTag->attachTags($_POST['tags']);
-                    }
+                    $newContent, $antitle, $start_display, $stop_display, $is_visible, $id);
+                $log_type = LOG_MODIFY;
+                $message = "<div class='alert alert-success'>$langAnnModify</div>";
+                if (isset($_POST['tags'])) {
+                    $moduleTag = new ModuleElement($id);
+                    $moduleTag->syncTags($_POST['tags']);
                 }
-
+            } else { // add new announcement
+                $id = Database::get()->query("INSERT INTO announcement
+                    SET content = ?s,
+                        title = ?s, `date` = " . DBHelper::timeAfter() . ",
+                        course_id = ?d, `order` = 0,
+                        start_display = ?t,
+                        stop_display = ?t,
+                        visible = ?d", $newContent, $antitle, $course_id, $start_display, $stop_display, $is_visible)->lastInsertID;
+                $log_type = LOG_INSERT;
+                if (isset($_POST['tags'])) {
+                    $moduleTag = new ModuleElement($id);
+                    $moduleTag->attachTags($_POST['tags']);
+                }
             }
 
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
