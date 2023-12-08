@@ -72,7 +72,7 @@ if (isset($_POST['submitAnnouncement'])) {
             $stop_display = null;
         }
 
-        if (!empty($_POST['id'])) {
+        if (isset($_POST['id']) and !isset($_POST['copy_ann'])) { // modify existing announcement
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement
                     SET content = ?s,
