@@ -57,7 +57,7 @@ if (!isset($_GET['pdf'])) {
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;xls=true;",
             'icon' => 'fa-download',
             'level' => 'primary-label')
-        
+
     ), false);
 }
 
@@ -91,36 +91,31 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 $moduleList = Database::get()->queryArray($sql, $_REQUEST['uInfo'], $_REQUEST['path_id'], $course_id);
 
 $maxAttempt = 1;
-$extendedList = array();
-$modar = array();
+$elementList = [];
 foreach ($moduleList as $module) {
-    $modar['identity'] = $module->learnPath_module_id . "." . $module->attempt; // because we need to group per attempt
-    $modar['learnPath_module_id'] = $module->learnPath_module_id;
-    $modar['parent'] = $module->parent;
-    $modar['lock'] = $module->lock;
-    $modar['module_id'] = $module->module_id;
-    $modar['contentType'] = $module->contentType;
-    $modar['name'] = $module->name;
-    $modar['lesson_status'] = $module->lesson_status;
-    $modar['raw'] = $module->raw;
-    $modar['scoreMax'] = $module->scoreMax;
-    $modar['credit'] = $module->credit;
-    $modar['session_time'] = $module->session_time;
-    $modar['total_time'] = $module->total_time;
-    $modar['attempt'] = $module->attempt;
-    $modar['started'] = $module->started;
-    $modar['accessed'] = $module->accessed;
-    $modar['path'] = $module->path;
-    $extendedList[] = $modar;
+    $moduleElement = [
+        'identity' => $module->learnPath_module_id . '.' . $module->attempt, // because we need to group per attempt
+        'learnPath_module_id' => $module->learnPath_module_id,
+        'parent' => $module->parent,
+        'lock' => $module->lock,
+        'module_id' => $module->module_id,
+        'contentType' => $module->contentType,
+        'name' => $module->name,
+        'lesson_status' => $module->lesson_status,
+        'raw' => $module->raw,
+        'scoreMax' => $module->scoreMax,
+        'credit' => $module->credit,
+        'session_time' => $module->session_time,
+        'total_time' => $module->total_time,
+        'attempt' => $module->attempt,
+        'started' => $module->started,
+        'accessed' => $module->accessed,
+        'path' => $module->path];
+    $elementList[] = $moduleElement;
     if ($module->attempt > $maxAttempt) {
         $maxAttempt = $module->attempt;
     }
 }
-
-// build the array of modules
-// build_element_list return a multi-level array, where children is an array with all nested modules
-// build_display_element_list return an 1-level array where children is the deep of the module
-$flatElementList = build_display_element_list(build_element_list($extendedList, 'parent', 'identity'));
 
 $moduleNbT = 0;
 $globalProg = $global_time = array();
@@ -129,13 +124,7 @@ for ($i = 1; $i <= $maxAttempt; $i++) {
     $global_time[$i] = "0000:00:00";
 }
 
-// look for maxDeep
-$maxDeep = 1; // used to compute colspan of <td> cells
-for ($i = 0; $i < sizeof($flatElementList); $i++) {
-    if ($flatElementList[$i]['children'] > $maxDeep) {
-        $maxDeep = $flatElementList[$i]['children'];
-    }
-}
+$maxDeep = 1; // used to compute colspan of <td> cells - only single level depth of modules currently used
 
 $toolName = uid_to_name($_REQUEST['uInfo']) . ": " . $LPname;
 $tool_content .= "<div class='table-responsive'>
@@ -158,7 +147,9 @@ $data[] = [ $langLearningObjects, $langAttempt, $langAttemptStarted, $langAttemp
 
 
 // ---------------- display list of elements ------------------------
-foreach ($flatElementList as $module) {
+
+$totalTime = "0000:00:00";
+foreach ($elementList as $module) {
     if ($module['scoreMax'] > 0) {
         $progress = @round($module['raw'] / $module['scoreMax'] * 100);
     } else {
@@ -175,10 +166,7 @@ foreach ($flatElementList as $module) {
 
     // display the current module name
     $spacingString = '';
-    for ($i = 0; $i < $module['children']; $i++) {
-        $spacingString .= '<td width="5">&nbsp;</td>';
-    }
-    $colspan = $maxDeep - $module['children'] + 1;
+    $colspan = $maxDeep + 1;
 
     $tool_content .= '<tr>' . $spacingString . '<td colspan="' . $colspan . '">';
 
@@ -229,14 +217,9 @@ foreach ($flatElementList as $module) {
             $total_time = "-";
         }
     }
-    //-- session_time
     $tool_content .= "<td>$session_time</td>";
-    //-- total_time
     $tool_content .= "<td>$total_time</td>";
-    //-- status
-    $tool_content .= "<td>";
-    $tool_content .= disp_lesson_status($module['lesson_status']);
-    $tool_content .= "</td>";
+    $tool_content .= "<td>" . disp_lesson_status($module['lesson_status']) . "</td>";
     //-- progression
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
