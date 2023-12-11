@@ -135,8 +135,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_users;
     $data['aaData'] = array();
     foreach ($result as $myrow) {
-        $full_name = sanitize_utf8($myrow->givenname . " " . $myrow->surname);
-        $am_message = sanitize_utf8(empty($myrow->am) ? '' : ("<div class='right'>" . q($myrow->am) . "</div>"));
+        $full_name = q(sanitize_utf8($myrow->givenname . " " . $myrow->surname));
+        $am = q(sanitize_utf8(trim($myrow->am)));
+        $am_message = ($am !== '') ? "<div class='right'>$am</div>": '';
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/userduration.php?course=$course_code&amp;u=$myrow->id");
         //create date field with unregister button
         $date_field = $myrow->reg_date ? format_locale_date(strtotime($myrow->reg_date), 'short', false) : $langUnknownDate;
@@ -231,7 +232,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                             </div>
                             <div class='pull-left'>
                                 <div style='padding-bottom:2px;'>".display_user($myrow->id, false, false, '', $course_code)."</div>
-                                <div><small><a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>$email_exclamation_icon</small></div>
+                                <div><small><a href='mailto:" . q($myrow->email) . "'>" . q($myrow->email) . "</a>$email_exclamation_icon</small></div>
                                 <div class='text-muted'><small>$am_message</small></div>
                             </div>
                         </div>";
