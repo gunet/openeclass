@@ -928,7 +928,7 @@ function build_element_list($list, $parentField, $idField, $id = 0) {
 
     if (is_array($list)) {
         foreach ($list as $element) {
-            if ($element[$idField] == $id) {
+            if ($element[$idField] === $id) {
                 $tree = $element; // keep all $list informations in the returned array
                 // explicitly add 'name' and 'value' for the build_nested_select_menu function
                 //$tree['name'] = $element['name']; // useless since 'name' is the same word in db and in the  build_nested_select_menu function
@@ -938,7 +938,7 @@ function build_element_list($list, $parentField, $idField, $id = 0) {
         }
 
         foreach ($list as $element) {
-            if ($element[$parentField] == $id && ( $element[$parentField] != $element[$idField] )) {
+            if ($element[$parentField] === $id && ( $element[$parentField] !== $element[$idField] )) {
                 if ($id == 0) {
                     $tree[] = build_element_list($list, $parentField, $idField, $element[$idField]);
                 } else {
