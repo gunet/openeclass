@@ -22,7 +22,8 @@
 
 
 require_once 'bbb-api.php';
-
+require_once('modules/tc/Zoom/Service.php');
+require_once('modules/tc/Zoom/Repository.php');
 
 
 /**
@@ -846,6 +847,10 @@ function add_update_tc_session($tc_type, $title, $desc, $start_session, $BBBEndD
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo ,
         $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin,
         $langDescription, $course_code, $course_id, $urlServer;
+
+    $zoomRepo = new \modules\tc\Zoom\Repository();
+    $zoomService = new \modules\tc\Zoom\Service($zoomRepo);
+    $zoomService->call();
 
     // Groups of participants per session
     $r_group = '';
