@@ -1369,6 +1369,13 @@ function shib_cas_login($type) {
             $status = $options['status'];
             $_SESSION['auth_user_info']['studentid'] = $am = $options['am'];
 
+            if (!$surname and $info->surname !== '') {
+                $_SESSION['auth_user_info']['surname'] = $_SESSION['cas_surname'] = $surname = $info->surname;
+            }
+            if (!$givenname and $info->givenname !== '') {
+                $_SESSION['auth_user_info']['givenname'] = $_SESSION['cas_givenname'] = $givenname = $info->givenname;
+            }
+
             // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
                                            status = ?d, verified_mail = ?d WHERE id = ?d",
