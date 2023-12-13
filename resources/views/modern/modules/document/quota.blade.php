@@ -74,29 +74,34 @@
                         
 
                         <div class='col-12'>
-                            <div class='form-wrapper form-edit borderLg mt-2 rounded'>
-                                <form class='form-horizontal' role='form'>
-                                    <div class='form-group'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaUsed') }}</label>
-                                        <div class='col-sm-8'>
-                                            <p class='form-control-static'>{!! $used !!}</p>
+                            <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                    <h3>{{ trans('langQuotaBar') }}</h3>
+                                </div>
+                                <div class='card-body'>
+                                    <form class='form-horizontal' role='form'>
+                                        <div class='form-group'>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaUsed') }}</label>
+                                            <div class='col-sm-8'>
+                                                <p class='form-control-static'>{!! $used !!}</p>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaPercentage') }}</label>
-                                        <div class='col-sm-9'>
-                                            <div role='progressbar' aria-valuenow={{$diskUsedPercentage}} aria-valuemin='0' aria-valuemax='100' style='--value: {{$diskUsedPercentage}}; --size: 6rem;'></div>
+                                        <div class='form-group mt-4'>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaPercentage') }}</label>
+                                            <div class='col-sm-9'>
+                                                <div role='progressbar' aria-valuenow={{$diskUsedPercentage}} aria-valuemin='0' aria-valuemax='100' style='--value: {{$diskUsedPercentage}}; --size: 6rem;'></div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div class='form-group mt-4'>
-                                        <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaTotal') }}</label>
-                                        <div class='col-sm-8'>
-                                            <p class='form-control-static'>{!! $quota !!}</p>
-                                        </div>
-                                    </div>  
-                                </form>
+                                        <div class='form-group mt-4'>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langQuotaTotal') }}</label>
+                                            <div class='col-sm-8'>
+                                                <p class='form-control-static'>{!! $quota !!}</p>
+                                            </div>
+                                        </div>  
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         

@@ -96,7 +96,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $langGoToGoogleMeetLinkText, $langLink, $langGoToGoogleMeetLink,
         $langGoToMicrosoftTeamsLink, $langGoToMicrosoftTeamsLinkText,
         $langGoToZoomLink, $langGoToZoomLinkText, $langGoToWebexLinkText,
-        $langGoToWebexLink, $urlServer;
+        $langGoToWebexLink, $urlServer, $urlAppend;
 
     $BBBEndDate = Session::has('BBBEndDate') ? Session::get('BBBEndDate') : "";
     $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($BBBEndDate ? 1 : 0);
@@ -296,19 +296,19 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='desc' class='col-sm-6 control-label-notes'>$langUnitDescr</label>
+            <label for='desc' class='col-sm-12 control-label-notes'>$langUnitDescr</label>
             <div class='col-sm-12'>
                 $textarea
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='start_session' class='col-sm-6 control-label-notes'>$langStart</label>
+            <label for='start_session' class='col-sm-12 control-label-notes'>$langStart</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='text' name='start_session' id='start_session' value='$start_session'>
             </div>
         </div>";
         $tool_content .= "<div class='input-append date form-group".(Session::getError('BBBEndDate') ? " has-error" : "")." mt-4' id='enddatepicker' data-date='$BBBEndDate' data-date-format='dd-mm-yyyy'>
-            <label for='BBBEndDate' class='col-sm-6 control-label-notes'>$langEnd</label>
+            <label for='BBBEndDate' class='col-sm-12 control-label-notes'>$langEnd</label>
             <div class='col-sm-12'>
                 <div class='input-group'>
                     <span class='input-group-addon'>
@@ -325,7 +325,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $en_recordings = has_enable_recordings($server_id);
         if ($en_recordings == 'true') {
             $tool_content .= "<div class='form-group mt-4'>
-                <label for='group_button' class='col-sm-6 control-label-notes mb-2'>$langBBBRecord</label>
+                <label for='group_button' class='col-sm-12 control-label-notes mb-2'>$langBBBRecord</label>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -343,7 +343,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>";
         }
         $tool_content .= "<div class='form-group mt-4'>
-            <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langNewBBBSessionStatus:</label>
+            <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -358,7 +358,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>
         <div class='form-group mt-4'>
-        <label for='active_button' class='col-sm-6 control-label-notes mb-2'>$langAnnouncements</label>
+        <label for='active_button' class='col-sm-12 control-label-notes mb-2'>$langAnnouncements</label>
             <div class='col-sm-12'>
                      <div class='checkbox'>
                      <label class='label-container'>
@@ -368,13 +368,13 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='minutes_before' class='col-sm-6 control-label-notes'>$langBBBSessionAvailable</label>
+            <label for='minutes_before' class='col-sm-12 control-label-notes'>$langBBBSessionAvailable</label>
             <div class='col-sm-12'>" . selection(array(10 => '10', 15 => '15', 30 => '30'), 'minutes_before', $unlock_interval, "id='minutes_before'") . "
                 $langBBBMinutesBefore
             </div>
         </div>
         <div class='form-group mt-4'>
-            <label for='sessionUsers' class='col-sm-6 control-label-notes'>$langBBBSessionMaxUsers</label>
+            <label for='sessionUsers' class='col-sm-12 control-label-notes'>$langBBBSessionMaxUsers</label>
             <div class='col-sm-12'>
                 <input class='form-control' type='number' min='1' pattern='\d+' name='sessionUsers' id='sessionUsers' value='$value_session_users'>";
         if ($tc_type == 'bbb') {
@@ -392,7 +392,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
             </div>
         </div>";
         $tool_content .= "<div class='form-group mt-4'>
-                <label for='select-groups' class='col-sm-6 control-label-notes'>$langParticipants</label>
+                <label for='select-groups' class='col-sm-12 control-label-notes'>$langParticipants</label>
                 <div class='col-sm-12'>
                 <select name='groups[]' multiple='multiple' class='form-select' id='select-groups'>";
 
@@ -453,8 +453,8 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         </div>
     
         <div class='form-group mt-4'>
-            <label for='user-list' class='col-sm-2 control-label'>$langBBBExternalUsers:</label>
-            <div class='col-sm-10'>
+            <label for='user-list' class='col-sm-12 control-label'-notes>$langBBBExternalUsers:</label>
+            <div class='col-sm-12'>
                 <table id='user-list' class='table'>
                     <thead>
                         <tr>
@@ -479,28 +479,28 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         <div class='form-group mt-4'>
             <div class='col-sm-2'></div>
             
-            <div class='col-sm-10'>
+            <div class='col-sm-12'>
                 <div class='form-group mt-4'>
-                    <div class='col-sm-2'>
-                        <label for='newExtEmail' class='control-label'>$langProfEmail:</label>
+                    <div class='col-sm-12'>
+                        <label for='newExtEmail' class='control-label-notes'>$langProfEmail:</label>
                     </div>
                     
-                    <div class='col-sm-4'>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' name='newExtEmail' id='newExtEmail' size='10'>
                     </div>
                 </div>
                 
                 <div class='form-group mt-4'>
-                    <div class='col-sm-2'>
-                        <label for='newExtName' class='control-label'>$langSurnameName:</label>
+                    <div class='col-sm-12'>
+                        <label for='newExtName' class='control-label-notes'>$langSurnameName:</label>
                     </div>
-                    <div class='col-sm-4'>
+                    <div class='col-sm-12'>
                         <input class='form-control' type='text' name='newExtName' id='newExtName' size='10'>
                     </div>
                 </div>
             
                 <div class='form-group mt-4'>
-                    <div class='col-sm-10'>
+                    <div class='col-sm-6'>
                         <div class='btn btn-primary newExtUserAdd'>
     $langInsertUserInfo
                         </div>
@@ -615,14 +615,17 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
     $tool_content .= "
         $submit_id
-        <div class='form-group'>
+        <div class='form-group mt-5'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='$submit_name' value='$value_message'>
             </div>
         </div>
         </fieldset>
          ". generate_csrf_token_form_field() ."
-        </form></div>";
+        </form></div></div>
+        <div class='d-none d-lg-block'>
+                    <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+                </div></div>";
     $tool_content .= "<script type='text/javascript'>
         //<![CDATA[
             var chkValidator  = new Validator('sessionForm');

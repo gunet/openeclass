@@ -953,7 +953,8 @@ a:hover{
 }
 
 #bgr-cheat-footer {
-  background-color: #F7F9FE;
+  /* background-color: #F7F9FE; */
+  background-color: #ffffff;
   color: #fff;
   font-size: 14px;
   width:auto;
@@ -971,7 +972,8 @@ a:hover{
     height: 80px; 
   } 
   .footer-container{
-    background-color: #F7F9FE;
+    /* background-color: #F7F9FE; */
+    background-color: transparent;
     padding: 32px 18px 32px 18px;
   }
 }
@@ -4465,6 +4467,11 @@ div[role="progressbar"]::before {
   width:100%;
 }
 
+.bodyChat{
+  background-color: transparent;
+  border: solid 1px #B4BED1;
+}
+
 .bodyChat::-webkit-scrollbar {
   width: 20px;
 }
@@ -4896,19 +4903,6 @@ div[role="progressbar"]::before {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 @media (max-width:991px){
 
   #bgr-cheat-header{ 
@@ -4946,17 +4940,6 @@ div[role="progressbar"]::before {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5073,3 +5056,303 @@ div[role="progressbar"]::before {
   width:auto;
 }
 
+
+
+
+
+
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/********************** NEW OPTIONS OF CLASSES AFTER CHANGING BACKGROUND-COLOR IN MODULES *****************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+/**********************************************************************************************************************/
+
+
+
+/************************************************* TEMP CLASSES *******************************************************/
+
+.border-card {
+  border: solid 1px #EFF6FF;
+}
+
+.border-default-card{
+  border: solid 1px #EFF6FF;
+}
+
+.statistics-card{
+  border: solid 1px #B3D1FF;
+}
+@media (min-width: 992px){
+  .BorderSolidDes {
+      border: solid 1px #EFF6FF;
+      filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+  }
+}
+
+.border-bottom-table-head {
+  border-bottom: solid 2px #0073E6;
+  background-color: #ffffff;
+}
+
+
+/**************************************************** FORMS ***********************************************************/
+
+.form-wrapper.form-edit.borderLg{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/*************************************************** PANELS ***********************************************************/
+
+.panel-admin-calendar{
+  border: solid 1px #EFF6FF;
+}
+.panel-admin-calendar .panel-heading,#cal-header{
+  background: #2B3944;
+  color:#ffffff;
+}
+.panel-admin-calendar .panel-heading .panel-title{
+  color:#ffffff;
+}
+.panel-admin-calendar>.panel-body-calendar{
+  background-color: #ffffff;
+}
+
+.panel-admin-calendar>.panel-footer{
+  background-color: transparent;
+}
+
+/**************************************************** TABLES **********************************************************/
+
+thead{
+  background-color: #ffffff;
+  min-height: 40px;
+}
+
+.table-default thead tr th,
+.announcements_table thead tr th,
+table.dataTable thead tr th,
+.table-default thead tr td,
+.announcements_table thead tr td,
+table.dataTablethead tr td{
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+thead, tbody .list-header {
+  border-bottom: solid 2px #0073E6;
+}
+
+
+.table-default tbody tr td,
+.announcements_table tbody tr td,
+table.dataTable tbody tr td,
+.table-default tbody tr th,
+.announcements_table tbody tr th,
+table.dataTable tbody tr th{
+  background-color: #ffffff;
+}
+
+.table-default tbody .warning td{
+  background-color: #FFF4D1;
+}
+
+.table-default tbody .danger td{
+  background-color: #FDEFE9;
+}
+
+
+/************************************************* COURSEHOME *********************************************************/
+
+.list-group-announce-homepage{
+  background-color: transparent;
+}
+
+/************************************************* GROUPS *************************************************************/
+
+.panelCard{
+  background-color: #ffffff !important;
+  border: solid 1px #EFF6FF;
+}
+
+.panelCard .card-header{
+  background-color: #ffffff !important;
+}
+
+.panelCard .card-body{
+  background-color: #ffffff !important;
+}
+
+.panelCard .card-footer{
+  background-color: #ffffff !important;
+}
+
+.panelCardDefault{
+  background-color: transparent !important;
+}
+
+.panelCardDefault .card-header-default{
+  background-color: transparent !important;
+}
+
+.panelCardDefault .card-body-default{
+  background-color: transparent !important;
+}
+
+.panelCardDefault .card-footer-default{
+  background-color: transparent !important;
+}
+
+.panelCard.border-card-left-default{
+  border-left: solid 7px #EFF6FF;
+}
+
+
+/****************************************** AUTH REGISTER COURSES *****************************************************/
+
+.list-group-item.list-header{  
+  color: #2b3944; 
+}
+
+.openCoursesFormWrapper, .borderLg{
+  background-color: transparent !important;
+  border: solid 1px #E8F2E7 !important;
+}
+
+
+/************************************************** ANNOUNCEMENTS *****************************************************/
+
+.title1{ 
+  background-color: #ffffff; 
+}
+
+/*************************************************** NOTES ************************************************************/
+
+.control-label-notes{ 
+  color: #2b3944; 
+}
+
+/*************************************************** ASSIGNMENTS ******************************************************/
+
+.margin-bottom-thin.Success-100-bg strong,
+.sub_title1.Warning-100-bg{
+  color: #2b3944;
+  font-weight: 700;
+}
+.container-fluid.form-group{
+  border: solid 1px #ffffff !important;
+  background-color: #ffffff;
+}
+
+/*************************************************** DOCUMENTS ********************************************************/
+
+.metadataCourseCollapseBtn,
+.metadataCourseCollapseBtn:hover,
+.metadataCourseCollapseBtn:focus{
+  color: #ffffff;
+}
+
+
+.visibleFile{ 
+  color: #2B3944; 
+}
+
+.docPanel{ 
+  padding: 0px ;
+  background-color: transparent !important;
+}
+
+
+/*************************************************** WALL *************************************************************/
+
+.wallWrapper{
+  background-clip: border-box !important; border: 1px solid #EFF6FF !important ; background-color: #ffffff !important;
+}
+
+/*************************************************** EXERCISE *********************************************************/
+
+.table-exercise td, .table-exercise th{
+  background-color: #ffffff;
+}
+
+/*************************************************** WORK *******************************************************/
+
+.moreFiles .fa::before{
+  color: #ffffff !important;
+}
+
+
+/*************************************************** H5P **************************************************************/
+
+.bs-placeholder:hover .filter-option .filter-option-inner-inner{
+  color: #ffffff;
+}
+
+.optgroup-1 .text{
+  color: #2b3944;
+}
+
+
+/*************************************************** USAGE **************************************************************/
+
+.last-visit-li{
+  color: #2b3944;
+}
+
+/*************************************************** ABOUT **************************************************************/
+
+.list-about{
+  color: #2b3944;
+}
+
+/**************************************** QUESTIONNAIER **************************************************************/
+
+.questionnaire-panel{
+  background-color: #ffffff !important;
+}
+
+/**************************************** OTHER CLASSES **************************************************************/
+
+#collapse-left-menu-icon path{
+  fill: #2b3944 !important;
+}
+
+/* left menu and main content */
+.col_maincontent_active{
+  background-color: #F7F9FE;
+}
+@media(min-width:992px){
+  .col_maincontent_active{
+    border-left: solid 1px #E8EDF8;
+  }
+}
+.col_maincontent_active .form-wrapper.form-edit{
+  background-color: transparent;
+}
+
+.col_maincontent_active .form-wrapper.form-edit.borderLg{
+  background-color: #ffffff !important;
+}
+
+.ContentLeftNav {
+  background: #ffffff;
+}
+
+@media(max-width:991px){
+  .module-container{
+    background-color: #F7F9FE;
+  }
+}
+
+.alert-info a{
+  color: #84bef7;
+  text-decoration: underline;
+}

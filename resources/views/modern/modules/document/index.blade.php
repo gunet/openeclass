@@ -93,11 +93,11 @@
 
                     @if (count($fileInfo) or $curDirName)
 
-                        <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif'>
-                            <div class='panel smallRadius'>
-                                <div class='panel-body docPanel smallRadius @if(isset($course_code) and $course_code) bg-light @else bg-default @endif px-3'>
-                                    <div class='row'>
-                                        <div class='col-9 d-flex justify-content-start align-items-center flex-wrap'>
+                        <div class='col-12  @if($dialogBox or $metaDataBox) mt-4 @endif @if(isset($course_code) and $course_code) bg-transparent @else bg-default @endif'>
+                            
+                                
+                                    <div class='d-flex justify-content-between gap-5'>
+                                        <div class='d-flex justify-content-start align-items-center flex-wrap'>
                                             {!! make_clickable_path($curDirPath) !!}
                                             @if ($downloadPath)
                                                 &nbsp;&nbsp;{!! icon('fa-download', trans('langDownloadDir'), $downloadPath) !!}
@@ -106,7 +106,7 @@
                                                 {{ $dirComment }}
                                             @endif
                                         </div>
-                                        <div class='col-3 d-flex justify-content-end align-items-center flex-wrap'>
+                                        <div>
                                             @if ($curDirName)
                                                 <a href='{{$parentLink}}' type='button' class='btn submitAdminBtn'>
                                                     <span class='fa fa-level-up'></span><span class='hidden-xs TextBold'>{{ trans('langUp') }}</span>
@@ -114,8 +114,8 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                
+                            
                         </div>
 
 

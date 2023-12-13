@@ -94,6 +94,7 @@
   
   .border-bottom-table-head{
     border-bottom: solid 2px #74AFE9;
+    background-color: transparent;
   }
     
   .input-bg-color{
@@ -1539,6 +1540,22 @@
     
   }
 
+
+
+  thead{
+    background-color: #212D37;
+    min-height: 40px;
+  }
+
+  .table-default tbody tr td,
+  .announcements_table tbody tr td,
+  table.dataTable tbody tr td,
+  .table-default tbody tr th,
+  .announcements_table tbody tr th,
+  table.dataTable tbody tr th{
+    background-color: #212D37;
+  }
+
   th,td{
     color: #ffffff;
   }
@@ -1568,6 +1585,8 @@
   tr.danger{
     background-color: #FDEFE9;
   }
+
+
 
 /* -------------------------------------------- ALL DATATABLES FROM OVERRIDE FILE  -----------------------------------------------------------------------------------*/
 /*-------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -2281,6 +2300,10 @@ tr.warning:hover{
   background-color: #000000 !important;
 } */
 
+.form-default{
+  border: solid 1px #4F6893 !important;
+}
+
 /**********************************************************************************************************************/
 /*************************************************** USAGE **************************************************************/
 /**********************************************************************************************************************/
@@ -2565,7 +2588,7 @@ tr.warning:hover{
   background: #e8e8e8;
 }
 .myCalendarEvents .fc-head-container.fc-widget-header .fc-day-header span{
-  color:#003e87;
+  color:#ffffff;
 }
 .myCalendarEvents .fc-widget-content table tbody td{
   border: solid 1px #f5f4f4 ;
@@ -2725,7 +2748,9 @@ tr.warning:hover{
     text-decoration: underline;
   }
 
-
+  .col_maincontent_active .form-wrapper.form-edit.borderLg{
+    background-color: #212D37 !important;
+  }
 
 
   

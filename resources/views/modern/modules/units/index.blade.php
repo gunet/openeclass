@@ -706,11 +706,11 @@
 
                     @if(count($units) > 0)
                         <div class='col-12 mt-4'>
-                            <div class='card panelCard px-lg-4 py-lg-3 p-3'>
-                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center px-0 py-0'>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3 class='mb-0'>{{ trans('langUnits')}}</h3>
                                 </div>
-                                <div class='card-body px-0'>
+                                <div class='card-body'>
                                     <div id='UnitsControls' class='carousel slide' data-bs-ride='carousel'>
 
                                         <div class='carousel-indicators h-auto mb-1'>

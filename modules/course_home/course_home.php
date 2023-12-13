@@ -985,7 +985,7 @@ function course_announcements() {
                 if($counter_ann <= $indexOfAnnounce){
                 $ann_url = $urlAppend . "modules/announcements/index.php?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = format_locale_date(strtotime($ann->date));
-                $ann_content .= "<li class='list-group-item ps-0 pe-0'>
+                $ann_content .= "<li class='list-group-item ps-0 pe-0 list-group-announce-homepage'>
                                     <span class='item-wholeline TextRegular Neutral-800-cl'>
                                         <div class='text-title'>
                                             <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a>

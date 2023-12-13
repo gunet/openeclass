@@ -158,7 +158,7 @@ if (isset($_GET['store']) && $is_editor) {
 
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default.css">
 </head>
-<body class='bgEclass bodyChat pb-3'>
+<body class=' bodyChat pb-3'>
 <?php
     // display message list
     $fileContent = file($fileChatName);

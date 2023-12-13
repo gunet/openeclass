@@ -75,7 +75,7 @@
                                                 <span id='result'></span>
                                             </div>
                                         </div>
-                                        <div class='input-append date form-group-mt-4'>
+                                        <div class='input-append date form-group mt-4'>
                                             <label class='col-12 control-label-notes'>{{ trans('langExpirationDate') }}:</label>
                                             <div class='col-12'>
                                                 <div class='input-group'>
