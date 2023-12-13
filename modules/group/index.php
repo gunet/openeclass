@@ -391,7 +391,7 @@ if ($is_editor) {
                                 FROM (user u, course_user cu)
                                 WHERE cu.course_id = ?d AND
                                       cu.user_id = u.id AND
-                                      cu.status = 5 AND
+                                      cu.status = ". USER_STUDENT . " AND
                                       cu.tutor = 0 AND
                                       u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                   WHERE `group`.id = group_members.group_id AND

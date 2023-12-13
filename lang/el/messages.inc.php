@@ -6154,6 +6154,7 @@ $langAccountStatus = "Κατάσταση λογαριασμού";
 
 // course user invitation
 $langCourseUsersInvitation = "Πρόσκληση χρηστών στο μάθημα";
+$langcourseExternalUsersInviation = "Πρόσκληση εξωτερικών χρηστών";
 $langCourseInviteOne = "Πρόσκληση χρήστη";
 $langCourseInviteMany = "Πρόσκληση χρηστών";
 $langDeleteInvitation = "Διαγραφή πρόσκλησης";

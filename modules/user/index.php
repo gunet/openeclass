@@ -28,6 +28,7 @@ $helpTopic = 'course_users';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 require_once 'include/course_settings.php';
+require_once 'modules/group/group_functions.php';
 
 //Identifying ajax request
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
@@ -140,8 +141,22 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $am = q(sanitize_utf8(trim($myrow->am)));
         $am_message = ($am !== '') ? "<div class='right'>$am</div>": '';
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/userduration.php?course=$course_code&amp;u=$myrow->id");
-        //create date field with unregister button
+        // create date field with unregister button
         $date_field = $myrow->reg_date ? format_locale_date(strtotime($myrow->reg_date), 'short', false) : $langUnknownDate;
+        // checks if user is group tutor
+        $is_tutor = false;
+        $q_tutor = Database::get()->queryArray("SELECT is_tutor FROM group_members 
+                                                    WHERE user_id = ?d 
+                                                    AND group_id IN (SELECT id FROM `group` WHERE course_id = ?d)",
+                                            $myrow->id, $course_id);
+        if (count($q_tutor) > 0) {
+            foreach ($q_tutor as $tutor_data) {
+                if ($tutor_data->is_tutor == 1) {
+                    $is_tutor = true;
+                    break;
+                }
+            }
+        }
 
         // Create appropriate role control buttons
         // Admin right
@@ -166,11 +181,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'url' => '#',
               'icon' => 'fa-times',
               'btn_class' => 'delete_btn btn-default'
-            ),
-            array(
-                'title' => $langGroupTutor,
-                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
             ),
             array(
                 'title' => $langCourseReviewer,
@@ -201,17 +211,18 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             )
         ));
         if ($myrow->editor == '1' and $myrow->status != USER_TEACHER) {
-            $user_roles = array($langTeacher);
+            $user_roles = [ $langTeacher ];
         } elseif ($myrow->course_reviewer == '1' and $myrow->status != USER_TEACHER) {
-            $user_roles = array($langCourseReviewer);
+            $user_roles = [ $langCourseReviewer ];
         } elseif ($myrow->status == USER_TEACHER) {
-            $user_roles = array($langCourseAdminTeacher);
+            $user_roles = [ $langCourseAdminTeacher ];
         } elseif ($myrow->status == USER_GUEST) {
-            $user_roles = array($langGuestName);
+            $user_roles = [ $langGuestName ];
         } else {
-            $user_roles = array($langStudent);
+            $user_roles = [ $langStudent ];
         }
-        if ($myrow->tutor == '1') {
+
+        if ($is_tutor) {
             $user_roles[] = $langGroupTutor;
         }
         if ($myrow->reviewer == '1') {
@@ -377,18 +388,6 @@ if (isset($_GET['giveAdmin'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
                                                                'dest_uid' => $new_admin_gid,
                                                                'right' => '+1'));
-} elseif (isset($_GET['giveTutor'])) {
-    $new_tutor_gid = intval(getDirectReference($_GET['giveTutor']));
-    Database::get()->query("UPDATE course_user SET tutor = 1
-                        WHERE user_id = ?d
-                        AND course_id = ?d", $new_tutor_gid, $course_id);
-    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
-                                                               'dest_uid' => $new_tutor_gid,
-                                                               'right' => '+3'));
-    Database::get()->query("UPDATE group_members, `group` SET is_tutor = 0
-                        WHERE `group`.id = group_members.group_id AND
-                              `group`.course_id = ?d AND
-                              group_members.user_id = ?d", $course_id, $new_tutor_gid);
 } elseif (isset($_GET['giveEditor'])) {
     $new_editor_gid = intval(getDirectReference($_GET['giveEditor']));
     Database::get()->query("UPDATE course_user SET editor = 1
@@ -414,14 +413,6 @@ if (isset($_GET['giveAdmin'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
                                                                'dest_uid' => $removed_admin_gid,
                                                                'right' => '-1'));
-} elseif (isset($_GET['removeTutor'])) {
-    $removed_tutor_gid = intval(getDirectReference($_GET['removeTutor']));
-    Database::get()->query("UPDATE course_user SET tutor = 0
-                        WHERE user_id = ?d
-                              AND course_id = ?d", $removed_tutor_gid, $course_id);
-    Log::record($course_id, MODULE_ID_USERS, LOG_MODIFY, array('uid' => $uid,
-                                                               'dest_uid' => $removed_tutor_gid,
-                                                               'right' => '-3'));
 } elseif (isset($_GET['removeEditor'])) {
     $removed_editor_gid = intval(getDirectReference($_GET['removeEditor']));
     Database::get()->query("UPDATE course_user SET editor = 0
@@ -486,7 +477,7 @@ $tool_content .=
                   'icon' => 'fa-child',
                   'level' => 'primary-label',
                   'show' => $course_user_requests),
-            array('title' => 'Πρόσκληση εξωτερικών χρηστών',
+            array('title' => $langcourseExternalUsersInviation,
                 'url' => "invite.php?course=$course_code",
                 'icon' => 'fa-plus-circle'),
             array('title' => $langGroupUserManagement,
