@@ -1006,10 +1006,11 @@ $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course
 
 $displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
                             WHERE display_position = ?d
+                            AND type = ?d
                             AND course_id = ?d
                             AND CURRENT_TIMESTAMP BETWEEN start_date AND end_date
                             ORDER BY pid DESC',
-                            1,$course_id);
+                            1,3,$course_id);
 
 
 if (($total_cunits > 0 or $is_editor) and $course_info->view_type == 'units') {
