@@ -255,7 +255,7 @@ function printPollForm() {
                 $tool_content .= "
                
                 <div class='$columnPanel'>
-                    <div class='panel panel-success h-100'>
+                    <div class='panel panel-success h-100 poll-panel'>
                         <div class='panel-heading'>
                             $langQuestion $i
                         </div>
