@@ -34,7 +34,7 @@ require_once 'include/lib/course.class.php';
 require_once 'include/lib/user.class.php';
 require_once 'hierarchy_validations.php';
 
-$data['tree'] = new Hierarchy();
+$data['tree'] = $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
