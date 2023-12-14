@@ -71,19 +71,33 @@ if ($doit) {
             Database::get()->query("DELETE FROM group_members
                             WHERE user_id = ?d AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
-            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d", $u);
-            Database::get()->query("DELETE FROM user_badge WHERE user = ?d", $u);
-            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d", $u);
-            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d", $u);
-            $message = "$langWithUsername $u_accoun $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>";
-            Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
-            //Session::Messages($message, 'alert-info');
-            Session::flash('message',$message);
-            Session::flash('alert-class', 'alert-info');
-            redirect_to_home_page("modules/admin/edituser.php?u=$u");
+
+            Database::get()->query("DELETE FROM user_badge_criterion WHERE user = ?d AND
+                                    badge_criterion IN
+                                           (SELECT id FROM badge_criterion WHERE badge IN
+                                           (SELECT id FROM badge WHERE course_id = ?d))", $u, $c);
+            Database::get()->query("DELETE FROM user_badge WHERE user = ?d AND
+                                      badge IN (SELECT id FROM badge WHERE course_id = ?d)", $u, $c);
+            Database::get()->query("DELETE FROM user_certificate_criterion WHERE user = ?d AND
+                                    certificate_criterion IN
+                                    (SELECT id FROM certificate_criterion WHERE certificate IN
+                                        (SELECT id FROM certificate WHERE course_id = ?d))", $u, $c);
+            Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND
+                                 certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $u, $c);
+            if (check_guest($u)) { // if user is guest
+                Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
+                Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
+                Session::flash('message', "$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>");
+                Session::flash('alert-class', 'alert-info');
+                redirect_to_home_page("modules/admin/search_user.php");
+            } else {
+                Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
+                Session::flash('message', "$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>");
+                Session::flash('alert-class', 'alert-info');
+                redirect_to_home_page("modules/admin/edituser.php?u=$u");
+            }
         }
     } else {
-        //Session::Messages($langErrorDelete, 'alert-danger');
         Session::flash('message',$langErrorDelete);
         Session::flash('alert-class', 'alert-danger');
     }
