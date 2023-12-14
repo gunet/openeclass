@@ -2809,6 +2809,10 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE poll ADD `display_position` INT(1) NOT NULL DEFAULT 0 AFTER show_results");
     }
 
+    if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
+        Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
+    }
+
 
 
 }
