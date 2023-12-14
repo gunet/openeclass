@@ -507,7 +507,7 @@
                                                                                 <tbody>
                                                                                     @foreach ($resources as $info)
                                                                                         @php $info->comments = standard_text_escape($info->comments); @endphp
-                                                                                        {!! show_resourceWeek($info) !!}
+                                                                                        {!! show_resource($info) !!}
                                                                                     @endforeach
                                                                                 </tbody>
                                                                             </table>
