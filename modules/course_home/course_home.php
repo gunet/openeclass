@@ -514,7 +514,7 @@ $carousel_or_row = $show_course->view_units;
 $data['displayQuickPoll'] = $displayQuickPoll = Database::get()->querySingle("SELECT * FROM poll
                             WHERE display_position = 1
                             AND course_id = ?d
-                            AND CURRENT_DATE BETWEEN start_date AND end_date
+                            AND CURRENT_TIMESTAMP BETWEEN start_date AND end_date
                             ORDER BY pid DESC", $course_id);
 
 if ($displayQuickPoll) {

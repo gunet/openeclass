@@ -548,7 +548,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                     <div class='radio mb-2'>
                       <label>
-                        <input type='radio' id='general_type' name='survey_type' value='3'".($PollSurveyType == POLL_QUICK ? " checked" : "").">
+                        <input type='radio' id='general_type' class='poll_quick' name='survey_type' value='3'".($PollSurveyType == POLL_QUICK ? " checked" : "").">
                         <span>$langQuickSurvey</span>
                       </label>
                     </div>                                        
@@ -584,7 +584,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>
             </div>
-            <div class='form-group mt-4'>
+
+            <div class='form-group mt-4 display_position ".($PollSurveyType == POLL_QUICK ? "" : "hide")." '>
                 <label class='col-sm-6 control-label-notes mb-2'>$langShowFront:</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
@@ -598,6 +599,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     </div>
                 </div>
             </div>";
+
+    $head_content .= "<script type='text/javascript'>
+            $(document).ready(function(){
+                $('input[name=\"survey_type\"]').change(function() {
+                  if ($(this).hasClass('poll_quick')) {
+                    $('.display_position').removeClass('hide');
+                  } else {
+                    $('.display_position').addClass('hide');
+                  }
+                });
+            })
+    </script>";
+
     if (is_active_external_lti_app($limesurveyapp, LIMESURVEY_LTI_TYPE, $course_id)) { // lti options
         $lti_templates = Database::get()->queryArray('SELECT * FROM lti_apps WHERE enabled = true AND is_template = true AND type = ?s', LIMESURVEY_LTI_TYPE);
         $lti_template_options = "";
@@ -1014,7 +1028,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
 
-            <div class='row p-2 margin-bottom-fat'>
+            <div class='row p-2 margin-bottom-fat ".($poll->type == POLL_QUICK ? "" : "hide")."'>
                 <div class='col-sm-3'>
                     <strong>$langShowFront:</strong>
                 </div>
