@@ -26,6 +26,7 @@ $require_current_course = true;
 $require_editor = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/units/functions.php';
 $toolName = $langActivityEdit;
 
 $course_info = Database::get()->querySingle('SELECT view_type FROM course WHERE id = ?d', $course_id);
