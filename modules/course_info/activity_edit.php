@@ -82,7 +82,7 @@ foreach ($items as $item) {
                             <tbody>";
         foreach ($resources as $info) {
             $info->comments = standard_text_escape($info->comments);
-            show_resourceWeek($info);
+            show_resource($info);
         }
         $tool_content .= "
                             </tbody>

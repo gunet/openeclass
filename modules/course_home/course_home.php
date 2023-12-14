@@ -1053,7 +1053,7 @@ if ($course_info->view_type == 'activity') {
                                 <tbody>";
                 foreach ($resources as $info) {
                     $info->comments = standard_text_escape($info->comments);
-                    show_resourceWeek($info);
+                    show_resource($info);
                 }
                 $tool_content .= "
                                 </tbody>
@@ -1222,7 +1222,7 @@ if (!$displayWall && $displayQuickPoll) {
         <div class='col-md-$cunits_sidebar_subcolumns'>
             <div class=''>
                 <div class='content-title'>$langQuickSurvey</div>
-                
+
                 <div class='panel'>";
 
         $tool_content .= "
@@ -1245,32 +1245,32 @@ if (!$displayWall && $displayQuickPoll) {
             <link rel='stylesheet' type='text/css' href='{$urlAppend}js/c3-0.4.10/c3.css' />
             <script type='text/javascript'>
                 pollChartData = new Array();
-        
+
                 $(document).ready(function(){
-                
+
                     $('.showResults').on('click', function() {
                       $(this).toggleClass('hide');
                       $('.showPoll, .pollResultsDiv').toggleClass('hide');
                       $('.pollQuestionDiv').toggleClass('hide');
                     });
-                    
+
                     $('.showPoll').on('click', function() {
                       $(this).toggleClass('hide');
                       $('.showResults, .pollResultsDiv').toggleClass('hide');
                       $('.pollQuestionDiv').toggleClass('hide');
                     });
-                    
+
                     draw_plots();
                 });
-        
-            function draw_plots(){                
+
+            function draw_plots(){
                 var options = null;
                 for(var i=0;i<pollChartData.length;i++){
-                    
+
                     pollChartData[0]['answer'].unshift('x')
                     pollChartData[0]['count'].unshift('Votes')
                     let chartHeight = pollChartData[0]['count'].length * 32
-                    
+
                     options = {
                         size: {
                             height: chartHeight,
@@ -1278,7 +1278,7 @@ if (!$displayWall && $displayQuickPoll) {
                         padding: {
                             right: 25,
                         },
-                        
+
                         data: {
                             x: 'x',
                             columns: [
@@ -1292,7 +1292,7 @@ if (!$displayWall && $displayQuickPoll) {
                                 if(data.index !== undefined) {
                                     return colors[data.index];
                                 }
-        
+
                                 return inColor;
                             },
                         },
@@ -1318,11 +1318,11 @@ if (!$displayWall && $displayQuickPoll) {
                         },
                         bindto: '#poll_chart'+i
                     };
-                    
+
                     c3.generate(options);
                 }
         }
-        
+
         </script>";
 
             $names_array = [];
