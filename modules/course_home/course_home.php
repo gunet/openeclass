@@ -1007,7 +1007,7 @@ $displayAnnouncements = Database::get()->querySingle('SELECT visible FROM course
 $displayQuickPoll = Database::get()->querySingle('SELECT * FROM poll
                             WHERE display_position = ?d
                             AND course_id = ?d
-                            AND CURRENT_DATE BETWEEN start_date AND end_date
+                            AND CURRENT_TIMESTAMP BETWEEN start_date AND end_date
                             ORDER BY pid DESC',
                             1,$course_id);
 
