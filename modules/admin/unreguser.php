@@ -93,9 +93,16 @@ if (!$doit) {
                                         (SELECT id FROM certificate WHERE course_id = ?d))", $u, $c);
             Database::get()->query("DELETE FROM user_certificate WHERE user = ?d AND
                                  certificate IN (SELECT id FROM certificate WHERE course_id = ?d)", $u, $c);
-            Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
-            Session::Messages("$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>", 'alert-info');
-            redirect_to_home_page("modules/admin/edituser.php?u=$u");
+            if (check_guest($u)) { // if user is guest
+                Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
+                Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
+                Session::Messages("$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>", 'alert-info');
+                redirect_to_home_page("modules/admin/search_user.php");
+            } else {
+                Log::record($c, MODULE_ID_USERS, LOG_DELETE, ['uid' => $u, 'right' => '-5']);
+                Session::Messages("$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em>", 'alert-info');
+                redirect_to_home_page("modules/admin/edituser.php?u=$u");
+            }
         }
     } else {
         $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
