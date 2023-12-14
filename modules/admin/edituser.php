@@ -71,10 +71,14 @@ if ($u) {
     if (isDepartmentAdmin())
         validateUserNodes(intval($u), true);
 
-   $data['info'] = $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
+    $data['info'] = $info = Database::get()->querySingle("SELECT surname, givenname, username, password, email,
                               phone, registered_at, expires_at, status, am,
-                              verified_mail, whitelist, disable_course_registration 
+                              verified_mail, whitelist, disable_course_registration
                          FROM user WHERE id = ?s", $u);
+    if (!$info) {
+        Session::messages($langNoUsersFound2, 'alert-danger');
+        redirect_to_home_page('modules/admin/');
+    }
     if (isset($_POST['submit_editauth'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         checkSecondFactorChallenge();
