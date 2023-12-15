@@ -32,7 +32,6 @@ $toolName = $langActivityEdit;
 $course_info = Database::get()->querySingle('SELECT view_type FROM course WHERE id = ?d', $course_id);
 
 if ($course_info->view_type != 'activity') {
-    //Session::Messages($langGeneralError, 'alert-danger');
     Session::flash('message',$langGeneralError);
     Session::flash('alert-class', 'alert-danger');
     redirect_to_home_page('courses/' . $course_code . '/');
@@ -47,7 +46,6 @@ if (isset($_POST['submit']) and isset($_POST['content'])) {
             $id, $course_id, $content);
     }
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-   // Session::Messages($langFaqEditSuccess, 'alert-success');
     Session::flash('message',$langFaqEditSuccess);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page('courses/' . $course_code . '/');
@@ -71,7 +69,7 @@ $tool_content .= "
 <form method='post' action='activity_edit.php?course=$course_code'>
     <div class='col-12'>
         <div class='row row-cols-1 row-cols-lg-2 g-4'>";
-           
+
 foreach ($items as $item) {
     $tool_content .= "
             <div class='col'>
