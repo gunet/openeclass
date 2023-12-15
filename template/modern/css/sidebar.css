@@ -4,7 +4,7 @@
 }
 
 #collapseTools{
-  background: #ffffff;
+  background: #F7F9FE;
 }
 
 .menu-items .fa{
@@ -44,7 +44,7 @@
 }
 
 .contextual-sidebar .list-group-item.active{
-  background-color: #EFF6FF;
+  background-color: #e6f1ff;
   color: #0073E6;
   z-index: 0;
 }
@@ -808,7 +808,7 @@
   left: 0; 
   right: 0;
   bottom: 0; 
-  background-color: #F7F9FE; 
+  background-color: #ffffff; 
   -webkit-transition: .4s; 
   transition: .4s; 
   border: solid 1px #CDD4E0; 
@@ -837,7 +837,7 @@
 }
 
 input:checked + .slider-round { 
-  background-color: #F7F9FE; 
+  background-color: #ffffff; 
 }
 
 input:focus + .slider-round { 

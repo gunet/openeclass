@@ -960,6 +960,11 @@ a:hover{
   width:auto;
 }
 @media(max-width:991px){
+  #bgr-cheat-footer {
+    background-color: #F7F9FE;
+  }
+}
+@media(max-width:991px){
   #bgr-cheat-footer, .footer-container{
     height: 340px; 
   }
@@ -3014,6 +3019,34 @@ body .form-action-button-popover{
 }
 
 
+.table-responsive::-webkit-scrollbar {
+  width: 20px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover {
+  background-color: #B4BED1;
+}
+
 table ,
 tr td{
   border:0px;
@@ -3028,12 +3061,12 @@ tr td{
   .table-default tbody,
   .table-default tfoot {
     display:block;
-    min-height: 48px;
+    /* min-height: 48px;
     max-height: 450px;
-    overflow: auto;
+    overflow: auto; */
   }
 
-  .table-default tbody::-webkit-scrollbar {
+  /* .table-default tbody::-webkit-scrollbar {
     width: 20px;
   }
   .table-default tbody::-webkit-scrollbar-track {
@@ -3051,7 +3084,7 @@ tr td{
     border-radius: 20px;
     border: 6px solid transparent;
     background-clip: content-box;
-  }
+  } */
   
 
   
@@ -3272,6 +3305,14 @@ tr.danger{
   .table-announcements-indexes tbody tr td:has(.announceContentStudent){
     width: 65% !important;
   }
+}
+
+
+
+div.dataTables_scrollBody {
+   position: relative;
+    overflow:hidden !important;
+    width: 100%;
 }
 
 
@@ -5331,7 +5372,7 @@ table.dataTable tbody tr th{
 
 /* left menu and main content */
 .col_maincontent_active{
-  background-color: #F7F9FE;
+  background-color: #ffffff;
 }
 @media(min-width:992px){
   .col_maincontent_active{
@@ -5347,12 +5388,12 @@ table.dataTable tbody tr th{
 }
 
 .ContentLeftNav {
-  background: #ffffff;
+  background: #F7F9FE;
 }
 
 @media(max-width:991px){
   .module-container{
-    background-color: #F7F9FE;
+    background-color: #ffffff;
   }
 }
 
