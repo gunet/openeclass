@@ -1280,6 +1280,9 @@ $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCourse. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <strong>Αλλαγή</strong>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
+$langUploadRecAudio = "Ηχογράφηση";
+$langPause = "Παύση";
+$langReleaseMic = "Αποδεύσμεση μικροφώνου";
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendances = "Παρουσιολόγια";
