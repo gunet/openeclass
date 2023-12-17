@@ -238,7 +238,7 @@ foreach ($result as $theresult) {
         $skw = $skw + $b;
     }
 
-    $trowcontent .= "<tr><td>" . uid_to_name($uid, 'fullname') . "</td><td>";
+    $trowcontent .= "<tr><td>" . q(uid_to_name($uid, 'fullname')) . "</td><td>";
 
     $dif_scores = $ckw - $skw;
 

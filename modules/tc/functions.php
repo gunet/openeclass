@@ -1210,7 +1210,7 @@ function tc_session_details() {
                         if ($participant_uid == 0) {
                             $participants .= $langAllUsers;
                         } else {
-                            $participants .= uid_to_name($participant_uid, 'fullname');
+                            $participants .= q(uid_to_name($participant_uid, 'fullname'));
                         }
                     }
                 }

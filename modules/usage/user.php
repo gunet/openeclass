@@ -41,8 +41,8 @@ $tool_content .= action_bar(array(
 ),false);
 
 if ($is_admin) {
-    $toolName .= "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
-    $pageName = "$langUserStats: " . uid_to_name($statsuser)." (".uid_to_name($statsuser, 'username').")";
+    $toolName .= "$langUserStats: " . q(uid_to_name($statsuser))." (".q(uid_to_name($statsuser, 'username')).")";
+    $pageName = "$langUserStats: " . q(uid_to_name($statsuser))." (".q(uid_to_name($statsuser, 'username')).")";
     $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
     $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
 }

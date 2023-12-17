@@ -170,9 +170,9 @@ foreach ($usersList as $user) {
 
     $tool_content .= "<tr>";
     if (!isset($_GET['pdf'])) {
-        $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . " (" . q($user->email) .")</a></td>";
+        $tool_content .= "<td><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . q(uid_to_name($user->id)) . " (" . q($user->email) .")</a></td>";
     } else {
-        $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
+        $tool_content .= "<td>" . q(uid_to_name($user->id)) . "</td>";
     }
 
     $tool_content .= "<td class='text-start'></td>

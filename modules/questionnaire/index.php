@@ -132,7 +132,7 @@ if ($is_editor) {
                 $group_name = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $user_data->group_id)->name;
                 echo "<li>$group_name</li>";
             } else { // assigned to user
-                echo "<li>" . uid_to_name($user_data->user_id) . "</li>";
+                echo "<li>" . q(uid_to_name($user_data->user_id)) . "</li>";
             }
         }
         echo "</ul>";

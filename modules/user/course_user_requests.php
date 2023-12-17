@@ -42,7 +42,7 @@ $tool_content .= action_bar(array(
         ));
 
 if (isset($_POST['rejected_req_id'])) { // do reject course user request
-    $from_name = uid_to_name($uid, 'fullname');
+    $from_name = q(uid_to_name($uid, 'fullname'));
     $from_address = uid_to_email($uid);
     $to_address = uid_to_email($_POST['rejected_uid']);
     $subject = "$langCourse: " .  course_id_to_title($course_id) . " - $langCourseUserRequestReject";
@@ -107,8 +107,8 @@ if (isset($_GET['rid'])) {
         $tool_content .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langReasonReject</label></div>
-        <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>" . uid_to_name($uid, 'fullname') . "</small></div>
-        <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>" . uid_to_name($_GET['u'], 'fullname') . "</small></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>" . q(uid_to_name($uid, 'fullname')) . "</small></div>
+        <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>" . q(uid_to_name($_GET['u'], 'fullname')) . "</small></div>
         <div class='form-group mt-3'>
             <div class='col-sm-12'>
               <textarea name='rej_content' rows='8' cols='80'></textarea>

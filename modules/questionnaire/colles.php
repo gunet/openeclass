@@ -232,7 +232,7 @@ if (!$thePoll->anonymized) {
         $uid = $theresult->st;
         $p_user_id = $theresult->poll_user_record_id;
 
-        $tool_content .= "<tr><td>" . uid_to_name($uid, 'fullname') . "</td><td>";
+        $tool_content .= "<tr><td>" . q(uid_to_name($uid, 'fullname')) . "</td><td>";
         $tool_content .= "<a href='#' class='trigger_names' data-type='multiple' id='show'>$langViewShow</a>";
         $tool_content .= "</td><td class='hidden_names' style='display:none;'><table width='100%'>";
         $answers = Database::get()->queryArray("SELECT t1.question_text AS qt, t2.answer_text AS ant

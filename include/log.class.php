@@ -783,10 +783,10 @@ class Log {
             $content .= "<br><a href='{$urlAppend}modules/exercise/exercise_result.php?course=$course_code&amp;eurId=$details[eurid]'>$langAttempt</a>";
         }
         if (isset($details['del_eurid_uid'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langDelete $langOfAttempt $langOfUserS &laquo;" . uid_to_name($details['del_eurid_uid']) . "&raquo;";
+            $content .= "&nbsp;&mdash;&nbsp; $langDelete $langOfAttempt $langOfUserS &laquo;" . q(uid_to_name($details['del_eurid_uid'])) . "&raquo;";
         }
         if (isset($details['mod_eurid_uid'])) {
-            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfAttempt $langOfUserS &laquo;" . uid_to_name($details['mod_eurid_uid']) . "&raquo;&nbsp;$langIn&nbsp;&laquo;" . get_exercise_attempt_status_legend($details['new_eurid_status']) . "&raquo";
+            $content .= "&nbsp;&mdash;&nbsp; $langModify $langOfAttempt $langOfUserS &laquo;" . q(uid_to_name($details['mod_eurid_uid'])) . "&raquo;&nbsp;$langIn&nbsp;&laquo;" . get_exercise_attempt_status_legend($details['new_eurid_status']) . "&raquo";
         }
         if (isset($details['purge_results'])) {
             $content .= "&nbsp;&mdash;&nbsp;$langPurgeExercises";
