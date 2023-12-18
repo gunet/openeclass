@@ -397,10 +397,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             ));
         }
         $data['aaData'][] = array(
-            '0' => sanitize_utf8($myrow->surname),
-            '1' => sanitize_utf8($myrow->givenname),
-            '2' => sanitize_utf8($myrow->username),
-            '3' => $email_icon,
+            '0' => q(sanitize_utf8($myrow->surname)),
+            '1' => q(sanitize_utf8($myrow->givenname)),
+            '2' => q(sanitize_utf8($myrow->username)),
+            '3' => q($email_icon),
             '4' => icon($icon, $tip),
             '5' => $icon_content,
             '6' => $inactive_user

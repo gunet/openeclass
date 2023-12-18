@@ -261,7 +261,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
             <ul id='forum-category'>
                 <li><span><b>$langCategory:</b></span> <span>" . q($cat_name) . "</span></li>
                 <li><span><b>$langForum:</b></span> <span><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a></span></li>
-                <li><span><b>$langForumFrom :</b></span> <span>$name</span></li>
+                <li><span><b>$langForumFrom :</b></span> <span>q($name)</span></li>
                 <li><span><b>$langDate:</b></span> <span> $topic_date </span></li>
             </ul>
         </div>

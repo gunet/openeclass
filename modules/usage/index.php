@@ -129,8 +129,8 @@ if (isset($_REQUEST['u'])) {
 
 if (isset($_GET['per_course_dur'])) {
     if ($is_admin) {
-        $toolName .= "$langUserStats: " . uid_to_name($uid_stats)." (".uid_to_name($uid_stats, 'username').")";
-        $pageName = "$langUserStats: " . uid_to_name($uid_stats)." (".uid_to_name($uid_stats, 'username').")";
+        $toolName .= "$langUserStats: " . q(uid_to_name($uid_stats))." (". q(uid_to_name($uid_stats, 'username')).")";
+        $pageName = "$langUserStats: " . q(uid_to_name($uid_stats))." (".q(uid_to_name($uid_stats, 'username')).")";
         $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
         $navigation[] = array('url' => '../admin/listusers.php', 'name' => $langListUsers);
         $tool_content .= action_bar(array(

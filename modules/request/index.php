@@ -254,7 +254,7 @@ function formatUsers($userData) {
             if (is_object($user)) {
                 return '<b>' . $user->name . '</b>';
             } else {
-                return '<b>' . uid_to_name($user) . '</b>';
+                return '<b>' . q(uid_to_name($user)) . '</b>';
             }
         }, $userData));
 }

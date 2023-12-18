@@ -126,7 +126,7 @@ for ($i = 1; $i <= $maxAttempt; $i++) {
 
 $maxDeep = 1; // used to compute colspan of <td> cells - only single level depth of modules currently used
 
-$toolName = uid_to_name($_REQUEST['uInfo']) . ": " . $LPname;
+$toolName = q(uid_to_name($_REQUEST['uInfo'])) . ": " . $LPname;
 $tool_content .= "<div class='table-responsive'>
     <table class='table-default'>
     <thead>
@@ -319,7 +319,7 @@ if (isset($_GET['xls'])) {
         <body>" . get_platform_logo() .
         "<h2>" . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2>" . q($LPname) . "</h2>
-        <h3>" . uid_to_name($_REQUEST['uInfo']) . "</h3>";
+        <h3>" . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";

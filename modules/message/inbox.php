@@ -215,7 +215,7 @@ if (isset($_GET['mid'])) {
                 <select name='recipients[]' multiple='multiple' class='form-select' id='select-recipients'>";
 
             // mail sender
-            $out .= "<option value='$msg->author_id' selected>". uid_to_name($msg->author_id) . "</option>";
+            $out .= "<option value='$msg->author_id' selected>". q(uid_to_name($msg->author_id)) . "</option>";
 
             addRecipientOptions();
 

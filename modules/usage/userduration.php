@@ -135,12 +135,12 @@ if (isset($_GET['u'])) { //  stats per user
                     'level' => 'primary-label')
 
             ), false);
-            $tool_content .= "<p class='normalColorBlueText TextBold text-start fs-5'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</p>";
+            $tool_content .= "<p class='normalColorBlueText TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</p>";
         } else {
-            $tool_content .= "<p class='normalColorBlueText TextBold text-start fs-5'>"  . uid_to_name($_GET['u']) . " $am_legend $grp_legend</p>";
+            $tool_content .= "<p class='normalColorBlueText TextBold text-start fs-5'>"  . q(uid_to_name($_GET['u'])) . " $am_legend $grp_legend</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langCourseRegistrationDate:</strong> " . get_course_user_registration($course_id, $_GET['u']) . "</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langHits:</strong> ".course_hits($course_id, $_GET['u']) . "</p>";
             $tool_content .= "<p class='small-text text-start mb-1'><strong>$langTotalDuration:</strong> ". user_duration_course($_GET['u']) . "</p>";
@@ -279,7 +279,7 @@ if (isset($_GET['u'])) { //  stats per user
             if (!isset($_GET['format'])) {
                 $tool_content .= "<td>" . display_user($um->user_id) . "</td>";
             } else {
-                $tool_content .= "<td>" . uid_to_name($um->user_id) . "</td>";
+                $tool_content .= "<td>" . q(uid_to_name($um->user_id)) . "</td>";
             }
             $tool_content .= "<td>" . $grp_name . "</td>";
             $tool_content .= "<td>" . $user_am . "</td>";
@@ -364,7 +364,7 @@ if (isset($_GET['u'])) { //  stats per user
                 if (!isset($_GET['format'])) {
                     $tool_content .= "<td>" . display_user($row->id) . "</td>";
                 } else {
-                    $tool_content .= "<td>" . uid_to_name($row->id) . "</td>";
+                    $tool_content .= "<td>" . q(uid_to_name($row->id)) . "</td>";
                 }
                 $tool_content .= "<td class='center'>$row->am</td>
                                 <td class='center'>$grp_name</td>

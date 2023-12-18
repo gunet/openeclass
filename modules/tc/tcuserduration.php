@@ -109,7 +109,7 @@ if (isset($_GET['per_user']) or isset($_GET['u'])) { // all users participation 
                                                     AND tc_attendance.bbbuserid = ?s", $course_id, $bbb_name)->totaltime;
         if (count($result) > 0) {
             $tool_content .= "<div class='panel panel-default'>";
-            $tool_content .= "<div class='panel-heading'><strong>" . uid_to_name($u, 'surname') . " " . uid_to_name($u, 'givenname') . "</strong></div>";
+            $tool_content .= "<div class='panel-heading'><strong>" . q(uid_to_name($u, 'surname')) . " " . q(uid_to_name($u, 'givenname')) . "</strong></div>";
             $tool_content .= "<div class='panel-body'><em>$langTotalDuration:</em> <strong>" . format_time_duration(0 + 60 * $total_time, 24, false) . "</strong></span></div><br>";
             $tool_content .= "</div>";
             $tool_content .= "<div class='table-responsive'><table class='table-default'>";

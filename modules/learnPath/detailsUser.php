@@ -204,7 +204,7 @@ if (isset($_GET['xls'])) {
         <body>" . get_platform_logo() .
         "<h2> " . get_config('site_name') . " - " . q($currentCourseName) . "</h2>
         <h2> " . q($langTrackUser) . "</h2>
-        <h3> " . uid_to_name($_REQUEST['uInfo']) . "</h3>";
+        <h3> " . q(uid_to_name($_REQUEST['uInfo'])) . "</h3>";
 
     $pdf_content .= $tool_content;
     $pdf_content .= "</body></html>";

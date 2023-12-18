@@ -153,9 +153,9 @@ foreach ($usersList as $user) {
     }
     $tool_content .= "<tr>";
     if (!isset($_GET['pdf'])) {
-        $tool_content .= "<td class='col-student'><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . uid_to_name($user->id) . "</a></td>";
+        $tool_content .= "<td class='col-student'><a href='detailsUser.php?course=$course_code&amp;uInfo=$user->id'>" . q(uid_to_name($user->id)) . "</a></td>";
     } else {
-        $tool_content .= "<td>" . uid_to_name($user->id) . "</td>";
+        $tool_content .= "<td>" . q(uid_to_name($user->id)) . "</td>";
     }
     $tool_content .= "<td>" . q($user->email). "</td>
                       <td>" . q($user->am) . "</td>";
