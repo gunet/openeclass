@@ -129,7 +129,9 @@ $head_content .= "
                 type: 'audio',
                 numberOfAudioChannels: isEdge ? 1 : 2,
                 checkForInactiveTracks: true,
-                bufferSize: 16384
+                bufferSize: 16384,
+                audioBitsPerSecond: 128000,
+                disableLogs: true,
             };
         
             if(isSafari || isEdge) {
@@ -150,9 +152,10 @@ $head_content .= "
                 recorder.destroy();
                 recorder = null;
             }
-        
+                    
             recorder = RecordRTC(microphone, options);
-        
+            // max duration recording = 5 min
+            recorder.setRecordingDuration(300000).onRecordingStopped(stopRecordingCallback);
             recorder.startRecording();
         
             btnStopRecording.disabled = false;
@@ -179,40 +182,49 @@ $head_content .= "
         };
         
         btnDownloadRecording.onclick = function() {
-            this.disabled = true;
-            if(!recorder || !recorder.getBlob()) return;
-        
-            if(isSafari) {
-                recorder.getDataURL(function(dataURL) {
-                    SaveToDisk(dataURL, getFileName('mp3'));
-                });
-                return;
-            }
-        
-            var blob = recorder.getBlob();
-            var file = new File([blob], getFileName('wav'), {
-                mimeType: 'audio/webm'
+            
+            bootbox.prompt({
+                title: '" . js_escape($langEnterFile) . "',
+                callback: function(result) {
+                    this.disabled = true;
+                    if(!recorder || !recorder.getBlob()) return;
+                
+                    if(isSafari) {
+                        var recfilename = result + '.mp3';
+                        recorder.getDataURL(function(dataURL) {
+                            SaveToDisk(dataURL, recfilename);
+                        });
+                        return;
+                    }
+                
+                    var blob = recorder.getBlob();                    
+                    var recfilename = result + '.mka';
+                    var file = new File([blob], recfilename, {
+                        mimeType: 'audio/webm'
+                    });
+                                
+                    var formData = new FormData();
+                    // recorded data
+                    formData.append('audio-blob', file);
+                    // file name
+                    formData.append('userFile', file.name);
+                    
+                    var upload_url = '" . $urlServer . "/modules/document/index.php?course=" . $course_code . "';
+                    
+                    $.ajax({
+                            url: upload_url,
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            type: 'POST'
+                        })
+                    .done(function(data) {
+                        window.location.href = '" . $urlServer . "/modules/document/index.php?course=" . $course_code . "';
+                    })
+                }
             });
-                        
-            var formData = new FormData();
-            // recorded data
-            formData.append('audio-blob', file);
-            // file name
-            formData.append('userFile', file.name);
             
-            var upload_url = '" . js_escape($urlServer) . "/modules/document/index.php?course=" . $course_code . "';
-            
-            $.ajax({
-                    url: upload_url, // replace with your own server URL
-                    data: formData,
-                    cache: false,
-                    contentType: false,
-                    processData: false,
-                    type: 'POST'
-                })
-            .done(function(data) {
-                window.location.href = '" . js_escape($urlServer) . "/modules/document/index.php?course=" . $course_code . "';
-            })
         };
         
         function click(el) {
@@ -220,27 +232,6 @@ $head_content .= "
             var evt = document.createEvent('Event');
             evt.initEvent('click', true, true);
             el.dispatchEvent(evt);
-        }
-        
-        function getRandomString() {
-            if (window.crypto && window.crypto.getRandomValues && navigator.userAgent.indexOf('Safari') === -1) {
-                var a = window.crypto.getRandomValues(new Uint32Array(3)),
-                    token = '';
-                for (var i = 0, l = a.length; i < l; i++) {
-                    token += a[i].toString(36);
-                }
-                return token;
-            } else {
-                return (Math.random() * new Date().getTime()).toString(36).replace(/\./g, '');
-            }
-        }
-        
-        function getFileName(fileExtension) {
-            var d = new Date();
-            var year = d.getFullYear();
-            var month = d.getMonth();
-            var date = d.getDate();
-            return 'RecordRTC-' + year + month + date + '-' + getRandomString() + '.' + fileExtension;
         }
         
         function SaveToDisk(fileURL, fileName) {

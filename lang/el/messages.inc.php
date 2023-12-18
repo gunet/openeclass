@@ -1282,7 +1282,8 @@ $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία 
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
 $langUploadRecAudio = "Ηχογράφηση";
 $langPause = "Παύση";
-$langReleaseMic = "Αποδεύσμεση μικροφώνου";
+$langReleaseMic = "Αποδέσμευση μικροφώνου";
+$langEnterFile = "Δώστε το όνομα αρχείου";
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendances = "Παρουσιολόγια";
