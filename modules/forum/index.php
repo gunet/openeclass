@@ -120,7 +120,7 @@ if ($total_categories > 0) {
         }
 
         $tool_content .= "<div class='col-12 mt-3'><caption>";
-        $tool_content .= "<div class='col-12 d-flex justify-content-between align-items-center border-card Primary-200-bg px-3 py-0 mb-0'>
+        $tool_content .= "<div class='col-12 forum-category-tools d-flex justify-content-between align-items-center border-card Primary-200-bg px-3 py-0 mb-0'>
                           <div><strong>$langCategory :</strong> $cat_title</div>";
         $tool_content .= "<div>";
         $tool_content .= action_button(
@@ -155,14 +155,15 @@ if ($total_categories > 0) {
                         'class' => 'delete',
                         'btn_class' => 'deleteAdminBtn',
                         'level' => 'primary',
+                        'confirm' => $langConfirmDelete,
                         'show' => $is_editor
-                        // 'confirm' => $langConfirmDelete
+                        
                     )
                 )
             );
         $tool_content .= "</div></div></caption>";
 
-        $tool_content .= "<div class='table-responsive'><table class='table-default mb-5'>";
+        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default mb-5'>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr class='list-header'>
             <th>$toolName</th>
