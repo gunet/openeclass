@@ -4,7 +4,8 @@ $require_login = true;
 $require_current_course = true;
 $require_editor = true;
 $require_help = true;
-$helpTopic = 'rec_audio';
+$helpTopic = 'documents';
+$helpSubTopic = 'rec_audio';
 require_once '../../include/baseTheme.php';
 
 $head_content .= "<script src='https://www.WebRTC-Experiment.com/RecordRTC.js'></script>";
@@ -280,12 +281,13 @@ $tool_content .= action_bar(array(
 
 $tool_content .= "
     <div class='form-wrapper'>
-        <div class='form-group'>        
-            <button class='btn btn-success' id='button-start-recording'>$langStart</button>        
+        <div class='form-group'>
+            <button class='btn btn-success' id='button-start-recording'>$langStart</button>
             <button class='btn btn-danger' id='button-stop-recording' disabled>$langPause</button>
             <button class='btn btn-default' id='button-release-microphone' disabled>$langReleaseMic</button>
-            <button class='btn btn-success' id='button-download-recording' disabled>$langSaveInDoc</button>
+            <button class='btn btn-success' id='button-download-recording' disabled>$langSaveInDoc</button>            
         </div>
+        <span class='help-block'>$langMaxRecAudioTime</span>
     </div>
     <div class='form-wrapper'>
         <audio controls autoplay playsinline></audio>

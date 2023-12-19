@@ -4,7 +4,9 @@ $require_login = true;
 $require_current_course = true;
 $require_editor = true;
 $require_help = true;
-$helpTopic = 'rec_video';
+$helpTopic = 'documents';
+$helpSubTopic = 'rec_video';
+
 require_once '../../include/baseTheme.php';
 
 $head_content .= "<script src='https://www.WebRTC-Experiment.com/RecordRTC.js'></script>";
@@ -130,6 +132,7 @@ $tool_content .= "
             <button class='btn btn-danger' id='button-stop-recording' disabled>$langPause</button>
             <button class='btn btn-success' id='button-download-recording' disabled>$langSaveInDoc</button>
         </div>
+        <span class='help-block'>$langMaxRecVideoTime</span>
     </div>
     <div class='form-wrapper'>
         <video controls autoplay playsinline></video>
