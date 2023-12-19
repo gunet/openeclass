@@ -185,16 +185,21 @@ class MultimediaHelper {
             case "3gp":
             case "3g2":
             case "m2v":
-            case "aac":
-            case "m4a":
             case "mp4":
-            case "ogg":
-            case "mp3":
             case "ogv":
             case "webm":
             case "m4v":
                 $mime = get_mime_type("." . $extension);
                 $ret .= self::serveVideojs($mime, $mediaPlay, $startdiv, $enddiv);
+                break;
+            case "aac":
+            case "m4a":
+            case "mka":
+            case "ogg":
+            case "mp3":
+            case "opus":
+                $mime = get_mime_type("." . $extension);
+                $ret .= self::serveAudio($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
             case "f4v":
             case "flv":
@@ -241,6 +246,34 @@ class MultimediaHelper {
         $ret .= '</html>';
 
         return $ret;
+    }
+
+    /**
+     * Serve audio in a plain <audio> tag
+     *
+     * @global string $urlAppend
+     * @param  string $mime
+     * @param  string $mediaPlay
+     * @param  string $startdiv
+     * @param  string $enddiv
+     * @return string
+     */
+    public static function serveAudio($mime, $mediaPlay, $startdiv, $enddiv) {
+        global $urlAppend;
+        return $startdiv . "
+            <div id='media-element'>
+              <audio controls preload='auto' style='padding: 24px 12px'>
+                <source type='{$mime}' src='{$mediaPlay}'>
+              </audio>
+            </div>
+            <script>
+              document.addEventListener('DOMContentLoaded', function(e) {
+                var el = document.getElementById('media-element'),
+                    size = {width: el.offsetWidth, height: el.offsetHeight + 82};
+                parent.jQuery && parent.jQuery.colorbox.resize(size);
+              });
+            </script>" .
+            $enddiv;
     }
 
     /**
