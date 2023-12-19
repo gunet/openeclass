@@ -60,7 +60,7 @@
 
   @media(min-width:992px){
     table.dataTable tbody tr:hover{
-      background-color: #EFF6FF;
+      background-color: transparent;
     }
   }
 

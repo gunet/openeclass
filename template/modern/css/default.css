@@ -721,7 +721,6 @@ a:hover{
   background-color: transparent; 
   border: 0 none; 
   height:80px; 
-  /* filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04)); */
   box-shadow: 1px 2px 6px rgba(43,57,68,0.04);
 }
 /* textEditor */
@@ -930,7 +929,6 @@ a:hover{
   .social-icon-tool{ 
     height: 30px; 
     padding-top:7px; 
-    /* color:#ffffff */
   }
 }
 
@@ -962,7 +960,6 @@ a:hover{
 }
 
 #bgr-cheat-footer {
-  /* background-color: #F7F9FE; */
   background-color: #ffffff;
   color: #fff;
   font-size: 14px;
@@ -986,7 +983,6 @@ a:hover{
     height: 80px; 
   } 
   .footer-container{
-    /* background-color: #F7F9FE; */
     background-color: transparent;
     padding: 32px 18px 32px 18px;
   }
@@ -1572,7 +1568,6 @@ select.form-select option{
 
 select.form-select:disabled{
   opacity: 0.4;
-  /* border-bottom: solid 2px #f9f8fa; */
   border-image: none;
   border-image-slice: 0;
   background-color: #DCDCDC;
@@ -1773,15 +1768,6 @@ input[type="submit"].warningAdminBtn:hover {
   height:14px; 
   width:14px;
 }
-
-/* .action_bar .ButtonsContent .btn{
-  margin-right: 5px;
-  margin-bottom: 5px;
-}
-
-.action_bar .ButtonsContent .btn:last-child{
-  margin-right:0px;
-} */
 
 .submitAdminBtn .fa-solid::before, .submitAdminBtn .fa-regular::before,
 .submitAdminBtnDefault .fa-solid::before, .submitAdminBtnDefault .fa-regular::before,
@@ -2659,7 +2645,6 @@ body .form-action-button-popover{
   border-top-right-radius: 4px;
   color:#2B3944;
   font-weight: 700; font-style: normal; font-size: 18px;
-  /* border-bottom: solid 1px #eee7e7; */
 }
 .panel-default .panel-heading .panel-title, .panel-action-btn-default .panel-heading .panel-title{
   color:#2B3944;
@@ -3074,33 +3059,8 @@ tr td{
   .table-default tbody,
   .table-default tfoot {
     display:block;
-    /* min-height: 48px;
-    max-height: 450px;
-    overflow: auto; */
   }
 
-  /* .table-default tbody::-webkit-scrollbar {
-    width: 20px;
-  }
-  .table-default tbody::-webkit-scrollbar-track {
-    background-color: #ffffff;
-  }
-  .table-default tbody::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-  }
-  .table-default tbody::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-  }
-  .table-default tbody::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-  } */
-  
-
-  
   .table-default thead, 
   .table-default tfoot tr, 
   .table-default tbody tr {
@@ -3109,14 +3069,6 @@ tr td{
     table-layout:fixed;
   }
 }
-
-
-/* thead tr th{
-  max-width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-} */
 
 thead tr th, 
 tfoot tr th{
@@ -4517,13 +4469,13 @@ div[role="progressbar"]::before {
 
 
 .embed-responsive-item{ 
-  height:450px; 
+  height:650px; 
   width:100%;
 }
 
 .bodyChat{
-  background-color: transparent;
-  border: solid 1px #B4BED1;
+  background-color: #E8EDF8;
+  border: solid 1px #E8EDF8;
 }
 
 .bodyChat::-webkit-scrollbar {

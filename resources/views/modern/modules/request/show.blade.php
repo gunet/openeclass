@@ -241,16 +241,16 @@
                                                 <div class='panel-body'>
 
 
-                                                    <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langFrom') }}</p>
-                                                    <p class='card-text'>{!! display_user($comment->user_id) !!}</p>
+                                                    <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langFrom') }}</p>
+                                                    <p class='card-text mb-3'>{!! display_user($comment->user_id) !!}</p>
 
-                                                    <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langDate') }}</p>
-                                                    <p class='card-text'>{{ format_locale_date(strtotime($comment->ts)) }}</p>
+                                                    <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langDate') }}</p>
+                                                    <p class='card-text mb-3'>{{ format_locale_date(strtotime($comment->ts)) }}</p>
 
                                                     @if ($comment->old_state != $comment->new_state)
 
-                                                        <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langChangeState') }}</p>
-                                                        <p class='card-text'>
+                                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langChangeState') }}</p>
+                                                        <p class='card-text mb-3'>
                                                             {{ $states[$comment->new_state] }}
                                                             <span>({{ trans('langFrom') }}:</span> {{ $states[$comment->old_state] }})
                                                         </p>
@@ -258,13 +258,13 @@
                                                     @endif
                                                     @if ($comment->real_filename)
 
-                                                        <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langAttachedFile') }}</p>
-                                                        <p class='card-text'><a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a></p>
+                                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langAttachedFile') }}</p>
+                                                        <p class='card-text mb-3'><a href='{{ commentFileLink($comment) }}'>{{ $comment->filename }}</a></p>
 
                                                     @endif
                                                     @if ($comment->comment)
 
-                                                        <p class='card-title fw-bold mb-1 fs-6'>{{ trans('langComment') }}</p>
+                                                        <p class='card-title fw-bold mb-0 fs-6'>{{ trans('langComment') }}</p>
                                                         {!! standard_text_escape($comment->comment) !!}
 
                                                     @endif
