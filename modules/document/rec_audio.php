@@ -3,6 +3,8 @@
 $require_login = true;
 $require_current_course = true;
 $require_editor = true;
+$require_help = true;
+$helpTopic = 'rec_audio';
 require_once '../../include/baseTheme.php';
 
 $head_content .= "<script src='https://www.WebRTC-Experiment.com/RecordRTC.js'></script>";
@@ -197,7 +199,7 @@ $head_content .= "
                         return;
                     }
                 
-                    var blob = recorder.getBlob();                    
+                    var blob = recorder.getBlob();
                     var recfilename = result + '.mka';
                     var file = new File([blob], recfilename, {
                         mimeType: 'audio/webm'

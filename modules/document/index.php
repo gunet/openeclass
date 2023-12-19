@@ -56,17 +56,58 @@ $helpTopic = 'documents';
 doc_init();
 
 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest' && $is_editor) {
-    /* save recorded data */
+    /* save video recorded data */
+    if (isset($_FILES['video-blob'])) {
+        $title = $_POST['userFile'];
+        $file_path = '/' . safe_filename('webm');
+        if (!move_uploaded_file($_FILES['video-blob']['tmp_name'], $basedir . $file_path)) {
+            Session::Messages($langGeneralError, 'alert-danger');
+        } else {
+            $filename = $title;
+            $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+            $file_date = date('Y-m-d G:i:s');
+            $file_format = 'webm';
+            Database::get()->query("INSERT INTO document SET
+            course_id = ?d,
+            subsystem = ?d,
+            subsystem_id = ?d,
+            path = ?s,
+            extra_path = '',
+            filename = ?s,
+            visible = 1,
+            comment = '',
+            category = 0,
+            title = ?s,
+            creator = ?s,
+            date = ?s,
+            date_modified = ?s,
+            subject = '',
+            description = '',
+            author = ?s,
+            format = ?s,
+            language = ?s,
+            copyrighted = 0,
+            editable = 0,
+            lock_user_id = ?d",
+                $course_id, $subsystem, $subsystem_id, $file_path,
+                $filename, $title, $file_creator,
+                $file_date, $file_date, $file_creator, $file_format,
+                $language, $uid);
+            Session::Messages("$langDownloadEnd", "alert-success");
+            exit();
+        }
+    }
+    /* save audio recorded data */
     if (isset($_FILES['audio-blob'])) {
         $title = $_POST['userFile'];
-        $file_path = '/' . safe_filename('wav');
+        $file_path = '/' . safe_filename('mka');
         if (!move_uploaded_file($_FILES['audio-blob']['tmp_name'], $basedir . $file_path)) {
             Session::Messages($langGeneralError, 'alert-danger');
         } else {
             $filename = $title;
             $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
             $file_date = date('Y-m-d G:i:s');
-            $file_format = 'wav';
+            $file_format = 'mka';
             Database::get()->query("INSERT INTO document SET
             course_id = ?d,
             subsystem = ?d,
@@ -1392,8 +1433,11 @@ if ($can_upload or $user_upload) {
                   'icon' => 'fa-folder',
                   'level' => 'primary'),
             array('title' => $langUploadRecAudio,
-                  'url' => "rec.php?course=$course_code",
+                  'url' => "rec_audio.php?course=$course_code",
                   'icon' => 'fa-microphone'),
+            array('title' => $langUploadRecVideo,
+                'url' => "rec_video.php?course=$course_code",
+                'icon' => 'fa-camera'),
             array('title' => $langExternalFile,
                   'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
                   'icon' => 'fa-link'),

@@ -1281,6 +1281,7 @@ $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCour
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
 $langUploadRecAudio = "Ηχογράφηση";
+$langUploadRecVideo = "Βιντεοσκόπηση";
 $langPause = "Παύση";
 $langReleaseMic = "Αποδέσμευση μικροφώνου";
 $langEnterFile = "Δώστε το όνομα αρχείου";

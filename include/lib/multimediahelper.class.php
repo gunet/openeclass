@@ -593,7 +593,7 @@ class MultimediaHelper {
             "dv", "mov", "moov", "movie", "mp4", "mpg", "mpeg",
             "3gp", "3g2", "m2v", "aac", "m4a",
             "flv", "f4v", "m4v", "mp3",
-            "swf", "webm", "ogv", "ogg");
+            "swf", "webm", "ogv", "ogg", "mka");
     }
 
     public static function getSupportedImages() {
