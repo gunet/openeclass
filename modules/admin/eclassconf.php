@@ -474,6 +474,8 @@ if (isset($_POST['submit'])) {
         'dont_display_contact_menu' => true,
         'dont_display_manual_menu' => true,
         'course_invitation' => true,
+        'allow_rec_video' => true,
+        'allow_rec_audio' => true
         );
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -1034,6 +1036,8 @@ else {
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
     $cbox_offline_course = get_config('offline_course') ? 'checked' : '';
+    $cbox_allow_rec_video = get_config('allow_rec_video') ? 'checked' : '';
+    $cbox_allow_rec_audio = get_config('allow_rec_audio') ? 'checked' : '';
 
     $tool_content .= "
             <div class='panel panel-primary' id='six'>
@@ -1078,6 +1082,18 @@ else {
                                     <label>
                                         <input type='checkbox' name='offline_course' value='1' $cbox_offline_course>
                                         $langCourseOfflineSettings
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='allow_rec_video' value='1' $cbox_allow_rec_video>
+                                        $lang_allow_rec_video
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='allow_rec_audio' value='1' $cbox_allow_rec_audio>
+                                        $lang_allow_rec_audio
                                     </label>
                                 </div>
                            </div>
