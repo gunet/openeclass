@@ -148,7 +148,7 @@ if (isset($_GET['delete'])) {
         if (!$section_editing) {
             $tool_content .= "
             <tr>
-                <td style='width:70px'>
+                <td class='count-col'>
                     <input class='form-control' type='text' name='new_section_id' value='".q($new_section_id)."'>
                 </td>
                 <td>

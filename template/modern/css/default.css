@@ -1941,7 +1941,10 @@ input[type="submit"].warningAdminBtn:hover {
 @media(max-width:991px){
   .contextual-menu-user{
     width: 296px;
+    overflow-y: auto;
+    max-height: calc(100vh - 56px);
   }
+
 }
 
 @media(min-width:992px){
@@ -3016,58 +3019,43 @@ body .form-action-button-popover{
   margin-top:15px; 
 }
 
-
-.table-responsive::-webkit-scrollbar {
+.table-responsive::-webkit-scrollbar,
+.dataTables_wrapper::-webkit-scrollbar {
   width: 20px;
 }
 
-.table-responsive::-webkit-scrollbar-track {
+.table-responsive::-webkit-scrollbar-track,
+.dataTables_wrapper::-webkit-scrollbar-track {
   background-color: #ffffff;
 }
 
-.table-responsive::-webkit-scrollbar-thumb {
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb {
   background-color: #d6dee1;
 }
 
-.table-responsive::-webkit-scrollbar-thumb {
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb {
   background-color: #d6dee1;
   border-radius: 20px;
 }
 
-.table-responsive::-webkit-scrollbar-thumb {
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb {
   background-color: #B4BED1;
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
-.table-responsive::-webkit-scrollbar-thumb:hover {
+.table-responsive::-webkit-scrollbar-thumb:hover,
+.dataTables_wrapper::-webkit-scrollbar-thumb:hover {
   background-color: #B4BED1;
 }
 
 table ,
 tr td{
   border:0px;
-}
-@media(min-width:992px){
-  tbody tr td{
-    word-break: break-word;
-  }
-}
-
-@media(min-width:992px){
-  .table-default tbody,
-  .table-default tfoot {
-    display:block;
-  }
-
-  .table-default thead, 
-  .table-default tfoot tr, 
-  .table-default tbody tr {
-    display:table;
-    width:100%;
-    table-layout:fixed;
-  }
 }
 
 thead tr th, 
@@ -3078,13 +3066,6 @@ tfoot tr th{
 tbody tr{
   border-bottom: solid 1px #EFF6FF;
 }
-
-@media(min-width:992px){
-  tbody tr:hover{
-    background-color: #EFF6FF;
-  }
-}
-
 
 tbody tr td,
 thead tr th{
@@ -3117,18 +3098,6 @@ th .fa-gears{
   display: none;
 }
 
-@media(min-width:992px){
-  .table-default th, .table-default {
-    width: auto !important;
-  }
-}
-@media(max-width:991px){
-  .table-default th, .table-default {
-    width: 100% !important;
-  }
-}
-
-
 tr.warning{
   background-color: #FFF4D1;
 }
@@ -3137,6 +3106,83 @@ tr.danger{
   background-color: #FDEFE9;
 }
 
+
+
+
+
+
+
+
+@media(max-width:991px){
+  .table-default {
+    width: 100% !important;
+    border-collapse: collapse; 
+  }
+
+  table.dataTable {
+    width: 100% !important;
+    border-collapse: collapse;
+  }
+
+  .annn_table_my_ann thead tr th:first-child,
+  .annn_table_my_ann thead tr td:first-child,
+  .annn_table_my_ann tbody tr td:first-child{
+    width: 80% !important;
+  }
+
+  .table-announcements-indexes thead tr th:first-child,
+  .table-announcements-indexes thead tr td:first-child,
+  .table-announcements-indexes tbody tr td:first-child{
+    width: 5% !important;
+  }
+
+  .table-announcements-indexes thead tr th.announceContent,
+  .table-announcements-indexes tbody tr td:has(.announceContent){
+    width: 35% !important;
+  }
+
+  .table-announcements-indexes thead tr th.btn-cell-content,
+  .table-announcements-indexes tbody tr td.option-btn-cell{
+    width: 3% !important;
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+@media(min-width:992px){
+  tbody tr:hover{
+    background-color: #EFF6FF;
+  }
+
+  tbody tr td{
+    word-break: break-word;
+  }
+
+  .table-default tbody,
+  .table-default tfoot {
+    display:block;
+  }
+
+  .table-default thead, 
+  .table-default tfoot tr, 
+  .table-default tbody tr {
+    display:table;
+    width:100%;
+    table-layout:fixed;
+  }
+
+  .table-default th, .table-default {
+    width: auto !important;
+  }
+}
 
 /* Change size of columns regarding tables */
 @media(min-width:992px) and (max-width:1199px){
