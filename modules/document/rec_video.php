@@ -6,7 +6,6 @@ $require_editor = true;
 $require_help = true;
 $helpTopic = 'documents';
 $helpSubTopic = 'rec_video';
-
 require_once '../../include/baseTheme.php';
 
 $toolName = $langUploadRecVideo;
@@ -22,8 +21,9 @@ $tool_content .= action_bar(array(
 $tool_content .= "
     <div class='form-wrapper'>
         <div class='form-group'>
-            <button class='btn btn-success' id='button-start-recording'>$langStart</button>
-            <button class='btn btn-danger' id='button-stop-recording' disabled>$langPause</button>
+            <button class='btn btn-success' id='button-open-camera'>$langOpenCamera</button>
+            <button class='btn btn-info' id='button-start-recording' disabled>$langStart</button>
+            <button class='btn btn-danger' id='button-stop-recording' disabled>$langStopRecording</button>
             <button class='btn btn-success' id='button-download-recording' disabled>$langSaveInDoc</button>
         </div>
         <span class='help-block'>$langMaxRecVideoTime</span>
@@ -34,8 +34,25 @@ $tool_content .= "
     <script src='{$urlAppend}node_modules/recordrtc/RecordRTC.min.js'></script>
     <script type='text/javascript'>
         $(document).ready(function() {
+            
             var video = document.querySelector('video');
+            var recorder;
+            var video_camera;
+            var btnOpenCamera = document.getElementById('button-open-camera');
+            var btnStartRecording = document.getElementById('button-start-recording');
+            var btnStopRecording = document.getElementById('button-stop-recording');
+            var btnDownloadRecording = document.getElementById('button-download-recording');
 
+            btnOpenCamera.onclick = function() {
+                captureCamera(function(camera) {
+                    video_camera = camera;
+                    video.muted = true;
+                    video.volume = 0;
+                    video.srcObject = camera;
+                });
+                btnStartRecording.disabled = false;
+            }
+            
             function captureCamera(callback) {
                 navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(camera) {
                     callback(camera);
@@ -44,7 +61,33 @@ $tool_content .= "
                     console.error(error);
                 });
             }
+            
+            btnStartRecording.onclick = function() {
+                this.disabled = true;
+                recorder = RecordRTC(video_camera, {
+                    type: 'video',
+                    audioBitsPerSecond: 128000,
+                    videoBitsPerSecond: 2097152, // 2 MBps
+                    disableLogs: true,
+                });
 
+                // max duration recording = 2 min
+                recorder.setRecordingDuration(120000).onRecordingStopped(stopRecordingCallback);
+                recorder.startRecording();
+
+                // release camera on stopRecording
+                recorder.camera = video_camera;
+
+                btnStopRecording.disabled = false;
+                btnOpenCamera.disabled = true;
+                btnDownloadRecording.disabled = true;
+            };
+
+            btnStopRecording.onclick = function() {
+                this.disabled = true;
+                recorder.stopRecording(stopRecordingCallback);
+            };
+            
             function stopRecordingCallback() {
 
                 btnDownloadRecording.disabled = false;
@@ -53,49 +96,9 @@ $tool_content .= "
                 video.muted = false;
                 video.volume = 1;
                 video.src = URL.createObjectURL(recorder.getBlob());
-
                 recorder.camera.stop();
             }
-
-            var recorder; // globally accessible
-
-            var btnStartRecording = document.getElementById('button-start-recording');
-            var btnStopRecording = document.getElementById('button-stop-recording');
-            var btnDownloadRecording = document.getElementById('button-download-recording');
-
-            btnStartRecording.onclick = function() {
-
-                this.disabled = true;
-                captureCamera(function(camera) {
-                    video.muted = true;
-                    video.volume = 0;
-                    video.srcObject = camera;
-
-                    recorder = RecordRTC(camera, {
-                        type: 'video',
-                        audioBitsPerSecond: 128000,
-                        videoBitsPerSecond: 2097152, // 2 MBps
-                        disableLogs: true,
-                    });
-
-                    // max duration recording = 2 min
-                    recorder.setRecordingDuration(120000).onRecordingStopped(stopRecordingCallback);
-                    recorder.startRecording();
-
-                    // release camera on stopRecording
-                    recorder.camera = camera;
-
-                    btnStopRecording.disabled = false;
-                    btnDownloadRecording.disabled = true;
-                });
-
-            };
-
-            btnStopRecording.onclick = function() {
-                this.disabled = true;
-                recorder.stopRecording(stopRecordingCallback);
-            };
-
+            
             btnDownloadRecording.onclick = function() {
 
                 bootbox.prompt({

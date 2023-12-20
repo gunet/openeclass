@@ -22,7 +22,7 @@ $tool_content .= "
     <div class='form-wrapper'>
         <div class='form-group'>
             <button class='btn btn-success' id='button-start-recording'>$langStart</button>
-            <button class='btn btn-danger' id='button-stop-recording' disabled>$langPause</button>
+            <button class='btn btn-danger' id='button-stop-recording' disabled>$langStopRecording</button>
             <button class='btn btn-default' id='button-release-microphone' disabled>$langReleaseMic</button>
             <button class='btn btn-success' id='button-download-recording' disabled>$langSaveInDoc</button>
         </div>
