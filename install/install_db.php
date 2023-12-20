@@ -1571,6 +1571,8 @@ $default_config = array(
     'personal_blog_rating', 1,
     'personal_blog_sharing', 1,
     'course_guest', 'link',
+    'allow_rec_audio', 1,
+    'allow_rec_video', 1,
     'version', ECLASS_VERSION);
 
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .

@@ -2570,9 +2570,11 @@ function upgrade_to_3_15($tbl_options) : void
               `Comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL
             ) $tbl_options");
     }
-
     // insert departments info
     update_minedu_deps();
+    // options
+    set_config('allow_rec_video', 1);
+    set_config('allow_rec_audio', 1);
 
 }
 

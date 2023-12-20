@@ -168,7 +168,10 @@ if (isset($_POST['submit'])) {
         'dont_display_courses_menu' => true,
         'dont_display_about_menu' => true,
         'dont_display_contact_menu' => true,
-        'dont_display_manual_menu' => true
+        'dont_display_manual_menu' => true,
+        'course_invitation' => true,
+        'allow_rec_video' => true,
+        'allow_rec_audio' => true
         ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -358,6 +361,8 @@ else {
     $data['cbox_dont_display_about_menu'] = get_config('dont_display_about_menu') ? 'checked' : '';
     $data['cbox_dont_display_manual_menu']= get_config('dont_display_manual_menu') ? 'checked' : '';
     $data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu') ? 'checked' : '';
+    $data['cbox_allow_rec_video'] = get_config('allow_rec_video') ? 'checked' : '';
+    $data['cbox_allow_rec_audio'] = get_config('allow_rec_audio') ? 'checked' : '';
 }
 
 view('admin.other.eclassconf', $data);

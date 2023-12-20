@@ -749,12 +749,26 @@
                                                                 </label>
                                                             </div>
                                                         <div class='checkbox'>
-                                                        <label class='label-container'>
-                                                                    <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
-                                                                    <span class='checkmark'></span>
-                                                                    {{ trans('langCourseOfflineSettings') }}
-                                                                </label>
-                                                            </div>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='offline_course' value='1' {{ $cbox_offline_course }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('langCourseOfflineSettings') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='allow_rec_video' value='1' {{ $cbox_allow_rec_video }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('lang_allow_rec_video') }}
+                                                            </label>
+                                                        </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='allow_rec_audio' value='1' {{ $cbox_allow_rec_audio }}>
+                                                                <span class='checkmark'></span>
+                                                                {{ trans('lang_allow_rec_audio') }}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </fieldset>
