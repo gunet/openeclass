@@ -145,8 +145,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $date_field = $myrow->reg_date ? format_locale_date(strtotime($myrow->reg_date), 'short', false) : $langUnknownDate;
         // checks if user is group tutor
         $is_tutor = false;
-        $q_tutor = Database::get()->queryArray("SELECT is_tutor FROM group_members 
-                                                    WHERE user_id = ?d 
+        $q_tutor = Database::get()->queryArray("SELECT is_tutor FROM group_members
+                                                    WHERE user_id = ?d
                                                     AND group_id IN (SELECT id FROM `group` WHERE course_id = ?d)",
                                             $myrow->id, $course_id);
         if (count($q_tutor) > 0) {
@@ -479,7 +479,8 @@ $tool_content .=
                   'show' => $course_user_requests),
             array('title' => $langcourseExternalUsersInviation,
                 'url' => "invite.php?course=$course_code",
-                'icon' => 'fa-plus-circle'),
+                'icon' => 'fa-plus-circle',
+                'show' => get_config('course_invitation')),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),

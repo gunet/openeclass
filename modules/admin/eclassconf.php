@@ -473,6 +473,7 @@ if (isset($_POST['submit'])) {
         'dont_display_about_menu' => true,
         'dont_display_contact_menu' => true,
         'dont_display_manual_menu' => true,
+        'course_invitation' => true,
         );
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -583,6 +584,7 @@ else {
 
     $cbox_block_duration_account = get_config('block_duration_account') ? 'checked' : '';
     $cbox_block_duration_alt_account = get_config('block_duration_alt_account') ? 'checked' : '';
+    $cbox_course_invitation = get_config('course_invitation') ? 'checked' : '';
 
     $maintenance_theme = get_config('maintenance_theme');
 
@@ -785,6 +787,15 @@ else {
                                     "class='form-control'") . "
                             </div>
                         </div>
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langcourseExternalUsersInviation:</label>
+                            <div class='checkbox col-sm-9'>
+                                <label>
+                                    <input type='checkbox' name='course_invitation' value='1' $cbox_course_invitation>
+                                    $langCourseInvitationHelp
+                                </label>
+                            </div>
+                        </div>
                         <hr>
                         <div class='form-group'>
                             <div class='col-sm-12'>
@@ -914,7 +925,7 @@ else {
                                     </label>
                                 </div>
                            </div>
-                           
+
                            <label for='theme' class='col-sm-2 col-sm-offset-1 control-label'>$langHomePageMenuSettings: </label>
                            <div class='col-sm-9'>
                                 <div class='checkbox'>
@@ -942,7 +953,7 @@ else {
                                     </label>
                                 </div>
                            </div>
-                           
+
                         </div>
                             </div>
                         </div>
@@ -1297,7 +1308,7 @@ else {
                                 <div class='checkbox'>
                                     <label>
                                         <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' $cbox_disable_student_unregister_cours>
-                                        $langUnsubscribeCourse 
+                                        $langUnsubscribeCourse
                                     </label>
                                 </div>
                            </div>
@@ -1472,7 +1483,7 @@ $tool_content .= "
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUsage / $langLogActions</h2>
                 </div>
-                <div class='panel-body'>                    
+                <div class='panel-body'>
                     <div class='form-group'>
                        <div class='col-sm-12'>
                             <div class='checkbox'>
@@ -1519,7 +1530,7 @@ $tool_content .= "
                         <div class='col-sm-12'>
                             <input class='btn btn-default' type='submit' name='submit' value='$langSave'>
                         </div>
-                    </div>                    
+                    </div>
                 </div>
             </div>
             <div class='panel panel-primary' id='thirteen'>
@@ -1631,7 +1642,7 @@ $tool_content .= "
                 </div>
                 <div class='panel-body'>
                         <div class='form-group'>
-                        
+
                             <div class='col-sm-9'>
                                 <div class='checkbox'>
                                     <label>
@@ -1640,11 +1651,11 @@ $tool_content .= "
                                     </label>
                                 </div>
                             </div>
-                       
+
                         </div>
                         <hr>
                         <div class='margin-bottom-fat margin-top-fat'><strong>$langMaintenanceChange</strong></div>
-                        
+
                         <fieldset>
                             <div class='landing-default'>";
 
@@ -1681,9 +1692,9 @@ $tool_content .= "
                                             </label>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
-                                <div class='row'>    
+                                <div class='row'>
                                     <div class='col-sm-6'>
                                         <div class='form-check'>
                                             <input class='form-check-input' type='radio' name='maintenance_theme' id='image3' value='3' ".checkMaintenanceTheme($maintenance_theme, 3).">
@@ -1701,7 +1712,7 @@ $tool_content .= "
                                         </div>
                                     </div>
                                 </div>
-                                <div class='row'>    
+                                <div class='row'>
                                     <div class='col-sm-6'>
                                         <div class='form-check'>
                                             <input class='form-check-input' type='radio' name='maintenance_theme' id='image5' value='5' ".checkMaintenanceTheme($maintenance_theme, 5).">

@@ -967,8 +967,10 @@ function format_locale_date($datetime_stamp, $format = null, $display_time = tru
 
     if ($format == 'short') {
         $format_date_style = IntlDateFormatter::SHORT;
-    } else if ($format == 'full') {
+    } elseif ($format == 'full') {
         $format_date_style = IntlDateFormatter::FULL;
+    } elseif ($format == 'medium') {
+        $format_date_style = IntlDateFormatter::MEDIUM;
     }
 
     if (!$display_time) {

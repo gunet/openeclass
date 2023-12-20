@@ -31,6 +31,10 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 require_once 'modules/user/invite_functions.php';
 
+if (!get_config('course_invitation')) {
+    redirect_to_home_page('modules/user/?course=' . $course_code);
+}
+
 if (isset($_POST['emailNewBodyInput']) and $_POST['emailNewBodyInput']) {
     $email_body = purify($_POST['emailNewBodyEditor']);
     $email_subject = purify($_POST['email_subject']);

@@ -31,13 +31,25 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/course.class.php';
 require_once 'modules/auth/auth.inc.php';
 
-$id = isset($_GET['id'])? $_GET['id']: null;
-$q = Database::get()->querySingle('SELECT * FROM course_invitation WHERE identifier = ?s AND registered_at IS NULL', $id);
-
-if (!$q) {
-    Session::Messages('Ο σύνδεσμος που ακολουθήσατε δεν είναι πλέον έγκυρος.', 'alert-info');
+if (!get_config('course_invitation')) {
+    Session::Messages($langNoLongerValid, 'alert-info');
     redirect_to_home_page();
 }
+
+$id = isset($_GET['id'])? $_GET['id']: null;
+$q = Database::get()->querySingle('SELECT *, expires_at <= NOW() AS expired
+    FROM course_invitation WHERE identifier = ?s', $id);
+
+if (!$q or $q->expired) {
+    Session::Messages($langNoLongerValid, 'alert-info');
+    redirect_to_home_page();
+}
+
+if ($q->registered_at) {
+    Session::Messages($langInvitationAlreadyUsed, 'alert-info');
+    redirect_to_home_page();
+}
+
 $course = Database::get()->querySingle('SELECT * FROM course WHERE id = ?d', $q->course_id);
 $course_id = $course->id;
 $course_code = $course->code;
@@ -68,7 +80,8 @@ if (isset($_POST['no_cas'])) {
             email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
             expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
             lang = ?s, am = '', email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
-            description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
+            description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = '',
+            disable_course_registration = 1",
             $surname, $givenname, $q->email, password_hash($_POST['password1'], PASSWORD_DEFAULT), $q->email, USER_STUDENT,
             get_config('default_language'));
     if ($user) {
@@ -207,18 +220,6 @@ if ($uid) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='name_field' class='col-sm-2 control-label'>$langName:</label>
-                            <div class='col-sm-10'>
-                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <label for='surname_field' class='col-sm-2 control-label'>$langSurname:</label>
-                            <div class='col-sm-10'>
-                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
-                            </div>
-                        </div>
-                        <div class='form-group'>
                             <label class='col-sm-2 control-label'>$langUsername:</label>
                             <div class='col-sm-10'>
                                 <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
@@ -239,8 +240,20 @@ if ($uid) {
                             </div >
                         </div>
                         <div class='form-group'>
+                            <label for='name_field' class='col-sm-2 control-label'>$langName:</label>
+                            <div class='col-sm-10'>
+                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='surname_field' class='col-sm-2 control-label'>$langSurname:</label>
+                            <div class='col-sm-10'>
+                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
+                            </div>
+                        </div>
+                        <div class='form-group'>
                             <div class='col-sm-12 text-center'>
-                                <button type='submit' name='no_cas' class='btn btn-primary'>Εγγραφή ως επισκέπτης</button>
+                                <button type='submit' name='no_cas' class='btn btn-primary'>$langRegisterAsVisitor</button>
                             </div>
                         </div>
                     </fieldset>

@@ -26,6 +26,10 @@ $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
+if (!get_config('course_invitation')) {
+    redirect_to_home_page('modules/user/?course=' . $course_code);
+}
+
 if (isset($_POST['delete'])) {
     $delete_id = getDirectReference($_POST['delete']);
     Database::get()->query('DELETE FROM course_invitation
@@ -51,7 +55,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         case 0: $sortCol = 'email'; break;
         case 1: $sortCol = 'surname'; break;
         case 2: $sortCol = 'created_at'; break;
-        case 3: $sortCol = 'registered_at'; break;
+        case 3: $sortCol = 'expires_at'; break;
+        case 4: $sortCol = 'registered_at'; break;
         default: $sortCol = 'created_at'; break;
     }
     $order_sql = "ORDER BY $sortCol $sortDir";
@@ -80,10 +85,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalDisplayRecords'] = $filtered_users;
     $data['aaData'] = [];
     foreach ($result as $myrow) {
+        $id_indirect = getIndirectReference($myrow->id);
         $full_name = sanitize_utf8($myrow->surname . ' ' . $myrow->givenname);
-        $date_field = format_locale_date(strtotime($myrow->created_at), 'short', false);
+        $date_field = format_locale_date(strtotime($myrow->created_at), 'medium', false);
+        $expiration_field = $myrow->expires_at? format_locale_date(strtotime($myrow->expires_at), 'medium', false): '-';
         if ($myrow->registered_at) {
-            $reg_field = format_locale_date(strtotime($myrow->registered_at), 'short', false);
+            $reg_field = format_locale_date(strtotime($myrow->registered_at), 'medium', false);
         } else {
             $reg_field = '-';
         }
@@ -94,16 +101,17 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'icon' => 'fa-times',
               'btn_class' => 'delete_btn btn-default' ],
             [ 'title' => $langSendReminder,
-              'url' => '#',
+              'url' => "invite_one.php?course=$course_code&amp;id=$id_indirect",
               'icon' => 'fa-check-square-o' ],
         ]);
         $data['aaData'][] = [
-            'DT_RowId' => getIndirectReference($myrow->id),
+            'DT_RowId' => $id_indirect,
             '0' => $myrow->email,
             '1' => $full_name,
             '2' => $date_field,
-            '3' => $reg_field,
-            '4' => $user_role_controls ];
+            '3' => $expiration_field,
+            '4' => $reg_field,
+            '5' => $user_role_controls ];
     }
     echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
@@ -221,6 +229,7 @@ $tool_content .= "
               <th>e-mail</th>
               <th class='text-center'>$langSurnameName</th>
               <th class='text-center' style='width: 80px;'>$langDate</th>
+              <th class='text-center' style='width: 80px;'>$langExpirationDate</th>
               <th class='text-center'>$langRegistration</th>
               <th class='text-center' style='width: 60px;'>".icon('fa-gears')."</th>
             </tr>
@@ -229,6 +238,7 @@ $tool_content .= "
         </tbody>
         <tfoot>
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
