@@ -2345,6 +2345,13 @@ $db->query("CREATE TABLE api_token (
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)) $tbl_options");
 
+$db->query("CREATE TABLE `minedu_departments` (
+    `MineduID` INT NOT NULL,
+    `Institution` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `School` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `Department` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+    `Comment` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL) 
+    $tbl_options");
 
 $_SESSION['theme'] = 'modern';
 
