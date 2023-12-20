@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 3.14
+ * Open eClass 3.15
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2023  Greek Universities Network - GUnet
@@ -23,6 +23,7 @@
  * @brief helper functions for upgrade
  */
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 function delete_field($table, $field) {
     global $langOfTable, $langDeleteField, $BAD;
@@ -2555,6 +2556,19 @@ function upgrade_to_3_15($tbl_options) : void
             UNIQUE KEY `course_email` (`course_id`,`email`),
             CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
     }
+
+    if (!DBHelper::tableExists('minedu_departments')) {
+        Database::get()->query("CREATE TABLE `minedu_departments` (
+              `MineduID` TEXT NOT NULL,
+              `Institution` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+              `School` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+              `Department` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+              `Comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL
+            ) $tbl_options");
+    }
+
+    // insert departments info
+    update_minedu_deps();
 }
 
 /**
@@ -3482,12 +3496,12 @@ function update_upload_whitelists() {
         'sb2', 'sb3', 'sbx', 'kodu', 'html', 'htm', 'wlmp', 'mswmm',
         'apk', 'py', 'ev3', 'psg', 'glo', 'gsp', 'xml', 'a3p', 'ypr',
         'mw2', 'dtd', 'aia', 'hex', 'mscz', 'pages', 'heic', 'piv', 'stk',
-        'pptm', 'gfar', 'lab', 'lmsp', 'qrs', 'cpp', 'c', 'h', 'java', 'm'];
+        'pptm', 'gfar', 'lab', 'lmsp', 'qrs', 'cpp', 'c', 'h', 'java', 'm', 'opus', 'mka'];
     $default_teacher_upload_whitelist = ['html', 'htm', 'svg', 'js',
         'css', 'xml', 'xsl', 'tcl', 'sgml', 'sgm', 'ini', 'ds_store', 'dir',
         'mom', 'gsp', 'kid', 'apk', 'woff', 'xsd', 'cur', 'lxf', 'a3p',
         'ypr', 'mw2', 'h5p', 'dtd', 'xsd', 'woff2', 'ppsm', 'jqz', 'jm',
-        'data', 'jar'];
+        'data', 'jar', 'mkv'];
 
     // add default whitelists to current whitelists, remove duplicates
     $student_upload_whitelist = array_unique(array_merge($default_student_upload_whitelist,
@@ -3503,4 +3517,34 @@ function update_upload_whitelists() {
 
     set_config('student_upload_whitelist', implode(', ', $student_upload_whitelist));
     set_config('teacher_upload_whitelist', implode(', ', $teacher_upload_whitelist));
+}
+
+/**
+ * @return void
+ */
+function update_minedu_deps()
+{
+
+    $value_string = '';
+    $i = 0;
+
+    Database::get()->query("DELETE FROM minedu_departments");
+    $file = IOFactory::load('upgrade/minedu_departments.xlsx');
+    $sheet = $file->getActiveSheet();
+
+    foreach ($sheet->getRowIterator() as $row) {
+        $i++;
+        if ($i == 1) { // first row contains field names
+            continue;
+        } else {
+            $cellIterator = $row->getCellIterator();
+            foreach ($cellIterator as $cell) {
+                $cell_value = $cell->getValue();
+                $value_string .= "'" . $cell_value . "'" . ",";
+            }
+            $db_string = "INSERT INTO minedu_departments(MineduID, Institution, School, Department, Comment) VALUES (" . rtrim($value_string, ',') .")";
+            Database::get()->query($db_string);
+            $value_string = '';
+        }
+    }
 }

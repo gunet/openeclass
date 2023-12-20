@@ -460,6 +460,9 @@ elseif (isset($_POST['install7'])) {
     // create main database
     require 'install_db.php';
 
+    // update departments info
+    update_minedu_deps();
+
     // create config.php
     $stringConfig = '<?php
 /* ========================================================
