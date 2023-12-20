@@ -125,7 +125,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $extra_terms = array();
     }
 
-    $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id, course.popular_course
+
+    $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id, course.created, course.popular_course
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
@@ -154,8 +155,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $popular_course_message = $langRemovePopular;
             $popular_course_action = "pop=0";
         }
-        $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
-                        </a> (" . q($logs->code) . ") " . $popular_icon . "<br /><i>" . q($logs->prof_names) . "";
+        $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><strong>" . q($logs->title) . "</strong>
+                        </a> (" . q($logs->code) . ") " . $popular_icon . "<br><i>" . q($logs->prof_names) .
+                        "<br><span class='help-block'>$langCreatedIn: " . format_locale_date(strtotime($logs->created), null, false). "</span>";
 
         $departments = $course->getDepartmentIds($logs->id);
         $i = 1;
