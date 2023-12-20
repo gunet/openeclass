@@ -129,7 +129,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $extra_terms = array();
     }
 
-    $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id
+    $sql = Database::get()->queryArray("SELECT DISTINCT course.code, course.title, course.prof_names, course.visible, course.id, course.created
                                FROM course, course_department, hierarchy
                               WHERE course.id = course_department.course
                                 AND hierarchy.id = course_department.department
@@ -149,8 +149,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
 
     foreach ($sql as $logs) {
-        $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><b>" . q($logs->title) . "</b>
-                        </a> (" . q($logs->code) . ")<br /><i>" . q($logs->prof_names) . "";
+        $course_title = "<a href='{$urlServer}courses/" . $logs->code . "/'><strong>" . q($logs->title) . "</strong>
+                        </a> (" . q($logs->code) . ")<br><i>" . q($logs->prof_names) .
+            "<br><span class='help-block'>$langCreatedIn: " . format_locale_date(strtotime($logs->created), null, false). "</span>";
 
         $departments = $course->getDepartmentIds($logs->id);
         $i = 1;

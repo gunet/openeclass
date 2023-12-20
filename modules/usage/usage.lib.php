@@ -1067,7 +1067,7 @@ function get_monthly_archives(): array
     $content = [];
     $start = new DateTime('now');
     $interval = DateInterval::createFromDateString('first day of last month');
-    $period = new DatePeriod($start, $interval, 12, DatePeriod::EXCLUDE_START_DATE); // last 12 months
+    $period = new DatePeriod($start, $interval, 24, DatePeriod::EXCLUDE_START_DATE); // last 12 months
 
     foreach ($period as $time) {
         $year_month_val = $time->format("Y-m");
@@ -1080,10 +1080,10 @@ function get_monthly_archives(): array
             $content[] = [ $data_month_year."-01", $data->profesNum, $data->studNum, $data->visitorsNum, $data->coursNum ];
         } else {
             $year_month_day = $time->format("Y-m-d");
-            $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course WHERE created <= ?t", $year_month_day)->cnt;
-            $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . " AND registered_at <= ?t", $year_month_day)->cnt;
-            $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at <= ?t", $year_month_day)->cnt;
-            $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_GUEST . " AND registered_at <= ?t", $year_month_day)->cnt;
+            $cnt_courses = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM course WHERE created <= ?t AND visible != ". COURSE_INACTIVE, $year_month_day)->cnt;
+            $cnt_prof = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_TEACHER . " AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter() , $year_month_day)->cnt;
+            $cnt_students = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_STUDENT . " AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter(), $year_month_day)->cnt;
+            $cnt_guest = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE status = " . USER_GUEST . " AND registered_at <= ?t AND expires_at > " . DBHelper::timeAfter(), $year_month_day)->cnt;
             $content[] = [ $year_month_day, $cnt_prof, $cnt_students, $cnt_guest, $cnt_courses ];
 
             Database::get()->query("INSERT INTO monthly_summary (month, profesNum, studNum, visitorsNum, coursNum) VALUES (?t, ?s, ?s, ?s, ?s)",
