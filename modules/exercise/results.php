@@ -185,7 +185,7 @@ foreach ($result as $row) {
 
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive mt-5'><table class='table-default'>";
-        $tool_content .= "<thead><tr><tdcolspan='".($is_editor ? 5 : 4)."'>";
+        $tool_content .= "<thead><tr><td colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
@@ -204,10 +204,10 @@ foreach ($result as $row) {
                 </tr>
                 <tr class='list-header'>
                   <th style='width:20% !important;'>" . $langStart . "</th>
-                  <th>" . $langExerciseDuration . "</th>
-                  <th>" . $langTotalScore . "</th>
-                  <th>" . $langCurrentStatus. "</th>
-                  ". ($is_editor ? "<th>" . icon('fa-gears'). "</th>" : "") ."
+                  <th style='width:20% !important;'>" . $langExerciseDuration . "</th>
+                  <th style='width:20% !important;'>" . $langTotalScore . "</th>
+                  <th style='width:20% !important;'>" . $langCurrentStatus. "</th>
+                  ". ($is_editor ? "<th style='width:20% !important;'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr></thead>";
 
         $k = 0;
@@ -280,15 +280,15 @@ foreach ($result as $row) {
 
             $tool_content .= "<tr$row_class><td style='width:20% !important;'>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' || empty($row2->time_duration) || $row2->attempt_status == ATTEMPT_ACTIVE) { // for compatibility
-                $tool_content .= "<td>$langNotRecorded</td>";
+                $tool_content .= "<td style='width:20% !important;'>$langNotRecorded</td>";
             } else {
-                $tool_content .= "<td>" . format_time_duration($row2->time_duration) . "</td>";
+                $tool_content .= "<td style='width:20% !important;'>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td>$results_link</td>
-                              <td>$status</td>";
+            $tool_content .= "<td style='width:20% !important;'>$results_link</td>
+                              <td style='width:20% !important;'>$status</td>";
             if ($is_editor) {
                 $tool_content .= "
-                    <td class='option-btn-cell text-end'>" . action_button(array(
+                    <td class='option-btn-cell text-end' style='width:20% !important;'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",

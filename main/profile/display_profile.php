@@ -77,7 +77,7 @@ if ($data['userdata']) {
                 //     'button-class' => 'submitAdminBtn mb-2 me-2',
                 //     'show' => get_config('eportfolio_enable')),
                 array('title' => $langModProfile,
-                    'url' => "profile.php",
+                    'url' => "profile.php?edProfile=true",
                     'icon' => 'fa-edit',
                     'button-class' => 'submitAdminBtn',
                     'level' => 'primary-label'),

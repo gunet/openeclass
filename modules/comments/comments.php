@@ -57,7 +57,7 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                 $post_actions .= '<span class="fa-solid fa-xmark text-danger float-end" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                 $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $post_actions .= '<span class="fa fa-edit pe-2 float-end text-warning" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                $post_actions .= '<span class="fa fa-edit pe-3 float-end" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
                 $post_actions .='</div>';
 
                 $response[0] = 'OK';
@@ -66,19 +66,19 @@ if ($wall_commenting || setting_get($setting_id, $course_id) == 1) {
                 $response[3] = "
                 <div class='row mb-4 comment' id='comment-".$comment->getId()."'>
                     <div class='col-12'>
-                        <div class='card panelCard'>
-                            <div class='card-header d-flex justify-content-between align-items-center'>
-                                <a href='#'>
-                                    ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) .
-                                    "<br><small>".display_user($comment->getAuthor(), false, false)."</small>
-                                </a>
+                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                <div>
+                                    <a href='#'>
+                                        ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
+                                    </a>
+                                    <small>" .display_user($comment->getAuthor(), false, false). "</small>
+                                </div>
                                 ".$post_actions."
                             </div>
                             <div class='card-body'>
-                                <button class='w-100 btn btn-light mt-2 media-heading'>".format_locale_date(strtotime($comment->getTime())).'</buton>'.
-                                    "
-                                    
-                                    <div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                                <p>".format_locale_date(strtotime($comment->getTime())).'</p>'.
+                                "<p id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</p>
                             </div>
                         </div>
                     </div>

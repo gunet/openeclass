@@ -108,11 +108,16 @@ function render_profile_fields_form($context, $valitron = false) {
                 }
 
                 $column = 'col-lg-6 col-12';
+                $padding = 'px-3';
                 // if case is editor then set column to equals 12. 
-                if($f->datatype == 2){
+                if($f->datatype == 2 or isset($_GET['edProfile'])){
                     $column = 'col-12';
+                    $padding = 'px-0';
+                    if($f->datatype == 2 and !isset($_GET['edProfile'])){
+                        $padding = 'px-3';
+                    }
                 }
-                $return_string .= '<div class="'.$column.' px-3"><div class="'.$form_class.'">';
+                $return_string .= '<div class="'.$column.' '.$padding.'"><div class="'.$form_class.'">';
                 $return_string .= '<label class="col-sm-12 control-label-notes" for="'.$f->shortname.'">'.q($f->name).'</label>';
                
 

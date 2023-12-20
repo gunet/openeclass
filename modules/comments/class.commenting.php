@@ -180,7 +180,7 @@ Class Commenting {
             }
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
-                $out .= '<div class="col-12  pb-5"><div class="form-wrapper form-edit Borders form-default"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $out .= '<div class="col-12  pb-5"><div class="form-wrapper form-edit Borders form-default px-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn submitAdminBtn m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form></div></div>';
