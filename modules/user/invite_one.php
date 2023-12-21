@@ -40,6 +40,7 @@ if (isset($_POST['submit'])) {
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('email_form'));
     $v->rule('email', 'email_form');
+    $invite = null;
     if ($v->validate()) {
         if (isset($_POST['id'])) {
             $invite = Database::get()->querySingle('SELECT * FROM course_invitation
@@ -60,7 +61,7 @@ if (isset($_POST['submit'])) {
             }
             if ($invite) {
                 Database::get()->query('UPDATE course_invitation
-                    SET registered_at = NOW WHERE id = ?d',
+                    SET registered_at = NOW() WHERE id = ?d',
                     $invite->id);
             }
             redirect_to_home_page('modules/user/invite_one.php?course=' . $course_code);
@@ -82,17 +83,17 @@ if (isset($_POST['submit'])) {
             WHERE course_id = ?d AND email = ?s',
             $course_id, $email);
         if ($invite) {
-            Database::get()->query('INSERT INTO course_invitation
-                SET email = ?s, surname = ?s, givenname = ?s, created_at = NOW(),
-                    course_id = ?d, identifier = ?s, expires_at = ?s',
-                $email, $surname, $givenname,
-                $course_id, $token, $expires_at);
-        } else {
             Database::get()->query('UPDATE course_invitation
                 SET email = ?s, surname = ?s, givenname = ?s, expires_at = ?s
                 WHERE id = ?d',
                 $email, $surname, $givenname,
                 $expires_at, $invite->id);
+        } else {
+            Database::get()->query('INSERT INTO course_invitation
+                SET email = ?s, surname = ?s, givenname = ?s, created_at = NOW(),
+                    course_id = ?d, identifier = ?s, expires_at = ?s',
+                $email, $surname, $givenname,
+                $course_id, $token, $expires_at);
         }
         if (isset($_POST['emailNewBodyInput']) and $_POST['emailNewBodyInput']) {
             $email_body = purify($_POST['emailNewBodyEditor']);
