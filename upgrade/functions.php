@@ -2561,7 +2561,7 @@ function upgrade_to_3_15($tbl_options) : void
         Database::get()->query("CREATE TABLE `minedu_departments` (
               `MineduID` TEXT NOT NULL,
               `Institution` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
-              `School` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
+              `School` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
               `Department` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci NOT NULL,
               `Comment` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci DEFAULT NULL
             ) $tbl_options");
