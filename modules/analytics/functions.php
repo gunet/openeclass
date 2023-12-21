@@ -976,7 +976,7 @@ function analytics_element_form($analytics_id, $type=null, $analytics_element_id
     <div class='flex-grow-1'>
         <div class='form-wrapper form-edit rounded'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                <h4 class='fs-4 control-label-notes text-center'>$elementTypeTitle</h4>
+                <h3>$elementTypeTitle</h3>
                 <input type='hidden' name='analytics_id' value='$analytics_id'>
                 <input type='hidden' name='analytics_element_id' value='$analytics_element_id'>
                 <div class='form-group mt-4'>

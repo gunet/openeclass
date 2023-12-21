@@ -115,11 +115,11 @@ Class Commenting {
             foreach ($comments as $comment) {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
                     if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
-                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
+                        $post_actions = '<div class="d-flex flex-wrap gap-2">';
+                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= '<span class="fa fa-edit pe-2 pb-2" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa-solid fa-xmark text-danger pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
-                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa fa-edit pe-2 pb-2 text-warning" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .='</div>';
                     } else {
                         $post_actions = '';
@@ -133,10 +133,11 @@ Class Commenting {
                             $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode));
                         }
 
-                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa-solid fa-xmark text-danger pb-2 pe-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa fa-edit normalBlueText pe-2 pb-2" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= '<span class="fa-solid fa-xmark text-danger pb-2 pe-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
 
                         $post_actions .='</div>';
                     } else {
