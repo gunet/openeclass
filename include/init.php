@@ -172,6 +172,12 @@ if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
       'preload' => 'Enum#auto,metadata,none',
       'controls' => 'Text',
     ));
+    $def->addElement('audio', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', array(
+        'src' => 'URI',
+        'type' => 'Text',
+        'preload' => 'Enum#auto,metadata,none',
+        'controls' => 'Text',
+    ));
     $def->addElement('source', 'Block', 'Flow', 'Common', array(
       'src' => 'URI',
       'type' => 'Text',

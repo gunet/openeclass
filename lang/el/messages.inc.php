@@ -1289,6 +1289,15 @@ $langGoogle = "Μηχανή αναζήτησης";
 $langIntroductionText = "Εισαγωγικό κείμενο του $langsOfCourse. Αντικαταστήστε το με το δικό σας, κάνοντας κλίκ στην <strong>Αλλαγή</strong>.";
 $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία το $langsCourse με τίτλο ";
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές $langsFaculties. Παρακαλώ ξαναπροσπαθήστε.";
+$langUploadRecAudio = "Ηχογράφηση";
+$langUploadRecVideo = "Βιντεοσκόπηση";
+$langPause = "Παύση";
+$langStopRecording = "Τέλος καταγραφής";
+$langReleaseMic = "Αποδέσμευση μικροφώνου";
+$langEnterFile = "Δώστε το όνομα αρχείου";
+$langOpenCamera = "Άνοιγμα κάμερας";
+$langMaxRecAudioTime = "μέγιστος χρόνος ηχογράφησης: 5 λεπτά";
+$langMaxRecVideoTime = "μέγιστος χρόνος βιντεοσκόπησης: 2 λεπτά";
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendances = "Παρουσιολόγια";
