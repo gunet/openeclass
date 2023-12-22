@@ -2830,6 +2830,10 @@ function upgrade_to_4_0($tbl_options): void {
     }
 
 
+    $show_modal_openCourses = get_config('show_modal_openCourses');
+    if (is_null($show_modal_openCourses)) {
+        set_config('show_modal_openCourses', 0);
+    }
 
 }
 

@@ -87,6 +87,7 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
+    set_config('show_modal_openCourses', $_POST['show_modal_openCourses']);
 
     //Maintenance Text set
     foreach ($session->active_ui_languages as $langcode) {
@@ -171,7 +172,8 @@ if (isset($_POST['submit'])) {
         'dont_display_manual_menu' => true,
         'course_invitation' => true,
         'allow_rec_video' => true,
-        'allow_rec_audio' => true
+        'allow_rec_audio' => true,
+        'show_modal_openCourses' => true
         ];
 
     register_posted_variables($config_vars, 'all', 'intval');
@@ -363,6 +365,7 @@ else {
     $data['cbox_dont_display_contact_menu'] = get_config('dont_display_contact_menu') ? 'checked' : '';
     $data['cbox_allow_rec_video'] = get_config('allow_rec_video') ? 'checked' : '';
     $data['cbox_allow_rec_audio'] = get_config('allow_rec_audio') ? 'checked' : '';
+    $data['cbox_allow_modal_courses'] = get_config('show_modal_openCourses') ? 'checked' : '';
 }
 
 view('admin.other.eclassconf', $data);

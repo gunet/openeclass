@@ -1137,7 +1137,7 @@ jContent;
                     }
 
                     $ret .= "<li class='list-group-item element'>
-                                <div class='table_td_header d-flex justify-content-between align-items-center'>
+                                <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap'>
                                     <div>
                                         <a class='categoryName text-decoration-underline' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                                 $ret .= (!empty($code)) ? "&nbsp;<span class='form-value'>(" . q($code) . ")</span>" : '';

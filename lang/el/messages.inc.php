@@ -2465,6 +2465,7 @@ $langMyCoursesUser = "Τα $langsCourses που παρακολουθώ";
 $langNoCourses = "Δεν υπάρχουν $langsCourses";
 $langCourseCreate = "Δημιουργία $langsOfCourse";
 $langCreationDate = "Ημερομηνία δημιουργίας";
+$langMoreCourseInfo = "Περισσότερες πληροφορίες";
 $langMyAgenda = "Το ημερολόγιό μου";
 $langMyAnnouncements = "Οι ανακοινώσεις μου";
 $langAdminTool = "Διαχείριση πλατφόρμας";
@@ -2643,6 +2644,8 @@ $lang_restrict_teacher_owndep = "Να μην επιτρέπεται η δημι�
 $lang_allow_teacher_clone_course = "Να επιτρέπεται η κλωνοποίηση $langsOfCourses από τους $langsTeachers";
 $lang_allow_rec_video = "Να επιτρέπεται η δημιουργία βιντεοσκοπημένου αρχείου στο $langsCourse";
 $lang_allow_rec_audio = "Να επιτρέπεται η δημιουργία ηχογραφημένου αρχείου στο $langsCourse";
+$lang_openCourse_inModal = "Να εμφανίζονται οι πληροφορίες του μαθήματος σε Modal(Πλαίσιο) στα ανοικτά μαθήματα;</br>
+                            Σε περίπτωση που δεν επιλέξετε αυτήν την επιλογή, οι πληροφορίες του μαθήματος θα εμφανίζονται σε καινούρια σελίδα του browser σας.";
 $lang_disable_log_actions = "Απενεργοποίηση καταγραφής ενεργειών";
 $lang_disable_cron_jobs = "Απενεργοποίηση μηνιαίων ενεργειών στατιστικών";
 $lang_disable_log_course_actions = "Απενεργοποίηση καταγραφής ενεργειών χρηστών μέσα στα $langsCourses";

@@ -83,18 +83,12 @@
                                             @endif
 
 
-                                            <div class='col-12 mt-4' id='accordion'>
+                                            <div class='col-12 border-card mt-4 rounded-2'>
                                                 <ul class='list-group list-group-flush list-group-default'>
-                                                    <li class="list-group-item d-flex justify-content-between align-items-start gap-5">
-                                                        <a class="btn list-group-btn @if(isset($_GET['fc']) and $_GET['fc'] != 1) collapsed @endif d-flex justify-content-start align-items-start px-0 gap-2" role='button' data-bs-toggle='collapse' href='#Category'>
-                                                            <i class='fa-solid fa-chevron-down'></i>
-                                                            {{ trans('langOpenOptions') }}
-                                                        </a>
-                                                        <div class='pt-1 pb-1'>{!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}</div>
+                                                    <li class="list-group-item d-flex justify-content-start align-items-center flex-wrap gap-2 TextBold">
+                                                        {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
                                                     </li>
-                                                    <div id='Category' class="panel-collapse accordion-collapse collapse border-0 rounded-0 @if(isset($_GET['fc']) and $_GET['fc'] == 1) show @endif" role='tabpanel' data-bs-parent='#accordion'>
-                                                        {!! $childHTML !!}
-                                                    </div>
+                                                    {!! $childHTML !!}
                                                 </ul>
                                                 
                                             </div>
@@ -118,10 +112,10 @@
                                             <th>{!! trans('langCourseCode') !!}</th>
                                         @if (isset($isInOpenCoursesMode))
                                             <th>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-center'>{!! trans('langOpenCoursesLevel') !!}</th>
+                                            <th class='text-end'>{!! trans('langOpenCoursesLevel') !!}</th>
                                         @else
                                             <th>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-center'>{!! trans('langType') !!}</th>
+                                            <th class='text-end'>{!! trans('langType') !!}</th>
                                         @endif
                                         </tr>
                                     </thead>
@@ -130,77 +124,85 @@
                                             <tr>
                                                 <td>
                                                     @if ($mycourse->visible == COURSE_OPEN)
-                                                        <a href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
+                                                        <a class='TextBold' href="../../courses/{!! urlencode($mycourse->k) !!}/">{!! $mycourse->i !!}</a>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @else
-                                                        {!! $mycourse->i !!}&nbsp;<small>({!! $mycourse->c !!})</small>
+                                                        <span class='TextBold'>{!! $mycourse->i !!}</span>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @endif
                                                     @if ($displayGuestLoginLinks)
                                                         @if ($course_data[$mycourse->id]['userguest'])
-                                                            <div class='float-end'>
+                                                            <div class='float-end ps-3'>
                                                             @if ($course_data[$mycourse->id]['userguest']->password === '')
                                                                     <form method='post' action='{{ $urlAppend }}'>
                                                                         <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
                                                                         <input type='hidden' name='pass' value=''>
                                                                         <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                        <button type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
+                                                                        <button type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top'><span class='fa fa-plane'></span></button>
                                                                     </form>
                                                             @else
-                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-toggle='tooltip'>
-                                                                    <span class='fa fa-plane'></span></a>
+                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-bs-placement='top' data-bs-toggle='tooltip'>
+                                                                        <span class='fa fa-plane'></span>
+                                                                    </a>
                                                             @endif
                                                             </div>
                                                         @endif
                                                     @endif
 
+                                                    @if(!get_config('show_modal_openCourses'))
+                                                        <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                            <i class="fa-solid fa-circle-info Primary-500-cl fa-lg"></i>
+                                                        </a>
+                                                    @endif
 
-                                                    <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                        <i class='fa-solid fa-display Primary-500-cl'></i>
-                                                    </button>
+                                                    @if(get_config('show_modal_openCourses'))
+                                                        <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                            <i class='fa-solid fa-display Primary-500-cl'></i>
+                                                        </button>
 
-                                                    <!-- The Modal -->
-                                                    <div id="myModal{{$mycourse->k}}" class="modal">
+                                                        <!-- The Modal -->
+                                                        <div id="myModal{{$mycourse->k}}" class="modal">
 
-                                                        <!-- Modal content -->
-                                                        <div class="modal-content modal-content-opencourses px-lg-5 py-lg-5">
-                                                            <div class='col-12 d-flex justify-content-between align-items-start'>
-                                                                <div>
-                                                                    <h2 class='d-flex justify-content-start align-items-start gap-3 TextBold mb-0'>
-                                                                        <span class='settings-icons mt-1 Neutral-600-cl'>{!! course_access_icon($mycourse->visible) !!}</span>
-                                                                        {{$mycourse->i}}
-                                                                    </h2>
-                                                                    <p class='course-professor-code'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</p>
+                                                            <!-- Modal content -->
+                                                            <div class="modal-content modal-content-opencourses px-lg-5 py-lg-5">
+                                                                <div class='col-12 d-flex justify-content-between align-items-start'>
+                                                                    <div>
+                                                                        <h2 class='d-flex justify-content-start align-items-start gap-3 TextBold mb-0'>
+                                                                            <span class='settings-icons mt-1 Neutral-600-cl'>{!! course_access_icon($mycourse->visible) !!}</span>
+                                                                            {{$mycourse->i}}
+                                                                        </h2>
+                                                                        <p class='course-professor-code'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <button type='button' class="close border-0 bg-default mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                                                    </div>
                                                                 </div>
-                                                                <div>
-                                                                    <button type='button' class="close border-0 bg-default mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+
+                                                                <div class='course-content mt-4'>
+                                                                    <div class='col-12 d-flex justify-content-center align-items-start'>
+                                                                        @if($mycourse->img == NULL)
+                                                                            <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
+                                                                        @else
+                                                                            <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ $mycourse->img }}" /></a>
+                                                                        @endif
+                                                                    </div>
+
+                                                                    <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'>
+                                                                        @if(empty($mycourse->de))
+                                                                            <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                                                        @else
+                                                                            {!! $mycourse->de !!}
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             </div>
 
-                                                            <div class='course-content mt-4'>
-                                                                <div class='col-12 d-flex justify-content-center align-items-start'>
-                                                                    @if($mycourse->img == NULL)
-                                                                        <img class='openCourseImg' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $mycourse->img }}" /></a>
-                                                                    @else
-                                                                        <img class='openCourseImg' src="{{ $urlAppend }}courses/{{$mycourse->k}}/image/{{$mycourse->img}}" alt="{{ $mycourse->img }}" /></a>
-                                                                    @endif
-                                                                </div>
-
-                                                                <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'>
-                                                                    @if(empty($mycourse->de))
-                                                                        <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
-                                                                    @else
-                                                                        {!! $mycourse->de !!}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
                                                         </div>
-
-                                                    </div>
+                                                    @endif
 
                                                 </td>
                                                 <td>
                                                     {!! $mycourse->t !!}
                                                 </td>
-                                                <td class='text-center'>
+                                                <td class='text-end'>
                                                 @if ($isInOpenCoursesMode)
                                                     {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
                                                     <a href='javascript:showMetadata("{!! $mycourse->k !!}");'><img src='{{ $themeimg }}/lom.png'/></a>

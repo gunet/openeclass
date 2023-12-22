@@ -138,19 +138,16 @@ if (isset($_POST['submit'])) {
                                 }
 
                                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>
-                                                    <div class='col-12' id='accordionRegister'>";
+                                                    <div class='col-12 border-card rounded-2'>";
                                         $tool_content .= "<ul class='list-group list-group-flush list-group-default'>
-                                                                <li class='list-group-item d-flex justify-content-between align-items-start gap-5'>
-                                                                    <a class='btn list-group-btn $collapsed d-flex justify-content-start align-items-start px-0' role='button' data-bs-toggle='collapse' href='#RegisterCourses'>
-                                                                        <i class='fa-solid fa-chevron-down'></i>&nbsp;&nbsp;$langOpenOptions
-                                                                    </a>
-                                                                    <div class='pt-1 pb-1'>".$tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=')."</div>
+                                                                <li class='list-group-item d-flex justify-content-start align-items-center flex-wrap gap-2 TextBold'>
+                                                                    ".$tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=')."
                                                                 </li>";
-                                            $tool_content .= "<div id='RegisterCourses' class='panel-collapse accordion-collapse collapse border-0 rounded-0 show' role='tabpanel' data-bs-parent='#accordionRegister'>";
+                                            $tool_content .= "";
                                                                     list($childCount, $childHTML) = $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
                                                                     $tool_content .= $childHTML;
                                                                     $subTrees = $tree->buildSubtrees(array($fc));
-                                            $tool_content .= "</div>";
+                                            $tool_content .= "";
                                         $tool_content .= "</ul>
                                                     </div>
                                                 </form>
@@ -252,7 +249,7 @@ function expanded_faculte($facid, $uid) {
     $retString .= "<th style='width:10% !important;'>$langRegistration</th>";
     $retString .= "<th>$langCourseCode</th>";
     $retString .= "<th>$langTeacher</th>";
-    $retString .= "<th>$langType</th>";
+    $retString .= "<th class='text-end'>$langType</th>";
     $retString .= "</tr></thead>";
 
     Database::get()->queryFunc("SELECT
@@ -340,7 +337,7 @@ function expanded_faculte($facid, $uid) {
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>
                    <td>" . q($mycours->t) . "</td>
-                   <td>" . course_access_icon($mycours->visible) . "</td></tr>";
+                   <td class='text-end'>" . course_access_icon($mycours->visible) . "</td></tr>";
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";
 

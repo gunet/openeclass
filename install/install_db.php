@@ -1510,6 +1510,7 @@ $default_config = array(
     'total_courses', 0,
     'visits_per_week', 0,
     'show_only_loginScreen', 0,
+    'show_modal_openCourses', 0,
     'email_required', 0,
     'email_from', 1,
     'email_verification_required', 0,

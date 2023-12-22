@@ -769,6 +769,13 @@
                                                                 {{ trans('lang_allow_rec_audio') }}
                                                             </label>
                                                         </div>
+                                                        <div class='checkbox'>
+                                                            <label class='label-container'>
+                                                                <input type='checkbox' name='show_modal_openCourses' value='1' {{ $cbox_allow_modal_courses }}>
+                                                                <span class='checkmark'></span>
+                                                                {!! trans('lang_openCourse_inModal') !!}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </fieldset>
