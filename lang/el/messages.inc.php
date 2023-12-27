@@ -510,7 +510,7 @@ $langMultiMoveCourses = "Μαζική μεταφορά $langsOfCourses";
 $langConfirmMultiMoveCourses = "Επιβεβαίωση μεταφοράς $langsOfCourses σε άλλο τμήμα.";
 $langCourseCodes = "Κωδικοί $langsOfCourses";
 $langAskManyUsersToCourses = "Τα $langsCourses θα πρέπει να υπάρχουν και οι χρήστες θα πρέπει να έχουν ήδη λογαριασμό στην πλατφόρμα για να εγγραφούν σε αυτά. Πληκτρολογήστε τα ονόματα χρήστη (usernames) και τους κωδικούς των $langsOfCourses σε ξεχωριστές γραμμές.";
-$langMultiRegUserInfo = "<p>Ανεβάστε ένα αρχείο τύπου Excel (.xls, xlsx) με τα στοιχεία των χρηστών με εην ακόλουθη μορφή:</p>
+$langMultiRegUserInfo = "<p>Ανεβάστε ένα αρχείο τύπου Excel (.xls, xlsx) με τα στοιχεία των χρηστών με την ακόλουθη μορφή:</p>
 <p>Η πρώτη γραμμή πρέπει να περιέχει τα πεδία των στοιχείων του χρήστη.</p>
 <p>Τα πιθανά πεδία είναι τα εξής:</p>
 <ul>
@@ -6339,3 +6339,4 @@ $langAccountStatus = "Κατάσταση λογαριασμού";
  $langRegisterAsVisitor = 'Εγγραφή ως επισκέπτης';
  $langCourseInvitation = 'Πρόσκληση εγγραφής στο μάθημα';
  $langMetaTeacher = "Εκπαιδευτικός";
+$langCourseInvitation = 'Πρόσκληση εγγραφής στο μάθημα';
