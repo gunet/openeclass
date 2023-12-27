@@ -687,13 +687,13 @@
 
                                                     <div class='card-body'>
 
-                                                        <div class="lesson-title">
+                                                        <div class="lesson-title line-height-default">
                                                             <a class='TextBold' href="{{$urlServer}}courses/{{$course->code}}/index.php">
                                                                 {{ $course->title }}&nbsp;({{ $course->public_code }})
                                                             </a>
                                                         </div>
 
-                                                        <div class="vsmall-text Neutral-900-cl TextRegular">{{ $course->professor }}</div>
+                                                        <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
                                                     </div>
 
                                                     <div class='card-footer bg-default border-0'>

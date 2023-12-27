@@ -311,8 +311,14 @@ a:hover,button:hover{
 }
 
 .item-title.h4 {
-  line-height: 22px;
+  line-height: 16px;
   margin-bottom: 15px;
+  letter-spacing: 0px;
+}
+
+.line-height-default{
+  line-height: 16px;
+  letter-spacing: 0px;
 }
 
 /**********************************************************************************************************************/

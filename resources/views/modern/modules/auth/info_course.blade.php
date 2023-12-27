@@ -16,14 +16,14 @@
                 @foreach($infoCourse as $c)
                     <div class="card border-0 px-0 mb-3">
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-lg-4 col-md-5 d-flex justify-content-center justify-content-md-start">
                                 @if($c->course_image == NULL)
                                     <img class='img-fluid rounded-start' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $c->title }}" /></a>
                                 @else
                                     <img class='img-fluid rounded-start' src="{{ $urlAppend }}courses/{{ $c->code }}/image/{{ $c->course_image }}" alt="{{ $c->course_image }}" /></a>
                                 @endif
                             </div>
-                            <div class="col-md-8 ps-md-5">
+                            <div class="col-lg-8 col-md-7 ps-md-3">
                                 <div class="card-body px-0 pt-md-0">
 
                                     <h2 class="card-title d-flex justify-content-start align-items-center gap-2 flex-wrap">

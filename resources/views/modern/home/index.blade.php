@@ -195,12 +195,12 @@
                                                                 @endif
                                                             </a>
                                                             <div class='card-body'>
-                                                                <div class="col-12 text-center mt-2">
+                                                                <div class="col-12 text-center mt-2 line-height-default">
                                                                     <a class='TextBold msmall-text' href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                         {{$pop_course->title}} ({{$pop_course->public_code}})
 
                                                                     </a>
-                                                                    <p class='TextRegular msmall-text Neutral-800-cl'>{{$pop_course->prof_names}}</p>
+                                                                    <p class='TextRegular msmall-text Neutral-800-cl mt-1'>{{$pop_course->prof_names}}</p>
                                                                 </div>
                                                             </div>
                                                         </div>

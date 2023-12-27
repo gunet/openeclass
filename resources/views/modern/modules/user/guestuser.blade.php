@@ -53,19 +53,19 @@
                                         <div class='row form-group'>
                                             <label class='col-12 control-label-notes'>{{ trans('langName') }}</label>
                                             <div class='col-12'>
-                                                <input class='form-control' value='{!! q($guest_info->givenname) !!}' disabled>
+                                                <input class='form-control h-40px' value='{!! q($guest_info->givenname) !!}' disabled>
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
                                             <label class='col-12 control-label-notes'>{{ trans('langSurname') }}</label>
                                             <div class='col-12'>
-                                                <input class='form-control' value='{!! q($guest_info->surname) !!}' disabled>
+                                                <input class='form-control h-40px' value='{!! q($guest_info->surname) !!}' disabled>
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
                                             <label class='col-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                             <div class='col-12'>
-                                                <input class='form-control' value='{!! q($guest_info->username) !!}' disabled>
+                                                <input class='form-control h-40px' value='{!! q($guest_info->username) !!}' disabled>
                                             </div>
                                         </div>
                                         <div class='row form-group mt-4'>
