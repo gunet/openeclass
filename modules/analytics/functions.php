@@ -437,7 +437,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
 
         $results = "
         <div class='table-responsive mt-0'>
-            <table class='table-default'>
+            <table class='table-default anaylitics-table-per-user'>
             <thead>
                 <tr class='list-header'>
                     

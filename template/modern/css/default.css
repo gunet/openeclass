@@ -80,7 +80,7 @@ body{
   .main-container,
   .module-container,
   .onlyLoginContainer{
-    min-height: calc(100vh - 56px - 283px + 56px);
+    min-height: calc(100vh - 56px - 283px);
   }
 }
 @media(min-width:992px){
@@ -3203,6 +3203,12 @@ tr.danger{
     width: 80% !important;
   }
 
+  .anaylitics-table-per-user thead tr th:first-child,
+  .anaylitics-table-per-user thead tr td:first-child,
+  .anaylitics-table-per-user tbody tr td:first-child{
+    width: 30% !important;
+  }
+
   .table-course-invitation thead tr th:first-child,
   .table-course-invitation thead tr td:first-child,
   .table-course-invitation tbody tr td:first-child{
@@ -3269,6 +3275,13 @@ tr.danger{
   .table-course-invitation thead tr td:first-child,
   .table-course-invitation tbody tr td:first-child{
     width: 20% !important;
+  }
+
+
+  .anaylitics-table-per-user thead tr th:first-child,
+  .anaylitics-table-per-user thead tr td:first-child,
+  .anaylitics-table-per-user tbody tr td:first-child{
+    width: 25% !important;
   }
 
   .annn_table_my_ann thead tr th:first-child,

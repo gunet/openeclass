@@ -34,9 +34,12 @@
                                     </a>
                                 @endif
                             @endif
-                            <a id='coursesId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/listfaculte.php">
-                                <i class="fa fa-book pe-2"></i>{{ trans('langCourses') }}
-                            </a>
+
+                            @if (!get_config('dont_display_courses_menu'))
+                                <a id='coursesId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/listfaculte.php">
+                                    <i class="fa fa-book pe-2"></i>{{ trans('langCourses') }}
+                                </a>
+                            @endif
                            
                             <a id='faqId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}info/faq.php">
                                 <i class="fa fa-question-circle pe-2"></i>{{ trans('langFaq') }}
