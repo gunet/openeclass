@@ -2835,6 +2835,28 @@ function upgrade_to_4_0($tbl_options): void {
         set_config('show_modal_openCourses', 0);
     }
 
+    if (!DBHelper::tableExists('course_invitation')) {
+        Database::get()->query("CREATE TABLE `course_invitation` (
+            `id` int(11) NOT NULL AUTO_INCREMENT,
+            `surname` varchar(255) NOT NULL DEFAULT '',
+            `givenname` varchar(255) NOT NULL DEFAULT '',
+            `email` varchar(255) CHARACTER SET ascii NOT NULL DEFAULT '',
+            `identifier` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '',
+            `created_at` datetime NOT NULL,
+            `expires_at` datetime DEFAULT NULL,
+            `registered_at` datetime DEFAULT NULL,
+            `course_id` int(11) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            UNIQUE KEY `identifier` (`identifier`),
+            UNIQUE KEY `course_email` (`course_id`,`email`),
+            CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
+    }
+
+    $course_invitationn = get_config('course_invitation');
+    if (is_null($course_invitationn)) {
+        set_config('course_invitation', 0);
+    }
+
 }
 
 

@@ -3203,6 +3203,12 @@ tr.danger{
     width: 80% !important;
   }
 
+  .table-course-invitation thead tr th:first-child,
+  .table-course-invitation thead tr td:first-child,
+  .table-course-invitation tbody tr td:first-child{
+    width: 20% !important;
+  }
+
   .table-default thead tr th.count-col,
   .table-default tbody tr td.count-col{
     width: 10% !important;
@@ -3257,6 +3263,12 @@ tr.danger{
   .table-default thead tr td:first-child,
   .table-default tbody tr td:first-child{
     width: 40% !important;
+  }
+
+  .table-course-invitation thead tr th:first-child,
+  .table-course-invitation thead tr td:first-child,
+  .table-course-invitation tbody tr td:first-child{
+    width: 20% !important;
   }
 
   .annn_table_my_ann thead tr th:first-child,

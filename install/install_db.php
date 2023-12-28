@@ -1507,6 +1507,7 @@ $default_config = array(
     'default_language', $lang,
     'dont_display_login_form', 0,
     'dont_display_testimonials', 0,
+    'course_invitation', 0,
     'total_courses', 0,
     'visits_per_week', 0,
     'show_only_loginScreen', 0,
@@ -2347,6 +2348,21 @@ $db->query("CREATE TABLE api_token (
     `updated` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expired` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)) $tbl_options");
+
+$db->query("CREATE TABLE `course_invitation` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `surname` varchar(255) NOT NULL DEFAULT '',
+    `givenname` varchar(255) NOT NULL DEFAULT '',
+    `email` varchar(255) CHARACTER SET ascii NOT NULL DEFAULT '',
+    `identifier` varchar(64) CHARACTER SET ascii COLLATE ascii_bin NOT NULL DEFAULT '',
+    `created_at` datetime NOT NULL,
+    `expires_at` datetime DEFAULT NULL,
+    `registered_at` datetime DEFAULT NULL,
+    `course_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `identifier` (`identifier`),
+    UNIQUE KEY `course_email` (`course_id`,`email`),
+    CONSTRAINT `invitation_course` FOREIGN KEY (`course_id`) REFERENCES `course` (`id`) ON DELETE CASCADE) $tbl_options");
 
 $db->query("CREATE TABLE `minedu_departments` (
     `MineduID` TEXT NOT NULL,

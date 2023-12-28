@@ -386,6 +386,18 @@
                                                     </div>
                                                 </div>
 
+
+                                                <div class='form-group mt-4'>
+                                                    <label class='col-sm-12 control-label-notes'>{{ trans('langcourseExternalUsersInviation') }}:</label>
+                                                    <div class='checkbox col-sm-12'>
+                                                        <label class='label-container'>
+                                                            <input type='checkbox' name='course_invitation' value='1' {{ $cbox_course_invitation }}>
+                                                            <span class='checkmark'></span>
+                                                            {{ trans('langCourseInvitationHelp') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+
                                             </fieldset>
                                         </div>
                                     </div>

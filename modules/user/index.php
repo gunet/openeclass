@@ -225,8 +225,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $email_exclamation_icon = '';
         }
 
-        $nameColumn = "<div class='d-flex justify-content-start align-items-start gap-2'>
-                            <div class='pull-left' style='width: 32px ; margin-right: 10px;'>
+        $nameColumn = "<div>
+                            <div class='d-flex justify-content-start align-items-start gap-2'>
                                 <img style='width:32px; height:32px; border-radius:50%; border:solid 2px #e8e8e8; 'class='img-circle' src='".user_icon($myrow->id) . "' />
                                 <div style='padding-left:8px; padding-top: 5px;'>$stats_icon</div>
                             </div>
@@ -380,6 +380,10 @@ $data['action_bar'] = action_bar([
       'icon' => 'fa-solid fa-hand',
       'level' => 'primary-label',
       'show' => $course_user_requests ],
+    ['title' => $langcourseExternalUsersInviation,
+      'url' => "invite.php?course=$course_code",
+      'icon' => 'fa-plus-circle',
+      'show' => get_config('course_invitation')],
     ['title' => $langGroupUserManagement,
       'url' => "../group/index.php?course=$course_code",
       'icon' => 'fa-solid fa-user-group'],

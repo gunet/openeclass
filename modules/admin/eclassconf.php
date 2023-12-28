@@ -173,6 +173,7 @@ if (isset($_POST['submit'])) {
         'course_invitation' => true,
         'allow_rec_video' => true,
         'allow_rec_audio' => true,
+        'course_invitation' => true,
         'show_modal_openCourses' => true
         ];
 
@@ -366,6 +367,7 @@ else {
     $data['cbox_allow_rec_video'] = get_config('allow_rec_video') ? 'checked' : '';
     $data['cbox_allow_rec_audio'] = get_config('allow_rec_audio') ? 'checked' : '';
     $data['cbox_allow_modal_courses'] = get_config('show_modal_openCourses') ? 'checked' : '';
+    $data['cbox_course_invitation'] = get_config('course_invitation') ? 'checked' : '';
 }
 
 view('admin.other.eclassconf', $data);
