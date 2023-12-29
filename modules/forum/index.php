@@ -119,9 +119,9 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
         }
 
-        $tool_content .= "<div class='col-12 mt-3'><caption>";
-        $tool_content .= "<div class='col-12 forum-category-tools d-flex justify-content-between align-items-center border-card Primary-200-bg px-3 py-0 mb-0'>
-                          <div><strong>$langCategory :</strong> $cat_title</div>";
+        $tool_content .= "<div class='col-12 border-card mb-4'><caption>";
+        $tool_content .= "<div class='col-12 forum-category-tools d-flex justify-content-between align-items-center border-card Primary-200-bg px-0 py-0 mb-0'>
+                          <div style='padding-left:10px;'><strong>$langCategory :</strong> $cat_title</div>";
         $tool_content .= "<div>";
         $tool_content .= action_button(
                 array(
@@ -163,7 +163,7 @@ if ($total_categories > 0) {
             );
         $tool_content .= "</div></div></caption>";
 
-        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default mb-5'>";
+        $tool_content .= "<div class='table-responsive mt-0'><table class='table-default '>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr class='list-header'>
             <th>$toolName</th>

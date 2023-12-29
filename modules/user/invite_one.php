@@ -31,6 +31,8 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/log.class.php';
 require_once 'modules/user/invite_functions.php';
 
+load_js('bootstrap-datetimepicker');
+
 if (!get_config('course_invitation')) {
     redirect_to_home_page('modules/user/?course=' . $course_code);
 }
@@ -173,8 +175,9 @@ $tool_content .= "
             <label class='col-sm-12 control-label-notes'>$langExpirationDate:</label>
             <div class='col-sm-12'>
               <div class='input-group'>
-                <input class='form-control' id='user_date_expires_at' name='expires_at' type='text' $value_date_expires>
-                <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
+                <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
+                <input class='form-control mt-0 border-start-0' id='user_date_expires_at' name='expires_at' type='text' $value_date_expires>
+                
               </div>
             </div>
           </div>
@@ -236,6 +239,16 @@ $tool_content .= "
                   }
               });
           });
-      </script>";
+
+        $('#user_date_expires_at').datetimepicker({
+            format: 'dd-mm-yyyy hh:ii',
+            pickerPosition: 'bottom-right',
+            language: '".$language."',
+            minuteStep: 5,
+            autoclose: true
+        });
+    </script>
+    
+    ";
 
 draw($tool_content, 2, null, $head_content);

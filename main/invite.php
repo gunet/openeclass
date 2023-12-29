@@ -75,8 +75,11 @@ if ($course->visible == COURSE_INACTIVE) {
 
 $auth = 7; // CAS
 $cas = get_auth_settings($auth);
-phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], false);
-phpCAS::setNoCasServerValidation();
+
+if($cas['auth_default'] == 1){
+    phpCAS::client(SAML_VERSION_1_1, $cas['cas_host'], intval($cas['cas_port']), $cas['cas_context'], false);
+    phpCAS::setNoCasServerValidation();
+}
 
 $user_id = null;
 if (isset($_POST['no_cas'])) {
@@ -112,33 +115,37 @@ if (isset($_POST['no_cas'])) {
     }
 }
 if (isset($_POST['submit'])) {
-    phpCAS::forceAuthentication();
+    if($cas['auth_default'] == 1){ 
+        phpCAS::forceAuthentication(); 
+    }
     if ($uid) {
         $user_id = $uid;
     }
 }
-if (!$uid and phpCAS::checkAuthentication()) {
-    $_SESSION['cas_attributes'] = phpCAS::getAttributes();
-    $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
-    $username = phpCAS::getUser();
-    $user = Database::get()->querySingle('SELECT id FROM user WHERE username = ?s', $username);
-    if ($user) {
-        $user_id = $user->id;
-    } else {
-        $user = Database::get()->query("INSERT IGNORE INTO user
-                    SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
-                        email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
-                        expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
-                        lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
-                        description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
-                    $attrs['surname'], $attrs['givenname'], $username, 'cas',
-                    mb_strtolower(trim($attrs['email'])), USER_STUDENT, get_config('default_language'),
-                    $attrs['studentid']);
+if($cas['auth_default'] == 1){
+    if (!$uid and phpCAS::checkAuthentication()) {
+        $_SESSION['cas_attributes'] = phpCAS::getAttributes();
+        $attrs = get_cas_attrs($_SESSION['cas_attributes'], $cas);
+        $username = phpCAS::getUser();
+        $user = Database::get()->querySingle('SELECT id FROM user WHERE username = ?s', $username);
         if ($user) {
-            $user_id = $user->lastInsertID;
-            Database::get()->query('INSERT IGNORE INTO user_department
-                SET user = ?d, department = ?d',
-                $user_id, 1);
+            $user_id = $user->id;
+        } else {
+            $user = Database::get()->query("INSERT IGNORE INTO user
+                        SET surname = ?s, givenname = ?s, username = ?s, password = ?s,
+                            email = ?s, status = ?d, registered_at = " . DBHelper::timeAfter() . ",
+                            expires_at = DATE_ADD(NOW(), INTERVAL " . get_config('account_duration') . " SECOND),
+                            lang = ?s, am = ?s, email_public = 0, phone_public = 0, am_public = 0, pic_public = 0,
+                            description = '', verified_mail = " . EMAIL_VERIFIED . ", whitelist = ''",
+                        $attrs['surname'], $attrs['givenname'], $username, 'cas',
+                        mb_strtolower(trim($attrs['email'])), USER_STUDENT, get_config('default_language'),
+                        $attrs['studentid']);
+            if ($user) {
+                $user_id = $user->lastInsertID;
+                Database::get()->query('INSERT IGNORE INTO user_department
+                    SET user = ?d, department = ?d',
+                    $user_id, 1);
+            }
         }
     }
 }
