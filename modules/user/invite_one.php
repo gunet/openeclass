@@ -231,14 +231,13 @@ $tool_content .= "
       $(function() {
         $('#customEmailBody').change(function() {
           if ($(this).is(':checked')) {
-           $('.emailbody, .emailsubject, .customMailHelp').removeClass('hidden');
+            $('.emailbody, .emailsubject, .customMailHelp').removeClass('hidden');
                     $('.emailNewBodyInput').val(1);
-                  } else {
+          } else {
                     $('.emailbody, .emailsubject, .customMailHelp').addClass('hidden');
                     $('.emailNewBodyInput').val(0);
-                  }
-              });
-          });
+          }
+        });
 
         $('#user_date_expires_at').datetimepicker({
             format: 'dd-mm-yyyy hh:ii',
@@ -247,6 +246,9 @@ $tool_content .= "
             minuteStep: 5,
             autoclose: true
         });
+      });
+
+        
     </script>
     
     ";
