@@ -139,7 +139,7 @@ if (!$conference_activity) {
         ),
         array('title' => $langWash,
             'url' => $wash_link,
-            'icon' => 'fa-trash Accent-200-cl',
+            'icon' => 'fa-trash ',
             'level' => 'primary-label',
             'link-attrs' => "target='messageList'",
             'show' => $is_editor

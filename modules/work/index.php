@@ -5348,7 +5348,7 @@ function show_assignment($id) {
                     $tool_content .= "<a href='$reportlink'><b>$langAutoJudgeShowWorkResultRpt</b></a>";
                 }
             }
-            $tool_content .= "<td class='text-center filename-col' class='col-md-2'>$filelink <br> $plagiarismlink</td>";
+            $tool_content .= "<td class='filename-col' class='col-md-2'>$filelink <br> $plagiarismlink</td>";
 
             $tool_content .= "<td class='col-md-2'>" . format_locale_date(strtotime($row->submission_date)) .$late_sub_text. "</td>";
 
@@ -5456,7 +5456,7 @@ function show_non_submitted($id) {
                 $tool_content .= "</table></div></div></div>";
         } else {
             $tool_content .= "
-                      <p class='sub_title1'>$m[WorkGroupNoSubmission]:</p>
+                      <p class='sub_title1 mt-3'>$m[WorkGroupNoSubmission]:</p>
                       <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$m[NoneWorkGroupNoSubmission]</span></div></div>";
         }
 
@@ -5493,7 +5493,7 @@ function show_non_submitted($id) {
                 $tool_content .= "</table></div></div></div>";
         } else {
             $tool_content .= "
-                      <p class='sub_title1'>$m[WorkUserNoSubmission]:</p>
+                      <p class='sub_title1 mt-3'>$m[WorkUserNoSubmission]:</p>
                       <div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$m[NoneWorkUserNoSubmission]</span></div></div>";
         }
     }

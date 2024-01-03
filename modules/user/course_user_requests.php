@@ -153,7 +153,7 @@ if (isset($_GET['rid'])) {
                                   'level' => 'primary'),
                                 array('title' => $langRejectRequest,
                                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$udata->uid&amp;rid=$udata->id&amp;rej=true",
-                                  'icon' => 'fa-xmark',
+                                  'icon' => 'fa-solid fa-xmark Accent-200-cl',
                                   'level' => 'primary')
                                  )).
                         "</td>";

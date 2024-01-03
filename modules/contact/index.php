@@ -92,7 +92,7 @@ draw($tool_content, 1);
  */
 function form($user) {
     global $course_id, $langInfoAboutRegistration, $langFrom, $langSendTo, 
-            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons;
+            $langSubmitNew, $course_code, $langRequest, $langOfCourse, $langRequestReasons, $urlAppend;
            
     $userprof = '';
     $profdata = Database::get()->queryArray("SELECT user.surname, user.givenname
@@ -102,20 +102,19 @@ function form($user) {
         $userprof .= "$prof->surname $prof->givenname &nbsp;&nbsp;";
     }
         
-    $ret = "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoAboutRegistration</span></div></div>";
-    $ret .= "<div class='col-sm-12'><div class='form-wrapper form-edit rounded'>";
+    $ret = "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoAboutRegistration</span></div></div>";
+    $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit borderLg mt-2 mb-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langRequest $langOfCourse:</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>
         <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>$user</small></div>
         <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>$userprof</small></div>
-            
-        <div class='help-block mt-3'><small>$langRequestReasons</small></div>            
+                       
         <div class='form-group mt-3'>
             <div class='col-sm-12'>
-              <textarea name='content' rows='10' cols='80'></textarea>
+              <textarea name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
             </div>
-	</div>
+	    </div>
         <div class='form-group mt-3'>
             <div class='col-sm-offset-1 col-sm-11'>
                 <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
@@ -123,7 +122,10 @@ function form($user) {
         </div>		
         ". generate_csrf_token_form_field() ."
         <input type='hidden' name='course_id' value='$course_id'>
-	</fieldset></form></div></div>";
+	</fieldset></form></div></div>
+    <div class='col-lg-6 col-12 d-none d-lg-block'>
+        <img class='form-image-modules' src='{$urlAppend}template/modern/img/form-image.png' alt='form-image'>
+    </div></div>";
 
     return $ret;
 }
@@ -191,7 +193,7 @@ function email_profs($course_id, $content, $from_name, $from_username, $from_add
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
-            $ret .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . icon('fa-university') . "&nbsp;" . q($to_name) . "</span></div></div>";            
+            $ret .= "<div class='col-sm-12'><div class='alert alert-success'><i class='fa-solid fa-circle-check fa-lg'></i><span>" . "" . "&nbsp;" . q($to_name) . "</span></div></div>";            
             if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message)) {
                 $ret .= "<div class='col-sm-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$GLOBALS[langErrorSendingMessage]</span></div></div>";
             }

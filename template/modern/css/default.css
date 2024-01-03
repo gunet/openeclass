@@ -2527,6 +2527,9 @@ body .form-action-button-popover{
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
 }
+.panel-admin-calendar .event{
+  margin-bottom: 0px;
+}
 
 .panel-primary,.panel-action-btn-primary{
   border-radius:4px;

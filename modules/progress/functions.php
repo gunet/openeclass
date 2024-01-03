@@ -216,15 +216,12 @@ function display_course_completion(): void
     if ($data) {
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-success'>
-                        <div class='panel-heading'>
-                            <div class='row'>
-                                <div class='col-sm-7 text-md-start text-center'>
-                                    $langCourseCompletion
-                                </div>
-                            </div>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <h3>$langCourseCompletion</h3>
+                                
                         </div>
-                        <div class='panel-body pt-2'>
+                        <div class='card-body'>
                             <div class='res-table-wrapper'>";
 
             $vis_status = $data->active ? "text-success" : "text-danger";
@@ -2299,7 +2296,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
         if (!$unit_id) {
             $tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-info'>
+                <div class='panel panel-admin'>
                     <div class='panel-body'>
 
                         <h3 class='mb-0 text-center'>$langCourseCompletion</h3>
@@ -2556,25 +2553,24 @@ function student_view_progress() {
 
     $head_content .= "<style>
         #progress_circle {
-          display: flex;
-          width: 100px;
-          height: 100px;
-          margin: 5px;
-          border-radius: 50%;
-          background: conic-gradient(red var(--progress), gray 0deg);
-          font-size: 0;
+            display: flex;
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: conic-gradient(#0073E6 var(--progress), #E8EDF8 0deg);
+            font-size: 0;
         }
         #progress_circle::after {
-          content: attr(data-progress) '%';
-          display: flex;
-          justify-content: center;
-          flex-direction: column;
-          width: 100%;
-          margin: 10px;
-          border-radius: 50%;
-          background: white;
-          font-size: 2rem;
-          text-align: center;
+            content: attr(data-progress) '%';
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+            margin: 10px;
+            border-radius: 50%;
+            background: white;
+            font-size: 2rem;
+            text-align: center;
         }
     </style>";
 
@@ -2589,22 +2585,22 @@ function student_view_progress() {
 
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='panel panel-success'>
-                        <div class='panel-heading'>
-                            $langCourseCompletion
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <h3>$langCourseCompletion</h3>
                         </div>
-                        <div class='panel-body'>
+                        <div class='card-body'>
                             <div class='res-table-wrapper'>
                                 <div class='row p-2 res-table-row border-0'>
-                                    <div class='col-4 d-flex justify-content-center align-items-center'>
+                                    <div class='col-md-4 col-12 d-flex justify-content-center align-items-center'>
                                         <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
                                     </div>
-                                    <div class='col-4 d-flex justify-content-center align-items-center'>
+                                    <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
                                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
                                       
                                     </div>
-                                    <div class='col-4 d-flex justify-content-center align-items-center'>
-                                      <div role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 5rem;'></div>
+                                    <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
+                                      <div role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
                                     </div>
                                 </div>
                             </div>
@@ -2657,7 +2653,7 @@ function student_view_progress() {
 
                 $tool_content .= "<div class='res-table-wrapper'>
                                     <div class='row res-table-row border-0 p-3'>
-                                        <div class='col-4 d-flex justify-content-center align-items-center'>
+                                        <div class='col-md-4 col-12 d-flex justify-content-center align-items-center'>
                                             <img class = '$faded center-block' style='max-height: 60px;' class='img-responsive block-center' src='$urlServer" . BADGE_TEMPLATE_PATH . "$badge_filename'>
                                         </div>";
                                 //     $tool_content .= "
@@ -2673,10 +2669,10 @@ function student_view_progress() {
                                 //     </div>
                                 // </div>";
                                 $tool_content .= "
-                                        <div class='col-4 d-flex justify-content-center align-items-center'>
+                                        <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
                                             <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user'>" . ellipsize($badge->title, 40) . "</a>
                                         </div>
-                                        <div class='col-4 d-flex justify-content-center align-items-center'>
+                                        <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
                                             <div role='progressbar' aria-valuenow='" .$badge_percentage. "' aria-valuemin='0' aria-valuemax='100' style='--value: ".$badge_percentage."; --size: 6rem;'></div>
                                         </div>
                                     </div>
@@ -2708,8 +2704,8 @@ function student_view_progress() {
                 $tool_content .= "<div class='res-table-wrapper'>";
                 $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
-                $tool_content .= "<div class='col-12 certificate_panel border border-secondary-4 m-auto d-block bg-light shadow-lg p-3'>
-                        <h4>$certificate->title</h4>
+                $tool_content .= "<div class='col-12 certificate_panel border-card m-auto d-block bg-light p-3'>
+                        <h4 class='text-center'>$certificate->title</h4>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
                             <div class='col-sm-12 certificate_panel_issuer text-center text-secondary'>$certificate->issuer</div>
@@ -2728,7 +2724,7 @@ function student_view_progress() {
                     $tool_content .= "</div>";
                 } else {
                     $score = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
-                    $tool_content .= "<div id='progress_circle' data-progress='$score' style='--progress: ".$score."deg; margin-left: 100px; margin-top: 10px;'>$score%</div>";
+                    $tool_content .= "<div id='progress_circle' class='mt-3 ms-auto me-auto' data-progress='$score' style='--progress: ".$score."deg;'>$score%</div>";
                     $tool_content .= "</div></a>";
                 }
                 $tool_content .= "</div>";

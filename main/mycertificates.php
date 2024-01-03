@@ -110,7 +110,7 @@ if (count($courses) > 0) {
                     continue;
                 }
                 $table_content .= "<tr class='not_visible'><td>" . $course1->title . " ($certificate->title)</td>
-                    <td style='text-align:center;'>
+                    <td>
                     <a href= '{$urlServer}modules/progress/index.php?course=$code&amp;certificate_id=$certificate->certificate&amp;u=$uid'>" . $cert_content . "</a> 
                             </td></tr>";
             }            
@@ -128,7 +128,7 @@ if (count($courses) > 0) {
                     $invisible = '';
                 }
                 $table_content .= "<tr class='$invisible'><td>" . $course1->title . " ($badge->title)</td>
-                    <td style='text-align:center;'>
+                    <td>
                     <a href= '{$urlServer}modules/progress/index.php?course=$code&amp;badge_id=$badge->badge&amp;u=$uid'>" . $cert_content . "</a>" . $icon_content . 
                             "</td></tr>";
             }
