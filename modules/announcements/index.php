@@ -830,10 +830,13 @@ if ($is_editor) {
                 array(
                     'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                 )
-            ))."</div>
-        <input type='hidden' name='id' value='$AnnouncementToModify'>
-        </div>
-        ";
+            ))."</div>";
+
+        if (isset($_GET['modify'])) {
+            $tool_content .= "<input type='hidden' name='id' value='$AnnouncementToModify'>";
+        }
+        $tool_content .= "</div>";
+
         if (isset($_GET['copy_ann'])) {
             $tool_content .= "<input type='hidden' name='copy_ann'>";
         }
