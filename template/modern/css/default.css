@@ -85,32 +85,73 @@ body{
 }
 @media(min-width:992px){
 
-  .main-container{
-    padding: 24px 18px 24px 18px;
+  .container.main-container{
+    padding: 24px 8px 24px 8px;
   }
+  .container-fluid.main-container{
+    padding: 24px 16px 24px 16px;
+  }
+
+
   .module-container{
     padding: 24px 0px 24px 0px;
   }
+
+
   .jumbotron-container{
-    padding: 24px 18px 24px 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding: 24px 18px 24px 18px; */
     background-color: #F7F9FE;
     min-height: 315px;
   }
+  .container.jumbotron-container{
+    padding: 24px 8px 24px 8px;
+  }
+  .container-fluid.jumbotron-container{
+    padding: 24px 16px 24px 16px;
+  }
+
+
   .homepage-container{
-    padding: 24px 18px 24px 18px;
+    /* padding: 24px 18px 24px 18px; */
     background-color: #ffffff;
     min-height: calc(100vh - 80px - 80px - 315px);
   }
+  .container.homepage-container{
+    padding: 24px 8px 24px 8px;
+  }
+  .container-fluid.homepage-container{
+    padding: 24px 16px 24px 16px;
+  }
+
+
   .portfolio-profile-container{
     min-height: 256px;
-    padding: 24px 18px 24px 18px;
+    /* padding: 24px 18px 24px 18px; */
     background-color: #F7F9FE;
   }
+  .container.portfolio-profile-container{
+    padding: 24px 8px 24px 8px;
+  }
+  .container-fluid.portfolio-profile-container{
+    padding: 24px 16px 24px 16px;
+  }
+
+
   .portfolio-courses-container{
-    padding: 24px 18px 24px 18px;
+    /* padding: 24px 0px 24px 0px; */
     background-color: #ffffff;
     min-height: calc(100vh - 80px - 80px - 256px);
   }
+  .container.portfolio-courses-container{
+    padding: 24px 8px 24px 8px;
+  }
+  .container-fluid.portfolio-courses-container{
+    padding: 24px 16px 24px 16px;
+  }
+
 
   .main-container,
   .module-container,
@@ -736,17 +777,25 @@ a:hover{
 
 .header-container{
   background-color: #ffffff;
-  padding: 32px 18px 32px 18px;
+  /* padding: 32px 18px 32px 18px; */
+}
+.container.header-container{
+  padding: 24px 8px 24px 8px;
+}
+.container-fluid.header-container{
+  padding: 24px 16px 24px 16px;
 }
 @media(max-width:991px){
   .header-container{
     min-height: 56px;
+    padding: 0px 18px 0px 18px !important;
   }
 }
 
 .eclass-nav-icon{ 
   width:200px; 
-  height:40px; 
+  height:60px; 
+  border-radius: 4px;
 }
 
 
@@ -990,7 +1039,13 @@ a:hover{
   } 
   .footer-container{
     background-color: transparent;
-    padding: 32px 18px 32px 18px;
+    /* padding: 32px 18px 32px 18px; */
+  }
+  .container.footer-container{
+    padding: 24px 8px 24px 8px;
+  }
+  .container-fluid.footer-container{
+    padding: 24px 16px 24px 16px;
   }
 }
 
@@ -4104,18 +4159,21 @@ body .delThemeBtn{
 
 @media(min-width:992px){
   .container-fluid.module-container .course-wrapper{
-    padding-left: 24px;
+    /* padding-left: 24px; */
+    padding-left: 0px;
   }
 }
 
 @media(min-width:992px) and (max-width:1199px){
   .container.module-container .course-wrapper{
-    padding-left: 16px;
+    /* padding-left: 16px; */
+    padding-left: 0px;
   }
 }
 @media(min-width:1200px){
   .container.module-container .course-wrapper{
-    padding-left: 16px;
+    /* padding-left: 16px; */
+    padding-left: 0px;
   }
 }
 
@@ -5007,7 +5065,7 @@ div[role="progressbar"]::before {
   }
 
   .eclass-nav-icon{
-    width:150px; height:30px; 
+    width:150px; height:40px; 
   }
 
   .dropdown_menu_user{ 

@@ -614,7 +614,7 @@ $tool_content .= "
   <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
-        <div class='form-wrapper form-edit rounded-2 p-lg-5 p-3'>
+        <div class='form-wrapper form-edit rounded'>
             <h3 class='theme_options_legend  mt-4'>$langLayoutConfig</h3>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langLayout:</label>

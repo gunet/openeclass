@@ -66,11 +66,11 @@
     flex: 1;
   }
   .container-fluid .course-wrapper .col_maincontent_active{
-    padding: 24px 32px 24px 32px;
+    padding: 24px 24px 24px 32px;
   }
 
   .container .course-wrapper .col_maincontent_active{
-    padding: 24px 32px 24px 32px;
+    padding: 24px 24px 24px 32px;
   }
   
 }

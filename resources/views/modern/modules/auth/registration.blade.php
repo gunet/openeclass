@@ -52,7 +52,7 @@
             @if ($user_registration)
                 <div class='col-12 mt-4'>
                     <div class='row row-cols-1 row-cols-lg-2 m-auto g-lg-5 g-4'>
-                        <div class='col-lg-6 col-12'>
+                        <div class='col-lg-6 col-12 ps-0'>
                             <ul class="nav nav-tabs" id="myRegistration">
                                 <li class="nav-item">
                                     <button class="nav-link active" id="reg-student" data-bs-toggle="tab" data-bs-target="#regStudent" type="button" role="tab" aria-controls="regStudent" aria-selected="true" aria-current="page">

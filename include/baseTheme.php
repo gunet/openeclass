@@ -508,6 +508,18 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeaderFooter];
                 }
 
+                #search_terms,
+                #search_terms::placeholder{
+                    color:$theme_options_styles[linkColorHeaderFooter];
+                }
+
+                #bgr-cheat-header .fa-magnifying-glass{
+                    color:$theme_options_styles[linkColorHeaderFooter];
+                }
+
+                .lang-select{
+                    color:$theme_options_styles[linkColorHeaderFooter];
+                }
 
             ";
         }
@@ -539,6 +551,16 @@ function view($view_file, $view_data = array()) {
                 .copyright:hover, .copyright:focus,
                 .social-icon-tool:hover, .social-icon-tool:focus,
                 .a_tools_site_footer:hover, .a_tools_site_footer:focus {
+                    color: $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+
+                #bgr-cheat-header .fa-magnifying-glass:hover,
+                #bgr-cheat-header .fa-magnifying-glass:focus {
+                    color: $theme_options_styles[linkHoverColorHeaderFooter];
+                }
+
+                .lang-select:hover,
+                .lang-select:focus{
                     color: $theme_options_styles[linkHoverColorHeaderFooter];
                 }
                 
@@ -879,7 +901,14 @@ function view($view_file, $view_data = array()) {
                     color:  $theme_options_styles[linkColor];
                 }
 
-                
+                .quickLink{
+                    border: solid 1px #4F6893;
+                    background-color: #ffffff;
+                    color: $theme_options_styles[linkColor];
+                }
+                  
+                  
+
             ";
         }
 
@@ -913,6 +942,13 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColor];
                 }
 
+                .quickLink:hover,
+                .quickLink:hover .fa-solid{
+                    border: solid 1px $theme_options_styles[linkHoverColor];
+                    background-color: $theme_options_styles[linkHoverColor];
+                    color: #ffffff !important;
+                }
+
             ";
         }
 
@@ -934,6 +970,11 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[leftMenuFontColor];
                 }
                 
+                @media(min-width:992px){
+                    #collapse-left-menu-icon path{
+                        fill: $theme_options_styles[leftMenuFontColor] !important;
+                    }
+                }
             ";
         }
 
@@ -1230,7 +1271,7 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="form-value d-flex justify-content-end align-items-center" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="form-value d-flex justify-content-end align-items-center lang-select" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>

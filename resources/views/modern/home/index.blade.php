@@ -28,7 +28,7 @@
             <div class="jumbotron jumbotron-login">
                 <div class='{{ $container }} jumbotron-container'>
                     <div class='row m-auto'>
-                        <div class='col-12 mt-lg-4'>
+                        <div class="col-12 ">
                             <div class='row row-cols-1 row-intro'>
                                 <div class='col-12'>
                                     <div class='intro-content'>
