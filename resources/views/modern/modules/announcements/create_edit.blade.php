@@ -174,7 +174,9 @@
                                         </div>
 
                                         <div class='row mt-4 form-group'>
-                                            <input type='hidden' name='id' value='{{ $announce_id }}'>
+                                            @if (isset($_GET['modify']))
+                                                <input type='hidden' name='id' value='{{ $announce_id }}'>
+                                            @endif
                                             <input type='hidden' name='course' value='{{ $course_code }}'>
                                             <input type='hidden' name='editorFromCreateEditAnnouncement' value='{{$is_editor}}'>
                                             <div class='col-12'>

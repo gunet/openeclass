@@ -168,7 +168,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 }
             }
 
-            //setting datables column data
+            //setting data tables column data
             if ($myrow->order != 0) {
                 $pinned_class = "text-danger";
                 $pinned = 0;
@@ -287,11 +287,10 @@ if (isset($_GET['an_id'])) {
               'level' => 'primary',
               'show' => $is_editor ],
             [ 'title' => $langBulkProcessing,
-//                  'url' => "",
-                  'class' => 'bulk-processing',
-                  'icon' => 'fa-hat-wizard',
-                  'button-class' => 'btn-success',
-                  'show' => $is_editor ],
+              'class' => 'bulk-processing',
+              'icon' => 'fa-hat-wizard',
+              'button-class' => 'btn-success',
+              'show' => $is_editor ],
         ]);
 
     $data['subscribeUrl'] = $urlAppend . 'main/profile/emailunsubscribe.php?cid=' . $course_id;
