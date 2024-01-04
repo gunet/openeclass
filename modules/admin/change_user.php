@@ -49,7 +49,7 @@ if (isset($_REQUEST['username'])) {
     }
     $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
     if ($myrow) {
-        if ($is_departmentmanage_user) {
+        if ($is_departmentmanage_user and !$is_power_user) {
             // Department admin - check if the user belongs to admin's departments
             $user = new User();
             $tree = new Hierarchy();
