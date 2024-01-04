@@ -507,64 +507,57 @@
 <div class='col-12 portfolio-profile'>
     <div class='{{ $container }} portfolio-profile-container'>
         <div class='row m-auto'>
-            <div class='col-12 d-lg-flex justify-content-lg-between align-items-lg-center'>
+            <div class='col-12 d-flex justify-content-between align-items-center flex-wrap gap-3'>
 
-                <div class='d-lg-flex'>
-                    <div class='text-lg-start text-center'>
-                        <img class="user-detals-photo m-auto d-block" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
-                        <div class='col-lg-12 col-md-3 col-6 ms-auto me-auto'>
-                            <a class='btn submitAdminBtn myProfileBtn mt-2' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                                <i class='fa-solid fa-user'></i>&nbsp;&nbsp;{{ trans('langMyProfile') }}
-                            </a>
+                <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
+                    <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
+                        <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
+                        <div>
+                            <h4 class='mb-0'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
+                            <p class='Neutral-900-cl mb-0'>
+                                @if($session->status == USER_TEACHER)
+                                    {{ trans('langMetaTeacher') }}
+                                @else
+                                    {{ trans('langStudent') }}
+                                @endif
+                            </p>
+                            <p class='vsmall-text Neutral-800-cl mb-0'>
+                                {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
+                            </p>
                         </div>
                     </div>
-                    <div class='px-3 text-lg-start text-center'>
-                        <h4 class='mb-0 mt-4'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
-                        <p class='Neutral-900-cl mb-0'>
-                            @if(($session->status == USER_TEACHER))
-                                {{ trans('langMetaTeacher') }}
-                            @elseif(($session->status == USER_STUDENT))
-                                {{ trans('langStudent') }}
-                            @else
-                                {{ trans('langAdministrator')}}
-                            @endif
-                        </p>
-                        <p class='vsmall-text Neutral-800-cl mb-0'>
-                            {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
-                        </p>
-                    </div>
+                    <a class='btn submitAdminBtn myProfileBtn ms-auto me-auto' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                        <i class='fa-solid fa-user'></i>&nbsp;&nbsp;{{ trans('langMyProfile') }}
+                    </a>
                 </div>
 
-                <div class='mt-lg-0 mt-4'>
-                    <div class='col-12'>
-                        <div class='row row-cols-1 row-cols-lg-2 g-4'>
-                            <div class='col'>
-                                <div class='card user-info-card border-0 h-100'>
-                                    <div class='card-body d-flex justify-content-center align-items-center'>
-                                        <div>
-                                            <h1 class='d-flex justify-content-center align-items-center'>
-                                                <i class='fa-solid fa-book-open pe-2'></i>{{ $student_courses_count }}
-                                            </h1>
-                                            <div class='form-label text-center'>{!! trans('langSumCoursesEnrolled') !!}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class='col'>
-                                <div class='card user-info-card border-0 h-100'>
-                                    <div class='card-body d-flex justify-content-center align-items-center'>
-                                        <div>
-                                            <h1 class='d-flex justify-content-center align-items-center'>
-                                                <i class='fa-solid fa-book-reader pe-2'></i>{{ $teacher_courses_count }}
-                                            </h1>
-                                            <div class='form-label text-center'>{!! trans('langSumCoursesSupport') !!}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                
+                <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
+
+                    <div class='card user-info-card h-100 px-3 py-0 border-card'>
+                        <div class='card-body d-flex justify-content-center align-items-center p-0'>
+                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1'>
+                                <i class='fa-solid fa-book-open fa-xs'></i>
+                                {{ $student_courses_count }}
+                                <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
+                            </h1>
+                            
                         </div>
                     </div>
+                            
+                    <div class='card user-info-card h-100 px-3 py-0 border-card'>
+                        <div class='card-body d-flex justify-content-center align-items-center p-0'>
+                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1'>
+                                <i class='fa-solid fa-book-reader fa-xs'></i>
+                                {{ $teacher_courses_count }}
+                                <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
+                            </h1>
+                            
+                        </div>
+                    </div>
+                    
                 </div>
+                
 
             </div>
         </div>

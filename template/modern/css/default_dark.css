@@ -1833,16 +1833,16 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
   .myProfileBtn{
-    background-color: #74AFE9;
-    color: #ffffff;
+    background-color: #212D37;
+    color: #74AFE9;
   }
   .myProfileBtn .fa-solid::before{
-    color: #ffffff;
+    color: #74AFE9;
   }
   .myProfileBtn:hover{
-    background-color: #6fa6dd;
-    color: #ffffff;
-    border-color: #6fa6dd;
+    background-color: #212D37;
+    color: #74AFE9;
+    border-color: #74AFE9;
   }
 
 

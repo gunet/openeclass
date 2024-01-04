@@ -585,6 +585,13 @@ function view($view_file, $view_data = array()) {
                     background-color: #ffffff;
                 }
 
+                .myProfileBtn,
+                .myProfileBtn:hover{
+                    border-color: $theme_options_styles[buttonBgWhiteColor];
+                    color: $theme_options_styles[buttonBgWhiteColor];
+                    background-color: #ffffff;
+                }
+
 
             ";
         }
@@ -601,6 +608,13 @@ function view($view_file, $view_data = array()) {
 
                 .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic, 
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                    background-color: #ffffff;
+                }
+
+                .myProfileBtn,
+                .myProfileBtn:hover{
                     border-color: $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                     background-color: #ffffff;
@@ -671,12 +685,6 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                 }
 
-                .myProfileBtn,
-                .myProfileBtn:hover{
-                    border-color: $theme_options_styles[buttonBgColor];
-                    background-color: $theme_options_styles[buttonBgColor];
-                }
-
                 .submitAdminBtnDefault, 
                 .submitAdminBtnDefault:hover,
                 input[type=submit], 
@@ -730,11 +738,6 @@ function view($view_file, $view_data = array()) {
 
                 .login-form-submit, 
                 .login-form-submit:hover{
-                    color: $theme_options_styles[buttonTextColor];
-                }
-
-                .myProfileBtn,
-                .myProfileBtn:hover{
                     color: $theme_options_styles[buttonTextColor];
                 }
                 

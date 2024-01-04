@@ -937,15 +937,15 @@ tr.danger{
 /**********************************************************************************************************************/
 
 .myProfileBtn{
-  background-color: #867F72;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #867F72;
 }
 .myProfileBtn .fa-solid::before{
-  color: #ffffff;
+  color: #867F72;
 }
 .myProfileBtn:hover{
-  background-color: #645f56;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #867F72;
 }
 
 

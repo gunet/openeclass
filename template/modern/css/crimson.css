@@ -936,15 +936,15 @@
 /**********************************************************************************************************************/
 
   .myProfileBtn{
-    background-color: #B70A0A;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #B70A0A;
   }
   .myProfileBtn .fa-solid::before{
-    color: #ffffff;
+    color: #B70A0A;
   }
   .myProfileBtn:hover{
-    background-color: #9e0909;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #B70A0A;
   }
 
 

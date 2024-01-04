@@ -67,8 +67,8 @@ body{
     min-height: calc(100vh - 56px - 283px + 56px - 233px);
   }
   .portfolio-profile-container{
-    min-height: 592px;
-    padding: 24px 8px 24px 8px;
+    min-height: 96px;
+    padding: 16px 8px 16px 8px;
     background-color: #F7F9FE;
   }
   .portfolio-courses-container{
@@ -128,15 +128,18 @@ body{
 
 
   .portfolio-profile-container{
-    min-height: 256px;
+    min-height: 96px;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
     /* padding: 24px 18px 24px 18px; */
     background-color: #F7F9FE;
   }
   .container.portfolio-profile-container{
-    padding: 24px 8px 24px 8px;
+    padding: 16px 8px 16px 8px;
   }
   .container-fluid.portfolio-profile-container{
-    padding: 24px 16px 24px 16px;
+    padding: 16px 16px 16px 16px;
   }
 
 
@@ -4047,7 +4050,7 @@ body .delThemeBtn{
 
 .user-details-collapse-less{ display: none; cursor: pointer; float:right; }
 
-.user-detals-photo { width: 120px; height: 120px; border-radius: 50%;}
+.user-detals-photo { width: 80px; height: 80px; border-radius: 50%;}
 @media(min-width:768px) and (max-width:991px){
   .user-detals-photo { max-width: 120px; }
 }
@@ -4099,19 +4102,20 @@ body .delThemeBtn{
 
 @media(max-width:991px){
   .user-info-card{
-    max-width:320px;
-    margin-left: auto;
-    margin-right: auto;
+    height: 64px;
+    width: auto;
   }
 }
 @media(min-width:992px) and (max-width:1199px){
   .user-info-card{
-    padding:30px;
+    height: 64px;
+    width: auto;
   }
 }
 @media(min-width:1200px){
   .user-info-card{
-    padding:40px;
+    height: 64px;
+    width: auto;
   }
 }
 
