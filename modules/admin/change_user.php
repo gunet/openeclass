@@ -24,11 +24,16 @@
  * @brief  Allows platform admin to login as another user without asking for password
  */
 
-
-$require_admin = true;
 require_once '../../include/baseTheme.php';
+require_once 'include/lib/user.class.php';
+require_once 'include/lib/hierarchy.class.php';
+
 $pageName = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+if (!($is_admin or $is_power_user or $is_usermanage_user or $is_departmentmanage_user)) {
+    redirect_to_home_page();
+}
 
 if (isset($_REQUEST['username'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
@@ -44,6 +49,22 @@ if (isset($_REQUEST['username'])) {
     }
     $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
     if ($myrow) {
+        if ($is_departmentmanage_user) {
+            // Department admin - check if the user belongs to admin's departments
+            $user = new User();
+            $tree = new Hierarchy();
+
+            $admindeps = array_map(function ($node) {
+                return $node->id;
+            }, $tree->buildSubtreesFull($user->getAdminDepartmentIds($uid)));
+            $userdeps = array_map(function ($node) {
+                return $node->id;
+            }, $tree->buildSubtreesFull($user->getDepartmentIds($myrow->id)));
+            $common_deps = array_intersect($admindeps, $userdeps);
+            if (!$common_deps) {
+                redirect_to_home_page();
+            }
+        }
         foreach (array_keys($_SESSION) as $key) {
             unset($_SESSION[$key]);
         }
