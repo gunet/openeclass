@@ -145,23 +145,20 @@ if ($is_editor) {
         if(!$p){
             redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
         }
-        // activate / dectivate polls
+        // activate / deactivate polls
         if (isset($_GET['visibility'])) {
             switch ($_GET['visibility']) {
                 case 'activate':
                     Database::get()->query("UPDATE poll SET active = 1 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                    //Session::Messages($langPollActivated, 'alert-success');
                     Session::flash('message',$langPollActivated);
                     Session::flash('alert-class', 'alert-success');
                     break;
                 case 'deactivate':
                     if (!resource_belongs_to_progress_data(MODULE_ID_QUESTIONNAIRE, $pid)) {
                         Database::get()->query("UPDATE poll SET active = 0 WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
-                        //Session::Messages($langPollDeactivated, 'alert-success');
                         Session::flash('message',$langPollDeactivated);
                         Session::flash('alert-class', 'alert-success');
                     } else {
-                        //Session::Messages($langResourceBelongsToCert, 'alert-warning');
                         Session::flash('message',$langResourceBelongsToCert);
                         Session::flash('alert-class', 'alert-warning');
                     }
@@ -290,7 +287,6 @@ if ($is_editor) {
                 } else {
                     $show_link = '';
                 }
-                //Session::Messages($message, 'alert-success');
                 Session::flash('message',$message);
                 Session::flash('alert-class', 'alert-success');
             }
@@ -465,7 +461,7 @@ function printPolls() {
                                 'level' => 'primary',
                                 'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
-                                'disabled' => $total_participants == 0],
+                                'disabled' => ($total_participants == 0 || $thepoll->type == POLL_LIMESURVEY)],
                             ['title' => $langSee,
                                 'icon' => 'fa-search',
                                 'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid"],
