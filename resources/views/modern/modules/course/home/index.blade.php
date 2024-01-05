@@ -398,7 +398,7 @@
                         @if($course_info->view_type == 'units')
                             <div class='card panelCard panelCardDefault px-0 py-0 mt-4 border-0 mb-5'>
 
-                                <div class='card-header card-header-default border-0 bg-default d-flex justify-content-between align-items-center px-0 py-0'>
+                                <div class='card-header card-header-default border-0 bg-default d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>
                                         <div class='d-flex gap-2'>
                                             {{ trans('langCourseUnits') }}

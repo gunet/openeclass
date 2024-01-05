@@ -521,6 +521,10 @@ function view($view_file, $view_data = array()) {
                     background-color: transparent;
                 }
 
+                .offCanvas-Tools{
+                    background: $theme_options_styles[bgColorHeader];
+                }
+
             ";
         }
 
@@ -861,7 +865,7 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= " 
 
-                .ContentLeftNav, #collapseTools, .offCanvas-Tools{
+                .ContentLeftNav, #collapseTools{
                     background: $theme_options_styles[leftNavBgColor];
                 }
 
