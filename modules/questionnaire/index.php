@@ -447,7 +447,7 @@ function printPolls() {
                           'level' => 'primary',
                           'icon' => 'fa-line-chart',
                           'url' => "pollresults.php?course=$course_code&amp;pid=$pid",
-                          'disabled' => $total_participants == 0 ],
+                          'disabled' => ($total_participants == 0 || $thepoll->type == POLL_LIMESURVEY)],
                         [ 'title' => $langSee,
                           'icon' => 'fa-search',
                           'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&amp;pid=$pid" ],
