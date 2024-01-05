@@ -128,7 +128,7 @@ $tool_content .=
                 )));
 
         $tool_content .=
-            "<div class='row'>
+            "<div class='row mt-4'>
                 <div class='col-sm-9'>
                     <form class='form-horizontal' role='form' action='$sec' method='post'>
                     <div data-bs-spy='scroll' data-bs-target='#navbar-examplePortfolioEdit' data-bs-offset='0' tabindex='0'>  ";

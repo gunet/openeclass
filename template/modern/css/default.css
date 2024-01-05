@@ -93,7 +93,10 @@ body{
   }
 
 
-  .module-container{
+  .container.module-container{
+    padding: 24px 0px 24px 0px;
+  }
+  .container-fluid.module-container{
     padding: 24px 0px 24px 0px;
   }
 
@@ -146,7 +149,7 @@ body{
   .portfolio-courses-container{
     /* padding: 24px 0px 24px 0px; */
     background-color: #ffffff;
-    min-height: calc(100vh - 80px - 80px - 256px);
+    min-height: calc(100vh - 80px - 80px - 96px);
   }
   .container.portfolio-courses-container{
     padding: 24px 8px 24px 8px;
@@ -1034,6 +1037,7 @@ a:hover{
   }
   .footer-container{
     padding: 32px 20px 32px 20px;
+    background-color: #F7F9FE;
   }
 }
 @media(min-width:992px){ 
@@ -1041,7 +1045,7 @@ a:hover{
     height: 80px; 
   } 
   .footer-container{
-    background-color: transparent;
+    background-color: #ffffff;
     /* padding: 32px 18px 32px 18px; */
   }
   .container.footer-container{
@@ -3738,6 +3742,9 @@ body .delThemeBtn{
     background: #ffffff;
   }
   .toolHomePage{
+    font-size: 14px;
+    font-weight: 700;
+    font-style: normal;
     background-color: #ffffff;
     color: #2B3944;
   }

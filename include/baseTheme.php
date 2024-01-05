@@ -328,7 +328,25 @@ function view($view_file, $view_data = array()) {
             }
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
-            $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
+            $styles_str .= "
+                                body{
+                                    background: $bg_color$bg_image;$background_type
+                                }
+                                .jumbotron.jumbotron-login { 
+                                    background-color: transparent;
+                                }
+                                #bgr-cheat-header{ 
+                                    box-shadow: none;
+                                    background-color: transparent;
+                                }
+                                .portfolio-profile {
+                                    background-color: transparent;
+                                }
+                                #bgr-cheat-footer {
+                                    background-color: transparent;
+                                }
+                                
+                            ";
         }
 
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
@@ -338,10 +356,26 @@ function view($view_file, $view_data = array()) {
             $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
             $styles_str .= "
                 .jumbotron.jumbotron-login{
-                    background: $gradient_str;
-                }
-                .jumbotron-container{
                     background-color: transparent;
+                }
+                #bgr-cheat-header{ 
+                    box-shadow: none;
+                    background-color: transparent;
+                }
+                .portfolio-profile {
+                    background-color: transparent;
+                }
+                #bgr-cheat-footer {
+                    background-color: transparent;
+                }
+
+
+
+
+
+
+                .jumbotron-container{
+                    background: $gradient_str;
                 }
             ";
         }
@@ -350,15 +384,30 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['loginImg'])){
                 $styles_str .= "
                     .jumbotron.jumbotron-login { 
+                        background-color: transparent;
+                    }
+                    #bgr-cheat-header{ 
+                        box-shadow: none;
+                        background-color: transparent;
+                    }
+                    .portfolio-profile {
+                        background-color: transparent;
+                    }
+                    #bgr-cheat-footer {
+                        background-color: transparent;
+                    }
+
+
+
+
+
+                    .jumbotron-container{
                         background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
                         border:0px; no-repeat center center fixed; 
                         -webkit-background-size: cover; 
                         -moz-background-size: cover; 
                         -o-background-size: cover; 
                         background-size: cover;
-                    }
-                    .jumbotron-container{
-                        background-color: transparent;
                     }
                 ";
 
@@ -460,10 +509,15 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
 
                 #bgr-cheat-header{ 
-                    background-color: $theme_options_styles[bgColorHeader];
+                    box-shadow: none;
+                    background-color: transparent;
                 }
 
                 .header-container {
+                    background-color: $theme_options_styles[bgColorHeader];
+                }
+
+                .portfolio-profile {
                     background-color: transparent;
                 }
 
@@ -474,12 +528,15 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['bgColorFooter'])) {
             $styles_str .= "
 
-                #bgr-cheat-footer{
-                    background-color: $theme_options_styles[bgColorFooter];
-                }
-                .footer-container, .div_social{
+                #bgr-cheat-footer,
+                .div_social{
                     background-color: transparent;
                 }
+
+                .footer-container{
+                    background-color: $theme_options_styles[bgColorFooter];
+                }
+
             ";
         }
 
@@ -519,6 +576,11 @@ function view($view_file, $view_data = array()) {
 
                 .lang-select{
                     color:$theme_options_styles[linkColorHeaderFooter];
+                }
+
+                .toolHomePage{
+                    background-color: transparent;
+                    color: $theme_options_styles[linkColorHeaderFooter];
                 }
 
             ";
@@ -714,9 +776,19 @@ function view($view_file, $view_data = array()) {
                 }
 
 
-
+                .pagination-glossary .page-item.active .page-link,
+                .pagination-glossary .page-item.active .page-link:hover {
+                    background-color: $theme_options_styles[buttonBgColor];
+                    border-color: $theme_options_styles[buttonBgColor];
+                }
                
-                  
+                .bootbox.show .modal-footer .submitAdminBtn, 
+                .bootbox.show .modal-footer .submitAdminBtn:hover, 
+                .modal.show .modal-footer .submitAdminBtn,
+                .modal.show .modal-footer .submitAdminBtn:hover {
+                    border-color: $theme_options_styles[buttonBgColor];
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
 
 
 
@@ -757,6 +829,18 @@ function view($view_file, $view_data = array()) {
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn,
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
                     color: $theme_options_styles[buttonTextColor];
+                }
+
+                .pagination-glossary .page-item.active .page-link,
+                .pagination-glossary .page-item.active .page-link:hover {
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .bootbox.show .modal-footer .submitAdminBtn, 
+                .bootbox.show .modal-footer .submitAdminBtn:hover, 
+                .modal.show .modal-footer .submitAdminBtn,
+                .modal.show .modal-footer .submitAdminBtn:hover {
+                    color: $theme_options_styles[buttonTextColor] ;
                 }
 
             ";
@@ -834,10 +918,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
-                .social-icon-tool {
-                    color: $theme_options_styles[linkColor];
-                }
-
                 .contextual-menu .list-group-item:hover,
                 .contextual-menu button[type=submit]:hover
                 .contextual-menu input[type=submit]:hover{
@@ -910,7 +990,18 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
                   
-                  
+                .portfolio-tools a{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .normalBlueText {
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .showSettings,
+                .showSettings:hover{
+                    color: $theme_options_styles[linkColor] !important;
+                }
 
             ";
         }
@@ -950,6 +1041,10 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[linkHoverColor];
                     background-color: $theme_options_styles[linkHoverColor];
                     color: #ffffff !important;
+                }
+
+                .portfolio-tools a:hover{
+                    color: $theme_options_styles[linkHoverColor];
                 }
 
             ";

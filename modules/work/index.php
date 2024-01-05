@@ -5371,7 +5371,7 @@ function show_assignment($id) {
             if ($is_editor) {
                 $tool_content .= "<td class='text-end'>
                                     $icon_field
-                                <a class='linkdelete' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
+                                <a class='linkdelete ps-2' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id'>
                                     <span class='fa fa-fw fa-xmark text-danger' data-bs-original-title='$langDeleteSubmission' title='' data-bs-toggle='tooltip'></span>
                                 </a>
                             </td>";

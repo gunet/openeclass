@@ -132,8 +132,6 @@
 
   .offcanvas-start.d-lg-none.show{ width:280px; overflow-y: scroll; }
 
-  .nav-link{  font-size:13px;  border-bottom: solid 1px white; }
-
   .active-nav{ opacity:1; }
 }
 
@@ -150,8 +148,6 @@
   .btn-close.text-reset{ background-color:white; }
 
   .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; }
-
-  .nav-link{ font-size:13px; border-bottom: solid 1px white; }
 
   .active-nav{ opacity:1; }
   
