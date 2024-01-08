@@ -24,18 +24,18 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor', 'whiteButtonHoveredTextColor'),
-                'rgba(247, 249, 254, 1)' => array('bgColorFooter','loginTextBgColor'),
-                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor','whiteButtonHoveredBgColor', 'whiteButtonTextColor'),
-                'rgba(43, 57, 68, 1)' => array('linkColorHeaderFooter','loginTextColor', 'leftSubMenuFontColor'),
-                'rgba(0, 115, 230, 1)' => array('linkHoverColorHeaderFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor'),
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor'),
+                'rgba(247, 249, 254, 1)' => array('loginTextBgColor','BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor'),
+                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor'),
+                'rgba(0, 115, 230, 1)' => array('linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader'),
+                'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('linkColor', 'leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
-                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor'),
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
-                "rgba(247, 249, 254, 1)" => array('loginJumbotronRadialBgColor', 'loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement"),
                 "" => array('fluidContainerWidth')
             );
@@ -705,7 +705,26 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColorHeader' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColorHeader' type='text' class='form-control colorpicker' id='bgColorHeader' value='$theme_options_styles[bgColorHeader]'>
-
+            </div>
+            <h3 class='theme_options_legend mt-4'>$langLinkColorHeader</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkColorHeader' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+              <input name='linkColorHeader' type='text' class='form-control colorpicker' id='linkColorHeader' value='$theme_options_styles[linkColorHeader]'>
+            </div>
+            <h3 class='theme_options_legend mt-4'>$langHoverLinkColorHeader</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkHoverColorHeader' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
+              <input name='linkHoverColorHeader' type='text' class='form-control colorpicker' id='linkHoverColorHeader' value='$theme_options_styles[linkHoverColorHeader]'>
+            </div>
+            <h3 class='theme_options_legend mt-4'>$langActiveLinkBgColorHeader</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkActiveBgColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkBgColorHeader:</label>
+              <input name='linkActiveBgColorHeader' type='text' class='form-control colorpicker' id='linkActiveBgColorHeader' value='$theme_options_styles[linkActiveBgColorHeader]'>
+            </div>
+            <h3 class='theme_options_legend mt-4'>$langActiveLinkColorHeader</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkActiveColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkColorHeader:</label>
+              <input name='linkActiveColorHeader' type='text' class='form-control colorpicker' id='linkActiveColorHeader' value='$theme_options_styles[linkActiveColorHeader]'>
             </div>
 
             <hr>
@@ -714,37 +733,39 @@ $tool_content .= "
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColorFooter' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColorFooter' type='text' class='form-control colorpicker' id='bgColorFooter' value='$theme_options_styles[bgColorFooter]'>
-
+            </div>
+            <h3 class='theme_options_legend mt-4'>$langLinkColorFooter</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkColorFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
+              <input name='linkColorFooter' type='text' class='form-control colorpicker' id='linkColorFooter' value='$theme_options_styles[linkColorFooter]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='linkHoverColorFooter' class='control-label-notes mb-2 me-2'>$langHoverLinkColorFooter:</label>
+              <input name='linkHoverColorFooter' type='text' class='form-control colorpicker' id='linkHoverColorFooter' value='$theme_options_styles[linkHoverColorFooter]'>
             </div>
 
             <hr>
 
 
-            <h3 class='theme_options_legend mt-2'>$langLinksHeaderFooterCongiguration</h3>
-            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-              <label for='linkColorHeaderFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
-              <input name='linkColorHeaderFooter' type='text' class='form-control colorpicker' id='linkColorHeaderFooter' value='$theme_options_styles[linkColorHeaderFooter]'>
+            
 
-            </div>
-            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-              <label for='linkHoverColorHeaderFooter' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
-              <input name='linkHoverColorHeaderFooter' type='text' class='form-control colorpicker' id='linkHoverColorHeaderFooter' value='$theme_options_styles[linkHoverColorHeaderFooter]'>
-            </div>
-
-            <hr>
+   
 
 
             <h3 class='theme_options_legend mt-2'>$langButtonsColorCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='buttonBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='buttonBgColor' type='text' class='form-control colorpicker' id='buttonBgColor' value='$theme_options_styles[buttonBgColor]'>
-
             </div>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='buttonTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
               <input name='buttonTextColor' type='text' class='form-control colorpicker' id='buttonTextColor' value='$theme_options_styles[buttonTextColor]'>
             </div>
-
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                <label for='buttonHoverBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
+                <input name='buttonHoverBgColor' type='text' class='form-control colorpicker' id='buttonHoverBgColor' value='$theme_options_styles[buttonHoverBgColor]'>
+            </div>
+            
             <hr>
 
 
@@ -841,6 +862,15 @@ $tool_content .= "
                       </div>
                 </div>
             </div>
+
+            <hr>
+            <h3 class='theme_options_legend mt-4'>$langPortFolioProfileContainer</h3>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <input name='BriefProfilePortfolioBgColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor' value='$theme_options_styles[BriefProfilePortfolioBgColor]'>
+            </div>
+
+
         </div>
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>

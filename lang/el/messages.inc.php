@@ -5749,6 +5749,13 @@ $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
 $langFormLoginPlacementCenter = "Κεντρική Στοίχιση";
 $langFormLoginPlacementLeft = "Στοίχιση στα αριστερά";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
+$langLinkColorHeader = 'Χρώμα Συνδέσμων Header';
+$langHoverLinkColorHeader = 'Χρώμα Hovered Συνδέσμων Header';
+$langActiveLinkBgColorHeader = "Χρώμα Φόντου Ενεργού Συνδέσμου Header";
+$langActiveLinkColorHeader = "Χρώμα Ενεργού Συνδέσμου Header";
+$langLinkColorFooter = 'Χρώμα Συνδέσμων Footer';
+$langHoverLinkColorFooter = 'Χρώμα Hovered Συνδέσμων Footer';
+$langPortFolioProfileContainer = "Χρώμα Φόντου Σύντομου Προφίλ Στο Χαρτοφυλάκιο Χρήστη";
 
 /* * ***********************************************************
  * Validation

@@ -1225,9 +1225,11 @@ function user_attendance_settings($attendance_id) {
                                       <td>
                                         <select class='form-select h-100 rounded-0' id='users_box' size='10' multiple></select>
                                       </td>
-                                      <td class='text-center'>
-                                        <input class='btn submitAdminBtnClassic rounded-2 h-40px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
-                                        <input class='btn submitAdminBtnClassic rounded-2 h-40px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                      <td>
+                                        <div class='d-flex align-items-center flex-column gap-2'>
+                                            <input class='btn submitAdminBtn submitAdminBtnClassic rounded-2 h-40px' type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
+                                            <input class='btn submitAdminBtn submitAdminBtnClassic rounded-2 h-40px mt-2' type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                        </div>
                                       </td>
                                       <td width='40%'>
                                         <select class='form-select h-100 rounded-0' id='participants_box' name='specific[]' size='10' multiple></select>

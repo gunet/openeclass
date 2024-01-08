@@ -73,6 +73,11 @@
       cursor:  url(../images/pointer.png), auto;
   }
 
+  .user-menu-btn:hover .fa-chevron-down,
+  .user-menu-btn:focus .fa-chevron-down{
+      color: #B70A0A;
+  }
+
   #bgr-cheat-footer {
     background-color: #ffffff;
   }
