@@ -48,33 +48,32 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
         }
         if ($tag->module_id !== $latest_module_id){
             $tool_content .= "
-                    <div class='panel panel-default'>
-                        <div class='panel-heading'>
-                            " . $modules[$tag->module_id]['title'] . "
-                        </div>
-                        <div class='panel-body'>";
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>" .
+                        $modules[$tag->module_id]['title'] . "
+                    </div>
+                    <div class='panel-body'>";
         }
         if ($tag->module_id == MODULE_ID_ANNOUNCE){
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/announcements/?course=".$course_code."&amp;an_id=".$tag->element_id."'>$announce->title</a><br>";
+            $link = "<a href='{$urlAppend}modules/announcements/?course=$course_code&amp;an_id={$tag->element_id}'>" . q($announce->title) . "</a><br>";
         }
         if ($tag->module_id == MODULE_ID_ASSIGN){
             $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/work/?course=".$course_code."&amp;id=".$tag->element_id."'>$work->title</a><br>";
+            $link = "<a href='{$urlAppend}modules/work/?course=$course_code&amp;id={$tag->element_id}'>" . q($work->title) . "</a><br>";
         }
         if ($tag->module_id == MODULE_ID_EXERCISE){
-            $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/exercise/admin.php?course=".$course_code."&amp;exerciseId=".$tag->element_id."'>$exe->title</a><br>";
+            $exercise = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
+            $link = "<a href='{$urlAppend}modules/exercise/admin.php?course=$course_code&amp;exerciseId={$tag->element_id}'>" . q($exercise->title) . "</a><br>";
         }
         if ($tag->module_id == MODULE_ID_UNITS){
             $unit = Database::get()->querySingle("SELECT title FROM course_units WHERE id = ?d ", $tag->element_id);
-            $link = "<a href='../../modules/units/index.php?course=".$course_code."&amp;id=".$tag->element_id."'>$unit->title</a><br>";
+            $link = "<a href='{$urlAppend}modules/units/index.php?course=$course_code&amp;id={$tag->element_id}'>" . q($unit->title) . "</a><br>";
         }
         $tool_content .= "
-                    <ul>
-                        <li>$link</li>
-                    </ul>
-                ";
+                        <ul>
+                            <li>$link</li>
+                        </ul>";
         $latest_module_id = $tag->module_id;
     }
     if ($tag_elements) {
