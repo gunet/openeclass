@@ -102,7 +102,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'btn_class' => 'delete_btn btn-default' ],
             [ 'title' => $langSendReminder,
               'url' => "invite_one.php?course=$course_code&amp;id=$id_indirect",
-              'icon' => 'fa-check-square-o' ],
+              'icon' => 'fa-check-square-o',
+              'show' => is_null($myrow->registered_at) ],
         ]);
         $data['aaData'][] = [
             'DT_RowId' => $id_indirect,

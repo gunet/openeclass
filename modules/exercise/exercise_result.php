@@ -30,11 +30,12 @@ require_once 'modules/gradebook/functions.php';
 require_once 'game.php';
 require_once 'analytics.php';
 
-if (isset($_GET['unit'])) {
+$unit = isset($unit)? $unit: null;
+
+if ($unit) {
     $unit_name = Database::get()->querySingle('SELECT title FROM course_units WHERE course_id = ?d AND id = ?d',
-        $course_id, $_GET['unit'])->title;
-    $navigation[] = ['url' => "index.php?course=$course_code&amp;id=" . intval($_GET['unit']),
-        'name' => q($unit_name)];
+        $course_id, $unit)->title;
+    $navigation[] = ['url' => "index.php?course=$course_code&amp;id=$unit", 'name' => q($unit_name)];
 } else {
     $navigation[] = ['url' => "index.php?course=$course_code", 'name' => $langExercices];
 }
@@ -72,7 +73,7 @@ if (isset($_GET['eurId'])) {
     }
     $objExercise = new Exercise();
     $objExercise->read($exercise_user_record->eid);
-    if (!isset($_GET['unit'])) {
+    if (!$unit) {
         $navigation[] = array('url' => "results.php?course=$course_code&amp;exerciseId=" . getIndirectReference($exercise_user_record->eid), 'name' => $langResults);
     }
 } else {
@@ -220,18 +221,18 @@ $showScore = $displayScore == 1
 $toolName = $langExercicesResult;
 
 if (!isset($_GET['pdf'])) {
-    if (isset($_REQUEST['unit'])) {
+    if ($unit) {
         $tool_content .= action_bar([
             [
                 'title' => $langDumpPDF,
-                'url' => "../units/view.php?course=$course_code&res_type=exercise_results&eurId=$eurid&unit=$_REQUEST[unit]&pdf=true",
+                'url' => "../units/view.php?course=$course_code&res_type=exercise_results&eurId=$eurid&unit=$unit&pdf=true",
                 'icon' => 'fa-file-pdf-o',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success'
             ],
             [
                 'title' => $langBack,
-                'url' => "../units/index.php?course=$course_code&id=$_REQUEST[unit]",
+                'url' => "../units/index.php?course=$course_code&id=$unit",
                 'icon' => 'fa fa-reply',
                 'level' => 'primary-label'
             ]
@@ -791,7 +792,7 @@ if (isset($_GET['pdf'])) {
             h1, h2, h3, h4 { font-family: 'roboto'; margin: .8em 0 0; }
             h1 { font-size: 16pt; }
             h2 { font-size: 12pt; border-bottom: 1px solid black; }
-            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }            
+            h3 { font-size: 10pt; color: #158; border-bottom: 1px solid #158; }
             th { text-align: left; border-bottom: 1px solid #999; }
             td { text-align: left; }
           </style>

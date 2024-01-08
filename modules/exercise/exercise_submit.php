@@ -35,6 +35,11 @@ require_once 'game.php';
 require_once 'analytics.php';
 require_once 'include/log.class.php';
 
+$unit = isset($unit)? $unit: null;
+$back_url = $unit?
+    "modules/units/index.php?course=$course_code&id=$unit":
+    "modules/exercise/index.php?course=$course_code";
+
 $picturePath = "courses/$course_code/image";
 
 require_once 'include/lib/modalboxhelper.class.php';
@@ -84,7 +89,7 @@ if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
 // he will be redirected to the exercises page (index.php)
 if (isset($_COOKIE['inExercise'])) {
     setcookie("inExercise", "", time() - 3600);
-    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    redirect_to_home_page($back_url);
 }
 
 // Check if an exercise ID exists in the URL
@@ -102,17 +107,13 @@ if (isset($_REQUEST['exerciseId'])) {
         // or doesn't exist, redirect and show error
         if (!$objExercise->read($exerciseId) || (!$is_editor && $objExercise->selectStatus($exerciseId)==0)) {
             session::Messages($langExerciseNotFound);
-            if (isset($_REQUEST['unit'])) {
-                redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-            } else {
-                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-            }
+            redirect_to_home_page($back_url);
         }
         // saves the object into the session
         $_SESSION['objExercise'][$exerciseId] = $objExercise;
     }
 } else {
-    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    redirect_to_home_page($back_url);
 }
 
 $pageName = $objExercise->selectTitle();
@@ -139,11 +140,7 @@ if ($objExercise->selectAssignToSpecific() and !$is_editor) {
     }
     if (!$accessible) {
         Session::Messages($langNoAccessPrivilages);
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-        } else {
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-        }
+        redirect_to_home_page($back_url);
     }
 }
 
@@ -185,11 +182,7 @@ if (isset($_POST['attempt_value']) && !isset($_GET['eurId'])) {
         });
         $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $eurid;
     } else {
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-        } else {
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-        }
+        redirect_to_home_page($back_url);
     }
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
                             'title' => $objExercise->selectTitle(),
@@ -211,11 +204,7 @@ if (!isset($_POST['acceptAttempt']) and (!isset($_POST['formSent']))) {
                 $_SESSION['password'][$exerciseId][$attempt_value] = 1;
             } else {
                 Session::Messages($langWrongPassword);
-                if (!isset($_REQUEST['unit'])) {
-                    redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
-                } else {
-                    redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-                }
+                redirect_to_home_page($back_url);
             }
         }
     }
@@ -228,11 +217,7 @@ if ($ips && !$is_editor){
     $user_ip = Log::get_client_ip();
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
         Session::Messages($langIPHasNoAccess);
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-        } else {
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-        }
+        redirect_to_home_page($back_url);
     }
 }
 
@@ -251,11 +236,7 @@ if (isset($_POST['buttonCancel'])) {
         'eurid' => $eurid ]);
     unset_exercise_var($exerciseId);
     Session::Messages($langAttemptWasCanceled);
-    if (isset($_REQUEST['unit'])) {
-        redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-    } else {
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-    }
+    redirect_to_home_page($back_url);
 }
 
 load_js('tools.js');
@@ -330,19 +311,11 @@ if ($temp_CurrentDate < $exercise_StartDate->getTimestamp()
                 'eurid' => $eurid ]);
             unset_exercise_var($exerciseId);
             Session::Messages($langExerciseExpiredTime);
-            if (isset($_REQUEST['unit'])) {
-                redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
-            } else {
-                redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
-            }
+            redirect_to_home_page($back_url);
         } else {
             unset_exercise_var($exerciseId);
             Session::Messages($langExerciseExpired);
-            if (isset($_REQUEST['unit'])) {
-                redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-            } else {
-                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-            }
+            redirect_to_home_page($back_url);
         }
     }
 }
@@ -414,20 +387,16 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || iss
     if ($exerciseAllowedAttempts > 0 && $attempt >= $exerciseAllowedAttempts) {
         unset_exercise_var($exerciseId);
         Session::Messages($langExerciseMaxAttemptsReached);
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/index.php?course=' . $course_code . '&id=' . $_REQUEST['unit']);
-        } else {
-            redirect_to_home_page('modules/exercise/index.php?course=' . $course_code);
-        }
+        redirect_to_home_page($back_url);
     } else {
         if ($exerciseAllowedAttempts > 0 && !isset($_POST['acceptAttempt'])) {
             $left_attempts = $exerciseAllowedAttempts - $attempt;
-            if (isset($_REQUEST['unit'])) {
-                $form_next_link = "{$urlServer}modules/units/view.php?course=$course_code&res_type=exercise&exerciseId=$exerciseId&unit=$_REQUEST[unit]";
-                $form_cancel_link = "{$urlServer}modules/units/index.php?course=$course_code&id=$_REQUEST[unit]";
+            if ($unit) {
+                $form_next_link = "{$urlAppend}modules/units/view.php?course=$course_code&res_type=exercise&exerciseId=$exerciseId&unit=$unit";
+                $form_cancel_link = "{$urlAppend}modules/units/index.php?course=$course_code&id=$unit";
             } else {
-                $form_next_link = "{$urlServer}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId";
-                $form_cancel_link = "{$urlServer}modules/exercise/index.php?course=$course_code";
+                $form_next_link = "{$urlAppend}modules/exercise/exercise_submit.php?course=$course_code&exerciseId=$exerciseId";
+                $form_cancel_link = "{$urlAppend}modules/exercise/index.php?course=$course_code";
             }
             $tool_content .= "<div class='alert alert-warning text-center'>" .
                 ($left_attempts == 1 ? $langExerciseAttemptLeft : sprintf($langExerciseAttemptsLeft, $left_attempts)) .
@@ -548,10 +517,10 @@ if (isset($_POST['formSent'])) {
                 Session::Messages($langExerciseCompleted, 'alert-success');
             }
         }
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/view.php?course='.$course_code.'&eurId='.$eurid.'&res_type=exercise_results&unit='.$_REQUEST['unit']);
+        if ($unit) {
+            redirect_to_home_page("modules/units/view.php?course=$course_code&eurId=$eurid&res_type=exercise_results&unit=$unit");
         } else {
-            redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
+            redirect_to_home_page("modules/exercise/exercise_result.php?course=$course_code&eurId=$eurid");
         }
     }
     // if the user has clicked on the "Save & Exit" button
@@ -583,12 +552,7 @@ if (isset($_POST['formSent'])) {
                 WHERE eurid = ?d AND question_id = ?d', $eurid, $qid);
         }
         unset_exercise_var($exerciseId);
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-        } else {
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-        }
-
+        redirect_to_home_page($back_url);
     }
 }
 
@@ -607,8 +571,8 @@ if (!empty($exerciseDescription)) { // description
     $tool_content .= "</div>";
 }
 
-if (isset($_REQUEST['unit'])) {
-    $form_action_link = "{$urlServer}modules/units/view.php?res_type=exercise&amp;unit=$_REQUEST[unit]&amp;course=$course_code&amp;exerciseId=$exerciseId";
+if ($unit) {
+    $form_action_link = "{$urlServer}modules/units/view.php?res_type=exercise&amp;unit=$unit&amp;course=$course_code&amp;exerciseId=$exerciseId";
 } else if (isset($_REQUEST['res_type'])) {
     $form_action_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;res_type=exercise&amp;exerciseId=$exerciseId";
 } else {
@@ -686,7 +650,7 @@ if ($questionList) {
             Database::get()->query('UPDATE exercise_answer_record SET is_answered = 1
                 WHERE eurid = ?d AND is_answered = 2', $eurid);
         } elseif ($exerciseType == MULTIPLE_PAGE_TYPE and isset($_REQUEST['q_id'])) { // we come from pagination buttons
-            $questionNumber = $_REQUEST['q_id']; // only number
+            $questionNumber = intval($_REQUEST['q_id']); // only number
         } elseif (isset($_REQUEST['questionId'])) { // we come from prev / next buttons
             if ($exerciseType == MULTIPLE_PAGE_TYPE and isset($_REQUEST['prev'])) { // previous
                 $questionNumber = array_search($_REQUEST['questionId'], $questionList) - 1;
@@ -728,11 +692,9 @@ if ($questionList) {
     }
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
-    if (isset($_REQUEST['unit'])) {
-        $backlink = "index.php?course=$course_code&amp;id=$_REQUEST[unit]";
-    } else {
-        $backlink = "index.php?course=$course_code";
-    }
+    $backlink = $unit?
+        "index.php?course=$course_code&amp;id=$unit":
+        "index.php?course=$course_code";
     $tool_content .= "<div class='pull-right'><a href='$backlink' class='btn btn-default'>$langBack</a></div>";
 }
 
@@ -809,11 +771,7 @@ $attempt = Database::get()->querySingle('SELECT eurid FROM exercise_user_record
         WHERE eurid = ?d AND attempt_status = ?d', $eurid, ATTEMPT_ACTIVE);
 if (!$attempt && !$is_editor) {
     Session::Messages($langExerciseAttemptGone, 'alert-danger');
-    if (isset($_REQUEST['unit'])) {
-        redirect_to_home_page('modules/units/index.php?course='.$course_code.'&id='.$_REQUEST['unit']);
-    } else {
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-    }
+    redirect_to_home_page($back_url);
 }
 
 if ($questionList) {

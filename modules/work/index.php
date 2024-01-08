@@ -57,6 +57,8 @@ $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
+$unit = isset($unit)? $unit: null;
+
 load_js('datatables');
 load_js('tools.js');
 
@@ -393,7 +395,7 @@ if ($is_editor) {
     ";
     }
     $head_content .= "
-        $(function() {        
+        $(function() {
             $('input[name=group_submissions]').click(changeAssignLabel);
             $('input[id=assign_button_some]').click(ajaxAssignees);
             $('input[id=assign_button_group]').click(ajaxAssignees);
@@ -724,7 +726,7 @@ if ($is_editor) {
         $id = intval($_REQUEST['id']);
         if (isset($_POST['work_submit'])) {
             $pageName = $m['SubmissionStatusWorkInfo'];
-            if (!isset($_REQUEST['unit'])) {
+            if (!$unit) {
                 $navigation[] = $works_url;
             }
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
@@ -732,7 +734,7 @@ if ($is_editor) {
         } else {
             $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             $pageName = $work_title;
-            if (!isset($_REQUEST['unit'])) {
+            if (!isset($unit)) {
                 $navigation[] = $works_url;
             }
             show_student_assignment($id);
@@ -744,7 +746,7 @@ if ($is_editor) {
     if (isset($_POST['grade_comments_review'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
         $pageName = $work_title;
-        if (!isset($_REQUEST['unit'])) {
+        if (!isset($unit)) {
             $navigation[] = $works_url;
         }
         submit_grade_reviews($_POST);
@@ -1603,8 +1605,8 @@ function submit_work($id, $on_behalf_of = null) {
         // End Auto-judge
 
         Session::Messages($success_msgs, 'alert-success');
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        if (isset($unit)) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
         } else {
             redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
         }
@@ -3876,8 +3878,8 @@ function show_student_assignment($id) {
     if ($row) {
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
             Session::Messages($langWrongPassword, 'alert-warning');
-            if (isset($_REQUEST['unit'])) {
-                redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+            if ($unit) {
+                redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
             } else {
                 redirect_to_home_page("modules/work/?course=" . $course_code);
             }
@@ -5296,7 +5298,6 @@ function show_student_assignments() {
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio, $langAssignemtTypeTurnitinInfo,
         $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt, $langAssignmentTypeTurnitin;
 
-
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
@@ -5562,7 +5563,7 @@ function show_assignments() {
                       <th style='width:45%;'>$langTitle</th>
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>
-                      <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>         
+                      <th class='text-center'>$langGroupWorkDeadline_of_Submission</th>
                       <th class='text-center'>" . icon('fa-gears') . "</th>
                     </tr>
                     </thead>
@@ -5805,7 +5806,7 @@ function submit_grade_comments($args) {
  * @param type $args
  */
 function submit_grade_reviews($args) {
-   global $langGrades, $course_id, $course_code, $langFormErrors;
+    global $langGrades, $course_id, $course_code, $unit, $langFormErrors;
 
     $id = $args['assignment'];//assignment=id_ergasias exei topotheththei ws pedio hidden sto grade_edit_review
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
@@ -5836,8 +5837,8 @@ function submit_grade_reviews($args) {
 
 
         Session::Messages($langGrades, 'alert-success');
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        if ($unit) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
         } else {
             redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
         }

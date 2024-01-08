@@ -79,16 +79,19 @@ if (isset($_POST['submit'])) {
         $email = canonicalize_whitespace($_POST['email_form']);
         $surname = canonicalize_whitespace($_POST['surname_form']);
         $givenname = canonicalize_whitespace($_POST['givenname_form']);
-        Database::get()->query('DELETE FROM course_invitation
-            WHERE course_id = ?d AND email = ?s',
-            $course_id, $email);
         if ($invite) {
+            Database::get()->query('DELETE FROM course_invitation
+                WHERE course_id = ?d AND email = ?s AND id <> ?d',
+                $course_id, $email, $invite->id);
             Database::get()->query('UPDATE course_invitation
                 SET email = ?s, surname = ?s, givenname = ?s, expires_at = ?s
                 WHERE id = ?d',
                 $email, $surname, $givenname,
                 $expires_at, $invite->id);
         } else {
+            Database::get()->query('DELETE FROM course_invitation
+                WHERE course_id = ?d AND email = ?s',
+                $course_id, $email);
             Database::get()->query('INSERT INTO course_invitation
                 SET email = ?s, surname = ?s, givenname = ?s, created_at = NOW(),
                     course_id = ?d, identifier = ?s, expires_at = ?s',
@@ -164,7 +167,7 @@ $tool_content .= "
             <label class='col-sm-2 control-label'>$langExpirationDate:</label>
             <div class='col-sm-10'>
               <div class='input-group'>
-                <input class='form-control' id='user_date_expires_at' name='user_date_expires_at' type='text' $value_date_expires>
+                <input class='form-control' id='user_date_expires_at' name='expires_at' type='text' $value_date_expires>
                 <span class='input-group-addon'><i class='fa fa-calendar'></i></span>
               </div>
             </div>

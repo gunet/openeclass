@@ -37,7 +37,7 @@ if (!$content) {
 if (!$res_type) {
     $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 } else {
-    $backUrl = $urlAppend . 'modules/units/?course=' . $course_code . '&id=' . $_REQUEST['unit'];
+    $backUrl = $urlAppend . 'modules/units/?course=' . $course_code . '&id=' . $unit;
 }
 
 $toolName = $langImport;
