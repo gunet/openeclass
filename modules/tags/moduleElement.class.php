@@ -54,9 +54,9 @@ class ModuleElement {
         $tags_array = $this->getTags();
         $total_tags = count($tags_array);
         $tag_list = '';
-        $i=1;
+        $i = 1;
         foreach($tags_array as $tag){
-            $tag_list .= "<a href='../../modules/tags/index.php?course=".$course_code."&amp;tag=".urlencode($tag)."'>".q($tag)."</a>";
+            $tag_list .= "<a href='../../modules/tags/?course=$course_code&amp;tag=".urlencode($tag)."'>".q($tag)."</a>";
             if ($i !== $total_tags) $tag_list .= ', ';
             $i++;
         }
