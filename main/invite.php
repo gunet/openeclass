@@ -144,7 +144,7 @@ if ($user_id) {
     }
 }
 
-$pageName = 'Πρόσκληση εγγραφής στο μάθημα';
+$pageName = $langCourseInvitation;
 $pageTitle = $langRegCourses;
 
 $tree = new Hierarchy();
@@ -177,7 +177,7 @@ $head_content .= <<<hContent
               if (pass && pass2 && pass != pass2) {
                   $('.pw-group').addClass('has-error');
                   form_error = true;
-                  $('#result').html('<span id="result" class="label label-error">Έχετε πληκτρολογήσει δύο διαφορετικούς κωδικούς πρόσβασης</span>');
+                  $('#result').html('<span id="result" class="label label-error">$langPassTwice</span>');
               } else {
                   $('.pw-group').removeClass('has-error');
                   form_error = false;
