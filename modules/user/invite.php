@@ -102,7 +102,8 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
               'btn_class' => 'delete_btn btn-default deleteAdminBtn' ],
             [ 'title' => $langSendReminder,
               'url' => "invite_one.php?course=$course_code&amp;id=$id_indirect",
-              'icon' => 'fa-check-square-o' ],
+              'icon' => 'fa-check-square-o',
+              'show' => is_null($myrow->registered_at) ],
         ]);
         $data['aaData'][] = [
             'DT_RowId' => $id_indirect,
@@ -172,38 +173,6 @@ $head_content .= "
       $(document).on('click', '.delete_btn', function (e) {
         e.preventDefault();
         var row_id = $(this).closest('tr').attr('id');
-        // bootbox.confirm('" . js_escape($langDeleteInvitation) . "', function(result) {
-        //   if (result) {
-        //     $.ajax({
-        //       type: 'POST',
-        //       url: '',
-        //       datatype: 'json',
-        //       data: {
-        //         delete: row_id
-        //       },
-        //       success: function(data) {
-        //         var info = oTable.page.info();
-        //         var per_page = info.length;
-        //         var page_number = info.page;
-        //         if (info.recordsDisplay % info.length == 1){
-        //         if (page_number!=0) {
-        //           page_number--;
-        //         }
-        //       }
-        //       $('#tool_title').after('<p class=\"success\">" . js_escape($langDeleteInvitationSuccess) . "</p>');
-        //       $('.success').delay(3000).fadeOut(1500);
-        //       oTable.page(page_number).draw(false);
-        //     },
-        //     error: function(xhr, textStatus, error) {
-        //       console.log(xhr.statusText);
-        //       console.log(textStatus);
-        //       console.log(error);
-        //     }
-        //     });
-        //   }
-        // });
-
-
         bootbox.confirm({ 
             closeButton: false,
             title: '<div class=\'icon-modal-default\'><i class=\'fa-regular fa-trash-can fa-xl Accent-200-cl\'></i></div><h3 class=\'modal-title-default text-center mb-0\'>".js_escape($langConfirmDelete)."</h3>',

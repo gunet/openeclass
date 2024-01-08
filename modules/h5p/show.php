@@ -35,9 +35,9 @@ if (!$content) {
 }
 
 if (!$res_type) {
-    $backUrl = $urlAppend . 'modules/h5p/index.php?course=' . $course_code;
+    $backUrl = $urlAppend . 'modules/h5p/?course=' . $course_code;
 } else {
-    $backUrl = $urlAppend . 'modules/units/index.php?course=' . $course_code . '&id=' . $_REQUEST['unit'];
+    $backUrl = $urlAppend . 'modules/units/?course=' . $course_code . '&id=' . $unit;
 }
 
 $toolName = $langImport;
@@ -56,7 +56,6 @@ $tool_content .= action_bar([
       'button-class' => 'btn-success',
       'show' => ($content->reuse_enabled && $is_editor)
     ]
-    
 ], false);
 
 $workspaceUrl = $urlAppend . 'courses/' . $course_code . '/h5p/content/' . $content_id . '/workspace';

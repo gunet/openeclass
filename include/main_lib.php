@@ -1163,12 +1163,12 @@ function is_module_disable($module_id) {
 }
 
 // Flipped Classroom
-function is_module_disable_FC($module_id,$course_code,$unit_id,$act_id) {
+function is_module_disable_FC($module_id, $course_code, $unit_id, $act_id) {
     $q = Database::get()->queryArray("SELECT unit_id,tool_ids FROM course_units_activities WHERE course_code = ?s and unit_id = ?d and activity_id=?s", $course_code, $unit_id,$act_id);
 
     $nrlz_ids_final =array("start");
-    foreach($q as $record){
-        $nrlz_ids = explode(" ",$record->tool_ids);
+    foreach ($q as $record) {
+        $nrlz_ids = explode(" ", $record->tool_ids);
         foreach($nrlz_ids as $f_id){
             array_push($nrlz_ids_final,$f_id);
         }

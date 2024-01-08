@@ -57,6 +57,8 @@ $action = new action();
 $action->record(MODULE_ID_ASSIGN);
 /* * *********************************** */
 
+$unit = isset($unit)? $unit: null;
+
 load_js('datatables');
 load_js('tools.js');
 
@@ -770,7 +772,7 @@ if ($is_editor) {
         $id = intval($_REQUEST['id']);
         if (isset($_POST['work_submit'])) {
             $pageName = $m['SubmissionStatusWorkInfo'];
-            if (!isset($_REQUEST['unit'])) {
+            if (!$unit) {
                 $navigation[] = $works_url;
             }
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
@@ -778,7 +780,7 @@ if ($is_editor) {
         } else {
             $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             $pageName = $work_title;
-            if (!isset($_REQUEST['unit'])) {
+            if (!$unit) {
                 $navigation[] = $works_url;
             }
             show_student_assignment($id);
@@ -790,7 +792,7 @@ if ($is_editor) {
     if (isset($_POST['grade_comments_review'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
         $pageName = $work_title;
-        if (!isset($_REQUEST['unit'])) {
+        if (!$unit) {
             $navigation[] = $works_url;
         }
         submit_grade_reviews($_POST);
@@ -1662,8 +1664,8 @@ function submit_work($id, $on_behalf_of = null) {
         // End Auto-judge
 
         Session::Messages($success_msgs, 'alert-success');
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        if (isset($unit)) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
         } else {
             redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
         }
@@ -4017,8 +4019,8 @@ function show_student_assignment($id) {
     if ($row) {
         if ($row->password_lock !== '' and (!isset($_POST['password']) or $_POST['password'] !== $row->password_lock)) {
             Session::Messages($langWrongPassword, 'alert-warning');
-            if (isset($_REQUEST['unit'])) {
-                redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+            if ($unit) {
+                redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
             } else {
                 redirect_to_home_page("modules/work/index.php?course=" . $course_code);
             }
@@ -4558,7 +4560,7 @@ EOF;*/
             allowfullscreen=""
             width="100%"
             height="800px"
-            style="border: 1px solid #ddd; border-radius: 4px;"></iframe></div>';
+            style="border: 1px solid #ddd; border-radius: 4px;"></iframe>';
     } else {
         $joinLink = create_join_button(
             $lti->lti_provider_url,
@@ -5509,7 +5511,6 @@ function show_student_assignments() {
         $langTitle, $langAddResePortfolio, $langAddGroupWorkSubePortfolio, $langAssignemtTypeTurnitinInfo,
         $langGradebookGrade, $langPassCode, $langIPUnlock, $langWillStartAt, $langAssignmentTypeTurnitin;
 
-
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
         $gids_sql_ready = implode(',',array_keys($gids));
@@ -5608,12 +5609,12 @@ function show_student_assignments() {
                         $lock_description .= "<li>$langIPUnlock</li>";
                     }
                     $lock_description .= "</ul>";
-                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$lock_description' data-bs-original-title='$lock_description'></span>";
+                    $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
                 }
             }
 
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             $title_temp = q($row->title);
@@ -5782,10 +5783,10 @@ function show_assignments() {
                     $lock_description .= "<li>$langIPUnlock</li>";
                 }
                 $lock_description .= "</ul>";
-                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$lock_description' data-bs-original-title='$lock_description'></span>";
+                $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'></span>";
             }
             if ($row->assignment_type == ASSIGNMENT_TYPE_TURNITIN) {
-                $turnitin_message = "&nbsp;&nbsp;<span class='badge rounded bg-success text-white float-end' data-bs-toggle='tooltip' data-bs-placement='right' data-bs-html='true' data-bs-title='$langAssignemtTypeTurnitinInfo' data-bs-original-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
+                $turnitin_message = "&nbsp;&nbsp;<span class='badge' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$langAssignemtTypeTurnitinInfo'><small>$langAssignmentTypeTurnitin</small></span>";
             }
 
             if ($row->assign_to_specific == 1) {
@@ -6001,7 +6002,7 @@ function submit_grade_comments($args) {
  * @param type $args
  */
 function submit_grade_reviews($args) {
-   global $langGrades, $course_id, $course_code, $langFormErrors;
+    global $langGrades, $course_id, $course_code, $unit, $langFormErrors;
 
     $id = $args['assignment'];//assignment=id_ergasias exei topotheththei ws pedio hidden sto grade_edit_review
     $rubric = Database::get()->querySingle("SELECT * FROM rubric as a JOIN assignment as b WHERE b.course_id = ?d AND a.id = b.grading_scale_id AND b.id = ?d", $course_id, $id);
@@ -6033,8 +6034,8 @@ function submit_grade_reviews($args) {
         Session::flash('message', $langGrades);
         Session::flash('alert-class', 'alert-success');
 
-        if (isset($_REQUEST['unit'])) {
-            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$_REQUEST[unit]");
+        if ($unit) {
+            redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit");
         } else {
             redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
         }

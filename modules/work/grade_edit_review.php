@@ -6,6 +6,7 @@ require_once 'functions.php';
 require_once 'modules/group/group_functions.php';
 
 $toolName = $langScore;
+$unit = isset($unit)? $unit: null;
 
 if (isset($_REQUEST['assignment']) && isset($_REQUEST['submission'])) {
     $as_id = intval($_REQUEST['assignment']);
@@ -13,8 +14,8 @@ if (isset($_REQUEST['assignment']) && isset($_REQUEST['submission'])) {
     $assign = get_assignment_details($as_id);
     $cdate = date('Y-m-d H:i:s');
 
-    if (isset($_REQUEST['unit'])) {
-        $navigation[] = array("url" => "index.php?course=$course_code&id=$_REQUEST[unit]", "name" => $langWorks);
+    if ($unit) {
+        $navigation[] = array("url" => "index.php?course=$course_code&id=$unit", "name" => $langWorks);
     } else {
         $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
         $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
@@ -54,7 +55,7 @@ function get_assignment_details($id) {
  * @param type $assign (contains an array with the assignment's details)
  */
 function show_form($id, $sid, $assign) {
-    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
+    global $unit, $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langGradebookGrade,
            $langBack, $assign, $langWorkOnlineText, $course_id, $pageName, $langEndPeerReview,
            $langReviewStart, $langReviewEnd, $urlAppend;
 
@@ -82,7 +83,7 @@ function show_form($id, $sid, $assign) {
 							</div>
 						</div>";
 		} else {
-		    if (isset($_REQUEST['unit'])) {
+		    if ($unit) {
 		        $get_link = "view.php?course=$course_code&amp;res_type=assignment&amp;id=$_REQUEST[unit]&amp;get=$sub->user_submit_id";
             } else {
                 $get_link = "index.php?course=$course_code&amp;get=$sub->user_submit_id";
@@ -130,10 +131,10 @@ function show_form($id, $sid, $assign) {
                 </tr>
             </table>
 		</div>";
-        if (isset($_REQUEST['unit'])) {
-            $form_link = "view.php?res_type=assignment&course=$course_code&unit=$_REQUEST[unit]";
-            $back_link = "index.php?course=$course_code&id=$_REQUEST[unit]";
-            $cancel_link = "index.php?course=$course_code&id=$_REQUEST[unit]";
+        if ($unit) {
+            $form_link = "view.php?res_type=assignment&course=$course_code&unit=$unit";
+            $back_link = "index.php?course=$course_code&id=$unit";
+            $cancel_link = "index.php?course=$course_code&id=$unit";
         } else {
             $form_link = "index.php?course=$course_code&id=$sub->assignment_id";
             $back_link = "index.php?course=$course_code&id=$sub->assignment_id";
@@ -152,11 +153,11 @@ function show_form($id, $sid, $assign) {
         <div class='flex-grow-1'><div class='form-wrapper form-edit rounded'>
 			<form class='form-horizontal' role='form' method='post' action='$form_link'>
                 <input type='hidden' name='assignment' value='$id'>
-                <input type='hidden' name='submission' value='$sid'>			
+                <input type='hidden' name='submission' value='$sid'>
                     <div class='form-group'>
                         <label class='col-sm-12 control-label-notes'>$m[username]:</label>
                         <div class='col-sm-12'>
-                        $uid_2_name 
+                        $uid_2_name
                         </div>
                     </div>
                     <div class='form-group mt-4'>

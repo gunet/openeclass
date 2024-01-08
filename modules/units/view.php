@@ -6,7 +6,10 @@
  * Time: 2:38 μμ
  */
 
-switch ($_REQUEST['res_type']) {
+$res_type = isset($_REQUEST['res_type'])? $_REQUEST['res_type']: null;
+$unit = isset($_REQUEST['unit'])? intval($_REQUEST['unit']): null;
+
+switch ($res_type) {
     case 'assignment':
         require_once '../work/index.php';
         exit;

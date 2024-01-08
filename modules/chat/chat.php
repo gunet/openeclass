@@ -32,6 +32,7 @@ $helpTopic = 'chat';
 require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 
+$unit = isset($_REQUEST['unit'])? intval($_REQUEST['unit']): null;
 $coursePath = $webDir . '/courses/';
 $conference_id = $_GET['conference_id'];
 $conference_activity = false;
@@ -114,7 +115,7 @@ $head_content .= '<script type="text/javascript">
 
 if (!$conference_activity) {
     $colmooc_url = $chatindex_url = '';
-    if (isset($_REQUEST['unit'])) {
+    if ($unit) {
         $save_link = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;store=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
         $back_link = "../units/index.php?course=$course_code&amp;id=$_REQUEST[unit]";
         $wash_link = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;reset=true&amp;conference_id=$conference_id&amp;" . generate_csrf_token_link_parameter();
@@ -146,7 +147,7 @@ if (!$conference_activity) {
         )
     ));
 
-    if (isset($_REQUEST['unit'])) {
+    if ($unit) {
         $action_form = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]";
         $iframe_file = "../units/view.php?course=$course_code&amp;res_type=chat_actions&amp;unit=$_REQUEST[unit]&amp;conference_id=$conference_id";
     } else {
@@ -169,8 +170,8 @@ if (!$conference_activity) {
             </div>
             <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>
               <iframe class='embed-responsive-item shadow-default Borders overflow-auto' id='iframe' src='$iframe_file' name='messageList'></iframe>
-            </div>       
-        </div>   
+            </div>
+        </div>
        </fieldset>
        " . generate_csrf_token_form_field() . "
        </form></div></div>";
@@ -291,9 +292,9 @@ if (!$conference_activity) {
         $tool_content .= "</table></div>";
     } else if ($is_editor && !isset($_GET['create_agent']) && !isset($_GET['edit_agent']) && !isset($_GET['pair_log'])) {
         $tool_content .= "<div class='col-sm-12'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>" . $langColMoocAgentCreateOrEdit . "</span></div></div>";
-        $q1 = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated 
-            from colmooc_user_session cus 
-            join conference c on (c.chat_activity_id = cus.activity_id) 
+        $q1 = Database::get()->queryArray("select cus.user_id, cus.session_status, cus.session_status_updated
+            from colmooc_user_session cus
+            join conference c on (c.chat_activity_id = cus.activity_id)
             join user u on (u.id = cus.user_id)
             where c.course_id = ?d and c.conf_id = ?d and cus.session_status = 1
             order by u.surname, u.givenname", $course_id, $conference_id);
@@ -342,9 +343,9 @@ if (!$conference_activity) {
     if (!$is_editor) {
         if ($sessionId && $sessionToken) {
             // Redirect student to colMOOC chat
-            $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/index.php?session_id=" . $sessionId . "&session_token=" . $sessionToken;
-            if (isset($_REQUEST['unit'])) {
-                $chatindex_url = $urlAppend . "modules/units/index.php?course=" . $course_code . "&id=" . intval($_REQUEST['unit']);
+            $colmooc_url = $colmoocapp->getParam(ColmoocApp::CHAT_URL)->value() . "/?session_id=" . $sessionId . "&session_token=" . $sessionToken;
+            if ($unit) {
+                $chatindex_url = $urlAppend . "modules/units/?course=$course_code&id=$unit";
             } else {
                 $chatindex_url = $urlAppend . "modules/chat/index.php";
             }
@@ -352,9 +353,9 @@ if (!$conference_activity) {
                 . ' <a class="studentChat" href="#" title="' . $langChat . '">' . $langChat . '</a> '
                 . $langColmoocFollowLink2 . "</span></div></div>";
 
-            $cus = Database::get()->querySingle("select cus.user_id, cus.session_status, cus.session_status_updated 
-                from colmooc_user_session cus 
-                join conference c on (c.chat_activity_id = cus.activity_id) 
+            $cus = Database::get()->querySingle("select cus.user_id, cus.session_status, cus.session_status_updated
+                from colmooc_user_session cus
+                join conference c on (c.chat_activity_id = cus.activity_id)
                 where c.course_id = ?d and c.conf_id = ?d and cus.user_id = ?d", $course_id, $conference_id, $uid);
             if ($cus) {
                 $tool_content .= "<div class='table-responsive'>";
@@ -386,7 +387,7 @@ $head_content .= "<script>
             e.preventDefault();
             var fileURL = $(this).attr('href');
             var fileTitle = $(this).attr('title');
-            
+
             // BUTTONS declare
             var bts = {};
             if (screenfull.enabled) {
@@ -403,7 +404,7 @@ $head_content .= "<script>
                 label: '$langCancel',
                 className: 'cancelAdminBtn'
             };
-            
+
             bootbox.dialog({
                 size: 'large',
                 title: fileTitle,
@@ -415,16 +416,16 @@ $head_content .= "<script>
                 buttons: bts
             });
         });
-        
+
         $('.studentChat').click(function (e) {
             window.open('" . $colmooc_url . "', '_blank');
             window.location.href = '" . $chatindex_url . "';
         });
-        
+
         $('.teacherLearningAnalytics').click(function (e) {
             window.open('" . $colmooc_teacher_la_url . "', '_blank');
         });
-        
+
         $('.studentLearningAnalytics').click(function (e) {
             window.open('" . $colmooc_student_la_url . "', '_blank');
         });
