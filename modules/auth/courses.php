@@ -284,7 +284,7 @@ function expanded_faculte($facid, $uid) {
             if ($disable_course_user_requests) {
                 $course_request_access_link = '';
             } else {
-                $course_request_access_link = "<br><small><em><a href='../contact/index.php?course_id=" . $cid . "'>$langLabelCourseUserRequest</a></em></small>";
+                $course_request_access_link = "<br><small><em><a class='text-decoration-underline' href='../contact/index.php?course_id=" . $cid . "'>$langLabelCourseUserRequest</a></em></small>";
             }
         } else {
             $codelink = $course_title;

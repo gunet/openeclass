@@ -18,7 +18,7 @@
             @endif
         </ul>
         <div class='d-flex justify-content-start align-items-center'>
-            <a class="copyright px-2" href='{{ $urlAppend }}info/copyright.php'>Open eClass - 2023 All rights reserved</a>
+            <a class="copyright px-2" href='{{ $urlAppend }}info/copyright.php'>2003 - 2024 -- All rights reserved</a>
             @if(get_config('enable_social_sharing_links'))
                 <a class="a_tools_site_footer px-2" href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f social-icon-tool"></i></a>
                 <a class="a_tools_site_footer px-2" href="https://twitter.com/" target="_blank"><i class="fab fa-twitter social-icon-tool"></i></a>

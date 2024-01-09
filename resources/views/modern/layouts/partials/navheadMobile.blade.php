@@ -39,7 +39,7 @@
                                 <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-2 px-1 pe-none">
                                     <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                     <div>
-                                        <h4 class='mb-0'>{{ $_SESSION['givenname'] }}&nbsp;{{ $_SESSION['surname'] }}</h4>
+                                        <h4 class='truncate-text mb-0'>{{ $_SESSION['givenname'] }}&nbsp;{{ $_SESSION['surname'] }}</h4>
                                         <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
                                     </div>
 

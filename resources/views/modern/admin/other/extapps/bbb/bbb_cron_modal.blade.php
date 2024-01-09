@@ -15,7 +15,9 @@
     </div>
 </div>
 
-<div class='alert {!! $tc_cron_class !!}' style='display: flex; align-items: center;'>
-    <div style='margin-right: 15px'><i class='fas {{ $tc_cron_icon }} fa-2x'></i></div>
-    <div style='width: 100%'>{!! $tc_cron_message !!}</div>
+<div class='col-12'>
+    <div class='alert {!! $tc_cron_class !!}'>
+        <i class='fa-solid fa-circle-info fa-lg'></i>
+        <span>{!! $tc_cron_message !!}</span>
+    </div>
 </div>

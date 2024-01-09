@@ -1136,7 +1136,7 @@ jContent;
                         continue;
                     }
 
-                    $ret .= "<li class='list-group-item element'>
+                    $ret .= "<li class='list-group-item element list-group-courses'>
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap'>
                                     <div>
                                         <a class='categoryName text-decoration-underline' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';

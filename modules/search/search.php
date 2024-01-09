@@ -151,7 +151,7 @@ foreach ($courses as $course) {
         $courseUrl = "<span id='cid" . $course->id . "'>" . q($course->title) . "</span> (" . q($course->public_code) . ")";
         $disable_course_user_requests = setting_get(SETTING_COURSE_USER_REQUESTS_DISABLE, $course->id);
         if (!$disable_course_user_requests) {
-            $courseUrl .= "<br/><small><em><a href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
+            $courseUrl .= "<br/><small><em><a class='text-decoration-underline' href='../contact/index.php?course_id=" . intval($course->id) . "'>$langLabelCourseUserRequest</a></em></small>";
         }
         $skipincourse = true;
     }

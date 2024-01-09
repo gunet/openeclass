@@ -92,7 +92,7 @@
                         
                     <div class='d-lg-flex gap-4 mt-4'>
                         <div class='flex-grow-1'>
-                            <div class='form-wrapper form-edit rounded'> 
+                            <div class='form-wrapper form-edit rounded py-0'> 
                                 
                                 <form class='form-horizontal' role='form' method='post' action='{{ $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code }}'>
                                     @if (isset($_GET['id']))

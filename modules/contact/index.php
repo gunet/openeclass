@@ -110,12 +110,12 @@ function form($user) {
         <div class='col-sm-12'><label class='control-label-notes'>$langFrom:&nbsp;</label><small>$user</small></div>
         <div class='col-sm-12'><label class='control-label-notes'>$langSendTo:&nbsp;</label><small>$userprof</small></div>
                        
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-12'>
               <textarea name='content' rows='10' cols='80' placeholder='$langRequestReasons'></textarea>
             </div>
 	    </div>
-        <div class='form-group mt-3'>
+        <div class='form-group mt-4'>
             <div class='col-sm-offset-1 col-sm-11'>
                 <input class='btn submitAdminBtn' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
             </div>

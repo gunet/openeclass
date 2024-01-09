@@ -170,7 +170,11 @@
                                             </a>
                                             <div id="AboutMe" class="panel-collapse accordion-collapse collapse border-0 rounded-0" role="tabpanel" data-bs-parent="#accordion">
                                                 <div class="panel-body bg-transparent Neutral-900-cl px-4">
-                                                    {!! $userdata->description !!}
+                                                    @if(!empty($userdata->description))
+                                                        {!! $userdata->description !!}
+                                                    @else
+                                                        {{ trans('langNoInfoAvailable') }}
+                                                    @endif
                                                 </div>
                                             </div>
                                         </li>
