@@ -51,6 +51,7 @@ include "../../include/baseTheme.php";
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
+require_once 'modules/admin/modalconfirmation.php';
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -305,18 +306,25 @@ $head_content .= "
                 }
             });
             
+            let confirmLpCleanAttemptHref;
             
-            $('#cleanattempt').change(function() {
-                if (this.checked) {
-                    $('.lp_launch_url').each(function() {
-                        $(this).attr('href', $(this).attr('href') + '&cleanattempt=on');
-                    });
-                } else {
-                    $('.lp_launch_url').each(function() {
-                        let re = new RegExp('&cleanattempt=on');
-                        $(this).attr('href', $(this).attr('href').replace(re, ''));
-                    });
-                }
+            $('#confirmLpCleanAttemptDialog').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+            
+            $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
+              confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
+            });
+        
+            $('#confirmLpCleanAttemptCancel').click(function() {
+                $('#confirmLpCleanAttemptDialog').modal('hide');
+            });
+        
+            $('#confirmLpCleanAttemptOk').click(function() {
+                $('#confirmLpCleanAttemptDialog').modal('hide');
+                window.location.href = confirmLpCleanAttemptHref;
             });
         });
     </script>
@@ -392,7 +400,6 @@ if ($l == 0) {
 }
 
 $tool_content .= "
-<div><input id='cleanattempt' type='checkbox' value='on' name='cleanattempt'> <label for='cleanattempt'>$langLearningPathCleanAttempt</label></div> 
 <div class='table-responsive'>
     <table class='table-default'>
     <thead>
@@ -427,7 +434,8 @@ if ($uid) {
 $sql = "SELECT MIN(LP.name) AS name, MIN(LP.comment) AS lp_comment, 
                MIN(UMP.`raw`) AS minRaw,
                MIN(LP.`lock`) AS `lock`, MIN(LP.visible) AS visible,
-               MIN(LP.learnPath_id) AS learnPath_id
+               MIN(LP.learnPath_id) AS learnPath_id,
+               MAX(UMP.`suspend_data`) AS suspend_data
            FROM `lp_learnPath` AS LP
      LEFT JOIN `lp_rel_learnPath_module` AS LPM
             ON LPM.`learnPath_id` = LP.`learnPath_id`
@@ -477,20 +485,24 @@ foreach ($result as $list) { // while ... learning path list
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
 
         $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
+        $susp_img = "<span class='fa fa-repeat' style='font-size:15px;'></span>";
 
-        if(!$is_editor){ // If is student
+        $susp_button = "";
+        if ($list->suspend_data) {
+            $susp_button = "<a data-href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>$susp_img</a>";
+        }
+
+        if(!$is_editor) { // If is student
             $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a class='lp_launch_url' href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
-
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
             }
         } else { // If is admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a class='lp_launch_url' href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
-
+                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
             } else {
                 $play_url = htmlspecialchars($list->name);
             }
@@ -498,7 +510,15 @@ foreach ($result as $list) { // while ... learning path list
 
         $tool_content .= "
             <td>
-                <div><strong>$play_url</strong><span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span></div>                
+                <div>
+                    <strong>$play_url</strong>
+                    <span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span>";
+        if ($susp_button) {
+            $tool_content .= "<br/>
+                    <span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
+        }
+        $tool_content .= "
+                    </div>                
                 <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
             </td>";
 
@@ -658,5 +678,6 @@ $tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='di
     </div>
   </div>
 </div>";
+$tool_content .= modalConfirmation('confirmLpCleanAttemptDialog', 'confirmLpCleanAttemptLabel', $langConfirmLpCleanAttemptTitle, $langConfirmLpCleanAttemptBody, 'confirmLpCleanAttemptCancel', 'confirmLpCleanAttemptOk');
 
 draw($tool_content, 2, null, $head_content);

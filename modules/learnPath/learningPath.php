@@ -214,7 +214,6 @@ if (commentBox(LEARNINGPATH_, DISPLAY_)) {
 $tool_content .= "</table></div>";
 
 // --------------------------- module table header --------------------------
-$tool_content .= "<div><input id='cleanattempt' type='checkbox' value='on' name='cleanattempt'> <label for='cleanattempt'>$langLearningPathCleanAttempt</label></div>";
 $tool_content .= "<div class='table-responsive'>";
 $tool_content .= "<table class='table-default'>";
 $tool_content .= "<tr class='list-header'><th colspan='" . ($maxDeep + 2) . "'><div class='align-left'>&nbsp;&nbsp;<strong>" . $langLearningPathStructure . "</strong></div></th>";
@@ -287,7 +286,7 @@ foreach ($flatElementList as $module) {
         if (isset($_GET['unit'])) {
             $tool_content .= "<a href='../units/view.php?course=$course_code&amp;res_type=lp&amp;unit=$_GET[unit]&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
         } else {
-            $tool_content .= "<a class='lp_launch_url' href='viewer.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
+            $tool_content .= "<a href='viewer.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']) . "&amp;module_id=$module[module_id]'>" . q($module['name']) . "</a>";
         }
 
         // a module ALLOW access to the following modules if
@@ -351,22 +350,4 @@ if ($uid && $moduleNb > 0) {
                       </tr>";
 }
 $tool_content .= "</table></div>";
-$head_content .= "
-    <script>
-        $(document).ready(function(){
-            $('#cleanattempt').change(function() {
-                if (this.checked) {
-                    $('.lp_launch_url').each(function() {
-                        $(this).attr('href', $(this).attr('href') + '&cleanattempt=on');
-                    });
-                } else {
-                    $('.lp_launch_url').each(function() {
-                        let re = new RegExp('&cleanattempt=on');
-                        $(this).attr('href', $(this).attr('href').replace(re, ''));
-                    });
-                }
-            });
-        });
-    </script>
-";
-draw($tool_content, 2, null, $head_content);
+draw($tool_content, 2);

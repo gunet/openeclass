@@ -5095,6 +5095,8 @@ $langEditAgent = "Edit Agent";
 $langHasBeenCompleted = $langUsersCertResults = "Completed by ";
 $langZipError = "File could not be unzipped";
 $langLearningPathCleanAttempt = "Start over on next attempt";
+$langConfirmLpCleanAttemptTitle = "Confirmation for starting over on next attempt";
+$langConfirmLpCleanAttemptBody = "With this option the next attempt of the Learning Path <u>will not</u> use the saved data to continue from where you last left off.<br/><br/><em>Cancel</em> your choice if you <u>do not</u> wish to start over on the next attempt.";
 $langForumPostFlatViewAsc = "Date view (oldest first)";
 $langForumPostFlatViewDesc = "Date view (newest first)";
 $langForumPostThreadedView = "Threaded view";
