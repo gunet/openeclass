@@ -2844,6 +2844,7 @@ $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πα
 $langLPViewerToggleLeftTOC = "Εναλλαγή εμφάνισης περιεχομένων";
 $langLearnPathDeleted = 'Η γραμμή μάθησης διαγράφηκε';
 $langZipError = "Το αρχείο δεν μπόρεσε να αποσυμπιεστεί";
+$langLearningPathCleanAttempt = "Ξεκινήστε από την αρχή στην επόμενη προσπάθεια";
 
 $langDistribute = "Διαμοιρασμός";
 $langCancelDistribute = "Ακύρωση διαμοιρασμού";

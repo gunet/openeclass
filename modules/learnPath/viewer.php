@@ -56,6 +56,10 @@ if (isset($_GET['path_id']) && !empty($_GET['path_id'])) {
 if (isset($_GET['module_id']) && !empty($_GET['module_id'])) {
     $_SESSION['lp_module_id'] = intval($_GET['module_id']);
 }
+$_SESSION['lp_attempt_clean'] = false;
+if (isset($_GET['cleanattempt']) && !empty($_GET['cleanattempt'])) {
+    $_SESSION['lp_attempt_clean'] = true;
+}
 
 check_LPM_validity($is_editor, $course_code, true);
 

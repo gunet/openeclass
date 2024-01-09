@@ -304,6 +304,20 @@ $head_content .= "
                     });
                 }
             });
+            
+            
+            $('#cleanattempt').change(function() {
+                if (this.checked) {
+                    $('.lp_launch_url').each(function() {
+                        $(this).attr('href', $(this).attr('href') + '&cleanattempt=on');
+                    });
+                } else {
+                    $('.lp_launch_url').each(function() {
+                        let re = new RegExp('&cleanattempt=on');
+                        $(this).attr('href', $(this).attr('href').replace(re, ''));
+                    });
+                }
+            });
         });
     </script>
 ";
@@ -378,6 +392,7 @@ if ($l == 0) {
 }
 
 $tool_content .= "
+<div><input id='cleanattempt' type='checkbox' value='on' name='cleanattempt'> <label for='cleanattempt'>$langLearningPathCleanAttempt</label></div> 
 <div class='table-responsive'>
     <table class='table-default'>
     <thead>
@@ -466,7 +481,7 @@ foreach ($result as $list) { // while ... learning path list
         if(!$is_editor){ // If is student
             $play_button = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>$play_img</a>";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
+                $play_url = "<a class='lp_launch_url' href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
 
             } else { // If there are no modules
                 $play_url = htmlspecialchars($list->name);
@@ -474,7 +489,7 @@ foreach ($result as $list) { // while ... learning path list
         } else { // If is admin
             $play_button = "";
             if (count($resultmodules) > 0) { // If there are modules
-                $play_url = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
+                $play_url = "<a class='lp_launch_url' href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>" . htmlspecialchars($list->name) . "</a>";
 
             } else {
                 $play_url = htmlspecialchars($list->name);

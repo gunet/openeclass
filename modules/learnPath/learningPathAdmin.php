@@ -484,6 +484,7 @@ $lp_action_button = action_button(array(
         'secondary_btn_class' => 'btn-success btn-sm'
     )
 );
+$tool_content .= "<div><input id='cleanattempt' type='checkbox' value='on' name='cleanattempt'> <label for='cleanattempt'>$langLearningPathCleanAttempt</label></div>";
 $tool_content .= "<div class='panel panel-default panel-action-btn-default'>
                     <div class='pull-right' style='padding:8px;'>
                         $lp_action_button
@@ -605,7 +606,7 @@ foreach ($flatElementList as $module) {
         }
 
         $contentType_alt = selectAlt($module['contentType']);
-        $tool_content .= "<span style=\"vertical-align: middle;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
+        $tool_content .= "<span style=\"vertical-align: middle;\">" . icon($moduleImg, $contentType_alt) . "</span>&nbsp;<a class='lp_launch_url' href=\"viewer.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "&amp;module_id=" . $module['module_id'] . "\"" . $style . ">" . htmlspecialchars($module['name']) . "</a>";
     }
     $tool_content .= "</td>"; // end of td of module name
 
@@ -654,4 +655,22 @@ foreach ($flatElementList as $module) {
 } // end of foreach
 
 $tool_content .= "</table></div>";
+$head_content .= "
+    <script>
+        $(document).ready(function(){
+            $('#cleanattempt').change(function() {
+                if (this.checked) {
+                    $('.lp_launch_url').each(function() {
+                        $(this).attr('href', $(this).attr('href') + '&cleanattempt=on');
+                    });
+                } else {
+                    $('.lp_launch_url').each(function() {
+                        let re = new RegExp('&cleanattempt=on');
+                        $(this).attr('href', $(this).attr('href').replace(re, ''));
+                    });
+                }
+            });
+        });
+    </script>
+";
 draw($tool_content, 2, null, $head_content, $body_action);

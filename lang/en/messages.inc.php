@@ -5094,6 +5094,7 @@ $langGradeCorrect = 'Grade';
 $langEditAgent = "Edit Agent";
 $langHasBeenCompleted = $langUsersCertResults = "Completed by ";
 $langZipError = "File could not be unzipped";
+$langLearningPathCleanAttempt = "Start over on next attempt";
 $langForumPostFlatViewAsc = "Date view (oldest first)";
 $langForumPostFlatViewDesc = "Date view (newest first)";
 $langForumPostThreadedView = "Threaded view";
