@@ -42,7 +42,7 @@ $navigation[] = ['url' => $backUrl, 'name' => $langH5p];
 
 // h5p variables
 $factory = new H5PFactory();
-$jsCacheBuster = "?ver=" . time();
+$jsCacheBuster = "?ver=" . CACHE_SUFFIX;
 
 if (isset($_POST['h5paction']) && $_POST['h5paction'] === 'create') {
     if (isset($_POST['cancel'])) {
