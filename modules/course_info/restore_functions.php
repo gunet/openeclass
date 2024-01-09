@@ -1938,7 +1938,9 @@ function certificate_criterion_map_function(&$data, $maps) {
         case 'forumtopic': $data['resource'] = $forum_topic_map[$data['resource']];
                     $data['module'] = MODULE_ID_FORUM;
                     break;
-        case 'learning path': $data['resource'] = $lp_learnPath_map[$data['resource']];
+        case 'learning path':
+        case 'learning path duration':
+                    $data['resource'] = $lp_learnPath_map[$data['resource']];
                     $data['module'] = MODULE_ID_LP;
                     break;
         case 'ebook': $data['resource'] = $ebook_map[$data['resource']];
@@ -1993,7 +1995,9 @@ function badge_criterion_map_function(&$data, $maps) {
         case 'forumtopic': $data['resource'] = $forum_topic_map[$data['resource']];
                     $data['module'] = MODULE_ID_FORUM;
                     break;
-        case 'learning path': $data['resource'] = $lp_learnPath_map[$data['resource']];
+        case 'learning path':
+        case 'learning path duration':
+                    $data['resource'] = $lp_learnPath_map[$data['resource']];
                     $data['module'] = MODULE_ID_LP;
                     break;
         case 'ebook': $data['resource'] = $ebook_map[$data['resource']];
