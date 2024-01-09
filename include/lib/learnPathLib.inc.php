@@ -736,7 +736,7 @@ function get_learnPath_combined_progress($lpid, $lpUid): float {
                AND LPM.`visible` = 1
                AND LPM.`module_id` = M.`module_id`
                AND M.`contentType` != ?s
-          GROUP BY LPM.`module_id`
+          GROUP BY LPM.`module_id`, UMP.`attempt`
           ORDER BY MIN(LPM.`rank`)";
     $modules = Database::get()->queryArray($sql, $lpUid, $lpid, CTLABEL_);
     $modulesProg = calculate_learnPath_combined_progress($modules);
