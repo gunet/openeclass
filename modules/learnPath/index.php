@@ -527,8 +527,7 @@ foreach ($result as $list) { // while ... learning path list
                   AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
-
-        $play_img = "<span class='fa fa-line-chart'></span>";
+        $play_img = "<span class='fa fa-line-chart' style='font-size:15px;'></span>";
         $susp_img = "<span class='fa fa-repeat' style='font-size:15px;'></span>";
 
         $susp_button = "";
@@ -555,14 +554,14 @@ foreach ($result as $list) { // while ... learning path list
         $tool_content .= "
             <td>
                 <div>
-                    $play_url
+                    <strong>$play_url</strong>
                     <span class='ps-2' data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathData'>$play_button</span>";
         if ($susp_button) {
-            $tool_content .= "&nbsp;<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
+            $tool_content .= "&nbsp;<span class='pull-right' style='padding-left: 15px;'  data-bs-toggle='tooltip' data-bs-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
         }
         $tool_content .= "
                 </div>
-                <div>$list->lp_comment</div>
+                <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
             </td>";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------

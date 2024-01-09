@@ -198,6 +198,31 @@ function show_resources($unit_id)
         });
         </script>";
 
+    $head_content .= "<script>
+        $(document).ready(function() {
+            let confirmLpCleanAttemptHref;
+            
+            $('#confirmLpCleanAttemptDialog').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+            
+            $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
+              confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
+            });
+        
+            $('#confirmLpCleanAttemptCancel').click(function() {
+                $('#confirmLpCleanAttemptDialog').modal('hide');
+            });
+        
+            $('#confirmLpCleanAttemptOk').click(function() {
+                $('#confirmLpCleanAttemptDialog').modal('hide');
+                window.location.href = confirmLpCleanAttemptHref;
+            });
+        });
+        </script>";
+
     $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 
     if ($q->flipped_flag == 2) {
@@ -524,6 +549,7 @@ function show_resources($unit_id)
  * @param type $info
  */
 function show_resource($info) {
+
     global $langUnknownResType, $is_editor, $langConfirmLpCleanAttemptTitle, $langConfirmLpCleanAttemptBody;
 
     $html = '';
@@ -777,6 +803,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
           <td width='1'>$imagelink</a></td>
           <td class='text-start'>$act_name</td>
           <td>$link $res_prereq_icon <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </td>" .
+
             actions('lp', $resource_id, $status) . "</tr>";
 }
 
