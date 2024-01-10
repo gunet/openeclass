@@ -307,6 +307,15 @@ echo "<!DOCTYPE HTML>
                 $.cookie('leftTOChiddenStatus', 0, { path: '/' });
             }
         });
+        
+        $('#close-btn-a').on('click', function(e) {
+            let api = window.parent.api;
+            if (typeof api !== 'undefined') {
+                e.preventDefault();
+                api.SetValue('adl.nav.request', 'exit');
+                api.LMSCommit('');
+            }
+        });
     });
 
     /* ]]> */
@@ -323,7 +332,7 @@ echo "<!DOCTYPE HTML>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li id='close-btn' style='padding-top: 15px;'><a href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
+                        <li id='close-btn' style='padding-top: 15px;'><a id='close-btn-a' href='$returl' target='_top'><span class='fa fa-times fa-lg'></span>&nbsp;&nbsp;<span class='hidden-xs'>$langLogout</span></span></a></li>
                     </ul>
                     <div class='pull-right progressbar-plr'>";
 
