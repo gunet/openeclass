@@ -813,6 +813,16 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonBgColor];
                     background-color: $theme_options_styles[buttonBgColor];
                 }
+
+                .nav-link-adminTools.normalColorBlueText.active{
+                    background-color:$theme_options_styles[buttonBgColor];
+                    color: #ffffff !important;
+                }
+
+                .panel-admin .panel-heading{
+                    background: $theme_options_styles[buttonBgColor];
+                }
+
             ";
         }
 

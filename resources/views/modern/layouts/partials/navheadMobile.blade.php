@@ -33,10 +33,10 @@
                             <img class="user-icon-filename mt-0" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                     </button>
 
-                    <div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
+                    <div class="m-0 py-3 px-2 dropdown-menu dropdown-menu-end contextual-menu contextual-menu-user contextual-border" aria-labelledby="dropdownMenuButton1">
                         <ul class="list-group list-group-flush dropdown_menu_user">
                             <li>
-                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-2 px-1 pe-none">
+                                <a class="list-group-item d-flex justify-content-start align-items-start gap-2 py-2 px-2 pe-none">
                                     <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                     <div>
                                         <h4 class='truncate-text mb-0'>{{ $_SESSION['givenname'] }}&nbsp;{{ $_SESSION['surname'] }}</h4>

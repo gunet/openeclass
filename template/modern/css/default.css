@@ -31,7 +31,7 @@ body{
   .main-section{
     max-width: 100%;
     padding-top: 56px;
-    min-height: calc(100vh - 56px - 283px + 56px);
+    min-height: calc(100vh - 56px - 134px + 56px);
   }
 }
 
@@ -64,7 +64,7 @@ body{
   .homepage-container{
     padding: 24px 8px 24px 8px;
     background-color: #ffffff;
-    min-height: calc(100vh - 56px - 283px + 56px - 233px);
+    min-height: calc(100vh - 56px - 134px + 56px - 233px);
   }
   .portfolio-profile-container{
     min-height: 96px;
@@ -74,13 +74,13 @@ body{
   .portfolio-courses-container{
     padding: 24px 8px 24px 8px;
     background-color: #ffffff;
-    min-height: calc(100vh - 56px - 283px + 56px - 592px);
+    min-height: calc(100vh - 56px - 134px + 56px - 592px);
   }
 
   .main-container,
   .module-container,
   .onlyLoginContainer{
-    min-height: calc(100vh - 56px - 283px);
+    min-height: calc(100vh - 56px - 134px);
   }
 }
 @media(min-width:992px){
@@ -1033,10 +1033,10 @@ a:hover{
 }
 @media(max-width:991px){
   #bgr-cheat-footer, .footer-container{
-    min-height: 283px; 
+    min-height: 134px; 
   }
   .footer-container{
-    padding: 32px 20px 32px 20px;
+    padding: 24px 20px 24px 20px;
     background-color: #F7F9FE;
   }
 }
@@ -2009,7 +2009,7 @@ input[type="submit"].warningAdminBtn:hover {
   .contextual-menu-user{
     width: 296px;
     overflow-y: auto;
-    max-height: calc(100vh - 56px);
+    max-height: calc(100vh - 56px - 134px);
   }
 
 }
@@ -5104,7 +5104,7 @@ div[role="progressbar"]::before {
   .dropdown_menu_user::-webkit-scrollbar { 
     -webkit-appearance: none; 
     appearance: none; 
-    width: 10px; 
+    width: 5px; 
     background-color: #e8e8e8; 
   }
 

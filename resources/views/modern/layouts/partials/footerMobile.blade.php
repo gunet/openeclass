@@ -4,18 +4,18 @@
 
         <div class="d-flex align-items-start flex-column h-100">
 
-            <div class='d-flex w-100 border-bottom-footer pb-3 gap-5'>
+            <div class='d-flex w-100 border-bottom-footer pb-3 gap-3 flex-wrap'>
 
-                <div>
+                
                     @if (!get_config('dont_display_about_menu'))
-                        <div class='col-12 px-0 pb-2'>
+                        <div class=''>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">
                                 {{ trans('langPlatformIdentity') }}
                             </a>
                         </div>
                     @endif
                     @if (!get_config('dont_display_contact_menu'))
-                        <div class='col-12 px-0 pb-2'>
+                        <div class=''>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">
                                 {{ trans('langContact') }}
                             </a>
@@ -23,52 +23,27 @@
                     @endif
                 
                     @if (!get_config('dont_display_manual_menu'))
-                        <div class='col-12 px-0 pb-2'>
+                        <div class=''>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/manual.php">
                                 {{ trans('langManuals') }}
                             </a>
                         </div>
                     @endif
-                    <div class='col-12 px-0 pb-2'>
+                    <div class=''>
                         <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php">
                             {{ trans('langUsageTerms') }}
                         </a>
                     </div>
                     @if (get_config('activate_privacy_policy_text'))
-                        <div class='col-12 px-0 pb-2'>
+                        <div class=''>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php">
                                 {{ trans('langPrivacyPolicy') }}
                             </a>
                         </div>
                     @endif
-                </div>
-                <div>
-                    @if(!get_config('show_only_loginScreen'))
-                        <div class='col-12 px-0 pb-2'>
-                            <a class="a_tools_site_footer" href="{{$urlAppend}}main/system_announcements.php">
-                                {{ trans('langAnnouncements')}}
-                            </a>
-                        </div>
-                    @endif
-                    @if(!get_config('show_only_loginScreen'))
-                        @if (!get_config('dont_display_courses_menu'))
-                            <div class='col-12 px-0 pb-2'>
-                                <a class="a_tools_site_footer" href="{{ $urlAppend }}modules/auth/listfaculte.php">
-                                    {{ trans('langCourses') }}
-                                </a>
-                            </div>
-                        @endif
-                    @endif
-                    @if(!get_config('show_only_loginScreen'))
-                        <div class='col-12 px-0 pb-2'>
-                            <a class="a_tools_site_footer" href="{{$urlAppend}}info/faq.php">
-                                {{ trans('langFaq') }}
-                            </a>
-                        </div>
-                    @endif
-                </div>
+                
 
-                </div>
+                
             </div>
 
             <div class="mt-auto w-100 d-flex justify-content-between align-items-center flex-wrap gap-3 pt-3">
