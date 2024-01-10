@@ -514,11 +514,10 @@ foreach ($result as $list) { // while ... learning path list
                     <strong>$play_url</strong>
                     <span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathData'>$play_button</span>";
         if ($susp_button) {
-            $tool_content .= "<br/>
-                    <span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
+            $tool_content .= "&nbsp;<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
         }
         $tool_content .= "
-                    </div>                
+                    </div>
                 <div style='padding: 15px; 8px; 10px;'>$list->lp_comment</div>
             </td>";
 
