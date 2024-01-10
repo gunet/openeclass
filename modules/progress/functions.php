@@ -2844,7 +2844,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 
     global $tool_content, $langNoUserActivity, $langAttendanceActivity, $langpublisher,
            $langInstallEnd, $langTotalPercentCompleteness, $langTitle, $langDescription,
-           $langCertAddress;
+           $langCertAddress, $langRubricCrit;
 
     $element_title = get_cert_title($element, $element_id);
     $resource_data = array();
@@ -2857,7 +2857,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
             $cert_public_link = "<div class='pn-info-title-sct control-label-notes'>$langCertAddress:</div>
                                 <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
         }
-        $sql = Database::get()->queryArray("SELECT certificate_criterion FROM user_certificate_criterion JOIN certificate_criterion
+        $sql = Database::get()->queryArray("SELECT certificate_criterion, activity_type, threshold, operator FROM user_certificate_criterion JOIN certificate_criterion
                                                             ON user_certificate_criterion.certificate_criterion = certificate_criterion.id
                                                                 AND certificate_criterion.certificate = ?d
                                                                 AND user = ?d", $element_id, $user_id);
@@ -2871,7 +2871,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         $sql3 = "SELECT completed, completed_criteria, total_criteria FROM user_certificate WHERE certificate = ?d AND user = ?d";
     } else { // badge
         $cert_public_link = '';
-        $sql = Database::get()->queryArray("SELECT badge_criterion FROM user_badge_criterion JOIN badge_criterion
+        $sql = Database::get()->queryArray("SELECT badge_criterion, activity_type, threshold, operator FROM user_badge_criterion JOIN badge_criterion
                                                             ON user_badge_criterion.badge_criterion = badge_criterion.id
                                                                 AND badge_criterion.badge = ?d
                                                                 AND user = ?d", $element_id, $user_id);
@@ -2949,14 +2949,18 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 <div class='card-body'>
                     <div class='res-table-wrapper'>
                         <div class='row p-2 res-table-header'>
-                            <div class='col-md-9 col-12 control-label-notes'>
+                            <div class='col-md-8 col-12 control-label-notes'>
                                 $langTitle:
                             </div>
-                            <div class='col-md-3 col-12 text-md-center'>
+                            <div class='col-md-2 col-12 control-label-notes'>
+                                $langRubricCrit
+                            </div>
+                            <div class='col-md-2 col-12 text-md-center'>
                                 $langInstallEnd
                             </div>
                         </div>";
 
+    // completed criteria
 	foreach ($sql as $user_criterion) {
         if ($element == 'badge') {
             $resource_data = get_resource_details($element, $user_criterion->badge_criterion);
@@ -2964,12 +2968,26 @@ function display_user_progress_details($element, $element_id, $user_id) {
             $resource_data = get_resource_details($element, $user_criterion->certificate_criterion);
         }
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
+
+        if (!empty($user_criterion->operator) && $user_criterion->activity_type != AssignmentSubmitEvent::ACTIVITY) {
+            $op = get_operators();
+            $op_content = $op[$user_criterion->operator];
+        } else {
+            $op_content = "&mdash;";
+        }
+        $threshold = $user_criterion->threshold;
+        if ($user_criterion->activity_type == AssignmentSubmitEvent::ACTIVITY) {
+            $threshold = "";
+        }
+
 		$tool_content .= "
-                <div class='row p-2 res-table-row border-0'>
-                    <div class='col-md-9 col-12 control-label-notes'>$activity:</div>
-                    <div class='col-md-3 col-12 text-md-center'>" . icon('fa-check-circle') . "</div>
-                </div>";
+            <div class='row p-2 res-table-row border-0'>
+                <div class='col-md-8 col-12 control-label-notes'>$activity:</div>
+                <div class='col-md-2 col-12 text-md-center'>" . $op_content . " " . $threshold . "</div>
+                <div class='col-md-2 col-12 text-md-center'>" . icon('fa-check-circle') . "</div>
+            </div>";
 	}
+    // uncompleted criteria
 	foreach ($sql2 as $user_criterion) {
 		$resource_data = get_resource_details($element, $user_criterion->id);
 		$activity = $resource_data['title'] . "&nbsp;<small>(" .$resource_data['type'] . ")</small>";
@@ -2984,10 +3002,10 @@ function display_user_progress_details($element, $element_id, $user_id) {
             $threshold = "";
         }
 		$tool_content .= "
-                <div class='row p-2 res-table-row not_visible border-0'>
-                    <div class='col-md-9 control-label-notes'>$activity:</div>
-                    <div class='col-md-3 text-md-center'>$op_content&nbsp;" . $threshold . "</div>
-                </div>";
+            <div class='row p-2 res-table-row not_visible border-0'>
+                <div class='col-md-9 control-label-notes'>$activity:</div>
+                <div class='col-md-3 text-md-center'>$op_content&nbsp;" . $threshold . "</div>
+            </div>";
 	}
 	$tool_content .= "
             <div class='row p-2 res-table-header'>
