@@ -718,6 +718,12 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonTextColor];
                     background-color: #ffffff;
                 }
+
+                .btn-outline-primary {
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                    background-color: #ffffff;
+                }
             ";
         }
 
@@ -738,6 +744,12 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .btn-outline-primary:hover,
+                .btn-outline-primary:focus{
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -755,6 +767,11 @@ function view($view_file, $view_data = array()) {
                 .form-wrapper:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover,
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic:hover{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
+                }
+
+                .btn-outline-primary:hover,
+                .btn-outline-primary:focus{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
             ";
         }
@@ -814,13 +831,9 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                 }
 
-                .nav-link-adminTools.normalColorBlueText.active{
-                    background-color:$theme_options_styles[buttonBgColor];
-                    color: #ffffff !important;
-                }
-
-                .panel-admin .panel-heading{
-                    background: $theme_options_styles[buttonBgColor];
+                .btn.btn-primary{
+                    background-color: $theme_options_styles[buttonBgColor];
+                    border-color: $theme_options_styles[buttonBgColor];
                 }
 
             ";
@@ -880,6 +893,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
+                .btn.btn-primary:hover{
+                    border-color: $theme_options_styles[buttonHoverBgColor];
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
 
             ";
         }
@@ -928,6 +946,11 @@ function view($view_file, $view_data = array()) {
                 .bootbox.show .modal-footer .submitAdminBtn:hover, 
                 .modal.show .modal-footer .submitAdminBtn,
                 .modal.show .modal-footer .submitAdminBtn:hover {
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                .btn.btn-primary,
+                .btn.btn-primary:hover{
                     color: $theme_options_styles[buttonTextColor] ;
                 }
 
