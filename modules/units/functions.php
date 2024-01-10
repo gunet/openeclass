@@ -733,11 +733,11 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
 
         // display learning path results
         if ($is_editor) {
-            $lp_results_button = "<div style='padding-top: 10px;'><span data-toggle='tooltip' data-placement='top' title='$langDetails'>        
+            $lp_results_button = "<span data-toggle='tooltip' data-placement='top' title='$langDetails'>        
                 <a href=" . $urlAppend . "modules/learnPath/details.php?course=" . $course_code . "&amp;path_id=" . $lp_id . ">
                 <span style='vertical-align: baseline' class='fa fa-line-chart'></span>
                 </a>
-            </span></div>";
+            </span>";
         } else {
                 list($lpProgress, $lpTotalTime) = get_learnPath_progress_details($lp_id, $uid);
                 $lp_results = "<span data-toggle='tooltip' data-placement='top' title='$langTotalTimeSpent'>" . $lpTotalTime . "</span>
@@ -753,14 +753,14 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
     }
 
     if (!empty($comments)) {
-        $comment_box = "<br>$comments";
+        $comment_box = "<small>$comments</small>";
     }
 
     return "
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
           <td class='text-left' width='1'>$act_name</td>
-          <td>$link $res_prereq_icon $comment_box <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span></td>" .
+          <td>$link $res_prereq_icon <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span><br>$comment_box </td>" .
             actions('lp', $resource_id, $status) . "</tr>";
 }
 
