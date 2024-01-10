@@ -417,7 +417,7 @@ $langSaveErrorMessage = "Error. Chat could not be saved.";
 $langNoGuest = "Guest Users cannot access 'Chat'";
 $langCopyright = "Copyright Notice";
 $langCopyrightNotice = '
-Copyright © 2003 - 2023 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
+Copyright © 2003 - 2024 <a href="http://www.openeclass.org" target=_blank>Open eClass</a>.<br>&nbsp;<br>
 Platform '.$siteName.' is based on the <a href="http://www.openeclass.org" target=_blank>Open eClass platform</a>
 which is a complete Electronic Course Management System and is GUnet\'s
 proposition for an Asynchronous eLearning Service infrastructure.

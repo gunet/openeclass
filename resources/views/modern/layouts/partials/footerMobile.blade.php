@@ -8,14 +8,14 @@
 
                 
                     @if (!get_config('dont_display_about_menu'))
-                        <div class=''>
+                        <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/about.php">
                                 {{ trans('langPlatformIdentity') }}
                             </a>
                         </div>
                     @endif
                     @if (!get_config('dont_display_contact_menu'))
-                        <div class=''>
+                        <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/contact.php">
                                 {{ trans('langContact') }}
                             </a>
@@ -23,19 +23,19 @@
                     @endif
                 
                     @if (!get_config('dont_display_manual_menu'))
-                        <div class=''>
+                        <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/manual.php">
                                 {{ trans('langManuals') }}
                             </a>
                         </div>
                     @endif
-                    <div class=''>
+                    <div>
                         <a class="a_tools_site_footer" href="{{$urlAppend}}info/terms.php">
                             {{ trans('langUsageTerms') }}
                         </a>
                     </div>
                     @if (get_config('activate_privacy_policy_text'))
-                        <div class=''>
+                        <div>
                             <a class="a_tools_site_footer" href="{{$urlAppend}}info/privacy_policy.php">
                                 {{ trans('langPrivacyPolicy') }}
                             </a>
