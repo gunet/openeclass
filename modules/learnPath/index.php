@@ -561,7 +561,7 @@ foreach ($result as $list) { // while ... learning path list
             $tool_content .= "&nbsp;<span class='pull-right' style='padding-left: 15px;'  data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>$susp_button</span>";
         }
         $tool_content .= "
-                </div>                
+                </div>
                 <div>$list->lp_comment</div>
             </td>";
 
