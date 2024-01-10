@@ -53,7 +53,7 @@ $head_content .= "<script type='text/javascript'>
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': true,
                 'searchDelay': 1000,
-                'order' : [[2, 'desc']],
+                'order' : [[0, 'asc']],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -85,7 +85,10 @@ if ($learnPathName) {
     $titleTab['subTitle'] = q($learnPathName->name);
     $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
 
-    if (!isset($_GET['pdf'])) {
+    if (isset($_GET['pdf'])) {
+        $emailCol = "<th class='text-left'>$langEmail</th>";
+    } else {
+        $emailCol = '';
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "index.php",
@@ -99,7 +102,7 @@ if ($learnPathName) {
                 'url' => "details.php?course=$course_code&path_id=$path_id&xls=true",
                 'icon' => 'fa-download',
                 'level' => 'primary-label')
-            
+
         ));
     }
 
@@ -107,8 +110,8 @@ if ($learnPathName) {
                     <table id='lpu_progress' class='table-default table-lpu-progress'>
                     <thead>
                         <tr class='list-header'>
-                            <th>$langStudent</th>
-                            <th>$langEmail</th>
+                            <th class='text-left'>$langStudent</th>
+                            $emailCol
                             <th>$langAttempts</th>
                             <th>$langAttemptStarted</th>
                             <th>$langAttemptAccessed</th>
@@ -119,6 +122,7 @@ if ($learnPathName) {
                     </thead>";
 
 
+    $data[] = [ $currentCourseName ];
     $data[] = [ $learnPathName->name ];
     $data[] = [];
     $data[] = [ $langSurnameName, $langEmail, $langAm, $langGroup, $langAttempts, $langAttemptStarted, $langAttemptAccessed, $langTotalTimeSpent, $langLessonStatus, $langProgress ];
@@ -142,20 +146,21 @@ if ($learnPathName) {
                                 <a href='detailsUserPath.php?course=$course_code&amp;uInfo=$user->id&amp;path_id=$path_id'>" . q($user->surname) . " " . q($user->givenname) . "</a>
                               </td>";
         } else {
-            $tool_content .= "<td>" . q($user->surname) . " " . q($user->givenname) . "</td>";
+            $tool_content .= "<td>" . q($user->surname) . " " . q($user->givenname) . "</td>" .
+                "<td class='text-left'>" . q($user->email) . "</td>";
         }
 
         $lp_total_status = disp_lesson_status($lpTotalStatus);
         $lp_total_started = format_locale_date(strtotime($lpTotalStarted), 'short');
         $lp_total_accessed = format_locale_date(strtotime($lpTotalAccessed), 'short');
 
-        $tool_content .= "<td><div class='text-lg-break'>" . q($user->email) . "</div></td>
-                            <td>" . q($lpAttemptsNb) ."</td>  
+        $tool_content .= "<td class='text-center'>" . q($lpAttemptsNb) ."</td>                            
                             <td>" . $lp_total_started . "</td>
                             <td>" . $lp_total_accessed . "</td>
                             <td>" . q($lpTotalTime) . "</td>
                             <td>" . $lp_total_status . "</td>
                             <td>" . disp_progress_bar($lpCombinedProgress, 1) . "</td>";
+
         $tool_content .= "</tr>";
 
         $ug = user_groups($course_id, $user->id, 'csv');
@@ -165,15 +170,16 @@ if ($learnPathName) {
 }
 
 if (isset($_GET['xls'])) {
-    $course_title = course_code_to_title($_GET['course']);
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
-    $sheet->setTitle($course_title);
+    $sheet->setTitle($langStatsOfLearnPath);
     $sheet->getDefaultColumnDimension()->setWidth(30);
     $filename = $course_code . " learning_path_results.xlsx";
 
     $sheet->mergeCells("A1:J1");
-    $sheet->getCell('A1')->getStyle()->getFont()->setItalic(true);
+    $sheet->mergeCells("A2:J2");
+    $sheet->getCell('A1')->getStyle()->getFont()->setBold(true);
+    $sheet->getCell('A2')->getStyle()->getFont()->setItalic(true);
     for ($i = 1; $i <= 10; $i++) {
         $sheet->getCellByColumnAndRow($i, 3)->getStyle()->getFont()->setBold(true);
     }
@@ -185,7 +191,6 @@ if (isset($_GET['xls'])) {
     set_content_disposition('attachment', $filename);
     $writer->save("php://output");
     exit;
-
 
 } else if (isset($_GET['pdf'])) {
     $titleTab['subTitle'] = q($learnPathName->name);

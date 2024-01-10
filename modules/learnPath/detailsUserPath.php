@@ -199,8 +199,8 @@ foreach ($elementList as $module) {
     $tool_content .= "<td>" . format_locale_date(strtotime($module['accessed']), 'short') . "</td>";
 
     if ($module['contentType'] == CTSCORM_) {
-        $session_time = preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']);
-        $total_time = preg_replace("/\.[0-9]{0,2}/", "", $module['total_time']);
+        $session_time = $module['session_time']? preg_replace("/\.[0-9]{0,2}/", "", $module['session_time']): '';
+        $total_time = $module['total_time']? preg_replace("/\.[0-9]{0,2}/", "", $module['total_time']): '';
         $global_time[$module['attempt']] = addScormTime($global_time[$module['attempt']], $total_time);
     } elseif ($module['contentType'] == CTLABEL_ || $module['contentType'] == CTEXERCISE_) {
         $session_time = $module['session_time'];

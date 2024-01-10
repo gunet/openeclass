@@ -507,7 +507,7 @@ function calculate_learnPath_combined_progress($modules): int {
     if (!is_array($modules) || empty($modules)) {
         return 0;
     } else {
-        $progress = 0;
+        $progress = [];
 
         // progression is calculated in percents
         foreach ($modules as $module) {
@@ -522,12 +522,15 @@ function calculate_learnPath_combined_progress($modules): int {
                 $modProgress = 100;
             }
 
-            if ($modProgress >= 0) {
-                $progress += $modProgress;
+            $id = $module->learnPath_module_id;
+            if (!isset($progress[$id])) {
+                $progress[$id] = $modProgress;
+            } elseif ($modProgress >= 0) {
+                $progress[$id] = max($modProgress, $progress[$id]);
             }
         }
 
-        return $progress;
+        return array_sum($progress);
     }
 }
 
@@ -643,7 +646,7 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
 
         foreach ($modules as $module) {
             // total time calculation
-            $mtt = preg_replace("/\.[0-9]{0,2}/", "", $module->total_time);
+            $mtt = preg_replace('/\.[0-9]{0,2}/', '', $module->total_time ?? '');
             $global_time[$module->attempt] = addScormTime($global_time[$module->attempt], $mtt);
 
             // total started and accessed calculations
@@ -672,7 +675,8 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
 
         $bestAttempt = 1; // discover best attempt
         for ($i = 1; $i <= $maxAttempt; $i++) {
-            if ($global_progress[$i] > $global_progress[$bestAttempt]) {
+            if ($global_progress[$i] > $global_progress[$bestAttempt] or
+                enum_lesson_status($global_status[$i]) > enum_lesson_status($global_status[$bestAttempt])) {
                 $bestAttempt = $i;
             }
         }
