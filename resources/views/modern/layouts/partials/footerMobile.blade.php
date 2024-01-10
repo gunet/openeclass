@@ -4,6 +4,13 @@
 
         <div class="d-flex align-items-start flex-column h-100">
 
+            @if($image_footer)
+                <div class='col-12 d-flex justify-content-md-between justify-content-center align-items-center py-3'>
+                    <img style='max-width:350px; max-height:200px; ' src='{{ $image_footer }}?<?php echo time(); ?>'>
+                    <a class='footer-back-to-top hidden-xs' href='#bgr-cheat-header'><i class='fa-solid fa-chevron-up back-to-top-icon'></i></a>
+                </div>
+            @endif
+
             <div class='d-flex w-100 border-bottom-footer pb-3 gap-3 flex-wrap'>
 
                 

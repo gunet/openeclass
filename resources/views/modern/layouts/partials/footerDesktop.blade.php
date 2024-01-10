@@ -1,7 +1,15 @@
 
 <footer id="bgr-cheat-footer" class="site-footer mt-auto d-flex justify-content-start align-items-center">
-<div class='{{ $container }} footer-container py-0 d-flex align-items-center'>
-    <div class='col-12 d-flex justify-content-between align-items-center'>
+<div class='{{ $container }} footer-container py-0 d-flex align-items-center flex-wrap gap-3'>
+
+    @if($image_footer)
+        <div class='col-12 d-flex justify-content-between align-items-center border-bottom-footer py-3 px-1'>
+            <img style='max-width:350px; max-height:200px; ' src='{{ $image_footer }}?<?php echo time(); ?>'>
+            <a class='footer-back-to-top' href='#bgr-cheat-header'><i class='fa-solid fa-chevron-up back-to-top-icon'></i></a>
+        </div>
+    @endif
+
+    <div class='col-12 d-flex justify-content-between align-items-center @if($image_footer) pb-3 @endif'>
         <ul class="container-items-footer nav">
             @if (!get_config('dont_display_about_menu'))
                 <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer ps-2 pe-3" href="{{ $urlAppend }}info/about.php">{{ trans('langPlatformIdentity') }}</a></li>
@@ -17,6 +25,7 @@
                 <li class="nav-item"><a class="nav-link menu-item a_tools_site_footer px-3" href="{{ $urlAppend }}info/privacy_policy.php">{{ trans('langPrivacyPolicy') }}</a>
             @endif
         </ul>
+
         <div class='d-flex justify-content-start align-items-center'>
             <a class="copyright px-2" href='{{ $urlAppend }}info/copyright.php'>2003 - 2024 -- All rights reserved</a>
             @if(get_config('enable_social_sharing_links'))
@@ -26,6 +35,10 @@
             @endif
         </div>
     </div>
+
+    
+        
+    
 </div>
 </footer>
 

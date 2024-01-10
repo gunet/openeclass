@@ -5757,9 +5757,13 @@ $langHoverLinkColorHeader = 'Χρώμα Hovered Συνδέσμων Header';
 $langActiveLinkBgColorHeader = "Χρώμα Φόντου Ενεργού Συνδέσμου Header";
 $langActiveLinkColorHeader = "Χρώμα Ενεργού Συνδέσμου Header";
 $langLinkColorFooter = 'Χρώμα Συνδέσμων Footer';
-$langHoverLinkColorFooter = 'Χρώμα Hovered Συνδέσμων Footer';
-$langPortFolioProfileContainer = "Χρώμα Φόντου Σύντομου Προφίλ Στο Χαρτοφυλάκιο Χρήστη";
-
+$langHoverLinkColorFooter = 'Χρώμα hovered συνδέσμων Footer';
+$langPortFolioProfileContainer = "Χρώμα φόντου σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
+$langBgColorWrapperJumbotron = "Gradient φόντου στο περιτύλιγμα της οθόνης σύνδεσης";
+$langBgColorWrapperHeader= "Χρώμα φόντου στο περιτύλιγμα του Header";
+$langBgColorWrapperFooter= "Χρώμα φόντου στο περιτύλιγμα του Footer";
+$langBgColorWrapperBriefProfilePortfolio = "Χρώμα φόντου στο περιτύλιγμα του σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
+$langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

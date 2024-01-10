@@ -256,6 +256,7 @@ function view($view_file, $view_data = array()) {
     // Add Theme Options styles
     $styles_str = '';
     $leftsideImg = '';
+    $image_footer = '';
     $PositionFormLogin = 0;
     $eclass_banner_value = 1;
 
@@ -318,16 +319,20 @@ function view($view_file, $view_data = array()) {
         "
         ;
 
-
+        // BACKGROUND COLOR OF BRIEF PROFILE IN PORTOFOLIO
         if(!empty($theme_options_styles['BriefProfilePortfolioBgColor'])){
             $styles_str .= "
-                .portfolio-profile {
-                    background-color: $theme_options_styles[BriefProfilePortfolioBgColor];
-                }
-
                 .portfolio-profile-container{
                     background-color: $theme_options_styles[BriefProfilePortfolioBgColor];
                   }
+            ";
+        }
+        // BACKGROUND COLOR OF WRAPPER BRIEF PROFILE IN PORTOFOLIO
+        if(!empty($theme_options_styles['BgColorWrapperBriefProfilePortfolio'])){
+            $styles_str .= "
+                .portfolio-profile {
+                    background-color: $theme_options_styles[BgColorWrapperBriefProfilePortfolio];
+                }
             ";
         }
 
@@ -345,20 +350,6 @@ function view($view_file, $view_data = array()) {
                                 body{
                                     background: $bg_color$bg_image;$background_type
                                 }
-                                .jumbotron.jumbotron-login { 
-                                    background-color: transparent;
-                                }
-                                #bgr-cheat-header{ 
-                                    box-shadow: none;
-                                    background-color: transparent;
-                                }
-                                .portfolio-profile {
-                                    background-color: transparent;
-                                }
-                                #bgr-cheat-footer {
-                                    background-color: transparent;
-                                }
-                                
                             ";
         }
 
@@ -368,27 +359,18 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
             $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
             $styles_str .= "
-                .jumbotron.jumbotron-login{
-                    background-color: transparent;
-                }
-                #bgr-cheat-header{ 
-                    box-shadow: none;
-                    background-color: transparent;
-                }
-                .portfolio-profile {
-                    background-color: transparent;
-                }
-                #bgr-cheat-footer {
-                    background-color: transparent;
-                }
-
-
-
-
-
-
                 .jumbotron-container{
                     background: $gradient_str;
+                }
+            ";
+        }
+
+        // BACKGROUND COLOR OF WRAPPER UMBOTRON
+        if (!empty($theme_options_styles['bgColorWrapperJumbotron']) && !empty($theme_options_styles['bgRadialWrapperJumbotron'])) {
+            $gradient_str_wrapper = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[bgRadialWrapperJumbotron], $theme_options_styles[bgColorWrapperJumbotron])";
+            $styles_str .= "
+                .jumbotron.jumbotron-login{
+                    background: $gradient_str_wrapper;
                 }
             ";
         }
@@ -396,24 +378,6 @@ function view($view_file, $view_data = array()) {
         // BACKGROUND IMAGE OF JUMBOTRON
         if (isset($theme_options_styles['loginImg'])){
                 $styles_str .= "
-                    .jumbotron.jumbotron-login { 
-                        background-color: transparent;
-                    }
-                    #bgr-cheat-header{ 
-                        box-shadow: none;
-                        background-color: transparent;
-                    }
-                    .portfolio-profile {
-                        background-color: transparent;
-                    }
-                    #bgr-cheat-footer {
-                        background-color: transparent;
-                    }
-
-
-
-
-
                     .jumbotron-container{
                         background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
                         border:0px; no-repeat center center fixed; 
@@ -521,17 +485,8 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['bgColorHeader'])) {
             $styles_str .= "
 
-                #bgr-cheat-header{ 
-                    box-shadow: none;
-                    background-color: transparent;
-                }
-
                 .header-container {
                     background-color: $theme_options_styles[bgColorHeader];
-                }
-
-                .portfolio-profile {
-                    background-color: transparent;
                 }
 
                 .offCanvas-Tools{
@@ -541,17 +496,36 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        // BACKGROUND-COLOR HEADER'S WRAPPER
+        if (!empty($theme_options_styles['BgColorWrapperHeader'])) {
+            $styles_str .= "
+
+                #bgr-cheat-header{ 
+                    box-shadow: none;
+                    background-color: $theme_options_styles[BgColorWrapperHeader];
+                }
+
+            ";
+        }
+
         // BACKGROUND COLOR FOOTER
         if (!empty($theme_options_styles['bgColorFooter'])) {
             $styles_str .= "
 
-                #bgr-cheat-footer,
-                .div_social{
-                    background-color: transparent;
-                }
-
                 .footer-container{
                     background-color: $theme_options_styles[bgColorFooter];
+                }
+
+            ";
+        }
+
+        // BACKGROUND COLOR FOOTER'S WRAPPER
+        if (!empty($theme_options_styles['bgColorWrapperFooter'])) {
+            $styles_str .= "
+
+                #bgr-cheat-footer,
+                .div_social{
+                    background-color: $theme_options_styles[bgColorWrapperFooter];
                 }
 
             ";
@@ -638,7 +612,7 @@ function view($view_file, $view_data = array()) {
 
                 .copyright:hover, .copyright:focus,
                 .social-icon-tool:hover, .social-icon-tool:focus,
-                .a_tools_site_footer:hover, .a_tools_site_footer:focus {
+                .a_tools_site_footer:hover, .a_tools_site_footer:focus{
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
@@ -672,7 +646,6 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorFooter];
                 }
 
-
             ";
         }
 
@@ -690,6 +663,7 @@ function view($view_file, $view_data = array()) {
                 .a_tools_site_footer:hover, .a_tools_site_footer:focus {
                     color: $theme_options_styles[linkHoverColorFooter];
                 }
+
                 
             ";
         }
@@ -1284,6 +1258,9 @@ function view($view_file, $view_data = array()) {
             $logo_img_small = "$urlThemeData/$theme_options_styles[imageUploadSmall]";
         }
 
+        if (isset($theme_options_styles['imageUploadFooter'])){
+            $image_footer = "$urlThemeData/$theme_options_styles[imageUploadFooter]";
+        }
 
     }
 
@@ -1331,7 +1308,7 @@ function view($view_file, $view_data = array()) {
             'saved_is_editor', 'require_course_admin', 'is_course_admin', 'require_editor', 'sidebar_courses',
             'show_toggle_student_view', 'themeimg', 'currentCourseName', 'default_open_group',
             'is_admin', 'is_power_user', 'is_usermanage_user', 'is_departmentmanage_user', 'is_lti_enrol_user',
-            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 'courseLicense', 'loginIMG');
+            'logo_url_path','leftsideImg','eclass_banner_value', 'is_in_tinymce', 'PositionFormLogin', 'tmp_pageName', 'courseLicense', 'loginIMG', 'image_footer');
     $data = array_merge($global_data, $view_data);
     //echo '  '.get_config('theme').'  -  '.$view_file;
     echo $blade->make($view_file, $data)->render();

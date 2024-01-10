@@ -24,8 +24,8 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor'),
-                'rgba(247, 249, 254, 1)' => array('loginTextBgColor','BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor'),
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter'),
+                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor'),
                 'rgba(0, 115, 230, 1)' => array('linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader'),
@@ -34,6 +34,7 @@ $defaults = array(
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
+                "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -77,6 +78,9 @@ if (isset($_GET['export'])) {
         }
         if (isset($styles['imageUploadSmall'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadSmall]");
+        }
+        if (isset($styles['imageUploadFooter'])) {
+            array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadFooter]");
         }
         if (isset($styles['loginImg'])) {
             array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
@@ -448,6 +452,14 @@ if (isset($_POST['optionsSave'])) {
     } else {
        $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall'>";
     }
+    if (isset($theme_options_styles['imageUploadFooter'])) {
+        $image_footer_field = "
+            <img src='$urlThemeData/$theme_options_styles[imageUploadFooter]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFooter'>$langDelete</a>
+            <input type='hidden' name='imageUploadFooter' value='$theme_options_styles[imageUploadFooter]'>
+        ";
+    } else {
+       $image_footer_field = "<input type='file' name='imageUploadFooter' id='imageUploadFooter'>";
+    }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
@@ -615,7 +627,7 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane fade show active' id='generalsetting'>
         <div class='form-wrapper form-edit rounded'>
-            <h3 class='theme_options_legend  mt-4'>$langLayoutConfig</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLayoutConfig</h3>
             <div class='form-group'>
                 <label class='col-sm-6 control-label-notes mb-2'>$langLayout:</label>
                 <div class='form-inline col-sm-12'>
@@ -649,7 +661,7 @@ $tool_content .= "
 
             <hr>
 
-            <h3 class='theme_options_legend mt-2'>$langLogoConfig</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLogoConfig</h3>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
@@ -665,7 +677,7 @@ $tool_content .= "
 
             <hr>
 
-            <h3 class='theme_options_legend mt-2'>$langBgColorConfig</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langBgColorConfig</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
@@ -701,47 +713,79 @@ $tool_content .= "
 
 
 
-            <h3 class='theme_options_legend mt-2'>$langBgHeaderCongiguration</h3>
+            <h3 class='theme_options_legend mt-2 text-decoration-underline'>$langBgHeaderCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-              <label for='bgColorHeader' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <label for='BgColorWrapperHeader' class='control-label-notes mb-2 me-2'>$langBgColorWrapperHeader:</label>
+              <input name='BgColorWrapperHeader' type='text' class='form-control colorpicker' id='BgColorWrapperHeader' value='$theme_options_styles[BgColorWrapperHeader]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='bgColorHeader' class='control-label-notes mb-2 me-2'>$langBgColor Header:</label>
               <input name='bgColorHeader' type='text' class='form-control colorpicker' id='bgColorHeader' value='$theme_options_styles[bgColorHeader]'>
             </div>
-            <h3 class='theme_options_legend mt-4'>$langLinkColorHeader</h3>
+
+
+
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLinkColorHeader</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColorHeader' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColorHeader' type='text' class='form-control colorpicker' id='linkColorHeader' value='$theme_options_styles[linkColorHeader]'>
             </div>
-            <h3 class='theme_options_legend mt-4'>$langHoverLinkColorHeader</h3>
+
+
+
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHoverLinkColorHeader</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkHoverColorHeader' class='control-label-notes mb-2 me-2'>$langLinkHoverColor:</label>
               <input name='linkHoverColorHeader' type='text' class='form-control colorpicker' id='linkHoverColorHeader' value='$theme_options_styles[linkHoverColorHeader]'>
             </div>
-            <h3 class='theme_options_legend mt-4'>$langActiveLinkBgColorHeader</h3>
+
+
+
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langActiveLinkBgColorHeader</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkActiveBgColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkBgColorHeader:</label>
               <input name='linkActiveBgColorHeader' type='text' class='form-control colorpicker' id='linkActiveBgColorHeader' value='$theme_options_styles[linkActiveBgColorHeader]'>
             </div>
-            <h3 class='theme_options_legend mt-4'>$langActiveLinkColorHeader</h3>
+
+
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langActiveLinkColorHeader</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkActiveColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkColorHeader:</label>
               <input name='linkActiveColorHeader' type='text' class='form-control colorpicker' id='linkActiveColorHeader' value='$theme_options_styles[linkActiveColorHeader]'>
             </div>
 
+
             <hr>
 
-            <h3 class='theme_options_legend mt-2'>$langBgFooterCongiguration</h3>
+
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langBgFooterCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-              <label for='bgColorFooter' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <label for='bgColorWrapperFooter' class='control-label-notes mb-2 me-2'>$langBgColorWrapperFooter:</label>
+              <input name='bgColorWrapperFooter' type='text' class='form-control colorpicker' id='bgColorWrapperFooter' value='$theme_options_styles[bgColorWrapperFooter]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='bgColorFooter' class='control-label-notes mb-2 me-2'>$langBgColor Footer:</label>
               <input name='bgColorFooter' type='text' class='form-control colorpicker' id='bgColorFooter' value='$theme_options_styles[bgColorFooter]'>
             </div>
-            <h3 class='theme_options_legend mt-4'>$langLinkColorFooter</h3>
+
+
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLinkColorFooter</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColorFooter' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColorFooter' type='text' class='form-control colorpicker' id='linkColorFooter' value='$theme_options_styles[linkColorFooter]'>
             </div>
+
+
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkHoverColorFooter' class='control-label-notes mb-2 me-2'>$langHoverLinkColorFooter:</label>
               <input name='linkHoverColorFooter' type='text' class='form-control colorpicker' id='linkHoverColorFooter' value='$theme_options_styles[linkHoverColorFooter]'>
+            </div>
+
+            <div class='form-group mt-4'>
+                <label for='imageUploadFooter' class='col-sm-6 control-label-notes mb-2'>$langFooterUploadImage:</label>
+                <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                   $image_footer_field
+                </div>
             </div>
 
             <hr>
@@ -752,7 +796,7 @@ $tool_content .= "
    
 
 
-            <h3 class='theme_options_legend mt-2'>$langButtonsColorCongiguration</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='buttonBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
               <input name='buttonBgColor' type='text' class='form-control colorpicker' id='buttonBgColor' value='$theme_options_styles[buttonBgColor]'>
@@ -769,8 +813,7 @@ $tool_content .= "
             <hr>
 
 
-            <h3 class='theme_options_legend mt-2'>$langButtonsColorWhiteCongiguration</h3>
-
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorWhiteCongiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='whiteButtonTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
               <input name='whiteButtonTextColor' type='text' class='form-control colorpicker' id='whiteButtonTextColor' value='$theme_options_styles[whiteButtonTextColor]'>
@@ -787,7 +830,7 @@ $tool_content .= "
             <hr>
 
 
-            <h3 class='theme_options_legend mt-2'>$langLinksCongiguration ($langEclass)</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLinksCongiguration ($langEclass)</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
               <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
@@ -801,31 +844,38 @@ $tool_content .= "
             <hr>
 
 
-            <h3 class='theme_options_legend mt-2'>$langLoginConfiguration</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLoginConfiguration</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient:</label>
-                    <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
-                    <i class='fa fa-arrow-right ms-3 me-3'></i>
-                    <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
+                <label for='bgColorWrapperJumbotron' class='control-label-notes mb-2 me-2'>$langBgColorWrapperJumbotron (jumbotron):</label>
+                <input name='bgColorWrapperJumbotron' type='text' class='form-control colorpicker' id='bgColorWrapperJumbotron' value='$theme_options_styles[bgColorWrapperJumbotron]'>
+                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                <input name='bgRadialWrapperJumbotron' type='text' class='form-control colorpicker' id='bgRadialWrapperJumbotron' value='$theme_options_styles[bgRadialWrapperJumbotron]'>
             </div>
-            <div class='form-group mt-4'>
-                <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
-                <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
-
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient (jumbotron):</label>
+                <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
+                <i class='fa fa-arrow-right ms-3 me-3'></i>
+                <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
             </div>
-            <div class='form-group mt-4'>
-                <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText:</label>
-                <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
-
-            </div>
-
-
             <div class='form-group mt-4'>
                 <label for='loginImg' class='col-sm-12 control-label-notes mb-2'>$langLoginImg (jumbotron):</label>
                 <div class='col-sm-12'>
                    $login_image_field
                 </div>
             </div>
+            <div class='form-group mt-4'>
+                <label for='loginTextColor' class='control-label-notes mb-2 me-2'>$langTextColor (jumbotron):</label>
+                <input name='loginTextColor' type='text' class='form-control colorpicker' id='loginTextColor' value='$theme_options_styles[loginTextColor]'>
+
+            </div>
+            <div class='form-group mt-4'>
+                <label for='loginTextBgColor' class='control-label-notes mb-2 me-2'>$langBgColor $langText (jumbotron):</label>
+                <input name='loginTextBgColor' type='text' class='form-control colorpicker' id='loginTextBgColor' value='$theme_options_styles[loginTextBgColor]'>
+
+            </div>
+
+
+            
             <div class='form-group mt-4'>
                 <label for='loginImgL' class='col-sm-6 control-label-notes mb-2'>$langLoginImg:</label>
                 <div class='col-sm-12'>
@@ -864,9 +914,13 @@ $tool_content .= "
             </div>
 
             <hr>
-            <h3 class='theme_options_legend mt-4'>$langPortFolioProfileContainer</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPortFolioProfileContainer</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-              <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+              <label for='BgColorWrapperBriefProfilePortfolio' class='control-label-notes mb-2 me-2'>$langBgColorWrapperBriefProfilePortfolio:</label>
+              <input name='BgColorWrapperBriefProfilePortfolio' type='text' class='form-control colorpicker' id='BgColorWrapperBriefProfilePortfolio' value='$theme_options_styles[BgColorWrapperBriefProfilePortfolio]'>
+            </div>
+            <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+              <label for='BriefProfilePortfolioBgColor' class='control-label-notes mb-2 me-2'>$langPortFolioProfileContainer:</label>
               <input name='BriefProfilePortfolioBgColor' type='text' class='form-control colorpicker' id='BriefProfilePortfolioBgColor' value='$theme_options_styles[BriefProfilePortfolioBgColor]'>
             </div>
 
@@ -875,7 +929,7 @@ $tool_content .= "
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
         <div class='form-wrapper form-edit rounded'>
-            <h3 class='theme_options_legend mt-4'>$langBgColorConfig</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgColorConfig</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftNavBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
               <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
@@ -884,7 +938,7 @@ $tool_content .= "
 
             <hr>
 
-            <h3 class='theme_options_legend mt-2'>$langMainMenuConfiguration</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langMainMenuConfiguration</h3>
 
             <!-- DISABLE
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -911,7 +965,7 @@ $tool_content .= "
             <hr>
 
 
-            <h3 class='theme_options_legend mt-2'>$langSubMenuConfig</h3>
+            <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSubMenuConfig</h3>
             <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
               <label for='leftSubMenuFontColor' class='control-label-notes mb-2 me-2'>$langSubMenuLinkColor:</label>
               <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
@@ -1053,7 +1107,7 @@ function clone_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         make_dir("$webDir/courses/theme_data/$new_theme_id");
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
@@ -1069,7 +1123,7 @@ function upload_images($new_theme_id = null) {
     if (!is_dir("$webDir/courses/theme_data/$theme_id")) {
         make_dir("$webDir/courses/theme_data/$theme_id", 0755);
     }
-    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg','loginImgL','imageUploadFooter');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
             $file_name = $_FILES[$image]['name'];
