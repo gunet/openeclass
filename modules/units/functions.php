@@ -8,6 +8,7 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/group/group_functions.php';
 require_once 'include/lib/learnPathLib.inc.php';
+require_once 'modules/admin/modalconfirmation.php';
 
 /**
  * @brief  Process resource actions
@@ -171,6 +172,31 @@ function show_resources($unit_id)
            $langFullScreen, $langNewTab, $langActInHome, $langActInClass, $langActAfterClass, $course_code;
 
     $html = '';
+
+    $head_content .= "<script>
+        $(document).ready(function() {
+            let confirmLpCleanAttemptHref;
+            
+            $('#confirmLpCleanAttemptDialog').modal({
+                show: false,
+                keyboard: false,
+                backdrop: 'static'
+            });
+            
+            $('#confirmLpCleanAttemptDialog').on('show.bs.modal', function (event) {
+              confirmLpCleanAttemptHref = $(event.relatedTarget).data('href');
+            });
+        
+            $('#confirmLpCleanAttemptCancel').click(function() {
+                $('#confirmLpCleanAttemptDialog').modal('hide');
+            });
+        
+            $('#confirmLpCleanAttemptOk').click(function() {
+                $('#confirmLpCleanAttemptDialog').modal('hide');
+                window.location.href = confirmLpCleanAttemptHref;
+            });
+        });
+        </script>";
 
     $q = Database::get()->querySingle("SELECT flipped_flag FROM course WHERE code = ?s", $course_code);
 
@@ -498,7 +524,7 @@ function show_resources($unit_id)
  * @param type $info
  */
 function show_resource($info) {
-    global $langUnknownResType, $is_editor;
+    global $langUnknownResType, $is_editor, $langConfirmLpCleanAttemptTitle, $langConfirmLpCleanAttemptBody;
 
     $html = '';
     if ($info->visible == 0 and $info->type != 'doc' and ! $is_editor) { // special case handling for old unit resources with type 'doc' .
@@ -573,6 +599,7 @@ function show_resource($info) {
         default:
             $html .= $langUnknownResType;
     }
+    $html .= modalConfirmation('confirmLpCleanAttemptDialog', 'confirmLpCleanAttemptLabel', $langConfirmLpCleanAttemptTitle, $langConfirmLpCleanAttemptBody, 'confirmLpCleanAttemptCancel', 'confirmLpCleanAttemptOk');
     return $html;
 }
 
@@ -685,7 +712,8 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
 {
 
     global $id, $urlAppend, $course_id, $is_editor, $langWasDeleted, $course_code, $langDetails,
-           $langResourceBelongsToUnitPrereq, $uid, $langTotalPercentCompleteness, $langTotalTimeSpent;
+           $langResourceBelongsToUnitPrereq, $uid, $langTotalPercentCompleteness, $langTotalTimeSpent,
+           $langLearningPathCleanAttempt;
 
     $title = q($title);
     $comment_box = $res_prereq_icon = $lp_results = $lp_results_button = '';
@@ -706,7 +734,19 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         }
         $status = $lp->visible;
         $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY `rank` LIMIT 1", $lp_id)->module_id;
+        $suspend_data = Database::get()->querySingle("SELECT MAX(suspend_data) AS suspend_data FROM lp_user_module_progress WHERE user_id = ?d AND learnPath_id = ?d", $uid, $lp_id)->suspend_data;
         $link = "<a href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'> $title</a>";
+
+        $lp_susp_button = "";
+        if ($suspend_data) {
+            $lp_susp_button = "
+                <span class='pull-right' style='padding-left: 15px;' data-toggle='tooltip' data-placement='top' title='$langLearningPathCleanAttempt'>
+                    <a data-href='{$urlAppend}modules/units/view.php?course=$course_code&amp;res_type=lp&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id&amp;cleanattempt=on' data-toggle='modal' data-target='#confirmLpCleanAttemptDialog'>
+                        <span class='fa fa-repeat' style='font-size:15px;'></span>
+                    </a>
+                </span>";
+        }
+
         // display learning path results
         if ($is_editor) {
             $lp_results_button = "<div style='padding-top: 10px;'><span data-bs-toggle='tooltip' data-bs-placement='top' data-bs-original-title='$langDetails'>        
@@ -736,7 +776,7 @@ function show_lp($title, $comments, $resource_id, $lp_id, $act_name): string
         <tr data-id='$resource_id'>
           <td width='1'>$imagelink</a></td>
           <td class='text-start'>$act_name</td>
-          <td>$link $res_prereq_icon $comment_box <span class='pull-right'>$lp_results_button $lp_results</span></td>" .
+          <td>$link $res_prereq_icon $comment_box <span class='pull-right'>$lp_susp_button $lp_results_button $lp_results</span></td>" .
             actions('lp', $resource_id, $status) . "</tr>";
 }
 

@@ -65,6 +65,11 @@ if ($uid) {
                AND M.`course_id` = ?d
                AND UMP.`attempt` = ?d";
     $userProgressionDetails = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id, $_SESSION['lp_attempt']);
+    $userProgressionDetailsPrev = null;
+    // fetch previous attempt user progression details if available
+    if ($_SESSION['lp_attempt'] > 1 && (!isset($_SESSION['lp_attempt_clean']) || !$_SESSION['lp_attempt_clean'])) {
+        $userProgressionDetailsPrev = Database::get()->querySingle($sql, $uid, $_SESSION['path_id'], $_SESSION['lp_module_id'], $course_id, $_SESSION['lp_attempt']-1);
+    }
 }
 
 if (!$uid || !$userProgressionDetails) {
@@ -98,6 +103,10 @@ if (!$uid || !$userProgressionDetails) {
     }
     $sco['total_time'] = $userProgressionDetails->total_time;
     $sco['suspend_data'] = $userProgressionDetails->suspend_data;
+    // user suspend data from previous attempt if available. this will enable resuming if previous attempt was not completed
+    if ($userProgressionDetailsPrev && $userProgressionDetailsPrev->suspend_data) {
+        $sco['suspend_data'] = $userProgressionDetailsPrev->suspend_data;
+    }
     $sco['launch_data'] = stripslashes($userProgressionDetails->launch_data);
 }
 
