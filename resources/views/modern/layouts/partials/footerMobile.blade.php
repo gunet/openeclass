@@ -5,13 +5,13 @@
         <div class="d-flex align-items-start flex-column h-100">
 
             @if($image_footer)
-                <div class='col-12 d-flex justify-content-md-between justify-content-center align-items-center py-3'>
-                    <img style='max-width:350px; max-height:200px; ' src='{{ $image_footer }}?<?php echo time(); ?>'>
-                    <a class='footer-back-to-top hidden-xs' href='#bgr-cheat-header'><i class='fa-solid fa-chevron-up back-to-top-icon'></i></a>
+                <div class='col-12 d-flex justify-content-center align-items-center pb-3 gap-3'>
+                    <img style='max-width:350px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>'>
+                    <button class='footer-back-to-top hidden-xs' onclick="topFunction()"><i class='fa-solid fa-chevron-up'></i></button>
                 </div>
             @endif
 
-            <div class='d-flex w-100 border-bottom-footer pb-3 gap-3 flex-wrap'>
+            <div class='col-12 d-flex d-flex justify-content-center align-items-center pb-3 gap-3 flex-wrap'>
 
                 
                     @if (!get_config('dont_display_about_menu'))
@@ -53,8 +53,10 @@
                 
             </div>
 
-            <div class="mt-auto w-100 d-flex justify-content-between align-items-center flex-wrap gap-3 pt-3">
-                <a class="copyright" href='{{$urlAppend}}info/copyright.php'>2003 - 2024 -- All rights reserved</a>
+            <div class='col-12 border-bottom-footer'></div>
+
+            <div class="col-12 mt-auto d-flex justify-content-between align-items-center flex-wrap gap-3 pt-3">
+                <a class="copyright" href='{{$urlAppend}}info/copyright.php'>Copyright © 2024 All rights reserved</a>
                 @if(get_config('enable_social_sharing_links'))
                     <div class='d-flex gap-3 justify-content-end'>
                         <a class='a_tools_site_footer' href="https://www.facebook.com/" target="_blank">

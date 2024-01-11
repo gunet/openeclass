@@ -48,6 +48,7 @@ $(document).ready(function(){
     popover_init();
     truncate_toggle('.more_less_btn', '#truncated', '#not_truncated', '#descr_content');
     validator_rubric();
+    topFunction();
 
 
     //fix modal appearance
@@ -257,4 +258,8 @@ function validator_rubric(){
       })
 }
 
-
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
