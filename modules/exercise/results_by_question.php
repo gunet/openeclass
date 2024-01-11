@@ -113,13 +113,13 @@ $tool_content .= "<div class='panel panel-primary'>
     <h3 class='panel-title'>" . $langOpenQuestionPageTitle . "</h3>
   </div>
     <div class='panel-body'>";
-    $question_types = Database::get()->queryArray("SELECT exq.question, exwq.q_position, exq.id, eur.eid, eur.eurid AS eurid, ear.weight "
+    $question_types = Database::get()->queryArray("SELECT exq.question, exwq.q_position, exq.id, eur.eid "
             . "FROM exercise_question AS exq "
             . "JOIN exercise_with_questions AS exwq ON exq.id = exwq.question_id "
             . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
             . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
             . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " "
-            . "GROUP BY exq.id, eur.eid, eur.eurid, ear.weight, exwq.q_position ORDER BY exwq.q_position",$exerciseId);
+            . "GROUP BY exq.id, eur.eid ORDER BY exwq.q_position",$exerciseId);
 
     $questions_table = "<table id=\'my-grade-table\' class='table-default'><thead class='list-header'><tr><th>$langOpenQuestionTitle</th><th>$langChoice</th></tr></thead><tbody>";
     $i=0;

@@ -63,7 +63,7 @@ if (!class_exists('Question')) {
         function read($id) {
             global $course_id;
 
-            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid 
+            $object = Database::get()->querySingle("SELECT question, description, feedback, weight, `type`, difficulty, category, copy_of_qid
                         FROM `exercise_question` WHERE course_id = ?d AND id = ?d", $course_id, $id);
             // if the question has been found
             if ($object) {
@@ -553,9 +553,9 @@ if (!class_exists('Question')) {
             $question_id = $this->id;
             if (isset($exercise_id)) {
                 $query_vars = array($question_id, $exercise_id);
-                $sql = "SELECT * FROM exercise_answer_record JOIN exercise_user_record 
-                            ON exercise_answer_record.eurid = exercise_user_record.eurid 
-                        AND question_id = ?d 
+                $sql = "SELECT * FROM exercise_answer_record JOIN exercise_user_record
+                            ON exercise_answer_record.eurid = exercise_user_record.eurid
+                        AND question_id = ?d
                         AND eid = ?d";
             } else {
                 $query_vars[] = $question_id;
@@ -687,9 +687,11 @@ if (!class_exists('Question')) {
 
             $id = $this->id;
             $question_weight = $this->weighting;
-
-            $answers_weight = Database::get()->querySingle("SELECT AVG(weight) AS weight FROM exercise_answer_record
-                                                            WHERE question_id = ?d", $id)->weight;
+            if (!$question_weight) {
+                return 0;
+            }
+            $answers_weight = Database::get()->querySingle("SELECT AVG(weight) AS weight
+                FROM exercise_answer_record WHERE question_id = ?d", $id)->weight;
             $successRate = round(($answers_weight/$question_weight)*100, 2);
 
             return $successRate;
