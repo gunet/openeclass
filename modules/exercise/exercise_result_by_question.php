@@ -106,7 +106,7 @@ if (isset($_GET['exerciseId'])) {
                 . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
                 . "WHERE eur.eid = ?d AND ear.weight IS NULL "
                 . "AND exq.type = " . FREE_TEXT . " AND exq.id = ?d "
-                . "GROUP BY exq.id, eur.eurid", $exerciseId, $question_id);
+                . "GROUP BY exq.id, eur.eurid", $exerciseId, $question_id)->eurid;
         $exercise_user_record = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eurid = ?d", $eurid);
 
         //select form db where user designated a specific free text question to grade

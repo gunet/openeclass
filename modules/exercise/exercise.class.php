@@ -62,6 +62,9 @@ if (!class_exists('Exercise')) {
         private $assign_to_specific;
         private $calc_grade_method;
         private $questionList;  // array with the list of this exercise's questions
+        private $public;
+        private $continueTimeLimit;
+        private $totalweight;
 
         /**
          * constructor of the class
@@ -107,7 +110,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, general_feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
-                                                    attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock, 
+                                                    attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock,
                                                     assign_to_specific, calc_grade_method, continue_time_limit
                                                 FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
@@ -1273,7 +1276,7 @@ if (!class_exists('Exercise')) {
             $range = $this->range;
             $calc_grade_method = 1;
             $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, `type`, `range`, start_date,
-                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock, 
+                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock,
                                     assign_to_specific, calc_grade_method)
                                     VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d)",
                 $clone_course_id, $exercise, $description, $type, $range, $startDate, $endDate, $tempSave,
@@ -1387,12 +1390,12 @@ if (!class_exists('Exercise')) {
             $temp_total_score1 = [];
 
             // disallow negative score in each question if question has multiple answers
-            $score1 = Database::get()->queryArray("SELECT SUM(exercise_answer_record.weight) AS temp_total_score                                                 
+            $score1 = Database::get()->queryArray("SELECT SUM(exercise_answer_record.weight) AS temp_total_score
                                                     FROM exercise_answer_record
                                                     JOIN exercise_question
                                                     ON question_id = id
                                                         AND exercise_question.type = " . MULTIPLE_ANSWER . "
-                                                        AND eurid = ?d 
+                                                        AND eurid = ?d
                                                     GROUP BY question_id", $eurid);
             if (count($score1) > 0) {
                 foreach ($score1 as $data) {
@@ -1405,12 +1408,12 @@ if (!class_exists('Exercise')) {
                 $total_score1 = array_sum($temp_total_score1); // total score for questions with multiple answers
             }
             // calculate total score for other question types
-            $temp_total_score2 = Database::get()->querySingle("SELECT SUM(temp_sum) AS total_sum FROM 
+            $temp_total_score2 = Database::get()->querySingle("SELECT SUM(temp_sum) AS total_sum FROM
                                                (SELECT SUM(exercise_answer_record.weight) AS temp_sum
                                                 FROM exercise_answer_record
                                                 JOIN exercise_question
                                                 ON question_id = id
-                                                    AND exercise_question.type <> " . MULTIPLE_ANSWER . "                                                         
+                                                    AND exercise_question.type <> " . MULTIPLE_ANSWER . "
                                                     AND eurid = ?d
                                              GROUP BY question_id) AS total_weight", $eurid);
 
