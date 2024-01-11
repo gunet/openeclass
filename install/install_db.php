@@ -1825,7 +1825,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) NOT NULL,
     `styles` LONGTEXT NOT NULL,
-    `version` TINYINT
+    `version` TINYINT,
     PRIMARY KEY (`id`)) $tbl_options");
 
 // Tags tables
