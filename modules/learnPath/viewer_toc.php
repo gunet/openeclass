@@ -265,6 +265,15 @@ echo "<!DOCTYPE HTML>
                 $.cookie('leftTOChiddenStatus', 0, { path: '/' });
             }
         });
+        
+        $('#close-btn-a').on('click', function(e) {
+            let api = window.parent.api;
+            if (typeof api !== 'undefined') {
+                e.preventDefault();
+                api.SetValue('adl.nav.request', 'exit');
+                api.LMSCommit('');
+            }
+        });
     });
 
     /* ]]> */
@@ -285,7 +294,7 @@ echo "<!DOCTYPE HTML>
                         <div id='navigation-btns' class='d-flex justify-content-end align-items-center gap-2'>
                             $prevNextString
                             <div id='close-btn'>
-                                <a class='d-flex justify-content-start align-items-center gap-1 text-decoration-none' href='$returl' target='_top'>
+                                <a id='close-btn-a' class='d-flex justify-content-start align-items-center gap-1 text-decoration-none' href='$returl' target='_top'>
                                     <span class='fa-solid fa-xmark fa-sm Accent-200-cl'></span>
                                     <span class='hidden-xs Accent-200-cl'>$langLogout</span>
                                 </a>
