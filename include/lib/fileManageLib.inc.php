@@ -105,30 +105,6 @@ function my_delete($file) {
     }
 }
 
-/*
- * @brief Rename a file or a directory
- * @param  - $filePath (string) - complete path of the file or the directory
- * @param  - $newFileName (string) - new name for the file or the directory
- * @return - boolean  (true if succeed, false otherwise)
- */
-
-function my_rename($filePath, $newFileName) {
-    $path = @$baseWorkDir . dirname($filePath);
-    $oldFileName = my_basename($filePath);
-
-    if (file_exists($path . "/" . $newFileName) && $newFileName != $oldFileName) {
-        return false;
-    } else {
-        /** * check if the new name has an extension ***/
-        if ((!preg_match('/[^.]+\.[[:alnum:]]+$/', $newFileName)) and preg_match('/\.([[:alnum:]]+)$/', $oldFileName, $extension)) {
-            $newFileName .= '.' . $extension[1];
-        }
-        $newFileName = replace_dangerous_char($newFileName);
-        chdir($path);
-        rename($oldFileName, $newFileName);
-        return true;
-    }
-}
 
 /*
  * @brief Move a file or a directory to another area

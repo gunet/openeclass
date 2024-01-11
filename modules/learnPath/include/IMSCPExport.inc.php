@@ -78,6 +78,7 @@ if (!class_exists('IMSCPExport')) {
         private $itemTree;
         private $fromScorm;
         private $destDir;
+        private $destZipFile;
         private $srcDirScorm;
         private $srcDirDocument;
         private $srcDirExercise;
@@ -142,8 +143,9 @@ if (!class_exists('IMSCPExport')) {
 
             /* Build various directories' names */
 
-            $this->destDir = $webDir . "/courses/" . $course_code . '/temp/'
-                . str_replace(',', '_', replace_dangerous_char($this->name));
+            $this->destDir = "$webDir/courses/$course_code/temp/LP_{$this->id}";
+            $this->destZipFile = "$webDir/courses/$course_code/temp/" .
+                str_replace(',', '_', replace_dangerous_char($this->name)) . '.zip';
             $this->srcDirDocument = $webDir . "/courses/" . $course_code . "/document";
             $this->srcDirExercise  = $webDir . "/courses/" . $course_code . "/exercise";
             $this->srcDirScorm    = $webDir . "/courses/" . $course_code . "/scormPackages/path_".$this->id;
@@ -677,7 +679,7 @@ if (!class_exists('IMSCPExport')) {
                 // Copy the scorm directory as OrigScorm/
                 if (
                        !claro_copy_file($this->srcDirScorm,  $this->destDir)
-                    || !my_rename($this->destDir.'/path_'.$this->id, $this->destDir.'/OrigScorm')  )
+                    || !rename($this->destDir.'/path_'.$this->id, $this->destDir.'/OrigScorm')  )
                 {
                     $this->error[] = $langErrorCopyingScorm;
                     return false;
@@ -1087,9 +1089,9 @@ if (!class_exists('IMSCPExport')) {
 
             // Write header
             fwrite($f, '<?xml version = "1.0" encoding = "UTF-8"?>
-                        <manifest xmlns = "http://www.imsglobal.org/xsd/imscp_v1p1" 
-                            xmlns:imsmd = "http://www.imsglobal.org/xsd/imsmd_v1p2" 
-                            xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" 	
+                        <manifest xmlns = "http://www.imsglobal.org/xsd/imscp_v1p1"
+                            xmlns:imsmd = "http://www.imsglobal.org/xsd/imsmd_v1p2"
+                            xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
                             xsi:schemaLocation = "http://www.imsglobal.org/xsd/imscp_v1p1 http://www.imsglobal.org/xsd/imscp_v1p1.xsd http://www.imsglobal.org/xsd/imsmd_v1p2 http://www.imsglobal.org/xsd/imsmd_v1p2.xsd "
                             identifier="Manifest1"
                             version="IMS CP 1.1.4">' . "\n");
@@ -1113,7 +1115,7 @@ if (!class_exists('IMSCPExport')) {
             global $langErrorCreatingScormArchive;
 
             $zipFile = new ZipArchive();
-            $zipFile->open($this->destDir . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            $zipFile->open($this->destZipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
             // Create recursive directory iterator
             $files = new RecursiveIteratorIterator(
@@ -1149,7 +1151,7 @@ if (!class_exists('IMSCPExport')) {
          */
         function send()
         {
-            $filename = $this->destDir . '.zip';
+            $filename = $this->destZipFile;
             header('Content-Description: File Transfer');
             header('Content-Type: application/zip');
             header('Content-Length: ' . filesize($filename));
@@ -1177,4 +1179,3 @@ if (!class_exists('IMSCPExport')) {
     }
 
 }
-
