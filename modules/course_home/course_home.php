@@ -1137,10 +1137,11 @@ if (isset($course_completion_id) and $course_completion_id > 0) {
                         } else {
                             $tool_content .= "<div class='center-block' style='display:inline-block;'>
                                 <a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>";
+                            $angle = $percentage * 100 / 360;
                             if ($percentage == '100') {
                                 $tool_content .= "<span class='fa fa-check-circle fa-5x state_success'></span>";
                             } else {
-                                $tool_content .= "<div id='progress_circle' data-progress='$percentage' style='--progress: ".$percentage."deg;'>$percentage%</div>";
+                                $tool_content .= "<div id='progress_circle' data-progress='$percentage' style='--progress: {$angle}deg;'>$percentage%</div>";
                             }
                             $tool_content .= "</a></div>";
                             $tool_content .= "<div style='text-align: right;'><a style='text-decoration:none;' href='{$urlServer}modules/progress/index.php?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langDetail ...</a></div>";
