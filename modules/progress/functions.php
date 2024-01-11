@@ -911,16 +911,16 @@ function display_available_assignments($element, $element_id, $activity_type, $u
     if ($unit_id) {
         if ($unit_resource_id) {
             $resWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
-                              FROM assignment, unit_resources 
+                              FROM assignment, unit_resources
                              WHERE assignment.id = unit_resources.res_id
                                AND unit_id = ?d
                                AND unit_resources.id = ?d";
             $result = Database::get()->queryArray("$resWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $unit_id, $unit_resource_id, $element_id);
         } else {
             $unitWorksSql = "SELECT assignment.id, assignment.title, assignment.description, submission_date
-                               FROM assignment, unit_resources 
+                               FROM assignment, unit_resources
                               WHERE assignment.id = unit_resources.res_id
-                                AND unit_id = ?d 
+                                AND unit_id = ?d
                                 AND unit_resources.type = 'work'
                                 AND visible = 1";
             $result = Database::get()->queryArray("$unitWorksSql AND assignment.id NOT IN $notInSql ORDER BY assignment.title", $unit_id, $element_id);
@@ -994,17 +994,17 @@ function display_available_exercises($element, $element_id, $unit_id = 0, $unit_
 
     if ($unit_id) {
         if ($unit_resource_id) {
-            $result = Database::get()->queryArray("SELECT exercise.id, exercise.title, exercise.description, exercise.active 
-                                            FROM exercise, unit_resources 
+            $result = Database::get()->queryArray("SELECT exercise.id, exercise.title, exercise.description, exercise.active
+                                            FROM exercise, unit_resources
                                             WHERE exercise.id = unit_resources.res_id
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.id = ?d"
                                             , $unit_id, $unit_resource_id);
         } else {
-            $result = Database::get()->queryArray("SELECT exercise.id, exercise.title, exercise.description, exercise.active 
-                                            FROM exercise, unit_resources 
+            $result = Database::get()->queryArray("SELECT exercise.id, exercise.title, exercise.description, exercise.active
+                                            FROM exercise, unit_resources
                                             WHERE exercise.id = unit_resources.res_id
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.type = 'exercise'
                                                 AND visible = 1", $unit_id);
         }
@@ -1090,17 +1090,17 @@ function display_available_documents($element, $element_id, $unit_id = 0, $unit_
 
     if ($unit_id) {
         if ($unit_resource_id) {
-            $result = Database::get()->queryArray("SELECT document.id, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key 
-                                            FROM document, unit_resources 
+            $result = Database::get()->queryArray("SELECT document.id, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
+                                            FROM document, unit_resources
                                             WHERE document.id = unit_resources.res_id
-                                                AND unit_id = ?d                                                 
+                                                AND unit_id = ?d
                                                 AND unit_resources.id = ?d"
                                             , $unit_id, $unit_resource_id);
         } else {
-            $result = Database::get()->queryArray("SELECT document.id, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key 
-                                            FROM document, unit_resources 
+            $result = Database::get()->queryArray("SELECT document.id, course_id, path, filename, format, document.title, extra_path, date_modified, document. visible, copyrighted, comment, IF(document.title = '', filename, document.title) AS sort_key
+                                            FROM document, unit_resources
                                             WHERE document.id = unit_resources.res_id
-                                                AND unit_id = ?d                                                 
+                                                AND unit_id = ?d
                                                 AND unit_resources.type = 'doc'
                                                 AND unit_resources.visible = 1", $unit_id);
         }
@@ -1417,17 +1417,17 @@ function display_available_forumtopics($element, $element_id, $unit_id = 0, $uni
 
     if ($unit_id) {
         if ($unit_resource_id) {
-            $result = Database::get()->queryArray("SELECT forum_topic.id, forum_topic.title, topic_time, forum_id 
-                                            FROM forum_topic, unit_resources 
+            $result = Database::get()->queryArray("SELECT forum_topic.id, forum_topic.title, topic_time, forum_id
+                                            FROM forum_topic, unit_resources
                                             WHERE forum_topic.id = unit_resources.res_id
                                                 AND unit_id = ?d
                                                 AND unit_resources.id = ?d"
                                             , $unit_id, $unit_resource_id);
         } else {
-            $result = Database::get()->queryArray("SELECT forum_topic.id, forum_topic.title, topic_time, forum_id 
-                                            FROM forum_topic, unit_resources 
+            $result = Database::get()->queryArray("SELECT forum_topic.id, forum_topic.title, topic_time, forum_id
+                                            FROM forum_topic, unit_resources
                                             WHERE forum_topic.id = unit_resources.res_id
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.type = 'topic'
                                                 AND visible = 1", $unit_id);
         }
@@ -1509,17 +1509,17 @@ function display_available_lps($element, $element_id, $activity_type, int $unit_
 
     if ($unit_id) {
         if ($unit_resource_id) {
-            $result = Database::get()->queryArray("SELECT learnPath_id, name, comment, `rank` 
-                                        FROM lp_learnPath, unit_resources 
+            $result = Database::get()->queryArray("SELECT learnPath_id, name, comment, `rank`
+                                        FROM lp_learnPath, unit_resources
                                             WHERE learnPath_id = unit_resources.res_id
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.id = ?d",
                                             $unit_id, $unit_resource_id);
         } else {
-            $result = Database::get()->queryArray("SELECT learnPath_id, name, comment, `rank` 
-                                        FROM lp_learnPath, unit_resources 
+            $result = Database::get()->queryArray("SELECT learnPath_id, name, comment, `rank`
+                                        FROM lp_learnPath, unit_resources
                                             WHERE learnPath_id = unit_resources.res_id
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.type = 'lp'
                                                 AND unit_resources.visible = 1", $unit_id);
         }
@@ -1637,17 +1637,17 @@ function display_available_multimedia($element, $element_id, $unit_id = 0, $unit
                     $sql_extra = '';
                 }
                 if ($unit_resource_id) {
-                    $result = Database::get()->queryArray("SELECT $table.id, $table.title, description, url, $table.date $sql_extra 
-                                    FROM $table, unit_resources 
+                    $result = Database::get()->queryArray("SELECT $table.id, $table.title, description, url, $table.date $sql_extra
+                                    FROM $table, unit_resources
                                     WHERE $table.id = unit_resources.res_id
-                                    AND unit_id = ?d 
+                                    AND unit_id = ?d
                                     AND unit_resources.id = ?d",
                         $unit_id, $unit_resource_id);
                 } else {
-                    $result = Database::get()->queryArray("SELECT $table.id, $table.title, description, url, $table.date $sql_extra 
-                                    FROM $table, unit_resources 
+                    $result = Database::get()->queryArray("SELECT $table.id, $table.title, description, url, $table.date $sql_extra
+                                    FROM $table, unit_resources
                                     WHERE $table.id = unit_resources.res_id
-                                    AND unit_id = ?d 
+                                    AND unit_id = ?d
                                     AND unit_resources.type = ?s
                                     AND unit_resources.visible = 1",
                         $unit_id, $table);
@@ -1738,16 +1738,16 @@ function display_available_ebooks($element, $element_id, $unit_id = 0, $unit_res
     if ($unit_id) {
         if ($unit_resource_id) {
             $result = Database::get()->queryArray("SELECT ebook.id, ebook.title
-                                            FROM ebook, unit_resources 
+                                            FROM ebook, unit_resources
                                             WHERE ebook.id = unit_resources.res_id
-                                            AND unit_id = ?d 
+                                            AND unit_id = ?d
                                             AND unit_resources.id = ?d"
                                         , $unit_id, $unit_resource_id);
         } else {
             $result = Database::get()->queryArray("SELECT ebook.id, ebook.title
-                                        FROM ebook, unit_resources 
+                                        FROM ebook, unit_resources
                                         WHERE ebook.id = unit_resources.res_id
-                                        AND unit_id = ?d 
+                                        AND unit_id = ?d
                                         AND unit_resources.type = 'ebook'
                                         AND unit_resources.visible = 1", $unit_id);
         }
@@ -1853,19 +1853,19 @@ function display_available_polls($element, $element_id, $unit_id = 0, int $unit_
 
     if ($unit_id) {
         if ($unit_resource_id) {
-            $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, unit_resources 
+            $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, unit_resources
                                             WHERE poll.pid = unit_resources.res_id
                                                 AND poll.active = 1
                                                 AND poll.end_date >= ". DBHelper::timeAfter() . "
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.id = ?d"
                                             , $unit_id, $unit_resource_id);
         } else {
-            $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, unit_resources 
+            $result = Database::get()->queryArray("SELECT poll.pid, name, description FROM poll, unit_resources
                                             WHERE poll.pid = unit_resources.res_id
                                                 AND poll.active = 1
                                                 AND poll.end_date >= ". DBHelper::timeAfter() . "
-                                                AND unit_id = ?d 
+                                                AND unit_id = ?d
                                                 AND unit_resources.type = 'poll'
                                                 AND visible = 1", $unit_id);
         }
@@ -2347,7 +2347,7 @@ function certificate_settings($element, $element_id = 0) {
          if ($('#selectWithIcon').length > 0) {
             let urlServer = $('#urlServer').val();
             let select2Data;
-            
+
             if ($('#certificate_hidden').length > 0) {
                 let data = JSON.parse($('#certificate_hidden').val());
                 select2Data = Object.keys(data).map(key => ({
@@ -2356,7 +2356,7 @@ function certificate_settings($element, $element_id = 0) {
                   image: urlServer + 'courses/user_progress_data/cert_templates/certificate' + key + '_thumbnail.png'
                 }));
             }
-            
+
             if ($('#badge_hidden').length > 0) {
                 let data = JSON.parse($('#badge_hidden').val());
                 select2Data = Object.keys(data).map(key => ({
@@ -2366,20 +2366,20 @@ function certificate_settings($element, $element_id = 0) {
                   width: 48
                 }));
             }
-            
+
             $('#selectWithIcon').select2({
                   data: select2Data,
                   templateResult: formatOption,
                 });
-            
+
             function formatOption(option) {
-              let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';               
+              let dareturn = '<span><img ' + (option.width ? 'width=' + option.width : '') + ' src=' + option.image + ' /> ' + option.text + '</span>';
               return $(dareturn);
             }
-            
+
             $('#selectWithIcon').on('change', function (e) {
                 let dataType = $(this).data('type');
-                
+
                 if (dataType == 'certificate') {
                     let imgPath = urlServer + 'courses/user_progress_data/cert_templates/certificate' + $('#selectWithIcon').val() + '_thumbnail.png';
                     $('#selected_icon').attr('src', imgPath);
@@ -2387,22 +2387,22 @@ function certificate_settings($element, $element_id = 0) {
                     let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
                     $('#selected_icon').attr('src', imgPath);
                 }
-              
+
             });
-            
+
             if ($('#certificate_hidden').length > 0) {
                 let imgPath = urlServer + 'courses/user_progress_data/cert_templates/certificate' + $('#selectWithIcon').val() + '_thumbnail.png';
                 $('#selected_icon').attr('src', imgPath);
             }
-            
+
             if ($('#badge_hidden').length > 0) {
                 let imgPath = urlServer + 'courses/user_progress_data/badge_templates/' + $('#select2-selectWithIcon-container').text() + '.png';
                 $('#selected_icon').attr('src', imgPath);
                 $('#selected_icon').attr('width', 48);
             }
-            
+
          }
-         
+
         });
         </script>";
 
@@ -2724,7 +2724,8 @@ function student_view_progress() {
                     $tool_content .= "</div>";
                 } else {
                     $score = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
-                    $tool_content .= "<div id='progress_circle' class='mt-3 ms-auto me-auto' data-progress='$score' style='--progress: ".$score."deg;'>$score%</div>";
+                    $angle = round($certificate->completed_criteria / $certificate->total_criteria * 360, 2);
+                    $tool_content .= "<div id='progress_circle' class='mt-3 ms-auto me-auto' data-progress='$score' style='--progress: {$angle}deg;'>$score%</div>";
                     $tool_content .= "</div></a>";
                 }
                 $tool_content .= "</div>";

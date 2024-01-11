@@ -602,7 +602,7 @@
                                                                 @if ($percentage_t == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else
-                                                                    <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $percentage_t }}deg;">{{ $percentage_t }}%</div>
+                                                                    <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $angle }}deg;">{{ $percentage_t }}%</div>
                                                                 @endif
                                                             </a>
                                                         </div>
