@@ -37,7 +37,9 @@ $helpSubTopic = 'users_participation';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/usage/usage.lib.php';
-
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 if (isset($_GET['u'])) { //  stats per user
     if ($_SESSION['uid'] != $_GET['u'] and !$is_course_reviewer) { // security check
         Session::Messages($langCheckCourseAdmin, 'alert-danger');
@@ -542,7 +544,7 @@ function pdf_output() {
 
     $mpdf = new Mpdf\Mpdf([
         'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/default/fonts' ]),
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
                 'opensans' => [
                     'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
