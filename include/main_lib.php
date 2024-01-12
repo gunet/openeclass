@@ -4677,9 +4677,9 @@ function get_platform_logo($size='normal') {
     global $themeimg, $urlAppend;
 
     if ($size == 'small') {
-        $logo_img = $themeimg . '/logo_eclass_small';
+        $logo_img = $themeimg . '/eclass-new-logo.svg';
     } else {
-        $logo_img = $themeimg . '/eclass-new-logo.png';
+        $logo_img = $themeimg . '/eclass-new-logo.svg';
     }
 
     $theme_id = get_config('theme_options_id');
