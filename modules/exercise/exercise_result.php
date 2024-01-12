@@ -826,7 +826,7 @@ if (isset($_GET['pdf'])) {
 
     $mpdf = new Mpdf\Mpdf([
         'tempDir' => _MPDF_TEMP_PATH,
-        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/default/fonts' ]),
+        'fontDir' => array_merge($fontDirs, [ $webDir . '/template/modern/fonts' ]),
         'fontdata' => $fontData + [
                 'opensans' => [
                     'R' => 'open-sans-v13-greek_cyrillic_latin_greek-ext-regular.ttf',
