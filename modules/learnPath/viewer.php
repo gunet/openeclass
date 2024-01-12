@@ -116,11 +116,19 @@ if ($displayFull == 0) {
             . "</iframe>" . "\n";
     draw($tool_content, 2, null, $head_content);
 } else {
+    // Record user presence every 5 min
+    $action_url = $urlAppend . "modules/learnPath/record_action.php?course=$course_code";
+    $action_period = 1000 * 60 * 5;
     echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.org/TR/html4/frameset.dtd'>"
     . "<html>"
     . "<head>"
     . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">'
     . "<title>" . q($titlePage) . "</title>"
+    . "<script>setInterval(function () {
+            var req = new XMLHttpRequest();
+            req.open('GET', '$action_url');
+            req.send();
+       }, $action_period);</script>"
     . "</head>"
     . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
     . "<frame src='$startModuleLink' name='mainFrame' />" . "\n"
