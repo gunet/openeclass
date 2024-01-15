@@ -461,8 +461,8 @@ $head_content .= "<script>
                 {'bSortable' : true, 'sWidth': '20%' },
                 {'bSortable' : true, 'sWidth': '20%' },
                 {'bSortable' : false, 'sWidth': '20%' },
-                {'bSortable' : false, 'sClass': 'text-start' },
-                {'bSortable' : false, 'sClass': 'text-start' },
+                {'bSortable' : false, 'sClass': '' },
+                {'bSortable' : false, 'sClass': 'text-end' },
             ],
             'oLanguage': {
                'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',

@@ -175,10 +175,10 @@ foreach ($usersList as $user) {
         $tool_content .= "<td>" . q(uid_to_name($user->id)) . "</td>";
     }
 
-    $tool_content .= "<td class='text-start'></td>
-            <td class='text-end'></td>
-            <td class='text-end'>" . q($globaltime) . "</td>
-            <td class='text-end'>"
+    $tool_content .= "<td></td>
+            <td></td>
+            <td>" . q($globaltime) . "</td>
+            <td>"
             . disp_progress_bar($total, 1) . "
             </td>";
     $tool_content .= "</tr>";

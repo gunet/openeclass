@@ -2983,7 +2983,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
 		$tool_content .= "
             <div class='row p-2 res-table-row border-0'>
                 <div class='col-md-8 col-12 control-label-notes'>$activity:</div>
-                <div class='col-md-2 col-12 text-md-center'>" . $op_content . " " . $threshold . "</div>
+                <div class='col-md-2 col-12'>" . $op_content . " " . $threshold . "</div>
                 <div class='col-md-2 col-12 text-md-center'>" . icon('fa-check-circle') . "</div>
             </div>";
 	}

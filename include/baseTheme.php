@@ -789,7 +789,7 @@ function view($view_file, $view_data = array()) {
                
 
                 .carousel-indicators>button.active {
-                    border-color: $theme_options_styles[buttonBgColor];
+                    border-color: tranparent;
                     background-color: $theme_options_styles[buttonBgColor];
                 }
 

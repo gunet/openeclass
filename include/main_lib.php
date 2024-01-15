@@ -3979,32 +3979,30 @@ function setOpenCoursesExtraHTML() {
 
             <div class='col-12 ms-auto me-auto banner_openCourses'>
                 <div class='card border-card h-100'>
-                    <div class='card-body card-body d-flex justify-content-center align-items-center'>
-                        <div class='row m-auto w-100 ms-0'>
+                    <div class='card-body'>
+                        
 
-                            <div class='col-12 d-flex justify-content-center align-items-center'>
-                                <img style='max-height:200px;' class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
+                            <div class='d-flex justify-content-center align-items-center w-100'>
+                                <img style='max-height:100px;' class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
                             </div>
 
-                            <div class='col-12'>
-                                <div class='row'>
-                                    <div class='col-12 ps-0 mt-3 d-flex justify-content-end'>
-                                        <a class='text-decoration-underline' target='_blank' href='$openFacultiesUrl'>
-                                            <span class='text-uppercase TextBold lightBlueText fs-5'>$openCoursesNum</span>
-                                            <span class='text-uppercase TextBold lightBlueText fs-5'>" .
-                                            (($openCoursesNum == 1)? $langCourses: $langCourse) . "
-                                            </span>
-                                        </a>
-                                    </div>
-                                    <div class='col-12 d-flex justify-content-end px-0 mt-3'>
-                                        <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
-                                            $langNationalOpenCourses
-                                            <span class='fa-solid fa-chevron-right ms-2'></span>
-                                        </a>
-                                    </div>
-                                </div>
+                            <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
+                                <a class='d-flex gap-1 align-items-center text-dark' target='_blank' href='$openFacultiesUrl'>
+                                    <i class='fa-solid fa-book-open fa-xl'></i>
+                                    <span class='text-uppercase TextBold lightBlueText fs-5'>$openCoursesNum</span>
+                                    <span class='text-uppercase TextBold lightBlueText fs-5'>
+                                        " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
+                                    </span>
+                                </a>
                             </div>
-                        </div>
+
+                            <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
+                                <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
+                                    $langNationalOpenCourses
+                                    <span class='fa-solid fa-chevron-right ms-2'></span>
+                                </a>
+                            </div>
+                        
                     </div>
                 </div>
             </div>

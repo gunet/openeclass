@@ -243,8 +243,8 @@ foreach ($result as $list) {
     
     $contentType_img = selectImage($list->contentType);
     $contentType_alt = selectAlt($list->contentType);
-    $tool_content .= "<tr><td class='count-col'>".icon($contentType_img, $contentType_alt)."</td>
-      <td class='text-start'><b>" . q($list->name) . "</b>";
+    $tool_content .= "<tr><td class='count-col'>".icon($contentType_img, $contentType_alt)."
+      <b class='ps-1'>" . q($list->name) . "</b>";
 
     if ($list->comment) {
         $tool_content .= "<br /><small style='color: #a19b99;'><b>$langComments</b>: " . $list->comment . "</small>";

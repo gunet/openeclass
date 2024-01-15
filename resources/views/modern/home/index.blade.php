@@ -9,9 +9,9 @@
             <div class="modal fade bg-light" id="WarningModal" aria-hidden="true" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content shadow-sm border-0 p-0">
-                        <div class="modal-header bgOrange d-flex justify-content-between align-items-center">
-                            <h5 class="modal-title text-white">{{ trans('langError') }}</h5>
-                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-header d-flex justify-content-between align-items-center">
+                            <h5 class="modal-title">{{ trans('langError') }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body bg-default">
                             {!! $warning !!}
@@ -349,7 +349,7 @@
                     @if(get_config('opencourses_enable'))
                         <div class='col-12 mb-5 order-{{ $open_courses_priority }}'>
                             <div class='row row-cols-1'>
-                                <div class='col-12'>
+                                <div class='col-md-6 col-12'>
                                     <div class='row row-cols-1'>
 
                                         @if ($openCoursesExtraHTML)

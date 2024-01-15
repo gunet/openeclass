@@ -68,7 +68,7 @@
 
                     <div class='col-sm-12'>
                         
-                            <table id='request_table_{{ $course_id }}' class='table table-default'>
+                            <table id='request_table_{{ $course_id }}' class='table table-default table-request'>
                                 <thead>
                                     <tr class='list-header'>
                                         <th>{{ trans('langRequest') }}</th>
@@ -156,7 +156,7 @@
                 { searchable: true, orderable: true },
                 { searchable: false, orderable: true },
                 { searchable: false, orderable: true },
-                { searchable: false, orderable: false }
+                { searchable: false, orderable: false, class: 'text-end' }
             ],
             stateSave: true,
             processing: true,
@@ -201,28 +201,6 @@
         $(document).on( 'click','.delete_btn', function (e) {
             e.preventDefault();
             var row_id = this.id;
-            // bootbox.confirm('{{ js_escape(trans('langConfirmDelete')) }}', function(result) {
-            //     if (result) {
-            //         $.ajax({
-            //             type: 'POST',
-            //             url: '{{ $deleteUrl }}',
-            //             datatype: 'json',
-            //             data: {
-            //                 id: row_id
-            //             },
-            //             success: function(data){
-            //                 var info = oTable.page.info();
-            //                 var page_number = info.page;
-            //                 oTable.draw(false);
-            //             },
-            //             error: function(xhr, textStatus, error){
-            //                 console.log(xhr.statusText);
-            //                 console.log(textStatus);
-            //                 console.log(error);
-            //             }
-            //         });
-            //     }
-            // });
             bootbox.confirm({ 
                 closeButton: false,
                 title: "<div class='icon-modal-default'><i class='fa-regular fa-trash-can fa-xl Accent-200-cl'></i></div><h3 class='modal-title-default text-center mb-0'>{{ js_escape(trans('langConfirmDelete')) }}</h3>",

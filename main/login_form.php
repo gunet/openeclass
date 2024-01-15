@@ -90,7 +90,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
                                         <div class='modal-dialog modal-dialog-centered'>
                                             <div class='modal-content border-0 p-0'>
                                                 <div class='modal-header bgOrange d-flex justify-content-between align-items-center'>
-                                                    <h5 class='modal-title text-white'>$langError</h5>
+                                                    <h6 class='modal-title text-white'>$langError</h6>
                                                     <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
                                                 </div>
                                                 <div class='modal-body bg-default'>

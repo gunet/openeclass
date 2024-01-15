@@ -1171,6 +1171,10 @@ a:hover{
   border-radius: 4px; 
   border: 0px;
 }
+.alert-warning a{
+  color: #84bef7;
+  text-decoration: underline;
+}
 
 .alert-danger { 
   background-color: #C44601; 
@@ -3139,6 +3143,13 @@ body .form-action-button-popover{
   background-color: #B4BED1;
 }
 
+
+
+
+
+
+
+
 table ,
 tr td{
   border:0px;
@@ -3171,12 +3182,7 @@ tbody tr td a:hover{
 }
 
 thead, tbody .list-header {
-  width:100%; 
-  border-bottom: solid 2px #0073E6;
-}
-
-table {
-  width:100%;
+  border-bottom: solid 2px #0073E6 ;
 }
 
 th .fa-cogs,
@@ -3195,247 +3201,19 @@ tr.danger{
 
 
 
-
-
-
-
-@media(max-width:991px){
-  .table-default {
-    width: 100% !important;
-    border-collapse: collapse; 
-  }
-
-  table.dataTable {
-    width: 100% !important;
-    border-collapse: collapse;
-  }
-
-  .annn_table_my_ann thead tr th:first-child,
-  .annn_table_my_ann thead tr td:first-child,
-  .annn_table_my_ann tbody tr td:first-child{
-    width: 80% !important;
-  }
-
-  .table-announcements-indexes thead tr th:first-child,
-  .table-announcements-indexes thead tr td:first-child,
-  .table-announcements-indexes tbody tr td:first-child{
-    width: 5% !important;
-  }
-
-  .table-announcements-indexes thead tr th.announceContent,
-  .table-announcements-indexes tbody tr td:has(.announceContent){
-    width: 35% !important;
-  }
-
-  .table-announcements-indexes thead tr th.btn-cell-content,
-  .table-announcements-indexes tbody tr td.option-btn-cell{
-    width: 3% !important;
-  }
-
-}
-
-
-
-
-
-
-
-
-
-
-@media(min-width:992px){
-  tbody tr:hover{
-    background-color: #EFF6FF;
-  }
-
-  tbody tr td{
-    word-break: break-word;
-  }
-
-  .table-default tbody,
-  .table-default tfoot {
-    display:block;
-  }
-
-  .table-default thead, 
-  .table-default tfoot tr, 
-  .table-default tbody tr {
-    display:table;
-    width:100%;
-    table-layout:fixed;
-  }
-
-  .table-default th, .table-default {
-    width: auto !important;
-  }
-}
-
-/* Change size of columns regarding tables */
-@media(min-width:992px) and (max-width:1199px){
-  .table-default thead tr th:first-child,
-  .table-default thead tr td:first-child,
-  .table-default tbody tr td:first-child{
-    width: 35% !important;
-  }
-  .annn_table_my_ann thead tr th:first-child,
-  .annn_table_my_ann thead tr td:first-child,
-  .annn_table_my_ann tbody tr td:first-child{
-    width: 80% !important;
-  }
-
-  .anaylitics-table-per-user thead tr th:first-child,
-  .anaylitics-table-per-user thead tr td:first-child,
-  .anaylitics-table-per-user tbody tr td:first-child{
-    width: 30% !important;
-  }
-
-  .table-course-invitation thead tr th:first-child,
-  .table-course-invitation thead tr td:first-child,
-  .table-course-invitation tbody tr td:first-child{
-    width: 20% !important;
-  }
-
-  .table-default thead tr th.count-col,
-  .table-default tbody tr td.count-col{
-    width: 10% !important;
-  }
-
-  .table-default thead tr th.user-col,
-  .table-default tbody tr td.user-col{
-    width: 25% !important;
-  }
-
-  .table-default thead tr th.col-student,
-  .table-default tbody tr td.col-student{
-    width: 15% !important;
-  }
-
-  .table-lpu-progress thead tr th:first-child,
-  .table-lpu-progress thead tr td:first-child,
-  .table-lpu-progress tbody tr td:first-child{
-    width: 15% !important;
-  }
-
-  .table-logs thead tr th:first-child,
-  .table-logs thead tr td:first-child,
-  .table-logs tbody tr td:first-child{
-    width: 15% !important;
-  }
-
-  .table-custom-profile thead tr th:first-child,
-  .table-custom-profile thead tr td:first-child,
-  .table-custom-profile tbody tr td:first-child{
-    width: 15% !important;
-  }
-
-  .table-announcements-indexes thead tr th:first-child,
-  .table-announcements-indexes thead tr td:first-child,
-  .table-announcements-indexes tbody tr td:first-child{
-    width: 5% !important;
-  }
-
-  .table-announcements-indexes thead tr th.announceContent,
-  .table-announcements-indexes tbody tr td:has(.announceContent){
-    width: 35% !important;
-  }
-
-  .table-announcements-indexes thead tr th.btn-cell-content,
-  .table-announcements-indexes tbody tr td.option-btn-cell{
-    width: 3% !important;
-  }
-}
-@media(min-width:1200px){
-  .table-default thead tr th:first-child,
-  .table-default thead tr td:first-child,
-  .table-default tbody tr td:first-child{
-    width: 40% !important;
-  }
-
-  .table-course-invitation thead tr th:first-child,
-  .table-course-invitation thead tr td:first-child,
-  .table-course-invitation tbody tr td:first-child{
-    width: 20% !important;
-  }
-
-
-  .anaylitics-table-per-user thead tr th:first-child,
-  .anaylitics-table-per-user thead tr td:first-child,
-  .anaylitics-table-per-user tbody tr td:first-child{
-    width: 25% !important;
-  }
-
-  .annn_table_my_ann thead tr th:first-child,
-  .annn_table_my_ann thead tr td:first-child,
-  .annn_table_my_ann tbody tr td:first-child{
-    width: 80% !important;
-  }
-
-  .table-default thead tr th.count-col,
-  .table-default tbody tr td.count-col{
-    width: 10% !important;
-  }
-
-  .table-default thead tr th.user-col,
-  .table-default tbody tr td.user-col{
-    width: 25% !important;
-  }
-
-  .table-default thead tr th.col-student,
-  .table-default tbody tr td.col-student{
-    width: 15% !important;
-  }
-
-  .table-lpu-progress thead tr th:first-child,
-  .table-lpu-progress thead tr td:first-child,
-  .table-lpu-progress tbody tr td:first-child{
-    width: 15% !important;
-  }
-  
-  .table-logs thead tr th:first-child,
-  .table-logs thead tr td:first-child,
-  .table-logs tbody tr td:first-child{
-    width: 15% !important;
-  }
-
-  .table-custom-profile thead tr th:first-child,
-  .table-custom-profile thead tr td:first-child,
-  .table-custom-profile tbody tr td:first-child{
-    width: 15% !important;
-  }
-  
-  .count-col-secondary{
-    width:5% !important;
-  }
-
-  .table-announcements-indexes thead tr th:first-child,
-  .table-announcements-indexes thead tr td:first-child,
-  .table-announcements-indexes tbody tr td:first-child{
-    width: 5% !important;
-  }
-
-  .table-announcements-indexes thead tr th.announceContent,
-  .table-announcements-indexes tbody tr td:has(.announceContent){
-    width: 45% !important;
-  }
-
-  .table-announcements-indexes thead tr th.btn-cell-content,
-  .table-announcements-indexes tbody tr td.option-btn-cell{
-    width: 3% !important;
-  }
-
-  .table-announcements-indexes thead tr th.announceContentStudent,
-  .table-announcements-indexes tbody tr td:has(.announceContentStudent){
-    width: 65% !important;
-  }
-}
-
-
-
-div.dataTables_scrollBody {
+/* div.dataTables_scrollBody {
    position: relative;
     overflow:hidden !important;
     width: 100%;
+} */
+
+
+table{
+  table-layout: auto !important;
+  width: 100% !important;
 }
+
+
 
 
 /**********************************************************************************************************************/
@@ -3443,13 +3221,12 @@ div.dataTables_scrollBody {
 /**********************************************************************************************************************/
 
 .label.label-success{
-  background-color: green;
+  background-color: #19680C;
   color:white;
   width:188px;
-  padding-left: 15px;
-  padding-right: 15px;
   margin-top: 5px;
   border-radius: 4px;
+  font-weight: 600;
 }
 
 .float-end.label.label-success{ 
@@ -3457,21 +3234,19 @@ div.dataTables_scrollBody {
 }
 
 .label.label-danger{ 
-  color: red;
+  color: #B70A0A;
   width:188px;
-  padding-left: 15px;
-  padding-right: 15px;
   margin-top: 5px;
   border-radius: 4px;
+  font-weight: 600;
 }
 
 .label.label-warning{  
   color: #F57600;
   width:188px;
-  padding-left: 15px;
-  padding-right: 15px;
   margin-top: 5px;
   border-radius: 4px; 
+  font-weight: 600;
 }
 
 

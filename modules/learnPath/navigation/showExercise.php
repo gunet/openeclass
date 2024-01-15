@@ -367,8 +367,8 @@ function showQuestion($questionId, $onlyAnswers = false) {
         echo "<table class='table-default'>
               <tr class='even'>
                     <th width='200' style='padding: 10px 10px 10px 10px;'>$langColumnA</th>
-                    <th class='text-center' width='130' style='padding: 10px 10px 10px 10px;'>$langMakeCorrespond</th>
-                    <th class='text-start' width='200' style='padding: 10px 10px 10px 10px;'>$langColumnB</th>
+                    <th width='130' style='padding: 10px 10px 10px 10px;'>$langMakeCorrespond</th>
+                    <th width='200' style='padding: 10px 10px 10px 10px;'>$langColumnB</th>
                   </tr>
                   ";
     }

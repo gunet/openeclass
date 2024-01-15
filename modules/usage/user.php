@@ -83,5 +83,5 @@ $tschema = "<thead><tr class='list-header'>"
         . "</tr></thead>"
         . "<tbody></tbody>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>";
-$tool_content .= table_placeholder("udetails1", "table-default table-striped table-bordered table-logs", $tschema, "$langHits $langAnd $langDuration");
+$tool_content .= table_placeholder("udetails1", "table-default table-striped table-logs", $tschema, "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
