@@ -197,7 +197,7 @@ foreach ($app->getParams() as $param) {
     } else {
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>";
-        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
+        $tool_content .= "<div class='col-sm-10'><input class='form-control' type='password' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
         $tool_content .= "</div>";
     }
 }
