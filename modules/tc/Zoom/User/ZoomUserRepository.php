@@ -111,6 +111,36 @@ class ZoomUserRepository
         return json_decode($responseDataJson);
     }
 
+    public function userExists(string $email) : bool
+    {
+        $accessToken = $this->zoomRepository->getAccessToken();
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken
+        ];
+
+        try {
+            $res = $this->client->get(
+                self::ZOOM_API_BASE_URL . '/v2/users/email?email=' . $email,
+                [
+                    'headers' => $headers
+                ]
+            );
+        } catch (ClientException $e) {
+            echo '<pre>';
+            print_r($e->getMessage());
+            exit;
+        }
+
+        $responseDataJson = $res->getBody()->getContents();
+        $response = json_decode($responseDataJson);
+
+        if (empty($response->existed_email)) {
+            return false;
+        }
+        return true;
+    }
+
     private function saveInDatabase($userId, $data)
     {
         Database::get()->query("INSERT IGNORE INTO `zoom_user` 
