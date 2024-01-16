@@ -740,8 +740,7 @@ function course_hits($cid, $userid = 0){
         $r = Database::get()->querySingle("SELECT SUM(hits) hits FROM actions_daily
                             WHERE course_id = ?d 
                             AND user_id = ?d
-                            AND module_id != " . MODULE_ID_TC . "
-                            AND module_id != " . MODULE_ID_LP . "", $cid, $userid);
+                            AND module_id != " . MODULE_ID_TC, $cid, $userid);
 
         return $r->hits;
     } else {
@@ -843,8 +842,6 @@ function table_placeholder($table_id, $table_class, $table_schema, $title = null
 /**
  * @brief calculate user duration per course
  * @param integer $uid
- * @global $tool_content
- * @global $langDurationVisitsPerCourse
 */
 function user_duration_per_course($u) {
 
@@ -857,8 +854,7 @@ function user_duration_per_course($u) {
                                         LEFT JOIN actions_daily
                                         ON actions_daily.user_id = course_user.user_id 
                                         AND actions_daily.course_id = course_user.course_id
-                                        AND actions_daily.module_id != " . MODULE_ID_TC . "
-                                        AND actions_daily.module_id != " . MODULE_ID_LP . "
+                                        AND actions_daily.module_id != " . MODULE_ID_TC . "                                        
                                         WHERE course_user.user_id = ?d
                                         AND course.visible != " . COURSE_INACTIVE . "
                                         GROUP BY course.id
@@ -919,8 +915,7 @@ function user_duration_course($u) {
                                 FROM actions_daily
                                 WHERE course_id = ?d
                                 AND user_id = ?d
-                                AND actions_daily.module_id != " . MODULE_ID_TC . "
-                                AND actions_daily.module_id != " . MODULE_ID_LP . "",
+                                AND actions_daily.module_id != " . MODULE_ID_TC,
                             $course_id, $u);
 
     if ($q) {
@@ -932,9 +927,6 @@ function user_duration_course($u) {
 
 /**
  * @brief get user 5 last logins
- * @global type $langLastVisits
- * @global type $dateFormatLong
- * @global type $tool_content
  * @param type $u
  */
 function user_last_logins($u) {
