@@ -252,12 +252,12 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
  <body class='body-learningPath' style='margin: 0px; padding-left: 0px; height: 100% !important; height: auto;'>
  <div id='content' style='padding:20px;'>";
 
-echo "<div class='panel panel-primary mb-4'>
-    <div class='panel-heading'>
-        <div class='panel-title'>" . q_math($exerciseTitle) . "</div>
+echo "<div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+        <h3 class='mb-0'>" . q_math($exerciseTitle) . "</h3>
     </div>";
 if (!empty($exerciseDescription_temp)) {
-    echo "<div class='panel-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
+    echo "<div class='card-body'>" . standard_text_escape($exerciseDescription_temp) . "</div>";
 }
 
 echo "</div>
@@ -296,12 +296,12 @@ foreach ($questionList as $questionId) {
     }
 
     // shows the question and its answers
-    echo "<div class='panel panel-default'>
-            <div class='panel-heading'>
-                <div class='panel-title'>" . $langQuestion . ": " . $i .
+    echo "<div class='card panelCard px-lg-4 py-lg-3 mb-4'>
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                <h3 class='mb-0'>" . $langQuestion . ": " . $i .
                ($exerciseType == 2 ?  " / $nbrQuestions" : '') .
-            "</div></div>" .
-         "<div class='panel-body'>";
+            "</h3></div>" .
+         "<div class='card-body'>";
     showQuestion($questionId);
     echo "</div></div>";
     // for sequential exercises

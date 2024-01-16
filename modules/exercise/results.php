@@ -135,7 +135,7 @@ $tool_content .= "</div></div>";
 
 
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : '';
-$tool_content .= "<div class='col-12 mt-3'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering'>
+$tool_content .= "<div class='col-12 mt-4'><select class='form-select' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect'>--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_ACTIVE."' ".(($status === ATTEMPT_ACTIVE)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_ACTIVE) . "</option>
         <option value='results.php?course=$course_code&amp;exerciseId=$exerciseIdIndirect&amp;status=".ATTEMPT_COMPLETED."' ".(($status === ATTEMPT_COMPLETED)? 'selected' : '').">" . get_exercise_attempt_status_legend(ATTEMPT_COMPLETED) . "</option>
@@ -184,7 +184,7 @@ foreach ($result as $row) {
                 ORDER BY a.record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
-        $tool_content .= "<div class='table-responsive mt-5'><table class='table-default'>";
+        $tool_content .= "<div class='col-12 user-details-exec border-card px-lg-4 py-lg-3 mt-4'><div class='table-responsive'><table class='table-default'>";
         $tool_content .= "<thead><tr><td colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
@@ -203,11 +203,11 @@ foreach ($result as $row) {
         $tool_content .= "</td>
                 </tr>
                 <tr class='list-header'>
-                  <th style='width:20% !important;'>" . $langStart . "</th>
-                  <th style='width:20% !important;'>" . $langExerciseDuration . "</th>
-                  <th style='width:20% !important;'>" . $langTotalScore . "</th>
-                  <th style='width:20% !important;'>" . $langCurrentStatus. "</th>
-                  ". ($is_editor ? "<th style='width:20% !important;'>" . icon('fa-gears'). "</th>" : "") ."
+                  <th>" . $langStart . "</th>
+                  <th>" . $langExerciseDuration . "</th>
+                  <th>" . $langTotalScore . "</th>
+                  <th>" . $langCurrentStatus. "</th>
+                  ". ($is_editor ? "<th>" . icon('fa-gears'). "</th>" : "") ."
                 </tr></thead>";
 
         $k = 0;
@@ -278,17 +278,17 @@ foreach ($result as $row) {
                 $row_class = " class='danger' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='$langAttemptCanceled''";
             }
 
-            $tool_content .= "<tr$row_class><td style='width:20% !important;'>" . q($row2->record_start_date) . "</td>";
+            $tool_content .= "<tr$row_class><td>" . q($row2->record_start_date) . "</td>";
             if ($row2->time_duration == '00:00:00' || empty($row2->time_duration) || $row2->attempt_status == ATTEMPT_ACTIVE) { // for compatibility
-                $tool_content .= "<td style='width:20% !important;'>$langNotRecorded</td>";
+                $tool_content .= "<td>$langNotRecorded</td>";
             } else {
-                $tool_content .= "<td style='width:20% !important;'>" . format_time_duration($row2->time_duration) . "</td>";
+                $tool_content .= "<td>" . format_time_duration($row2->time_duration) . "</td>";
             }
-            $tool_content .= "<td style='width:20% !important;'>$results_link</td>
-                              <td style='width:20% !important;'>$status</td>";
+            $tool_content .= "<td>$results_link</td>
+                              <td>$status</td>";
             if ($is_editor) {
                 $tool_content .= "
-                    <td class='option-btn-cell text-end' style='width:20% !important;'>" . action_button(array(
+                    <td class='option-btn-cell text-end'>" . action_button(array(
                         array(
                             'title' => $langDelete,
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
@@ -319,7 +319,7 @@ foreach ($result as $row) {
             $tool_content .= "</tr>";
             $k++;
         }
-        $tool_content .= "</table></div><br>";
+        $tool_content .= "</table></div></div>";
     }
 }
 

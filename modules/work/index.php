@@ -4760,17 +4760,18 @@ function assignment_details($id, $row, $x =false) {
     $moduleTag = new ModuleElement($id);
     $tool_content .= "
     <div class='col-12'>
-    <div class='panel panel-primary'>
-        <div class='panel-heading'>
-            <h5 class='mb-0 text-white'>
-                $m[WorkInfo] &nbsp;
+    <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+            <h3 class='mb-0'>
+                $m[WorkInfo]
+            </h3>
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
-                    <span class='fa fa-edit' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
+                    <span class='fa fa-edit text-link fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
-            </h5>
+            
         </div>
-        <div class='panel-body'>
+        <div class='card-body'>
             <div class='row p-2 margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong class='control-label-notes'>$langTitle:</strong>

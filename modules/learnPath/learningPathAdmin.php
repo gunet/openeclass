@@ -381,11 +381,11 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='col-sm-12'>
-                    <div class='panel panel-primary'>
-                    <div class='panel-heading'>
-                        <span class='panel-title'>$langLearningPathData</span>
+                    <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                        <h3 class='mb-0'>$langLearningPathData</h3>
                     </div>";
-$tool_content .= "<div class='panel-body'><div class='table-responsive mt-0'><table class='table-default'>";
+$tool_content .= "<div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="<tr><th width='70'>$langTitle:</th>";
@@ -416,7 +416,7 @@ $tool_content .= "</td></tr></table></div></div></div></div>";
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
 
-        <div class='col-12 mt-3'>
+        <div class='col-12 mt-4'>
             <div class='panel panel-default'>
                 <div class='panel-body'>
                     <div class='row'>
@@ -492,7 +492,7 @@ $lp_action_button = action_button(array(
     )
 );
 
-$tool_content .= "<div class='col-12 mt-3'>
+$tool_content .= "<div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>                     
                         <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>                           
                            <h3>

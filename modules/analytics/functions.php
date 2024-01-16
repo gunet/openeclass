@@ -177,7 +177,7 @@ function display_general_lists($analytics_id) {
         }
 
         $tool_content .= "
-                <div class='col-12 mt-3'>
+                <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>      
                         <div class='card-body'>         
                             <div class='panel'>
@@ -508,7 +508,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
     }
 
     $tool_content .= "
-        <div class='col-12 mt-3'>                 
+        <div class='col-12 mt-4'>                 
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>             
                     <h3>$analytics_title->title</h3>
@@ -666,7 +666,7 @@ function display_analytics_user($userid, $analytics_id, $start, $end, $previous,
     $analytics_title = Database::get()->querySingle("SELECT title FROM analytics WHERE id=?d", $analytics_id);
 
     $tool_content .= "
-                <div class='col-12 mt-3'>
+                <div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                             <h3>$analytics_title->title</h3>

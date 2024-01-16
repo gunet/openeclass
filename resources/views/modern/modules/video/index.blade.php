@@ -140,7 +140,7 @@
                                                     {!! icon('fa-folder text-link', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
                                                 @endif
                                                 </th>
-                                                <th>{{ trans('langDate') }}</th>
+                                                <th></th>
                                                 @if (!$is_in_tinymce)
                                                     <th></th>
                                                 @endif

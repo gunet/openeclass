@@ -129,11 +129,11 @@ $tool_content .= "
         </table>
     </div></div></div>";
 
-$tool_content .= "<div class='panel panel-primary mt-4'>
-  <div class='panel-heading'>
-    <div class='panel-title'>" . $langOpenQuestionPageTitle . "</div>
+$tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+  <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+    <h3 class='mb-0'>" . $langOpenQuestionPageTitle . "</h3>
   </div>
-    <div class='panel-body'>";
+    <div class='card-body'>";
     $question_types = Database::get()->queryArray("SELECT exq.question, exwq.q_position, exq.id, eur.eid "
             . "FROM exercise_question AS exq "
             . "JOIN exercise_with_questions AS exwq ON exq.id = exwq.question_id "

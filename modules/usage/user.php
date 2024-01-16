@@ -73,7 +73,7 @@ $tool_content .= plot_placeholder("course_stats", $langModule);
 $tool_content .= "</div></div></div>";
 
 /****   Datatables   ****/
-$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr class='list-header'>"
         . "<th>$langDate</th>"
         . "<th>$langCourse</th>"

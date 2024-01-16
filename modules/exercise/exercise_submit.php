@@ -589,7 +589,7 @@ if (isset($timeleft)) { // time remaining
 }
 
 if (!empty($exerciseDescription)) { // description
-    $tool_content .= "<div class='col-sm-12 mb-3'><div class='card panelCard px-lg-4 py-lg-3'>
+    $tool_content .= "<div class='col-sm-12 mb-4'><div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'><h3>$langDescription</h3></div>";
     $tool_content .= "<div class='card-body'><em>" . standard_text_escape($exerciseDescription) . "</em></div>";
     $tool_content .= "</div></div>";
@@ -688,9 +688,9 @@ if ($questionList) {
 
         if ($exerciseType == MULTIPLE_PAGE_TYPE) {
             // display question numbering buttons
-            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 bg-light'>";
-            $tool_content .= "<div class='card-body p-0 bg-light' style='border-radius:15px;'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 bg-light flex-wrap gap-3' style='border-radius:15px;'>";
+            $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3'>";
+            $tool_content .= "<div class='card-body p-0' style='border-radius:4px;'>";
+            $tool_content .= "<div class='d-flex justify-content-center p-0 flex-wrap gap-2' style='border-radius:4px;'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {

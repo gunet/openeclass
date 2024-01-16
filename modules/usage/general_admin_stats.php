@@ -65,7 +65,7 @@ $tool_content .= "</div>";
 
 /****   Datatables   ****/
 
-$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr class='list-header'>"
     . "<th rowspan='2'>$langCategory</th>"
     . "<th colspan='3'>$langUsers</th>"
@@ -83,7 +83,7 @@ $tschema .= "</tr></thead>"
 $tool_content .= table_placeholder("adetails1", "table table-default dataTable", $tschema, "$langUsers $langAnd $langCourses");
 $tool_content .= "</div></div>";
 
-$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr class='list-header'>"
     . "<th>$langDate $langAnd $langHour</th>"
     . "<th>$langUser</th>"

@@ -353,7 +353,7 @@ if (count($exercise_question_ids) > 0) {
         
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "
-            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise mb-4'>
+            <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise table-exercise-secondary mb-4'>
             <thead><tr class='active'>
               <td class='w-75'>
                 <strong><u>$langQuestion</u>: $i</strong>";

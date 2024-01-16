@@ -212,7 +212,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
             $tool_content .= "<div class='col-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$theQuestion->question_text</span></div></div>";
         } else {
             $tool_content .= "
-            <div class='col-12 mt-3'>
+            <div class='col-12 mt-4'>
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                     <h3>$langQuestion $j</h3>
@@ -308,7 +308,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                 $answers_table .= "</table><br>";
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
                 /****   C3 plot   ****/
-                $tool_content .= "<div class='row plotscontainer mb-3'>";
+                $tool_content .= "<div class='row plotscontainer mb-4'>";
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q_math($theQuestion->question_text));
                 $tool_content .= "</div></div>";
@@ -391,7 +391,7 @@ if ($PollType == POLL_NORMAL || $PollType == POLL_QUICK) {
                 /****   C3 plot   ****/
                 $chart_data[] = $this_chart_data;
                 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-                $tool_content .= "<div class='row plotscontainer mb-3'>";
+                $tool_content .= "<div class='row plotscontainer mb-4'>";
                 $tool_content .= "<div class='col-lg-12'>";
                 $tool_content .= plot_placeholder("poll_chart$chart_counter", q($theQuestion->question_text));
                 $tool_content .= "</div></div>";

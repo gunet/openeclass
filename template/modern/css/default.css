@@ -3160,6 +3160,12 @@ tfoot tr th{
   padding: 10px 0px 10px 0px;
 }
 
+thead tr.active td{
+  padding-top: 10px ;
+  padding-bottom: 10px ;
+}
+
+
 tbody tr{
   border-bottom: solid 1px #EFF6FF;
 }
@@ -4481,6 +4487,15 @@ div[role="progressbar"]::before {
 .table-exercise td, .table-exercise th{
   background-color: #ffffff;
   padding: 10px 15px;
+}
+
+.user-details-exec{
+  background-color: #ffffff;
+
+}
+
+.table-exercise-secondary{
+  background-color: #ffffff;
 }
 
 /**********************************************************************************************************************/

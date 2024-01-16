@@ -50,8 +50,8 @@ function display_attendances() {
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>
                             <th>$langAvailableAttendances</th>
-                            <th style='width: 150px;'>$langStart</th>
-                            <th style='width: 150px;'>$langFinish</th>";
+                            <th>$langStart</th>
+                            <th>$langFinish</th>";
         if( $is_editor) {
             $tool_content .= "<th>" . icon('fa-gears') . "</th>";
         }

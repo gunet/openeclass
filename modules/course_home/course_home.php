@@ -455,7 +455,7 @@ if (isset($level) && !empty($level)) {
             <div class='col-12 d-flex justify-content-center'>
                 <img class='img-responsive center-block' src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
             </div>
-            <div class='col-12 mt-3'>
+            <div class='col-12 mt-4'>
                 <div style='border-bottom:1px solid #ccc; margin-bottom: 5px;'>$langOpenCoursesLevel: $level</div>
                 <p class='not_visible'>
                 <small>$langVisitsShort : &nbsp;$visitsopencourses</small>

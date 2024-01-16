@@ -54,12 +54,12 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         $qNumber = "$question_number / $nbrQuestions";
     }
     $tool_content .= "
-            <div class='panel panel-primary qPanel mt-3' id='qPanel$questionId'>
-              <div class='panel-heading'>
-                <div class='panel-title'>$langQuestion $qNumber
+            <div class='card panelCard px-lg-4 py-lg-3 qPanel mt-4' id='qPanel$questionId'>
+              <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                <h3 class='mb-0 d-flex justify-content-start align-items-center gap-2 flex-wrap'>$langQuestion $qNumber
                     <small>($questionTypeWord &mdash; $questionWeight $message)</small>&nbsp;
                     <span title='$langHasAnswered' id='qCheck$question_number'></span>
-                </div>
+                </h3>
             </div>
             <div class='panel-body'>
                 <h4 class='mb-2'>" . q_math($questionName) . "</h4>
@@ -349,7 +349,7 @@ function display_exercise($exercise_id) {
             $colspan = 1;
         }
 
-        $tool_content .= "<div class='col-12 mb-5'><div class='table-responsive'><table class='table-default'>";
+        $tool_content .= "<div class='col-12 mb-4'><div class='table-responsive'><table class='table-default'>";
         if (is_array($qid)) { // placeholder for random questions (if any)
             $hasRandomQuestions = true;
             $tool_content .= "<tr class='active'>
@@ -502,7 +502,7 @@ function display_exercise($exercise_id) {
             }
 
             $tool_content .= "<tr class='active'><th colspan='$colspan'>";
-            $tool_content .= "<div class='px-2'><span>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span></div>";
+            $tool_content .= "<div class='px-2 py-3'><span>$langQuestionScore: <strong>" . round($questionWeighting, 2) . "</strong></span></div>";
             $tool_content .= "</th></tr>";
         }
         $tool_content .= "</table></div></div>";

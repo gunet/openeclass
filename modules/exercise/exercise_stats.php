@@ -76,6 +76,9 @@ $tool_content .= "
             <thead>
                 <tr class='list-header'>
                     <th>$langAttempts</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -93,18 +96,21 @@ $tool_content .= "
                 </tr>
             </tbody>
             <tfoot>
-                <tr class='active mt-2'>
-                    <th class='form-label px-2'>$langTotal:</th>
+                <tr class='active user-details-exec mt-2'>
+                    <th class='form-label px-2'>$langTotal</th>
                     <th class='form-label px-2'>$total_attempts</th>
+                    <th></th>
+                    <th></th>
                 </tr>            
             </tfoot>
         </table>
     </div>
-    <div class='table-responsive'>
+    <div class='table-responsive mt-4'>
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
                     <th>$langScore</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -123,11 +129,12 @@ $tool_content .= "
             </tbody>
         </table>
     </div>
-    <div class='table-responsive'>
+    <div class='table-responsive mt-4'>
         <table class='table-default'>
             <thead>
                 <tr class='list-header'>
                     <th>$langStudents</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -147,7 +154,7 @@ $questionList = $objExercise->selectQuestionList();
 $tool_content .= "
 
 
-    <div class='col-12 mt-5'>
+    <div class='col-12 mt-4'>
     <div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'><h3>$langQuestions</h3></div>
     <div class='card-body'>

@@ -100,12 +100,12 @@ $exerciseDescription = $objExercise->selectDescription();
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
 
-echo "<div class='panel panel-primary'>
-        <div class='panel-heading'>
-            <b>" . q(stripslashes($exerciseTitle)) . "</b>
+echo "<div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+            <h3 class='mb-0'>" . q(stripslashes($exerciseTitle)) . "</h3>
         </div>";
 if ($exerciseDescription) {
-   echo "<div class='panel-body'>
+   echo "<div class='card-body'>
         " . standard_text_escape($exerciseDescription) . "
         </div>";
   }
@@ -376,7 +376,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     } // end for()
     if ($displayScore == 1) {
         echo "<tr>
-              <th colspan='$colspan'><div>
+              <th class='p-2' colspan='$colspan'><div>
                         $langQuestionScore: <strong>" . round($questionScore, 2) . " / $questionWeighting</strong></div>
               </th>
             </tr>";

@@ -124,7 +124,7 @@ if ($is_editor) {
         }
 
         $tool_content .= "<div class='form-group mt-4'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel control-labe-notes'>$langChatToSpecUsers</label></div>
-            <div class='form-group mt-3'>
+            <div class='form-group mt-4'>
                 <div class='col-sm-12'>
                     <select class='form-select' name='chat_users[]' multiple class='form-control' id='select-chatusers'>";
             $chat_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.username

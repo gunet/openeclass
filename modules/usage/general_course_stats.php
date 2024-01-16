@@ -26,26 +26,26 @@ $tool_content .= action_bar(array(
 require_once 'modules/usage/form.php';
 
 /****   Plots   ****/
-$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'>";
+$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-4'>";
 $tool_content .= plot_placeholder("generic_stats", "$langHits $langAnd $langDuration");
 $tool_content .= "</div></div>";
 
-$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'><div id='modulepref_pie_container'>";
+$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-4'><div id='modulepref_pie_container'>";
 $tool_content .= plot_placeholder("modulepref_pie", $langFavourite);
 $tool_content .= "</div></div></div>";
 
-$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'><div id='module_container'>";
+$tool_content .= "<div class='plotscontainer'><div class='col-12 mt-4'><div id='module_container'>";
 $tool_content .= plot_placeholder("module_stats", $langModule);
 $tool_content .= "</div></div/></div>";
 
 if (!isset($_GET['id'])) {
-    $tool_content .= "<div class='plotscontainer'><div class='col-12 mt-3'>";
+    $tool_content .= "<div class='plotscontainer'><div class='col-12 mt-4'>";
     $tool_content .= plot_placeholder("coursereg_stats", $langMonthlyCourseRegistrations);
     $tool_content .= "</div></div>";
 }
 
 /****   Datatables   ****/
-$tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
+$tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
 $tschema = "<thead><tr class='list-header'>"
     . "<th>$langDate</th>"
     . "<th>$langModule</th>"
@@ -61,7 +61,7 @@ $tool_content .= table_placeholder("cdetails1", "table-default table-striped tab
 $tool_content .= "</div></div>";
 
 if (!isset($_GET['id'])) {
-    $tool_content .= "<div class='col-sm-12 mt-3'><div class='panel panel-default detailscontainer'>";
+    $tool_content .= "<div class='col-sm-12 mt-4'><div class='panel panel-default detailscontainer'>";
     $tschema = "<thead><tr class='list-header'>"
         . "<th>$langDate</th>"
         . "<th>$langUser</th>"

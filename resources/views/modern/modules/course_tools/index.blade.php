@@ -143,8 +143,8 @@
                                                             <strong>{{  $externalLinks->title }}</strong></br>
                                                             <small class='text-muted'>{{ $externalLinks->url }}</small>
                                                         </div>
-                                                        <div class='col-2 text-end'>
-                                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa-solid fa-xmark'></span></a>
+                                                        <div class='col-2 d-flex justify-content-end align-items-center'>
+                                                            <a class='text-danger' href='?course={{ $course_code }}&amp;delete={{ getIndirectReference($externalLinks->id) }}'><span class='fa-solid fa-xmark Accent-200-cl'></span></a>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -230,7 +230,7 @@
                                                             <tr {!!($row->enabled? '': " class='not_visible'")!!}>
                                                                 <td class='text-start'>{!! $title !!}</td>
                                                                 <td>{!! $desc !!}</td>
-                                                                <td class='text-center'>{!! $joinLink !!}</td>
+                                                                <td>{!! $joinLink !!}</td>
                                                                 <td class='option-btn-cell text-center'>
                                                                 {!! action_button(array(
                                                                         array(  'title' => trans('langEditChange'),

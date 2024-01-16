@@ -127,7 +127,7 @@ $export_box = "";
 
 if ($is_editor) {
     $export_box .= "
-        <div class='col-12 mb-3'>
+        <div class='col-12 mb-4'>
             <div class='card panelCard px-lg-4 py-lg-3'>
                 <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                   
                     <h3>$langDumpUserDurationToFile</h3>
@@ -153,6 +153,7 @@ $tool_content .= action_bar(array(
             )
         ))."
 $export_box
+<div class='col-12 mb-4'>
 <div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
@@ -199,6 +200,7 @@ $export_box
             </div>
         </div>
     </div>
+</div>
 </div>
 ";
 
@@ -333,7 +335,7 @@ $chart_data = array();
 $this_chart_data = array();
 
 $tool_content .= "
-<div class='col-12 mt-3'>
+<div class='col-12 mt-4'>
 <div class='card panelCard px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$lang_result_summary</h3>
@@ -352,7 +354,7 @@ $this_chart_data['percentage'][] = round(100*$both_con_sep/$total_partic,2);
 /****   C3 plot   ****/
 $chart_data[] = $this_chart_data;
 $tool_content .= "<script type = 'text/javascript'>pollChartData.push(".json_encode($this_chart_data).");</script>";
-$tool_content .= "<div class='row plotscontainer mb-3'>";
+$tool_content .= "<div class='row plotscontainer mb-4'>";
 $tool_content .= "<div class='col-lg-12'>";
 $tool_content .= plot_placeholder("poll_chart");
 $tool_content .= "</div></div>";

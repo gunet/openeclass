@@ -185,7 +185,7 @@ if (isset($_GET['store']) && $is_editor) {
                     $alert_type_icon = 'fa-circle-info fa-lg';
                 }
                 echo "
-                            <div class='col-12 mt-3 mb-3 ps-3 pe-3'>
+                            <div class='col-12 mt-4 mb-3 ps-3 pe-3'>
                                 <div class='alert $class text-center'>
                                     <i class='fa-solid $alert_type_icon'></i>
                                     <span>
@@ -232,7 +232,7 @@ if (isset($_GET['store']) && $is_editor) {
             }
         } else { //prior to version 3.0 generated conferences
                 echo "
-                            <div class='col-12 mt-3 mb-3 ps-3 pe-3'>
+                            <div class='col-12 mt-4 mb-3 ps-3 pe-3'>
                                 <div class='alert alert-default'>
                                     $str_1[0]
                                 </div>

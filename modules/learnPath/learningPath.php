@@ -200,11 +200,11 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   ================================================================ */
 
 // comment
-$tool_content .= "<div class='col-sm-12'><div class='panel panel-primary'>
-                    <div class='panel-heading'>
-                        <span class='panel-title'>$langLearningPathData</span>
+$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                        <h3 class='mb-0'>$langLearningPathData</h3>
                     </div>";
-$tool_content .= "<div class='panel-body'><table class='table-default'>";
+$tool_content .= "<div class='card-body'><table class='table-default'>";
 $tool_content .= "<tr><th width='70'>$langTitle:</th>";
 $tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
