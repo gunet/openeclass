@@ -4226,7 +4226,7 @@ $langUsageCoursesHeader = "Σύνολο $langsOfCourses";
 $langUsageUsers = "Σύνολο χρηστών";
 $langStatOfFaculty = "Στατιστικά $langOfFaculty";
 $langHaveCreated = "Έχουν δημιουργηθεί";
-$langInfoUserDuration = "Στους παρακάτω χρόνους συμμετοχής <b>δεν</b> συμπεριλαμβάνονται οι χρόνοι στις <em>Γραμμές μάθησης</em> και <em>Τηλεσυνεργασία</em>.";
+$langInfoUserDuration = "Στους παρακάτω χρόνους συμμετοχής <strong>δεν</strong> συμπεριλαμβάνονται οι χρόνοι στη Τηλεσυνεργασία</em>.";
 $langInfoUserDuration2 = "Για αυτά τα υποσυστήματα, κάντε κλικ στα αντίστοιχα κουμπιά.";
 
 // for platform statistics

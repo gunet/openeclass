@@ -64,8 +64,7 @@ if (isset($_GET['u'])) { //  stats per user
                             FROM actions_daily
                             WHERE course_id = ?d
                               AND user_id = ?d
-                             AND module_id != " . MODULE_ID_TC . "
-                             AND module_id != " . MODULE_ID_LP . "
+                             AND module_id != " . MODULE_ID_TC . "                             
                             GROUP BY module_id", $course_id, $_GET['u']);
 
 
@@ -447,8 +446,7 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
                                 FROM $from
                                 LEFT JOIN actions_daily ON user.id = actions_daily.user_id
                                 WHERE (actions_daily.course_id = ?d
-                                    AND actions_daily.module_id != " . MODULE_ID_TC . "
-                                    AND actions_daily.module_id != " . MODULE_ID_LP . ")
+                                    AND actions_daily.module_id != " . MODULE_ID_TC . ")
                                 $and
                                 $date_where
                                 GROUP BY user.id, surname, givenname, am
@@ -467,8 +465,7 @@ function selection_course_modules() {
     $mod_opts = "<option value='-1'>$langAllModules</option>";
     $result = Database::get()->queryArray("SELECT module_id FROM course_module
                     WHERE course_id = ?d
-                    AND module_id != " . MODULE_ID_TC . "
-                    AND module_id != " . MODULE_ID_LP . "", $course_id);
+                    AND module_id != " . MODULE_ID_TC , $course_id);
     foreach ($result as $row) {
         $mid = $row->module_id;
         $extra = '';
