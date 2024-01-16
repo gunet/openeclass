@@ -57,7 +57,7 @@ function select_tc_server($course_id) {
                       </div>
                     </td>
                     <td>
-                        <div class='d-flex justify-content-end align-items-center gap-3 flex-wrap'>
+                        <div class='d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                             <span>$description</span>
                             <span><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1&amp;tc_type=$name' class='btn submitAdminBtn'>$langNewBBBSession</a></span>
                         </div>

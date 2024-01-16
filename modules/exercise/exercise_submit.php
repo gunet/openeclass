@@ -690,7 +690,7 @@ if ($questionList) {
             // display question numbering buttons
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 bg-light'>";
             $tool_content .= "<div class='card-body p-0 bg-light' style='border-radius:15px;'>";
-            $tool_content .= "<div class='d-flex justify-content-center p-0 bg-light flex-wrap' style='border-radius:15px;'>";
+            $tool_content .= "<div class='d-flex justify-content-center p-0 bg-light flex-wrap gap-3' style='border-radius:15px;'>";
             foreach ($questionList as $k => $q_id) {
                 $answered = in_array($q_id, $answeredIds);
                 if ($answered) {

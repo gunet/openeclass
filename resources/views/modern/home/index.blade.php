@@ -129,7 +129,7 @@
                 @if(!get_config('show_only_loginScreen'))
                     <div class='col-12 mb-5 order-{{ $announcements_priority }}'>
                         <div class='card bg-transparent border-0'>
-                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                            <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                 <div class='d-flex justify-content-start align-items-center'>
                                     <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
                                     <a href='{{ $urlServer }}rss.php'><i class="fa-solid fa-rss"></i></a>

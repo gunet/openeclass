@@ -257,7 +257,7 @@ foreach ($result as $list) {
                       'icon' => 'fa-pencil'),
                 array('title' => $langComments,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqComment&amp;module_id=$list->module_id",
-                      'icon' => 'fa-comment-o'),
+                      'icon' => 'fa-solid fa-comment'),
                 array('title' => $langDelete,
                       'icon' => 'fa-xmark',
                       'class' => 'delete',

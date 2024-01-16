@@ -355,7 +355,7 @@ if (count($exercise_question_ids) > 0) {
         $tool_content .= "
             <table class='table ".(($question_graded)? 'graded' : 'ungraded')." table-default table-exercise mb-4'>
             <thead><tr class='active'>
-              <td>
+              <td class='w-75'>
                 <strong><u>$langQuestion</u>: $i</strong>";
 
         if ($answerType == FREE_TEXT) {

@@ -69,7 +69,7 @@ function display_learning_analytics() {
 
             <div class='col-12'>
                 <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                         
                            
                             <h3>$langLearningAnalytics</h3>
@@ -309,7 +309,7 @@ function display_analytics_elements($analytics_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     
                        
                         <h3>$langAnalyticsParameters</h3>
@@ -350,7 +350,7 @@ function display_analytics_information($analytics_id) {
     $tool_content .= "
         <div class='col-12'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                     
                         <h3>
                             $title<span class='$active_vis small-text ms-1'>($active_msg)</span>
@@ -451,7 +451,7 @@ function display_analytics_peruser($analytics_id, $startdate, $enddate, $previou
                         $langAnalyticsStatus
                     </th>
                     <th>
-                        <div class='d-flex justify-content-center align-items-center gap-2 flex-wrap'>
+                        <div class='d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$previous&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-left fa-fw' $backclass aria-hidden='true'></i></a>
                             " . format_locale_date(strtotime($startdate), 'short', false) . " &mdash; " . format_locale_date(strtotime($enddate), 'short', false)  . "
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;analytics_id=$analytics_id&amp;mode=perUser&amp;period=$next&amp;orderby=$orderby&amp;reverse=$reverse'><i class='fa fa-arrow-circle-right fa-fw' $nextclass aria-hidden='true'></i></a>

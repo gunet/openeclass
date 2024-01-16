@@ -268,7 +268,7 @@ function show_prereqs() {
                             'title' => $langRemovePrerequisite,
                             'level' => 'primary',
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=" . $cid,
-                            'icon' => 'fa-xmark',
+                            'icon' => 'fa-xmark Accent-200-cl',
                             'btn_class' => 'delete_btn deleteAdminBtn'
                         )
                     )

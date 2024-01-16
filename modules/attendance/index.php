@@ -450,7 +450,7 @@ if ($is_editor) {
             array(
                 array('title' => $langNewAttendance,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
-                      'icon' => 'fa-plus',
+                      'icon' => 'fa-solid fa-circle-plus',
                       'level' => 'primary-label',
                       'button-class' => 'btn-success')));
     }

@@ -262,7 +262,7 @@ if (isset($_GET['delete'])) {
             foreach ($sections as $section){
                 $sections_table .=
                         "
-                        <li class='list-group-item'>
+                        <li class='list-group-item toolHomePage'>
                             ".q($section->public_id).".&nbsp;
                             ".q($section->title)."
                         </li>
@@ -283,7 +283,7 @@ if (isset($_GET['delete'])) {
                         ));
         $tool_content .= "
         <div class='col-sm-12 mb-3'>
-            <div class='panel panel-primary'>
+            <div class='panel panel-admin'>
                 <div class='panel-heading'>
                     <div class='panel-title'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
@@ -366,7 +366,7 @@ if (isset($_GET['delete'])) {
                        $file_id = $r->file_id;
                        $display_id = $r->sid . ',' . $r->ssid;
                        if ($editable[$id_map[$file_id]]) {
-                           $edit = '&nbsp;' . icon('fa-edit', $langEditChange,
+                           $edit = '&nbsp;&nbsp;&nbsp;' . icon('fa-edit text-link', $langEditChange,
                                "new.php?course=$course_code&amp;editPath=" .
                                $paths[$id_map[$file_id]] . "&amp;ebook_id=$ebook_id&amp;back=edit");
                        } else {
@@ -400,6 +400,8 @@ if (isset($_GET['delete'])) {
                    }
                    $tool_content .= "
                     <tr>
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
                       <td>&nbsp;</td>
                       <td><input class='btn submitAdminBtn float-end' type='submit' name='submit' value='$langSubmit'></td>
                     </table></div>

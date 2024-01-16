@@ -371,7 +371,7 @@ if ($userdata) {
                 $post->course_title = $langUserBlog;
             }
             $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mb-3'>
-                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                                                                                 
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                                                                 
                                             <h3>".q($data['title'])."</h3>
                                             <div>
                                                 ". action_button(array(
@@ -471,7 +471,7 @@ if ($userdata) {
                     $post->course_title = $langUserBlog;
                 }
                 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 mt-3 h-100'>
-                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                                           
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                           
                                         <h3>".q($data['title'])."</h3>                                    
                                         <div>
                                             ". action_button(array(
@@ -540,7 +540,7 @@ if ($userdata) {
                                               <div class='small-text'>$submission->course_title</div>                                          
                                       </div>";
                 $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                                        
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>                                        
                                             $submission_header_content                                           
                                             <div>
                                             ". action_button(array(

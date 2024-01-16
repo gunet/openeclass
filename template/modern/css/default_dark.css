@@ -400,10 +400,12 @@
     color:#ffffff;
   }
   
-  a{ 
+  a,
+  .text-link{ 
     color:#74AFE9; 
   }
-  a:hover{
+  a:hover,
+  .text-link:hover{
     color: #74AFE9;
   }
   
@@ -919,11 +921,17 @@
   .submitAdminBtn span{
     color: #74AFE9;
   }
+  .submitAdminBtn span.Accent-200-cl{
+    color: #B70A0A;
+  }
   .submitAdminBtn .fa-solid::before, 
   .submitAdminBtn .fa-regular::before,
   .submitAdminBtn .fa-brands::before,
   .submitAdminBtn span.fa::before{
     color: #74AFE9;
+  }
+  .submitAdminBtn span.Accent-200-cl::before{
+    color: #B70A0A;
   }
   .submitAdminBtnDefault .fa-solid::before, 
   .submitAdminBtnDefault .fa-regular::before,
@@ -1530,20 +1538,49 @@
       background-color: #212D37;
     }
     .table-default tbody::-webkit-scrollbar-thumb {
-      background-color: #B4BED1;
+      background-color: #212D37;
     }
     .table-default tbody::-webkit-scrollbar-thumb {
       background-color: #B4BED1;
       border-radius: 20px;
-    }
-    .table-default tbody::-webkit-scrollbar-thumb {
-      background-color: #B4BED1;
-      border-radius: 20px;
-      border: 6px solid transparent;
-      background-clip: content-box;
     }
     
   }
+
+
+
+.table-responsive::-webkit-scrollbar-track,
+.dataTables_wrapper::-webkit-scrollbar-track,
+.panel-body::-webkit-scrollbar-track {
+  background-color: #212D37;
+}
+
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb,
+.panel-body::-webkit-scrollbar-thumb {
+  background-color: #212D37;
+}
+
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb,
+.panel-body::-webkit-scrollbar-thumb {
+  background-color: #212D37;
+}
+
+.table-responsive::-webkit-scrollbar-thumb,
+.dataTables_wrapper::-webkit-scrollbar-thumb,
+.panel-body::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+.table-responsive::-webkit-scrollbar-thumb:hover,
+.dataTables_wrapper::-webkit-scrollbar-thumb:hover,
+.panel-body::-webkit-scrollbar-thumb:hover {
+  background-color: #B4BED1;
+}
 
 
 
@@ -2078,6 +2115,9 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   }
   .container-fluid.form-group{
     border: solid 1px #ffffff !important;
+  }
+  #lti_label{
+    background-color: transparent;
   }
 
   /**********************************************************************************************************************/
@@ -2621,7 +2661,7 @@ tr.warning:hover{
  .datetimepicker .table-condensed thead,
  .datetimepicker .table-condensed thead tr th{ 
     background-color: #212D37;
-    color:#687DA3;
+    color:#687DA3 !important;
  }
 
  .datetimepicker .table-condensed thead tr th.prev::before,

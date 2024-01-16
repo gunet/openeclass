@@ -330,9 +330,9 @@ $data['courseDescriptionVisible'] = $courseDescriptionVisible = count($res);
 $data['edit_course_desc_link'] = '';
 if ($is_editor) {
     if ($courseDescriptionVisible > 0) {
-        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-pen-to-square settings-icon mt-2', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-pen-to-square settings-icon text-link mt-2', $langCourseDescription,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
     } else {
-        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-circle-plus settings-icon mt-2', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
+        $data['edit_course_desc_link'] = "&nbsp;&nbsp;" . icon('fa-solid fa-circle-plus settings-icon text-link mt-2', $langAdd,$urlAppend . "modules/course_description/index.php?course=" . $course_code);
     }
 }
 

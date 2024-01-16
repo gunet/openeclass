@@ -223,7 +223,7 @@
                                     <div id='orderTexts'>
                                         @foreach($texts as $text)
                                             <div class='card panelCard px-lg-4 py-lg-3 mb-4' data-id='{{ $text->id }}'>
-                                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                     
                                                         
                                                         <h3>
@@ -231,9 +231,9 @@
                                                             @if($text->type == 2) <span class='badge Primary-200-bg form-value'>Testimonial</span> @endif
                                                         </h3>
                                                         
-                                                        <div>
+                                                        <div class='d-flex gap-2'>
                                                             <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}'>
-                                                                <span class='fa fa-edit pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
+                                                                <span class='fa fa-edit text-link pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
                                                             </a>
                                                             <a href='javascript:void(0);'><span class='fa fa-arrows pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
                                                             <a class='forDelete' href='javascript:void(0);' data-id='{{ $text->id }}' data-order='{{ $text->order }}'><span class='fa-solid fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>

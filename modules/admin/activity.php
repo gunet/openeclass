@@ -226,7 +226,7 @@ $(function() {
             $indirectId = getIndirectReference($item->id);
             $tool_content .= "
       <div class='card panelCard px-lg-4 py-lg-3 mt-3' data-id='$indirectId'>
-        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
           
            
             <h3>$heading</h3>

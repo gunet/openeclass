@@ -157,7 +157,7 @@
                     @if ($previousLink or $nextLink)
                         <div class='col-12'>
                             <div class='card panelCard px-lg-0 py-lg-0 border-0'>
-                                <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders">
+                                <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders gap-3 flex-wrap">
                                     @if ($previousLink)
                                         <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
                                             <span class='fa fa-arrow-left space-after-icon'></span>
@@ -177,7 +177,7 @@
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
-                            <div class='card-header border-0 bg-default d-xl-flex justify-content-xl-between align-items-xl-center'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
                                     <div class='form-value'>
@@ -224,16 +224,16 @@
                             <div class='card panelCard px-lg-4 py-lg-3'>
                                 <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>
-                                        <div class='d-inline-flex align-items-top'>
+                                        <div class='d-inline-flex align-items-top gap-3 flex-wrap'>
                                             {{ trans('langActivities')}}
                                             <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                                <span class="fa fa-pencil ms-2 mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                                <span class="fa fa-pencil ms-2 mt-1 text-link" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
                                             </a>
                                         </div>
                                     </h3>
                                 </div>
                                 <div class='card-body'>
-                                    <table class='table table-bordered'>
+                                    <table class='table-default'>
                                         <tbody>
                                         @if ($q_in_home)
                                             </tr><tr><th scope='row'><label class='col-12 control-label'>{{ trans('langActInHome') }}</label></th>
