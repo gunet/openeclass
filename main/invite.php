@@ -196,70 +196,96 @@ $head_content .= <<<hContent
   hContent;
 
 if ($uid) {
-    $message = 'Επιλέξτε το παρακάτω κουμπί για να εγγραφείτε και να μεταβείτε στο μάθημα.';
-    $label = 'Εγγραφή';
+    $message = $langInvitationClickToAccept;
+    $label = $langRegister;
     $eclass_login = $eclass_form = '';
 } else {
-    $message = 'Εφόσον διαθέτετε λογαριασμό στο κεντρικό σύστημα πιστοποίησης του ΕΚΠΑ, παρακαλούμε
-        συνδεθείτε με τον ιδρυματικό σας λογαριασμό επιλέγοντας το παρακάτω κουμπί.';
-    $label = 'Σύνδεση και εγγραφή (λογαριασμός ΕΚΠΑ)';
+    $cas_auth = Database::get()->querySingle("SELECT * FROM auth WHERE auth_name = 'cas'");
+    if ($cas_auth and $cas_auth->auth_default) {
+        $cas = true;
+        $eclass_login_help = $langInviteEclassLoginAlt;
+    } else {
+        $cas = false;
+        $eclass_login_help = $langCourseInvitationReceived . ' ' . $langInviteEclassLoginCreate;
+    }
     $givenname = q($q->givenname);
     $surname = q($q->surname);
-    $eclass_login = "
-        <div class='row'>
-            <div class='panel'>
-                <div class='panel-body'>
-                    <fieldset>
-                        <div class='form-group'>
-                            <div class='col-sm-8 col-sm-offset-2'>
-                                <p class='form-control-static'>
-                                    Εναλλακτικά, <strong>εφόσον δε διαθέτετε ιδρυματικό λογαριασμό στο ΕΚΠΑ</strong>, παρακαλούμε εισαγάγετε
-                                    παρακάτω τα στοιχεία που χρειάζονται για να δημιουργήσετε λογαριασμό επισκέπτη
-                                    στην πλατφόρμα.
-                                <p>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langUsername:</label>
-                            <div class='col-sm-10'>
-                                <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
-                                <span class='help-text'>(ταυτίζεται με τη διεύθυνση e-mail σας)</span>
-                            </div>
-                        </div>
-                        <div class='form-group pw-group'>
-                            <label for='password_field' class='col-sm-2 control-label'>$langPass:</label >
-                            <div class='col-sm-10' >
-                                <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice' required>
-                                <span id='result'></span>
-                            </div>
-                        </div >
-                        <div class='form-group pw-group'>
-                            <label for='password_field_2' class='col-sm-2 control-label'>$langConfirmation:</label >
-                            <div class='col-sm-10' >
-                                <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off' required>
-                            </div >
-                        </div>
-                        <div class='form-group'>
-                            <label for='name_field' class='col-sm-2 control-label'>$langName:</label>
-                            <div class='col-sm-10'>
-                                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <label for='surname_field' class='col-sm-2 control-label'>$langSurname:</label>
-                            <div class='col-sm-10'>
-                                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-sm-12 text-center'>
-                                <button type='submit' name='no_cas' class='btn btn-primary'>$langRegisterAsVisitor</button>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
+    $eclass_login_form = "
+        <div class='form-group'>
+            <div class='col-sm-8 col-sm-offset-2'>
+                <p class='form-control-static'>
+                    $eclass_login_help
+                <p>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langUsername:</label>
+            <div class='col-sm-10'>
+                <input class='form-control' type='text' name='username' value='". q($q->email) . "' disabled>
+                <span class='help-text'>($langSameAsYourEmail)</span>
+            </div>
+        </div>
+        <div class='form-group pw-group'>
+            <label for='password_field' class='col-sm-2 control-label'>$langPass:</label >
+            <div class='col-sm-10' >
+                <input class='form-control' type='password' name='password1' maxlength='30' autocomplete='off' id='password_field' placeholder='$langUserNotice' required>
+                <span id='result'></span>
+            </div>
+        </div >
+        <div class='form-group pw-group'>
+            <label for='password_field_2' class='col-sm-2 control-label'>$langConfirmation:</label >
+            <div class='col-sm-10' >
+                <input id='password_field_2' class='form-control' type='password' name='password' maxlength='30' autocomplete='off' required>
+            </div >
+        </div>
+        <div class='form-group'>
+            <label for='name_field' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10'>
+                <input id='name_field' class='form-control' type='text' name='givenname_form' maxlength='100' value = '$givenname' placeholder='$langName' required>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='surname_field' class='col-sm-2 control-label'>$langSurname:</label>
+            <div class='col-sm-10'>
+                <input id='surname_field' class='form-control' type='text' name='surname_form' maxlength='100' value = '$surname' placeholder='$langSurname' required>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-12 text-center'>
+                <button type='submit' name='no_cas' class='btn btn-primary'>$langRegisterAsVisitor</button>
             </div>
         </div>";
+    if ($cas) {
+        $auth_title = getSerializedMessage($cas_auth->auth_title);
+        $message = sprintf($langInvitationAcceptViaCAS, q($auth_title));
+        $main_accept_form = "
+            <div class='form-group'>
+                <div class='col-sm-8 col-sm-offset-2'>
+                    <p class='form-control-static'>
+                        $langCourseInvitationReceived
+                        $message
+                    </p>
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-12 text-center'>
+                    <button type='submit' name='submit' class='btn btn-primary'>$langLoginAndRegister</button>
+                </div>
+            </div>";
+        $alt_accept_form = "
+            <div class='row'>
+                <div class='panel'>
+                    <div class='panel-body'>
+                        <fieldset>
+                            $eclass_login_form
+                        </fieldset>
+                    </div>
+                </div>
+            </div>";
+    } else {
+        $main_accept_form = $eclass_login_form;
+        $alt_accept_form = '';
+    }
 }
 
 $tool_content .= "
@@ -269,6 +295,12 @@ $tool_content .= "
             <div class='panel'>
                 <div class='panel-body'>
                     <fieldset>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langCourse:</label>
+                            <div class='col-sm-10'>
+                                <p class='form-control-static'>" . q($course->title) . "</p>
+                            </div>
+                        </div>
                         <div class='form-group'>
                             <label class='col-sm-2 control-label'>$langFaculty:</label>
                             <div class='col-sm-10'>
@@ -281,24 +313,12 @@ $tool_content .= "
                                 <p class='form-control-static'>" . q($course->public_code) . "</p>
                             </div>
                         </div>
-                        <div class='form-group'>
-                            <div class='col-sm-8 col-sm-offset-2'>
-                                <p class='form-control-static'>
-                                    Έχετε λάβει πρόσκληση συμμετοχής στο ανωτέρω μάθημα.
-                                    $message
-                                </p>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-sm-12 text-center'>
-                                <button type='submit' name='submit' class='btn btn-primary'>$label</button>
-                            </div>
-                        </div>
+                        $main_accept_form
                     </fieldset>
                 </div>
             </div>
         </div>
-        $eclass_login
+        $alt_accept_form
     </form>";
 
 draw($tool_content, 1, null, $head_content);
