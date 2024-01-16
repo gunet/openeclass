@@ -113,7 +113,7 @@
                                     </div>
                                 </div>
                                 <div class='form-group mt-5'>
-                                    <div class='col-12 d-flex justify-content-center align-items-center'>
+                                    <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
                                         <input class='btn submitAdminBtn' type='submit' name='send_link' value='{{ trans('langSend') }}'>
                                         <a class='btn cancelAdminBtn ms-1' href='{{ $urlServer }}'>{{ trans('langCancel') }}</a>
                                     </div>

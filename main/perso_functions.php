@@ -69,7 +69,7 @@ function getUserCourseInfo($uid) {
                 $fav_status = 0;
                 $fav_message = '';
             } else {
-                $favorite_icon = 'fa-regular fa-star';
+                $favorite_icon = 'fa-regular fa-star text-link';
                 $fav_status = 1;
                 $fav_message = $langFavorite;
             }
@@ -91,7 +91,7 @@ function getUserCourseInfo($uid) {
                             <div class='d-inline-flex'>";
 
             $lesson_content .= "<a class='ClickCoursePortfolio me-3' href='#' id='{$data->code}' type='button' class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title='$langPreview&nbsp$langOfCourse'>
-                                <i class='fa-solid fa-display'></i>
+                                <i class='fa-solid fa-display text-link'></i>
                             </a>
 
                             <div id='PortfolioModal{$data->code}' class='modal'>
@@ -131,11 +131,11 @@ function getUserCourseInfo($uid) {
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");
             if ($data->status == USER_STUDENT) {
                 if (get_config('disable_student_unregister_cours') == 0) {
-                    $lesson_content .= icon('fa-minus-circle ms-3', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                    $lesson_content .= icon('fa-minus-circle ms-3 text-link', $langUnregCourse, "{$urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                     $student_courses_count++;
                 }
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench ms-3', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
+                $lesson_content .= icon('fa-wrench ms-3 text-link', $langAdm, "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
             $lesson_content .= "</div>

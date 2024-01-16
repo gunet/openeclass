@@ -85,6 +85,13 @@
   z-index: 0;
 }
 
+.myPersonalCalendar table {
+  width: 100% !important;
+  box-sizing: border-box;
+  table-layout: fixed !important;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 .myPersonalCalendar tbody tr:hover{
   background-color: transparent;
 }
@@ -144,7 +151,13 @@
 }
 
 
-
+.myCalendarEvents table {
+  width: 100% !important;
+  box-sizing: border-box;
+  table-layout: fixed !important;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 .myCalendarEvents tbody tr:hover{
   background-color: transparent;
 }

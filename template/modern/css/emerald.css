@@ -490,11 +490,17 @@ input[type="submit"].warningAdminBtn:hover {
 .submitAdminBtn span{
   color: #1E7E0E;
 }
+.submitAdminBtn span.Accent-200-cl{
+  color: #B70A0A;
+}
 .submitAdminBtn .fa-solid::before, 
 .submitAdminBtn .fa-regular::before,
 .submitAdminBtn .fa-brands::before,
 .submitAdminBtn span.fa::before{
   color: #1E7E0E;
+}
+.submitAdminBtn span.Accent-200-cl::before{
+  color: #B70A0A;
 }
 .submitAdminBtnDefault .fa-solid::before, 
 .submitAdminBtnDefault .fa-regular::before,
@@ -1620,7 +1626,7 @@ color:#1E7E0E;
 .datetimepicker .table-condensed thead,
 .datetimepicker .table-condensed thead tr th{ 
 background-color: #ffffff;
-color:#1E7E0E;
+color:#1E7E0E !important;
 }
 
 .datetimepicker .table-condensed thead tr th.prev::before,

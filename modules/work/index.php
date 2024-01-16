@@ -5258,7 +5258,7 @@ function show_assignment($id) {
                 $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
             }
             $tool_content .= "<tr>
-                            <td class='text-right count-col'>$i.</td>
+                            <td class='count-col'>$i.</td>
                             <td class='user-col'>$name $am_field $mess";
 
             // student comment

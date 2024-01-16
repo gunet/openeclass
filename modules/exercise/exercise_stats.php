@@ -93,9 +93,9 @@ $tool_content .= "
                 </tr>
             </tbody>
             <tfoot>
-                <tr class='active badge Primary-200-bg mt-2'>
-                    <th class='form-label'>$langTotal:</th>
-                    <th class='form-label'>$total_attempts</th>
+                <tr class='active mt-2'>
+                    <th class='form-label px-2'>$langTotal:</th>
+                    <th class='form-label px-2'>$total_attempts</th>
                 </tr>            
             </tfoot>
         </table>

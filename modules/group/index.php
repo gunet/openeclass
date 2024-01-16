@@ -604,7 +604,7 @@ if ($is_editor) {
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                         <div class='card panelCard $link_class card$pagesPag px-lg-4 py-lg-3 h-100'>
-                                                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                 <a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                                                                 <div>
                                                                     " .
@@ -879,7 +879,7 @@ if ($is_editor) {
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                       <div class='card panelCard card$pagesPag px-lg-4 py-lg-3 h-100'>
-                                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>";
+                                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center flex-wrap gap-3'>";
                                                                 if ($is_member or $is_tutor) {
                                                                 $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                                                                                     "</a> 
@@ -889,7 +889,7 @@ if ($is_editor) {
                                                                     if ($max_members > 0 and $max_members == $member_count) {
                                                                         $full_group_message = " <span class='badge bg-warning TextBold text-white text-capitalize'>$langGroupFull</span>";
                                                                     }
-                                                                        $tool_content .= q($group_name) . "$full_group_message";
+                                                                        $tool_content .= "<h3 class='mb-0'>".q($group_name)."</h3>" . "$full_group_message";
                                                                 }
                                         $tool_content .= "</div>
                                                         <div class='card-body rounded-0'>
@@ -919,7 +919,7 @@ if ($is_editor) {
                                                                 }
 
                                         $tool_content .= "</div>
-                                                        <div class='card-footer d-flex bg-default border-0 justify-content-between align-items-center'>";
+                                                        <div class='card-footer d-flex bg-default border-0 justify-content-between align-items-center flex-wrap gap-3'>";
                                                                 $group_id_indirect = getIndirectReference($group_id);
                                                                 $control = '';
 

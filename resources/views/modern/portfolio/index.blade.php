@@ -575,7 +575,7 @@
                             <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
                                 @php $totalCourses = $student_courses_count + $teacher_courses_count; @endphp
                                 <h2>{{ trans('langMyCoursesSide') }}&nbsp;({{ $totalCourses }})</h2>
-                                <div class='d-flex'>
+                                <div class='d-flex mt-md-0 mt-3'>
                                     <a class="btn submitAdminBtn @if ($_SESSION['status'] == USER_TEACHER or $is_power_user or $is_departmentmanage_user) me-2 @endif" href="{{ $urlAppend }}modules/auth/courses.php">
                                         <i class="fa-regular fa-pen-to-square"></i>&nbsp
                                         {{ trans('langRegister') }}
@@ -655,7 +655,7 @@
                                                     $fav_status = 0;
                                                     $fav_message = '';
                                                 } else {
-                                                    $favorite_icon = 'fa-regular fa-star';
+                                                    $favorite_icon = 'fa-regular fa-star text-link';
                                                     $fav_status = 1;
                                                     $fav_message = trans('langFavorite');
                                                 }
@@ -696,11 +696,11 @@
                                                        {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
                                                         @if ($course->status == USER_STUDENT)
                                                             @if (get_config('disable_student_unregister_cours') == 0)
-                                                                {!! icon('fa-minus-circle ms-3', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
+                                                                {!! icon('fa-minus-circle ms-3 text-link', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
 
                                                             @endif
                                                         @elseif ($course->status == USER_TEACHER)
-                                                            {!! icon('fa-wrench ms-3', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
+                                                            {!! icon('fa-wrench ms-3 text-link', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
                                                         @endif
                                                     </div>
 

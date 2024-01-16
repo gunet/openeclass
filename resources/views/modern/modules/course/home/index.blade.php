@@ -291,7 +291,7 @@
                     <div class='flex-grow-1'>
                         <div class='card panelCard panelCardDefault border-0'>
 
-                            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <div>
                                     <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
                                 </div>
@@ -536,7 +536,7 @@
                     </div>
 
 
-                    {{--<div class='col-xl-5 col-12 mt-xl-0 mt-5 sticky-column-course-home'>--}}
+                    
                     <div>
                         <div class="panel panel-admin panel-admin-calendar p-0 border-0 sticky-column-course-home">
                             <h3 class='mt-1 mb-4'>{{ trans('langAgenda') }}</h3>
@@ -566,7 +566,7 @@
                         @endif
 
                         <div class="card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home">
-                            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
                                 <a class='Course-home-ellipsis-announcements TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
                             </div>
@@ -580,7 +580,7 @@
                         @if ($uid)
                             @if(isset($course_completion_id) and $course_completion_id > 0)
                                 <div class="card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home">
-                                    <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
+                                    <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <h3 class='mb-0'>{{ trans('langCourseCompletion') }}</h3>
                                         @if ($is_editor)
                                             <a class='Course-home-ellipsis TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>

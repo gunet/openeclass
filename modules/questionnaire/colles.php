@@ -223,8 +223,8 @@ if (!$thePoll->anonymized) {
     $tool_content .= "<div class='table-responsive'><table class='table-default'>
                 <tbody>
                 <tr class='list-header'>
-                    <th>$langStudents</th>
-                    <th>$lang_Results</th>
+                    <th class='p-2'>$langStudents</th>
+                    <th class='p-2'>$lang_Results</th>
                 </tr>";
 
     foreach ($result as $theresult) {

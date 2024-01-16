@@ -57,7 +57,7 @@
                             @foreach ($rules as $key => $rule)
                             <div class='col'>
                                 <div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         
                                         
                                                 <h3>{{ trans('langAutoEnrollRule') }} {{ $key + 1 }}</h3>

@@ -494,6 +494,9 @@
   .submitAdminBtn span{
     color: #B70A0A;
   }
+  .submitAdminBtn span.Accent-200-cl{
+    color: #B70A0A;
+  }
   .submitAdminBtn .fa-solid::before, 
   .submitAdminBtn .fa-regular::before,
   .submitAdminBtn .fa-brands::before,
@@ -1630,7 +1633,7 @@
 .datetimepicker .table-condensed thead,
 .datetimepicker .table-condensed thead tr th{ 
   background-color: #ffffff;
-  color:#B70A0A;
+  color:#B70A0A !important;
 }
 
 .datetimepicker .table-condensed thead tr th.prev::before,

@@ -4076,7 +4076,7 @@ div[role="progressbar"]::before {
 
 .panelCard{
   border-radius: 4px ;
-  border: solid 1px#EFF2FB;
+  border: solid 1px #EFF2FB;
 }
 
 .panelCard .card-header{
@@ -4126,7 +4126,7 @@ div[role="progressbar"]::before {
 }
 
 .ViewGroup{
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .showSettings{
