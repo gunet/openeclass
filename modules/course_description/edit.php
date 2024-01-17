@@ -28,9 +28,9 @@ $require_editor = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
-$toolName = $langCourseDescription;
+$toolName = $langSyllabus;
 $pageName = $langEditCourseProgram;
-$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSyllabus);
 
 if (isset($_REQUEST['id'])) {
     $editId = intval(getDirectReference($_REQUEST['id']));
@@ -122,15 +122,9 @@ $tool_content .= "
 
 $head_content .= <<<hCont
 <script type="text/javascript">
-/* <![CDATA[ */
-
-    $(document).on('change', '#typSel', function (e) {
-        //console.log(e);
-        //alert($(this).children(':selected').text());
-        $('#titleSel').val( $(this).children(':selected').text() );
+    $(document).on('change', '#typSel', function (e) {       
+        $('#titleSel').val($(this).children(':selected').text());
     });
-
-/* ]]> */
 </script>
 hCont;
 draw($tool_content, 2, null, $head_content);

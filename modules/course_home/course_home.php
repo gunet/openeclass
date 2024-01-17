@@ -845,7 +845,7 @@ $tool_content .= "<ul class='course-title-actions clearfix pull-right list-inlin
                             <div class='course-info-title clearfix'>
                                     <h5>
                                   <a role='button' id='btn-syllabus' data-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
-                                            <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>$langCourseDescription</span></a>
+                                            <span class='fa fa-chevron-right fa-fw'></span><span style='padding-left: 5px;'>$langSyllabus</span></a>
                                             $edit_course_desc_link";
                                         // course license
                                     if ($course_license) {

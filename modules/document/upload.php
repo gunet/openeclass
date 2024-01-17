@@ -141,10 +141,10 @@ if ($can_upload) {
         <div class='col-sm-10'>
           <select class='form-control' name='file_category'>
             <option selected='selected' value='0'>$langCategoryOther</option>
-            <option value='1'>$langCategoryExcercise</option>
+            <option value='1'>$langExercise</option>
             <option value='2'>$langCategoryLecture</option>
             <option value='3'>$langAssignment</option>
-            <option value='4'>$langCategoryDescription</option>
+            <option value='4'>$langDescription</option>
             <option value='5'>$langCategoryExample</option>
             <option value='6'>$langCategoryTheory</option>
           </select>

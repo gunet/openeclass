@@ -35,20 +35,20 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
 
-$toolName = $langCourseDescription;
+$toolName = $langSyllabus;
 
 ModalBoxHelper::loadModalBox();
 if ($is_editor) {
     load_js('tools.js');
     $tool_content .= "
-	<div id='operations_container'>" .
+        <div id='operations_container'>" .
             action_bar(array(
                 array('title' => $langEditCourseProgram,
                     'url' => "edit.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'))) .
-            "</div>";
+        "</div>";
 
     processActions();
 

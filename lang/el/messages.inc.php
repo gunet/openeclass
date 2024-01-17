@@ -1090,6 +1090,7 @@ $langDownloadCourse = "Κατέβασμα του μαθήματος";
 $langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langOfNotifications = "ειδοποιήσεων";
+$langSyllabus = "Περίγραμμα";
 
 
 /* * *******************************************
@@ -1698,14 +1699,9 @@ $langFormat = "Τύπος-Κατηγορία";
 $langSubject = "Θέμα";
 $langAuthor = "Συγγραφέας";
 $langUserForum = "Μέλος";
-$langCopyrighted = "Πνευματικά Δικαιώματα";
 $langCopyrightedFree = "Ελεύθερο δικαιωμάτων";
-$langCopyrightedNotFree = "Προστατεύονται όλα τα δικαιώματα";
-$langCopyrightedUnknown = "Άγνωστο";
 $langChangeMetadata = "Αλλαγή πληροφοριών εγγράφου";
 $langEditMeta = "Επεξεργασία Πληροφοριών";
-$langCategoryExcercise = "Άσκηση";
-$langCategoryDescription = "Περιγραφή $langsOfCourse";
 $langCategoryExample = "Παράδειγμα";
 $langCategoryTheory = "Θεωρία";
 $langCategoryLecture = "Διάλεξη";

@@ -1126,10 +1126,10 @@ if ($can_upload or $user_upload) {
                     <label class='col-sm-2 control-label'>$langCategory:</label>
                     <div class='col-sm-10'>" .
                         selection(array('0' => $langCategoryOther,
-                            '1' => $langCategoryExcercise,
+                            '1' => $langExercise,
                             '2' => $langCategoryLecture,
                             '3' => $langAssignment,
-                            '4' => $langCategoryDescription,
+                            '4' => $langDescription,
                             '5' => $langCategoryExample,
                             '6' => $langCategoryTheory), 'file_category', $oldCategory, "class='form-control'") . "</div>
                   </div>
