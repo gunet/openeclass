@@ -57,8 +57,8 @@
        
             
                 <div class='d-flex align-items-center px-2 py-1'>
-                    <div class='event event-important'></div>
-                    <div class="agenda-comment"> {{ trans('langAgendaDueDay') }}</div>
+                    <span class='event event-important'></span>
+                    <span class="agenda-comment"> {{ trans('langAgendaDueDay') }}</span>
                 </div>
             
           

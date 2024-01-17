@@ -117,7 +117,7 @@ function getUserCourseInfo($uid) {
                 $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
             }
             $lesson_content .= "</div>
-                <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'> ";
+                <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
             if(empty($data->description)) {
                 $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
             } else {

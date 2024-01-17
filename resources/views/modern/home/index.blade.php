@@ -110,7 +110,7 @@
                                             <a class="text-decoration-underline" href="{{$urlAppend}}modules/auth/lostpass.php">{{ trans('lang_forgot_pass') }}</a>
                                         </div>
                                         <div class='col-12 text-center mt-2 mb-lg-0 mb-2'>
-                                            <a class="vsmall-text TextBold lightBlueText" href="{{$urlAppend}}main/login_form.php">{{ trans('langMoreLogin') }}</a>
+                                            <a class="vsmall-text TextBold Primary-500-cl" href="{{$urlAppend}}main/login_form.php">{{ trans('langMoreLogin') }}</a>
                                         </div>
                                     </div>
                                 </div>

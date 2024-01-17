@@ -542,21 +542,21 @@
                             <h3 class='mt-1 mb-4'>{{ trans('langAgenda') }}</h3>
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
-                                <div class='d-flex align-items-center px-2 py-1'>
+                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
                                     <span class='event event-important'></span>
-                                    <span class='small-text'>{{ trans('langAgendaDueDay') }}</span>
+                                    <span class='small-text agenda-comment'>{{ trans('langAgendaDueDay') }}</span>
                                 </div>
-                                <div class='d-flex align-items-center px-2 py-1'>
+                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
                                     <span class='event event-info'></span>
-                                    <span class='small-text'>{{ trans('langAgendaCourseEvent') }}</span>
+                                    <span class='small-text agenda-comment'>{{ trans('langAgendaCourseEvent') }}</span>
                                 </div>
-                                <div class='d-flex align-items-center px-2 py-1'>
+                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
                                     <span class='event event-success'></span>
-                                    <span class='small-text'>{{ trans('langAgendaSystemEvent') }}</span>
+                                    <span class='small-text agenda-comment'>{{ trans('langAgendaSystemEvent') }}</span>
                                 </div>
-                                <div class='d-flex align-items-center px-2 py-1'>
+                                <div class='d-flex align-items-center px-2 py-1 gap-1'>
                                     <span class='event event-special'></span>
-                                    <span class='small-text'>{{ trans('langAgendaPersonalEvent') }}</span>
+                                    <span class='small-text agenda-comment'>{{ trans('langAgendaPersonalEvent') }}</span>
                                 </div>
                             </div>
                         </div>

@@ -376,6 +376,7 @@ a:hover,button:hover{
 .Neutral-900-bg{
   background-color: #2B3944;
 }
+
 .Neutral-900-cl{
   color: #2B3944;
 }
@@ -383,6 +384,7 @@ a:hover,button:hover{
 .Neutral-800-bg{
   background-color: #4F6893;
 }
+
 .Neutral-800-cl{
   color: #4F6893;
 }
@@ -390,6 +392,7 @@ a:hover,button:hover{
 .Neutral-700-bg{
   background-color: #687DA3;
 }
+
 .Neutral-700-cl{
   color: #687DA3;
 }
@@ -397,6 +400,7 @@ a:hover,button:hover{
 .Neutral-600-bg{
   background-color: #9BA9C1;
 }
+
 .Neutral-600-cl{
   color: #9BA9C1;
 }
@@ -404,6 +408,7 @@ a:hover,button:hover{
 .Neutral-500-bg{
   background-color: #B4BED1;
 }
+
 .Neutral-500-cl{
   color: #B4BED1;
 }
@@ -411,6 +416,7 @@ a:hover,button:hover{
 .Neutral-400-bg{
   background-color: #CDD4E0;
 }
+
 .Neutral-400-cl{
   color: #CDD4E0;
 }
@@ -418,6 +424,7 @@ a:hover,button:hover{
 .Neutral-300-bg{
   background-color: #E8EDF8;
 }
+
 .Neutral-300-cl{
   color: #E8EDF8;
 }
@@ -425,6 +432,7 @@ a:hover,button:hover{
 .Neutral-200-bg{
   background-color: #EFF2FB;
 }
+
 .Neutral-200-cl{
   color:#EFF2FB;
 }
@@ -433,6 +441,7 @@ a:hover,button:hover{
 .Primary-600-bg{
   background-color: #2546F0;
 }
+
 .Primary-600-cl{
   color: #2546F0;
 }
@@ -440,6 +449,7 @@ a:hover,button:hover{
 .Primary-500-bg{
   background-color: #0073E6;
 }
+
 .Primary-500-cl{
   color:#0073E6;
 }
@@ -447,6 +457,7 @@ a:hover,button:hover{
 .Primary-400-bg{
   background-color: #74AFE9;
 }
+
 .Primary-400-cl{
   color: #74AFE9;
 }
@@ -454,6 +465,7 @@ a:hover,button:hover{
 .Primary-300-bg{
   background-color: #B3D1FF;
 }
+
 .Primary-300-cl{
   color: #B3D1FF;
 }
@@ -461,6 +473,7 @@ a:hover,button:hover{
 .Primary-200-bg{
   background-color: #EFF6FF;
 }
+
 .Primary-200-cl{
   color: #EFF6FF;
 }
@@ -468,6 +481,7 @@ a:hover,button:hover{
 .Primary-100-bg{
   background-color: #F7F9FE;
 }
+
 .Primary-100-cl{
   color: #F7F9FE;
 }
@@ -475,6 +489,7 @@ a:hover,button:hover{
 .Accent-200-bg{
   background-color: #C44601;
 }
+
 .Accent-200-cl{
   color: #C44601;
 }
@@ -482,6 +497,7 @@ a:hover,button:hover{
 .Accent-100-bg{
   background-color: #FDEFE9;
 }
+
 .Accent-100-cl{
   color:#FDEFE9;
 }
@@ -489,6 +505,7 @@ a:hover,button:hover{
 .Success-200-bg{
   background-color: #1E7E0E;
 }
+
 .Success-200-cl{
   color: #1E7E0E;
 }
@@ -496,6 +513,7 @@ a:hover,button:hover{
 .Success-100-bg{
   background-color: #E8F2E7;
 }
+
 .Success-100-cl{
   color:#E8F2E7;
 }
@@ -503,6 +521,7 @@ a:hover,button:hover{
 .Warning-200-bg{
   background-color: #F57600;
 }
+
 .Warning-200-cl{
   color: #F57600;
 }
@@ -510,6 +529,7 @@ a:hover,button:hover{
 .Warning-100-bg{
   background-color: #FFF4D1;
 }
+
 .Warning-100-cl{
   color: #FFF4D1;
 }
@@ -522,60 +542,12 @@ a:hover,button:hover{
   color: #ffffff;
 }
 
-.orangeText{ 
-  color: #F57600; 
-}
-
-.greyText { 
-  color: #f5f5f5; 
-}
-
-.bgOrange {
-  background-color: #F57600;
-}
-
-.blackBlueText { 
-  color:#2B3944; 
-}
-
-.bgBlackBlue { 
-  background-color: #2B3944;
-}
-
-.bgNormalBlueText{
-  background-color: #2546F0;
-}
-
-.normalBlueText { 
-  color: #2546F0; 
-}
-
-.normalColorBlueText{
-    color: #2B3944 !important; 
-}
-
-.lightBlueText { 
-  color:#0073E6; 
-}
-
-.bgLightBlue { 
-  background-color: #0073E6;
-}
-
-.bgEclass { 
+.bgLightwhite { 
   background-color: #e8e8e8;
-}
-
-.lightColor{ 
-  background-color: #f5f5f5; 
 }
 
 .greyColor { 
   background-color: #D3D3D3;
-}
-
-.textgreyColor { 
-  color: #bdbdbd;
 }
 
 .bg-default{
@@ -3260,7 +3232,13 @@ table{
 /**************************************************** AFFIXED SIDENAV *************************************************/
 /**********************************************************************************************************************/
 
-.nav-link-adminTools.normalColorBlueText.active{
+.nav-link-adminTools{
+  color: #0073E6;
+}
+.nav-link-adminTools:hover{
+  color: #0073E6;
+}
+.nav-link-adminTools.Neutral-900-cl.active{
   background-color: #0073E6;
   color: #ffffff !important;
 }

@@ -110,13 +110,12 @@
                         <div class='col-xl-9 col-lg-8 col-md-12 col-sm-12 col-12 forms-panels-admin'>
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
-                                    <div class='panel panel-admin' id='one'>
-                                        <div class='panel-heading'>
-
-                                                {{ trans('langBasicCfgSetting') }}
+                                    <div class='card panelCard px-lg-4 py-lg-3' id='one'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                            <h3>{{ trans('langBasicCfgSetting') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='formurlServer' class='col-sm-6 col-sm-offset-1 control-label-notes'>{{ trans('langSiteUrl') }}:</label>
@@ -194,13 +193,13 @@
 
 
 
-                                    <div class='panel panel-admin mt-4' id='two'>
-                                        <div class='panel-heading'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='two'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                               {{ trans('langUpgReg') }}
+                                               <h3>{{ trans('langUpgReg') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='user_registration' class='col-sm-12 control-label-notes'>{{ trans('langUserRegistration') }}:</label>
@@ -404,13 +403,13 @@
 
 
 
-                                    <div class='panel panel-admin mt-4' id='three'>
-                                        <div class='panel-heading'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='three'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                                {{ trans('langSupportedLanguages') }}
+                                                <h3>{{ trans('langSupportedLanguages') }}</h3>
 
                                         </div>
-                                        <div class='panel-body panel-body-admin ps-3 pt-3 pb-3 pe-3 Borders'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='default_language' class='col-sm-12 control-label-notes'>{{ trans('langMainLang') }}: </label>
@@ -436,14 +435,14 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4' id='four'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='four'>
 
-                                        <div class='panel-heading'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                                {{trans('langHomePageSettings')}}
+                                                <h3>{{trans('langHomePageSettings')}}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <div class='margin-bottom-fat margin-top-fat fs-5 mb-3'><strong>{{trans('langSelectHomePage')}} :</strong></div>
                                             <fieldset>
                                                 <div class='landing-default'>
@@ -544,66 +543,6 @@
                                                     </div>
                                                 </div>
 
-                                                {{--
-                                                <div class='landing-toolbox'>
-                                                    <div class='radio margin-bottom-fat'>
-                                                        <label>
-                                                            <input {{$toolboxHomepage}} class='homepageSet checkbox_toolbox' name='homepageSet' value='toolbox' type='radio'> <span class='text-secondary mb-3 fs-4'>{{trans('langHomePageToolbox')}}</span>
-                                                        </label>
-                                                    </div>
-                                                    <div id='collapse-toolboxHomepage' class='collapse homepage-inputs margin-bottom-fat'>
-                                                        <hr class='margin-bottom-fat'>
-                                                        <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageTitle' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroTitle')}}</label>
-                                                            <div class='col-sm-12'>
-                                                                <input class='form-control' type='text' name='toolbox_title' id='toolboxHomepageTitle' value="{!! q(get_config('toolbox_title', $langEclass)) !!}">
-                                                                <p class='help-block'>{{trans('langHomePageTitleHelpText')}}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}</label>
-                                                            <div class='col-sm-12'>
-                                                                <input class='form-control' type='text' name='toolbox_name' id='toolboxHomepageBcrmp' value="{!! q(get_config('toolbox_name', $langHomePage)) !!}">
-                                                                <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class='form-group mt-3'>
-                                                            <label for='toolboxHomepageIntro' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroText')}}:</label>
-                                                            <div class='col-sm-12'>
-                                                                {!! rich_text_editor('toolbox_intro', 5, 20, get_config('toolbox_intro', $langInfoAbout)) !!}
-                                                                <p class='help-block'>{{trans('langHomePageIntroTextHelp')}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class='landing-external'>
-                                                    <div class='radio margin-bottom-fat'>
-                                                        <label>
-                                                            <input {{$externalHomepage}} class='homepageSet checkbox_external' type='radio' name='homepageSet' value='external'> <span class='text-secondary mb-3 fs-4'>{{trans('langHomePageExternal')}}</span>
-                                                        </label>
-                                                    </div>
-                                                    <div id='collapse-externalHomepage' class='collapse homepage-inputs margin-bottom-fat'>
-                                                        <hr class='margin-bottom-fat'>
-                                                        <div class='form-group mt-4'>
-                                                            <label for='externalHomepageBcrmp' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroBcrmp')}}:</label>
-                                                            <div class='col-sm-12'>
-                                                                <input class='form-control' type='text' name='landing_name' id='externalHomepageBcrmp' value="{!! q(get_config('landing_name')) !!}">
-                                                                <p class='help-block'>{{trans('langHomePageNavTitleHelp')}}</p>
-                                                            </div>
-                                                        </div>
-                                                        <div class='form-group mt-4'>
-                                                            <label for='externalHomepageUrl' class='col-sm-12 control-label-notes'>{{trans('langHomePageIntroUrl')}}:</label>
-                                                            <div class='col-sm-12'>
-                                                                <input class='form-control' type='text' name='landing_url' id='externalHomepageUrl' value="{!! q(get_config('landing_url')) !!}">
-                                                                <p class='help-block'>{{trans('langHomePageExtUrlHelp')}}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                --}}
-
                                             </fieldset>
                                         </div>
                                     </div>
@@ -611,13 +550,13 @@
 
 
                                     @if(!$install)
-                                    <div class='panel panel-admin mt-4' id='five'>
-                                        <div class='panel-heading'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='five'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                               {{ trans('langEmailSettings') }}
+                                               <h3>{{ trans('langEmailSettings') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                     @endif
                                                 <div class='form-group'>
@@ -716,12 +655,12 @@
                                     @endif
 
 
-                                    <div class='panel panel-admin mt-4' id='six'>
-                                        <div class='panel-heading'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='six'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                                {{ trans('langCourseSettings') }}
+                                                <h3>{{ trans('langCourseSettings') }}</h3>
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -797,14 +736,14 @@
 
 
 
-                                    <div class='panel panel-admin mt-4' id='seven'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='seven'>
 
-                                        <div class='panel-heading'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                              {{ trans('langMetaCommentary') }}
+                                              <h3>{{ trans('langMetaCommentary') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -838,13 +777,13 @@
 
 
 
-                                    <div class='panel panel-admin mt-4' id='eight'>
-                                        <div class='panel-heading'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='eight'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                                {{ trans('langOtherOptions') }}
+                                                <h3>{{ trans('langOtherOptions') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1000,7 +939,7 @@
                                                     </div>
                                                 </div>
                                                 <hr><br>
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-4'>
                                                     <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langMinPasswordLen') }}: </label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control form-control-admin' name='min_password_len' id='min_password_len' value='{{ get_config('min_password_len') }}'>
@@ -1009,7 +948,7 @@
 
 
 
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-4'>
                                                     <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('lang_max_glossary_terms') }} </label>
                                                     <div class='col-sm-12'>
                                                             <input class='form-control form-control-admin' type='text' name='max_glossary_terms' value='{{ $max_glossary_terms }}'>
@@ -1018,7 +957,7 @@
 
 
 
-                                                <div class='form-group mt-3'>
+                                                <div class='form-group mt-4'>
                                                     <label for='min_password_len' class='col-sm-12 control-label-notes'>{{ trans('langActionsExpireInterval') }} ({{ trans('langMonthsUnit') }}):</label>
                                                     <div class='col-sm-12'>
                                                             <input type='text' class='form-control form-control-admin' name='actions_expire_interval' value='{{ get_config('actions_expire_interval') }}'>
@@ -1028,14 +967,14 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-4' id='nine'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='nine'>
 
-                                        <div class='panel-heading'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                                {{ trans('langDocumentSettings') }}
+                                                <h3>{{ trans('langDocumentSettings') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                 <label class='col-sm-12 control-label-notes'>{{ trans('langEnableMyDocs') }}:</label>
@@ -1099,13 +1038,13 @@
                                         </div>
                                     </div>
 
-                                    <div class='panel panel-admin mt-4' id='ten'>
-                                        <div class='panel-heading'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='ten'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                               {{ trans('langDefaultQuota') }}
+                                               <h3>{{ trans('langDefaultQuota') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='doc_quota' class='col-sm-12 control-label-notes'>{{ trans('langDocQuota') }} (MB):</label>
@@ -1136,14 +1075,14 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4' id='eleven'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='eleven'>
 
-                                        <div class='panel-heading'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                               {{ trans('langUploadWhitelist') }}
+                                               <h3>{{ trans('langUploadWhitelist') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <label for='student_upload_whitelist' class='col-sm-12 control-label-notes'>{{ trans('langStudentUploadWhitelist') }}:</label>
@@ -1166,14 +1105,14 @@
 
 
 
-                                    <div class='panel panel-admin mt-4' id='twelve'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='twelve'>
 
-                                        <div class='panel-heading'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                               {{ trans('langLogActions') }}
+                                               <h3>{{ trans('langLogActions') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1223,14 +1162,14 @@
 
 
 
-                                    <div class='panel panel-admin mt-4' id='thirteen'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='thirteen'>
 
-                                        <div class='panel-heading'>
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
 
-                                                {{ trans('langLoginFailCheck') }}
+                                                <h3>{{ trans('langLoginFailCheck') }}</h3>
 
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1275,12 +1214,12 @@
                                     </div>
 
 
-                                    <div class='panel panel-admin mt-4' id='fourteen'>
+                                    <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='fourteen'>
 
-                                        <div class='panel-heading'>
-                                            {{ trans('langMaintenance') }}
+                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                            <h3>{{ trans('langMaintenance') }}</h3>
                                         </div>
-                                        <div class='panel-body'>
+                                        <div class='card-body'>
                                             <fieldset>
                                                 <div class='form-group'>
                                                     <div class='col-sm-12'>
@@ -1304,7 +1243,7 @@
                                                     </div>
                                                 @endforeach
                                                 <hr>
-                                                <div class='mt-3'>
+                                                <div class='mt-4'>
                                                     <label class='col-sm-12 control-label-notes mb-3'>{{ trans('langThemes') }}</label>
                                                     <div class='row'>
                                                         <div class='col-sm-6'>
@@ -1386,23 +1325,23 @@
 
                             <nav id="navbar-example3" class="navbar navbar-light bg-default flex-column align-items-stretch p-3 sticky-top BorderSolidDes Borders" style="z-index:0;">
                                 <nav class="nav nav-pills flex-column">
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#one">{{ trans('langBasicCfgSetting') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#two">{{ trans('langUpgReg') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#three">{{ trans('langSupportedLanguages') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#four">{{ trans('langHomePageSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#one">{{ trans('langBasicCfgSetting') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#two">{{ trans('langUpgReg') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#three">{{ trans('langSupportedLanguages') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#four">{{ trans('langHomePageSettings') }}</a>
 
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#five">{{ trans('langEmailSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#six">{{ trans('langCourseSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#seven">{{ trans('langMetaCommentary') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#five">{{ trans('langEmailSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#six">{{ trans('langCourseSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#seven">{{ trans('langMetaCommentary') }}</a>
 
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eight">{{ trans('langOtherOptions') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#nine">{{ trans('langDocumentSettings') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#ten">{{ trans('langDefaultQuota') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#twelve">{{ trans('langLogActions') }}</a>
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#eight">{{ trans('langOtherOptions') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#nine">{{ trans('langDocumentSettings') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#ten">{{ trans('langDefaultQuota') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#eleven">{{ trans('langUploadWhitelist') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#twelve">{{ trans('langLogActions') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#thirteen">{{ trans('langLoginFailCheck') }}</a>
 
-                                    <a class="nav-link nav-link-adminTools normalColorBlueText" href="#fourteen">{{ trans('langMaintenance') }}</a>
+                                    <a class="nav-link nav-link-adminTools Neutral-900-cl" href="#fourteen">{{ trans('langMaintenance') }}</a>
                                 </nav>
                             </nav>
                         </div>

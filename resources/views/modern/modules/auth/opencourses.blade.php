@@ -185,7 +185,7 @@
                                                                         @endif
                                                                     </div>
 
-                                                                    <div class='col-12 openCourseDes mt-3 blackBlueText pb-3'>
+                                                                    <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'>
                                                                         @if(empty($mycourse->de))
                                                                             <p class='text-center'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
                                                                         @else

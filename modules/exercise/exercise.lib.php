@@ -517,6 +517,6 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-12 mt-5 text-center fs-5 TextBold normalColorBlueText'>$langTotalScore: $totalWeighting</div>";
+        $tool_content .= "<div class='col-12 mt-5 text-center fs-5 TextBold Neutral-900-cl'>$langTotalScore: $totalWeighting</div>";
     }
 }

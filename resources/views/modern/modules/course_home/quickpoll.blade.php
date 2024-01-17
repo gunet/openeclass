@@ -21,7 +21,7 @@
         </div>
         <div class='card-body card-body-default px-0'>
             <div class='d-flex justify-content-between align-items-start' role='alert' style='margin: 0'>
-                <div>{!! standard_text_escape($theQuestion->question_text) !!}</div>
+                <p>{!! standard_text_escape($theQuestion->question_text) !!}</p>
                 @if ($show_results)
                     <script type = 'text/javascript'>
                         pollChartData = [];

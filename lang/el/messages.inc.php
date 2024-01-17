@@ -5739,7 +5739,7 @@ $langBgImg = "Εικόνα Φόντου";
 $langRepeatedImg = 'Επαναλαμβανόμενη Εικόνα';
 $langStretchedImg = 'Τεντωμένη Εικόνα';
 $langFixedImg = 'Σταθερή Εικόνα';
-$langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
+$langNavSettings = 'Σελίδα Μαθήματος';
 $langSaveAs = 'Αποθήκευση ως ...';
 $langLoginConfiguration = "Ρυθμίσεις Οθόνης Σύνδεσης";
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
@@ -5758,8 +5758,28 @@ $langPortFolioProfileContainer = "Χρώμα φόντου σύντομου πρ�
 $langBgColorWrapperJumbotron = "Gradient φόντου στο περιτύλιγμα της οθόνης σύνδεσης";
 $langBgColorWrapperHeader= "Χρώμα φόντου στο περιτύλιγμα του Header";
 $langBgColorWrapperFooter= "Χρώμα φόντου στο περιτύλιγμα του Footer";
-$langBgColorWrapperBriefProfilePortfolio = "Χρώμα φόντου στο περιτύλιγμα του σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
+$langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στο περιτύλιγμα του σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
+
+$langShadowHeader = "Σκιά στο κάτω μέρος της επικεφαλίδας";
+$langNavContainer = "Containers";
+$langNavSettingsHeader = "Επικεφαλίδα (Header)";
+$langNavSettingsFooter = "Footer";
+$langNavLinksButtons = "Σύνδεσμοι - Κουμπιά";
+$langLoginConfigurationSettings = "Οθόνη Σύνδεσης";
+$langHomepageContainer = "Χρώμα φόντου (Οθόνη σύνδεσης, Ανακοινώσεις , Δημοφιλή Μαθήματα, Στατιστικά επισκεψιμότητας) στην αρχική σελίδα";
+$langPortfolioCoursesContainer = "Χρώμα φόντου (Τα μαθήματα μου, Ανακοινώσεις, Μηνύματα) στο χαρτοφυλάκιο χρήστη";
+$langBgColorConfigRightColumn = "Ρυθμίσεις Φόντου (δεξιά στήλη που αφορά το περιεχόμενο του μαθήματος)";
+$langHelpCourseUI = "(αριστερή στήλη που αφορά τα εργαλεία του μαθήματος)";
+$langNavHyperTexts = "Επικεφαλίδες - Κείμενα";
+$langPHyperTextColor = "Χρώμα επικεφαλίδων - κειμένων";
+$langBgPanels = "Χρώμα φόντου";
+$langPanels = "Πανελς (Cards)";
+$langForms = "Φόρμες εγγραφής";
+$langBgForms = "Χρώμα φόντου";
+$langColorLabel = "Χρώμα Ετικέτας";
+$langTables = "Πίνακες";
+$langBgTables = "Χρώμα φόντου";
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

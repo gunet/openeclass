@@ -283,7 +283,7 @@ if ($is_editor) {
                 //         <div class='col-md-9 col-12'>
                 //             <div class='input-group'>
                 //                 <input class='form-control mt-0' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
-                //                 <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                //                 <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgLightwhite'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                 //             </div>
                 //         </div>
                 //     </div>
@@ -295,7 +295,7 @@ if ($is_editor) {
                 //         <div class='col-md-9 col-12'>
                 //             <div class='input-group add-on'>
                 //                 <input class='form-control mt-0' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
-                //                 <div class='input-group-addon add-on input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-clock-o fa-fw'></span></div>
+                //                 <div class='input-group-addon add-on input-group-text h-30px border-0 BordersRightInput bgLightwhite'><span class='fa fa-clock-o fa-fw'></span></div>
                 //             </div>
                 //         </div>
                 //     </div>";
@@ -335,7 +335,7 @@ if ($is_editor) {
                 //             <div class='col-md-9 col-12'>
                 //                 <div class='input-group ms-md-2'>
                 //                     <input class='form-control mt-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                //                     <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                //                     <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgLightwhite'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                 //                 </div>
                 //             </div>
                 //         </div>
@@ -555,7 +555,7 @@ if ($is_editor) {
                                         title.addClass('text-center');
 
                                         var time = element.find( '.fc-time' );
-                                        time.addClass('text-center mb-2 bagde bg-default normalBlueText');
+                                        time.addClass('text-center mb-2 bagde bg-default Primary-600-cl');
                                     },
 
                                     eventClick:  function(event) {

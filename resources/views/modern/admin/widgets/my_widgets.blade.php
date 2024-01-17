@@ -93,7 +93,7 @@
                             @endforeach
                             </div>
                             @else
-                            <div class='orangeText margin-bottom-fat'>
+                            <div class='Warning-200-cl margin-bottom-fat'>
                                 {{ trans('langNoInstalledWidgets') }}
                             </div>
                             @endif

@@ -86,10 +86,10 @@ $tool_content .= "<div class='col-12 mt-5'>";
             if (Session::has('login_error') and $authInfo[0]) {
                 $tool_content .= "<div class='col-12'>
                                     <input id='showWarningModal2' type='hidden' value='1'>
-                                    <div class='modal fade bgEclass' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                    <div class='modal fade bgLightwhite' id='WarningModal2' aria-hidden='true' tabindex='-1'>
                                         <div class='modal-dialog modal-dialog-centered'>
                                             <div class='modal-content border-0 p-0'>
-                                                <div class='modal-header bgOrange d-flex justify-content-between align-items-center'>
+                                                <div class='modal-header Warning-200-bg d-flex justify-content-between align-items-center'>
                                                     <h6 class='modal-title text-white'>$langError</h6>
                                                     <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
                                                 </div>

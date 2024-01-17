@@ -245,7 +245,7 @@ function printPollForm() {
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "
                 <div class='col-12 mb-0 text-center'>
-                   <p style='border:solid 1px #E8EDF8;' class='text-wrap p-3 Borders bg-light questionnaire-panel normalColorBlueText text-uppercase TextBold fs-6 mb-0'>" . standard_text_escape($theQuestion->question_text) . "</p>
+                   <p style='border:solid 1px #E8EDF8;' class='text-wrap p-3 Borders bg-light questionnaire-panel Neutral-900-cl text-uppercase TextBold fs-6 mb-0'>" . standard_text_escape($theQuestion->question_text) . "</p>
                 </div>";
             } else {
                 $columnPanel = 'col';
@@ -260,7 +260,7 @@ function printPollForm() {
                             $langQuestion $i
                         </div>
                         <div class='panel-body panel-body-questionaire'>
-                            <p class='TextMedium normalColorBlueText mb-2'>".q_math($theQuestion->question_text)."</p>
+                            <p class='TextMedium Neutral-900-cl mb-2'>".q_math($theQuestion->question_text)."</p>
                             <input type='hidden' name='question[$pqid]' value='$qtype'>";
                 if ($qtype == QTYPE_SINGLE || $qtype == QTYPE_MULTIPLE) {
                     $name_ext = ($qtype == QTYPE_SINGLE)? '': '[]';

@@ -915,7 +915,13 @@ tr.danger{
 /**************************************************** AFFIXED SIDENAV *************************************************/
 /**********************************************************************************************************************/
 
-.nav-link-adminTools.normalColorBlueText.active{
+.nav-link-adminTools{
+  color: #1E7E0E;
+}
+.nav-link-adminTools:hover{
+  color: #1E7E0E;
+}
+.nav-link-adminTools.Neutral-900-cl.active{
   background-color: #1E7E0E;
   color: #ffffff !important;
 }

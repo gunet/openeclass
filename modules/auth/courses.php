@@ -316,7 +316,7 @@ function expanded_faculte($facid, $uid) {
             if ($myCourses[$cid]->status != 1) { // display registered courses
                 // password needed
                 if (!empty($password)) {
-                    $requirepassword = "<br /><span class='orangeText'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
+                    $requirepassword = "<br /><span class='Warning-200-cl'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' value='" . q($password) . "' autocomplete='off' />";
                 } else {
                     $requirepassword = '';
                 }
@@ -326,7 +326,7 @@ function expanded_faculte($facid, $uid) {
             }
         } else { // display unregistered courses
             if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {
-                $requirepassword = "<br /><span class='orangeText'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
+                $requirepassword = "<br /><span class='Warning-200-cl'>$m[code]:</span> <input class='form-control' type='password' name='pass$cid' autocomplete='off' />";
             } else {
                 $requirepassword = '';
             }

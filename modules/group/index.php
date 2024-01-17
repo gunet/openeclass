@@ -761,11 +761,11 @@ if ($is_editor) {
     // Begin student view
     // ************************************
     if (($multi_reg == 0) and !$user_visible_groups) {
-        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='blackBlueText text-start'>$langSingleGroupRegInfo</p></li></ul></div>";
+        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='Neutral-900-cl text-start'>$langSingleGroupRegInfo</p></li></ul></div>";
     } else if ($multi_reg == 1) {
-        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='blackBlueText text-start'>$langMultipleGroupRegInfo</p></li></ul></div>";
+        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='Neutral-900-cl text-start'>$langMultipleGroupRegInfo</p></li></ul></div>";
     } else if (($multi_reg == 2)) {
-        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='blackBlueText text-start'>$langCategoryGroupRegInfo</p></li></ul></div>";
+        $tool_content .= "<div class='col-md-8 col-12 mx-auto d-block mb-4'><ul><li><p class='Neutral-900-cl text-start'>$langCategoryGroupRegInfo</p></li></ul></div>";
     }
 
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
@@ -803,11 +803,11 @@ if ($is_editor) {
         //     // Allow student to enter group only if he's a member
         //     if ($is_member or $is_tutor) {
         //         $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
-        //                 "</a> <span class='TextBold text-uppercase blackBlueText'>--$langMyGroup--</span>";
+        //                 "</a> <span class='TextBold text-uppercase Neutral-900-cl'>--$langMyGroup--</span>";
         //     } else {
         //         $full_group_message = '';
         //         if ($max_members > 0 and $max_members == $member_count) {
-        //            $full_group_message = " <span class='TextBold text-uppercase orangeText'>--$langGroupFull--</span>";
+        //            $full_group_message = " <span class='TextBold text-uppercase Warning-200-cl'>--$langGroupFull--</span>";
         //         }
         //         $tool_content .= q($group_name) . "$full_group_message";
         //     }

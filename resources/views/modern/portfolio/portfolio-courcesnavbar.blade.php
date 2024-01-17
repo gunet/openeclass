@@ -4,7 +4,7 @@
     <div class="col-md-6 col-12 d-flex justify-content-md-start justify-content-center">
         <div class="cources-{{$paging_type}}-num-group d-flex" >
             <div type="button" onclick="cources_paging_left('{{$paging_type}}')"> 
-                <div class="btn_left_rigth"><i class="fas fa-chevron-left  cources-paging-arrow arrow-left normalColorBlueText"></i></div> 
+                <div class="btn_left_rigth"><i class="fas fa-chevron-left  cources-paging-arrow arrow-left Neutral-900-cl"></i></div> 
             </div>&emsp;
             @for($i=0; $i<$cource_pages; $i++ )
                 @if( $i==1 )
@@ -14,7 +14,7 @@
                 
                 
                 <div type="button" onclick="cources_paging_goto('{{$paging_type}}',{{$i+1}})" 
-                    class="cources-paging-num @if( $i==0 ) lightBlueText @endif "
+                    class="cources-paging-num @if( $i==0 ) Primary-500-cl @endif "
                     @if( $i>2 && $i!=$cource_pages-1 )
                         style="display:none"
                     @endif 
@@ -26,7 +26,7 @@
                 @endif
             @endfor&emsp;
             <div type="button" onclick="cources_paging_right('{{$paging_type}}')"> 
-                <div class="btn_left_rigth"><i class="fas fa-chevron-right cources-paging-arrow arrow-right normalColorBlueText"></i></div>
+                <div class="btn_left_rigth"><i class="fas fa-chevron-right cources-paging-arrow arrow-right Neutral-900-cl"></i></div>
             </div>
         </div>
     </div>
@@ -97,8 +97,8 @@
         $(new_active_id).show();
         old_active_num = '#cources-'+type+'-num-'+old_active_index;
         new_active_num = '#cources-'+type+'-num-'+new_active_index;
-        $(old_active_num).removeClass('lightBlueText');
-        $(new_active_num).addClass('lightBlueText');
+        $(old_active_num).removeClass('Primary-500-cl');
+        $(new_active_num).addClass('Primary-500-cl');
 
         cources_paging_fix_selection_bar(type,new_active_index-1);
     }

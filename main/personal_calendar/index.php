@@ -398,7 +398,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 //                 <div class='col-12'>
                 //                     <div class='input-group'>
                 //                         <input class='form-control mt-0' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
-                //                         <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
+                //                         <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgLightwhite'><span class='add-on'><span class='fa fa-calendar fa-fw'></span></span></div>
                 //                     </div>
                 //                 </div>
                 //             </div>
@@ -411,7 +411,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                 //                 <div class='col-12'>
                 //                     <div class='input-group add-on'>
                 //                         <input class='form-control mt-0' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
-                //                         <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgEclass'><span class='fa fa-clock-o fa-fw'></span></div>
+                //                         <div class='input-group-addon input-group-text h-30px border-0 BordersRightInput bgLightwhite'><span class='fa fa-clock-o fa-fw'></span></div>
                 //                     </div>
                 //                 </div>
                 //             </div>
@@ -718,7 +718,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                         title.addClass('text-center');
 
                                         var time = element.find( '.fc-time' );
-                                        time.addClass('text-center mb-2 bagde bg-default normalBlueText');
+                                        time.addClass('text-center mb-2 bagde bg-default Primary-600-cl');
 
                                     },
 

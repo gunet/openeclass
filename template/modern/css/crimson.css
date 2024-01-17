@@ -916,7 +916,13 @@
 /**************************************************** AFFIXED SIDENAV *************************************************/
 /**********************************************************************************************************************/
 
-  .nav-link-adminTools.normalColorBlueText.active{
+  .nav-link-adminTools{
+    color: #B70A0A;
+  }
+  .nav-link-adminTools:hover{
+    color: #B70A0A;
+  }
+  .nav-link-adminTools.Neutral-900-cl.active{
     background-color: #B70A0A;
     color: #ffffff !important;
   }

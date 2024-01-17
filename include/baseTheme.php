@@ -276,31 +276,31 @@ function view($view_file, $view_data = array()) {
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 
-        $cl_cache = time();
-        //Get .css files in order to export more info about themes
-        if($theme_options->name == 'Default Dark'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".$cl_cache."'/>
-            ";
-        }
+        // $cl_cache = time();
+        // //Get .css files in order to export more info about themes
+        // if($theme_options->name == 'Default Dark'){
+        //     $head_content .= "
+        //         <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".$cl_cache."'/>
+        //     ";
+        // }
 
-        if($theme_options->name == 'Crimson'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".$cl_cache."'/>
-            ";
-        }
+        // if($theme_options->name == 'Crimson'){
+        //     $head_content .= "
+        //         <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".$cl_cache."'/>
+        //     ";
+        // }
 
-        if($theme_options->name == 'Emerald'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".$cl_cache."'/>
-            ";
-        }
+        // if($theme_options->name == 'Emerald'){
+        //     $head_content .= "
+        //         <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".$cl_cache."'/>
+        //     ";
+        // }
 
-        if($theme_options->name == 'Wood'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".$cl_cache."'/>
-            ";
-        }
+        // if($theme_options->name == 'Wood'){
+        //     $head_content .= "
+        //         <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".$cl_cache."'/>
+        //     ";
+        // }
 
 
         $styles_str .= " 
@@ -315,6 +315,8 @@ function view($view_file, $view_data = array()) {
             .inputSearch::placeholder{
                 background-color: transparent;
             }
+
+           
 
         "
         ;
@@ -349,6 +351,9 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
                                 body{
                                     background: $bg_color$bg_image;$background_type
+                                }
+                                .main-container{
+                                    background-color: $bg_color;
                                 }
                             ";
         }
@@ -501,7 +506,6 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
 
                 #bgr-cheat-header{ 
-                    box-shadow: none;
                     background-color: $theme_options_styles[BgColorWrapperHeader];
                 }
 
@@ -629,6 +633,17 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        //SHADOW TO THE BOTTOM SIDE INTO HEADER
+        if (isset($theme_options_styles['shadowHeader'])){
+            $styles_str .= " 
+                #bgr-cheat-header{ box-shadow: none; }
+            ";
+        }else{
+            $styles_str .= " 
+                #bgr-cheat-header{ box-shadow: 1px 2px 6px rgba(43,57,68,0.04); }
+            "; 
+        }
+
 
 
 
@@ -698,6 +713,13 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[whiteButtonTextColor];
                     background-color: #ffffff;
                 }
+
+                .submitAdminBtn .fa-solid::before, 
+                .submitAdminBtn .fa-regular::before,
+                .submitAdminBtn .fa-brands::before,
+                .submitAdminBtn span.fa::before{
+                    color: $theme_options_styles[whiteButtonTextColor];
+                }
             ";
         }
 
@@ -722,6 +744,13 @@ function view($view_file, $view_data = array()) {
                 .btn-outline-primary:hover,
                 .btn-outline-primary:focus{
                     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
+
+                .submitAdminBtn .fa-solid::before:hover, 
+                .submitAdminBtn .fa-regular::before:hover,
+                .submitAdminBtn .fa-brands::before:hover,
+                .submitAdminBtn span.fa::before:hover{
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
             ";
@@ -810,6 +839,10 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[buttonBgColor];
                 }
 
+                .nav-link-adminTools.Neutral-900-cl.active{
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
             ";
         }
 
@@ -872,6 +905,10 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
+                .nav-link-adminTools.Neutral-900-cl.active{
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
 
             ";
         }
@@ -928,6 +965,23 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[buttonTextColor] ;
                 }
 
+                .nav-link-adminTools.Neutral-900-cl.active{
+                    color: $theme_options_styles[buttonTextColor] !important;
+                }
+
+                .submitAdminBtnDefault span,
+                .submitAdminBtnDefault span:hover{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                .submitAdminBtnDefault .fa-solid::before, 
+                .submitAdminBtnDefault .fa-solid::before:hover,
+                .submitAdminBtnDefault .fa-regular::before,
+                .submitAdminBtnDefault .fa-regular::before:hover,
+                .submitAdminBtnDefault .fa-brands::before,
+                .submitAdminBtnDefault .fa-brands::before:hover{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
             ";
         }
 
@@ -969,6 +1023,8 @@ function view($view_file, $view_data = array()) {
 
 
 
+
+
         // BACKGROUND COLOR OF LEFT MENU
         if (!empty($theme_options_styles['leftNavBgColor'])) {
 
@@ -1004,15 +1060,7 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[linkColor] !important;
                 }
 
-                .lightBlueText { 
-                    color:$theme_options_styles[linkColor];
-                }
-                
-                .bgLightBlue { 
-                    background-color: $theme_options_styles[linkColor];
-                }
-
-                .Help-text-panel-heading, .normalColorBlueText {
+                .Help-text-panel-heading {
                     color:  $theme_options_styles[linkColor] !important;
                 }
 
@@ -1116,15 +1164,21 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
-                .normalBlueText {
-                    color: $theme_options_styles[linkColor];
-                }
-
                 .showSettings,
                 .showSettings:hover{
                     color: $theme_options_styles[linkColor] !important;
                 }
 
+                .menu-popover.submitAdminBtn, 
+                .btn-group-default .submitAdminBtn {
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .nav-link-adminTools{
+                    color: $theme_options_styles[linkColor];
+                }
+                
+                
             ";
         }
 
@@ -1166,6 +1220,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .portfolio-tools a:hover{
+                    color: $theme_options_styles[linkHoverColor];
+                }
+
+                .nav-link-adminTools:hover{
                     color: $theme_options_styles[linkHoverColor];
                 }
 
@@ -1261,6 +1319,222 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['imageUploadFooter'])){
             $image_footer = "$urlThemeData/$theme_options_styles[imageUploadFooter]";
         }
+
+        if(!empty($theme_options_styles['BgColorWrapperHomepage'])){
+            $styles_str .= "
+                @media(max-width:991px){
+                    .homepage-container{
+                      background-color: $theme_options_styles[BgColorWrapperHomepage];
+                    }
+                }
+                @media(min-width:992px){
+                    .homepage-container{
+                      background-color:$theme_options_styles[BgColorWrapperHomepage];
+                    }
+                }
+                .testimonials{
+                    background-color: $theme_options_styles[BgColorWrapperHomepage];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['BgColorWrapperPortfolioCourses'])){
+            $styles_str .= "
+                .portfolio-courses-container {
+                    background-color:$theme_options_styles[BgColorWrapperPortfolioCourses];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['RightColumnCourseBgColor'])){
+            $styles_str .= "
+                .col_maincontent_active {
+                    background-color:$theme_options_styles[RightColumnCourseBgColor];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['ColorHyperTexts'])){
+            $styles_str .= "
+                h1,h2,h3,h4,h5,h6,
+                p,strong,.li-indented,li,small,
+                .Neutral-900-cl,
+                .agenda-comment,
+                .form-label, 
+                .default-value,
+                label,
+                th,
+                td{
+                    color:$theme_options_styles[ColorHyperTexts];
+                }
+
+
+                .dataTables_wrapper .dataTables_length, 
+                .dataTables_wrapper .dataTables_filter, 
+                .dataTables_wrapper .dataTables_info, 
+                .dataTables_wrapper .dataTables_processing, 
+                .dataTables_wrapper .dataTables_paginate {
+                    color:$theme_options_styles[ColorHyperTexts] !important;
+                }
+
+
+
+            ";
+        }
+
+        if(!empty($theme_options_styles['BgPanels'])){
+            $styles_str .= "
+
+                .user-info-card,
+                .card-body{
+                    background-color:$theme_options_styles[BgPanels];
+                }
+                .panelCard{
+                    background-color:$theme_options_styles[BgPanels] !important;
+                }
+                  
+                .panelCard .card-header{
+                    background-color:$theme_options_styles[BgPanels] !important;
+                }
+                  
+                .panelCard .card-body{
+                    background-color:$theme_options_styles[BgPanels] !important;
+                }
+                  
+                .panelCard .card-footer{
+                    background-color:$theme_options_styles[BgPanels] !important;
+                }
+
+                .cardLogin{
+                    background-color:$theme_options_styles[BgPanels] !important;
+                }
+
+                .banner-body{
+                    background-color: #ffffff !important;
+                }
+            ";
+        }
+
+
+        if(!empty($theme_options_styles['BgForms']) or !empty($theme_options_styles['clLabelForms'])){
+            if(!empty($theme_options_styles['BgForms'])){
+                $styles_str .= "
+                    .form-wrapper.form-edit { 
+                        background-color: $theme_options_styles[BgForms];
+                    }
+                ";
+            }
+
+            if(!empty($theme_options_styles['clLabelForms'])){
+                $styles_str .= "
+                    .radio label{ 
+                        color:$theme_options_styles[clLabelForms];
+                    } 
+
+                    .form-wrapper.form-edit .control-label-notes{ 
+                        color:$theme_options_styles[clLabelForms];
+                    }
+
+                    .label-container {
+                        color:$theme_options_styles[clLabelForms];
+                    }
+                
+                ";
+            }
+            
+        }
+
+        if(!empty($theme_options_styles['BgTables'])){
+            $styles_str .= "
+
+                #portfolio_lessons tbody tr,
+                rgb(33, 45, 55){
+                    background-color: $theme_options_styles[BgTables];
+                }
+                .table-default tbody tr td, 
+                .announcements_table tbody tr td, 
+                table.dataTable tbody tr td, 
+                .table-default tbody tr th, 
+                .announcements_table tbody tr th, 
+                table.dataTable tbody tr th {
+                    background-color: $theme_options_styles[BgTables];
+                }
+
+                thead {
+                    background-color: $theme_options_styles[BgTables];
+                }
+
+                .row-course:hover td:first-child, .row-course:hover td:last-child{
+                    background-color: $theme_options_styles[BgTables];
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['BgListGroup']) or !empty($theme_options_styles['clListGroup'])){
+
+            if(!empty($theme_options_styles['BgListGroup'])){
+                $styles_str .= "
+
+                    .list-group-item {
+                        background-color: transparent;
+                    }
+            
+                    .list-group-default .list-group-item.element{
+                        background-color: transparent;
+                    } 
+                ";
+            }
+
+            if(!empty($theme_options_styles['clListGroup'])){
+
+                $styles_str .= "
+                    .list-group-item {
+                        color: #212529;
+                    }
+                ";
+            }
+        }
+
+        
+
+
+
+
+
+
+
+
+        $cl_cache = time();
+        //Get .css files in order to export more info about themes
+        if($theme_options->name == 'Default Dark'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".$cl_cache."'/>
+            ";
+        }
+
+        if($theme_options->name == 'Crimson'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".$cl_cache."'/>
+            ";
+        }
+
+        if($theme_options->name == 'Emerald'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".$cl_cache."'/>
+            ";
+        }
+
+        if($theme_options->name == 'Wood'){
+            $head_content .= "
+                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".$cl_cache."'/>
+            ";
+        }
+
+
+
+
+
+
 
     }
 

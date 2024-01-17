@@ -5643,9 +5643,9 @@ function show_student_assignments() {
                                 <td data-sort='$sort_id'>" . $deadline ;
 
             if ($not_started) {
-                $tool_content .= "<small><span class='orangeText'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
+                $tool_content .= "<small><span class='Warning-200-cl'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
             } else if ($row->time > 0) {
-                $tool_content .= "<br>(<small class='orangeText'>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
+                $tool_content .= "<br>(<small class='Warning-200-cl'>$langDaysLeft " . format_time_duration($row->time) . "</small>)";
             }   else if($row->deadline) {
                 $tool_content .= "<br>(<small><span class='text-danger'>$langHasExpiredS</span></small>)";
             }
@@ -5833,7 +5833,7 @@ function show_assignments() {
                             <td data-sort='$sort_id'>$deadline";
 
             if ($not_started) {
-                $tool_content .= "<small><span class='orangeText'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
+                $tool_content .= "<small><span class='Warning-200-cl'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
             } else if ($row->time > 0) {
                 $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if (intval($row->deadline)) {

@@ -125,14 +125,13 @@
 
                                     <thead>
                                         <tr class="list-header">
-
-                                            <th>{!! headlink(trans('langName'), 'name') !!}</th>
-                                            <th>{!! headlink(trans('langType'), 'type') !!}</th>
-                                            <th>{{ trans('langSize') }}</th>
-                                            <th>{!! headlink(trans('langDate'), 'date') !!}</th>
+                                            <th style='width:30%;'>{!! headlink(trans('langName'), 'name') !!}</th>
+                                            
+                                            <th style='width:30%;'>{{ trans('langSize') }}</th>
+                                            <th style='width:30%;'>{!! headlink(trans('langDate'), 'date') !!}</th>
 
                                             @unless ($is_in_tinymce)
-                                                <th>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
+                                                <th style='width:10%;'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -144,9 +143,23 @@
                                         @if($file->visible == 1 or $can_upload)
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
-                                                <td>
+                                                <td style='width:30%;'>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>
+
+                                                    @if($file->visible == 1)
+                                                        @if ($file->is_dir)
+                                                            <span class='visibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
+                                                        @else
+                                                            <span class='visibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                        @endif
+                                                    @else
+                                                        @if ($file->is_dir)
+                                                            <span class='invisibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
+                                                        @else
+                                                            <span class='invisibleFile pe-2'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
+                                                       @endif
+                                                    @endif
 
                                                     @if ($file->is_dir)
                                                         @if($file->visible == 1)
@@ -198,52 +211,38 @@
                                                     @endif
                                                 </td>
 
-                                                <td>
-                                                    @if($file->visible == 1)
-                                                        @if ($file->is_dir)
-                                                            <span class='visibleFile'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
-                                                        @else
-                                                            <span class='visibleFile'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
-                                                        @endif
-                                                    @else
-                                                        @if ($file->is_dir)
-                                                            <span class='invisibleFile'>{!! icon(choose_image('.' . $file->format), trans('langDirectory')) !!} </span>
-                                                        @else
-                                                            <span class='invisibleFile'>{!! icon(choose_image('.' . $file->format), trans('langFileName') . " " . $file->format) !!} </span>
-                                                       @endif
-                                                    @endif
-                                                </td>
+                                                
 
                                                 @if ($file->is_dir)
-                                                    <td>&nbsp;</td>
+                                                    <td style='width:30%;'>&nbsp;</td>
                                                     @if($file->visible == 1)
-                                                        <td>{{ format_locale_date(strtotime($file->date), 'short', false) }}</td>
+                                                        <td style='width:30%;'>{{ format_locale_date(strtotime($file->date), 'short', false) }}</td>
                                                     @else
-                                                        <td><span class="opacity-50 text-secondary">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
+                                                        <td style='width:30%;'><span class="opacity-50 text-secondary">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @elseif ($file->format == '.meta')
                                                     @if($file->visible == 1)
-                                                        <td>{{ format_file_size($file->size) }}</td>
-                                                        <td>{{ $file->date }}</td>
+                                                        <td style='width:30%;'>{{ format_file_size($file->size) }}</td>
+                                                        <td style='width:30%;'>{{ $file->date }}</td>
                                                     @else
-                                                        <td><span class="opacity-50">{{ format_file_size($file->size) }}</span></td>
-                                                        <td><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
+                                                        <td style='width:30%;'><span class="opacity-50">{{ format_file_size($file->size) }}</span></td>
+                                                        <td style='width:30%;'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @else
                                                     @if($file->visible == 1)
-                                                        <td>{{ format_file_size($file->size) }}</td>
-                                                        <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
+                                                        <td style='width:30%;'>{{ format_file_size($file->size) }}</td>
+                                                        <td style='width:30%;' title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
                                                     @else
-                                                        <td><span style="opacity-50">{{ format_file_size($file->size) }}</span></td>
-                                                        <td title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
+                                                        <td style='width:30%;'><span style="opacity-50">{{ format_file_size($file->size) }}</span></td>
+                                                        <td style='width:30%;' title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
                                                     @endif
 
                                                 @endif
 
                                                 @unless ($is_in_tinymce)
-                                                    <td class='text-end {{ $can_upload? 'option-btn-cell': '' }}'>
+                                                    <td style='width:10%;' class='text-end {{ $can_upload? 'option-btn-cell': '' }}'>
                                                         {!! $file->action_button !!}
                                                     </td>
                                                 @endif

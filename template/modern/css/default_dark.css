@@ -19,12 +19,6 @@
     .homepage-container{
       background-color: #212D37;
     }
-    .portfolio-profile-container{
-      background-color: #F7F9FE;
-    }
-    .portfolio-courses-container{
-      background-color: #ffffff;
-    }
   
   }
   @media(min-width:992px){
@@ -34,12 +28,6 @@
     }
     .homepage-container{
       background-color: #212D37;
-    }
-    .portfolio-profile-container{
-      background-color: #F7F9FE;
-    }
-    .portfolio-courses-container{
-      background-color: #ffffff;
     }
   
   }
@@ -159,7 +147,7 @@
   /************************************************* COLORS *************************************************************/
   /**********************************************************************************************************************/
   
-  .bg-light, .bgEclass{
+  .bg-light, .bgLightwhite{
     background-color: #212D37 !important;
   }
 
@@ -250,7 +238,6 @@
   }
   
   .Primary-200-bg{
-    /* background-color: #EFF6FF; */
     background-color: #4F6893;
   }
   .Primary-200-cl{
@@ -309,57 +296,9 @@
   .basic-value-cl{
     color: #687DA3;
   }
-  
-  .orangeText{ 
-    color: #F57600; 
-  }
-  
-  .greyText { 
-    color: #f5f5f5; 
-  }
-  
-  .bgOrange {
-    background-color: #F57600;
-  }
-  
-  .blackBlueText { 
-    color:#ffffff; 
-  }
-  
-  .bgBlackBlue { 
-    background-color: #ffffff;
-  }
-  
-  .bgNormalBlueText{
-    background-color: #74AFE9;
-  }
-  
-  .normalBlueText { 
-    color: #74AFE9; 
-  }
-  
-  .normalColorBlueText{
-    color: #ffffff !important; 
-  }
-  
-  .lightBlueText { 
-    color:#74AFE9; 
-  }
-  
-  .bgLightBlue { 
-    background-color: #74AFE9;
-  }
-  
-  .lightColor{ 
-    background-color: #f5f5f5; 
-  }
-  
+
   .greyColor { 
     background-color: #D3D3D3;
-  }
-  
-  .textgreyColor { 
-    color: #bdbdbd;
   }
 
   .bg-default{
@@ -1804,9 +1743,21 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**************************************************** AFFIXED SIDENAV *************************************************/
 /**********************************************************************************************************************/
 
-  .nav-link-adminTools.normalColorBlueText.active{
+  .nav-link-adminTools{
+    color: #74AFE9;
+  }
+  .nav-link-adminTools:hover{
+    color: #74AFE9;
+  }
+  .nav-link-adminTools.Neutral-900-cl.active{
     background-color: #74AFE9;
     color: #ffffff !important;
+  }
+
+  @media(min-width:992px){
+    .BorderSolidDes{
+      border: solid 1px #4F6893;
+    }
   }
   
 

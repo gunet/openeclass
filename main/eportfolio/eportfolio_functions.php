@@ -74,7 +74,7 @@ function render_eportfolio_fields_content($uid) {
     
             $j++;
     
-            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools normalColorBlueText' href='#IndexPortfolio$c->id'>$c->name</a>";
+            $cat_return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#IndexPortfolio$c->id'>$c->name</a>";
             
             foreach ($res as $f) {
     
@@ -170,11 +170,11 @@ function render_eportfolio_fields_form() {
             
             $return_string['panels'] .= '
            
-            <div class="panel panel-admin mb-4" id="EditPortfolio'.$c->id.'">
-                                       <div class="panel-heading">
-                                           <div class="panel-title">'.$c->name.'</div>
+            <div class="card panelCard px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
+                                       <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">
+                                           <h3>'.$c->name.'</h3>
                                        </div>
-                                       <div class="panel-body NoBorderTop">
+                                       <div class="card-body">
                                            <fieldset>';
             if ($j == 0) {
                 $active = " class='active'";
@@ -184,7 +184,7 @@ function render_eportfolio_fields_form() {
             
             $j++;
             
-            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools normalColorBlueText' href='#EditPortfolio$c->id'>$c->name</a>";
+            $return_string['right_menu'] .= "<a class='nav-link nav-link-adminTools Neutral-900-cl' href='#EditPortfolio$c->id'>$c->name</a>";
             
             foreach ($res as $f) {
 

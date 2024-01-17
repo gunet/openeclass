@@ -94,7 +94,7 @@
                             @endforeach
                             </div>
                             @else
-                            <div class='orangeText margin-bottom-fat'>
+                            <div class='Warning-200-cl margin-bottom-fat'>
                                 {{ trans('langNoInstalledWidgets') }}
                             </div>
                             @endif
@@ -112,7 +112,7 @@
 
                                         </div>
                                         <div class="panel-body">
-                                            <span class="blackBlueText">
+                                            <span class="Neutral-900-cl">
                                             {{ $uninstalled_widget->getDesc() }}
                                             </span>
                                         </div>
@@ -131,7 +131,7 @@
                                 @endforeach
                             </div>
                             @else
-                            <div class='orangeText margin-bottom-fat'>
+                            <div class='Warning-200-cl margin-bottom-fat'>
                                 {{ trans('langNoAvailableWidgets') }}
                             </div>
                             @endif
