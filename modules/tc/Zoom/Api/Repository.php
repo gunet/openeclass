@@ -5,6 +5,7 @@ namespace modules\tc\Zoom\Api;
 require_once 'include/init.php';
 
 use Database;
+use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
@@ -18,24 +19,31 @@ class Repository
     const RECORDING_NONE    =   'none';
     const RECORDING_CLOUD   =   'cloud';
     const RECORDING_LOCAL   =   'local';
+    const ACCESS_TOKEN_DURATION = 3500;
 
     /**
      * @var Client
      */
     private $client;
+    /**
+     * @var DateTime
+     */
+    private $dateTime;
 
     public function __construct(Client $client)
     {
         $this->client = $client;
+        $this->dateTime = new DateTime();
     }
 
     public function createMeeting(ZoomUser $zoomUser, string $agenda, string $topic, string $date, string $auto_recording)
     {
         $accessToken = $this->getAccessToken();
-        $record = 'none';
+        $record = self::RECORDING_NONE;
+        $this->dateTime->createFromFormat('Y-m-d H:i:s', $date);
 
-        if ($auto_recording) {
-            $record = 'cloud';
+        if ($auto_recording === 'true') {
+            $record = self::RECORDING_CLOUD;
         }
 
         $headers = [
@@ -45,14 +53,12 @@ class Repository
 
         $body = '{
               "agenda": "'.$agenda.'",
-              "default_password": false,
-              "duration": 60,
-              "password": "123456",
+              "default_password": true,
               "pre_schedule": false,
               "settings": {
                 "auto_recording": "'.$record.'"
               },
-              "start_time": "2022-01-03T19:32:55Z",
+              "start_time": "'.$this->dateTime->format(self::DATETIME_FORMAT).'",
               "timezone": "Europe/Athens",
               "topic": "'.$topic.'"
         }';
@@ -82,7 +88,7 @@ class Repository
         if (
             empty($accessTokenCreated)
             || $accessTokenCreated === 'null'
-            || (strtotime('now') - $accessTokenCreated >= 3500)
+            || (strtotime('now') - $accessTokenCreated >= self::ACCESS_TOKEN_DURATION)
         ) {
             $generateAccessToken = $this->generateAccessToken();
             $this->saveAccessTokenInDatabase($generateAccessToken);
@@ -152,7 +158,9 @@ class Repository
 
     private function getAccessTokenCreation()
     {
-        $q = Database::get()->querySingle("SELECT `value` AS `key_creation` FROM `config` WHERE `key` = 'zoomApiAccessTokenCreated'");
+        $q = Database::get()->querySingle("SELECT `value` AS `key_creation` 
+                                                    FROM `config` 
+                                                    WHERE `key` = 'zoomApiAccessTokenCreated'");
         return $q->key_creation;
     }
 
