@@ -122,7 +122,7 @@ if ($can_upload) {
       $flex_grow = 'flex-grow-1';
       $column_content = 'form-content-modules';
     }else{
-      $flex_content = 'row m-auto'; 
+      $flex_content = 'row m-auto';
       $flex_grow = 'col-lg-6 col-12 px-0';
       $column_content = 'col-lg-6 col-12';
     }
@@ -165,10 +165,10 @@ $tool_content .= "<div class='$flex_content mt-4'>
                                 <div class='col-sm-12'>
                                   <select class='form-select' name='file_category'>
                                     <option selected='selected' value='0'>$langCategoryOther</option>
-                                    <option value='1'>$langCategoryExcercise</option>
+                                    <option value='1'>$langExercise</option>
                                     <option value='2'>$langCategoryLecture</option>
                                     <option value='3'>$langCategoryEssay</option>
-                                    <option value='4'>$langCategoryDescription</option>
+                                    <option value='4'>$langDescription</option>
                                     <option value='5'>$langCategoryExample</option>
                                     <option value='6'>$langCategoryTheory</option>
                                   </select>

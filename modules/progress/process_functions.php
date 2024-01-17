@@ -1055,7 +1055,7 @@ function resource_usage($element, $element_resource_id) {
  */
 function get_resource_details($element, $resource_id) {
 
-    global $course_id, $langCategoryExcercise, $langAssignment, $langLearnPath, $langNumOfForums,
+    global $course_id, $langExercise, $langAssignment, $langLearnPath, $langNumOfForums,
             $langDocument, $langVideo, $langsetvideo, $langEBook, $langMetaQuestionnaire,
             $langBlog, $langForums, $langWikiPages, $langNumOfBlogs, $langCourseParticipation,
             $langWiki, $langAllActivities, $langComments, $langCommentsBlog, $langCommentsCourse,
@@ -1077,7 +1077,7 @@ function get_resource_details($element, $resource_id) {
                 if ($q) {
                     $title = $q->title;
                 }
-                $type = "$langCategoryExcercise";
+                $type = "$langExercise";
                 break;
         case AssignmentEvent::ACTIVITY:
                 $q = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.course_id = ?d AND assignment.id = ?d", $course_id, $resource);

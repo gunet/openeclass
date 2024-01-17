@@ -35,7 +35,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
 
-$toolName = $langCourseDescription;
+$toolName = $langSyllabus;
 
 ModalBoxHelper::loadModalBox();
 

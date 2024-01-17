@@ -2,20 +2,20 @@
 
 @section('content')
 
-    <div class="col-12 main-section">   
+    <div class="col-12 main-section">
     <div class='{{ $container }} module-container py-lg-0'>
             <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
-                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0"> 
+                <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
                     <div class="d-none d-sm-block d-sm-none d-md-block d-md-none d-lg-block ContentLeftNav">
                         @include('layouts.partials.sidebar',['is_editor' => $is_editor])
                     </div>
                 </div>
 
                 <div class="col_maincontent_active">
-                    
+
                     <div class="row">
-                        
+
                         @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
                         <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
@@ -30,11 +30,11 @@
                         @include('layouts.partials.legend_view')
 
                         {!! $backButton !!}
-                        
+
                         @if(Session::has('message'))
                         <div class='col-12 all-alerts'>
                             <div class="alert {{ Session::get('alert-class', 'alert-info') }} alert-dismissible fade show" role="alert">
-                                @php 
+                                @php
                                     $alert_type = '';
                                     if(Session::get('alert-class', 'alert-info') == 'alert-success'){
                                         $alert_type = "<i class='fa-solid fa-circle-check fa-lg'></i>";
@@ -46,7 +46,7 @@
                                         $alert_type = "<i class='fa-solid fa-circle-xmark fa-lg'></i>";
                                     }
                                 @endphp
-                                
+
                                 @if(is_array(Session::get('message')))
                                     @php $messageArray = array(); $messageArray = Session::get('message'); @endphp
                                     {!! $alert_type !!}<span>
@@ -56,19 +56,19 @@
                                 @else
                                     {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                 @endif
-                                
+
                                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         </div>
                         @endif
-                        
-                        
-                        
+
+
+
                         @if ($can_upload)
-                            
+
                                 <div class='col-12'>
                                     <div class='form-wrapper form-edit p-3 mt-2 rounded'>
-                                        
+
                                         <form class='form-horizontal' role='form' action='{{ $upload_target_url }}' method='post' enctype='multipart/form-data'>
                                             <input type='hidden' name='uploadPath' value='{{ $uploadPath }}'>
                                             @if ($externalFile)
@@ -95,7 +95,7 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileTitle' class='col-sm-6 control-label-notes'>{{ trans('langTitle') }}:</label>
@@ -104,7 +104,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileComment' class='col-sm-6 control-label-notes'>{{ trans('langComment') }}:</label>
@@ -113,17 +113,17 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileCategory' class='col-sm-6 control-label-notes'>{{ trans('langCategory') }}:</label>
                                                 <div class='col-sm-12'>
                                                 <select class='form-select' name='file_category'>
                                                     <option selected value='0'>{{ trans('langCategoryOther') }}</option>
-                                                    <option value='1'>{{ trans('langCategoryExcercise') }}</option>
+                                                    <option value='1'>{{ trans('langExercise') }}</option>
                                                     <option value='2'>{{ trans('langCategoryLecture') }}</option>
                                                     <option value='3'>{{ trans('langCategoryEssay') }}</option>
-                                                    <option value='4'>{{ trans('langCategoryDescription') }}</option>
+                                                    <option value='4'>{{ trans('langDescription') }}</option>
                                                     <option value='5'>{{ trans('langCategoryExample') }}</option>
                                                     <option value='6'>{{ trans('langCategoryTheory') }}</option>
                                                 </select>
@@ -132,7 +132,7 @@
                                                 <input type='hidden' name='file_creator' value='{{ $_SESSION['givenname'] . ' ' . $_SESSION['surname'] }}' size='40'>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileSubject' class='col-sm-6 control-label-notes'>{{ trans('langSubject') }}:</label>
@@ -141,7 +141,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileDescription' class='col-sm-6 control-label-notes'>{{ trans('langDescription') }}:</label>
@@ -150,7 +150,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileAuthor' class='col-sm-6 control-label-notes'>{{ trans('langAuthor') }}:</label>
@@ -159,7 +159,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <input type='hidden' name='file_date' value='' size='40'>
@@ -171,7 +171,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <label for='inputFileCopyright' class='col-sm-6 control-label-notes'>{{ trans('langCopyrighted') }}:</label>
@@ -180,7 +180,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             @unless ($externalFile)
                                                 <div class='form-group'>
@@ -194,9 +194,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            @endunless 
+                                            @endunless
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <div class='col-sm-offset-2 col-sm-12'>
@@ -210,7 +210,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='row'>
                                                 <div class='infotext col-sm-offset-2 col-sm-12 margin-bottom-fat'>{{ trans('langNotRequired') }}
@@ -219,7 +219,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="row p-2"></div>     
+                                            <div class="row p-2"></div>
 
                                             <div class='form-group'>
                                                 <div class='col-xs-offset-2 col-xs-12'>
@@ -227,18 +227,18 @@
                                                     <a class='btn btn-secondary' href='{{ $backUrl }}'>{{ trans('langCancel') }}</a>
                                                 </div>
                                             </div>
-                                            
+
                                         </form>
                                     </div>
                                 </div>
-                            
+
                         @else
                         <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langNotAllowed') }}</span></div>
                         @endif
                     </div>
                 </div>
             </div>
-        
+
     </div>
     </div>
 @endsection

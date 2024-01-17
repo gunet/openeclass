@@ -28,9 +28,9 @@ $require_editor = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.class.php';
 
-$toolName = $langCourseDescription;
+$toolName = $langSyllabus;
 $pageName = $langEditCourseProgram;
-$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langSyllabus);
 
 if (isset($_REQUEST['id'])) {
     $data['editId'] = intval(getDirectReference($_REQUEST['id']));
