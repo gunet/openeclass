@@ -887,6 +887,10 @@ function view($view_file, $view_data = array()) {
                 .group-section .list-group-item .accordion-btn{
                     color: $theme_options_styles[clAccordions];
                 }
+
+                .list-group-default .list-group-btn.collapsed{
+                    color: $theme_options_styles[clAccordions];
+                }
             ";
         }
 
@@ -965,6 +969,14 @@ function view($view_file, $view_data = array()) {
                 .list-group-default .list-group-item.element{
                     background-color: $theme_options_styles[bgLists];
                 }
+
+                .list-group-default .list-group-item.element:hover{
+                    background-color: $theme_options_styles[bgLists];
+                }
+
+                .list-group-default .list-group-item:has(.collapsed){
+                    background-color: $theme_options_styles[bgLists];
+                }
             ";
         }
 
@@ -998,6 +1010,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .profile-pers-info-row{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+
+                .list-group-default .list-group-item:has(.collapsed){
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
                 }
                 
@@ -2063,6 +2079,19 @@ function view($view_file, $view_data = array()) {
                 .card .card-footer{
                     background-color:$theme_options_styles[BgPanels] !important;
                 }
+
+                .panel-copyright{
+                    background-color: $theme_options_styles[BgPanels] ;
+                }
+
+                .testimonials .testimonial {
+                    background: $theme_options_styles[BgPanels] ;
+                }
+
+                /* active testimonial */
+                .testimonial.slick-slide.slick-current.slick-active.slick-center{
+                    background-color: $theme_options_styles[BgPanels] ;
+                }
             ";
         }
 
@@ -2094,6 +2123,19 @@ function view($view_file, $view_data = array()) {
 
                 .wallWrapper{
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .panel-copyright{
+                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .testimonials .testimonial {
+                    border: solid 1px $theme_options_styles[clBorderPanels] ;
+                }
+
+                /* active testimonial */
+                .testimonial.slick-slide.slick-current.slick-active.slick-center{
+                    border: solid 1px $theme_options_styles[clBorderPanels] ;
                 }
 
             ";

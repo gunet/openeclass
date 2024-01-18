@@ -11,7 +11,7 @@
                     <div class="col-12 mt-4">
                         
                     
-                        <div class='border-card Borders bg-default p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
+                        <div class='panel-copyright border-card Borders bg-default p-lg-5 p-3'>{!! trans('langCopyrightNotice') !!}</div>
                     </div>
                
         </div>
