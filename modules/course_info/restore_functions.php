@@ -1312,7 +1312,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
             $vlike = '/' . $videofile;
 
-            if (!isWhitelistAllowed($videofile)) {
+            if (!isWhitelistAllowed($videofile) and !$clone_course) {
                 unlink($videodir . "/" . $videofile);
                 Database::get()->query("DELETE FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike);
                 continue;
