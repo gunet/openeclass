@@ -52,12 +52,12 @@
                         <table id='search_results_table' class='table-default display'>
                             <thead class='list-header'>
                                 <tr>
-                                <th width='150'>{{ trans('langSurname') }}</th>
-                                <th width='100'>{{ trans('langName') }}</th>
-                                <th width='170'>{{ trans('langUsername') }}</th>
+                                <th>{{ trans('langSurname') }}</th>
+                                <th>{{ trans('langName') }}</th>
+                                <th>{{ trans('langUsername') }}</th>
                                 <th>{{ trans('langEmail') }}</th>
-                                <th>{{ trans('langProperty') }}</th>
-                                <th width='130'>{!! icon('fa-gears') !!}</th>
+                                <th style='width:5%;'>{{ trans('langProperty') }}</th>
+                                <th style='width:5%;'>{!! icon('fa-gears') !!}</th>
                                 </tr>
                             </thead>
                             <!-- DO NOT DELETE THESE EMPTY COLUMNS -->

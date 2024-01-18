@@ -5761,7 +5761,7 @@ $langBgColorWrapperFooter= "Χρώμα φόντου στο περιτύλιγμ�
 $langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στο περιτύλιγμα του σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
 
-$langShadowHeader = "Σκιά στο κάτω μέρος της επικεφαλίδας";
+$langShadowHeader = "Shadow στο κάτω μέρος της επικεφαλίδας";
 $langNavContainer = "Containers";
 $langNavSettingsHeader = "Επικεφαλίδα (Header)";
 $langNavSettingsFooter = "Footer";

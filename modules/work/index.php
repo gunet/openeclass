@@ -5571,7 +5571,7 @@ function show_student_assignments() {
 
     if (count($result) > 0) {
         if (get_config('eportfolio_enable')) {
-            $add_eportfolio_res_th = "<th>".icon('fa-gears')."</th>";
+            $add_eportfolio_res_th = "<th style='width:10%;'>".icon('fa-gears')."</th>";
         } else {
             $add_eportfolio_res_th = "";
         }
@@ -5583,7 +5583,7 @@ function show_student_assignments() {
                 <table id='assignment_table' class='table-default'>
                   <thead>
                       <tr class='list-header'>
-                          <th style='width:45%'>$langTitle</th>
+                          <th style='width:40%'>$langTitle</th>
                           <th style='width:25%'>$langGroupWorkDeadline_of_Submission</th>
                           <th class='text-center'>$m[submitted]</th>
                           <th class='text-center'>$langGradebookGrade</th>
@@ -5682,10 +5682,10 @@ function show_student_assignments() {
 
             if (get_config('eportfolio_enable')) {
                 if ($eportfolio_action_array) {
-                    $tool_content .= "<td class='text-end'>" .
+                    $tool_content .= "<td class='text-end' style='width:10%;'>" .
                         action_button($eportfolio_action_array) . "</td>";
                 } else {
-                    $tool_content .= '<td>&nbsp;</td>';
+                    $tool_content .= '';
                 }
             }
             $tool_content .= "</tr>";
@@ -5762,11 +5762,11 @@ function show_assignments() {
                     <table id='assignment_table' class='table-default'>
                     <thead>
                     <tr class='list-header'>
-                      <th style='width:45%;'>$langTitle</th>
-                      <th>$m[subm]</th>
-                      <th>$m[nogr]</th>
-                      <th>$langGroupWorkDeadline_of_Submission</th>
-                      <th>" . icon('fa-gears') . "</th>
+                      <th style='width:40%;'>$langTitle</th>
+                      <th class='text-center'>$m[subm]</th>
+                      <th class='text-center'>$m[nogr]</th>
+                      <th style='width:25%;'>$langGroupWorkDeadline_of_Submission</th>
+                      <th style='width:10%;'>" . icon('fa-gears') . "</th>
                     </tr>
                     </thead>
                     <tbody>";
@@ -5823,24 +5823,24 @@ function show_assignments() {
                 $deadline = '';
             }
             $tool_content .= "<tr class='".((!$row->active or $not_started)? "not_visible":"")."'>";
-            $tool_content .= "<td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+            $tool_content .= "<td style='width:40%;'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                                 $exclamation_icon
                                 $turnitin_message
                                 <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                                 $assign_to_users_message
-                            <td>$num_submitted</td>
-                            <td>$num_ungraded</td>
-                            <td data-sort='$sort_id'>$deadline";
+                            <td class='text-center'>$num_submitted</td>
+                            <td class='text-center'>$num_ungraded</td>
+                            <td data-sort='$sort_id' style='width:25%;'>$deadline";
 
             if ($not_started) {
                 $tool_content .= "<small><span class='Warning-200-cl'>$langWillStartAt: " . format_locale_date(strtotime($row->submission_date)). "</span></small>";
             } else if ($row->time > 0) {
-                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
+                $tool_content .= " <br><span><small class='label label-warning'>$langDaysLeft " . format_time_duration($row->time) . "</small></span>";
             } else if (intval($row->deadline)) {
-                $tool_content .= " <br><span class='label label-danger'><small>$langHasExpiredS</small></span>";
+                $tool_content .= " <br><span><small class='label label-danger'>$langHasExpiredS</small></span>";
             }
            $tool_content .= "</td>
-              <td class='text-end'>";
+              <td style='width:10%;' class='text-end'>";
               if ($is_editor) {
                   $tool_content .= action_button(array(
                       array('title' => $langEditChange,

@@ -113,9 +113,9 @@
                                     <thead>
                                         <tr class='list-header'>
                                             <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
-                                            <th>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
+                                            <th style='width:15%;'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
                                             @if (!$is_in_tinymce)
-                                                <th></th>
+                                                <th style='width:10%;'></th>
                                             @endif
                                         </tr>
                                     </thead>

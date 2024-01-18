@@ -2,10 +2,10 @@
 @foreach ($items as $result)
     <tr class='{{ $result->row_class }}'>
         <td class='nocategory-link'>{!! $result->link_href !!}{!! $result->extradescription !!}</td>
-        <td>{{ format_locale_date(strtotime($result->myrow->date), 'short', false) }}</td>
+        <td style='width:15%;'>{{ format_locale_date(strtotime($result->myrow->date), 'short', false) }}</td>
         @if (!$is_in_tinymce)
             @if ($display_tools)
-            <td class='option-btn-cell text-end'>
+            <td class='option-btn-cell text-end' style='width:10%;'>
                 {!!
                 action_button(array(
                     array('title' => $GLOBALS['langEditChange'],
@@ -48,7 +48,7 @@
                 !!}
             </td>
             @else
-            <td class='text-center'>
+            <td class='text-end'>
                 {!! ($result->table == 'video') ? icon('fa-download', $GLOBALS['langDownload'], $result->link_to_save) : '&nbsp;' !!}
             </td>
             @endif

@@ -600,8 +600,8 @@ if (isset($_GET['mid'])) {
         $out .= "    <th>$langCourse</th>";
     }
     $out .= "         <th>$langSender</th>
-                      <th>$langDate</th>
-                      <th class='option-btn-cell'><i class='fa fa-cogs'></i></th>
+                      <th style='width:15%;'>$langDate</th>
+                      <th style='width:10%;' class='option-btn-cell'><i class='fa fa-cogs'></i></th>
                     </tr>
                 </thead>
                 <tbody>

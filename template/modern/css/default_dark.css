@@ -2764,5 +2764,7 @@ tr.warning:hover{
     background-color: #212D37 !important;
   }
 
-
+  .list-group-item {
+      border-bottom: solid 1px #4F6893;
+  }
   

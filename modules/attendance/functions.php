@@ -49,11 +49,11 @@ function display_attendances() {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>
-                            <th>$langAvailableAttendances</th>
-                            <th>$langStart</th>
-                            <th>$langFinish</th>";
+                            <th style='width:46%;'>$langAvailableAttendances</th>
+                            <th style='width:22%;'>$langStart</th>
+                            <th style='width:22%;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th style='width:10%;'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $a) {
@@ -62,13 +62,13 @@ function display_attendances() {
             $row_class = !$a->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
-                        <td>
+                        <td style='width:46%;'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".q($a->title)."</a>
                         </td>
-                        <td>$start_date</td>
-                        <td>$end_date</td>";
+                        <td style='width:22%;'>$start_date</td>
+                        <td style='width:22%;'>$end_date</td>";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-end'>";
+                $tool_content .= "<td style='width:10%;' class='option-btn-cell text-end'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",

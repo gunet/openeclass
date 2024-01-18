@@ -1009,29 +1009,29 @@ function display_gradebooks() {
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>
         
-                            <th>$langAvailableGradebooks</th>
-                            <th>$langStart</th>
-                            <th>$langFinish</th>";
+                            <th style='width:46%;'>$langAvailableGradebooks</th>
+                            <th style='width:22%;'>$langStart</th>
+                            <th style='width:22%;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-end'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th style='width:10%;' class='text-end'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
-                        <td>
+                        <td style='width:46%;'>
                             <div class='table_td'>
                                 <div class='tahle_td_header'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a>
                                 </div>
                             </div>
                         </td>
-                        <td>" . format_locale_date(strtotime($g->start_date), 'short') . "</td>
-                        <td>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
+                        <td style='width:22%;'>" . format_locale_date(strtotime($g->start_date), 'short') . "</td>
+                        <td style='width:22%;'>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
                         ";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-end'>";
+                $tool_content .= "<td style='width:10%;' class='option-btn-cell text-end'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;editSettings=1",

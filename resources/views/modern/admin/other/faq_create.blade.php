@@ -252,7 +252,7 @@
                                     </div>
                                 @else
                                     @foreach ($faqs as $key => $faq)
-                                        <div class='bg-default mb-4 p-3' data-id='{{ $faq->id }}'>
+                                        <div class='bg-default mb-4 p-3 border-bottom-custom' data-id='{{ $faq->id }}'>
                                             <div class='d-flex justify-content-between align-items-center' role='tab' id='heading-{{ $faq->id }}'>
                                                 <div>
                                                     <a data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>

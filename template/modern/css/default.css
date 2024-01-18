@@ -4071,6 +4071,9 @@ div[role="progressbar"]::before {
   font-weight: 700;
   font-style: normal;
 }
+.panelCard .card-header h3{
+  margin-bottom: 0px;
+}
 
 @media(max-width:991px){
   .panelCard .card-body{
