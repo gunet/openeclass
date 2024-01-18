@@ -2057,7 +2057,7 @@ input[type="submit"].warningAdminBtn:hover {
   font-size: 14px;
   letter-spacing: 0px;
   line-height: 16px;
-  background-color: #ffffff;
+  background-color: transparent;
   min-height: 40px;
 }
 
@@ -3255,7 +3255,7 @@ table{
 
 .list-group-default .list-group-item{
   background-color: #EFF2FB;
-  border-bottom: #EFF2FB;
+  border-bottom: solid 1px #EFF2FB;
 }
 .list-group-default .list-group-item:hover{
   cursor:  url(../images/pointer.png), auto;

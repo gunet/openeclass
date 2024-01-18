@@ -647,7 +647,7 @@
   .contextual-menu input[type="submit"]{
     border-bottom: solid 1px #EFF6FF;
     color: #2B3944;
-    background-color: #ffffff;
+    background-color: transparent;
   }
   .contextual-menu .list-group-item .settings-icons::before{
     color: #2B3944;

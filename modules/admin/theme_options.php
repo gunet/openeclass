@@ -24,20 +24,22 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables'),
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,'bgContextualMenu', 'bgColorListMenu'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor'),
-                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms'),
-                'rgba(0, 115, 230, 1)' => array('linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions'),
+                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu'),
+                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
-                "rgba(77,161,228,1)" => array('linkColor', 'leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
-                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader'),
+                "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
+                "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 'clHoveredListMenu', 'bgHoveredListMenu'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
                 "rgba(104, 125, 163, 1)" => array('clAccordions'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions'),
+                "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
+                "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -624,16 +626,18 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link active' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsHeader' aria-controls='navsettingsHeader' role='tab' data-bs-toggle='tab'>$langNavSettingsHeader</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsFooter' aria-controls='navsettingsFooter' role='tab' data-bs-toggle='tab'>$langNavSettingsFooter</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navlinksButtons' aria-controls='navlinksButtons' role='tab' data-bs-toggle='tab'>$langNavLinksButtons</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navHyperTexts' aria-controls='navHyperTexts' role='tab' data-bs-toggle='tab'>$langNavHyperTexts</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navPanels' aria-controls='navPanels' role='tab' data-bs-toggle='tab'>$langPanels</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navForms' aria-controls='navForms' role='tab' data-bs-toggle='tab'>$langForms</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTables' aria-controls='navTables' role='tab' data-bs-toggle='tab'>$langTables</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTabs' aria-controls='navTabs' role='tab' data-bs-toggle='tab'>$langTabs</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navAccordions' aria-controls='navAccordions' role='tab' data-bs-toggle='tab'>$langAccordions</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navLists' aria-controls='navLists' role='tab' data-bs-toggle='tab'>$langLists</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navContextualMenu' aria-controls='navContextualMenu' role='tab' data-bs-toggle='tab'>$langContextualMenu</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -1232,6 +1236,10 @@ $tool_content .= "
                         <label for='BgPanels' class='control-label-notes mb-2 me-2'>$langBgPanels:</label>
                         <input name='BgPanels' type='text' class='form-control colorpicker' id='BgPanels' value='$theme_options_styles[BgPanels]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderPanels' class='control-label-notes mb-2 me-2'>$langclBorderPanels:</label>
+                        <input name='clBorderPanels' type='text' class='form-control colorpicker' id='clBorderPanels' value='$theme_options_styles[clBorderPanels]'>
+                    </div>
                 </div>
             </div>
 
@@ -1348,6 +1356,105 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clActiveAccordions' class='control-label-notes mb-2 me-2'>$langActiveTextColor:</label>
                         <input name='clActiveAccordions' type='text' class='form-control colorpicker' id='clActiveAccordions' value='$theme_options_styles[clActiveAccordions]'>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navLists'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLists</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgLists' class='control-label-notes mb-2 me-2'>$langBgColorList:</label>
+                        <input name='bgLists' type='text' class='form-control colorpicker' id='bgLists' value='$theme_options_styles[bgLists]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderBottomLists' class='control-label-notes mb-2 me-2'>$langclBorderBottomLists:</label>
+                        <input name='clBorderBottomLists' type='text' class='form-control colorpicker' id='clBorderBottomLists' value='$theme_options_styles[clBorderBottomLists]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clLists' class='control-label-notes mb-2 me-2'>$langclLists:</label>
+                        <input name='clLists' type='text' class='form-control colorpicker' id='clLists' value='$theme_options_styles[clLists]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredLists' class='control-label-notes mb-2 me-2'>$langclHoveredLists:</label>
+                        <input name='clHoveredLists' type='text' class='form-control colorpicker' id='clHoveredLists' value='$theme_options_styles[clHoveredLists]'>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navContextualMenu'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langContextualMenuInfo</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgContextualMenu' class='control-label-notes mb-2 me-2'>$langBgColorMenuCont:</label>
+                        <input name='bgContextualMenu' type='text' class='form-control colorpicker' id='bgContextualMenu' value='$theme_options_styles[bgContextualMenu]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgBorderContextualMenu' class='control-label-notes mb-2 me-2'>$langbgBorderContextualMenu:</label>
+                        <input name='bgBorderContextualMenu' type='text' class='form-control colorpicker' id='bgBorderContextualMenu' value='$theme_options_styles[bgBorderContextualMenu]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgColorListMenu' class='control-label-notes mb-2 me-2'>$langBgColorListMenu:</label>
+                        <input name='bgColorListMenu' type='text' class='form-control colorpicker' id='bgColorListMenu' value='$theme_options_styles[bgColorListMenu]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgHoveredListMenu' class='control-label-notes mb-2 me-2'>$langbgHoveredListMenu:</label>
+                        <input name='bgHoveredListMenu' type='text' class='form-control colorpicker' id='bgHoveredListMenu' value='$theme_options_styles[bgHoveredListMenu]'>
+                    </div>
+                    
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderBottomListMenu' class='control-label-notes mb-2 me-2'>$langclBorderBottomListMenu:</label>
+                        <input name='clBorderBottomListMenu' type='text' class='form-control colorpicker' id='clBorderBottomListMenu' value='$theme_options_styles[clBorderBottomListMenu]'>
+                    </div>
+                    
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clListMenu' class='control-label-notes mb-2 me-2'>$langclListMenu:</label>
+                        <input name='clListMenu' type='text' class='form-control colorpicker' id='clListMenu' value='$theme_options_styles[clListMenu]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredListMenu' class='control-label-notes mb-2 me-2'>$langclHoveredclHoveredListMenu:</label>
+                        <input name='clHoveredListMenu' type='text' class='form-control colorpicker' id='clHoveredListMenu' value='$theme_options_styles[clHoveredListMenu]'>
+                    </div>
+
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clListMenuUsername' class='control-label-notes mb-2 me-2'>$langclListMenuUsername:</label>
+                        <input name='clListMenuUsername' type='text' class='form-control colorpicker' id='clListMenuUsername' value='$theme_options_styles[clListMenuUsername]'>
                     </div>
                 </div>
             </div>

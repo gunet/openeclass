@@ -492,49 +492,46 @@ function view($view_file, $view_data = array()) {
 
             $styles_str .= "
             
-            @media(min-width:1400px) and (max-width:1500px){
-                .main-section:has(.course-wrapper) .form-image-modules{
-                    max-width: 450px;
-                    float:right;
+                @media(min-width:1400px) and (max-width:1500px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: 450px;
+                        float:right;
+                    }
                 }
-            }
-            @media(min-width:1501px) and (max-width:1600px){
-                .main-section:has(.course-wrapper) .form-image-modules{
-                    max-width: 470px;
-                    float:right;
+                @media(min-width:1501px) and (max-width:1600px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: 470px;
+                        float:right;
+                    }
                 }
-            }
-            @media(min-width:1601px) and (max-width:1700px){
-                .main-section:has(.course-wrapper) .form-image-modules{
-                    max-width: 490px;
-                    float:right;
+                @media(min-width:1601px) and (max-width:1700px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: 490px;
+                        float:right;
+                    }
                 }
-            }
-            @media(min-width:1701px) and (max-width:1800px){
-                .main-section:has(.course-wrapper) .form-image-modules{
-                    max-width: 510px;
-                    float:right;
+                @media(min-width:1701px) and (max-width:1800px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: 510px;
+                        float:right;
+                    }
                 }
-            }
-            @media(min-width:1801px){
-                .main-section:has(.course-wrapper) .form-image-modules{
-                    max-width: 530px;
-                    float:right;
+                @media(min-width:1801px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: 530px;
+                        float:right;
+                    }
                 }
-            }
-            @media(min-width:1901px){
-                .main-section:has(.course-wrapper) .form-image-modules{
-                    max-width: 550px;
-                    float:right;
+                @media(min-width:1901px){
+                    .main-section:has(.course-wrapper) .form-image-modules{
+                        max-width: 550px;
+                        float:right;
+                    }
                 }
-            }
-            
-            .main-section:not(:has(.course-wrapper)) .form-image-modules{
-                width:auto;
-            } 
-            
-            
-            
+                
+                .main-section:not(:has(.course-wrapper)) .form-image-modules{
+                    width:auto;
+                } 
             ";
         }
 
@@ -568,7 +565,11 @@ function view($view_file, $view_data = array()) {
                 td,
                 .panel-body,
                 .card-body,
-                div{
+                div,
+                .visibleFile,
+                .list-group-item,
+                .help-block,
+                .control-label-notes{
                     color:$theme_options_styles[ColorHyperTexts];
                 }
 
@@ -900,6 +901,14 @@ function view($view_file, $view_data = array()) {
                 .group-section .list-group-item{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
                 }
+
+                .border-bottom-default{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
+                }
+
+                .border-bottom-custom{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
+                }
             ";
         }
 
@@ -932,104 +941,132 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BACKGROUND COLOR OF LIST GROUP //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgLists'])){
+            $styles_str .= "
+
+                .list-group .list-group-item{
+                    background-color: $theme_options_styles[bgLists];
+                }
+
+                .list-group-item.element{
+                    background-color: $theme_options_styles[bgLists];
+                }
+                
+                .list-group-default .list-group-item{
+                    background-color: $theme_options_styles[bgLists];
+                }
+
+                .list-group-default .list-group-item.element{
+                    background-color: $theme_options_styles[bgLists];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BORDER BOTTOM OF LIST GROUP /////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clBorderBottomLists'])){
+            $styles_str .= "
+
+                .list-group-item.element{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+                
+                .list-group-default .list-group-item{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+
+                .list-group-default .list-group-item.element{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+
+                .border-bottom-list-group{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+
+                .admin-list-group{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+
+                .profile-pers-info-row{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomLists];
+                }
+                
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// COLOR LINK OF LIST GROUP /////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clLists'])){
+            $styles_str .= "
+
+                .list-group-item .categoryName{
+                    color: $theme_options_styles[clLists];
+                }
+
+                .list-group-item a{
+                    color: $theme_options_styles[clLists];
+                }
+
+                .list-group-item a span{
+                    color: $theme_options_styles[clLists];
+                }
+
+                .list-group-default .list-group-btn{
+                    color: $theme_options_styles[clLists];
+                }
+
+                .announce-link-homepage{
+                    color: $theme_options_styles[clLists];
+                }
+                
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// HOVERED COLOR LINK OF LIST GROUP ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clHoveredLists'])){
+            $styles_str .= "
+
+                .list-group-item .categoryName:hover{
+                    color: $theme_options_styles[clHoveredLists];
+                }
+
+                .list-group-item a:hover{
+                    color: $theme_options_styles[clHoveredLists];
+                }
+
+                .list-group-item a span:hover{
+                    color: $theme_options_styles[clHoveredLists];
+                }
+
+                .list-group-default .list-group-btn:hover{
+                    color: $theme_options_styles[clHoveredLists];
+                }
+
+                .announce-link-homepage:hover{
+                    color: $theme_options_styles[clLists];
+                }
+                
+            ";
+        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -1367,9 +1404,6 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-
-
-
         // Override button with white background if needed
         if (empty($theme_options_styles['whiteButtonTextColor'])) {
             $styles_str .= "
@@ -1401,6 +1435,249 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BACKGROUND COLOR CONTEXTUAL MENU ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgContextualMenu'])) {
+            $styles_str .= "
+                .contextual-menu{
+                    background-color: $theme_options_styles[bgContextualMenu];
+                }
+
+                .contextual-menu-user::-webkit-scrollbar-track {
+                    background-color: $theme_options_styles[bgContextualMenu];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// BORDER COLOR CONTEXTUAL MENU /////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgBorderContextualMenu'])) {
+            $styles_str .= "
+                .contextual-menu{
+                    border: solid 1px $theme_options_styles[bgBorderContextualMenu];
+                }
+
+                .contextual-menu-user{
+                    border: solid 1px $theme_options_styles[bgBorderContextualMenu];
+                }
+
+                .contextual-border{
+                    border: solid 1px $theme_options_styles[bgBorderContextualMenu];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// BACKGROUND COLOR TOOL CONTEXTUAL MENU /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgColorListMenu'])) {
+            $styles_str .= "
+                .contextual-menu .list-group-item,
+                .contextual-menu button[type='submit'],
+                .contextual-menu input[type='submit']{
+                    background-color: $theme_options_styles[bgColorListMenu];
+                }
+ 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BORDER BOTTOM COLOR TOOL CONTEXTUAL MENU /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clBorderBottomListMenu'])) {
+            $styles_str .= "
+                .contextual-menu .list-group-item,
+                .contextual-menu button[type='submit'],
+                .contextual-menu input[type='submit']{
+                    border-bottom: solid 1px $theme_options_styles[clBorderBottomListMenu];
+                }
+ 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////// COLOR TOOL CONTEXTUAL MENU //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clListMenu'])) {
+            $styles_str .= "
+                .contextual-menu .list-group-item,
+                .contextual-menu button[type='submit'],
+                .contextual-menu input[type='submit']{
+                    color: $theme_options_styles[clListMenu];
+                }
+
+                .contextual-menu .list-group-item .settings-icons::before{
+                    color: $theme_options_styles[clListMenu];
+                }
+ 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// BACKGROUND HOVERED COLOR TOOL CONTEXTUAL MENU ////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['bgHoveredListMenu'])) {
+            $styles_str .= "
+                .contextual-menu .list-group-item:hover,
+                .contextual-menu button[type='submit']:hover
+                .contextual-menu input[type='submit']:hover{
+                    background-color: $theme_options_styles[bgHoveredListMenu];
+                }
+ 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// HOVERED COLOR TOOL CONTEXTUAL MENU ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clHoveredListMenu'])) {
+            $styles_str .= "
+                .contextual-menu .list-group-item:hover,
+                .contextual-menu button[type='submit']:hover
+                .contextual-menu input[type='submit']:hover{
+                    color: $theme_options_styles[clHoveredListMenu];
+                }
+                .contextual-menu .list-group-item:hover .settings-icons::before{
+                    color: $theme_options_styles[clHoveredListMenu];
+                }
+ 
+            ";
+        }
+  
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// USERNAME COLOR CONTEXTUAL MENU /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['clListMenuUsername'])) {
+            $styles_str .= "
+                .contextual-menu-user .username-text{
+                    color:$theme_options_styles[clListMenuUsername];
+                } 
+ 
+            ";
+        }
+
+        
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1453,19 +1730,6 @@ function view($view_file, $view_data = array()) {
 
                 .Help-text-panel-heading {
                     color:  $theme_options_styles[linkColor] !important;
-                }
-
-                .list-group-default .list-group-btn {
-                    color: $theme_options_styles[linkColor];
-                }
-
-                .contextual-menu .list-group-item:hover,
-                .contextual-menu button[type=submit]:hover
-                .contextual-menu input[type=submit]:hover{
-                    color: $theme_options_styles[linkColor];
-                }
-                .contextual-menu .list-group-item:hover .settings-icons::before{
-                    color: $theme_options_styles[linkColor];
                 }
 
                 .menu-popover .list-group-item:hover{ 
@@ -1548,6 +1812,10 @@ function view($view_file, $view_data = array()) {
                 .nav-link-adminTools{
                     color: $theme_options_styles[linkColor];
                 }
+
+                #cal-slide-content a.event-item{
+                    color: $theme_options_styles[linkColor] !important;
+                }
                 
                 
             ";
@@ -1555,7 +1823,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////// HOVER COLOR OF LINKS IN PLATFORM ////////////////////////////
+        ////////////////////// HOVERED COLOR TO THE PLATFORM'S LINKS ////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1595,6 +1863,12 @@ function view($view_file, $view_data = array()) {
 
             ";
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// SETTINGS TO THE LEFT MENU OF COURSE /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
         if (!empty($theme_options_styles['leftSubMenuFontColor'])){
             $styles_str .= "
@@ -1674,6 +1948,12 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////// UPLOAD LOGO ////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
         if (isset($theme_options_styles['imageUpload'])){
             $logo_img =  "$urlThemeData/$theme_options_styles[imageUpload]";
         }
@@ -1685,6 +1965,12 @@ function view($view_file, $view_data = array()) {
         if (isset($theme_options_styles['imageUploadFooter'])){
             $image_footer = "$urlThemeData/$theme_options_styles[imageUploadFooter]";
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// BACKGROUND COLOR OF HOMEPAGE CONTAINER /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
         if(!empty($theme_options_styles['BgColorWrapperHomepage'])){
             $styles_str .= "
@@ -1704,6 +1990,12 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND COLOR OF PORTFOLIO - COURSES CONTAINER ////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
         if(!empty($theme_options_styles['BgColorWrapperPortfolioCourses'])){
             $styles_str .= "
                 .portfolio-courses-container {
@@ -1712,9 +2004,18 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////// BACKGROUND COLOR OF COURSE CONTAINER (RIGHT COL) ////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
         if(!empty($theme_options_styles['RightColumnCourseBgColor'])){
             $styles_str .= "
                 .col_maincontent_active {
+                    background-color:$theme_options_styles[RightColumnCourseBgColor];
+                }
+                .user-details-exec{
                     background-color:$theme_options_styles[RightColumnCourseBgColor];
                 }
             ";
@@ -1725,15 +2026,21 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['BgPanels'])){
             $styles_str .= "
 
+                .card,
                 .user-info-card,
-                .card-body{
+                .card-body,
+                .panel-body,
+                .media-body{
                     background-color:$theme_options_styles[BgPanels];
                 }
-                .panelCard{
+
+                .panelCard,
+                .poll-panel{
                     background-color:$theme_options_styles[BgPanels] !important;
                 }
                   
-                .panelCard .card-header{
+                .panelCard .card-header,
+                .card .card-header{
                     background-color:$theme_options_styles[BgPanels] !important;
                 }
                   
@@ -1752,6 +2059,43 @@ function view($view_file, $view_data = array()) {
                 .banner-body{
                     background-color: #ffffff !important;
                 }
+
+                .card .card-footer{
+                    background-color:$theme_options_styles[BgPanels] !important;
+                }
+            ";
+        }
+
+        if(!empty($theme_options_styles['clBorderPanels'])){
+            $styles_str .= "
+
+                .user-info-card,
+                .panelCard,
+                .cardLogin,
+                .border-card,
+                .statistics-card,
+                .panel-success,
+                .panel-admin,
+                .panel-default,
+                .panel-danger,
+                .panel-primary,
+                .panel-info,
+                .panel-action-btn-default{
+                    border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                .panelCard.border-card-left-default {
+                    border-left: solid 7px $theme_options_styles[clBorderPanels];
+                }
+
+                .BorderSolidDes{
+                    border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                .wallWrapper{
+                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
+                }
+
             ";
         }
 
@@ -1810,30 +2154,7 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        if(!empty($theme_options_styles['BgListGroup']) or !empty($theme_options_styles['clListGroup'])){
-
-            if(!empty($theme_options_styles['BgListGroup'])){
-                $styles_str .= "
-
-                    .list-group-item {
-                        background-color: transparent;
-                    }
-            
-                    .list-group-default .list-group-item.element{
-                        background-color: transparent;
-                    } 
-                ";
-            }
-
-            if(!empty($theme_options_styles['clListGroup'])){
-
-                $styles_str .= "
-                    .list-group-item {
-                        color: #212529;
-                    }
-                ";
-            }
-        }
+        
 
     }
 
