@@ -303,7 +303,7 @@ function showgroupsofcategory($catid) {
                         $user_can_register_to_group = false;
                     }
                     if ($self_reg and $user_can_register_to_group and (!$max_members or $member_count < $max_members)) {
-                        $control = icon('fa-sign-in text-link', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
+                        $control = icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
                     }
                 } elseif ($allow_unreg) {
                     $control = icon('fa-sign-out Accent-200-cl', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id_indirect", " style='color:#d9534f;'");

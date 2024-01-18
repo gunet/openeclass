@@ -386,7 +386,7 @@ function attendance_display_available_exercises($attendance_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td class='text-end'>" . icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+            $tool_content .= "<td class='text-end'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div>";
@@ -435,7 +435,7 @@ function attendance_display_available_assignments($attendance_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td class='text-end'>".icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
             $tool_content .= "</td></tr>";
         } // end of while
         $tool_content .= "</table></div>";
@@ -473,7 +473,7 @@ function attendance_display_available_tc($attendance_id) {
         foreach ($checkForTc as $data) {
             $tool_content .= "<tr><td>" . q($data->title) . "</td>";
             $tool_content .= "<td>". format_locale_date(strtotime($data->start_date)) . "</td>";
-            $tool_content .= "<td class='text-end'>".icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
         } // end of while
         $tool_content .= "</tr></table></div>";
     } else {

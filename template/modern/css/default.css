@@ -1162,7 +1162,7 @@ a:hover{
 .nav-tabs{
   border: 0px;
 }
-.nav-tabs .nav-item:hover .nav-link{
+.nav-tabs .nav-item .nav-link:hover{
   color: #0073E6;
 }
 .nav-tabs .nav-item .nav-link:hover{
@@ -2161,6 +2161,7 @@ body .form-action-button-mydropdowns{
   font-size: 14px;
   min-height: 40px;
   padding: 10px;
+  color: #2B3944;
 }
 
 .menu-popover .list-group-item .fa{

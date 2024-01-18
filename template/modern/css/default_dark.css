@@ -340,11 +340,13 @@
   }
   
   a,
-  .text-link{ 
+  a span,
+  a.list-group-item{ 
     color:#74AFE9; 
   }
   a:hover,
-  .text-link:hover{
+  a span:hover,
+  a.list-group-item:hover{
     color: #74AFE9;
   }
   
@@ -1034,14 +1036,29 @@
     color: #ffffff;
     background-color: transparent;
   }
+
+  .contextual-sidebar .list-group-item span,
+  .contextual-sidebar .list-group-item i{
+    color: #ffffff;
+  }
   
   .contextual-sidebar .list-group-item:hover{
     background-color: #99c3ee;
     color:#ffffff;
   }
+
+  .contextual-sidebar .list-group-item:hover span,
+  .contextual-sidebar .list-group-item:hover i{
+    color: #ffffff;
+  }
   
   .contextual-sidebar .list-group-item.active{
     background-color: #74AFE9;
+    color: #ffffff;
+  }
+
+  .contextual-sidebar .list-group-item.active span,
+  .contextual-sidebar .list-group-item.active i{
     color: #ffffff;
   }
   
@@ -1088,11 +1105,12 @@
   
   
   .menu-popover .list-group-item{ 
+    color: #2B3944;
     border-bottom: solid 1px #EFF6FF;
   }
 
   .menu-popover .list-group-item .fa{ 
-    color:#000000;
+    color:#2B3944;
   }
   .menu-popover .list-group-item .fa-xmark,
   .menu-popover .list-group-item .fa-trash{ 
@@ -1882,6 +1900,14 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #ffffff;
   }
 
+  .portfolio-tools a{
+    color:#74AFE9;
+  }
+  .portfolio-tools a:hover{
+    color:#6fa6dd;
+    cursor:  url(../images/pointer.png), auto;
+  }
+
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE *************************************************************/
 /**********************************************************************************************************************/
@@ -2536,6 +2562,10 @@ tr.warning:hover{
 .myPersonalCalendar .cal-month-day:hover .number-day-cal{
   color: #000000 !important;
 }
+#cal-slide-content a.event-item{
+  color: #74AFE9 !important;
+}
+
 
 
 
@@ -2764,7 +2794,4 @@ tr.warning:hover{
     background-color: #212D37 !important;
   }
 
-  .list-group-item {
-      border-bottom: solid 1px #4F6893;
-  }
   

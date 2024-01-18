@@ -4767,7 +4767,7 @@ function assignment_details($id, $row, $x =false) {
             </h3>
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
-                    <span class='fa fa-edit text-link fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
+                    <span class='fa fa-edit fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
             
         </div>

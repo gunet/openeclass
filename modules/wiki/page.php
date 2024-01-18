@@ -596,7 +596,7 @@ switch ($action) {
                 foreach ($recentChanges as $recentChange) {
                     $pgtitle = ( $recentChange->title == "__MainPage__" ) ? $langWikiMainPage : $recentChange->title;
 
-                    $entry = '<a class="list-group-item bg-transparent text-link" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $entry = '<a class="list-group-item bg-transparent border-bottom-list-group rounded-0" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . rawurlencode($recentChange->title)
                             . '&amp;action=show"'
                             . '><strong>' . $pgtitle . '</strong><small>';
@@ -616,7 +616,7 @@ switch ($action) {
     case "all": {
             // handle main page
 
-            $tool_content .= '<div class="col-sm-12"><div class="list-group"><a class="list-group-item bg-transparent text-link" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
+            $tool_content .= '<div class="col-sm-12"><div class="list-group"><a class="list-group-item bg-transparent border-bottom-list-group rounded-0" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;wikiId=' . $wikiId
                     . '&amp;title=' . rawurlencode("__MainPage__")
                     . '&amp;action=show">'
@@ -634,7 +634,7 @@ switch ($action) {
                     }
                     $pgtitle = rawurlencode($page->title);
 
-                    $link = '<a class="list-group-item bg-transparent text-link" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $link = '<a class="list-group-item bg-transparent border-bottom-list-group rounded-0" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
                             . '>' . $page->title . '</a>';
                     $tool_content .= $link;

@@ -5754,11 +5754,11 @@ $langActiveLinkBgColorHeader = "Χρώμα Φόντου Ενεργού Συνδ�
 $langActiveLinkColorHeader = "Χρώμα Ενεργού Συνδέσμου Header";
 $langLinkColorFooter = 'Χρώμα Συνδέσμων Footer';
 $langHoverLinkColorFooter = 'Χρώμα hovered συνδέσμων Footer';
-$langPortFolioProfileContainer = "Χρώμα φόντου σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
+$langPortFolioProfileContainer = "Χρώμα φόντου σύντομου προφίλ";
 $langBgColorWrapperJumbotron = "Gradient φόντου στο περιτύλιγμα της οθόνης σύνδεσης";
 $langBgColorWrapperHeader= "Χρώμα φόντου στο περιτύλιγμα του Header";
 $langBgColorWrapperFooter= "Χρώμα φόντου στο περιτύλιγμα του Footer";
-$langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στο περιτύλιγμα του σύντομου προφίλ στο χαρτοφυλάκιο χρήστη";
+$langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στο περιτύλιγμα του σύντομου προφίλ";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
 
 $langShadowHeader = "Shadow στο κάτω μέρος της επικεφαλίδας";
@@ -5767,11 +5767,11 @@ $langNavSettingsHeader = "Επικεφαλίδα (Header)";
 $langNavSettingsFooter = "Footer";
 $langNavLinksButtons = "Σύνδεσμοι - Κουμπιά";
 $langLoginConfigurationSettings = "Οθόνη Σύνδεσης";
-$langHomepageContainer = "Χρώμα φόντου (Οθόνη σύνδεσης, Ανακοινώσεις , Δημοφιλή Μαθήματα, Στατιστικά επισκεψιμότητας) στην αρχική σελίδα";
-$langPortfolioCoursesContainer = "Χρώμα φόντου (Τα μαθήματα μου, Ανακοινώσεις, Μηνύματα) στο χαρτοφυλάκιο χρήστη";
-$langBgColorConfigRightColumn = "Ρυθμίσεις Φόντου (δεξιά στήλη που αφορά το περιεχόμενο του μαθήματος)";
-$langHelpCourseUI = "(αριστερή στήλη που αφορά τα εργαλεία του μαθήματος)";
-$langNavHyperTexts = "Επικεφαλίδες - Κείμενα";
+$langHomepageContainer = "Χρώμα φόντου (<small>Οθόνη σύνδεσης, Ανακοινώσεις , Δημοφιλή Μαθήματα, Στατιστικά επισκεψιμότητας</small>)";
+$langPortfolioCoursesContainer = "Χρώμα φόντου (<small>Τα μαθήματα μου, Ανακοινώσεις, Μηνύματα</small>)";
+$langBgColorConfigRightColumn = "Ρυθμίσεις Φόντου (<small>Δεξιά στήλη με το περιεχόμενο του μαθήματος</small>)";
+$langHelpCourseUI = "(<small>Αριστερή στήλη με τα εργαλεία του μαθήματος</small>)";
+$langNavHyperTexts = "Τυπογραφία";
 $langPHyperTextColor = "Χρώμα επικεφαλίδων - κειμένων";
 $langBgPanels = "Χρώμα φόντου";
 $langPanels = "Πανελς (Cards)";
@@ -5780,6 +5780,11 @@ $langBgForms = "Χρώμα φόντου";
 $langColorLabel = "Χρώμα Ετικέτας";
 $langTables = "Πίνακες";
 $langBgTables = "Χρώμα φόντου";
+$langTabs = "Καρτέλες (Tabs)";
+$langHoverTextColor = "Χρώμα Hovered Κειμένου";
+$langActiveTextColor = "Χρώμα Ενεργού Κειμένου";
+$langAccordions = "Accordion" ;
+$langAccordionsBorderBottom = "Χρώμα border στο κάτω μέρος" ;
 /* * ***********************************************************
  * Validation
  * ************************************************************ */
