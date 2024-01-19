@@ -98,9 +98,9 @@ if ($learnPathName) {
                 'url' => "details.php?course=$course_code&path_id=$path_id&pdf=true",
                 'icon' => 'fa-file-pdf',
                 'level' => 'primary-label'),
-            array('title' => $langDumpUser,
+            array('title' => $langDumpExcel,
                 'url' => "details.php?course=$course_code&path_id=$path_id&xls=true",
-                'icon' => 'fa-download',
+                'icon' => 'fa-file-excel',
                 'level' => 'primary-label')
 
         ));

@@ -53,9 +53,9 @@ if (!isset($_GET['pdf'])) {
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;pdf=true;",
             'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
-        array('title' => $langDumpUser,
+        array('title' => $langDumpExcel,
             'url' => "detailsUserPath.php?course=$course_code&amp;uInfo=$_REQUEST[uInfo]&amp;path_id=$_REQUEST[path_id]&amp;xls=true;",
-            'icon' => 'fa-download',
+            'icon' => 'fa-file-excel',
             'level' => 'primary-label')
 
     ), false);

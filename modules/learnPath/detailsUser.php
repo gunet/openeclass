@@ -96,11 +96,11 @@ if (!isset($_GET['pdf'])) {
             'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_GET[uInfo]&amp;pdf=true",
             'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
-        array('title' => $langDumpUser,
+        array('title' => $langDumpExcel,
             'url' => "detailsUser.php?course=$course_code&amp;uInfo=$_GET[uInfo]&amp;xls=true",
-            'icon' => 'fa-download',
+            'icon' => 'fa-file-excel',
             'level' => 'primary-label')
-        
+
     ));
 }
 

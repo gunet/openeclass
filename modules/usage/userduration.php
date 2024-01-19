@@ -130,9 +130,9 @@ if (isset($_GET['u'])) { //  stats per user
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=pdf",
                     'icon' => 'fa-file-pdf',
                     'level' => 'primary-label'),
-                array('title' => $langDumpUser,
+                array('title' => $langDumpExcel,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;u=$_GET[u]&amp;format=xls",
-                    'icon' => 'fa-download',
+                    'icon' => 'fa-file-excel',
                     'level' => 'primary-label')
 
             ), false);
@@ -247,9 +247,9 @@ if (isset($_GET['u'])) { //  stats per user
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=pdf",
                     'icon' => 'fa-file-pdf',
                     'level' => 'primary-label'),
-                array('title' => $langDumpUser,
+                array('title' => $langDumpExcel,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;m=$module&amp;format=xls",
-                    'icon' => 'fa-download',
+                    'icon' => 'fa-file-excel',
                     'level' => 'primary-label')
 
             ), false);
@@ -328,9 +328,9 @@ if (isset($_GET['u'])) { //  stats per user
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=pdf",
                     'icon' => 'fa-file-pdf',
                     'level' => 'primary-label'),
-                array('title' => $langDumpUser,
+                array('title' => $langDumpExcel,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;format=xls",
-                    'icon' => 'fa-download',
+                    'icon' => 'fa-file-excel',
                     'level' => 'primary-label')
 
             ), false);

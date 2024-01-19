@@ -82,9 +82,9 @@ if (!isset($_GET['pdf'])) {
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pdf=true",
             'icon' => 'fa-file-pdf',
             'level' => 'primary-label'),
-        array('title' => $langDumpUser,
+        array('title' => $langDumpExcel,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;xls=true",
-            'icon' => 'fa-download',
+            'icon' => 'fa-file-excel',
             'level' => 'primary-label')
         ),
         false);
