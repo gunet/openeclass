@@ -144,8 +144,8 @@
                                     <ul class='list-group list-group-flush'>
                                         @foreach ($announcements as $announcement)
                                             @if($counterAn < 3)
-                                                <li class='li-unstyled border-bottom-list-group px-0 py-3'>
-                                                    <a class='list-group-item announce-link-homepage bg-transparent border-0 px-0 py-0 TextBold msmall-text' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
+                                                <li class='list-group-item element'>
+                                                    <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                         {{$announcement->title}}
                                                     </a>
                                                     <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
@@ -156,7 +156,7 @@
                                     </ul>
                                 @else
                                     <ul class='list-group list-group-flush'>
-                                        <li class='li-unstyled border-bottom-list-group px-0 py-3'>
+                                        <li class='list-group-item element'>
                                             <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ trans('langNoInfoAvailable') }}</div>
                                         </li>
                                     </ul>

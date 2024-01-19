@@ -138,9 +138,9 @@ if (isset($_POST['submit'])) {
                                 }
 
                                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post' class='mt-4'>
-                                                    <div class='col-12 border-card rounded-2'>";
-                                        $tool_content .= "<ul class='list-group list-group-flush list-group-default'>
-                                                                <li class='list-group-item d-flex justify-content-start align-items-center flex-wrap gap-2 TextBold'>
+                                                    <div class='col-12'>";
+                                        $tool_content .= "<ul class='list-group list-group-flush'>
+                                                                <li class='list-group-item list-group-item-action d-flex justify-content-start align-items-center flex-wrap gap-2'>
                                                                     ".$tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=')."
                                                                 </li>";
                                             $tool_content .= "";

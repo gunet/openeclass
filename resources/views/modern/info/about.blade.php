@@ -47,26 +47,50 @@
                     
 
                     
-                        <div class='col-12 mt-5'>
-                            <div class='row'>
-                                <div class='col-md-6 col-12'>
-                                    <ul class='list-group list-group-flush'>
-                                        <li class='list-group-item'><strong class='Primary-500-cl text-uppercase'>{{ trans('langCourses') }}</strong><span class='badge Primary-500-bg text-white float-end'>{{ $course_inactive }}</span></li>
-                                        <li class='list-group-item list-about'>{{ trans('langOpenCoursesShort') }}<span class='badge bg-secondary text-white float-end'>{{ $course_open }}</span></li>
-                                        <li class='list-group-item list-about'>{{ trans('langOpenCourseWithRegistration') }}<span class='badge bg-secondary text-white float-end'>{{ $course_registration }}</span></li>
-                                        <li class='list-group-item list-about'>{{ trans('langClosedCourses') }}<span class='badge bg-secondary text-white float-end'>{{ $course_closed }}</span></li>
-                                    </ul>
-                                </div>
-                                <div class='col-md-6 col-12 mt-md-0 mt-3'>
-                                    <ul class='list-group list-group-flush'>
-                                        <li class='list-group-item'><strong class='Primary-500-cl text-uppercase'>{{ trans('langUsers') }}</strong><span class='badge Primary-500-bg text-white float-end'>{{ $count_total }}</span></li>
-                                        <li class='list-group-item list-about'>{{ trans('langTeachers') }}<span class='badge bg-secondary text-white float-end'>{{ $count_status[USER_TEACHER] }}</span></li>
-                                        <li class='list-group-item list-about'>{{ trans('langStudents') }}<span class='badge bg-secondary text-white float-end'>{{ $count_status[USER_STUDENT] }}</span></li>
-                                        <li class='list-group-item list-about'>{{ trans('langGuest') }}<span class='badge bg-secondary text-white float-end'>{{ $count_status[USER_GUEST] }}</span> </li>
-                                    </ul>
-                                </div>
+                    <div class='col-12 mt-5'>
+                        <div class='row row-cols-1 row-cols-md-2 g-3 g-md-5'>
+                            <div class='col'>
+                                <ul class='list-group list-group-flush'>
+                                    <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-5 flex-wrap'>
+                                        <div>{{ trans('langCourses') }}</div>
+                                        <div>{{ $course_inactive }}</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
+                                        <div>{{ trans('langOpenCoursesShort') }}</div>
+                                        <div>{{ $course_open }}</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
+                                        <div>{{ trans('langOpenCourseWithRegistration') }}</div>
+                                        <div>{{ $course_registration }}</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
+                                        <div>{{ trans('langClosedCourses') }}</div>
+                                        <div>{{ $course_closed }}</div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class='col'>
+                                <ul class='list-group list-group-flush'>
+                                    <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-5 flex-wrap'>
+                                        <div>{{ trans('langUsers') }}</div>
+                                        <div>{{ $count_total }}</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
+                                        <div>{{ trans('langTeachers') }}</div>
+                                        <div>{{ $count_status[USER_TEACHER] }}</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
+                                        <div>{{ trans('langStudents') }}</div>
+                                        <div>{{ $count_status[USER_STUDENT] }}</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-centergap-5 flex-wrap'>
+                                        <div>{{ trans('langGuest') }}</div>
+                                        <div>{{ $count_status[USER_GUEST] }}</div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
+                    </div>
 
                 
         </div>

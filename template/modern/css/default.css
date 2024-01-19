@@ -217,26 +217,12 @@ img {
 .border-custom{
   border: solid 1px #EFF2FB;
 }
-
-.border-bottom-custom{
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: solid 1px #EFF2FB;
-}
   
 .border-bottom-card-header{
   border-top: none;
   border-left: none;
   border-right: none;
   border-bottom: solid 1px #B3D1FF;
-}
-  
-.border-bottom-list-group{
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom: solid 1px #EFF6FF;
 }
 
 .border-bottom-default{
@@ -3247,71 +3233,43 @@ table{
 /**********************************************************************************************************************/
 /**************************************************** LIST-GROUPS *****************************************************/
 /**********************************************************************************************************************/
-.list-group-item.element{
-  background-color: #ffffff;
-  border: 0px;
+
+.list-group-item.list-group-item-action{
+  background-color: transparent;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #2B3944;
+  font-style: normal;
   border-bottom: solid 1px #EFF2FB;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
-.list-group-default .list-group-item{
-  background-color: #EFF2FB;
-  border-bottom: solid 1px #EFF2FB;
+.list-group-item.list-group-item-action a{
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #0073E6;
+  font-style: normal;
 }
-.list-group-default .list-group-item:hover{
-  cursor:  url(../images/pointer.png), auto;
-}
-.list-group-default .list-group-item.element{
-  background-color: #ffffff;
-  border: 0px;
-  border-bottom: solid 1px #EFF2FB;
-}
-.list-group-default .list-group-item.element:hover{
-  cursor:not-allowed;
-  background-color: #EFF6FF;
-}
-.list-group-default .list-group-item.element.list-group-courses:hover{
-  cursor:not-allowed;
+
+.list-group-item.list-group-item-action:hover{
   background-color: transparent;
 }
-.categoryName:hover{
-  cursor:  url(../images/pointer.png), auto;
-}
 
-.list-group-default .list-group-item:has(.collapsed){
-  background-color: #EFF2FB;
-  border-bottom: #EFF2FB;
-}
-
-.list-group-default .list-group-btn{
-  color: #0073E6;
-  font-weight: 700;
-  font-size: 14px;
-  font-style: normal;
-  letter-spacing: 0px;
-  line-height: 16px;
-  text-decoration: none;
-}
-.list-group-default .list-group-btn:hover{
-  cursor:  url(../images/pointer.png), auto;
-}
-.list-group-default .list-group-btn .fa-chevron-down{
-  transform: rotate(180deg);
-  transition: transform .3s ease-in-out;
-}
-
-.list-group-default .list-group-btn.collapsed{
+.list-group-item.element{
+  background-color: transparent;
   color: #2B3944;
-  font-weight: 700;
-  font-size: 14px;
-  font-style: normal;
-  letter-spacing: 0px;
-  line-height: 16px;
-  text-decoration: none;
+  border: 0px;
+  border-bottom: solid 1px #EFF2FB;
+  padding-left: 0px;
+  padding-right: 0px;
 }
-.list-group-default .list-group-btn.collapsed .fa-chevron-down{
-  transform: rotate(0deg);
-  transition: transform .3s ease-in-out;
-}
+
+
 
 
 
@@ -5272,12 +5230,6 @@ table.dataTable tbody tr th{
 /*************************************************** USAGE **************************************************************/
 
 .last-visit-li{
-  color: #2b3944;
-}
-
-/*************************************************** ABOUT **************************************************************/
-
-.list-about{
   color: #2b3944;
 }
 

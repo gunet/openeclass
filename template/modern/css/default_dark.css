@@ -44,22 +44,8 @@
   .border-custom{
     border: solid 1px #4F6893;
   }
-  
-  .border-bottom-custom{
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: solid 1px #4F6893;
-  }
     
   .border-bottom-card-header{
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: solid 1px #4F6893;
-  }
-    
-  .border-bottom-list-group{
     border-top: none;
     border-left: none;
     border-right: none;
@@ -1783,35 +1769,40 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 /**************************************************** LIST-GROUPS *****************************************************/
 /**********************************************************************************************************************/
+
+  .list-group-item.list-group-item-action{
+    background-color: transparent;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    color: #ffffff;
+    font-style: normal;
+    border-bottom: solid 1px #4F6893;
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+
+  .list-group-item.list-group-item-action a{
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26px;
+    color: #74AFE9;
+    font-style: normal;
+  }
+  
+  .list-group-item.list-group-item-action:hover{
+    background-color: transparent;
+  }
+  
   .list-group-item.element{
     background-color: transparent;
+    color: #ffffff;
+    border: 0px;
     border-bottom: solid 1px #4F6893;
-  }
-  
-  .list-group-default .list-group-item{
-    background-color: #EFF2FB;
-    border-bottom: #4F6893;
-  }
-
-  .list-group-default .list-group-item.element{
-    background-color: #212D37;
-    border-bottom: solid 1px #4F6893;
-  }
-  .list-group-default .list-group-item.element:hover{
-    background-color: #212D37;
-  }
-
-  .list-group-default .list-group-item:has(.collapsed){
-    background-color: #EFF2FB;
-    border-bottom: #4F6893;
-  }
-  
-  .list-group-default .list-group-btn{
-    color: #74AFE9;
-  }
-
-  .list-group-default .list-group-btn.collapsed{
-    color: #2B3944;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   @media (max-width: 991px){
@@ -2348,13 +2339,6 @@ tr.warning:hover{
 /**********************************************************************************************************************/
 .last-visit-li{
   color: #212D37;
-}
-
-/**********************************************************************************************************************/
-/*************************************************** ABOUT **************************************************************/
-/**********************************************************************************************************************/
-.list-about{
-  color: #ffffff;
 }
 
 /**********************************************************************************************************************/

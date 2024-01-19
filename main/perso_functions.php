@@ -248,25 +248,19 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     $ann_url = $urlAppend . 'modules/announcements/index.php?course=' . $ann->code . '&amp;an_id=' . $ann->id;
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
-                        <li class='list-group-item ps-0 pe-0'>
-                            <div class='item-wholeline text-start'>
-                                <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-
-                                <p class='TextBold mb-0'>$course_title</p>
-                                <div class='TextRegular Neutral-800-cl'>$ann_date</div>
-                            </div>
+                        <li class='list-group-item element'>
+                            <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                            <p class='TextBold mb-0'>$course_title</p>
+                            <div class='TextRegular Neutral-800-cl'>$ann_date</div>
                         </li>";
                 } else {
                     $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
                     $ann_date = format_locale_date(strtotime($ann->an_date));
                     $ann_content .= "
-                    <li class='list-group-item ps-0 pe-0'>
-                        <div class='item-wholeline text-start'>
-                            <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
-
-                            <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
-                            <div class='TextRegular Neutral-800-cl'>$ann_date</div>
-                        </div>
+                    <li class='list-group-item element'>
+                        <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
+                        <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
+                        <div class='TextRegular Neutral-800-cl'>$ann_date</div>
                     </li>";
                 }
             }
@@ -304,15 +298,16 @@ function getUserMessages() {
                 $course_title = '';
             }
             $message_date = format_locale_date($message->timestamp);
-            $message_content .= "<li class='list-group-item ps-0 pe-0'>
-                                    <div class='item-wholeline text-start'>
-                                        <div class='text-title TextBold'><span>$langFrom:</span><span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span></div>
+            $message_content .= "<li class='list-group-item element'>
+                                        <div class='text-title TextBold'>
+                                            <span>$langFrom:</span>
+                                            <span class='text-decoration-underline'>".display_user($message->author_id, false, false)."</span>
+                                        </div>
 
                                         <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
 
                                         <p class='TextBold mb-0'>$course_title</p>
                                         <div class='TextRegular Neutral-800-cl'>$message_date</div>
-                                    </div>
                                 </li>";
         }
         $counterMs++;

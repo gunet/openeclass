@@ -36,8 +36,8 @@
                 @foreach ($toolArr as $key => $tool_group)
                     <a id="Tool{{$key}}" class="collapsed parent-menu mt-5 menu-header" data-bs-toggle="collapse" href="#collapse{{ $key }}">
                         <div class="panel-sidebar-heading bg-transparent border-bottom-default px-lg-0">
-                            <div class="panel-title h3 bg-transparent">
-                                <div class='d-flex justify-content-start align-items-start gap-1'>
+                            <div class="panel-title pb-2 bg-transparent">
+                                <div class='d-flex justify-content-start align-items-start gap-1 Tools-active-deactive'>
                                     <span class="fa fa-chevron-up" style='transition: transform .3s ease-in-out;'></span>
                                     {{ $tool_group[0]['text'] }}
                                     

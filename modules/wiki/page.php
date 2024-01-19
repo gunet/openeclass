@@ -591,12 +591,12 @@ switch ($action) {
         }
     case "recent": {
             if (is_array($recentChanges)) {
-                $tool_content .= '<div class="col-sm-12"><div class="list-group">' . "\n";
+                $tool_content .= '<div class="col-sm-12"><ul class="list-group list-group-flush">' . "\n";
 
                 foreach ($recentChanges as $recentChange) {
                     $pgtitle = ( $recentChange->title == "__MainPage__" ) ? $langWikiMainPage : $recentChange->title;
 
-                    $entry = '<a class="list-group-item bg-transparent border-bottom-list-group rounded-0" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $entry = '<li class="list-group-item element"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . rawurlencode($recentChange->title)
                             . '&amp;action=show"'
                             . '><strong>' . $pgtitle . '</strong><small>';
@@ -607,21 +607,21 @@ switch ($action) {
 
                     $userStr = q($userInfo->givenname) . "&nbsp;" . q($userInfo->surname);
                     $userUrl = $userStr;
-                    $tool_content .= sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl) . '</small></a>';
+                    $tool_content .= sprintf($langWikiRecentChangesPattern, $entry, $time, $userUrl) . '</small></a></li>';
                 }
-                $tool_content .= '</div></div>';
+                $tool_content .= '</ul></div>';
             }
             break;
         }
     case "all": {
             // handle main page
 
-            $tool_content .= '<div class="col-sm-12"><div class="list-group"><a class="list-group-item bg-transparent border-bottom-list-group rounded-0" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
+            $tool_content .= '<div class="col-sm-12"><ul class="list-group list-group-flush"><li class="list-group-item element"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code
                     . '&amp;wikiId=' . $wikiId
                     . '&amp;title=' . rawurlencode("__MainPage__")
                     . '&amp;action=show">'
                     . $langWikiMainPage
-                    . '</a>'
+                    . '</a></li>'
             ;
 
             // other pages
@@ -634,12 +634,12 @@ switch ($action) {
                     }
                     $pgtitle = rawurlencode($page->title);
 
-                    $link = '<a class="list-group-item bg-transparent border-bottom-list-group rounded-0" href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
+                    $link = '<li class="list-group-item element"><a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;wikiId='
                             . $wikiId . '&amp;title=' . $pgtitle . '&amp;action=show"'
-                            . '>' . $page->title . '</a>';
+                            . '>' . $page->title . '</a></li>';
                     $tool_content .= $link;
                 }
-                $tool_content .= '</div></div>';
+                $tool_content .= '</ul></div>';
             }
             break;
         }

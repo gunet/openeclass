@@ -31,18 +31,26 @@
                                         <span class='settings-icons Neutral-600-cl'>{!! course_access_icon($c->visible) !!}</span>
                                     </h2>
 
-                                    <p class="card-text mt-2">({!! $c->public_code !!})&nbsp;-&nbsp;{!! $c->prof_names !!}</p>
+                                    <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;-&nbsp;{!! $c->prof_names !!}</p>
 
+                                    
                                     @if(empty($c->description))
-                                        <p class='card-text mt-4 border-bottom-custom mb-1 TextBold'>{{ trans('langCourseProgram')}}</p>
-                                        <p class='card-text'>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
+                                        <ul class='list-group list-group-flush'>
+                                            <li class='list-group-item list-group-item-action'>{{ trans('langCourseProgram')}}</li>
+                                            <li class='list-group-item element'>{{ trans('langThisCourseDescriptionIsEmpty') }}</li>
+                                        </ul>
                                     @else
-                                        <p class='card-text mt-4 border-bottom-custom mb-1 TextBold'>{{ trans('langCourseProgram')}}</p>
-                                        <p class='card-text'>{!! $c->description !!}</p>
+                                        <ul class='list-group list-group-flush'>
+                                            <li class='list-group-item list-group-item-action'>{{ trans('langCourseProgram')}}</li>
+                                            <li class='list-group-item element'>{!! $c->description !!}</li>
+                                        </ul>
                                     @endif
 
-                                    <p class='card-text mt-4 border-bottom-custom mb-1 TextBold'>{{ trans('langCreationDate')}}</p>
-                                    <p class='card-text'>{!! format_locale_date(strtotime($c->created), null, false) !!}</p>
+                                    <ul class='list-group list-group-flush mt-3'>
+                                        <li class='list-group-item list-group-item-action'>{{ trans('langCreationDate')}}</li>
+                                        <li class='list-group-item element'>{!! format_locale_date(strtotime($c->created), null, false) !!}</li>
+                                    </ul>
+
                                 </div>
                             </div>
                         </div>

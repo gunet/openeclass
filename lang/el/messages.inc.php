@@ -5802,6 +5802,8 @@ $langbgBorderContextualMenu = "Χρώμα border μενού";
 $langclListMenu = "Χρώμα συνδέσμου επιλογής μενού";
 $langbgHoveredListMenu = "Χρώμα Hovered φόντου συνδέσμου επιλογής μενού" ;
 $langBgColorMenuCont = "Χρώμα φόντου μενού";
+$langAddPaddingListGroup = "Προσθήκη padding στη λίστα συνδέσμων";
+$langButtonColorWhiteCongiguration = "Χρώμα φόντου κουμπιού";
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

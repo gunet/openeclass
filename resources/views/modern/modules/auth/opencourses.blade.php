@@ -70,39 +70,26 @@
                     <div class="col-12 @if(isset($_SESSION['uid'])) mt-4 @endif">
                         <h1>{{ trans('langCourses') }}</h1>
                     </div>
+
                     <div class='col-12 mt-4'>
-                        <div class='row row-cols-1'>
-                            <div class='col-12'>
-                                <div class="card border-card h-100 Borders border-0 bg-transparent">
-                                    <div class="card-body p-0">
+                        
+                        @if (isset($buildRoots))
+                            {!! $buildRoots !!}
+                        @endif
 
-
-                                        @if (isset($buildRoots))
-                                            {!! $buildRoots !!}
-                                        @endif
-
-
-                                        <div class='col-12 border-card mt-4 rounded-2'>
-                                            <ul class='list-group list-group-flush list-group-default'>
-                                                <li class="list-group-item d-flex justify-content-start align-items-center flex-wrap gap-2 TextBold">
-                                                    {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
-                                                </li>
-                                                {!! $childHTML !!}
-                                            </ul>
-                                            
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
+                        <div class='col-12'>
+                            <ul class='list-group list-group-flush'>
+                                <li class="list-group-item list-group-item-action d-flex justify-content-start align-items-center flex-wrap gap-2">
+                                    {!! $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') !!}
+                                </li>
+                                {!! $childHTML !!}
+                            </ul>
                         </div>
+                        
                     </div>
 
-
-
-
                     @if (count($courses) > 0)
-                        <div class='col-12 mt-5'>
+                        <div class='col-12 mt-4'>
                             <div class='table-responsive'>
                                 <table class='table-default' id="myopencourses_table">
                                     <thead>

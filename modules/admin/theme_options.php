@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,'bgContextualMenu', 'bgColorListMenu'),
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu'),
@@ -1075,6 +1075,10 @@ $tool_content .= "
 
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorWhiteCongiguration</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgWhiteButtonColor' class='control-label-notes mb-2 me-2'>$langButtonColorWhiteCongiguration:</label>
+                        <input name='bgWhiteButtonColor' type='text' class='form-control colorpicker' id='bgWhiteButtonColor' value='$theme_options_styles[bgWhiteButtonColor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='whiteButtonTextColor' class='control-label-notes mb-2 me-2'>$langTextColor:</label>
                         <input name='whiteButtonTextColor' type='text' class='form-control colorpicker' id='whiteButtonTextColor' value='$theme_options_styles[whiteButtonTextColor]'>
                     </div>
@@ -1391,6 +1395,19 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clHoveredLists' class='control-label-notes mb-2 me-2'>$langclHoveredLists:</label>
                         <input name='clHoveredLists' type='text' class='form-control colorpicker' id='clHoveredLists' value='$theme_options_styles[clHoveredLists]'>
+                    </div>
+                    <hr>
+                    <div class='form-group mt-2'>
+                        <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAddPaddingListGroup</h3>
+                        <div class='col-sm-12'>
+                            <div class='checkbox'>
+                                <label class='label-container'>
+                                    <input type='checkbox' name='AddPaddingListGroup' value='1' ".((isset($theme_options_styles['AddPaddingListGroup']))? 'checked' : '').">
+                                    <span class='checkmark'></span>
+                                    $langActivate
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
