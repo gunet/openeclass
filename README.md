@@ -22,7 +22,7 @@ instructions as well as other manuals at the following address:
 https://docs.openeclass.org/en/start
 
 GUnet Asychronous e-Learning Group
-November 2023
+January 2024
 
 
 # Πλατφόρμα Open eClass 3.15
@@ -65,4 +65,4 @@ PHP >= 8.0 και μια βάση δεδομένων (MySQL or MariaDB). Ανα�
 https://docs.openeclass.org/el/start
 
 Ομάδα Ασύγχρονης Τηλεκπαίδευσης GUnet
-Νοέμβριος 2023
+Ιανουάριος 2024
