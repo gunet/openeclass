@@ -27,50 +27,52 @@
                 @include('layouts.partials.legend_view')
                 {!! $action_bar !!}
 
-                <div class='col-lg-6 col-12 forms-panels-admin'>
-                    <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
+                <div class='col-lg-6 col-12'>
+                    <div class='form-wrapper form-edit'>
+                        <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
 
-                        <div class='panel-body'>
+                           
 
-                            <div class='landing-default'>
-                                @foreach ($selectable_langs as $langCode => $langName)
-                                    <div class='form-group mb-4'>
-                                         <label for='privacy_policy_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}: <span class='text-secondary'>({{ $langName }})</span></label>
-                                         <div class='col-sm-12'>
-                                             {!! rich_text_editor('privacy_policy_text_'.$langCode, 5, 20, $policyText[$langCode]) !!}
-                                         </div>
-                                     </div>
-                                 @endforeach
-                            </div>
+                                <div class='landing-default'>
+                                    @foreach ($selectable_langs as $langCode => $langName)
+                                        <div class='form-group mb-4'>
+                                            <label for='privacy_policy_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}: <span class='text-secondary'>({{ $langName }})</span></label>
+                                            <div class='col-sm-12'>
+                                                {!! rich_text_editor('privacy_policy_text_'.$langCode, 5, 20, $policyText[$langCode]) !!}
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
-                            <div class='form-group mt-4'>
-                                 <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </label>
-                                <div class='col-sm-12'>
-                                    <div class='checkbox'>
-                                        <label class='label-container'>
-                                            <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text' {{ $cbox_activate_privacy_policy_text }} >
-                                            <span class='checkmark'></span>
-                                            {{ trans('langDisplayPrivacyPolicyLink') }}
-                                        </label>
-                                    </div>
-                                    <div class='checkbox'>
-                                        <label class='label-container'>
-                                            <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent' {{ $cbox_activate_privacy_policy_consent }} >
-                                            <span class='checkmark'></span>
-                                            {{ trans('langAskPrivacyPolicyConsent') }}
-                                        </label>
+                                <div class='form-group mt-4'>
+                                    <label for='theme' class='col-sm-12 control-label-notes mb-1'>{{ trans('langViewShow') }}: </label>
+                                    <div class='col-sm-12'>
+                                        <div class='checkbox'>
+                                            <label class='label-container'>
+                                                <input id='privacyPolicyLink' type='checkbox' name='activate_privacy_policy_text' {{ $cbox_activate_privacy_policy_text }} >
+                                                <span class='checkmark'></span>
+                                                {{ trans('langDisplayPrivacyPolicyLink') }}
+                                            </label>
+                                        </div>
+                                        <div class='checkbox'>
+                                            <label class='label-container'>
+                                                <input id='privacyPolicyConsent' type='checkbox' name='activate_privacy_policy_consent' {{ $cbox_activate_privacy_policy_consent }} >
+                                                <span class='checkmark'></span>
+                                                {{ trans('langAskPrivacyPolicyConsent') }}
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class='form-group mt-5'>
-                                <div class='col-12 d-flex justify-content-end align-items-center'>
-                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
-                                    <a class='btn cancelAdminBtn ms-1' href='index.php'>{{ trans('langCancel') }}</a>
+                                <div class='form-group mt-5'>
+                                    <div class='col-12 d-flex justify-content-end align-items-center'>
+                                        <input class='btn submitAdminBtn' type='submit' name='submit' value='{{ trans('langModify') }}'>
+                                        <a class='btn cancelAdminBtn ms-1' href='index.php'>{{ trans('langCancel') }}</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </form>
+                            
+                        </form>
+                    </div>
                 </div>
                 <div class='col-lg-6 col-12 d-none d-md-none d-lg-block text-end'>
                     <img class='form-image-modules' src='{{$urlAppend}}template/modern/img/form-image.png' alt='form-image'>
