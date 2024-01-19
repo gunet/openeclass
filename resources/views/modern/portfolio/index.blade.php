@@ -513,15 +513,15 @@
                     <div class='d-flex justify-content-md-start justify-content-center align-items-center flex-wrap gap-3'>
                         <img class="user-detals-photo" src="{{ user_icon($uid, IMAGESIZE_LARGE) }}" alt="{{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }}">
                         <div>
-                            <h4 class='mb-0'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
-                            <p class='Neutral-900-cl mb-0'>
+                            <h4 class='mb-0 portofolio-text-intro'> {{ $_SESSION['surname'] }} {{ $_SESSION['givenname'] }} </h4>
+                            <p class='Neutral-900-cl mb-0 portofolio-text-intro'>
                                 @if($session->status == USER_TEACHER)
                                     {{ trans('langMetaTeacher') }}
                                 @else
                                     {{ trans('langStudent') }}
                                 @endif
                             </p>
-                            <p class='vsmall-text Neutral-800-cl mb-0'>
+                            <p class='vsmall-text Neutral-800-cl mb-0 portofolio-text-intro'>
                                 {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
                             </p>
                         </div>
@@ -536,10 +536,10 @@
 
                     <div class='card user-info-card h-100 px-3 py-0 border-card'>
                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1'>
-                                <i class='fa-solid fa-book-open fa-xs'></i>
+                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro'>
+                                <i class='fa-solid fa-book-open fa-xs portofolio-text-intro'></i>
                                 {{ $student_courses_count }}
-                                <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
+                                <div class='form-label mb-0 portofolio-text-intro'>{!! trans('langSumCoursesEnrolled') !!}</div>
                             </h1>
                             
                         </div>
@@ -547,10 +547,10 @@
                             
                     <div class='card user-info-card h-100 px-3 py-0 border-card'>
                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1'>
-                                <i class='fa-solid fa-book-reader fa-xs'></i>
+                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro'>
+                                <i class='fa-solid fa-book-reader fa-xs portofolio-text-intro'></i>
                                 {{ $teacher_courses_count }}
-                                <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
+                                <div class='form-label mb-0 portofolio-text-intro'>{!! trans('langSumCoursesSupport') !!}</div>
                             </h1>
                             
                         </div>

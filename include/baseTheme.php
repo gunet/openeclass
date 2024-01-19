@@ -357,6 +357,20 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// TEXT COLOR OF BRIEF PROFILE IN PORTOFOLIO ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BriefProfilePortfolioTextColor'])){
+            $styles_str .= "
+                .portofolio-text-intro{
+                    color: $theme_options_styles[BriefProfilePortfolioTextColor] !important;
+                  }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         //////////////// BACKGROUND COLOR OR BACKGROUND IMAGE OF BODY ///////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -2235,6 +2249,10 @@ function view($view_file, $view_data = array()) {
                 table.dataTable.order-column.stripe tbody tr.odd > .sorting_1, 
                 table.dataTable.display tbody tr.even > .sorting_1, 
                 table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+                    background-color: $theme_options_styles[BgTables] !important;
+                }
+
+                table.dataTable tbody tr {
                     background-color: $theme_options_styles[BgTables] !important;
                 }
 

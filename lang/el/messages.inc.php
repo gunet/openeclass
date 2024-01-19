@@ -5806,6 +5806,7 @@ $langAddPaddingListGroup = "Προσθήκη padding στη λίστα συνδ�
 $langButtonColorWhiteCongiguration = "Χρώμα φόντου κουμπιού";
 $langBgBorderForms = "Χρώμα border φόρμας";
 $langSubmitComment = "Υποβολή σχόλιου";
+$langBriefProfilePortfolioTextColor = "Χρώμα κειμένων σύντομου προφίλ";
 /* * ***********************************************************
  * Validation
  * ************************************************************ */
