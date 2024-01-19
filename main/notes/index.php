@@ -43,13 +43,19 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/references.class.php';
 require_once 'main/notes/notes.class.php';
 
-//angela: Do we need recording of personal actions????
-// The following is added for statistics purposes
-//require_once 'include/action.php';
-//$action = new action();
-//$action->record(MODULE_ID_ANNOUNCE);
-
 $toolName = $langNotes;
+
+// quick note
+if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['submitNote'])) {
+        $newTitle = $_POST['newTitle'];
+        $newContent = $_POST['newContent'];
+        $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
+        $id = Notes::add_note($newTitle, $newContent, $refobjid);
+        Session::Messages($langNoteAdd, 'alert-success');
+        exit;
+    }
+}
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -105,10 +111,6 @@ if (isset($_POST['submitNote'])) {
             redirect_to_home_page('main/notes/index.php');
         } else { // new note
             $id = Notes::add_note($newTitle, $newContent, $refobjid);
-            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-                echo $langNoteAdd;
-                exit;
-            }
             Session::Messages($langNoteAdd, 'alert-success');
             redirect_to_home_page('main/notes/index.php');
         }
@@ -124,7 +126,6 @@ if (isset($_GET['delete'])) {
     $thisNoteId = intval(getDirectReference($_GET['delete']));
     Notes::delete_note($thisNoteId);
     Session::Messages($langNoteDel, 'alert-success');
-//    redirect_to_home_page('main/notes/index.php');
 }
 
 
@@ -234,17 +235,13 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                     'button-class' => 'btn-success')
             ));
 
-
-
     /* display notes */
-    //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
     if (isset($_GET['course'])) {
         $cid = course_code_to_id($_GET['course']);
         $notelist = Notes::get_all_course_notes($cid);
     } else {
         $notelist = Notes::get_user_notes();
     }
-    //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
 
     $iterator = 1;
     $bottomNote = $noteNumber = count($notelist);

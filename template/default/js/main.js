@@ -359,12 +359,8 @@ $(document).ready(function () {
                             $(".spinner-div img").toggleClass("hidden");
                             $(".spinner-div p").toggleClass("hidden");
                             setTimeout(function () {
-                                $(".spinner-div").addClass("hidden");
-                                $(".spinner-div img").toggleClass("hidden");
-                                $(".spinner-div p").toggleClass("hidden");
-                                $("#title-note").val('');
-                                $("#text-note").val('');
-                            }, 2000);
+                                window.location.href = sidebarConfig.notesLink;
+                            }, 250);
                         }
                     });
                 }
