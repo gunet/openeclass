@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2016-08-11 13:21:11
+// Generated 2024-01-19 17:14:50
 
 $langCourse = "Course";
 $langEclass = "E-Learning Platform";
@@ -54,4 +54,23 @@ $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
 $langsOfFaculty = "category";
-$langHelp = "Help";
+$langCourseAdmin = "Admin";
+$langOfCourseAdmin = "Admin";
+$langCourseAdmins = "Admins";
+$langOfCourseAdmins = "Admins";
+$langsCourseAdmin = "admin";
+$langsOfCourseAdmin = "admin";
+$langsCourseAdmins = "admins";
+$langsOfCourseAdmins = "admins";
+$langCourseAdminTeacher = "Admin - Teacher";
+$langOfCourseAdminTeacher = "Admin - Teacher";
+$langCourseAdminTeachers = "Admins - Teachers";
+$langOfCourseAdminTeachers = "Admins - Teachers";
+$langsCourseAdminTeacher = "admin - teacher";
+$langsOfCourseAdminTeacher = "admin - teacher";
+$langsCourseAdminTeachers = "admins - teachers";
+$langsOfCourseAdminTeachers = "admins - teachers";
+$langCourseReviewer = "Reviewer";
+$langOfCourseReviewer = "Reviewer";
+$langsCourseReviewer = "reviewer";
+$langsOfCourseReviewer = "reviewer";
