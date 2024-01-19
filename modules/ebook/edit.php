@@ -258,11 +258,11 @@ if (isset($_GET['delete'])) {
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
         if ($sections){
 
-            $sections_table = "<ul class='list-group'>";
+            $sections_table = "<ul class='list-group list-group-flush'>";
             foreach ($sections as $section){
                 $sections_table .=
                         "
-                        <li class='list-group-item toolHomePage'>
+                        <li class='list-group-item element'>
                             ".q($section->public_id).".&nbsp;
                             ".q($section->title)."
                         </li>

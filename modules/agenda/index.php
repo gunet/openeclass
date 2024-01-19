@@ -1038,7 +1038,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $tool_content .= ''
                  . '
                  <div class="col-12 overflow-auto">
-                    <div id="calendar_wrapper" class="border-custom">
+                    <div id="calendar_wrapper" class="border-card">
                         
                             <div class="calendar-header">
                                 

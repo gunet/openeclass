@@ -213,10 +213,6 @@ img {
 .border-default-card{
   border: solid 1px #B3D1FF;
 }
-
-.border-custom{
-  border: solid 1px #EFF2FB;
-}
   
 .border-bottom-card-header{
   border-top: none;
@@ -1525,8 +1521,9 @@ input:-webkit-autofill:active {
 }
 
 .form-wrapper.form-edit { 
-  border:solid 1px #E8EDF8; 
-  padding: 15px 20px 25px 20px;
+  /* border:solid 1px #E8EDF8;  */
+  /* padding: 15px 20px 25px 20px; */
+  padding: 15px 0px 25px 0px;
   background-color: #ffffff;
 }
 
@@ -3482,13 +3479,7 @@ body .delThemeBtn{
   .offCanvas-Tools{
     background: #ffffff;
   }
-  .toolHomePage{
-    font-size: 14px;
-    font-weight: 700;
-    font-style: normal;
-    background-color: #ffffff;
-    color: #2B3944;
-  }
+
 }
 .news-list{ 
   margin-left: 5px; 
@@ -4578,15 +4569,6 @@ div[role="progressbar"]::before {
 }
 
 /**********************************************************************************************************************/
-/*************************************************** COMMENTS **************************************************************/
-/**********************************************************************************************************************/
-
-.form-default{
-  border: solid 1px #EFF6FF !important;
-}
-
-
-/**********************************************************************************************************************/
 /*********************************************** COURSE INFO **********************************************************/
 /**********************************************************************************************************************/
 
@@ -4627,8 +4609,6 @@ div[role="progressbar"]::before {
   #bgr-cheat-footer {border-top-left-radius:0px; border-top-right-radius:0px;}
 
   #bgr-cheat-header {border-bottom-left-radius:0px; border-bottom-right-radius:0px;}
-
-  .borderLg {border-radius: 4px;}
 
   .h30px{height:30px;}
 }
@@ -5034,14 +5014,6 @@ div[role="progressbar"]::before {
   background-color: #ffffff;
 }
 
-
-/**************************************************** FORMS ***********************************************************/
-
-.form-wrapper.form-edit.borderLg{
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
 /*************************************************** PANELS ***********************************************************/
 
 .panel-admin-calendar{
@@ -5148,10 +5120,10 @@ table.dataTable tbody tr th{
   color: #2b3944; 
 }
 
-.openCoursesFormWrapper, .borderLg{
+/* .openCoursesFormWrapper{
   background-color: transparent !important;
   border: solid 1px #E8F2E7 !important;
-}
+} */
 
 
 /************************************************** ANNOUNCEMENTS *****************************************************/
@@ -5254,10 +5226,6 @@ table.dataTable tbody tr th{
 }
 .col_maincontent_active .form-wrapper.form-edit{
   background-color: transparent;
-}
-
-.col_maincontent_active .form-wrapper.form-edit.borderLg{
-  background-color: #ffffff !important;
 }
 
 .ContentLeftNav {

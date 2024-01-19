@@ -122,11 +122,4 @@
     </div>
 </nav>
 
-<script type='text/javascript'>
-    $(document).ready(function() {
-        $('.toolHomePage').on('click',function(){
-            var btnId = $(this).attr('id');
-            $('#'+btnId).css("background-color",'#ffffff');
-        });
-    });
-</script>
+

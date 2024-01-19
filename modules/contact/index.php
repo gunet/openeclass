@@ -103,7 +103,7 @@ function form($user) {
     }
         
     $ret = "<div class='col-sm-12 mt-3'><div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langInfoAboutRegistration</span></div></div>";
-    $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit borderLg mt-2 mb-3 rounded'>";
+    $ret .= "<div class='row m-auto'><div class='col-lg-6 col-12 px-0'><div class='form-wrapper form-edit p-0 border-0 mt-2 mb-3 rounded'>";
     $ret .= "<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
         <div class='col-sm-12'><label class='control-label-notes'>$langRequest $langOfCourse:</label>&nbsp;&nbsp;<small>" . course_id_to_title($course_id) . "</small></div>

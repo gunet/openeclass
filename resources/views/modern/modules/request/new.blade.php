@@ -71,7 +71,7 @@
                                 <div class='form-group'>
                                     <div class='col-sm-12'>
                                         <label class='control-label-notes'>{{ trans('langCreator') }}: 
-                                            <span class="text-black-50 form-control-static">{{ $creatorName }}</span>
+                                            <span>{{ $creatorName }}</span>
 
                                         </label>
                                     </div>

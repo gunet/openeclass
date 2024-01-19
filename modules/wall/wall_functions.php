@@ -313,7 +313,7 @@ function generate_infinite_container_html($posts, $next_page) {
                 <h3>'.$langWallPostsShow.'</h3>
 
           </div>
-          <div class="card-body card-body-default p-0">
+          <div class="card-body card-body-default p-0 mt-4">
             <div class="infinite-container">';
 
     foreach ($posts as $post) {

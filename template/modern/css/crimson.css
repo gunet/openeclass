@@ -794,11 +794,6 @@
   .form-wrapper.form-edit .control-label-notes{ 
     color:#2B3944; 
   } 
- 
-  .form-wrapper.form-edit.borderLg{
-    padding-left: 15px;
-    padding-right: 15px;
-  }
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn{
@@ -1027,19 +1022,40 @@
 /**************************************************** LIST-GROUPS *****************************************************/
 /**********************************************************************************************************************/
 
- .col_maincontent_active .list-group-item {
-    background-color: transparent;
-    border: 0px;
-    border-bottom: 1px solid #EFF6FF;
-  }
+.list-group-item.list-group-item-action{
+  background-color: transparent;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #2B3944;
+  font-style: normal;
+  border-bottom: solid 1px #EFF2FB;
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
-  /* .col_maincontent_active .oc-metedata-list .list-group-item{
-      background-color: #ffffff;
-  }
-  
-  .col_maincontent_active .oc-metedata-list .list-group-item.Primary-600-bg{
-    background-color: #B70A0A;;
-  } */
+.list-group-item.list-group-item-action a{
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 26px;
+  color: #B70A0A;
+  font-style: normal;
+}
+
+.list-group-item.list-group-item-action:hover{
+  background-color: transparent;
+}
+
+.list-group-item.element{
+  background-color: transparent;
+  color: #2B3944;
+  border: 0px;
+  border-bottom: solid 1px #EFF2FB;
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
 
 /**********************************************************************************************************************/
@@ -1261,10 +1277,10 @@
     color: #2b3944; 
   }
   
-  .openCoursesFormWrapper, .borderLg{
+  /* .openCoursesFormWrapper{
     background-color: transparent !important;
     border: solid 1px #E8F2E7 !important;
-  }
+  } */
   
 
   /**********************************************************************************************************************/
@@ -1496,14 +1512,6 @@
   color: #B70A0A;
 }
 
-/**********************************************************************************************************************/
-/*************************************************** COMMENTS **************************************************************/
-/**********************************************************************************************************************/
-
-.form-default{
-  background-color: #ffffff !important;
-}
-
 
 /**********************************************************************************************************************/
 /*************************************************** ADMIN ************************************************************/
@@ -1523,7 +1531,7 @@
 }
 
 
-.theme-option-wrapper, .wrapper-lostpass{
+.wrapper-lostpass{
   border: solid 1px #EFF6FF !important;
 }
 
@@ -1825,10 +1833,6 @@ color:#ffffff;
   }
   .col_maincontent_active .form-wrapper.form-edit{
     background-color: transparent;
-  }
-
-  .col_maincontent_active .form-wrapper.form-edit.borderLg{
-    background-color: #ffffff !important;
   }
   
   .ContentLeftNav {

@@ -7,7 +7,7 @@
                         <img src="{{ $logo_img_small }}">
                     </div>
                     @if(get_config('enable_search'))
-                        <div class='col-12 mt-5 d-flex justify-content-center align-items-center px-4'>
+                        <div class='col-12 mt-5 d-flex justify-content-center align-items-center'>
                             @if(isset($course_code) and $course_code)
                                 <form action="{{ $urlAppend }}modules/search/search_incourse.php?all=true" class='d-flex justify-content-center align-items-end w-100'>
                             @else
@@ -21,27 +21,27 @@
                         </div>
                     @endif
                     <div class='col-12 mt-5 mb-3'>
-                        <ul class="list-group px-4">
+                        <ul class="list-group list-group-flush">
                             @if(!get_config('hide_login_link'))
-                                <a id='homeId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlServer }}">
+                                <a id='homeId' type='button' class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlServer }}">
                                     <i class="fa fa-home pe-2"></i>{{ trans('langHome') }}
                                 </a>
                             @endif
                             @if (!isset($_SESSION['uid']))
                                 @if(get_config('registration_link')!='hide')
-                                    <a id='registrationId' type="button" class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/registration.php">
+                                    <a id='registrationId' type="button" class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/registration.php">
                                         <i class="fa fa-pencil pe-2"></i>{{ trans('langRegistration') }}
                                     </a>
                                 @endif
                             @endif
 
                             @if (!get_config('dont_display_courses_menu'))
-                                <a id='coursesId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/listfaculte.php">
+                                <a id='coursesId' type='button' class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/listfaculte.php">
                                     <i class="fa fa-book pe-2"></i>{{ trans('langCourses') }}
                                 </a>
                             @endif
                            
-                            <a id='faqId' type='button' class="list-group-item list-group-item-action toolHomePage rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}info/faq.php">
+                            <a id='faqId' type='button' class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}info/faq.php">
                                 <i class="fa fa-question-circle pe-2"></i>{{ trans('langFaq') }}
                             </a>
                             

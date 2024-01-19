@@ -690,11 +690,6 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
-                .toolHomePage{
-                    background-color: transparent;
-                    color: $theme_options_styles[linkColorHeader];
-                }
-
             ";
         }
 
@@ -1629,6 +1624,46 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// BACKGROUND COLOR OF FORM WRAPPER ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgForms'])){
+            $styles_str .= "
+                .form-wrapper.form-edit { 
+                    background-color: $theme_options_styles[BgForms];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// BACKGROUND COLOR OF FORM WRAPPER ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clLabelForms'])){
+            $styles_str .= "
+                .radio label{ 
+                    color:$theme_options_styles[clLabelForms];
+                } 
+
+                .form-wrapper.form-edit .control-label-notes{ 
+                    color:$theme_options_styles[clLabelForms];
+                }
+
+                .label-container {
+                    color:$theme_options_styles[clLabelForms];
+                }
+            
+            ";
+        }
+            
+        
+
         
 
 
@@ -2168,33 +2203,7 @@ function view($view_file, $view_data = array()) {
         }
 
 
-        if(!empty($theme_options_styles['BgForms']) or !empty($theme_options_styles['clLabelForms'])){
-            if(!empty($theme_options_styles['BgForms'])){
-                $styles_str .= "
-                    .form-wrapper.form-edit { 
-                        background-color: $theme_options_styles[BgForms];
-                    }
-                ";
-            }
-
-            if(!empty($theme_options_styles['clLabelForms'])){
-                $styles_str .= "
-                    .radio label{ 
-                        color:$theme_options_styles[clLabelForms];
-                    } 
-
-                    .form-wrapper.form-edit .control-label-notes{ 
-                        color:$theme_options_styles[clLabelForms];
-                    }
-
-                    .label-container {
-                        color:$theme_options_styles[clLabelForms];
-                    }
-                
-                ";
-            }
-            
-        }
+        
 
         if(!empty($theme_options_styles['BgTables'])){
             $styles_str .= "

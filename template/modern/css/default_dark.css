@@ -40,10 +40,6 @@
   .border-default-card{
     border: solid 1px #4F6893;
   }
-  
-  .border-custom{
-    border: solid 1px #4F6893;
-  }
     
   .border-bottom-card-header{
     border-top: none;
@@ -655,7 +651,6 @@
   }
   
   .form-wrapper.form-edit { 
-    border:solid 1px #212D37; 
     background-color: #212D37;
   }
   
@@ -1197,12 +1192,6 @@
   .form-wrapper.form-edit .control-label-notes{ 
     color:#ffffff; 
   } 
-  
-  /* statistics wrapper */
-  .form-wrapper.form-edit.borderLg{
-    padding-left: 15px;
-    padding-right: 15px;
-  }
   
   .form-wrapper:has(.submitAdminBtn) .submitAdminBtn,
   .form-horizontal:has(.submitAdminBtn) .submitAdminBtn{
@@ -1810,18 +1799,6 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     padding-right: 0px;
   }
 
-  @media (max-width: 991px){
-    .toolHomePage,
-    .toolHomePage:hover,
-    .toolHomePage:focus{
-      background-color: transparent;
-      color: #74AFE9;
-      border: 0px;
-      border-bottom: solid 1px #4F6893;
-    }
-  }
-  
-
 
 /**********************************************************************************************************************/
 /************************************************* CONTACT - ABOUT ****************************************************/
@@ -2047,10 +2024,10 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #ffffff; 
   }
   
-  .openCoursesFormWrapper, .borderLg{
+  /* .openCoursesFormWrapper{
     background-color: #212D37 !important;
     border: solid 1px #4F6893 !important;
-  }
+  } */
   
 
   /**********************************************************************************************************************/
@@ -2326,17 +2303,6 @@ tr.warning:hover{
 }
 
 
-
-/**********************************************************************************************************************/
-/*************************************************** COMMENTS **************************************************************/
-/**********************************************************************************************************************/
-
-
-.form-default{
-  border: solid 1px #4F6893 !important;
-}
-
-
 /**********************************************************************************************************************/
 /**************************************** LEARNING PATH **************************************************************/
 /**********************************************************************************************************************/
@@ -2387,7 +2353,7 @@ tr.warning:hover{
 }
 
 
-.theme-option-wrapper, .wrapper-lostpass{
+.wrapper-lostpass{
   border: solid 1px #4F6893 !important;
 }
 
@@ -2771,8 +2737,5 @@ tr.warning:hover{
     text-decoration: underline;
   }
 
-  .col_maincontent_active .form-wrapper.form-edit.borderLg{
-    background-color: #212D37 !important;
-  }
 
   

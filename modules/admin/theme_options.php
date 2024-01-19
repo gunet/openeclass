@@ -619,6 +619,7 @@ if (isset($_POST['optionsSave'])) {
     </div></div>";
 
 $tool_content .= "
+<div class='col-12 border-card p-3'>
 <div role='tabpanel mt-4'>
 
   <!-- Nav tabs -->
@@ -1496,7 +1497,7 @@ $tool_content .= "
         </form>
     </div>
 </div>
-
+</div>
 
 
 <div class='modal fade' id='JumbotronImagesModal' tabindex='-1' aria-labelledby='JumbotronImagesModalLabel' aria-hidden='true'>

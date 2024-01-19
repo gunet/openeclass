@@ -76,7 +76,7 @@ Class Commenting {
      */
     public function put($courseCode, $isEditor, $uid, $always_open = false) {
         global $langComments, $langBlogPostUser, $langSubmit, $langModify, $langDelete,
-        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content, $langClose, $langTypeOutMessage;
+        $langCommentsDelConfirm, $langCommentsSaveConfirm, $urlServer, $head_content, $langClose, $langTypeOutMessage, $langSubmitComment;
 
         $commentsNum = $this->getCommentsNum();
 
@@ -119,7 +119,7 @@ Class Commenting {
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= '<span class="fa fa-edit pe-2 pb-2" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<span class="fa-solid fa-xmark text-danger pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
+                        $post_actions .= '<span class="fa-solid fa-xmark Accent-200-cl pe-2 pb-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></span></a>';
                         $post_actions .='</div>';
                     } else {
                         $post_actions = '';
@@ -174,16 +174,16 @@ Class Commenting {
 
         if (is_null($courseCode)) { //for the case of personal blog posts comments
             if (isset($_SESSION['uid'])) {
-                $out .= '<div class="col-12"><div class="form-wrapper form-edit Borders form-default pb-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $out .= '<div class="col-12"><div class="form-wrapper form-edit Borders px-0 pb-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
-                $out .= '<input class="btn submitAdminBtn m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
+                $out .= '<input class="btn submitAdminBtn" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
                 $out .= '</form></div></div>';
             }
         } else {
             if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
-                $out .= '<div class="col-12  pb-5"><div class="form-wrapper form-edit Borders form-default px-3"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $out .= '<div class="col-12 pb-5"><div class="form-wrapper form-edit Borders px-0"><form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" placeholder="'.$langTypeOutMessage.'" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
-                $out .= '<input class="btn submitAdminBtn m-auto d-block" name="send_button" type="submit" value="'.$langSubmit.'" />';
+                $out .= '<input class="btn submitAdminBtn" name="send_button" type="submit" value="'.$langSubmitComment.'" />';
                 $out .= '</form></div></div>';
             }
         }
