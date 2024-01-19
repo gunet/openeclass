@@ -92,7 +92,7 @@
 @endphp
 
 <div class='col-12 mt-4'>
-    <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-lg-5 g-4">
+    <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-3 g-lg-4">
         <div class='col'>
             <div class='card panelCard p-0 bg-default m-auto h-100 border-0'>
                 <div class='card-body px-0'>
@@ -312,7 +312,7 @@
 
 @if ($is_admin)
     <div class='col-12 mt-4'>
-        <div class="row row-cols-1 row-cols-lg-3 g-lg-5 g-4">
+        <div class="row row-cols-1 row-cols-lg-3 g-3 g-lg-4">
             <div class='col'>
                 <div class='card panelCard p-0 border-0 bg-default h-100'>
                     <div class='card-body px-0'>

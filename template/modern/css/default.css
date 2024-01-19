@@ -2203,6 +2203,10 @@ body .form-action-button-popover{
   display: none; 
 }
 
+.forum-category-tools{
+  background-color: #EFF2FB;
+}
+
 .forum-category-tools .form-action-button-popover{
   display: block; 
 }
@@ -4086,7 +4090,9 @@ div[role="progressbar"]::before {
   color:#2546F0 !important;
 }
 
-
+.list-group-groups{
+  list-style-type: none;
+}
 
 /**********************************************************************************************************************/
 /****************************************** AUTH REGISTER COURSES *****************************************************/
@@ -5096,12 +5102,6 @@ table.dataTable tbody tr th{
 }
 
 
-/************************************************* COURSEHOME *********************************************************/
-
-.list-group-announce-homepage{
-  background-color: transparent;
-}
-
 /************************************************* GROUPS *************************************************************/
 
 .panelCard{
@@ -5226,12 +5226,6 @@ table.dataTable tbody tr th{
   color: #2b3944;
 }
 
-
-/*************************************************** USAGE **************************************************************/
-
-.last-visit-li{
-  color: #2b3944;
-}
 
 /**************************************** QUESTIONNAIER **************************************************************/
 

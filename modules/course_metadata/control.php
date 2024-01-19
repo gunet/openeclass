@@ -166,7 +166,7 @@ $lastSubmission = '';
 if (isset($xmlData['course_lastLevelConfirmation']) &&
         strlen($xmlData['course_lastLevelConfirmation']) > 0 &&
         ($ts = strtotime($xmlData['course_lastLevelConfirmation'])) > 0) {
-    $lastSubmission = '<p><small>' . $langLastSubmission . ': ' . date('j/n/Y H:i:s', $ts) . '</small></p>';
+    $lastSubmission = '<p class="mt-3"><small>' . $langLastSubmission . ': ' . date('j/n/Y H:i:s', $ts) . '</small></p>';
 }
 
 $tool_content .= action_bar(array(
@@ -177,41 +177,41 @@ $tool_content .= action_bar(array(
 $tool_content .= "
     <div class='oc-metedata-list'>
         <div class='col-12'>
-            <ul class='list-group'>
-                <li class='list-group-item Primary-600-bg'>
-                    <span class='text-white TextBold'>$langOpenCoursesCharacteristics</span>
+            <ul class='list-group list-group-flush'>
+                <li class='list-group-item list-group-item-action'>
+                    <div>$langOpenCoursesCharacteristics</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $openAccessImgBadge'><i class='fa $openAccessImg'></i></span>
-                    $langOpenCoursesOpenAccess
+                    <div>$langOpenCoursesOpenAccess</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $mandatoryMetadataImgBadge'><i class='fa $mandatoryMetadataImg'></i></span>
-                    $langOpenCoursesMandatoryMetadata
+                    <div>$langOpenCoursesMandatoryMetadata</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $licenseImgBadge'><i class='fa $licenseImg'></i></span>
-                    $langOpenCoursesLicense
+                    <div>$langOpenCoursesLicense</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $teacherConfirmImgBadge'><i class='fa $teacherConfirmImg'></i></span>
-                    $langOpenCoursesTeacherConfirm
+                    <div>$langOpenCoursesTeacherConfirm</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $docsImgBadge'><i class='fa $docsImg'></i></span>
-                    $langOpenCoursesHasDocuments ($numDocs $langDoc)
+                    <div>$langOpenCoursesHasDocuments ($numDocs $langDoc)</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $unitsImgBadge'><i class='fa $unitsImg'></i></span>
-                    $langOpenCoursesHasUnits ($numUnits $langCourseUnits)
+                    <div>$langOpenCoursesHasUnits ($numUnits $langCourseUnits)</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $mediaImgBadge'><i class='fa $mediaImg'></i></span>
-                    $langOpenCoursesHasMediaFiles ($numMedia $langOpenCoursesFiles)
+                    <div>$langOpenCoursesHasMediaFiles ($numMedia $langOpenCoursesFiles)</div>
                 </li>
-                <li class='list-group-item'>
+                <li class='list-group-item element d-flex justify-content-start align-items-center gap-1 flex-wrap'>
                     <span class='badge $teacherConfirmVideoImgBadge'><i class='fa $teacherConfirmVideoImg'></i></span>
-                    $langOpenCoursesTeacherConfirmVideo
+                    <div>$langOpenCoursesTeacherConfirmVideo</div>
                 </li>
             </ul>
         </div>
@@ -220,47 +220,41 @@ $tool_content .= "
 
 $tool_content .= "
                     <div class='col-12 mt-4'>
-                        <div class='list-group'>
+                        
                             <form class='horizontal-form' role='form' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>";
 $tool_content .= <<<EOF
-                            <ul class='list-group oc-metedata-list'>
-                                <li class='list-group-item Primary-600-bg'>
-                                    <span class='text-white TextBold'>$langOpenCoursesCharacter</span>
-                                </li>
-                                <li class='list-group-item'>
-                                    <label for='check_AMinus'>$langOpenCoursesType <strong>$langOpenCoursesIsAMinusLevel</strong></label>
-                                    <span class='float-end'>
+                                <ul class='list-group list-group-flush oc-metedata-list'>
+                                    <li class='list-group-item list-group-item-action'>
+                                        <div>$langOpenCoursesCharacter</div>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                        <div>$langOpenCoursesType <strong>($langOpenCoursesIsAMinusLevel)</strong></div>
                                         <label class='label-container'>
                                             <input type="checkbox" id="check_AMinus" name="course_confirmAMinusLevel" value="true" $checkedAMinusLevel $disabledAMinusLevel/>
                                             <span class='checkmark'></span>
                                         </label>
-                                    </span>
-                                </li>
-                                <li class='list-group-item'>
-                                    <label for='check_A'>$langOpenCoursesType <strong>$langOpenCoursesIsALevel</strong></label>
-                                    <span class='float-end'>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                        <div>$langOpenCoursesType <strong>($langOpenCoursesIsALevel)</strong></div>
                                         <label class='label-container'>
                                             <input type="checkbox" id="check_A" name="course_confirmALevel" value="true" $checkedALevel $disabledALevel/>
                                             <span class='checkmark'></span>
                                         </label>
-                                    </span>
-                                </li>
-                                <li class='list-group-item' style='border-bottom:none;'>
-                                    <label for='check_APlus'>$langOpenCoursesType <strong>$langOpenCoursesIsAPlusLevel</strong></label>
-                                    <span class='float-end'>
+                                    </li>
+                                    <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                        <div>$langOpenCoursesType <strong>($langOpenCoursesIsAPlusLevel)</strong></div>
                                         <label class='label-container'>
                                             <input type="checkbox" id="check_APlus" name="course_confirmAPlusLevel" value="true" $checkedAPlusLevel $disabledAPlusLevel/>
                                             <span class='checkmark'></span>
                                         </label>
-                                    </span>
-                                </li>
-                                <li class='list-group-item' style='border-top:none;'>
-                                    <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
-                                </li>
-                            </ul>
-                        </form>
+                                    </li>
+                                    <li class='list-group-item d-flex justify-content-end element'>
+                                        <input class='btn submitAdminBtn' type='submit' name='submit' value='$langSubmit'>
+                                    </li>
+                                </ul>
+                            </form>
+                    
                     </div>
-                </div>
             
     
     

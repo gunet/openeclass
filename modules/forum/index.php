@@ -120,7 +120,7 @@ if ($total_categories > 0) {
         }
 
         $tool_content .= "<div class='col-12 border-card mb-4'><caption>";
-        $tool_content .= "<div class='col-12 forum-category-tools d-flex justify-content-between align-items-center border-card Primary-200-bg px-0 py-0 mb-0'>
+        $tool_content .= "<div class='col-12 forum-category-tools d-flex justify-content-between align-items-center border-card px-0 py-0 mb-0'>
                           <div style='padding-left:10px;'><strong>$langCategory :</strong> $cat_title</div>";
         $tool_content .= "<div>";
         $tool_content .= action_button(

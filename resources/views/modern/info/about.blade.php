@@ -48,7 +48,7 @@
 
                     
                     <div class='col-12 mt-5'>
-                        <div class='row row-cols-1 row-cols-md-2 g-3 g-md-5'>
+                        <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
                             <div class='col'>
                                 <ul class='list-group list-group-flush'>
                                     <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-5 flex-wrap'>

@@ -150,7 +150,7 @@
 
             @if ($is_admin)
                 <div class='col-12 mt-4'>
-                    <div class='row row-cols-1 row-cols-lg-2 g-4'>
+                    <div class='row row-cols-1 row-cols-lg-2 g-3 g-lg-4'>
 
                         <div class='col'>
                             <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 bg-default h-100'>
@@ -238,7 +238,7 @@
                         $colSize = '1';
                     }
                 @endphp
-                <div class="row row-cols-1 row-cols-lg-{{ $colSize }} g-4">
+                <div class="row row-cols-1 row-cols-lg-{{ $colSize }} g-3 g-lg-4">
 
                     <div class='col'>
                         <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>

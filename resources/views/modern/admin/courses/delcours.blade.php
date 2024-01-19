@@ -58,19 +58,19 @@
                         </div>
                     </div>
 
-                    <div class='col-12'>
-                        <ul class='list-group'>
-                            <li class='list-group-item'>
-                                <a href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course_id }}&amp;delete=yes&amp;{{ generate_csrf_token_link_parameter() }}' {!! $asktotp !!}>
-                                <b>{{ trans('langYes') }}</b>
+                    <div class='col-12 d-flex justify-content-center align-items-center flex-wrap gap-3'>
+                        
+                           
+                                <a class='btn deleteAdminBtn' href='{{ $_SERVER['SCRIPT_NAME'] }}?c={{ $course_id }}&amp;delete=yes&amp;{{ generate_csrf_token_link_parameter() }}' {!! $asktotp !!}>
+                                    {{ trans('langYes') }}
                                 </a>
-                            </li>
-                            <li class='list-group-item'>
-                                <a href='listcours.php'>
-                                    <b>{{ trans('langNo') }}</b>
+                           
+                         
+                                <a class='btn cancelAdminBtn' href='listcours.php'>
+                                    {{ trans('langNo') }}
                                 </a>
-                            </li>
-                        </ul>
+                           
+                        
                     </div>
 
                 

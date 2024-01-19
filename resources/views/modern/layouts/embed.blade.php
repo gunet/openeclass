@@ -74,7 +74,7 @@
 <body class='py-5 px-3'>
     <div class="container p-0">
         <div class="row m-auto" id="Frame">
-            <div id="leftnav" class="col-2 sidebar embeded bg-default pt-5 ps-0">
+            <div id="leftnav" class="col-2 sidebar embeded bg-transparent pt-5 ps-0">
                 <div class="panel-group accordion mt-1" id="sidebar-accordion">
                     <div class="m-0 p-0 contextual-sidebar w-auto border-0">
                         <ul class="list-group list-group-flush">

@@ -53,20 +53,43 @@ $tool_content .= "
                 <h3>$langUsage</h3>
             </div>
             <div class='card-body'>
-                <div class='row'>
-                    <div class='col-12'>
+                <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
+                    <div class='col'>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item px-0'><strong>$langUsageUsers</strong><span class='badge rounded Primary-600-bg text-white float-end'>".count_course_users($course_id)."</span></li>
-                            <li class='list-group-item li-indented px-0'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge rounded bgLightwhite Neutral-900-cl float-end'>".count_course_users($course_id,USER_TEACHER)."</span></li>
-                            <li class='list-group-item li-indented px-0'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge rounded bgLightwhite Neutral-900-cl float-end'>".count_course_users($course_id,USER_STUDENT)."</span></li>
+                            <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langUsageUsers</div>
+                                <div>
+                                    ".count_course_users($course_id)."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langTeachers</div>
+                                <div>".count_course_users($course_id,USER_TEACHER)."</div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langStudents</div>
+                                <div>".count_course_users($course_id,USER_STUDENT)."</div>
+                            </li>
                         </ul>
                     </div>
-                    <div class='col-12 mt-4'>
+                    <div class='col'>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item px-0'><strong>$langGroups</strong><span class='badge rounded Primary-600-bg text-white float-end'>".count_course_groups($course_id)."</span></li>
-                            <li class='list-group-item px-0'><strong>$langTotalVisits</strong><span class='badge rounded Primary-600-bg text-white float-end'>".course_visits($course_id)."</span></li>
-                            <li class='list-group-item px-0'><strong>$langTotalHits</strong><span class='badge rounded Primary-600-bg text-white float-end'>".$hits['hits']."</span></li>
-                            <li class='list-group-item px-0'><strong>$langTotalDuration</strong><span class='badge rounded Primary-600-bg text-white float-end'>".$hits['duration']."</span></li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langGroups</div>
+                                <div>".count_course_groups($course_id)."</div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langTotalVisits</div>
+                                <div>".course_visits($course_id)."</div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langTotalHits</div>
+                                <div>".$hits['hits']."</div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langTotalDuration</div>
+                                <div>".$hits['duration']."</div>
+                            </li>
                         </ul>
                     </div>
                 </div>

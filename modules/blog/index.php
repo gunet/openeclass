@@ -847,8 +847,8 @@ if ($action == "showBlog") {
         $posts = $blog->getBlogPostsDB($page, $posts_per_page);
 
         /***blog posts area***/
-        $tool_content .= "<div class='row m-auto'>";
-        $tool_content .= "<div class='col-sm-8 border border-secondary-4 bg-light shadow-sm p-3'>";
+        $tool_content .= "<div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>";
+        $tool_content .= "<div class='col-md-8'>";
         foreach ($posts as $post) {
             if ($blog_type == 'course_blog') {
                 $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
@@ -943,7 +943,7 @@ if ($action == "showBlog") {
 
 
         /***sidebar area***/
-        $tool_content .= "<div class='col-sm-4 bg-light p-3 border border-secondary-4 shadow-sm mt-md-0 mt-3'>";
+        $tool_content .= "<div class='col-md-4'>";
         $tool_content .= $blog->popularBlogPostsHTML($num_popular);
         $tool_content .= $blog->chronologicalTreeHTML(date('n',strtotime($posts[0]->getTime())), date('Y',strtotime($posts[0]->getTime())));
 

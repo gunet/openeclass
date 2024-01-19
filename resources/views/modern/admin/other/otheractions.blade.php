@@ -144,37 +144,29 @@
                         </div>
                         @elseif  ($_GET['stats'] == 'vmusers')
                                 <div class='col-12'>
-                                    <div class='form-wrapper form-edit'>
-                                        <div class='control-label-notes pb-3'>
-                                            {{ trans('langUsers') }}
-                                        </div>
+                                    
                                         <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item'>
-                                                <label>
-                                                    <a href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
-                                                </label>
-                                                <span class='badge bg-secondary text-white float-end'>{{ $verifiedEmailUserCnt }}</span>
+                                            <li class='list-group-item list-group-item-action'>
+                                                <div>{{ trans('langUsers') }}</div>
                                             </li>
-                                            <li class='list-group-item'>
-                                                <label>
-                                                    <a href='listusers.php?search=yes&verified_mail=2'>{{ trans('langMailVerificationNo') }}</a>
-                                                </label>
-                                                <span class='badge bg-secondary text-white float-end'>{{ $unverifiedEmailUserCnt }}</span>
+                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                <a href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
+                                                <div>{{ $verifiedEmailUserCnt }}</div>
                                             </li>
-                                            <li class='list-group-item'>
-                                                <label>
-                                                    <a href='listusers.php?search=yes&verified_mail=0'>{{ trans('langMailVerificationPending') }}</a>
-                                                </label>
-                                                <span class='badge bg-secondary text-white float-end'>{{ $verificationRequiredEmailUserCnt }}</span>
+                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                <a href='listusers.php?search=yes&verified_mail=2'>{{ trans('langMailVerificationNo') }}</a>
+                                                <div>{{ $unverifiedEmailUserCnt }}</div>
                                             </li>
-                                            <li class='list-group-item'>
-                                                <label>
-                                                    <a href='listusers.php?search=yes'>{{ trans('langTotal') }}</a>
-                                                </label>
-                                                <span class='badge bg-success text-white float-end'>{{ $totalUserCnt }}</span>
+                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                <a href='listusers.php?search=yes&verified_mail=0'>{{ trans('langMailVerificationPending') }}</a>
+                                                <div>{{ $verificationRequiredEmailUserCnt }}</div>
+                                            </li>
+                                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                <a href='listusers.php?search=yes'>{{ trans('langTotal') }}</a>
+                                                <div>{{ $totalUserCnt }}</div>
                                             </li>
                                         </ul>
-                                    </div>
+                                    
                                 </div>
                         @elseif  ($_GET['stats'] == 'cusers')
                         <div class='col-12'>

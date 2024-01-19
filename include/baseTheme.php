@@ -320,6 +320,9 @@ function view($view_file, $view_data = array()) {
                 border: 0px;
             }
            
+            .forum-category-tools{
+                background-color: transparent;
+            }
 
         "
         ;
@@ -371,7 +374,8 @@ function view($view_file, $view_data = array()) {
                                 body{
                                     background: $bg_color$bg_image;$background_type
                                 }
-                                .main-container{
+                                .main-container,
+                                .module-container{
                                     background-color: $bg_color;
                                 }
                             ";
@@ -2199,6 +2203,7 @@ function view($view_file, $view_data = array()) {
                 rgb(33, 45, 55){
                     background-color: $theme_options_styles[BgTables];
                 }
+
                 .table-default tbody tr td, 
                 .announcements_table tbody tr td, 
                 table.dataTable tbody tr td, 
@@ -2215,6 +2220,15 @@ function view($view_file, $view_data = array()) {
                 .row-course:hover td:first-child, .row-course:hover td:last-child{
                     background-color: $theme_options_styles[BgTables];
                 }
+
+                table.dataTable.display tbody tr.odd, 
+                table.dataTable.display tbody tr.odd > .sorting_1, 
+                table.dataTable.order-column.stripe tbody tr.odd > .sorting_1, 
+                table.dataTable.display tbody tr.even > .sorting_1, 
+                table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+                    background-color: $theme_options_styles[BgTables] !important;
+                }
+
             ";
         }
 

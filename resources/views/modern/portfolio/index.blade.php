@@ -787,8 +787,8 @@
 
 
                                 @if($portfolio_page_main_widgets)
-                                    <div class='panel panel-admin border-0 bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                                        {!! $portfolio_page_main_widgets !!}
+                                    <div class='panel panel-admin border-0  mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
+                                        <div class='panel-body'>{!! $portfolio_page_main_widgets !!}</div>
                                     </div>
                                 @endif
 

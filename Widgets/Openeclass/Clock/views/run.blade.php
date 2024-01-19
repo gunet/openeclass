@@ -1,6 +1,6 @@
 @if (isset($clock_type) && $clock_type == 0 || !isset($clock_type))
    
-            <ul class="clock clock-sidebar mt-3">	
+            <ul class="clock clock-sidebar">	
                     <li class="sec"></li>
                     <li class="hour"></li>
                     <li class="min"></li>

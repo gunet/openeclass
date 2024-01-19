@@ -288,9 +288,9 @@ if (isset($_GET['group_as'])) {
                             <h3>$langTools</h3>
                         </div>
                         <div class='card-body'>
-                            <ul class='ps-3'>";
+                            <ul class='list-group list-group-flush list-group-groups'>";
                                 if($is_editor){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='group_edit.php?course=$course_code&group_id=$group_id&from=group'>
                                                             <span class='fa fa-edit pt-0 pe-1'></span>$langModify
                                                         </a>
@@ -298,7 +298,7 @@ if (isset($_GET['group_as'])) {
                                 }
 
                                 if($has_forum and $forum_id <> 0){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                             <span class='fa fa-comments pt-0 pe-1'></span>$langForums
                                                         </a>
@@ -306,7 +306,7 @@ if (isset($_GET['group_as'])) {
                                 }
 
                                 if($documents){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='document.php?course=$course_code&amp;group_id=$group_id'>
                                                             <span class='fa fa-folder-open pt-0 pe-1'></span>$langGroupDocumentsLink
                                                         </a>
@@ -314,7 +314,7 @@ if (isset($_GET['group_as'])) {
                                 }
 
                                 if($wiki){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../wiki/index.php?course=$course_code&amp;gid=$group_id'>
                                                             <span class='fa-solid fa-won-sign pt-0 pe-1'></span>$langWiki
                                                         </a>
@@ -322,7 +322,7 @@ if (isset($_GET['group_as'])) {
                                 }
 
                                 if(visible_module(MODULE_ID_ASSIGN)){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1'>
                                                             <span class='fa fa-globe pt-0 pe-1'></span>$langGroupAssignments
                                                         </a>
@@ -331,7 +331,7 @@ if (isset($_GET['group_as'])) {
 
 
                                 if($is_editor or $is_tutor or $student_to_student_allow){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='../message/index.php?course=$course_code&upload=1&type=cm&group_id=$group_id'>
                                                             <span class='fa fa-envelope pt-0 pe-1'></span>$langEmailGroup
                                                         </a>
@@ -339,7 +339,7 @@ if (isset($_GET['group_as'])) {
                                 }
 
                                 if($is_editor){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li class='mb-3'>
                                                         <a class='d-flex justify-content-start align-items-start' href='muladduser.php?course=$course_code&amp;group_id=$group_id'>
                                                             <span class='fa fa-plus-circle pt-0 pe-1'></span>$langAddManyUsers
                                                         </a>
@@ -347,7 +347,7 @@ if (isset($_GET['group_as'])) {
                                 }
 
                                 if($is_editor){
-                                    $tool_content .= "<li class='mb-2'>
+                                    $tool_content .= "<li>
                                                         <a class='d-flex justify-content-start align-items-start' href='dumpgroup.php?course=$course_code&amp;group_id=$group_id'>
                                                             <span class='fa-solid fa-file-zipper pt-0 pe-1'></span>$langDumpExcel
                                                         </a>
@@ -372,20 +372,20 @@ if (isset($_GET['group_as'])) {
                             </div>
                             <div class='card-body'>
                           <ul class='list-group list-group-flush'>
-                              <li class='list-group-item'>
+                              <li class='list-group-item element'>
                                   <div class='row'>";
             if ($is_editor or $is_tutor) {
-                $tool_content .= "<div class='col-4 form-label'>$langSurnameName</div>
-                                      <div class='col-4 form-label'>$langAm</div>
-                                      <div class='col-4 form-label'>$langEmail</div>";
+                $tool_content .= "<div class='col-4 TextBold' style='font-size:14px;'>$langSurnameName</div>
+                                      <div class='col-4 TextBold' style='font-size:14px;'>$langAm</div>
+                                      <div class='col-4 TextBold' style='font-size:14px;'>$langEmail</div>";
             } else {
-                $tool_content .= "<div class='col-12 form-label'>$langSurnameName</div>";
+                $tool_content .= "<div class='col-12 TextBold' style='font-size:14px;'>$langSurnameName</div>";
             }
             $tool_content .= "</div></li>";
 
             foreach ($members as $member) {
                 $user_group_description = q($member->description);
-                $tool_content .= "<li class='list-group-item'>
+                $tool_content .= "<li class='list-group-item element'>
                                   <div class='row'>";
                 if ($is_editor or $is_tutor) {
                     $email = q($member->email);

@@ -56,39 +56,102 @@ $tool_content .= action_bar(array(
 
 $tool_content .= "
         <div class='col-12'>
-                <div class='row'>
-                    <div class='col-md-6 col-12'>
+                <div class='row row-cols-1 row-cols-md-2 g-3 g-md-4'>
+                    <div class='col'>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item'><strong>$langUsageCoursesHeader</strong><span class='badge rounded bg-success text-white float-end'>".count_courses()."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCoursesShort<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_OPEN)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langOpenCourseWithRegistration<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_REGISTRATION)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langClosedCourses<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_CLOSED)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langCourseInactiveShort<span class='badge rounded bg-secondary text-white float-end'>".count_courses(COURSE_INACTIVE)."</span></li>
+                            <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langUsageCoursesHeader</div>
+                                <div>
+                                    ".count_courses()."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langOpenCoursesShort</div>
+                                <div>
+                                    ".count_courses(COURSE_OPEN)."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langOpenCourseWithRegistration</div>
+                                <div>
+                                    ".count_courses(COURSE_REGISTRATION)."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langClosedCourses</div>
+                                <div>
+                                    ".count_courses(COURSE_CLOSED)."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langCourseInactiveShort</div>
+                                <div>
+                                    ".count_courses(COURSE_INACTIVE)."
+                                </div>
+                            </li>
                         </ul>
                     </div>
-                    <div class='col-md-6 col-12 mt-md-0 mt-3'>
+                    <div class='col'>
                         <ul class='list-group list-group-flush'>
-                            <li class='list-group-item'><strong>$langUsageUsers</strong><span class='badge rounded bg-success text-white float-end'>".count_users()."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langTeachers<span class='badge rounded bg-secondary text-white float-end'>".count_users(USER_TEACHER)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langStudents<span class='badge rounded bg-secondary text-white float-end'>".count_users(USER_STUDENT)."</span></li>
-                            <li class='list-group-item li-indented'>&nbsp;&nbsp;-&nbsp;&nbsp;$langGuest<span class='badge rounded bg-secondary text-white float-end'>".count_users(USER_GUEST)."</span></li>                           
+                            <li class='list-group-item list-group-item-action d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langUsageUsers</div>
+                                <div>
+                                    ".count_users()."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langTeachers</div>
+                                <div>
+                                    ".count_users(USER_TEACHER)."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langStudents</div>
+                                <div>
+                                    ".count_users(USER_STUDENT)."
+                                </div>
+                            </li>
+                            <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                <div>$langGuest</div>
+                                <div>
+                                    ".count_users(USER_GUEST)."
+                                </div>
+                            </li>              
                         </ul>
                     </div>
                 </div>
-                <div class='row mt-4'>
-                    <div class='col-12'>
-                        <div class='form-wrapper form-edit'>
-                            <ul class='list-group list-group-flush'>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=popularcourses'>$langPopularCourses</a><small> ($langLast30Entries)</small></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=cusers'>$langMultipleCourseUsers</a><small> ($langLast30Entries)</small></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a></li>
-                                <li class='list-group-item'><a href='../admin/otheractions.php?stats=unregusers'>$langUnregUsers</a><small> ($langLastMonth)</small></li>
-                            </ul>
-                        </div>
+                <div class='row row-cols-1 mt-md-4 mt-3'>
+                    <div class='col'>
+                        <ul class='list-group list-group-flush'>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a>
+                                <small> ($langLast15Days)</small>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=popularcourses'>$langPopularCourses</a>
+                                <small> ($langLast30Entries)</small>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=cusers'>$langMultipleCourseUsers</a>
+                                <small> ($langLast30Entries)</small>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a>
+                            </li>
+                            <li class='list-group-item element'>
+                                <a href='../admin/otheractions.php?stats=unregusers'>$langUnregUsers</a>
+                                <small> ($langLastMonth)</small>
+                            </li>
+                        </ul>
                     </div>   
                 </div>         
         </div>";

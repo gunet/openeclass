@@ -130,7 +130,7 @@
                 <div class="panel-group" id="sidebar-accordion">
                     <div class="panel">
                         @foreach ($toolArr as $key => $tool_group)
-                            <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion">
+                            <a class="collapsed parent-menu" data-bs-toggle="collapse" data-bs-parent="#sidebar-accordion">
                                 <div class="panel-heading">
                                     <div class="panel-title h3">
                                         <span class="fa-solid fa-chevron-right"></span>

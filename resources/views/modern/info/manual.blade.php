@@ -11,7 +11,7 @@
                     </div>
 
                     <div class='col-12'>
-                        <div class='row row-cols-1 row-cols-md-3 g-md-5 g-4'>
+                        <div class='row row-cols-1 row-cols-md-3 g-3 g-md-4'>
                             <div class='col'>
                                 <ul class='list-group list-group-flush'>
                                     <li class='list-group-item list-group-item-action border-0 pb-3'>

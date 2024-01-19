@@ -157,7 +157,7 @@
                                 @else
                                     <ul class='list-group list-group-flush'>
                                         <li class='list-group-item element'>
-                                            <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ trans('langNoInfoAvailable') }}</div>
+                                            <div class='TextRegular msmall-text Neutral-800-cl'>{{ trans('langNoInfoAvailable') }}</div>
                                         </li>
                                     </ul>
                                 @endif

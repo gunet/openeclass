@@ -876,19 +876,15 @@ function user_duration_per_course($u) {
     $tool_content .= "
                 <div class='margin-bottom-fat margin-top-fat mb-4'>
                   <div class='col-12'>
-                    <ul class='list-group'>
-                      <li class='list-group-item Primary-600-bg'>
-                        <div class='row'>
-                          <div class='col-sm-12'><strong class='text-white'>$langDurationVisitsPerCourse</strong></div>
-                        </div>
+                    <ul class='list-group list-group-flush'>
+                      <li class='list-group-item list-group-item-action'>
+                          <div>$langDurationVisitsPerCourse</div>
                       </li>";
     foreach ($duration as $code => $time) {
         $tool_content .= "
-                      <li class='list-group-item'>
-                        <div class='row'>
-                          <div class='col-sm-8'><b>" . q(course_code_to_title($code)) . "</b></div>
-                          <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time) . "</div>
-                        </div>
+                      <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                          <div>" . q(course_code_to_title($code)) . "</div>
+                          <div>" . format_time_duration(0 + $time) . "</div>
                       </li>";
     }
     $tool_content .= "
@@ -938,19 +934,15 @@ function user_last_logins($u) {
     if (count($result) > 0) {
         $tool_content .= "<div class='margin-bottom-fat margin-top-fat mb-3'>
                   <div class='col-12'>
-                    <ul class='list-group'>
-                      <li class='list-group-item Primary-600-bg'>
-                        <div class='row'>
-                          <div class='col-sm-12'><b class='text-white TextBold'>$langLastVisits</b></div>
-                        </div>";
+                    <ul class='list-group list-group-flush'>
+                       <li class='list-group-item list-group-item-action'>
+                            <div>$langLastVisits</div>
+                        </li>";
 
         foreach ($result as $lastVisit) {
-            $tool_content .= "<li class='list-group-item'>
-                        <div class='row'>
-                          <div class='col-sm-8'><strong class='last-visit-li'>" . format_locale_date(strtotime($lastVisit->when)) . "</strong>
-                          </div>
-                        </div>
-                      </li>";
+            $tool_content .= "<li class='list-group-item element'>
+                                <div>" . format_locale_date(strtotime($lastVisit->when)) . "</div>
+                              </li>";
         }
         $tool_content .= "
                     </ul>
