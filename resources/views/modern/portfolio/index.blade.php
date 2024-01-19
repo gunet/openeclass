@@ -655,7 +655,7 @@
                                                     $fav_status = 0;
                                                     $fav_message = '';
                                                 } else {
-                                                    $favorite_icon = 'fa-regular fa-star text-link';
+                                                    $favorite_icon = 'fa-regular fa-star';
                                                     $fav_status = 1;
                                                     $fav_message = trans('langFavorite');
                                                 }
@@ -696,11 +696,11 @@
                                                        {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
                                                         @if ($course->status == USER_STUDENT)
                                                             @if (get_config('disable_student_unregister_cours') == 0)
-                                                                {!! icon('fa-minus-circle ms-3 text-link', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
+                                                                {!! icon('fa-minus-circle ms-3', trans('langUnregCourse'), "{$urlServer}main/unregcours.php?cid=$course->course_id&amp;uid=$uid") !!}
 
                                                             @endif
                                                         @elseif ($course->status == USER_TEACHER)
-                                                            {!! icon('fa-wrench ms-3 text-link', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
+                                                            {!! icon('fa-wrench ms-3', trans('langAdm'), "{$urlServer}modules/course_info/index.php?from_home=true&amp;course=" . $course->code, '', true, true) !!}
                                                         @endif
                                                     </div>
 
@@ -797,7 +797,7 @@
                     </div>
                     <div>
 
-                        <div class='col-12 mb-4 mt-1'><h3>{{ trans('langAgenda') }}</h3></div>
+                        <div class='col-12 mb-4 mt-1 d-flex justify-content-xl-start justify-content-center'><h3 class='mb-0'>{{ trans('langAgenda') }}</h3></div>
                         @include('portfolio.portfolio-calendar')
 
                         <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
@@ -835,13 +835,13 @@
                         </div>
 
                         @if($portfolio_page_sidebar_widgets)
-                            <div class='card panelCard border-0 BorderSolid bg-default mt-lg-3 mt-4 py-lg-3 px-lg-4 py-0 px-0 shadow-none sticky-column-course-home'>
-                                <div class='card-header bg-default border-0 text-start'>
+                            <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
+                                <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
 
                                         <h3>{{ trans('langMyWidgets') }}</h3>
 
                                 </div>
-                                <div class='card-body'>
+                                <div class='card-body px-0'>
                                     {!! $portfolio_page_sidebar_widgets !!}
                                 </div>
                             </div>

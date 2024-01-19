@@ -49,11 +49,11 @@ function display_attendances() {
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>
-                            <th>$langAvailableAttendances</th>
-                            <th>$langStart</th>
-                            <th>$langFinish</th>";
+                            <th style='width:46%;'>$langAvailableAttendances</th>
+                            <th style='width:22%;'>$langStart</th>
+                            <th style='width:22%;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th style='width:10%;'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $a) {
@@ -62,13 +62,13 @@ function display_attendances() {
             $row_class = !$a->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
-                        <td>
+                        <td style='width:46%;'>
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".q($a->title)."</a>
                         </td>
-                        <td>$start_date</td>
-                        <td>$end_date</td>";
+                        <td style='width:22%;'>$start_date</td>
+                        <td style='width:22%;'>$end_date</td>";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-end'>";
+                $tool_content .= "<td style='width:10%;' class='option-btn-cell text-end'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",
@@ -386,7 +386,7 @@ function attendance_display_available_exercises($attendance_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td class='text-end'>" . icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+            $tool_content .= "<td class='text-end'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div>";
@@ -435,7 +435,7 @@ function attendance_display_available_assignments($attendance_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td class='text-end'>".icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
             $tool_content .= "</td></tr>";
         } // end of while
         $tool_content .= "</table></div>";
@@ -473,7 +473,7 @@ function attendance_display_available_tc($attendance_id) {
         foreach ($checkForTc as $data) {
             $tool_content .= "<tr><td>" . q($data->title) . "</td>";
             $tool_content .= "<td>". format_locale_date(strtotime($data->start_date)) . "</td>";
-            $tool_content .= "<td class='text-end'>".icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addCourseActivity=" . $data->id . "&amp;type=4");
         } // end of while
         $tool_content .= "</tr></table></div>";
     } else {

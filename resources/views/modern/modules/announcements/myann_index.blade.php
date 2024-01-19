@@ -52,7 +52,7 @@
                                     <thead>
                                     <tr class='list-header'>
                                         <th>{{ trans('langAnnouncement') }}</th>
-                                        <th>{{ trans('langDate') }}</th>
+                                        <th style='width:15%;'>{{ trans('langDate') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody></tbody>

@@ -366,7 +366,7 @@ if (isset($_GET['delete'])) {
                        $file_id = $r->file_id;
                        $display_id = $r->sid . ',' . $r->ssid;
                        if ($editable[$id_map[$file_id]]) {
-                           $edit = '&nbsp;&nbsp;&nbsp;' . icon('fa-edit text-link', $langEditChange,
+                           $edit = '&nbsp;&nbsp;&nbsp;' . icon('fa-edit', $langEditChange,
                                "new.php?course=$course_code&amp;editPath=" .
                                $paths[$id_map[$file_id]] . "&amp;ebook_id=$ebook_id&amp;back=edit");
                        } else {

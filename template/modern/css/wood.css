@@ -38,6 +38,19 @@
   background-color: #ffffff;
 }
 
+a,
+a span,
+a.list-group-item{ 
+  color:#867F72; 
+}
+a:hover,
+a span:hover,
+a.list-group-item:hover{
+  color: #867F72;
+}
+
+
+
 /**********************************************************************************************************************/
 /************************************************* COLORS *************************************************************/
 /**********************************************************************************************************************/
@@ -597,6 +610,49 @@ input[type="submit"].warningAdminBtn:hover {
 /************************************************* CONTEXTUAL MENUS ***************************************************/
 /**********************************************************************************************************************/
 
+
+.contextual-menu{
+  border: solid 1px #CDD4E0;
+  filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+}
+
+
+.contextual-menu-user{
+  border: solid 1px #CDD4E0;
+}
+.contextual-menu-user h4{
+  color:#2B3944; 
+}
+
+@media(min-width:992px){
+  .contextual-menu-user::-webkit-scrollbar-track {
+    background-color: #ffffff;
+  }
+  .contextual-menu-user::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+  }
+  .contextual-menu-user::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px;
+  }
+  .contextual-menu-user::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border: 6px solid transparent;
+  }
+}
+
+
+.contextual-menu .list-group-item,
+.contextual-menu button[type="submit"],
+.contextual-menu input[type="submit"]{
+  border-bottom: solid 1px #EFF6FF;
+  color: #2B3944;
+  background-color: transparent;
+}
+.contextual-menu .list-group-item .settings-icons::before{
+  color: #2B3944;
+}
+
 .contextual-menu .list-group-item:hover,
 .contextual-menu button[type="submit"]:hover
 .contextual-menu input[type="submit"]:hover{
@@ -604,6 +660,46 @@ input[type="submit"].warningAdminBtn:hover {
   color:#867F72;
 }
 .contextual-menu .list-group-item:hover .settings-icons::before{
+  color: #867F72;
+}
+
+.contextual-border{
+  border: solid 1px #CDD4E0;
+}
+
+
+.contextual-sidebar{
+  border: solid 1px #EFF6FF;
+}
+
+.contextual-sidebar .list-group-item{
+  border-bottom: solid 1px #EFF6FF;
+  color: #2B3944;
+  background-color: transparent;
+}
+
+.contextual-sidebar .list-group-item span,
+.contextual-sidebar .list-group-item i{
+  color: #2B3944;
+}
+
+.contextual-sidebar .list-group-item:hover{
+  background-color: #EFF6FF;
+  color:#867F72;
+}
+
+.contextual-sidebar .list-group-item:hover span,
+.contextual-sidebar .list-group-item:hover i{
+  color: #867F72;
+}
+
+.contextual-sidebar .list-group-item.active{
+  background-color: #EFF2FB;
+  color: #867F72;
+}
+
+.contextual-sidebar .list-group-item.active span,
+.contextual-sidebar .list-group-item.active i{
   color: #867F72;
 }
 
@@ -650,6 +746,7 @@ input[type="submit"].warningAdminBtn:hover {
 
 
 .menu-popover .list-group-item{ 
+  color: #2B3944;
   border-bottom: solid 1px #EFF6FF;
 }
 
@@ -1001,6 +1098,14 @@ tr.danger{
   text-decoration: none;
   background-color: #867F72;
   color: #ffffff;
+}
+
+.portfolio-tools a{
+  color:#867F72;
+}
+.portfolio-tools a:hover{
+  color:#7a7367;
+  cursor:  url(../images/pointer.png), auto;
 }
 
 /**********************************************************************************************************************/
@@ -1548,6 +1653,10 @@ background-color: transparent;
 .myPersonalCalendar .cal-month-day:hover .number-day-cal{
 color: #2b3944 !important;
 }
+#cal-slide-content a.event-item{
+  color: #867F72 !important;
+}
+
 
 
 

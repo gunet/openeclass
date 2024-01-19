@@ -227,7 +227,7 @@
                                         <div class='d-inline-flex align-items-top gap-3 flex-wrap'>
                                             {{ trans('langActivities')}}
                                             <a href="{{ $urlAppend }}modules/create_course/course_units_activities.php?course={{ $course_code }}&edit_act={{ $id }}">
-                                                <span class="fa fa-pencil ms-2 mt-1 text-link" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
+                                                <span class="fa fa-pencil ms-2 mt-1" data-bs-toggle="tooltip" data-bs-placement="bottom" title data-bs-original-title="{{ trans('langEdit') }}"></span>
                                             </a>
                                         </div>
                                     </h3>

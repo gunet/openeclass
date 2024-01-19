@@ -1009,29 +1009,29 @@ function display_gradebooks() {
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<thead><tr class='list-header'>
         
-                            <th>$langAvailableGradebooks</th>
-                            <th>$langStart</th>
-                            <th>$langFinish</th>";
+                            <th style='width:46%;'>$langAvailableGradebooks</th>
+                            <th style='width:22%;'>$langStart</th>
+                            <th style='width:22%;'>$langFinish</th>";
         if( $is_editor) {
-            $tool_content .= "<th class='text-end'>" . icon('fa-gears') . "</th>";
+            $tool_content .= "<th style='width:10%;' class='text-end'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr></thead>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
             $tool_content .= "
                     <tr $row_class>
-                        <td>
+                        <td style='width:46%;'>
                             <div class='table_td'>
                                 <div class='tahle_td_header'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a>
                                 </div>
                             </div>
                         </td>
-                        <td>" . format_locale_date(strtotime($g->start_date), 'short') . "</td>
-                        <td>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
+                        <td style='width:22%;'>" . format_locale_date(strtotime($g->start_date), 'short') . "</td>
+                        <td style='width:22%;'>" . format_locale_date(strtotime($g->end_date), 'short') . "</td>
                         ";
             if( $is_editor) {
-                $tool_content .= "<td class='option-btn-cell text-end'>";
+                $tool_content .= "<td style='width:10%;' class='option-btn-cell text-end'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;editSettings=1",
@@ -1084,7 +1084,7 @@ function display_available_exercises($gradebook_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td class='text-start'><a href='{$urlServer}modules/exercise/admin.php?course=$course_code&amp;exerciseId=$newExerToGradebook->id&amp;preview=1'>" . q($newExerToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td class='text-end'>" . icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
+            $tool_content .= "<td class='text-end'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div></div>";
@@ -1136,7 +1136,7 @@ function display_available_assignments($gradebook_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td><a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$newAssToGradebook->id'>" . q($newAssToGradebook->title) . "</a></td>";
             $tool_content .= "<td>" . $content . "</td>";
-            $tool_content .= "<td class='text-end'>".icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
             $tool_content .= "</td></tr>";
         } // end of while
         $tool_content .= "</table></div></div></div>";
@@ -1171,7 +1171,7 @@ function display_available_lps($gradebook_id) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>&nbsp;<a href='{$urlServer}modules/learnPath/learningPathAdmin.php?course=$course_code&amp;path_id=$newExerToGradebook->learnPath_id'>" . q($newExerToGradebook->name) . "</a></td>";
             $tool_content .= "<td>" .q($newExerToGradebook->comment). "</td>";
-            $tool_content .= "<td class='text-end'>".icon('fa-plus text-link', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
+            $tool_content .= "<td class='text-end'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
             $tool_content .= "</tr>";
         } // end of while
         $tool_content .= "</table></div></div>";

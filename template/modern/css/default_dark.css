@@ -340,11 +340,13 @@
   }
   
   a,
-  .text-link{ 
+  a span,
+  a.list-group-item{ 
     color:#74AFE9; 
   }
   a:hover,
-  .text-link:hover{
+  a span:hover,
+  a.list-group-item:hover{
     color: #74AFE9;
   }
   
@@ -969,21 +971,22 @@
 /**********************************************************************************************************************/
 
   .contextual-menu{
-    border: solid 1px #CDD4E0;
+    border: solid 1px #4F6893;
     filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
+    background-color: #2B3944;
   }
   
   
   .contextual-menu-user{
-    border: solid 1px #CDD4E0;
+    border: solid 1px #4F6893;
   }
-  .contextual-menu-user h4{
-    color:#2B3944; 
-  }
+  .contextual-menu-user .username-text{
+    color:#ffffff; 
+  } 
   
   @media(min-width:992px){
     .contextual-menu-user::-webkit-scrollbar-track {
-      background-color: #ffffff;
+      background-color: #2B3944;
     }
     .contextual-menu-user::-webkit-scrollbar-thumb {
       background-color: #B4BED1;
@@ -1002,26 +1005,26 @@
   .contextual-menu .list-group-item,
   .contextual-menu button[type="submit"],
   .contextual-menu input[type="submit"]{
-    border-bottom: solid 1px #EFF6FF;
-    color: #2B3944;
-    background-color: #ffffff;
+    border-bottom: solid 1px #4F6893;
+    color: #ffffff;
+    background-color: transparent;
   }
   .contextual-menu .list-group-item .settings-icons::before{
-    color: #2B3944;
+    color: #ffffff;
   }
   
   .contextual-menu .list-group-item:hover,
   .contextual-menu button[type="submit"]:hover
   .contextual-menu input[type="submit"]:hover{
-    background-color: #EFF6FF;
-    color:#74AFE9;
+    background-color: #4F6893;
+    color:#ffffff;
   }
   .contextual-menu .list-group-item:hover .settings-icons::before{
-    color: #74AFE9;
+    color: #ffffff;
   }
   
   .contextual-border{
-    border: solid 1px #CDD4E0;
+    border: solid 1px #4F6893;
   }
 
   
@@ -1034,14 +1037,29 @@
     color: #ffffff;
     background-color: transparent;
   }
+
+  .contextual-sidebar .list-group-item span,
+  .contextual-sidebar .list-group-item i{
+    color: #ffffff;
+  }
   
   .contextual-sidebar .list-group-item:hover{
-    background-color: #99c3ee;
+    background-color: #4F6893;
     color:#ffffff;
+  }
+
+  .contextual-sidebar .list-group-item:hover span,
+  .contextual-sidebar .list-group-item:hover i{
+    color: #ffffff;
   }
   
   .contextual-sidebar .list-group-item.active{
-    background-color: #74AFE9;
+    background-color: #596d8f;
+    color: #ffffff;
+  }
+
+  .contextual-sidebar .list-group-item.active span,
+  .contextual-sidebar .list-group-item.active i{
     color: #ffffff;
   }
   
@@ -1088,11 +1106,12 @@
   
   
   .menu-popover .list-group-item{ 
+    color: #2B3944;
     border-bottom: solid 1px #EFF6FF;
   }
 
   .menu-popover .list-group-item .fa{ 
-    color:#000000;
+    color:#2B3944;
   }
   .menu-popover .list-group-item .fa-xmark,
   .menu-popover .list-group-item .fa-trash{ 
@@ -1882,6 +1901,14 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #ffffff;
   }
 
+  .portfolio-tools a{
+    color:#74AFE9;
+  }
+  .portfolio-tools a:hover{
+    color:#6fa6dd;
+    cursor:  url(../images/pointer.png), auto;
+  }
+
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE *************************************************************/
 /**********************************************************************************************************************/
@@ -2536,6 +2563,10 @@ tr.warning:hover{
 .myPersonalCalendar .cal-month-day:hover .number-day-cal{
   color: #000000 !important;
 }
+#cal-slide-content a.event-item{
+  color: #74AFE9 !important;
+}
+
 
 
 
@@ -2763,6 +2794,5 @@ tr.warning:hover{
   .col_maincontent_active .form-wrapper.form-edit.borderLg{
     background-color: #212D37 !important;
   }
-
 
   

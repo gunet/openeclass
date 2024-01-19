@@ -306,7 +306,7 @@ function showgroupsofcategory($catid) {
                         $control = icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id_indirect");
                     }
                 } elseif ($allow_unreg) {
-                    $control = icon('fa-sign-out', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id_indirect", " style='color:#d9534f;'");
+                    $control = icon('fa-sign-out Accent-200-cl', $langUnRegister, "group_space.php?course=$course_code&amp;selfUnReg=1&amp;group_id=$group_id_indirect", " style='color:#d9534f;'");
                 }
             }
             $tool_content .= ($control? $control: '&mdash;') . "</td>";

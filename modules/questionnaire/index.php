@@ -448,7 +448,7 @@ function printPolls() {
 
                 if ($is_editor) {
                     $tool_content .= "
-                    <td>$total_participants</td>
+                    <td class='text-center'>$total_participants</td>
                     <td class='text-end option-btn-cell'>" .
                         action_button([
                             ['title' => $langEditChange,

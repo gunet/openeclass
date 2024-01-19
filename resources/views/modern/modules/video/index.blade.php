@@ -113,9 +113,9 @@
                                     <thead>
                                         <tr class='list-header'>
                                             <th>{!! headlink($GLOBALS['langVideoDirectory'], 'title') !!}</th>
-                                            <th>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
+                                            <th style='width:15%;'>{!! headlink($GLOBALS['langDate'], 'date') !!}</th>
                                             @if (!$is_in_tinymce)
-                                                <th></th>
+                                                <th style='width:10%;'></th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -135,9 +135,9 @@
                                             <tr class='list-header'>
                                                 <th>{{ trans('langCatVideoDirectory') }}&nbsp;&nbsp;&nbsp;
                                                 @if ($expand_all)
-                                                    {!! icon('fa-folder-open text-link', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
+                                                    {!! icon('fa-folder-open', $GLOBALS['langViewHide'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=0") !!}
                                                 @else
-                                                    {!! icon('fa-folder text-link', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
+                                                    {!! icon('fa-folder', $GLOBALS['langViewShow'], $_SERVER["SCRIPT_NAME"] . "?course=" . $course_code . "&amp;d=1") !!}
                                                 @endif
                                                 </th>
                                                 <th></th>

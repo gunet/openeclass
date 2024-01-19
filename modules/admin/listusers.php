@@ -461,7 +461,7 @@ $head_content .= "<script>
                 {'bSortable' : true, 'sWidth': '20%' },
                 {'bSortable' : true, 'sWidth': '20%' },
                 {'bSortable' : false, 'sWidth': '20%' },
-                {'bSortable' : false, 'sClass': '' },
+                {'bSortable' : false, 'sClass': 'text-center' },
                 {'bSortable' : false, 'sClass': 'text-end' },
             ],
             'oLanguage': {

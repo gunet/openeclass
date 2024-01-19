@@ -128,8 +128,8 @@ if (isset($_POST['submit'])) {
         }
 
         $tool_content .= "<div class='col-12 mt-4'>
-                            <div class='row row-cols-1 row-cols-lg-2 g-lg-5 g-4'>
-                                <div class='col-12'>
+                            <div class='row row-cols-1'>
+                               
                                     <div class='col-12'>
                                         <div class='card border-card h-100 Borders border-0'>
                                             <div class='card-body p-0'>";
@@ -156,7 +156,7 @@ if (isset($_POST['submit'])) {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                
                             </div>";
        $tool_content .= "</div>";
 
@@ -246,7 +246,7 @@ function expanded_faculte($facid, $uid) {
 
     $retString .= "<div class='table-responsive mt-4'><table class='table-default'>";
     $retString .= "<thead><tr class='list-header'>";
-    $retString .= "<th style='width:10% !important;'>$langRegistration</th>";
+    $retString .= "<th style='width:10%'>$langRegistration</th>";
     $retString .= "<th>$langCourseCode</th>";
     $retString .= "<th>$langTeacher</th>";
     $retString .= "<th class='text-end'>$langType</th>";
@@ -309,7 +309,7 @@ function expanded_faculte($facid, $uid) {
             $coursePrerequisites = "<br/><small class='text-muted'>". $GLOBALS['langCoursePrerequisites'] . ": " . $coursePrerequisites . "</small>";
         }
 
-        $retString .= "<td style='width:10% !important;'>";
+        $retString .= "<td style='width:10%'>";
         $requirepassword = '';
         $vis_class = ($mycours->visible == COURSE_CLOSED) ? 'class="reg_closed"' : '';
         if (isset($myCourses[$cid])) {

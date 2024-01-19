@@ -1162,7 +1162,7 @@ a:hover{
 .nav-tabs{
   border: 0px;
 }
-.nav-tabs .nav-item:hover .nav-link{
+.nav-tabs .nav-item .nav-link:hover{
   color: #0073E6;
 }
 .nav-tabs .nav-item .nav-link:hover{
@@ -2057,7 +2057,7 @@ input[type="submit"].warningAdminBtn:hover {
   font-size: 14px;
   letter-spacing: 0px;
   line-height: 16px;
-  background-color: #ffffff;
+  background-color: transparent;
   min-height: 40px;
 }
 
@@ -2161,6 +2161,7 @@ body .form-action-button-mydropdowns{
   font-size: 14px;
   min-height: 40px;
   padding: 10px;
+  color: #2B3944;
 }
 
 .menu-popover .list-group-item .fa{
@@ -3254,7 +3255,7 @@ table{
 
 .list-group-default .list-group-item{
   background-color: #EFF2FB;
-  border-bottom: #EFF2FB;
+  border-bottom: solid 1px #EFF2FB;
 }
 .list-group-default .list-group-item:hover{
   cursor:  url(../images/pointer.png), auto;
@@ -4070,6 +4071,9 @@ div[role="progressbar"]::before {
 .panelCard .card-header .submitAdminBtn, .panelCard .card-header .submitAdminBtn span, .panelCard .card-header .submitAdminBtn .fa{
   font-weight: 700;
   font-style: normal;
+}
+.panelCard .card-header h3{
+  margin-bottom: 0px;
 }
 
 @media(max-width:991px){

@@ -3988,7 +3988,7 @@ function setOpenCoursesExtraHTML() {
 
                             <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
                                 <a class='d-flex gap-1 align-items-center text-dark' target='_blank' href='$openFacultiesUrl'>
-                                    <i class='fa-solid fa-book-open fa-xl text-link'></i>
+                                    <span class='fa-solid fa-book-open fa-xl'></span>
                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
                                     <span class='text-uppercase TextBold Primary-500-cl fs-5'>
                                         " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
