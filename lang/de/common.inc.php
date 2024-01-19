@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2016-08-11 13:21:13
+// Generated 2024-01-19 17:14:54
 
 $langCourse = "Kurs";
 $langEclass = "Open eClass - die asynchrone E-Learning Plattform";
@@ -31,9 +31,6 @@ $langOfFaculties = "Fakultäten";
 $langFaculties = "Fakultäten";
 $langsFaculty = "Fakultät";
 $langsFaculties = "Fakultäten";
-$langpres = "Typ: Grundstudium";
-$langposts = "Postgraduiertes Studium";
-$langothers = "Andere";
 $langpre = "Typ: Grundstudium";
 $langpost = "Typ: Postgraduiertes Studium";
 $langother = "Typ: Postgraduiertes Studium";
@@ -69,3 +66,23 @@ $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
 $langsOfFaculty = "category";
+$langCourseAdmin = "Admin";
+$langOfCourseAdmin = "Admin";
+$langCourseAdmins = "Admins";
+$langOfCourseAdmins = "Admins";
+$langsCourseAdmin = "admin";
+$langsOfCourseAdmin = "admin";
+$langsCourseAdmins = "admins";
+$langsOfCourseAdmins = "admins";
+$langCourseAdminTeacher = "Admin - Teacher";
+$langOfCourseAdminTeacher = "Admin - Teacher";
+$langCourseAdminTeachers = "Admins - Teachers";
+$langOfCourseAdminTeachers = "Admins - Teachers";
+$langsCourseAdminTeacher = "admin - teacher";
+$langsOfCourseAdminTeacher = "admin - teacher";
+$langsCourseAdminTeachers = "admins - teachers";
+$langsOfCourseAdminTeachers = "admins - teachers";
+$langCourseReviewer = "Reviewer";
+$langOfCourseReviewer = "Reviewer";
+$langsCourseReviewer = "reviewer";
+$langsOfCourseReviewer = "reviewer";

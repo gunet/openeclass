@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2023-05-12 17:49:21
+// Generated 2024-01-19 17:14:56
 
 $langYes = "Sì";
 $langNo = "No";
@@ -2813,7 +2813,7 @@ $langUnregUsers = "Users unregistering from the platform";
 $langLogExpireInterval = "Log retention interval";
 $langLogPurgeInterval = "Log purge interval";
 $langWikiPageNotFound = "Wiki page not found";
-$langDelWarnUserAssignment = 'Confirm assignment delete of '.$langOfUser;
+$langDelWarnUserAssignment = 'Confirm assignment delete';
 $langOpenCourses = "Open Courses";
 $langOpenCoursesShort = "Open Courses";
 $langCourseMetadata = "Course Metadata";
@@ -4583,8 +4583,8 @@ $langThemePomegranate = "Pomegranate";
 $langThemeClouds = "Clouds";
 $langHasExpiredS = "è scaduto";
 $langHasExpired = "È scaduto";
-$langExportGradebookWithUsers = "Extract user results";
-$langExportGradebook = "Extract gradebook results";
+$langExportGradebookWithUsers = "Extract results per user";
+$langExportGradebook = "Extract results per activity";
 $langRestrictions = "Restrictions";
 $langTimeConstraint = "Time";
 $langHitConstraint = "Attempts";
@@ -4879,7 +4879,7 @@ $langGradeRubricsSelect = "Select Rubric";
 $langRubricCriteria = "Criteria";
 $langRubricWeight = "The sum of percentage completion must be equal to 100";
 $langRubricDeleted = "Rubric deleted";
-$langRubricNotEditable = "Rubric has been used in assignment and is not editable anymore.";
+$langRubricNotEditable = "Rubric has been used in assignment(s) and is not editable.";
 $langRubricNotDelete = "Rubric can't be deleted. There are assignments which have used it.";
 $langRubricGrade = "Grade using rubric";
 $langRubricGrading = "Grading with rubric";
@@ -5543,7 +5543,7 @@ $langUseOfServiceInfo = "Select in which $langsCourses the service will be avail
 $langInvalidEmailRecipients = 'Recipients without a valid e-mail address';
 $langDisabledEmailRecipients = 'Recipients with disabled e-mail reception';
 $langSubjectArea = "Subject Area";
-$langInfoUserDuration = "The following participation times do not include time spent in <em>Learning Paths</em> and <em>Teleconferences</em>.";
+$langInfoUserDuration = 'The following participation times do not include time spent in <em>Teleconferences</em>.';
 $langInfoUserDuration2 = "For these modules, please click on the corresponding buttons.";
 $langNoPeerReviewMultipleFiles = "The assignment can't be distributed for peer review because it accepts multiple files for each submission.";
 $langBBBCronRunning = 'Automatic registration of teleconference attendance is enabled.';
@@ -5563,5 +5563,152 @@ $langBBBCronEnableInstructions = '
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
+$langActiveUsers = "Active";
+$langEmailUpdatedAutomaticaly = 'Your e-mail address was automatically changed by the authentication system to "%s" (from "%s").';
 $langEmailBody = "Email Body";
 $langCustomEmailBody = "Custom Email Body";
+$langAssignemtTypeTurnitinInfo = "Assignment submissions will be checked for plagiarism via Turnitin";
+$langAddToUnitCompletion = 'Add to unit completion criteria';
+$langResourceBelongsToUnitPrereq = "The resource is a part of unit completion criteria";
+$langCustomMailHelp = "<p>Placeholder variables</p>
+</br>
+<ul>
+  <li>[first] : First name</li>
+  <li>[last] : Last name</li>
+  <li>[id] : Student ID</li>
+  <li>[email] : E-mail address</li>
+  <li>[phone] : Phone</li>
+  <li>[username] : Username</li>
+  <li>[password] : Password</li>
+</ul>";
+$langUnsubscribeCourse = "Disable Course Unsubscription";
+$lang_disable_name_surname_change = 'Do not allow users to modify their name and surname';
+$lang_disable_email_change = 'Do not allow users to modify their e-mail';
+$lang_disable_am_change = 'Do not allow users to modify their student ID';
+$langMaintenanceOn = 'Activate maintenance mode';
+$langMaintenanceOff = 'Deactivate maintenance mode';
+$langMaintenance = 'Maintenance';
+$langMaintenanceChange = 'Modify maintenance mode text';
+$langMaintenanceMode = 'Maintenance Mode';
+$langAccountStatus = 'Account status';
+$langSelectReq = "Please select at least one option!";
+$langBulkProcessing = "Bulk Processing";
+$langOfUserS = 'user';
+$langUserWithRights = 'User with course creation rights';
+$langUserWithNoRights = 'User without course creation rights';
+$langUsersWithRightsS = 'Users with rights';
+$langUsersWithNoRightsS = 'Users without rights';
+$langUsersWithTeacherRights = 'Users with course creation rights';
+$langUsersWithNoTeacherRights = 'Users without course creation rights';
+$langHomePageMenuSettings = "Front page side menu settings";
+$langNotRegistered = "not registered";
+$langSyllabus = "Syllabus";
+$langUploadRecAudio = "Sound Recording";
+$langUploadRecVideo = 'Record Video';
+$langPause = "Pause";
+$langStopRecording = "End of recording";
+$langReleaseMic = 'Release Microphone';
+$langEnterFile = "Enter filename";
+$langOpenCamera = "Open camera";
+$langMaxRecAudioTime = "max recording time: 5 min";
+$langMaxRecVideoTime = "max recording time: 2 min";
+$langOfLearningPathDuration = "Learning Path duration";
+$langRefreshProgress = "Refresh from activities";
+$langRefreshProgressInfo = "Refreshing only takes into account exercises, assignments and learning path progress.";
+$langRefreshProgressResults = "$langStudents progress updated";
+$langCompletedIn = "Completed at";
+$langCourseActiveShort = "Active $langsCourses";
+$langImportAiken = "Import from Aiken";
+$langAikenFormatExample = "Example Question
+1. What is the capital of Greece; (score: 5)
+a) Patras
+*b) Athens
+c) Thessaloniki
+";
+$langAikenFormatNote = "Enter the questions in Aiken format. Please note that <strong>only</strong> multiple choice questions with a <strong>single answer</strong> are supported.";
+$langAikenFormatExplain = '
+<ul>
+<li>The question should begin with a number followed by a full stop or parenthesis.</li>
+<li>To set the question score, please use the following expression: <em>(score: χχ)</em>. Instead of the word <em>score</em>, you can also use one of the following:
+<em>points</em>, <em>weight</em>. Otherwise, the score will be set from the number entered in the "Grade" field over the "Check" button.</li>
+<li>Each answer should begin with a letter followed by a parenthesis or full stop. The correct answer should be marked with an asterisk.</li>
+<li>Empty lines are ignored.</li>
+<li>After entering the question in the area on the left, one should click on the "Check" button. The area on the right will display any error messages about the question format.</li>
+<li>If everything seems correct, we can click on "Import".</li>
+</ul>';
+$langQtiImportNote = "You can upload a file with questions in <strong>QTI format</strong>.
+<br><br>Please note that the <strong>only supported</strong> question types are:
+<ul>
+<li>multiple choice questions with a <strong>single answer</strong></li>
+<li>multiple choice questions with <strong>multiple answers</strong></li>
+<li><strong>true / false</strong> questions</li>
+</ul>
+";
+$langImportWithSuccess = 'Import was successful';
+$langAikenWithNoGrades = 'applies to questions without a score';
+$langCheckResults = 'Check results';
+$lang_dont_display_courses_menu = "Do not display $langsCourses list";
+$lang_dont_display_contact_menu = "Do not display contact information";
+$lang_dont_display_manual_menu = "Don't display manuals";
+$lang_dont_display_about_menu = "Don't display platform info";
+$lang_allow_rec_video = "Allow creation of video recordings in $langsCourse documents";
+$lang_allow_rec_audio = "Allow creation of audio recordings in $langsCourse documents";
+$langLearningPathCleanAttempt = "Start over on next attempt";
+$langConfirmLpCleanAttemptTitle = "Confirmation for starting over on next attempt";
+$langConfirmLpCleanAttemptBody = "With this option the next attempt of the Learning Path <u>will not</u> use the saved data to continue from where you last left off.<br/><br/><em>Cancel</em> your choice if you <u>do not</u> wish to start over on the next attempt.";
+$langAssignmentParticipation = "Assignment Participation";
+$langParticipateSimple = "Simple Participation";
+$langQuickSurvey = "Quick Poll";
+$langShowFront = 'Show in home page';
+$langGiveRightCourseReviewer = "Add $langsOfCourseReviewer right";
+$langRemoveRightCourseReviewer = "Remove $langsOfCourseReviewer right";
+$langFileUserData = 'User data file (.xls or .xlsx format)';
+$langInfoEnableCourseRegistration = "The user can register to $langsCourses";
+$langUserPermissions = "Permissions";
+$langRubricUpdated = "Rubric updated";
+$langMsTeamsShortDescription = 'Connection with Microsoft Teams teleconference service.";
+$langMsTeamsLongDescription = 'Connection with the Microsoft Teams teleconference service.";
+$langWebexUrl = 'You can change it if you want to use a different WebEx server.';
+$langZoomUrl = "You can change it if you want to use a different Zoom server.";
+$langGoToMicrosoftTeamsLink = 'Click on the "Go to Microsoft Teams" link below, to be taken to the Microsoft Teams environment where you can create the meeting link. Once you have created it, copy it and paste it into the "Link" field.';
+$langGoToMicrosoftTeamsLinkText = "Go to Microsoft Teams";
+$langUpdateRequired = "Update required";
+$langCourseUsersInvitation = 'Invite external users to the course';
+$langcourseExternalUsersInviation = 'External Users Invitation';
+$langCourseInviteOne = 'Invite One User';
+$langCourseInviteMany = "Invite Multiple Users";
+$langDeleteInvitation = 'Delete Invitation';
+$langDeleteInvitationSuccess = 'The invitation was deleted';
+$langCourseInvitationSubject = 'Invitation to register to the platform';
+$langCourseInvitationBody1 = "You have received an invitation to register on the $siteName platform in order to participate in the course";
+$langCourseInvitationBody2 = 'To proceed with registration, please follow the link below.';
+$langCourseInvitationSent = 'The invitation was sent!';
+$langCourseInvitationsSent = "The invitations were sent to";
+$langUserWithEmail = "The user with e-mail";
+$langAlreadyAccount = 'already had an account on the platform and was added to your course.';
+$langAlreadyRegistered = "was already enrolled in your course.";
+$langAlreadyRegisteredUsers = 'The following users already had an account on the platform and were added to the course';
+$langInvitationCustomEmail = '<p>Placeholder variables</p>
+  <br>
+  <ul>
+    <li>[email] : E-mail address</li>
+    <li>[link] : Registration link</li>
+  </ul>";
+$langErrorInserting = 'The following records in the file you sent had a problem. Either the email was invalid or there were more fields than expected:';
+$langCourseInvitationUsersExcelInfo = 'You can upload a spreadsheet file (eg. xls, xlsx, csv) with one or three columns.
+ The first column must contain the e-mail of each user you wish to invite to the course.
+ The second and third columns can optionally contain the last name and first name of each user.
+ Please note that users who are already on the platform with that e-mail will be immediately added to the course without receiving an invitation and without further notification.";
+$langSendReminder = "Send Reminder";
+$langCourseInvitationHelp = 'If this option is active, course admins can invite external users to the platform to enroll in their course.';
+$langNoLongerValid = 'The link you followed is no longer valid.';
+$langInvitationAlreadyUsed = 'You have already registered on the platform through the link you followed. You can now log in using your e-mail address as a username and the password you entered during registration.';
+$langRegisterAsVisitor = 'Register as a guest';
+$langCourseInvitation = 'Course Invitation';
+$langCourseInvitationReceived = 'You have received an invitation to participate in the above course.';
+$langInvitationClickToAccept = 'Click on the button below to register and go to the course.';
+$langInvitationAcceptViaCAS = '<strong>If you do have</strong> an account on the <strong>Central Authentication Service (%s)</strong>, please sign in with your institutional account by clicking on the button below.';
+$langLoginAndRegister = 'Login and Register';
+$langInviteEclassLoginCreate = 'Please enter the required information below to register to the platform.';
+$langInviteEclassLoginAlt = 'Alternatively, if you <strong>don't have a Central Authentication Service account</strong>, please enter below the details needed to create a guest account on the platform.';
+$langSameAsYourEmail = 'same as your e-mail address';

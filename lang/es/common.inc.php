@@ -1,12 +1,10 @@
 <?php
 
 // Message file for language es
-// Generated 2016-08-11 13:21:11
+// Generated 2024-01-19 17:14:51
 
 $langCourse = "Curso";
 $langEclass = "eClass Libre - Sistema de Administración del Curso";
-$langYes = "Si";
-$langNo = "No";
 $langTeacher = "Formador";
 $langOfTeacher = "Formador";
 $langTeachers = "Formadores";
@@ -27,15 +25,12 @@ $langsOfStudentss = "Estudiantes";
 $langsstudent_acc = $langsStudent;
 $langGuest = "Usuario invitado";
 $langGuests = "Usuarios invitados";
-$langFaculty = "Categoría del curso";
+$langFaculty = "Categoría";
 $langOfFaculty = "Category";
 $langOfFaculties = "Categories";
 $langFaculties = "Categories";
 $langsFaculty = "facultad";
 $langsFaculties = "facultades";
-$langpres = "Undergraduate";
-$langposts = "Postgraduate";
-$langothers = "Otros";
 $langpre = "Undergraduate";
 $langpost = "Postgrado";
 $langother = "Otro";
@@ -44,7 +39,7 @@ $langExtrasLeft = '';
 $langExtrasRight = '';
 $langCourses = "curso";
 $langGroupTutor = "Group Tutor";
-$langEditor = "Tutor Assistant";
+$langEditor = "Tutor auxiliar";
 $langOfEditor = "Tutor Assistant";
 $langsEditor = "tutor assistant";
 $langsOfEditor = "tutor assistant";
@@ -56,3 +51,23 @@ $langsCourses = "courses";
 $langsOfCourse = "course";
 $langsOfCourses = "courses";
 $langsOfFaculty = "category";
+$langCourseAdmin = "Admin";
+$langOfCourseAdmin = "Admin";
+$langCourseAdmins = "Admins";
+$langOfCourseAdmins = "Admins";
+$langsCourseAdmin = "admin";
+$langsOfCourseAdmin = "admin";
+$langsCourseAdmins = "admins";
+$langsOfCourseAdmins = "admins";
+$langCourseAdminTeacher = "Admin - Teacher";
+$langOfCourseAdminTeacher = "Admin - Teacher";
+$langCourseAdminTeachers = "Admins - Teachers";
+$langOfCourseAdminTeachers = "Admins - Teachers";
+$langsCourseAdminTeacher = "admin - teacher";
+$langsOfCourseAdminTeacher = "admin - teacher";
+$langsCourseAdminTeachers = "admins - teachers";
+$langsOfCourseAdminTeachers = "admins - teachers";
+$langCourseReviewer = "Reviewer";
+$langOfCourseReviewer = "Reviewer";
+$langsCourseReviewer = "reviewer";
+$langsOfCourseReviewer = "reviewer";
