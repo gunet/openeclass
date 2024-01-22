@@ -24,6 +24,7 @@ body{
     max-width: 100%;
     padding: 0;
     min-height: calc(100vh - 80px - 80px);
+    padding-top: 80px;
   }
 }
 /* whole height - header - footer + header */
@@ -133,7 +134,7 @@ body{
     background-color: #F7F9FE;
   }
   .container.portfolio-profile-container{
-    padding: 16px 8px 16px 8px;
+    padding: 40px 8px 40px 8px;
   }
   .container-fluid.portfolio-profile-container{
     padding: 16px 16px 16px 16px;
@@ -142,7 +143,7 @@ body{
 
   .portfolio-courses-container{
     background-color: #ffffff;
-    min-height: calc(100vh - 80px - 80px - 96px);
+    min-height: calc(100vh - 80px - 80px - 160px);
   }
   .container.portfolio-courses-container{
     padding: 24px 8px 24px 8px;
@@ -726,7 +727,7 @@ a:hover{
 #bgr-cheat-header{ 
   z-index:4;
   overflow: visible; 
-  background-color: transparent; 
+  background-color: #ffffff; 
   border: 0 none; 
   height:80px; 
   box-shadow: 1px 2px 6px rgba(43,57,68,0.04);

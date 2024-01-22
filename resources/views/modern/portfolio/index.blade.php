@@ -536,22 +536,22 @@
 
                     <div class='card user-info-card h-100 px-3 py-0 border-card'>
                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro'>
+                            <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro'>
                                 <i class='fa-solid fa-book-open fa-xs portofolio-text-intro'></i>
                                 {{ $student_courses_count }}
                                 <div class='form-label mb-0 portofolio-text-intro'>{!! trans('langSumCoursesEnrolled') !!}</div>
-                            </h1>
+                            </h2>
                             
                         </div>
                     </div>
                             
                     <div class='card user-info-card h-100 px-3 py-0 border-card'>
                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                            <h1 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro'>
+                            <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro'>
                                 <i class='fa-solid fa-book-reader fa-xs portofolio-text-intro'></i>
                                 {{ $teacher_courses_count }}
                                 <div class='form-label mb-0 portofolio-text-intro'>{!! trans('langSumCoursesSupport') !!}</div>
-                            </h1>
+                            </h2>
                             
                         </div>
                     </div>

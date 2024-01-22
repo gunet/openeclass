@@ -125,10 +125,10 @@
 
                                     <thead>
                                         <tr class="list-header">
-                                            <th style='width:30%;'>{!! headlink(trans('langName'), 'name') !!}</th>
+                                            <th style='width:50%;'>{!! headlink(trans('langName'), 'name') !!}</th>
                                             
-                                            <th style='width:30%;'>{{ trans('langSize') }}</th>
-                                            <th style='width:30%;'>{!! headlink(trans('langDate'), 'date') !!}</th>
+                                            <th style='width:15%;'>{{ trans('langSize') }}</th>
+                                            <th style='width:15%;'>{!! headlink(trans('langDate'), 'date') !!}</th>
 
                                             @unless ($is_in_tinymce)
                                                 <th style='width:10%;'>{!! icon('fa-cogs', trans('langCommands')) !!}</th>
@@ -143,7 +143,7 @@
                                         @if($file->visible == 1 or $can_upload)
                                             <tr class="{{ !$file->visible || ($file->extra_path && !$file->common_doc_visible) ? 'not_visible' : 'visible' }}">
 
-                                                <td style='width:30%;'>
+                                                <td style='width:50%;'>
                                                     @php $downloadfile = $base_url . "download=" . getIndirectReference($file->path); @endphp
                                                     <input type='hidden' value={!!$downloadfile!!}>
 
@@ -214,29 +214,29 @@
                                                 
 
                                                 @if ($file->is_dir)
-                                                    <td style='width:30%;'>&nbsp;</td>
+                                                    <td style='width:20%;'>&nbsp;</td>
                                                     @if($file->visible == 1)
-                                                        <td style='width:30%;'>{{ format_locale_date(strtotime($file->date), 'short', false) }}</td>
+                                                        <td style='width:20%;'>{{ format_locale_date(strtotime($file->date), 'short', false) }}</td>
                                                     @else
-                                                        <td style='width:30%;'><span class="opacity-50 text-secondary">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
+                                                        <td style='width:20%;'><span class="opacity-50 text-secondary">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @elseif ($file->format == '.meta')
                                                     @if($file->visible == 1)
-                                                        <td style='width:30%;'>{{ format_file_size($file->size) }}</td>
-                                                        <td style='width:30%;'>{{ $file->date }}</td>
+                                                        <td style='width:20%;'>{{ format_file_size($file->size) }}</td>
+                                                        <td style='width:15%;'>{{ $file->date }}</td>
                                                     @else
-                                                        <td style='width:30%;'><span class="opacity-50">{{ format_file_size($file->size) }}</span></td>
-                                                        <td style='width:30%;'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
+                                                        <td style='width:20%;'><span class="opacity-50">{{ format_file_size($file->size) }}</span></td>
+                                                        <td style='width:20%;'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @else
                                                     @if($file->visible == 1)
-                                                        <td style='width:30%;'>{{ format_file_size($file->size) }}</td>
-                                                        <td style='width:30%;' title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
+                                                        <td style='width:20%;'>{{ format_file_size($file->size) }}</td>
+                                                        <td style='width:20%;' title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'>{{ format_locale_date(strtotime($file->date), 'short') }}</td>
                                                     @else
-                                                        <td style='width:30%;'><span style="opacity-50">{{ format_file_size($file->size) }}</span></td>
-                                                        <td style='width:30%;' title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
+                                                        <td style='width:20%;'><span style="opacity-50">{{ format_file_size($file->size) }}</span></td>
+                                                        <td style='width:20%;' title='{{ format_locale_date(strtotime($file->date), 'short', false) }}' class='center'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short') }}</span></td>
                                                     @endif
 
                                                 @endif

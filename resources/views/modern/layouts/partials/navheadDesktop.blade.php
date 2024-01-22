@@ -1,5 +1,5 @@
 
-<nav id="bgr-cheat-header" class="navbar navbar-eclass py-0">
+<nav id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
     <div class='{{ $container }} header-container py-0'>
     <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
 
