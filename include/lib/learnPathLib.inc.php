@@ -119,7 +119,7 @@ function commentBox($type, $mode) {
     }
 
     // update mode
-    // allow to chose between
+    // allow to choose between
     // - update and show the comment and the pencil and the delete cross (UPDATE_)
     // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
     if (( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_editor) {
@@ -147,18 +147,14 @@ function commentBox($type, $mode) {
 
     // delete mode
     if ($mode == DELETE_ && $is_editor) {
-        $sql = "UPDATE `" . $tbl_name . "`
-                 SET `" . $col_name . "` = ''
-                 WHERE " . $where_cond;
+        $sql = "UPDATE `" . $tbl_name . "` SET `" . $col_name . "` = '' WHERE " . $where_cond;
         Database::get()->query($sql);
         $dsp = TRUE;
     }
 
     // display mode only or display was asked by delete mode or update mode
     if ($mode == DISPLAY_ || $dsp == TRUE) {
-        $sql = "SELECT `" . $col_name . "`
-                FROM `" . $tbl_name . "`
-                WHERE " . $where_cond;
+        $sql = "SELECT `" . $col_name . "` FROM `" . $tbl_name . "` WHERE " . $where_cond;
 
         $result = Database::get()->querySingle($sql);
         $currentComment = ($result && !empty($result->$col_name)) ? $result->$col_name : false;
@@ -168,31 +164,28 @@ function commentBox($type, $mode) {
             return $output;
         }
 
+        $output .= "<div class='panel-body'>";
         if (empty($currentComment)) {
             // if no comment and user is admin : display link to add a comment
             if ($is_editor) {
-                $output .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">'
-                    . $langAdd . '</a>';
+                $output .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">' . $langAdd . '</a>';
             }
         } else {
-            // display edit and delete links if user as the right to see it
-            // display comment
-            $output .= standard_text_escape($currentComment);
-
+            $output .=  standard_text_escape($currentComment);
             if ($is_editor) {
                 $output .= "&nbsp;&nbsp;&nbsp;" . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "");
                 $output .= "&nbsp;&nbsp;&nbsp";
                 $output .= icon('fa-times', $langDelete, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=del$col_name", 'onClick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmDelete) . '\')) return false;"');
-
             }
         }
+        $output .= "</div>";
     }
 
     return $output;
 }
 
 /*
- * This function is used to display name of module or learning path with admin links if needed
+ * @brief: This function is used to display name of module or learning path with admin links if needed
  *
  * @param string $type MODULE_ , LEARNINGPATH_
  * @param string $mode display(DISPLAY_) or update(UPDATE_) mode, no delete for a name
@@ -204,7 +197,6 @@ function commentBox($type, $mode) {
  */
 
 function nameBox($type, $mode, $formlabel = FALSE) {
-    // globals
     global $is_editor, $langModify, $langErrorNameAlreadyExists, $course_code, $course_id;
 
     // $dsp will be set 'true' if the comment has to be displayed
@@ -229,7 +221,6 @@ function nameBox($type, $mode, $formlabel = FALSE) {
     if ($mode == UPDATE_ && $is_editor) {
 
         if (isset($_POST['newName']) && !empty($_POST['newName'])) {
-
             $num = Database::get()->querySingle("SELECT COUNT(`" . $col_name . "`) AS count
                                  FROM `" . $tbl_name . "`
                                 WHERE `" . $col_name . "` = ?s
@@ -249,16 +240,16 @@ function nameBox($type, $mode, $formlabel = FALSE) {
                     FROM `" . $tbl_name . "`
                     WHERE " . $where_cond . " AND `course_id` = ?d", $course_id)->name;
 
-            $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
+            $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
 
             if ($formlabel != FALSE) {
-                $output .= '<div class="col-xs-10"><div class="input-group">'
+                $output .= '<div class="col-xs-12"><div class="input-group">'
                         . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
                         . '<span class="input-group-btn">'
                         . '<button class="btn btn-primary" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
                         . '</span>'
                         . '</div></div>'
-                        . '<input type="hidden" name="cmd" value="updateName" />' . ""
+                        . '<input type="hidden" name="cmd" value="updateName" />'
                         . '</form>';
             }
         }
@@ -266,17 +257,15 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
     // display if display mode or asked by the update
     if ($mode == DISPLAY_ || $dsp == true) {
-        $sql = "SELECT `name`
-                FROM `" . $tbl_name . "`
-                WHERE " . $where_cond . " AND `course_id` = ?d";
-
+        $sql = "SELECT `name` FROM `" . $tbl_name . "` WHERE " . $where_cond . " AND `course_id` = ?d";
         $result = Database::get()->querySingle($sql, $course_id);
-        $currentName = ($result && !empty($result->name)) ? $result->name : false;
-        $output .= q($currentName);
 
+        $currentName = ($result && !empty($result->name)) ? $result->name : false;
+        $output .= "<div class='panel-heading'><h3 class='panel-title'>" . q($currentName);
         if ($is_editor) {
             $output .= '&nbsp;&nbsp;&nbsp;'.icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName');
         }
+        $output .= "</h3></div>";
     }
 
     return $output;
@@ -653,16 +642,20 @@ function get_learnPath_progress_details($lpid, $lpUid): array {
             $global_time[$module->attempt] = addScormTime($global_time[$module->attempt], $mtt);
 
             // total started and accessed calculations
-            $mst = strtotime($module->started);
-            $mat = strtotime($module->accessed);
-            if ($mst) {
+            if (!is_null($module->started)) {
+                $mst = strtotime($module->started);
+            }
+            if (!is_null($module->accessed)) {
+                $mat = strtotime($module->accessed);
+            }
+            if (isset($mst)) {
                 if ($global_started[$module->attempt] === "") {
                     $global_started[$module->attempt] = $module->started;
                 } else if (strtotime($global_started[$module->attempt]) > $mst) {
                     $global_started[$module->attempt] = $module->started;
                 }
             }
-            if ($mat) {
+            if (isset($mat)) {
                 if ($global_accessed[$module->attempt] === "") {
                     $global_accessed[$module->attempt] = $module->accessed;
                 } else if (strtotime($global_accessed[$module->attempt]) < $mat) {
