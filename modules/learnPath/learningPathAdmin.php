@@ -48,7 +48,6 @@
   - change locking , visibility, order
   - access to config page of modules in this learning path
 
-  @Comments:
   ==============================================================================
  */
 
@@ -380,29 +379,15 @@ $tool_content .= action_bar(array(
             )
         ),false);
 
-$tool_content .= "<div class='col-sm-12'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
-                        <h3 class='mb-0'>$langLearningPathData</h3>
-                    </div>";
-$tool_content .= "<div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
 
-//############################ LEARNING PATH NAME BOX ################################\\
-$tool_content .="<tr><th width='70'>$langTitle:</th>";
+$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
+$tool_content .= "<div class='card-body'>";
 
 if ($cmd == "updateName") {
     $tool_content .= disp_message_box(nameBox(LEARNINGPATH_, UPDATE_, $langModify));
 } else {
-    $tool_content .= "<td>" . nameBox(LEARNINGPATH_, DISPLAY_);
+    $tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
 }
-
-$tool_content .= "</td></tr>";
-
-//############################ LEARNING PATH COMMENT BOX #############################\\
-$tool_content .="
-    <tr>
-      <th width='90'>$langDescription:</th>
-      <td>";
 if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
 } elseif ($cmd == "delcomment") {
@@ -411,7 +396,8 @@ if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td></tr></table></div></div></div></div>";
+$tool_content .= "</div></div></div>";
+
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "

@@ -199,19 +199,18 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
   OUTPUT STARTS HERE
   ================================================================ */
 
+
 // comment
-$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>
-                    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
-                        <h3 class='mb-0'>$langLearningPathData</h3>
-                    </div>";
-$tool_content .= "<div class='card-body'><table class='table-default'>";
-$tool_content .= "<tr><th width='70'>$langTitle:</th>";
-$tool_content .= "<td>". nameBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
+$tool_content .= "<div class='col-sm-12'><div class='card panelCard px-lg-4 py-lg-3'>";
+$tool_content .= "<div class='card-body'>";
+$tool_content .= nameBox(LEARNINGPATH_, DISPLAY_);
+
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
-    $tool_content .= "<tr><th width='90'>$langDescription:</th>";
-    $tool_content .= "<td>". commentBox(LEARNINGPATH_, DISPLAY_) ."</td></tr>";
+    $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
-$tool_content .= "</table></div></div></div>";
+
+$tool_content .= "</div></div></div>";
+
 
 // --------------------------- module table header --------------------------
 $tool_content .= "<div class='table-responsive'>";
