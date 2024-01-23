@@ -18,7 +18,7 @@
     "bootstrap-sass": "^3.4.1"
   },
   "devDependencies": {
-    "browser-sync": "^2.27.11",
+    "browser-sync": "^3.0.2",
     "del": "^3.0.0",
     "gulp": "^4.0.0",
     "gulp-autoprefixer": "^8.0.0",
