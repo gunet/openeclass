@@ -169,7 +169,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $group_opened = false;
             for ($i = 0; $i < $numOfToolGroups; $i ++) {
                 if (!$is_embedonce) {
-                    $t->set_var ('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
+                    $t->set_var('NAV_BLOCK_CLASS', $toolArr[$i][0]['class']);
                     $t->set_var('TOOL_GROUP_ID', $i);
                     if ($toolArr [$i] [0] ['type'] == 'none') {
                         $t->set_var('ACTIVE_TOOLS', '&nbsp;');
@@ -212,12 +212,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $t->parse('leftNavLink', 'leftNavLinkBlock', true);
                 }
                 if (!$group_opened and
-                    ($current_module_dir == '/' or
-                    $current_module_dir == 'course_home' or
-                    $current_module_dir == 'units' or
-                    $current_module_dir == 'weeks' or
-                    $current_module_dir == 'main/portfolio.php' or
-                    ($current_module_dir == 'usage' and !$GLOBALS['is_course_admin']))) {
+                    ($is_embedonce or
+                     $current_module_dir == '/' or
+                     $current_module_dir == 'course_home' or
+                     $current_module_dir == 'units' or
+                     $current_module_dir == 'weeks' or
+                     $current_module_dir == 'main/portfolio.php' or
+                     ($current_module_dir == 'usage' and !$GLOBALS['is_course_admin']))) {
                     $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
                     $group_opened = true;
                 }
@@ -870,7 +871,7 @@ function module_path($path) {
     }
 
     $original_path = $path;
-    $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
+    $path = preg_replace('/\?[a-zA-Z0-9=&;_-]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
                         array('/', '/', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {
