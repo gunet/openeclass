@@ -297,11 +297,11 @@ function pickerMenu() {
     global $urlServer, $course_code, $course_id, $is_editor, $is_course_admin, $modules, $session, $uid;
 
     // params
-    $originating_module = (isset($_REQUEST['originating_module'])) ? intval($_REQUEST['originating_module']) : null;
-    $originating_forum = (isset($_REQUEST['originating_forum'])) ? intval($_REQUEST['originating_forum']) : null;
-    $append_module = (!empty($originating_module)) ? "&originating_module=" . q($originating_module) : '';
-    $append_forum = (!empty($originating_forum)) ? "&originating_forum=" . q($originating_forum) : '';
-    $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter=' . q($_REQUEST['docsfilter']) : '';
+    $originating_module = isset($_REQUEST['originating_module']) ? intval($_REQUEST['originating_module']) : null;
+    $originating_forum = isset($_REQUEST['originating_forum']) ? intval($_REQUEST['originating_forum']) : null;
+    $append_module = $originating_module ? "&originating_module=$originating_module" : '';
+    $append_forum = $originating_forum ? "&originating_forum=$originating_forum" : '';
+    $docsfilter = isset($_REQUEST['docsfilter']) ? ('&docsfilter=' . q($_REQUEST['docsfilter'])) : '';
     $params = "?course=" . $course_code . "&embedtype=tinymce" . $append_module . $append_forum . $docsfilter;
 
     $sideMenuGroup = array();
@@ -352,7 +352,7 @@ function pickerMenu() {
 
     // link for group documents
     if ($originating_module === MODULE_ID_FORUM && !empty($originating_forum)) {
-        $result = Database::get()->querySingle("select * from `group` where forum_id = ?d limit 1", $originating_forum);
+        $result = Database::get()->querySingle("SELECT * FROM `group` WHERE forum_id = ?d LIMIT 1", $originating_forum);
         if ($result) {
             // check user access: editors and admins PASS, group_members also
             $usercheck = false;
