@@ -1449,6 +1449,11 @@ input[type="radio"]:disabled{
   opacity: 0.4;
 }
 
+.radio:has(input[type='radio']:disabled) .help-block{
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
 /* panels and form-wrapper where contains checkbox checked then change checked label color*/
 .form-wrapper.form-edit label:has(input[type="radio"]:checked){
   font-size: 14px;
@@ -1478,7 +1483,7 @@ input[type="radio"]:disabled{
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid #9BA9C1;
+  border: 1px solid ;
   border-radius: 4px;
   outline: none;
   transition-duration: 0.3s;

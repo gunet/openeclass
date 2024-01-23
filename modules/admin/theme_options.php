@@ -24,10 +24,13 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter','whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor'),
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter',
+                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 
+                                                    'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
+                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 'BgInput'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 'BgColorWrapperBriefProfilePortfolio'),
-                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor'),
-                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu', 'BriefProfilePortfolioTextColor'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes'),
+                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
@@ -36,10 +39,11 @@ $defaults = array(
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
-                "rgba(104, 125, 163, 1)" => array('clAccordions'),
+                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
+                "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -631,14 +635,18 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navHyperTexts' aria-controls='navHyperTexts' role='tab' data-bs-toggle='tab'>$langNavHyperTexts</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navPanels' aria-controls='navPanels' role='tab' data-bs-toggle='tab'>$langPanels</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navForms' aria-controls='navForms' role='tab' data-bs-toggle='tab'>$langForms</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navRadios' aria-controls='navRadios' role='tab' data-bs-toggle='tab'>$langRadio</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navCheckboxes' aria-controls='navCheckboxes' role='tab' data-bs-toggle='tab'>$langCheckbox</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navInputText' aria-controls='navInputText' role='tab' data-bs-toggle='tab'>$langInputText</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTables' aria-controls='navTables' role='tab' data-bs-toggle='tab'>$langTables</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTabs' aria-controls='navTabs' role='tab' data-bs-toggle='tab'>$langTabs</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navAccordions' aria-controls='navAccordions' role='tab' data-bs-toggle='tab'>$langAccordions</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navLists' aria-controls='navLists' role='tab' data-bs-toggle='tab'>$langLists</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navContextualMenu' aria-controls='navContextualMenu' role='tab' data-bs-toggle='tab'>$langContextualMenu</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navContextualMenu' aria-controls='navContextualMenu' role='tab' data-bs-toggle='tab'>$langContextualMenu</a></li>
+    
   </ul>
 
   <!-- Tab panes -->
@@ -1108,44 +1116,8 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navcontainer'>
                 <div class='form-wrapper form-edit rounded'>
-
-
-                    
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPortFolioProfileContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -1174,35 +1146,6 @@ $tool_content .= "
             </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navHyperTexts'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langPHyperTextColor</h3>
@@ -1212,30 +1155,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             <div role='tabpanel' class='tab-pane fade' id='navPanels'>
@@ -1251,6 +1170,207 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navRadios'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langRadios</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgRadios' class='control-label-notes mb-2 me-2'>$langBgRadios:</label>
+                        <input name='BgRadios' type='text' class='form-control colorpicker' id='BgRadios' value='$theme_options_styles[BgRadios]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBorderRadios' class='control-label-notes mb-2 me-2'>$langBgBorderRadios:</label>
+                        <input name='BgBorderRadios' type='text' class='form-control colorpicker' id='BgBorderRadios' value='$theme_options_styles[BgBorderRadios]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClRadios' class='control-label-notes mb-2 me-2'>$langClRadios:</label>
+                        <input name='ClRadios' type='text' class='form-control colorpicker' id='ClRadios' value='$theme_options_styles[ClRadios]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgClRadios' class='control-label-notes mb-2 me-2'>$langBgClRadios:</label>
+                        <input name='BgClRadios' type='text' class='form-control colorpicker' id='BgClRadios' value='$theme_options_styles[BgClRadios]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClIconRadios' class='control-label-notes mb-2 me-2'>$langClIconRadios:</label>
+                        <input name='ClIconRadios' type='text' class='form-control colorpicker' id='ClIconRadios' value='$theme_options_styles[ClIconRadios]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClInactiveRadios' class='control-label-notes mb-2 me-2'>$langClInactiveRadios:</label>
+                        <input name='ClInactiveRadios' type='text' class='form-control colorpicker' id='ClInactiveRadios' value='$theme_options_styles[ClInactiveRadios]'>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navCheckboxes'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langCheckboxes</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgCheckboxes' class='control-label-notes mb-2 me-2'>$langBgCheckboxes:</label>
+                        <input name='BgCheckboxes' type='text' class='form-control colorpicker' id='BgCheckboxes' value='$theme_options_styles[BgCheckboxes]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBorderCheckboxes' class='control-label-notes mb-2 me-2'>$langBgBorderCheckboxes:</label>
+                        <input name='BgBorderCheckboxes' type='text' class='form-control colorpicker' id='BgBorderCheckboxes' value='$theme_options_styles[BgBorderCheckboxes]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClCheckboxes' class='control-label-notes mb-2 me-2'>$langClCheckboxes:</label>
+                        <input name='ClCheckboxes' type='text' class='form-control colorpicker' id='ClCheckboxes' value='$theme_options_styles[ClCheckboxes]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgActiveCheckboxes' class='control-label-notes mb-2 me-2'>$langBgActiveCheckboxes:</label>
+                        <input name='BgActiveCheckboxes' type='text' class='form-control colorpicker' id='BgActiveCheckboxes' value='$theme_options_styles[BgActiveCheckboxes]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClActiveCheckboxes' class='control-label-notes mb-2 me-2'>$langClActiveCheckboxes:</label>
+                        <input name='ClActiveCheckboxes' type='text' class='form-control colorpicker' id='ClActiveCheckboxes' value='$theme_options_styles[ClActiveCheckboxes]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClIconCheckboxes' class='control-label-notes mb-2 me-2'>$langClIconCheckboxes:</label>
+                        <input name='ClIconCheckboxes' type='text' class='form-control colorpicker' id='ClIconCheckboxes' value='$theme_options_styles[ClIconCheckboxes]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClInactiveCheckboxes' class='control-label-notes mb-2 me-2'>$langClInactiveCheckboxes:</label>
+                        <input name='ClInactiveCheckboxes' type='text' class='form-control colorpicker' id='ClInactiveCheckboxes' value='$theme_options_styles[ClInactiveCheckboxes]'>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1288,6 +1408,31 @@ $tool_content .= "
 
 
 
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navInputText'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langInputText</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgInput' class='control-label-notes mb-2 me-2'>$langBgInput:</label>
+                        <input name='BgInput' type='text' class='form-control colorpicker' id='BgInput' value='$theme_options_styles[BgInput]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderInput' class='control-label-notes mb-2 me-2'>$langclBorderInput:</label>
+                        <input name='clBorderInput' type='text' class='form-control colorpicker' id='clBorderInput' value='$theme_options_styles[clBorderInput]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clInputText' class='control-label-notes mb-2 me-2'>$langclInputText:</label>
+                        <input name='clInputText' type='text' class='form-control colorpicker' id='clInputText' value='$theme_options_styles[clInputText]'>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -1491,9 +1636,9 @@ $tool_content .= "
             <div role='tabpanel' class='tab-pane' id='settings'>...</div>
         </div>
             <div class='form-group mt-5'>
-                <div class='col-12 d-flex justify-content-center align-items-center'>
-                    ".($theme_id ? "<input class='btn submitAdminBtn me-1' name='optionsSave' type='submit' value='$langSave'>" : "")."
-                    <input class='btn submitAdminBtn mb-md-0 mb-2 me-1' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
+                <div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap'>
+                    ".($theme_id ? "<input class='btn submitAdminBtn' name='optionsSave' type='submit' value='$langSave'>" : "")."
+                    <input class='btn submitAdminBtn' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
                     ".($theme_id ? "<a class='btn submitAdminBtn' href='theme_options.php?export=true'>$langExport</a>" : "")."
                 </div>
             </div>

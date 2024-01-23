@@ -1640,6 +1640,464 @@ function view($view_file, $view_data = array()) {
         }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// BACKGROUND COLOR OF RADIO BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgRadios'])){
+            $styles_str .= "
+                input[type='radio']{
+                    background-color: $theme_options_styles[BgRadios];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// BORDER COLOR OF RADIO BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgBorderRadios'])){
+            $styles_str .= "
+                input[type='radio']{
+                    border: solid 1px $theme_options_styles[BgBorderRadios];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////// TEXT COLOR OF RADIO BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClRadios'])){
+            $styles_str .= "
+                .radio label{ 
+                    color: $theme_options_styles[ClRadios];
+                } 
+
+                input[type='radio']{
+                    color:  $theme_options_styles[ClRadios];
+                }
+
+                .radio:not(:has(input[type='radio']:checked)) .help-block{
+                    color: $theme_options_styles[ClRadios];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////// BACKGROUND AND TEXT COLOR RADIO ACTIVE BUTTON //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgClRadios'])){
+            $styles_str .= "
+                input[type='radio']:checked { 
+                    border: solid 6px $theme_options_styles[BgClRadios];
+                }
+                .input-StatusCourse:checked{
+                    box-shadow: inset 0 0 0 0px #e8e8e8;
+                    border: 0px solid #e8e8e8;
+                    background-color: $theme_options_styles[BgClRadios];
+                }
+                .form-wrapper.form-edit label:has(input[type='radio']:checked){
+                    color: $theme_options_styles[BgClRadios];
+                }
+                
+                .radio:has(input[type='radio']:checked) .help-block{
+                    color: $theme_options_styles[BgClRadios];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// ICON COLOR IN RADIO ACTIVE BUTTON //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClIconRadios'])){
+            $styles_str .= "
+                .radio:has(.input-StatusCourse:checked) .fa{
+                    color: $theme_options_styles[ClIconRadios];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// TEXT COLOR IN RADIO INACTIVE BUTTON /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClInactiveRadios'])){
+            $styles_str .= "
+                label:has(input[type='radio']:disabled){
+                    color: $theme_options_styles[ClInactiveRadios];
+                }
+            ";
+        }
+
+        
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BACKGROUND COLOR IN CHECKBOX BUTTON /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgCheckboxes'])){
+            $styles_str .= "
+                .label-container > input[type='checkbox'] {
+                    background-color: $theme_options_styles[BgCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// BORDER COLOR IN CHECKBOX BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgBorderCheckboxes'])){
+            $styles_str .= "
+                .label-container > input[type='checkbox'] {
+                    border: 1px solid $theme_options_styles[BgBorderCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// TEXT COLOR IN CHECKBOX BUTTON ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClCheckboxes'])){
+            $styles_str .= "
+                .label-container {
+                    color: $theme_options_styles[ClCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////// BACKGROUND COLOR IN ACTIVE CHECKBOX BUTTON //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgActiveCheckboxes'])){
+            $styles_str .= "
+                .label-container > input[type='checkbox']:checked {
+                    border: 1px solid $theme_options_styles[BgActiveCheckboxes];
+                    background-color: $theme_options_styles[BgActiveCheckboxes];
+                }
+                .label-container > input[type='checkbox']:active {
+                    border: 1px solid $theme_options_styles[BgActiveCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// TEXT COLOR IN ACTIVE CHECKBOX BUTTON /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClActiveCheckboxes'])){
+            $styles_str .= "
+                .label-container:has(input[type='checkbox']:checked){
+                    color: $theme_options_styles[ClActiveCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// ICON COLOR IN ACTIVE CHECKBOX BUTTON /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClIconCheckboxes'])){
+            $styles_str .= "
+                .label-container > input[type='checkbox']:checked + .checkmark::before {
+                    color: $theme_options_styles[ClIconCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// TEXT COLOR IN INACTIVE CHECKBOX BUTTON ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClInactiveCheckboxes'])){
+            $styles_str .= "
+                .label-container:has(input[type='checkbox']:disabled){
+                    color: $theme_options_styles[ClInactiveCheckboxes];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// BACKGROUND COLOR IN INPUT TEXT ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgInput'])){
+            $styles_str .= "
+                input::placeholder,
+                .form-control,
+                .login-input,
+                .login-input::placeholder,
+                input[type='text'], 
+                input[type='password'], 
+                input[type='number'],
+                input[type='search'],
+                input[type='url'],
+                input[type='email']{
+                    background-color: $theme_options_styles[BgInput];
+                }
+                
+                textarea,
+                textarea.form-control{
+                    background-color: $theme_options_styles[BgInput];
+                }
+                
+                input[type='text']:focus,
+                input[type='datetime']:focus,
+                input[type='datetime-local']:focus,
+                input[type='date']:focus,
+                input[type='month']:focus,
+                input[type='time']:focus,
+                input[type='week']:focus,
+                input[type='number']:focus,
+                input[type='email']:focus,
+                input[type='url']:focus,
+                input[type='search']:focus,
+                input[type='tel']:focus,
+                input[type='color']:focus,
+                .form-control:focus,
+                .uneditable-input:focus,
+                textarea:focus,
+                .login-input:focus {   
+                    background-color: $theme_options_styles[BgInput];
+                }
+
+                select.form-select {
+                    background-color: $theme_options_styles[BgInput];
+                }
+
+                select.form-select:focus{
+                    background-color: $theme_options_styles[BgInput];
+                }
+
+                .dataTables_wrapper select {
+                    background-color: $theme_options_styles[BgInput];
+                }
+
+                .dataTables_wrapper select:focus {
+                    background-color: $theme_options_styles[BgInput];
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// BORDER COLOR IN INPUT TEXT //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clBorderInput'])){
+            $styles_str .= "
+                input::placeholder,
+                .form-control,
+                .login-input,
+                .login-input::placeholder,
+                input[type='text'], 
+                input[type='password'], 
+                input[type='number'],
+                input[type='search'],
+                input[type='url'],
+                input[type='email']{
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+                
+                textarea,
+                textarea.form-control{
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+                
+                input[type='text']:focus,
+                input[type='datetime']:focus,
+                input[type='datetime-local']:focus,
+                input[type='date']:focus,
+                input[type='month']:focus,
+                input[type='time']:focus,
+                input[type='week']:focus,
+                input[type='number']:focus,
+                input[type='email']:focus,
+                input[type='url']:focus,
+                input[type='search']:focus,
+                input[type='tel']:focus,
+                input[type='color']:focus,
+                .form-control:focus,
+                .uneditable-input:focus,
+                textarea:focus,
+                .login-input:focus {   
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+
+                select.form-select {
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+
+                select.form-select:focus{
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+
+
+                .dataTables_wrapper select {
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+
+                .dataTables_wrapper select:focus {
+                    border-color: $theme_options_styles[clBorderInput];
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////// TEXT COLOR IN INPUT TEXT ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['clInputText'])){
+            $styles_str .= "
+                input::placeholder,
+                .form-control,
+                .form-control::placeholder,
+                .login-input::placeholder,
+                .login-input,
+                input[type='text'], 
+                input[type='password'], 
+                input[type='number'],
+                input[type='search'],
+                input[type='url'],
+                input[type='email']{
+                    color: $theme_options_styles[clInputText];
+                }
+                
+                textarea,
+                textarea.form-control{
+                    color: $theme_options_styles[clInputText];
+                }
+                
+                input[type='text']:focus,
+                input[type='datetime']:focus,
+                input[type='datetime-local']:focus,
+                input[type='date']:focus,
+                input[type='month']:focus,
+                input[type='time']:focus,
+                input[type='week']:focus,
+                input[type='number']:focus,
+                input[type='email']:focus,
+                input[type='url']:focus,
+                input[type='search']:focus,
+                input[type='tel']:focus,
+                input[type='color']:focus,
+                .form-control:focus,
+                .uneditable-input:focus,
+                textarea:focus,
+                .login-input:focus {   
+                    color: $theme_options_styles[clInputText];
+                }
+
+                select.form-select {
+                    color: $theme_options_styles[clInputText];
+                }
+
+                select.form-select option{
+                    color: $theme_options_styles[clInputText];
+                }
+
+                .dataTables_wrapper select option {
+                    color: $theme_options_styles[clInputText];
+                }
+
+                .dataTables_wrapper select option:focus {
+                    color: $theme_options_styles[clInputText];
+                }
+
+
+            ";
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         //////////////////////// BACKGROUND COLOR OF FORM WRAPPER ///////////////////////////
@@ -1662,20 +2120,15 @@ function view($view_file, $view_data = array()) {
         
         if(!empty($theme_options_styles['clLabelForms'])){
             $styles_str .= "
-                .radio label{ 
-                    color:$theme_options_styles[clLabelForms];
-                } 
-
-                .form-wrapper.form-edit .control-label-notes{ 
+                .form-wrapper.form-edit .control-label-notes,
+                .form-group .control-label-notes{ 
                     color:$theme_options_styles[clLabelForms];
                 }
 
-                .label-container {
-                    color:$theme_options_styles[clLabelForms];
-                }
             
             ";
         }
+        
             
         
 
@@ -1840,28 +2293,6 @@ function view($view_file, $view_data = array()) {
                     color:#C44601;
                 }
 
-                
-                .label-container > input[type=checkbox]:checked {
-                    border: 1px solid $theme_options_styles[linkColor];
-                    background-color: $theme_options_styles[linkColor];
-                }
-                  
-                .label-container > input[type=checkbox]:active {
-                    border: 1px solid $theme_options_styles[linkColor];
-                }
-
-                input[type='radio']:checked { 
-                    border: solid 6px $theme_options_styles[linkColor];
-                }
-                .input-StatusCourse:checked{
-                    background-color: $theme_options_styles[linkColor];
-                }
-                  
-                .form-wrapper.form-edit label:has(input[type=radio]:checked){
-                    color:$theme_options_styles[linkColor];
-                }
-
-
                 thead, tbody .list-header {
                     border-bottom: solid 2px $theme_options_styles[linkColor];
                 }
@@ -1976,11 +2407,10 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[leftMenuFontColor];
                 }
                 
-                @media(min-width:992px){
-                    #collapse-left-menu-icon path{
-                        fill: $theme_options_styles[leftMenuFontColor] !important;
-                    }
+                #collapse-left-menu-icon path{
+                    fill: $theme_options_styles[leftMenuFontColor] !important;
                 }
+                
             ";
         }
 
@@ -2168,6 +2598,10 @@ function view($view_file, $view_data = array()) {
                 .testimonial.slick-slide.slick-current.slick-active.slick-center{
                     background-color: $theme_options_styles[BgPanels] ;
                 }
+
+                #lti_label{
+                    background-color: $theme_options_styles[BgPanels] ;
+                }
             ";
         }
 
@@ -2214,6 +2648,14 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[clBorderPanels] ;
                 }
 
+                #lti_label{
+                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .wrapper-lostpass{
+                    border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
             ";
         }
 
@@ -2237,7 +2679,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgTables];
                 }
 
-                thead {
+                thead,
+                .title1 {
                     background-color: $theme_options_styles[BgTables];
                 }
 

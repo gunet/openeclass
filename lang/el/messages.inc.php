@@ -5776,7 +5776,7 @@ $langNavHyperTexts = "Τυπογραφία";
 $langPHyperTextColor = "Χρώμα επικεφαλίδων - κειμένων";
 $langBgPanels = "Χρώμα φόντου";
 $langPanels = "Card";
-$langForms = "Form";
+$langForms = "Φόρμες";
 $langBgForms = "Χρώμα φόντου";
 $langColorLabel = "Χρώμα Ετικέτας";
 $langTables = "Table";
@@ -5807,6 +5807,31 @@ $langButtonColorWhiteCongiguration = "Χρώμα φόντου κουμπιού";
 $langBgBorderForms = "Χρώμα border φόρμας";
 $langSubmitComment = "Υποβολή σχόλιου";
 $langBriefProfilePortfolioTextColor = "Χρώμα κειμένων σύντομου προφίλ";
+
+$langRadio = "Radio";
+$langRadios = "Ρυθμίσεις radio κουμπιού";
+$langBgRadios = "Χρώμα φόντου radio κουμπιού";
+$langBgBorderRadios = "Χρώμα border radio κουμπιού";
+$langClRadios = "Χρώμα κειμένου radio κουμπιού";
+$langBgClRadios = "Χρώμα φόντου και κειμένου ενεργού radio κουμπιού";
+$langClIconRadios = "Χρώμα icon ενεργού radio κουμπιού";
+$langClInactiveRadios = "Χρώμα κειμένου ανενεργού radio κουμπιού";
+
+$langCheckbox = "Checkboxes";
+$langCheckboxes = "Ρυθμίσεις checkbox κουμπιού";
+$langBgCheckboxes = "Χρώμα φόντου checkbox κουμπιού";
+$langBgBorderCheckboxes = "Χρώμα border checkbox κουμπιού";
+$langClCheckboxes = "Χρώμα κειμένου checkbox κουμπιού" ;
+$langBgActiveCheckboxes = "Χρώμα φόντου ενεργού checkbox κουμπιού";
+$langClActiveCheckboxes = "Χρώμα κειμένου ενεργού checkbox κουμπιού";
+$langClIconCheckboxes = "Χρώμα icon ενεργού checkbox κουμπιού";
+$langClInactiveCheckboxes = "Χρώμα κειμένου ανενεργού checkbox κουμπιού";
+
+$langInputText = "Input-TextArea-Select";
+$langBgInput = "Χρώμα φόντου περιοχής κειμένου";
+$langclBorderInput = "Χρώμα border περιοχής κειμένου";
+$langclInputText = "Χρώμα κειμένου";
+
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

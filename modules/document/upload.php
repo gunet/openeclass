@@ -245,7 +245,7 @@ $tool_content .= "<div class='$flex_content mt-4'>
                                             <label class='label-container'>
                                               <input type='checkbox' name='uncompress' value='1'>
                                               <span class='checkmark'></span>
-                                              <div class='TextRegular Neutral-900-cl'>$langUncompress</div>
+                                              $langUncompress
                                             </label>
                                       </div>
                                     </div>
@@ -260,7 +260,7 @@ $tool_content .= "<div class='$flex_content mt-4'>
                                         <label class='label-container'>
                                             <input type='checkbox' name='replace' value='1'>
                                             <span class='checkmark'></span>
-                                            <div class='TextRegular Neutral-900-cl'>$langReplaceSameName</div>
+                                            $langReplaceSameName
                                         </label>
                                     </div>
                                 </div>
