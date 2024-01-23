@@ -47,7 +47,7 @@
                     </div>
                 @endif
                 <div class='col-lg-6 col-12'>
-                    <div class='form-wrapper'>
+                    <div class='form-wrapper form-edit rounded'>
                          <form class='form-horizontal' role='form' name='serverForm' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
 
                              <div class='form-group mt-4'>

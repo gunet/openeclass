@@ -46,7 +46,7 @@
 
 
                         <div class="col-12">
-                            <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
+                            <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
                             <hr>
                             @if (count($installed_widgets))
                             <div id="widgets">
@@ -99,7 +99,7 @@
                             </div>
                             @endif
 
-                            <h3 class="control-label-notes mt-5">{{ trans('langAvailableWidgets') }}</h3>
+                            <h3 class=" mt-5">{{ trans('langAvailableWidgets') }}</h3>
                             <hr>
                             @if (count($uninstalled_widgets))
                             <div>

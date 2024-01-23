@@ -393,7 +393,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='form-wrapper form-edit rounded'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>            
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
-              <label for='PollName' class='col-sm-6 control-label-notes'>$langTitle</label>
+              <label for='PollName' class='col-sm-12 control-label-notes'>$langTitle</label>
               <div class='col-sm-12'>
                 <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='" . q($PollName) . "'>
                 <span class='help-block Accent-200-cl'>".Session::getError('PollName')."</span>
@@ -468,21 +468,21 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4'>
-              <label for='PollDescription' class='col-sm-6 control-label-notes'>$langDescription</label>
+              <label for='PollDescription' class='col-sm-12 control-label-notes'>$langDescription</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
             </div>
             
             <div class='form-group mt-4'>
-              <label for='PollEndMessage' class='col-sm-6 control-label-notes'>$langPollEndMessage</label>
+              <label for='PollEndMessage' class='col-sm-12 control-label-notes'>$langPollEndMessage</label>
               <div class='col-sm-12'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
             </div>
 
             <div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes mb-2'>$m[WorkAssignTo]</label>
+                <label class='col-sm-12 control-label-notes mb-2'>$m[WorkAssignTo]</label>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -538,7 +538,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
            
 
             <div class='form-group mt-4'>
-                <label class='col-sm-6 control-label-notes mb-2'>$langType</label>
+                <label class='col-sm-12 control-label-notes mb-2'>$langType</label>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -586,7 +586,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group mt-4 display_position ".($PollSurveyType == POLL_QUICK ? "" : "hide")." '>
-                <label class='col-sm-6 control-label-notes mb-2'>$langShowFront:</label>
+                <label class='col-sm-12 control-label-notes mb-2'>$langShowFront:</label>
                 <div class='col-sm-12'>
                     <div class='checkbox'>
                         <label class='label-container'>
@@ -743,7 +743,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     <div class='flex-grow-1'>
     <div class='form-wrapper form-edit rounded'><form class='form-horizontal' role='form' action='$action_url' method='post'>
             <div class='form-group $questionNameErrorClass'>
-                <label for='questionName' class='col-sm-6 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)."</label>
+                <label for='questionName' class='col-sm-12 control-label-notes'>".(isset($_GET['questionType']) ? $langLabel : $langQuestion)."</label>
                 <div class='col-sm-12'>
                   ".(isset($_GET['questionType']) || isset($question) && $question->qtype == QTYPE_LABEL ? rich_text_editor('questionName', 10, 10, $questionName) :"<input type='text' class='form-control' id='questionName' name='questionName' value='".q($questionName)."'>")."
                   <span class='help-block'>$questionNameError</span>
@@ -767,7 +767,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </script>";
         $tool_content .= "
             <div class='form-group mt-4'>
-                <label for='answerType' class='col-sm-6 control-label-notes mb-2'>$langType</label>
+                <label for='answerType' class='col-sm-12 control-label-notes mb-2'>$langType</label>
                 <div class='col-sm-12'>
                     <div class='radio mb-2'>
                       <label>
@@ -801,7 +801,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
 
             <div class='form-group$questionScaleErrorClass$questionScaleShowHide mt-4'>
-                <label for='questionScale' class='col-sm-6 control-label-notes'>$langMax $langScale (1-..):</label>
+                <label for='questionScale' class='col-sm-12 control-label-notes'>$langMax $langScale (1-..):</label>
                 <div class='col-12'>
                     <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
                     <span class='help-block'>$questionScaleError</span>
@@ -967,92 +967,114 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
 
     <div class='col-12 mb-4'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
           <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
             <h3>$langInfoPoll &nbsp;".icon('fa-edit', $langEditPoll, "admin.php?course=$course_code&amp;pid=$pid&amp;modifyPoll=yes")."</h3>
           </div>
 
           <div class='card-body'>
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langTitle:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . q($poll->name) . "
-                </div>
-            </div>
+            <ul class='list-group list-group-flush'>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langTitle</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            " . q($poll->name) . "
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langPollStart:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ". format_locale_date(strtotime($poll->start_date)) ."
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langPollStart</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            ". format_locale_date(strtotime($poll->start_date)) ."
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langPollEnd:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ". format_locale_date(strtotime($poll->end_date)) ."
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langPollEnd</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            ". format_locale_date(strtotime($poll->end_date)) ."
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$m[WorkAssignTo]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ". $assign_to_users_message ."
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$m[WorkAssignTo]</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            ". $assign_to_users_message ."
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langResults:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ".(($poll->anonymized) ? icon('fa-square-check') : icon('fa-square'))." $langPollAnonymize <br>
-                    ".(($poll->show_results) ? icon('fa-square-check') : icon('fa-square'))." $langPollShowResults
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langResults</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            ".(($poll->anonymized) ? icon('fa-square-check') : icon('fa-square'))." $langPollAnonymize <br>
+                            ".(($poll->show_results) ? icon('fa-square-check') : icon('fa-square'))." $langPollShowResults
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langType:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $poll_type
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langType</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            $poll_type
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat ".($poll->type == POLL_QUICK ? "" : "hide")."'>
-                <div class='col-sm-3'>
-                    <strong>$langShowFront:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ".(($poll->display_position) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langYes <br>
-                </div>
-            </div>
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langDescription:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . standard_text_escape($poll->description) . "
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2 margin-bottom-fat ".($poll->type == POLL_QUICK ? "" : "hide")."'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langShowFront</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            ".(($poll->display_position) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langYes
+                        </div>
+                    </div>
+                </li>
 
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langPollEndMessage:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    " . standard_text_escape($poll->end_message) . "
-                </div>
-            </div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langDescription</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            " . standard_text_escape($poll->description) . "
+                        </div>
+                    </div>
+                </li>
+
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langPollEndMessage</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            " . standard_text_escape($poll->end_message) . "
+                        </div>
+                    </div>
+                </li>
+            
+            </ul>
           </div>
         </div>
     </div>
@@ -1103,7 +1125,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                         <tbody id='pollAnswers'>
                             <tr class='list-header'>
                               <th colspan='2'>$langQuesList</th>
-                              <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
+                              <th class='text-end'>".icon('fa-gears', $langCommands)."</th>
                             </tr>";
             $i=1;
             $nbrQuestions = count($questions);
@@ -1113,7 +1135,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                                 $aType[$question->qtype - 1]."</td>
                                 <td>
-                                    <div class='d-flex justify-content-center align-items-center gap-2'>
+                                    <div class='d-flex justify-content-end align-items-center gap-2'>
                                     <div class='reorder-btn pull-left' style=' font-size: 16px; cursor: pointer; vertical-align: bottom;'>
                                             <span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='$langReorder'></span>
                                     </div>

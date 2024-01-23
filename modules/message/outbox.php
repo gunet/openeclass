@@ -72,80 +72,91 @@ if (isset($_GET['mid'])) {
         $out .= "
                     <div id='out_del_msg'></div>
                     <div id='out_msg_area'>
-                        <div class='row row-cols-1 row-cols-lg-2 g-4'>
+                        <div class='row row-cols-1 g-4'>
                                     <div class='col'>
-                                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                        <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                                 <h3>$langMessageInfo</h3>
                                             </div>
                                             <div class='card-body'>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-12'>
-                                                        <strong class='control-label-notes'>$langSubject:</strong>
+                                                <ul class='list-group list-group-flush'>
+                                                    <li class='list-group-item element'>
+                                                        <div class='row row-cols-1 row-cols-2'>
+                                                            <div class='col-md-3 col-12'>
+                                                                <div class='title-default'>$langSubject</div>
+                                                            </div>
+                                                            <div class='col-md-9 col-12 title-default-line-height'>
+                                                                ".q($msg->subject)."
+                                                            </div>
+                                                        </div>
+                                                    </li>";
+                                if ($msg->course_id != 0 && $course_id == 0) {
+                                    $out .= "
+                                                <li class='list-group-item element'>
+                                                    <div class='row row-cols-1 row-cols-2'>
+                                                        <div class='col-md-3 col-12'>
+                                                            <div class='title-default'>$langCourse</div>
+                                                        </div>
+                                                        <div class='col-md-9 col-12 title-default-line-height'>
+                                                            <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                                                        </div>
                                                     </div>
-                                                    <div class='col-12'>
-                                                        ".q($msg->subject)."
-                                                    </div>
-                                                </div>";
-                            if ($msg->course_id != 0 && $course_id == 0) {
-                                $out .= "
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-12'>
-                                                        <strong class='control-label-notes'>$langCourse:</strong>
-                                                    </div>
-                                                    <div class='col-12'>
-                                                        <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
-                                                    </div>
-                                                </div>";
-                            }
-                            $out .= "
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-12'>
-                                                        <strong class='control-label-notes'>$langDate:</strong>
-                                                    </div>
-                                                    <div class='col-12'>
-                                                        ". format_locale_date($msg->timestamp, 'short') ."
-                                                    </div>
-                                                </div>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-12'>
-                                                        <strong class='control-label-notes'>$langSender:</strong>
-                                                    </div>
-                                                    <div class='col-12'>
-                                                        ".display_user($msg->author_id, false, false, "outtabs")."
-                                                    </div>
-                                                </div>
-                                                <div class='row p-2 margin-bottom-thin'>
-                                                    <div class='col-12'>
-                                                        <strong class='control-label-notes'>$langRecipients:</strong>
-                                                    </div>
-                                                    <div class='col-12'>
-                                                        $recipients
-                                                    </div>
-                                                </div>
+                                                </li>";
+                                }
+                                $out .= "           <li class='list-group-item element'>
+                                                        <div class='row row-cols-1 row-cols-2'>
+                                                            <div class='col-md-3 col-12'>
+                                                                <div class='title-default'>$langDate</div>
+                                                            </div>
+                                                            <div class='col-md-9 col-12 title-default-line-height'>
+                                                                ". format_locale_date($msg->timestamp, 'short') ."
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class='list-group-item element'>
+                                                        <div class='row row-cols-1 row-cols-2'>
+                                                            <div class='col-md-3 col-12'>
+                                                                <div class='title-default'>$langSender</div>
+                                                            </div>
+                                                            <div class='col-md-9 col-12 title-default-line-height'>
+                                                                ".display_user($msg->author_id, false, false, "outtabs")."
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    <li class='list-group-item element'>
+                                                        <div class='row row-cols-1 row-cols-2'>
+                                                            <div class='col-md-3 col-12'>
+                                                                <div class='title-default'>$langRecipients</div>
+                                                            </div>
+                                                            <div class='col-md-9 col-12 title-default-line-height'>
+                                                                $recipients
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </div>
 
 
                                     <div class='col'>
-                                        <div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                                        <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                                                  <h3>$langMessageContent</h3>
                                             </div>
                                             <div class='card-body'>
-                                                            <div class='row p-2 margin-bottom-thin'>
-                                                                <div class='col-12'>
+                                                            <div class='d-flex justify-content-start align-items-center flex-wrap gap-2 mb-4'>
+                                                                <div>
                                                                     ".standard_text_escape($msg->body)."
                                                                 </div>
                                                             </div>";
                                                 if ($msg->filename != '') {
-                                                $out .= "<hr>
-                                                            <div class='row p-2 margin-top-thin'>
-                                                                <div class='col-12'>
+                                                $out .= "
+                                                            <div class='d-flex justify-content-start align-items-center flex-wrap gap-2'>
+                                                                <div>
                                                                     $langAttachedFile
                                                                 </div>
-                                                                <div class='col-12'>
+                                                                <div>
                                                                     <a href=\"message_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
                                                                         &nbsp;<i class='fa fa-save'></i>
                                                                     </a>

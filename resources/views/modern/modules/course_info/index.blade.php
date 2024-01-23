@@ -147,7 +147,7 @@
                           
                           <div class='d-lg-flex gap-4 mt-4'>
                           <div class='flex-grow-1'>
-                            <div class='form-wrapper form-edit py-3 rounded'>
+                            <div class='form-wrapper form-edit rounded'>
 
                               <form class='form-horizontal' role='form' method='post' action="{{ $form_url }}" onsubmit='return validateNodePickerForm();'>
                                 <fieldset>

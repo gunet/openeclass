@@ -267,8 +267,8 @@ if (isset($_POST['submit'])) {
         $infoText = $langActivateUserInfo;
         $monthsField = "
                 <div class='form-group mt-3'>
-                    <label class='col-sm-2 control-label-notes' for='months-id'>$langActivateMonths:</label>
-                    <div class='col-sm-2'>
+                    <label class='col-sm-12 control-label-notes' for='months-id'>$langActivateMonths:</label>
+                    <div class='col-sm-12'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
                     </div>
                 </div>";
@@ -288,7 +288,7 @@ if (isset($_POST['submit'])) {
                 <input type='hidden' name='old_dep' value='$dep'>
                 
                 <div class='form-group mt-3'>
-                    <label class='col-sm-6 control-label-notes' for='dialog-set-value'>$langFaculty:</label>
+                    <label class='col-sm-12 control-label-notes' for='dialog-set-value'>$langFaculty:</label>
                     <div class='col-sm-12'>$html</div>
                 </div>";
         $confirm = '';

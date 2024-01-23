@@ -1,3 +1,4 @@
+    <div class='form-wrapper form-edit rounded'> 
         <form id="optionsForm{{ $widget_widget_area_id }}">
               <label class='d-inline-flex w-100'>
                   <span class='w-25 control-label-notes pt-2 me-2'>RSS feed url:</span> 
@@ -12,4 +13,5 @@
                     </select> 
               </label>         
         </form>
+    </div>
 

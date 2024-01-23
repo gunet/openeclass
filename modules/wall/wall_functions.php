@@ -253,7 +253,7 @@ function generate_single_post_html($post) {
 
                                             <div class="margin-top-thin" style="padding:20px">
                                                 '.$extvideo_block.'
-                                                <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
+                                                <div class="userContent title-default">'.nl2br(standard_text_escape($content)).'</div>
                                             </div>
                                             '.show_resources($id).'
                                             '.$rating_content.'
@@ -409,7 +409,7 @@ function generate_infinite_container_html($posts, $next_page) {
 
                         <div class="margin-top-thin" style="padding:20px">' .
                           $extvideo_block . '
-                        <div class="userContent control-label-notes">'.nl2br(standard_text_escape($content)).'</div>
+                        <div class="userContent title-default">'.nl2br(standard_text_escape($content)).'</div>
                       </div>' .
                       show_resources($id) . '
                       <div class="row">

@@ -2234,7 +2234,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
         }
         $tool_content .= "
                 <div class='col-12'>
-                    <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
                         <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>                            
                                 <h3>
                                     $langProgressBasicInfo
@@ -2247,46 +2247,56 @@ function display_settings($element, $element_id, $unit_id = 0): void
                             }
                         $tool_content .= "</div>
                         <div class='card-body'>
-                            <div class='row'>
-                                <div class='col-md-4 col-12'>
-                                    <img class='img-responsive center-block m-md-0 m-auto d-block' src='$icon_link'>
+                            <div class='d-flex justify-content-md-start justify-content-center align-items-start flex-wrap gap-5'>
+                                <div>
+                                    <img class='img-responsive center-block m-auto d-block' src='$icon_link'>
                                 </div>
-                                <div class='col-md-8 col-12 mt-md-0 mt-3'>
-                                    <div class='row p-2'>
-                                        <div class='col-md-4 col-12'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langTitle:</div>
-                                        </div>
-                                        <div class='col-md-8 col-12 text-start'>
-                                            <div class='pn-info-text-sct'>$title</div>
-                                        </div>
-                                    </div>
+                                <div class='flex-grow-1'>
+                                    <ul class='list-group list-group-flush'>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-2'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langTitle</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$title</div>
+                                                </div>
+                                            </div>
+                                        </li>
 
-                                    <div class='row p-2'>
-                                        <div class='col-md-4 col-12'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langDescription:</div>
-                                        </div>
-                                        <div class='col-md-8 col-12 text-start'>
-                                            <div class='pn-info-text-sct'>$description</div>
-                                        </div>
-                                    </div>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-2'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langDescription</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct'>$description</div>
+                                                </div>
+                                            </div>
+                                        </li>
 
-                                    <div class='row p-2'>
-                                        <div class='col-md-4 col-12'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langMessage:</div>
-                                        </div>
-                                        <div class='col-md-8 col-12'>
-                                            <div class='pn-info-text-sct text-start'>$message</div>
-                                        </div>
-                                    </div>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-2'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langMessage</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct text-start'>$message</div>
+                                                </div>
+                                            </div>
+                                        </li>
 
-                                    <div class='row p-2'>
-                                        <div class='col-md-4 col-12'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langpublisher:</div>
-                                        </div>
-                                        <div class='col-md-8 col-12'>
-                                            <div class='pn-info-text-sct text-start'>$issuer</div>
-                                        </div>
-                                    </div>
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-2'>
+                                                <div class='col-md-3 col-12'>
+                                                    <div class='pn-info-title-sct title-default'>$langpublisher</div>
+                                                </div>
+                                                <div class='col-md-9 col-12 title-default-line-height'>
+                                                    <div class='pn-info-text-sct text-start'>$issuer</div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -2495,7 +2505,7 @@ function certificate_settings($element, $element_id = 0) {
                     </div>
                 </div>
                 <div class='form-group mt-4'>
-                    <label class='col-sm-6 control-label-notes'>$langCertificateDeadline:</label>
+                    <label class='col-sm-12 control-label-notes'>$langCertificateDeadline:</label>
                     <div class='col-sm-12'>
                        <div class='input-group'>
                            <span class='input-group-addon'>
@@ -2855,7 +2865,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
         $cert_public_link = '';
         // create public link if user has completed certificate and there is cert identifier
         if (has_certificate_completed($user_id, $element, $element_id) and get_cert_identifier($element_id, $user_id) != null) {
-            $cert_public_link = "<div class='pn-info-title-sct control-label-notes'>$langCertAddress:</div>
+            $cert_public_link = "<div class='pn-info-title-sct title-default'>$langCertAddress:</div>
                                 <div class='pn-info-text-sct'>" . certificate_link($element_id, $user_id) . "</div>";
         }
         $sql = Database::get()->queryArray("SELECT certificate_criterion, activity_type, threshold, operator FROM user_certificate_criterion JOIN certificate_criterion
@@ -2900,7 +2910,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                             <div class='col-sm-12'>
                                 <div class='row p-2'>
                                     <div class='col-md-6 col-12'>
-                                        <div class='pn-info-title-sct control-label-notes'>$langTotalPercentCompleteness:</div></div>";
+                                        <div class='pn-info-title-sct title-default'>$langTotalPercentCompleteness:</div></div>";
                                         $tool_content .= "<div class='col-md-6 col-12'>";
                                         if ($user_data) {
                                             $tool_content .= "<div class='pn-info-text-sct text-md-end'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
@@ -2913,7 +2923,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                 $tool_content .= "
                                     <div class='row p-2'>
                                         <div class='col-md-6 col-12'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langDescription:</div>
+                                            <div class='pn-info-title-sct title-default'>$langDescription:</div>
                                         </div>
                                         <div class='col-md-6 col-12'>
                                             <div class='pn-info-text-sct text-md-end'>" . $cert_desc . "</div>
@@ -2924,7 +2934,7 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                     $tool_content .= "
                                     <div class='row p-2'>
                                         <div class='col-md-6 col-12'>
-                                            <div class='pn-info-title-sct control-label-notes'>$langpublisher:</div>
+                                            <div class='pn-info-title-sct title-default'>$langpublisher:</div>
                                         </div>
                                         <div class='col-md-6 col-12'>
                                             <div class='pn-info-text-sct text-md-end'>" . get_cert_issuer($element, $element_id) . "</div>
@@ -2948,18 +2958,17 @@ function display_user_progress_details($element, $element_id, $user_id) {
                     <h3>$langAttendanceActivity</h3>
                 </div>
                 <div class='card-body'>
-                    <div class='res-table-wrapper'>
-                        <div class='row p-2 res-table-header'>
-                            <div class='col-md-8 col-12 control-label-notes'>
-                                $langTitle:
-                            </div>
-                            <div class='col-md-2 col-12 control-label-notes'>
-                                $langRubricCrit
-                            </div>
-                            <div class='col-md-2 col-12 text-md-center'>
-                                $langInstallEnd
-                            </div>
-                        </div>";
+                    <div class='table-responsive mt-0'>
+                    <table class='table-default'>
+                        
+                            <thead>
+                                <tr>
+                                    <th>$langTitle</th>
+                                    <th>$langRubricCrit</th>
+                                    <th>$langInstallEnd</th>
+                                </tr>
+                            </thead>
+                       ";
 
     // completed criteria
 	foreach ($sql as $user_criterion) {
@@ -2982,11 +2991,11 @@ function display_user_progress_details($element, $element_id, $user_id) {
         }
 
 		$tool_content .= "
-            <div class='row p-2 res-table-row border-0'>
-                <div class='col-md-8 col-12 control-label-notes'>$activity:</div>
-                <div class='col-md-2 col-12'>" . $op_content . " " . $threshold . "</div>
-                <div class='col-md-2 col-12 text-md-center'>" . icon('fa-check-circle') . "</div>
-            </div>";
+            <tr>
+                <td>$activity:</td>
+                <td>" . $op_content . " " . $threshold . "</td>
+                <td>" . icon('fa-check-circle') . "</td>
+            </tr>";
 	}
     // uncompleted criteria
 	foreach ($sql2 as $user_criterion) {
@@ -3003,24 +3012,26 @@ function display_user_progress_details($element, $element_id, $user_id) {
             $threshold = "";
         }
 		$tool_content .= "
-            <div class='row p-2 res-table-row not_visible border-0'>
-                <div class='col-md-9 control-label-notes'>$activity:</div>
-                <div class='col-md-3 text-md-center'>$op_content&nbsp;" . $threshold . "</div>
-            </div>";
+            <tr>
+                <td>$activity:</td>
+                <td>$op_content&nbsp;" . $threshold . "</td>
+            </tr>";
 	}
-	$tool_content .= "
-            <div class='row p-2 res-table-header'>
-                <div class='col-md-9 col-12 control-label-notes'>$langTotalPercentCompleteness:</div>";
-                if ($user_data) {
-                    $tool_content .= "<div class='col-md-3 col-12 text-md-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
-                } else {
-                    $tool_content .= "<div class='col-md-3 col-12 text-md-center'><em>0%</em></div>";
-                }
-            $tool_content .= "</div>";
-            $tool_content .= "
-                    </div></div>
-                </div>
-            </div>";
+	$tool_content .= "   
+        </table>
+        </div>
+
+        <div class='col-12 mt-4 d-flex gap-2 flex-wrap justify-content-start align-items-center'>
+            <div class='title-default'>$langTotalPercentCompleteness:</div>";
+            if ($user_data) {
+                $tool_content .= "<div class='text-md-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
+            } else {
+                $tool_content .= "<div class='text-md-center'><em>0%</em></div>";
+            }
+    $tool_content .="
+            </div>
+        </div>
+    </div></div></div>";
 }
 
 

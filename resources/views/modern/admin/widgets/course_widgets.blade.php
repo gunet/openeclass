@@ -68,8 +68,8 @@
                             </div>
                             @endif
 
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                                <h3 class="control-label-notes">{{ trans('langInstalledWidgets') }}</h3>
+                            <div class="col-md-4 col-12">
+                                <h3 class="">{{ trans('langInstalledWidgets') }}</h3>
                                 <hr>
                                 @if (count($installed_widgets) > 0)
                                 <div id="widgets">
@@ -121,7 +121,7 @@
                                 </div>
                                 @endif
                             </div>
-                            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 mt-lg-0 mt-3">
+                            <div class="col-md-8 col-12 mt-md-0 mt-4">
                                 @include('admin.widgets.common.courseHomeMain')
                                 @include('admin.widgets.common.courseHomeSide')
                             </div>

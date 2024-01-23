@@ -42,7 +42,7 @@ function table_row($title, $content, $html = false) {
         $tool_content .= "
                         <div class='row p-2 margin-bottom-fat'>
                             <div class='col-sm-3'>
-                                <strong class='control-label-notes'>$title:</strong>
+                                <strong class='title-default'>$title:</strong>
                             </div>
                             <div class='col-sm-9'$extra>$content
                             </div>
@@ -368,22 +368,26 @@ function show_submission_details($id) {
 
     $tool_content .= "
     <div class='col-12 mt-4'>
-        <div class='card panelCard px-lg-4 py-lg-3'>
+        <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
                 <h3>$m[SubmissionWorkInfo]</h3>
             </div>
             <div class='card-body'>
-                <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong class='control-label-notes'>".$m['SubmissionStatusWorkInfo'].":</strong>
+            <ul class='list-group list-group-flush'>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>".$m['SubmissionStatusWorkInfo']."</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>$notice</div>
                     </div>
-                    <div class='col-sm-9'>$notice</div>
-                </div>
-                <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong class='control-label-notes'>" . $langGradebookGrade . ":</strong>
+                </li>
+                <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>" . $langGradebookGrade . "</div>
                     </div>
-                   <div class='col-sm-9'>";
+                   <div class='col-md-9 col-12 title-default-line-height'>";
     if ($preview_rubric == 1 AND $points_to_graded == 1) {
         $tool_content .= "
                         <a role='button' data-bs-toggle='collapse' href='#collapseGrade' aria-expanded='false' aria-controls='collapseGrade'>"
@@ -420,19 +424,24 @@ function show_submission_details($id) {
     }
     $tool_content .= "</div>
                 </div>
-                <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong class='control-label-notes'>" . $m['gradecomments'] . ":</strong>
+                </li>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>" . $m['gradecomments'] . "</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
+                        </div>
                     </div>
-                    <div class='col-sm-8' style='white-space: pre-wrap'>" . q($sub->grade_comments) . $file_comments_link . "
+                </li>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>" . $m['sub_date'] . "</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>" . format_locale_date(strtotime($sub->submission_date)) . "</div>
                     </div>
-                </div>
-                <div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong class='control-label-notes'>" . $m['sub_date'] . ":</strong>
-                    </div>
-                    <div class='col-sm-9'>" . format_locale_date(strtotime($sub->submission_date)) . "</div>
-                </div>";
+                </li>";
 
     if ($assignment->submission_type == ASSIGNMENT_RUBRIC_GRADE) {
         // multiple files
@@ -448,11 +457,17 @@ function show_submission_details($id) {
             }, Database::get()->queryArray('SELECT id, file_name FROM assignment_submit
                     WHERE assignment_id = ?d AND uid = ?d AND group_id = ?d ORDER BY id',
                     $sub->assignment_id, $sub->uid, $sub->group_id)));
-        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langOpenCoursesFiles:</strong>
+        $tool_content .= "
+        <li class='list-group-item element'>
+            <div class='row row-cols-1 row-cols-2'>
+                <div class='col-md-3 col-12'>
+                    <div class='title-default'>$langOpenCoursesFiles</div>
                 </div>
-                <div class='col-sm-9'>$links</div>";
+                <div class='col-md-9 col-12 title-default-line-height'>
+                    $links
+                </div>
+            </div>
+        </li>";
     } elseif ($assignment->submission_type == ASSIGNMENT_STANDARD_GRADE) {
         // single file
         if (isset($_GET['unit'])) {
@@ -461,38 +476,51 @@ function show_submission_details($id) {
             $url = "{$urlAppend}modules/work/index.php?course=$course_code&amp;get=$sub->id";
         }
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
-        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong class='control-label-notes'>$langFileName:</strong>
+        $tool_content .= "
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langFileName</div>
                     </div>
-                    <div class='col-sm-9'>$filelink</div>";
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $filelink
+                    </div>
+                </div>
+            </li>";
     } else {
         // online text
-        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                    <div class='col-sm-3'>
-                        <strong class='control-label-notes'>$langWorkOnlineText:</strong>
+        $tool_content .= "
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langWorkOnlineText</div>
                     </div>
-                    <div class='col-sm-9'>
+                    <div class='col-sm-9 col-12 title-default-line-height'>
                         <a href='#' class='onlineText btn submitAdminBtn d-inline-flex' data-id='$sub->id'>$langQuestionView</a>
-                    </div>";
+                    </div>
+                </div>
+            </li>";
     }
-    $tool_content .= "</div>";
+    $tool_content .= "";
 
     if ($assignment->auto_judge and $autojudge->isEnabled()) {
         $reportlink = $urlServer."modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
         $tool_content .= "
-                    <div class='row p-2 margin-bottom-fat'>
-                        <div class='col-sm-3'>
-                            <strong class='control-label-notes'>" . $langAutoJudgeEnable . ":</strong>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>" . $langAutoJudgeEnable . "</div>
                         </div>
-                        <div class='col-sm-9'><a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            <a href='$reportlink'> $langAutoJudgeShowWorkResultRpt</a>
                         </div>
-                    </div>";
+                    </div>
+                </li>";
     }
 
     table_row($m['comments'], $sub->comments);
 
-    $tool_content .= "</div></div></div>";
+    $tool_content .= "</ul></div></div></div>";
 }
 
 // Check if a file has been submitted by user uid or group gid

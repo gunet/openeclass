@@ -4760,45 +4760,52 @@ function assignment_details($id, $row, $x =false) {
     $moduleTag = new ModuleElement($id);
     $tool_content .= "
     <div class='col-12'>
-    <div class='card panelCard px-lg-4 py-lg-3'>
+    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
         <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
             <h3 class='mb-0'>
                 $m[WorkInfo]
             </h3>
                 ". (($is_editor) ?
                 "<a href='{$urlServer}modules/work/index.php?course=$course_code&amp;id=$id&amp;choice=edit'>
-                    <span class='fa fa-edit fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
+                    <span class='fa-solid fa-edit fa-lg' title='' data-bs-toggle='tooltip' data-bs-original-title='$langEditChange'></span>
                 </a>" : "")."
             
         </div>
         <div class='card-body'>
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langTitle:</strong>
+        <ul class='list-group list-group-flush'>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langTitle</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height' id='assignment_title'>
+                        " . q($row->title) . "
+                    </div>
                 </div>
-                <div class='col-sm-9' id='assignment_title'>
-                    " . q($row->title) . "
-                </div>
-            </div>";
+            </li>";
         if (!empty($row->description)) {
-            $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langDescription:</strong>
+            $tool_content .= "<li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langDescription</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        " . mathfilter($row->description, 12 , "../../courses/mathimg/") . "
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    " . mathfilter($row->description, 12 , "../../courses/mathimg/") . "
-                </div>
-            </div>";
+            </li>";
         }
         if (!empty($row->comments)) {
-            $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$m[comments]:</strong>
+            $tool_content .= "<li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$m[comments]</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height' style='white-space: pre-wrap'>
+                        $row->comments
+                    </div>
                 </div>
-                <div class='col-sm-9' style='white-space: pre-wrap'>
-                    $row->comments
-                </div>
-            </div>";
+            </li>";
         }
         if (isset($_GET['unit'])) {
             $unit = intval($_GET['unit']);
@@ -4808,123 +4815,144 @@ function assignment_details($id, $row, $x =false) {
         }
         if (!empty($row->file_name)) {
             $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
-            $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langWorkFile:</strong>
+            $tool_content .= "
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langWorkFile</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $filelink
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    $filelink
-                </div>
-            </div>";
+            </li>";
         }
         $tool_content .= "
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$m[max_grade]:</strong>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$m[max_grade]</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $row->max_grade
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    $row->max_grade
+            </li>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default mb-1'>$langGradeType</div>
+                    </div>
+                <div class='col-md-9 col-12 title-default-line-height'>";
+                    if ($preview_rubric == 1) {
+                        $tool_content .= "
+                            <a class='' role='button' data-bs-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
+                                $g_type
+                            </a>
+                        </div>
+                        </div>
+                        <div class='table-responsive collapse' id='collapseRubric'>
+                            <table class='table-default'>
+                                <thead class='list-header'>
+                                    <th>$langDetail</th>
+                                    <th>$langCriteria</th>
+                                </thead>
+                                <tr>
+                                    <td><h5>$rubric_name</h5><h6>$rubric_desc</h6></td>
+                                    <td>
+                                        <ul class='list-unstyled'>
+                                            $criteria_list
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>";
+                    } else {
+                        $tool_content .= "$g_type
+                            </div></div>";
+                    }
+        $tool_content .= "</li>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$m[start_date]</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        " . format_locale_date(strtotime($row->submission_date)) . "
+                    </div>
                 </div>
-            </div>
-            <div class='row p-2 margin-bottom-fat'>
-            <div class='col-sm-3'>
-                <strong class='control-label-notes mb-1'>$langGradeType:</strong>
-            </div>
-            <div class='col-sm-9'>";
-            if ($preview_rubric == 1) {
-                $tool_content .= "
-                    <a class='' role='button' data-bs-toggle='collapse' href='#collapseRubric' aria-expanded='false' aria-controls='collapseRubric'>
-                        $g_type
-                    </a>
+            </li>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langGroupWorkDeadline_of_Submission</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
+                    </div>
                 </div>
+            </li>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$m[group_or_user]</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
+                    </div>
                 </div>
-                <div class='table-responsive collapse' id='collapseRubric'>
-                    <table class='table-default'>
-                        <thead class='list-header'>
-                            <th>$langDetail</th>
-                            <th>$langCriteria</th>
-                        </thead>
-                        <tr>
-                            <td><h5>$rubric_name</h5><h6>$rubric_desc</h6></td>
-                            <td>
-                                <ul class='list-unstyled'>
-                                    $criteria_list
-                                </ul>
-                            </td>
-                        </tr>
-                    </table>
-                </div>";
-            } else {
-                $tool_content .= "$g_type
-                    </div></div>";
-            }
-        $tool_content .= "<div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$m[start_date]:</strong>
+            </li>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$m[WorkAssignTo]</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $assign_to_users_message
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    " . format_locale_date(strtotime($row->submission_date)) . "
-                </div>
-            </div>
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langGroupWorkDeadline_of_Submission:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $deadline ".(isset($deadline_notice) ? $deadline_notice : "")."
-                </div>
-            </div>
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$m[group_or_user]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."
-                </div>
-            </div>
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$m[WorkAssignTo]:</strong>
-                </div>
-                <div class='col-sm-9'>
-                    $assign_to_users_message
-                </div>
-            </div>
+            </li>
             ";
         $tags_list = $moduleTag->showTags();
         if ($tags_list) {
             $tool_content .= "
-            <div class='row p-2 margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong class='control-label-notes'>$langTags:</strong>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langTags</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $tags_list
+                    </div>
                 </div>
-                <div class='col-sm-9'>
-                    $tags_list
-                </div>
-            </div> ";
+            </li>";
         }
 		$review_per_assignment = Database::get()->querySingle("SELECT reviews_per_assignment FROM assignment WHERE id = ?d", $id)->reviews_per_assignment;
 		if ($grade_type == 3 && !$x){
 			$tool_content .= "
-				<div class='row p-2 margin-bottom-fat'>
-					<div class='col-sm-3'>
-						<strong class='control-label-notes'>$langReviewStart:</strong>
-					</div>
-					<div class='col-sm-9'>
-						$start_date_review ".(isset($start_date_review_notice) ? $start_date_review_notice: "")."
-					</div>
-				</div>
-				<div class='row p-2 margin-bottom-fat'>
-					<div class='col-sm-3'>
-						<strong class='control-label-notes'>$langReviewEnd:</strong>
-					</div>
-					<div class='col-sm-9'>
-						$due_date_review ".(isset($due_date_review_notice) ? $due_date_review_notice: "")."
-					</div>
-				</div>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langReviewStart</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            $start_date_review ".(isset($start_date_review_notice) ? $start_date_review_notice: "")."
+                        </div>
+                    </div>
+                </li>
+                <li class='list-group-item element'>
+                    <div class='row row-cols-1 row-cols-2'>
+                        <div class='col-md-3 col-12'>
+                            <div class='title-default'>$langReviewEnd:</div>
+                        </div>
+                        <div class='col-md-9 col-12 title-default-line-height'>
+                            $due_date_review ".(isset($due_date_review_notice) ? $due_date_review_notice: "")."
+                        </div>
+                    </div>
+                </li>
 				";
 		}
-    $tool_content .= "
+    $tool_content .= "</ul>
         </div>
     </div></div>";
     $cdate = date('Y-m-d H:i:s');

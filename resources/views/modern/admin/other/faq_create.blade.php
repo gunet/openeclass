@@ -256,7 +256,7 @@
                                             <div class='d-flex justify-content-between align-items-center' role='tab' id='heading-{{ $faq->id }}'>
                                                 <div>
                                                     <a data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
-                                                        <span class="control-label-notes">{{ $key+1 }}. {!! $faq->title !!}</span>
+                                                        {{ $key+1 }}. {!! $faq->title !!}
                                                     </a>
                                                 </div>
                                                 <div>

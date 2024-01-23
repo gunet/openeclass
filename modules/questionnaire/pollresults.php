@@ -150,52 +150,68 @@ $tool_content .= action_bar(array(
                           'show' => $is_course_reviewer)
                 ));
 $tool_content .= "<div class='col-12'>
-<div class='card panelCard px-lg-4 py-lg-3'>
+<div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
     <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
 
     </div>
     <div class='card-body'>
-        <div class='row p-2 margin-bottom-fat'>
-            <div class='col-md-5 col-12'>
-                <strong class='control-label-notes'>$langTitle:</strong>
-            </div>
-            <div class='col-md-7 col-12'>
-                " . q_math($thePoll->name) . "
-            </div>
-        </div>
-        <div class='row p-2 margin-bottom-fat'>
-            <div class='col-md-5 col-12'>
-                <strong class='control-label-notes'>$langPollCreation:</strong>
-            </div>
-            <div class='col-md-7 col-12'>
-                " . format_locale_date(strtotime($thePoll->creation_date)) . "
-            </div>
-        </div>
-        <div class='row p-2 margin-bottom-fat'>
-            <div class='col-md-5 col-12'>
-                <strong class='control-label-notes'>$langStart:</strong>
-            </div>
-            <div class='col-md-7 col-12'>
-                " . format_locale_date(strtotime($thePoll->start_date)) . "
-            </div>
-        </div>
-        <div class='row p-2 margin-bottom-fat'>
-            <div class='col-md-5 col-12'>
-                <strong class='control-label-notes'>$langPollEnd:</strong>
-            </div>
-            <div class='col-md-7 col-12'>
-                " . format_locale_date(strtotime($thePoll->end_date)) . "
-            </div>
-        </div>
-        <div class='row p-2 margin-bottom-fat'>
-            <div class='col-md-5 col-12'>
-                <strong class='control-label-notes'>$langPollTotalAnswers:</strong>
-            </div>
-            <div class='col-md-7 col-12'>
-                $total_participants
-            </div>
-        </div>
+        <ul class='list-group list-group-flush'>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langTitle</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        " . q_math($thePoll->name) . "
+                    </div>
+                </div>
+            </li>
+
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langPollCreation</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        " . format_locale_date(strtotime($thePoll->creation_date)) . "
+                    </div>
+                </div>
+            </li>
+
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langStart</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        " . format_locale_date(strtotime($thePoll->start_date)) . "
+                    </div>
+                </div>
+            </li>
+
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langPollEnd</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        " . format_locale_date(strtotime($thePoll->end_date)) . "
+                    </div>
+                </div>
+            </li>
+
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                    <div class='col-md-3 col-12'>
+                        <div class='title-default'>$langPollTotalAnswers:</div>
+                    </div>
+                    <div class='col-md-9 col-12 title-default-line-height'>
+                        $total_participants
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 </div>";

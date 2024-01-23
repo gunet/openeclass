@@ -202,21 +202,23 @@
                     </div>
 
                     <div class='col-12 mt-4'>
-                        <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
-                            <input type='hidden' name='course' value='{{ $course_code }}'>
-                            <div class='mb-0'>
-                                <div class="d-inline-flex align-items-center">
-                                    <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
-                                    <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
-                                        @foreach ($units as $unit)
-                                            <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
-                                                {{ ellipsize($unit->title, 50) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                        <div class='form-wrapper form-edit rounded'>
+                            <form class='form-horizontal' name='unitselect' action='{{ $urlAppend }}modules/units/index.php' method='get'>
+                                <input type='hidden' name='course' value='{{ $course_code }}'>
+                                <div class='mb-0'>
+                                    <div class="d-inline-flex align-items-center">
+                                        <label class='control-label-notes' for='id' style="min-width: 130px;"></span>&nbsp;{{ trans('langGoTo') }}:</label>
+                                        <select name='id' id='id' class='form-select' onchange='document.unitselect.submit()'>
+                                            @foreach ($units as $unit)
+                                                <option value='{{ $unit->id }}' {{ $unit->id == $unitId ? 'selected' : '' }}>
+                                                    {{ ellipsize($unit->title, 50) }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
 
                     @if ($is_editor and $q->flipped_flag == 2)

@@ -520,19 +520,19 @@ if ($userdata) {
                 $submission->course_title = $langCourse.': '.$submission->course_title;
                 $submission_content = "<div class='well'>";
                 $submission_content .= "<div><button type='button' class='btn submitAdminBtn mb-3 btn-sm' data-bs-toggle='collapse' data-bs-target='#header_more_$submission->id'>$langMore</button></div>
-                                       <div id='header_more_$submission->id' class='collapse panel-body'>";
+                                       <div id='header_more_$submission->id' class='collapse panel-body px-0'>";
                 if (!empty($data['descr'])) {
-                    $submission_content .= "<div class='mb-3'><b class='control-label-notes pt-3 pb-3'>".$langDescription."</b>:</div><div>".$data['descr']."</div>";
+                    $submission_content .= "<div class='mb-3'><p class='title-default'>".$langDescription."</p></div><div>".$data['descr']."</div>";
                 }
                 $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=assignment&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 $submission_content .= "</div>";
                 $submission_content .= "</div>";
-                $submission_content .= "<div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>$langSubmit</b>: " . format_locale_date(strtotime($data['subm_date'])) . "</div>
-                                       <div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>$langGradebookGrade</b>: ".$data['grade']." / ".$data['max_grade']."</div>
-                                       <div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>".$m['group_or_user']."</b>: ".$assignment_type."</div>";
+                $submission_content .= "<div class='mb-3'><p class='title-default'>$langSubmit</p> " . format_locale_date(strtotime($data['subm_date'])) . "</div>
+                                       <div class='mb-3'><p class='title-default'>$langGradebookGrade</p> ".$data['grade']." / ".$data['max_grade']."</div>
+                                       <div class='mb-3'><p class='title-default'>".$m['group_or_user']."</p> ".$assignment_type."</div>";
 
                 if (!is_null($data['subm_text'])) {
-                    $submission_content .= "<div class='mb-3'><b class='control-label-notes pt-3 pb-3 fs-6'>$langWorkOnlineText</b>: <br>".$data['subm_text']."</div>";
+                    $submission_content .= "<div class='mb-3'><p class='title-default'>$langWorkOnlineText</p>".$data['subm_text']."</div>";
                 } else {
                    $submission_content .= "<div class='mb-3'><a href='resources.php?action=get&amp;id=$id&amp;token=$token&amp;type=submission&amp;er_id=$submission->id'>$langWorkFile</a></div>";
                 }

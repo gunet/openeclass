@@ -588,6 +588,7 @@ function view($view_file, $view_data = array()) {
                 .list-group-item,
                 .help-block,
                 .control-label-notes,
+                .title-default,
                 .list-group-item.list-group-item-action{
                     color:$theme_options_styles[ColorHyperTexts];
                 }

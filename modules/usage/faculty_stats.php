@@ -87,21 +87,21 @@ if (isset($_GET['stats_submit'])) {
                                     <div class='row'>
                                         <div class='col-sm-6'>
                                                 <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                                    <dt class='control-label-notes'>$langTitle :</dt>
+                                                    <dt class='title-default'>$langTitle :</dt>
                                                     <dd>$course->title <small>($course->code)</small></dd>
                                                 </dl>
                                                 <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                                    <dt class='control-label-notes'>$langTeacher :</dt>
+                                                    <dt class='title-default'>$langTeacher :</dt>
                                                     <dd>$course->prof_names</dd>
                                                 </dl>
                                         </div>
                                         <div class='col-sm-6'>
                                                 <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                                    <dt class='control-label-notes'>$langCourseVis :</dt>
+                                                    <dt class='title-default'>$langCourseVis :</dt>
                                                     <dd>" . course_status_message($_GET['c']) . "</dd>
                                                 </dl>
                                                 <dl class='ps-3 pb-3 pt-3 pe-3'>
-                                                    <dt class='control-label-notes'>$langUsers :</dt>
+                                                    <dt class='title-default'>$langUsers :</dt>
                                                     <dd>$users</dd>
                                                 </dl>
                                         </div>
@@ -131,7 +131,7 @@ if (isset($_GET['stats_submit'])) {
             $total_visits += $data->visits;
             $total_users += $data->users;
         }
-        $tool_content .= "<tr><td><h5 class='control-label-notes'>$langTotal</h5></td><td><h5>$total_visits</h5></td><td><h5>$total_users</h5></td></tr>";
+        $tool_content .= "<tr><td><h5 class='title-default'>$langTotal</h5></td><td><h5>$total_visits</h5></td><td><h5>$total_users</h5></td></tr>";
         $tool_content .= "</table></div>";
 
         // visits per module per month

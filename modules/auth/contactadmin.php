@@ -98,7 +98,7 @@ if ($userid and isset($_GET['h']) and token_validate("userid=$userid", $_GET['h'
         $tool_content .= "
         <div class='d-lg-flex gap-4 mt-4'>
         <div class='flex-grow-1'>
-        <div class='form-wrapper'>
+        <div class='form-wrapper form-edit'>
             <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?userid=$userid&amp;h=$_GET[h]' method='post'>
             <fieldset>
                 <div class='form-group'>

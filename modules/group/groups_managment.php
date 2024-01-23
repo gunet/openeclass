@@ -358,7 +358,7 @@ $tool_content .= "<div class='col-12'>
                                                                     $tool_content .= "
                                                                                     <div class='row'>
                                                                                         <div class='col-12 form-group'>
-                                                                                            <p class='control-label-notes mb-0'>$langGroupTutor</p>
+                                                                                            <label class='control-label-notes mb-1'>$langGroupTutor</label>
                                                                                             <select name='tutor_$gr->id[]' multiple id='select-tutor_$gr->id' class='form-select'>\n";
                                                                                                 $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
                                                                                                                             user.id IN (SELECT user_id FROM group_members
@@ -379,7 +379,7 @@ $tool_content .= "<div class='col-12'>
 
 
                                                                     $tool_content .= "  <div class='col-12 form-group mt-4'>
-                                                                                            <p class='control-label-notes mb-1'>$langMax $langGroupPlacesThis</p>
+                                                                                            <label class='control-label-notes mb-1'>$langMax $langGroupPlacesThis</label>
                                                                                             <div class='col-sm-12'>
                                                                                                 <input class='form-control' type=text name='maxStudent_$gr->id' size=2 value='$max_members'>
                                                                                             </div>";
@@ -391,7 +391,7 @@ $tool_content .= "<div class='col-12'>
 
 
                                                                     $tool_content .= "  <div class='col-12 form-group mt-4'>
-                                                                                            <label for='selectcategory_$gr->id' class='col-12 control-label-notes'>$langCategory</label>
+                                                                                            <label for='selectcategory_$gr->id' class='col-12 control-label-notes mb-1'>$langCategory</label>
                                                                                             <div class='col-sm-12'>
                                                                                                 <select class='form-select' name='selectcategory_$gr->id' id='selectcategory_$gr->id'>
                                                                                                     <option value='0'>--</option>";
@@ -414,7 +414,7 @@ $tool_content .= "<div class='col-12'>
                                                                                 <div class='col-lg-4 col-12 col-12 mt-lg-0 mt-4'>
                                                                                     <div class='row'>";
                                                                         $tool_content .="<div class='col-12 form-group'>
-                                                                                                <p class='control-label-notes mb-1'>$langGroupStudentRegistrationType</p>
+                                                                                                <label class='control-label-notes mb-1'>$langGroupStudentRegistrationType</label>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='checkbox'>
                                                                                                         <label class='label-container'>
@@ -427,7 +427,7 @@ $tool_content .= "<div class='col-12'>
                                                                                             </div>
 
                                                                                             <div class='col-12 form-group mt-4'>
-                                                                                                <p class='control-label-notes mb-1'>$langGroupAllowUnregister</p>
+                                                                                                <label class='control-label-notes mb-1'>$langGroupAllowUnregister</label>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='checkbox'>
                                                                                                         <label class='label-container'>
@@ -440,7 +440,7 @@ $tool_content .= "<div class='col-12'>
                                                                                             </div>
 
                                                                                             <div class='col-12 form-group mt-4'>
-                                                                                                <p class='control-label-notes mb-1'>$langPrivate_1</p>
+                                                                                                <label class='control-label-notes mb-1'>$langPrivate_1</label>
                                                                                                 <div class='col-sm-12'>
                                                                                                     <div class='radio mb-2'>
                                                                                                         <label>
@@ -460,7 +460,7 @@ $tool_content .= "<div class='col-12'>
                                                                 $tool_content .= "</div>
 
                                                                                 <div class='col-lg-4 col-12 col-12 mt-lg-0 mt-4'>
-                                                                                    <p class='control-label-notes mb-1'>$langTools</p>
+                                                                                    <label class='control-label-notes mb-1'>$langTools</label>
                                                                                     <div class='row'>";
 
                                                                     $tool_content .= "  <div class='col-12 form-group'>

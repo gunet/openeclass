@@ -364,17 +364,17 @@ function display_analytics_information($analytics_id) {
                 </div>
                 <div class='card-body'>
                     
-                        <div class='row'>
-                            <div class='col-md-4 col-12'>
-                                <div class='control-label-notes pn-info-title-sct'>$langDescription</div>
+                        <div class='row row-cols-1 row-cols-md-3 g-md-4 g-3'>
+                            <div class='col'>
+                                <div class='title-default mb-1 pn-info-title-sct'>$langDescription</div>
                                 <div class='pn-info-text-sct'>$description</div>
                             </div>
-                            <div class='col-md-4 col-12 mt-md-0 mt-3'>
-                                <div class='control-label-notes pn-info-title-sct'>$langAnalyticsTimeFrame</div>
+                            <div class='col'>
+                                <div class='title-default mb-1 pn-info-title-sct'>$langAnalyticsTimeFrame</div>
                                 <div class='pn-info-text-sct'>$langFrom $start_date $langTill $end_date</div>
                             </div>
-                            <div class='col-md-4 col-12 mt-md-0 mt-3'>
-                                <div class='control-label-notes pn-info-title-sct'>$langAnalyticsCalculation</div>
+                            <div class='col'>
+                                <div class='title-default mb-1 pn-info-title-sct'>$langAnalyticsCalculation</div>
                                 <div class='pn-info-text-sct'>$periodType</div>
                             </div>
                         </div>
@@ -708,17 +708,17 @@ function display_user_info($user_id) {
                 </div>
                 <div class='card-body'>
                     
-                        <div class='row g-3'>
-                            <div class='col-md-4 col-12'>
-                                <div class='pn-info-title-sct control-label-notes'>$langEmail</div>
+                        <div class='row row-cols-1 row-cols-md-3 g-3 g-md-4'>
+                            <div class='col'>
+                                <div class='pn-info-title-sct title-default'>$langEmail</div>
                                 $email
                             </div>
-                            <div class='col-md-4 col-12'>
-                                <div class='pn-info-title-sct control-label-notes'>$langAm</div>
+                            <div class='col'>
+                                <div class='pn-info-title-sct title-default'>$langAm</div>
                                 $am
                             </div>
-                            <div class='col-md-4 col-12'>
-                                <div class='pn-info-title-sct control-label-notes'>$langPhone</div>
+                            <div class='col'>
+                                <div class='pn-info-title-sct title-default'>$langPhone</div>
                                 $phone
                             </div>
                         </div>
@@ -856,31 +856,31 @@ function edit_analytics_settings ($analytics_id = 0)
             <div class='form-wrapper form-edit rounded'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                     <div class='form-group'>
-                        <label for='title' class='col-sm-6 control-label-notes'>$langTitle</label>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langTitle</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='description' class='col-sm-6 control-label-notes'>$langDescription</label>
+                        <label for='description' class='col-sm-12 control-label-notes'>$langDescription</label>
                         <div class='col-sm-12'>
                             <textarea class='form-control' placeholder='$langDescription' name='description' rows='6'>$description</textarea>
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label for='title' class='col-sm-6 control-label-notes'>$langActivate</label>
+                        <label for='title' class='col-sm-12 control-label-notes'>$langActivate</label>
                             <div class='col-sm-12'>";
                                 $tool_content .= selection(get_activation_status(), 'active', $active);
                             $tool_content .= "</div>
                     </div>
                     <div class='form-group mt-4'>
-                    <label for='title' class='col-sm-6 control-label-notes'>$langAnalyticsCalculation</label>
+                    <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsCalculation</label>
                         <div class='col-sm-12'>";
                             $tool_content .= selection(get_period_types_array () , 'periodType', $periodType);
                         $tool_content .= "</div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langStart</label>
+                        <label class='col-sm-12 control-label-notes'>$langStart</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
                                 <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
@@ -890,7 +890,7 @@ function edit_analytics_settings ($analytics_id = 0)
                         </div>
                     </div>
                     <div class='form-group mt-4'>
-                        <label class='col-sm-6 control-label-notes'>$langFinish</label>
+                        <label class='col-sm-12 control-label-notes'>$langFinish</label>
                         <div class='col-sm-12'>
                             <div class='input-group'>
                                 <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
@@ -1235,7 +1235,7 @@ function get_available_resources($type, $analytics_element_id) {
     }
 
     $resource_field =  "<div class='form-group mt-3'>
-                            <label for='title' class='col-sm-6 control-label-notes'>$langAnalyticsResource</label>
+                            <label for='title' class='col-sm-12 control-label-notes'>$langAnalyticsResource</label>
                             <div class='col-sm-12'>"
                             . selection($resource, 'resource', $resource_id) .
                             "</div>

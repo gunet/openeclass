@@ -190,23 +190,26 @@ $tool_content .=
                 'url' => $pathBack . "?course=$course_code",
                 'icon' => 'fa-reply',
                 'level' => 'primary')),false) . "
-    <div class='panel panel-default'>
-        <div class='panel-heading'>
-            <div class='panel-title'>$langLearningObjectData</div>
+    <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
+        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+            <h3 class='mb-0'>$langLearningObjectData</h3>
         </div>
-        <div class='panel-body'>
-            <div class='row margin-bottom-fat p-2'>
-                <div class='col-sm-4'>
-                    <strong class='control-label-notes'>$langTitle:</strong>
+        <div class='card-body'>
+        <ul class='list-group list-group-flush'>
+            <li class='list-group-item element'>
+                <div class='row row-cols-1 row-cols-2'>
+                <div class='col-md-3 col-12'>
+                    <div class='title-default'>$langTitle</div>
                 </div>
-                <div class='col-sm-8'>";
+                <div class='col-md-9 col-12 title-default-line-height'>";
 if (isset($_REQUEST['cmd']) and $_REQUEST['cmd'] == 'updateName') {
     $tool_content .= nameBox(MODULE_, UPDATE_, $langModify);
 } else {
     $tool_content .= nameBox(MODULE_, DISPLAY_);
 }
 $tool_content .= "</div>
-            </div>";
+                </div>
+            </li>";
 
 
 //############################ PROGRESS  AND  START LINK #############################\\
@@ -240,38 +243,47 @@ if ($module->contentType != CTLABEL_) { //
 
         //display type of the module
 
-        $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-4'>
-                                <strong class='control-label-notes'>$langTypeOfModule:</strong>
+        $tool_content .= "
+                    <li class='list-group-item element'>
+                        <div class='row row-cols-1 row-cols-2'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langTypeOfModule</div>
                             </div>
-                            <div class='col-sm-8'>
+                            <div class='col-md-9 col-12 title-default-line-height'>
                                 <i class='fa $contentType_img'></i> $contentDescType
                             </div>
                         </div>
+                    </li>
                 ";
 
         //display total time already spent in the module
 
-        $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-4'>
-                                <strong class='control-label-notes'>$langTotalTimeSpent:</strong>
+        $tool_content .= "
+                    <li class='list-group-item element'>
+                        <div class='row row-cols-1 row-cols-2'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langTotalTimeSpent</div>
                             </div>
-                            <div class='col-sm-8'>
+                            <div class='col-md-9 col-12 title-default-line-height'>
                                 $resultBrowsed->total_time
                             </div>
                         </div>
+                    </li>
                 ";
 
         //display time passed in last session
 
-        $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-4'>
-                                <strong class='control-label-notes'>$langLastSessionTimeSpent:</strong>
+        $tool_content .= "
+                    <li class='list-group-item element'>
+                        <div class='row row-cols-1 row-cols-2'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langLastSessionTimeSpent</div>
                             </div>
-                            <div class='col-sm-8'>
+                            <div class='col-md-9 col-12 title-default-line-height'>
                                 $resultBrowsed->session_time
                             </div>
                         </div>
+                    </li>
                 ";
 
         //display user best score
@@ -306,14 +318,17 @@ if ($module->contentType != CTLABEL_) { //
             $statusToDisplay = $resultBrowsed->lesson_status;
         }
 
-        $tool_content .= "<div class='row margin-bottom-fat p-2'>
-                            <div class='col-sm-4'>
-                                <strong class='control-label-notes'>$langLessonStatus:</strong>
+        $tool_content .= "
+                    <li class='list-group-item element'>
+                        <div class='row row-cols-1 row-cols-2'>
+                            <div class='col-md-3 col-12'>
+                                <div class='title-default'>$langLessonStatus</div>
                             </div>
-                            <div class='col-sm-8'>
+                            <div class='col-md-9 col-12 title-default-line-height'>
                                 $statusToDisplay
                             </div>
                         </div>
+                    </li>
                 ";
     } //end display stats
 
@@ -326,21 +341,25 @@ if ($module->contentType != CTLABEL_) { //
                AND `module_id` = ?d", $module->startAsset_id, $_SESSION['lp_module_id']);
 
     $tool_content .="
-    <div class='row margin-bottom-fat p-2'>
-        <div class='col-sm-4'>
-            <strong class='control-label-notes'>$langPreview:</strong>
+    <li class='list-group-item element'>
+        <div class='row row-cols-1 row-cols-2'>
+            <div class='col-md-3 col-12'>
+                <div class='title-default'>$langPreview</div>
+            </div>
+            <div class='col-md-9 col-12 title-default-line-height'>";
+        if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
+            $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'> 
+                                <input class='btn submitAdminBtn' type='submit' value='$langStartModule'>
+                            </form>";
+        } else {
+            $tool_content .= "<p style='align:center;'>$langNoStartAsset</p>";
+        }
+        $tool_content .= "
+            </div>
         </div>
-        <div class='col-sm-8'>";
-    if ($module->startAsset_id != "" && $asset->asset_id == $module->startAsset_id) {
-        $tool_content .= "<form action='./viewer.php?course=$course_code' method='post'> 
-                            <input class='btn submitAdminBtn' type='submit' value='$langStartModule'>
-                        </form>";
-    } else {
-        $tool_content .= "<p style='align:center;'>$langNoStartAsset</p>";
-    }
-    $tool_content .= "</div></div>";
+    </li>";
 }// end if($module['contentType'] != CTLABEL_)
 
-$tool_content .= "</div></div>";
+$tool_content .= "</ul></div></div>";
 
 draw($tool_content, 2, null, $head_content, $body_action);

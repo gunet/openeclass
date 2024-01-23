@@ -8,29 +8,29 @@
                         <div class='col-12'>
                             @if($toolName)
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         {{$toolName}}
                                     </span>
                                 </div>
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
                                         <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
                                 </div>
                             @else
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
                                         <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
@@ -43,29 +43,29 @@
                         <div class='col-12'>
                             @if($toolName)
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         {{$toolName}}
                                     </span>
                                 </div>
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
                                         <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
                                 </div>
                             @else
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <a class='fs-2' href='{{ $urlAppend }}index.html'>{!! $section_title !!}</a>
                                     </span>
                                 </div>
                                 <div class='row'>
-                                    <span class='control-label-notes'>
+                                    <span class='title-default'>
                                         <span>{{course_id_to_prof($course_id)}}</span>&nbsp; - &nbsp;
                                         <span>{{course_id_to_public_code($course_id)}}</span>
                                     </span>
@@ -92,7 +92,7 @@
                                         @if($toolName)
                                             <tr class='border-0'>
                                                 <th class='border-0'>
-                                                    <span class='control-label-notes'>
+                                                    <span class='title-default'>
                                                         {{$toolName}}
                                                     </span>
                                                 </th>

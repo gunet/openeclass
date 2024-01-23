@@ -39,10 +39,6 @@
                                 <div class='col-12 d-flex justify-content-center form-value'>{{ $admin_name }}</div>
                             </div>
                         </div>
-                                {{--<div class='p-1'><strong class='control-label-notes'>{{ trans('langInstituteShortName') }}:</strong> <a href='{{ $institution_url }}' target='_blank' class='mainpage'>{{ $institution }}</a></div>
-                                <div class='p-1'><strong class='control-label-notes'>{{ trans('langCampusName') }}:</strong> {{ $siteName }}</div>
-                                <div class='p-1'><strong class='control-label-notes'>{{ trans('langVersion') }}:</strong> <a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>{{ $eclass_version }}</a></div>
-                                <div class='p-1'><strong class='control-label-notes'>{{ trans('langSupportUser') }}:</strong> {{ $admin_name }}</div>--}}
                     </div>
                     
 
