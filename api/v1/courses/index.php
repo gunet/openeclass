@@ -19,20 +19,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+require_once '../../../include/lib/course.class.php';
 require_once '../../../modules/create_course/functions.php';
 
 function api_method($access) {
 
+    if (!$access->isValid) {
+        Access::error(100, "Authentication required");
+    }
+
     //Create course with post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-//        if (!$access->isValid) {
-//            Access::error(100, "Authentication required");
-//        }
+        $course = new Course();
 
         $ok = register_posted_variables([
             'title'             => true,
-            'category'          => true,
+            'department_id'     => true,
             'description'       => false,
             'password'          => false,
             'prof_names'        => false,
@@ -49,13 +52,13 @@ function api_method($access) {
         ]);
 
         if (!$ok) {
-            Access::error(2, 'For creating a cousre, the following inputs are mandatory: title, category');
+            Access::error(2, 'For creating a cousre, the following inputs are mandatory: title, department_id');
         }
 
         $title = $GLOBALS['title'];
-        $category = $GLOBALS['category'];
+        $department_id = $GLOBALS['department_id'];
 
-        $code = strtoupper(new_code($category));
+        $code = strtoupper(new_code($department_id));
         $code = str_replace(' ', '', $code);
 
         $description = isset($_POST['description']) ? $GLOBALS['description'] : "";
@@ -177,13 +180,16 @@ function api_method($access) {
         $new_course_id = $result->lastInsertID;
         create_modules($new_course_id);
 
+        $course->refresh($new_course_id, [$department_id]);
+
         course_index($code);
 
         header('Content-Type: application/json');
         echo json_encode([
+            'id'                => $new_course_id,
             'title'             => $title,
             'code'              => $code,
-            'category id'       => $category,
+            'department id'     => $department_id,
             'password'          => $password,
             'lang'              => $lang,
             'visible'           => $visible,
