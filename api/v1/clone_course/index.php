@@ -30,9 +30,9 @@ function api_method($access) {
     //Clone course with post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-//        if (!$access->isValid) {
-//            Access::error(100, "Authentication required");
-//        }
+        if (!$access->isValid) {
+            Access::error(100, "Authentication required");
+        }
 
         $ok = register_posted_variables([
             'id'        => true,
@@ -83,7 +83,7 @@ function api_method($access) {
         $course_code = $GLOBALS['currentCourseCode'];
 
         header('Content-Type: application/json');
-        echo json_encode($_POST['add_users'], JSON_UNESCAPED_UNICODE);
+        echo json_encode("Course with id" . $course_id . "cloned", JSON_UNESCAPED_UNICODE);
         exit();
 
     }
