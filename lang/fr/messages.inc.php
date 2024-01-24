@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2024-01-19 17:14:55
+// Generated 2024-01-24 11:05:20
 
 $langYes = "Oui";
 $langNo = "Non";
@@ -5886,8 +5886,8 @@ $langFileUserData = 'User data file (.xls or .xlsx format)';
 $langInfoEnableCourseRegistration = "The user can register to $langsCourses";
 $langUserPermissions = "Permissions";
 $langRubricUpdated = "Rubric updated";
-$langMsTeamsShortDescription = 'Connection with Microsoft Teams teleconference service.";
-$langMsTeamsLongDescription = 'Connection with the Microsoft Teams teleconference service.";
+$langMsTeamsShortDescription = 'Connection with Microsoft Teams teleconference service.';
+$langMsTeamsLongDescription = 'Connection with the Microsoft Teams teleconference service.';
 $langWebexUrl = 'You can change it if you want to use a different WebEx server.';
 $langZoomUrl = "You can change it if you want to use a different Zoom server.";
 $langGoToMicrosoftTeamsLink = 'Click on the "Go to Microsoft Teams" link below, to be taken to the Microsoft Teams environment where you can create the meeting link. Once you have created it, copy it and paste it into the "Link" field.';
@@ -5913,12 +5913,12 @@ $langInvitationCustomEmail = '<p>Placeholder variables</p>
   <ul>
     <li>[email] : E-mail address</li>
     <li>[link] : Registration link</li>
-  </ul>";
+  </ul>';
 $langErrorInserting = 'The following records in the file you sent had a problem. Either the email was invalid or there were more fields than expected:';
 $langCourseInvitationUsersExcelInfo = 'You can upload a spreadsheet file (eg. xls, xlsx, csv) with one or three columns.
  The first column must contain the e-mail of each user you wish to invite to the course.
  The second and third columns can optionally contain the last name and first name of each user.
- Please note that users who are already on the platform with that e-mail will be immediately added to the course without receiving an invitation and without further notification.";
+ Please note that users who are already on the platform with that e-mail will be immediately added to the course without receiving an invitation and without further notification.';
 $langSendReminder = "Send Reminder";
 $langCourseInvitationHelp = 'If this option is active, course admins can invite external users to the platform to enroll in their course.';
 $langNoLongerValid = 'The link you followed is no longer valid.';
@@ -5930,5 +5930,5 @@ $langInvitationClickToAccept = 'Click on the button below to register and go to 
 $langInvitationAcceptViaCAS = '<strong>If you do have</strong> an account on the <strong>Central Authentication Service (%s)</strong>, please sign in with your institutional account by clicking on the button below.';
 $langLoginAndRegister = 'Login and Register';
 $langInviteEclassLoginCreate = 'Please enter the required information below to register to the platform.';
-$langInviteEclassLoginAlt = 'Alternatively, if you <strong>don't have a Central Authentication Service account</strong>, please enter below the details needed to create a guest account on the platform.';
+$langInviteEclassLoginAlt = "Alternatively, if you <strong>don't have a Central Authentication Service account</strong>, please enter below the details needed to create a guest account on the platform.";
 $langSameAsYourEmail = 'same as your e-mail address';
