@@ -1907,6 +1907,32 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[BgInput];
                 }
 
+                .dataTables_wrapper input[type='text'],
+                .dataTables_wrapper input[type='password'],
+                .dataTables_wrapper input[type='email'],
+                .dataTables_wrapper input[type='number'],
+                .dataTables_wrapper input[type='url'],
+                .dataTables_wrapper input[type='search']{
+                    background-color: $theme_options_styles[BgInput] !important;
+                }
+                
+                .dataTables_wrapper input[type='text']:focus,
+                .dataTables_wrapper input[type='number']:focus,
+                .dataTables_wrapper input[type='email']:focus,
+                .dataTables_wrapper input[type='url']:focus,
+                .dataTables_wrapper input[type='search']:focus,
+                .dataTables_wrapper .form-control:focus,
+                .dataTables_wrapper .uneditable-input:focus {   
+                    background-color: $theme_options_styles[BgInput] !important;
+                }
+
+                .add-on,
+                .add-on1,
+                .add-on2{
+                    background-color: $theme_options_styles[BgInput] !important;
+                }
+                
+
             ";
         }
 
@@ -1954,6 +1980,39 @@ function view($view_file, $view_data = array()) {
                 textarea:focus,
                 .login-input:focus {   
                     border-color: $theme_options_styles[clBorderInput];
+                }
+
+                input:-webkit-autofill, 
+                input:-webkit-autofill:hover, 
+                input:-webkit-autofill:focus, 
+                textarea:-webkit-autofill, 
+                textarea:-webkit-autofill:hover, 
+                textarea:-webkit-autofill:focus {
+                    border: 1px solid $theme_options_styles[clBorderInput];
+                }
+
+
+                .dataTables_wrapper input[type='text'],
+                .dataTables_wrapper input[type='password'],
+                .dataTables_wrapper input[type='email'],
+                .dataTables_wrapper input[type='number'],
+                .dataTables_wrapper input[type='url'],
+                .dataTables_wrapper input[type='search']{
+                    border-color: $theme_options_styles[clBorderInput] !important;
+                }
+
+                .dataTables_wrapper input[type='text']:focus,
+                .dataTables_wrapper input[type='number']:focus,
+                .dataTables_wrapper input[type='email']:focus,
+                .dataTables_wrapper input[type='url']:focus,
+                .dataTables_wrapper input[type='search']:focus,
+                .dataTables_wrapper .form-control:focus,
+                .dataTables_wrapper .uneditable-input:focus {   
+                    border-color: $theme_options_styles[clBorderInput] !important;
+                }
+
+                .input-border-color {
+                    border-color: $theme_options_styles[clBorderInput] ;
                 }
 
             ";
@@ -2006,12 +2065,46 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clInputText];
                 }
 
+                input:-webkit-autofill, 
+                input:-webkit-autofill:hover, 
+                input:-webkit-autofill:focus, 
+                textarea:-webkit-autofill, 
+                textarea:-webkit-autofill:hover, 
+                textarea:-webkit-autofill:focus {
+                    -webkit-text-fill-color: $theme_options_styles[clInputText];
+                }
+
+
+
+                .dataTables_wrapper input::placeholder{
+                    color: $theme_options_styles[clInputText] !important;
+                }
+                  
+                .dataTables_wrapper input[type='text'],
+                .dataTables_wrapper input[type='password'],
+                .dataTables_wrapper input[type='email'],
+                .dataTables_wrapper input[type='number'],
+                .dataTables_wrapper input[type='url'],
+                .dataTables_wrapper input[type='search']{
+                    color: $theme_options_styles[clInputText] !important;
+                }
+                
+                .dataTables_wrapper input[type='text']:focus,
+                .dataTables_wrapper input[type='number']:focus,
+                .dataTables_wrapper input[type='email']:focus,
+                .dataTables_wrapper input[type='url']:focus,
+                .dataTables_wrapper input[type='search']:focus,
+                .dataTables_wrapper .form-control:focus,
+                .dataTables_wrapper .uneditable-input:focus {   
+                    color: $theme_options_styles[clInputText] !important;
+                }
+
             ";
         }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////// BACKGROUND COLOR TO SELECT COMBONENT //////////////////////////
+        ///////////////////// BACKGROUND COLOR TO SELECT COMPONENT //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -2083,7 +2176,10 @@ function view($view_file, $view_data = array()) {
                     border: 1px solid $theme_options_styles[clBorderSelect] !important;
                 }
 
-
+                select:-webkit-autofill:hover, 
+                select:-webkit-autofill:focus {
+                    border: 1px solid $theme_options_styles[clBorderSelect];
+                }
 
             ";
         }
@@ -2131,10 +2227,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[clOptionSelect];
                 }
 
-
-                
-
-
                 .select2-selection.select2-selection--multiple{ 
                     color: $theme_options_styles[clOptionSelect] !important;
                 }
@@ -2145,6 +2237,11 @@ function view($view_file, $view_data = array()) {
 
                 .select2-container--default .select2-selection--multiple .select2-selection__choice {
                     color: $theme_options_styles[clOptionSelect] !important;
+                }
+
+                select:-webkit-autofill:hover, 
+                select:-webkit-autofill:focus {
+                    -webkit-text-fill-color: $theme_options_styles[clOptionSelect];
                 }
 
             ";
@@ -2253,46 +2350,9 @@ function view($view_file, $view_data = array()) {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////// BACKGROUND COLOR OF FORM WRAPPER ///////////////////////////
+        /////////////////////// BACKGROUND COLOR TO FORM COMPONENT //////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
@@ -2306,7 +2366,7 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////// BACKGROUND COLOR OF FORM WRAPPER ///////////////////////////
+        ////////////////////////// LABEL COLOR IN FORM COMPONENT /////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         
@@ -2316,13 +2376,87 @@ function view($view_file, $view_data = array()) {
                 .form-group .control-label-notes{ 
                     color:$theme_options_styles[clLabelForms];
                 }
-
-            
             ";
         }
         
             
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BACKGROUND COLOR TO MODAL COMPONONENT /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         
+        if(!empty($theme_options_styles['BgModal'])){
+            $styles_str .= "
+                .bootbox.show .bootbox-close-button{
+                    background-color:$theme_options_styles[BgModal];
+                }
+                .modal.show .close{
+                    background-color: $theme_options_styles[BgModal];
+                }
+                .modal-content {
+                    background-color: $theme_options_styles[BgModal];
+                }
+                .modal-content-opencourses{
+                    background:$theme_options_styles[BgModal];
+                }
+                .course-content::-webkit-scrollbar-track {
+                    background-color: $theme_options_styles[BgModal];
+                }
+                .modal-content-opencourses .close{
+                    background-color: $theme_options_styles[BgModal];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BORDER COLOR TO MODAL COMPONONENT ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clBorderModal'])){
+            $styles_str .= "
+                .modal-content {
+                    border: 1px solid $theme_options_styles[clBorderModal];
+                }
+                .modal-content-opencourses{
+                    border: solid 1px $theme_options_styles[clBorderModal];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// TEXT COLOR TO MODAL COMPONONENT ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clTextModal'])){
+            $styles_str .= "
+                .bootbox.show .modal-header .modal-title, 
+                .modal.show .modal-header .modal-title {
+                    color:  $theme_options_styles[clTextModal];
+                }
+                .modal-content h1,
+                .modal-content h2,
+                .modal-content h3,
+                .modal-content h4,
+                .modal-content h5,
+                .modal-content h6,
+                .modal-content div,
+                .modal-content small,
+                .modal-content span,
+                .modal-content p,
+                .modal-content b,
+                .modal-content strong,
+                .modal-content li,
+                .modal-content label,
+                .modal-content{
+                    color:  $theme_options_styles[clTextModal];
+                }
+            ";
+        }
 
         
 

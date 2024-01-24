@@ -5842,6 +5842,12 @@ $langclHoveredSelectOption = "Χρώμα hovered κειμένου επολογή
 $langbgOptionSelected = "Χρώμα φόντου ενεργής επιλογής";
 $langclOptionSelected = "Χρώμα κειμένου ενεργής επιλογής";
 
+$langModals = "Modal";
+$langSettingModals = "Ρυθμίσεις Modal";
+$langBgModal = "Χρώμα φόντου modal";
+$langclBorderModal = "Χρώμα border modal";
+$langclTextModal = "Χρώμα κειμένων στα modals";
+
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

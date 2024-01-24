@@ -13,6 +13,10 @@ body{
   font-size:14px;
 }
 
+iframe{
+  background: #ffffff;
+}
+
 .ContentEclass{
   min-width: 100%;
   padding: 0;
@@ -1127,6 +1131,22 @@ a:hover{
   color: #0c622e; 
   border-radius: 4px; 
 }
+.alert-success h1,
+.alert-success h2,
+.alert-success h3,
+.alert-success h4,
+.alert-success h5,
+.alert-success h6,
+.alert-success div,
+.alert-success small,
+.alert-success span,
+.alert-success p,
+.alert-success b,
+.alert-success strong,
+.alert-success li,
+.alert-success label{
+  color: #0c622e; 
+}
 .alert-success .btn-close{
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(12, 98, 46)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
@@ -1144,6 +1164,22 @@ a:hover{
   color: #3b7e94; 
   border-radius: 4px; 
   border: 0px;
+}
+.alert-info h1,
+.alert-info h2,
+.alert-info h3,
+.alert-info h4,
+.alert-info h5,
+.alert-info h6,
+.alert-info div,
+.alert-info small,
+.alert-info span,
+.alert-info p,
+.alert-info b,
+.alert-info strong,
+.alert-info li,
+.alert-info label{
+  color: #3b7e94; 
 }
 .alert-info .btn-close{
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(59, 126, 148)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
@@ -1166,7 +1202,23 @@ a:hover{
   border-radius: 4px; 
   border: 0px;
 }
-.alert-info .btn-close{
+.alert-warning h1,
+.alert-warning h2,
+.alert-warning h3,
+.alert-warning h4,
+.alert-warning h5,
+.alert-warning h6,
+.alert-warning div,
+.alert-warning small,
+.alert-warning span,
+.alert-warning p,
+.alert-warning b,
+.alert-warning strong,
+.alert-warning li,
+.alert-warning label{
+  color: #896110; 
+}
+.alert-warning .btn-close{
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(137, 97, 16)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
@@ -1188,7 +1240,23 @@ a:hover{
   border-radius: 4px; 
   border: 0px;
 }
-.alert-info .btn-close{
+.alert-danger h1,
+.alert-danger h2,
+.alert-danger h3,
+.alert-danger h4,
+.alert-danger h5,
+.alert-danger h6,
+.alert-danger div,
+.alert-danger small,
+.alert-danger span,
+.alert-danger p,
+.alert-danger b,
+.alert-danger strong,
+.alert-danger li,
+.alert-danger label{
+  color: #b03d50; 
+}
+.alert-danger .btn-close{
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(176, 61, 80)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.75rem center;

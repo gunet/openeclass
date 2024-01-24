@@ -639,6 +639,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navCheckboxes' aria-controls='navCheckboxes' role='tab' data-bs-toggle='tab'>$langCheckbox</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navInputText' aria-controls='navInputText' role='tab' data-bs-toggle='tab'>$langInputText</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navSelect' aria-controls='navSelect' role='tab' data-bs-toggle='tab'>$langSelectOption</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navModal' aria-controls='navModal' role='tab' data-bs-toggle='tab'>$langModals</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTables' aria-controls='navTables' role='tab' data-bs-toggle='tab'>$langTables</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTabs' aria-controls='navTabs' role='tab' data-bs-toggle='tab'>$langTabs</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navAccordions' aria-controls='navAccordions' role='tab' data-bs-toggle='tab'>$langAccordions</a></li>
@@ -1480,8 +1481,59 @@ $tool_content .= "
                         <input name='bgOptionSelected' type='text' class='form-control colorpicker' id='bgOptionSelected' value='$theme_options_styles[bgOptionSelected]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clOptionSelected' class='control-label-notes mb-2 me-2'>$langclOptionSelected:</label>
+                        <label for='clOptionSelected' class='control-label-notes mb-2 me-2'>$:</label>
                         <input name='clOptionSelected' type='text' class='form-control colorpicker' id='clOptionSelected' value='$theme_options_styles[clOptionSelected]'>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navModal'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langSettingModals</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgModal' class='control-label-notes mb-2 me-2'>$langBgModal:</label>
+                        <input name='BgModal' type='text' class='form-control colorpicker' id='BgModal' value='$theme_options_styles[BgModal]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderModal' class='control-label-notes mb-2 me-2'>$langclBorderModal:</label>
+                        <input name='clBorderModal' type='text' class='form-control colorpicker' id='clBorderModal' value='$theme_options_styles[clBorderModal]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clTextModal' class='control-label-notes mb-2 me-2'>$langclTextModal:</label>
+                        <input name='clTextModal' type='text' class='form-control colorpicker' id='clTextModal' value='$theme_options_styles[clTextModal]'>
                     </div>
                 </div>
             </div>
