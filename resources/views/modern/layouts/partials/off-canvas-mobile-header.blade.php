@@ -2,7 +2,7 @@
                 <div class="offcanvas-header">
                     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                 </div>
-                <div class="offcanvas-body">
+                <div class="offcanvas-body px-3">
                     <div class='col-12 mt-3 d-flex justify-content-center align-items-center'>
                         <img src="{{ $logo_img_small }}">
                     </div>
@@ -23,27 +23,35 @@
                     <div class='col-12 mt-5 mb-3'>
                         <ul class="list-group list-group-flush">
                             @if(!get_config('hide_login_link'))
-                                <a id='homeId' type='button' class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlServer }}">
-                                    <i class="fa fa-home pe-2"></i>{{ trans('langHome') }}
-                                </a>
+                                <li class="list-group-item element">
+                                    <a id='homeId' class='d-flex justify-content-start align-items-start gap-2 flex-wrap' type='button' href="{{ $urlServer }}">
+                                        <i class="fa-solid fa-home"></i>{{ trans('langHome') }}
+                                    </a>
+                                </li>
                             @endif
                             @if (!isset($_SESSION['uid']))
                                 @if(get_config('registration_link')!='hide')
-                                    <a id='registrationId' type="button" class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/registration.php">
-                                        <i class="fa fa-pencil pe-2"></i>{{ trans('langRegistration') }}
-                                    </a>
+                                    <li class="list-group-item element">
+                                        <a id='registrationId' type="button" class='d-flex justify-content-start align-items-start gap-2 flex-wrap' href="{{ $urlAppend }}modules/auth/registration.php">
+                                            <i class="fa-solid fa-pencil"></i>{{ trans('langRegistration') }}
+                                        </a>
+                                    </li>
                                 @endif
                             @endif
 
                             @if (!get_config('dont_display_courses_menu'))
-                                <a id='coursesId' type='button' class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}modules/auth/listfaculte.php">
-                                    <i class="fa fa-book pe-2"></i>{{ trans('langCourses') }}
-                                </a>
+                                <li class="list-group-item element">
+                                    <a id='coursesId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap' href="{{ $urlAppend }}modules/auth/listfaculte.php">
+                                        <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
+                                    </a>
+                                </li>
                             @endif
                            
-                            <a id='faqId' type='button' class="list-group-item element rounded-0 d-flex justify-content-start align-items-start" href="{{ $urlAppend }}info/faq.php">
-                                <i class="fa fa-question-circle pe-2"></i>{{ trans('langFaq') }}
-                            </a>
+                            <li class="list-group-item element">
+                                <a id='faqId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap' href="{{ $urlAppend }}info/faq.php">
+                                    <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
+                                </a>
+                            </li>
                             
                         </ul>
                     </div>

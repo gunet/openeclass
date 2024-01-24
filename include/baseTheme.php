@@ -589,7 +589,8 @@ function view($view_file, $view_data = array()) {
                 .help-block,
                 .control-label-notes,
                 .title-default,
-                .list-group-item.list-group-item-action{
+                .list-group-item.list-group-item-action,
+                .list-group-item.element{
                     color:$theme_options_styles[ColorHyperTexts];
                 }
 
@@ -2457,6 +2458,71 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// BACKGROUND COLOR TO AGENDA COMPONONENT /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['bgAgenda'])){
+            $styles_str .= "
+                .panel-admin-calendar>.panel-body-calendar {
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .myPersonalCalendar {
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .myCalendarEvents table tr td{
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .myCalendarEvents .fc-head-container.fc-widget-header,
+                .myCalendarEvents .fc-head-container thead{
+                    background: $theme_options_styles[bgAgenda];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////// BACKGROUND COLOR TO OF AGENDA'S HEADER //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['BgColorHeaderAgenda'])){
+            $styles_str .= "
+                .panel-admin-calendar .panel-heading, 
+                #cal-header {
+                    background: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                #calendar-header {
+                    background: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .myCalendarEvents .fc-header-toolbar {
+                    background: $theme_options_styles[BgColorHeaderAgenda];
+                }
+            ";
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
 

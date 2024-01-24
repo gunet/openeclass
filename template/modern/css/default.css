@@ -1437,7 +1437,7 @@ a:hover{
 }
 .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar {
   display: block; 
-  width: 20px;
+  width: 15px;
 }
 .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-track {
   background-color: transparent;
@@ -1597,7 +1597,7 @@ input[type="radio"]:disabled{
   -moz-appearance: none;
   -o-appearance: none;
   appearance: none;
-  border: 1px solid ;
+  border: 1px solid #9BA9C1;
   border-radius: 4px;
   outline: none;
   transition-duration: 0.3s;
@@ -2472,7 +2472,7 @@ body .form-action-button-popover{
   overflow-y: auto;
 }
 .course-content::-webkit-scrollbar {
-  width: 20px;
+  width: 15px;
 }
 .course-content::-webkit-scrollbar-track {
   background-color: #ffffff;
@@ -2981,7 +2981,7 @@ body .form-action-button-popover{
 
 
 .panel-body::-webkit-scrollbar {
-  width: 20px;
+  width: 15px;
 }
 
 .panel-body::-webkit-scrollbar-track {
@@ -3194,7 +3194,7 @@ body .form-action-button-popover{
 
 .table-responsive::-webkit-scrollbar,
 .dataTables_wrapper::-webkit-scrollbar {
-  width: 20px;
+  width: 15px;
 }
 
 .table-responsive::-webkit-scrollbar-track,
@@ -3813,7 +3813,7 @@ body .delThemeBtn{
 }
 
 .cardTestimonial > .card-body::-webkit-scrollbar {
-  width: 20px;
+  width: 15px;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-track {
   background-color: transparent;
@@ -4473,7 +4473,7 @@ div[role="progressbar"]::before {
 }
 
 .bodyChat::-webkit-scrollbar {
-  width: 20px;
+  width: 15px;
 }
 
 .bodyChat::-webkit-scrollbar-track {

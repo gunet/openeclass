@@ -27,10 +27,10 @@ $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
-                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected'),
+                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes'),
-                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes'),
+                'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 'bgOptionSelected'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
@@ -40,7 +40,7 @@ $defaults = array(
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
                 "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect'),
-                "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions'),
+                "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
@@ -629,6 +629,7 @@ $tool_content .= "
   <!-- Nav tabs -->
   <ul class='nav nav-tabs' role='tablist'>
     <li role='presentation' class='nav-item'><a class='nav-link active' href='#generalsetting' aria-controls='generalsetting' role='tab' data-bs-toggle='tab'>$langGeneralSettings</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsBody' aria-controls='navsettingsBody' role='tab' data-bs-toggle='tab'>$langNavBody</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsHeader' aria-controls='navsettingsHeader' role='tab' data-bs-toggle='tab'>$langNavSettingsHeader</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsFooter' aria-controls='navsettingsFooter' role='tab' data-bs-toggle='tab'>$langNavSettingsFooter</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navlinksButtons' aria-controls='navlinksButtons' role='tab' data-bs-toggle='tab'>$langNavLinksButtons</a></li>
@@ -645,6 +646,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navAccordions' aria-controls='navAccordions' role='tab' data-bs-toggle='tab'>$langAccordions</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navLists' aria-controls='navLists' role='tab' data-bs-toggle='tab'>$langLists</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navContextualMenu' aria-controls='navContextualMenu' role='tab' data-bs-toggle='tab'>$langContextualMenu</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAgenda' aria-controls='navsettingsAgenda' role='tab' data-bs-toggle='tab'>$langNavSettingsAgenda</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
@@ -668,7 +670,7 @@ $tool_content .= "
                                     <div class='radio'>
                                         <label>
                                         <input type='radio' name='containerType' value='boxed' ".(($theme_options_styles['containerType'] == 'boxed')? 'checked' : '').">
-                                        $langBoxed &nbsp;
+                                            $langBoxed &nbsp;
                                         </label>
                                     </div>
                                 </div>
@@ -676,7 +678,7 @@ $tool_content .= "
                                     <div class='radio'>
                                         <label>
                                         <input type='radio' name='containerType' value='fluid' ".(($theme_options_styles['containerType'] == 'fluid')? 'checked' : '').">
-                                        $langFluid &nbsp;
+                                            $langFluid &nbsp;
                                         </label>
                                     </div>
                                 </div>
@@ -697,49 +699,17 @@ $tool_content .= "
                     <div class='form-group'>
                         <label for='imageUpload' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoNormal</small>:</label>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                        $logo_field
+                            $logo_field
                         </div>
                     </div>
                     <div class='form-group mt-4'>
                         <label for='imageUploadSmall' class='col-sm-6 control-label-notes mb-2'>$langLogo <small>$langLogoSmall</small>:</label>
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                        $small_logo_field
+                            $small_logo_field
                         </div>
                     </div>
 
-                    <hr>
-
-                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langBgColorConfig</h3>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                    <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
-                    <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
-                    </div>
-                    <div class='form-group mt-4'>
-                        <label for='imageBg' class='col-sm-6 control-label-notes mb-2'>$langBgImg:</label>
-                        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
-                        $bg_field
-                        </div>
-                        <div class='form-inline col-sm-9 col-sm-offset-3 mt-2'>
-                            <div class='radio'>
-                                <label>
-                                <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
-                                $langRepeatedImg &nbsp;
-                                </label>
-                            </div>
-                            <div class='radio'>
-                                <label>
-                                <input type='radio' name='bgType' value='fix' ".(($theme_options_styles['bgType'] == 'fix')? 'checked' : '').">
-                                $langFixedImg &nbsp;
-                                </label>
-                            </div>
-                            <div class='radio'>
-                                <label>
-                                <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
-                                $langStretchedImg &nbsp;
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
 
@@ -750,6 +720,44 @@ $tool_content .= "
 
 
 
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsBody'>
+                <div class='form-wrapper form-edit form-create-theme rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langBgColorConfig</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgColor' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
+                    </div>
+                    <div class='form-group mt-4'>
+                        <label for='imageBg' class='col-sm-6 control-label-notes mb-2'>$langBgImg:</label>
+                        <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
+                            $bg_field
+                        </div>
+                        <div class='form-inline col-sm-9 col-sm-offset-3 mt-2'>
+                            <div class='radio'>
+                                <label>
+                                    <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
+                                    $langRepeatedImg &nbsp;
+                                </label>
+                            </div>
+                            <div class='radio'>
+                                <label>
+                                    <input type='radio' name='bgType' value='fix' ".(($theme_options_styles['bgType'] == 'fix')? 'checked' : '').">
+                                    $langFixedImg &nbsp;
+                                </label>
+                            </div>
+                            <div class='radio'>
+                                <label>
+                                    <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
+                                    $langStretchedImg &nbsp;
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -1339,7 +1347,19 @@ $tool_content .= "
 
 
 
-
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsAgenda'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAgendaSettings</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgAgenda' class='control-label-notes mb-2 me-2'>$langBgColorAgenda:</label>
+                        <input name='bgAgenda' type='text' class='form-control colorpicker' id='bgAgenda' value='$theme_options_styles[bgAgenda]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgColorHeaderAgenda' class='control-label-notes mb-2 me-2'>$langBgColorHeaderAgenda:</label>
+                        <input name='BgColorHeaderAgenda' type='text' class='form-control colorpicker' id='BgColorHeaderAgenda' value='$theme_options_styles[BgColorHeaderAgenda]'>
+                    </div>
+                </div>
+            </div>
 
 
 
@@ -1481,7 +1501,7 @@ $tool_content .= "
                         <input name='bgOptionSelected' type='text' class='form-control colorpicker' id='bgOptionSelected' value='$theme_options_styles[bgOptionSelected]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='clOptionSelected' class='control-label-notes mb-2 me-2'>$:</label>
+                        <label for='clOptionSelected' class='control-label-notes mb-2 me-2'>$langclOptionSelected:</label>
                         <input name='clOptionSelected' type='text' class='form-control colorpicker' id='clOptionSelected' value='$theme_options_styles[clOptionSelected]'>
                     </div>
                 </div>

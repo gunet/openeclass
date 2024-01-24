@@ -5848,6 +5848,13 @@ $langBgModal = "Χρώμα φόντου modal";
 $langclBorderModal = "Χρώμα border modal";
 $langclTextModal = "Χρώμα κειμένων στα modals";
 
+$langNavBody = "Body";
+
+$langNavSettingsAgenda = "Agenda";
+$langAgendaSettings = "Ρυθμίσεις στα ημερολόγια";
+$langBgColorAgenda = "Χρώμα φόντου στο ημερολόγιο";
+$langBgColorHeaderAgenda = "Χρώμα φόντου επικεφαλίδας ημερολογίου";
+
 /* * ***********************************************************
  * Validation
  * ************************************************************ */
