@@ -34,7 +34,7 @@
 
 .select2.select2-container{ width:100% !important; background: transparent; }
 
-.select2-dropdown--below{ background-color: #ffffff !important; }
+.select2-dropdown--below{ background-color: #ffffff; }
 
 
 

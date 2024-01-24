@@ -1099,11 +1099,15 @@ a:hover{
 }
 
 .alert-dismissible .btn-close {
-  box-sizing: none;
   height: 8px;
   width:8px;
-  color: #ffffff;
-  background: transparent url(../images/Icons_xmark.svg) center/1em auto no-repeat;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(97, 97, 97)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
   border: 0;
   border-radius: 0.25rem;
   opacity: 1;
@@ -1116,40 +1120,82 @@ a:hover{
 }
 
 
+
 .alert-success { 
   border: 0px; 
-  background-color: #1E7E0E; 
-  color: #ffffff; 
+  background-color: #a1dbb8;
+  color: #0c622e; 
   border-radius: 4px; 
 }
+.alert-success .btn-close{
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(12, 98, 46)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+
 
 .alert-info { 
-  background-color: #0073E6; 
-  color: #ffffff; 
+  background-color: #e5f4f8; 
+  color: #3b7e94; 
   border-radius: 4px; 
   border: 0px;
+}
+.alert-info .btn-close{
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(59, 126, 148)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 .alert-info a{
-  color: #84bef7;
+  color: #0073E6;
   text-decoration: underline;
 }
+
 
 .alert-warning { 
-  background-color: #F57600; 
-  color: #ffffff; 
+  background-color: #fbf1dd; 
+  color: #896110; 
   border-radius: 4px; 
   border: 0px;
 }
+.alert-info .btn-close{
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(137, 97, 16)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
 .alert-warning a{
-  color: #84bef7;
+  color: #0073E6;
   text-decoration: underline;
 }
 
+
+
 .alert-danger { 
-  background-color: #C44601; 
-  color: #ffffff; 
+  background-color: #fae4e8; 
+  color: #b03d50; 
   border-radius: 4px; 
   border: 0px;
+}
+.alert-info .btn-close{
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(176, 61, 80)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 /**********************************************************************************************************************/
@@ -5230,6 +5276,6 @@ table.dataTable tbody tr th{
 }
 
 .alert-info a{
-  color: #84bef7;
+  color: #0073E6;
   text-decoration: underline;
 }

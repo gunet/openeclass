@@ -728,10 +728,13 @@
     background-color: #212D37;
     border-color:#ffffff;
     color:#ffffff;
-    background: url(../images/chevron_down_select.svg) no-repeat right #212D37;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='white' d='M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z'/%3E%3C/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
-    background-position-x: 97.5%;
   }
   
   select.form-select:focus {
@@ -2359,11 +2362,11 @@ tr.warning:hover{
     border-color:#ffffff;
     background-color: #212D37;
     color: #ffffff;
-
+  
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple {
-  border: solid #ffffff 1px;
+  border: solid 1px #ffffff;
   outline: 0;
 }
 
@@ -2401,7 +2404,7 @@ tr.warning:hover{
 
 .select2.select2-container{background: transparent; }
 
-.select2-dropdown--below{ background-color: #ffffff !important; }
+.select2-dropdown--below{ background-color: #212D37 !important; }
 
 
 

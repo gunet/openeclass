@@ -614,7 +614,7 @@
                                             @else
                                                 {!! $alert_type !!}<span>{!! Session::get('message') !!}</span>
                                             @endif
-                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                     </div>
                                 @endif

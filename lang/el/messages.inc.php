@@ -5827,10 +5827,20 @@ $langClActiveCheckboxes = "Χρώμα κειμένου ενεργού checkbox �
 $langClIconCheckboxes = "Χρώμα icon ενεργού checkbox κουμπιού";
 $langClInactiveCheckboxes = "Χρώμα κειμένου ανενεργού checkbox κουμπιού";
 
-$langInputText = "Input-TextArea-Select";
+$langInputText = "Input-TextArea";
 $langBgInput = "Χρώμα φόντου περιοχής κειμένου";
 $langclBorderInput = "Χρώμα border περιοχής κειμένου";
 $langclInputText = "Χρώμα κειμένου";
+
+$langSelectOption = "Select";
+$langSettingSelect = "Ρυθμίσεις επιλογής";
+$langBgSelect = "Χρώμα φόντου επιλογής";
+$langclBorderSelect = "Χρώμα border επιλογής";
+$langclOptionSelect = "Χρώμα κειμένου επιλογής";
+$langbgHoveredSelectOption = "Χρώμα hovered φόντου επιλογής";
+$langclHoveredSelectOption = "Χρώμα hovered κειμένου επολογής";
+$langbgOptionSelected = "Χρώμα φόντου ενεργής επιλογής";
+$langclOptionSelected = "Χρώμα κειμένου ενεργής επιλογής";
 
 /* * ***********************************************************
  * Validation

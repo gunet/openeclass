@@ -27,11 +27,11 @@ $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
-                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 'BgInput'),
+                                                    'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes'),
-                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists'),
+                'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 'bgOptionSelected'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 'clHoveredListMenu', 'bgHoveredListMenu'),
@@ -39,7 +39,7 @@ $defaults = array(
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
-                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText'),
+                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
@@ -638,6 +638,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navRadios' aria-controls='navRadios' role='tab' data-bs-toggle='tab'>$langRadio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navCheckboxes' aria-controls='navCheckboxes' role='tab' data-bs-toggle='tab'>$langCheckbox</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navInputText' aria-controls='navInputText' role='tab' data-bs-toggle='tab'>$langInputText</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navSelect' aria-controls='navSelect' role='tab' data-bs-toggle='tab'>$langSelectOption</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTables' aria-controls='navTables' role='tab' data-bs-toggle='tab'>$langTables</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTabs' aria-controls='navTabs' role='tab' data-bs-toggle='tab'>$langTabs</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navAccordions' aria-controls='navAccordions' role='tab' data-bs-toggle='tab'>$langAccordions</a></li>
@@ -1430,6 +1431,57 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='clInputText' class='control-label-notes mb-2 me-2'>$langclInputText:</label>
                         <input name='clInputText' type='text' class='form-control colorpicker' id='clInputText' value='$theme_options_styles[clInputText]'>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navSelect'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langSettingSelect</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgSelect' class='control-label-notes mb-2 me-2'>$langBgSelect:</label>
+                        <input name='BgSelect' type='text' class='form-control colorpicker' id='BgSelect' value='$theme_options_styles[BgSelect]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderSelect' class='control-label-notes mb-2 me-2'>$langclBorderSelect:</label>
+                        <input name='clBorderSelect' type='text' class='form-control colorpicker' id='clBorderSelect' value='$theme_options_styles[clBorderSelect]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clOptionSelect' class='control-label-notes mb-2 me-2'>$langclOptionSelect:</label>
+                        <input name='clOptionSelect' type='text' class='form-control colorpicker' id='clOptionSelect' value='$theme_options_styles[clOptionSelect]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgHoveredSelectOption' class='control-label-notes mb-2 me-2'>$langbgHoveredSelectOption:</label>
+                        <input name='bgHoveredSelectOption' type='text' class='form-control colorpicker' id='bgHoveredSelectOption' value='$theme_options_styles[bgHoveredSelectOption]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredSelectOption' class='control-label-notes mb-2 me-2'>$langclHoveredSelectOption:</label>
+                        <input name='clHoveredSelectOption' type='text' class='form-control colorpicker' id='clHoveredSelectOption' value='$theme_options_styles[clHoveredSelectOption]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgOptionSelected' class='control-label-notes mb-2 me-2'>$langbgOptionSelected:</label>
+                        <input name='bgOptionSelected' type='text' class='form-control colorpicker' id='bgOptionSelected' value='$theme_options_styles[bgOptionSelected]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clOptionSelected' class='control-label-notes mb-2 me-2'>$langclOptionSelected:</label>
+                        <input name='clOptionSelected' type='text' class='form-control colorpicker' id='clOptionSelected' value='$theme_options_styles[clOptionSelected]'>
                     </div>
                 </div>
             </div>
