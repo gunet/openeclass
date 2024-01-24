@@ -30,14 +30,15 @@ function api_method($access) {
     //Clone course with post request
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-        if (!$access->isValid) {
-            Access::error(100, "Authentication required");
-        }
+//        if (!$access->isValid) {
+//            Access::error(100, "Authentication required");
+//        }
 
         $ok = register_posted_variables([
-            'id'        => true,
-            'department_id'  => true,
-            'add_users'  => false,
+            'id'                => true,
+            'department_id'     => true,
+            'add_users'         => false,
+            'title'             => false,
         ]);
 
         if (!$ok) {
@@ -51,7 +52,13 @@ function api_method($access) {
 
         $course_code    = $course[0]->code;
         $course_lang    = $course[0]->lang;
-        $course_title   = $course[0]->title;
+
+        if (isset($_POST['title'])) {
+            $course_title = $_POST['title'];
+        } else {
+            $course_title   = $course[0]->title . " (copy)";
+        }
+
         $course_desc    = $course[0]->description;
         $course_vis     = $course[0]->visible;
         $course_prof    = $course[0]->prof_names;
@@ -81,7 +88,12 @@ function api_method($access) {
         $course_code = $GLOBALS['currentCourseCode'];
 
         header('Content-Type: application/json');
-        echo json_encode("Course with id" . $course_id . "cloned", JSON_UNESCAPED_UNICODE);
+        echo json_encode([
+            'id'                => $course_id,
+            'title'             => $course_title,
+            'code'              => $course_code,
+            'department id'     => $GLOBALS['department_id'],
+        ], JSON_UNESCAPED_UNICODE);
         exit();
 
     }
