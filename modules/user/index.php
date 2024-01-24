@@ -495,9 +495,9 @@ $tool_content .=
 
 
 $tool_content .= "
-    <table id='users_table{$course_id}' class='table-default'>
+    <table id='users_table{$course_id}' class='table-default' style='width: 100%'>
         <thead>
-            <tr>
+            <tr class='list-header'>
               <th>$langSurnameName</th>
               <th class='text-center'>$langRole</th>
               <th class='text-center'>$langGroup</th>

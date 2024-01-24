@@ -224,9 +224,9 @@ $tool_content .=
         ]);
 
 $tool_content .= "
-    <table id='invite_table{$course_id}' class='table-default'>
+    <table id='invite_table{$course_id}' class='table-default' style='width: 100%'>
         <thead>
-            <tr>
+            <tr class='list-header'>
               <th>e-mail</th>
               <th class='text-center'>$langSurnameName</th>
               <th class='text-center' style='width: 80px;'>$langDate</th>
@@ -237,14 +237,5 @@ $tool_content .= "
         </thead>
         <tbody>
         </tbody>
-        <tfoot>
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-        </tfoot>
     </table>";
 draw($tool_content, 2, null, $head_content);
