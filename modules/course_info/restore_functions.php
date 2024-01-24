@@ -1275,26 +1275,31 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
     // check/cleanup video files after restore transaction
     if ($new_course_code != null && $new_course_id != null) {
-        $videodir = $webDir . "/video/" . $new_course_code;
-        $videos = scandir($videodir);
-        foreach ($videos as $videofile) {
-            if (is_dir($videofile)) {
-                continue;
-            }
+        if (!$clone_course) {
+            require_once 'include/lib/fileUploadLib.inc.php';
+            $videodir = $webDir . "/video/" . $new_course_code;
+            $videos = scandir($videodir);
+            foreach ($videos as $videofile) {
+                if (is_dir($videofile)) {
+                    continue;
+                }
 
-            $vlike = '/' . $videofile;
+                $vlike = '/' . $videofile;
 
-            if (!isWhitelistAllowed($videofile) and !$clone_course) {
-                unlink($videodir . "/" . $videofile);
-                Database::get()->query("DELETE FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike);
-                continue;
-            }
+                if (!isWhitelistAllowed($videofile)) {
+                    unlink($videodir . "/" . $videofile);
+                    Database::get()->query("DELETE FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike);
+                    continue;
+                }
 
-            $vcnt = Database::get()->querySingle("SELECT count(id) AS count FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike)->count;
-            if ($vcnt <= 0) {
-                unlink($videodir . "/" . $videofile);
+                $vcnt = Database::get()->querySingle("SELECT count(id) AS count FROM `video` WHERE course_id = ?d AND path LIKE ?s", $new_course_id, $vlike)->count;
+                if ($vcnt <= 0) {
+                    unlink($videodir . "/" . $videofile);
+                }
             }
         }
+
+
         $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
         $tool_content .= action_bar(array(
             array('title' => $langEnter,

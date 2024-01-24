@@ -63,9 +63,15 @@ if (function_exists('api_method')) {
         ],
         [
             'url' => $base . 'courses/',
-            'method' => 'GET',
+            'method' => 'POST',
             'auth_required' => false,
-            'description' => 'Get platform courses',
+            'description' => 'Get platform courses or create course',
+        ],
+        [
+            'url' => $base . 'clone_course/',
+            'method' => 'POST',
+            'auth_required' => false,
+            'description' => 'Clone course',
         ],
         [
             'url' => $base . 'courses/?course_id={N}&uname={U}',
