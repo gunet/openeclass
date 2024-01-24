@@ -76,8 +76,6 @@ function api_method($access) {
 
         $tool_content = '';
 
-        $_POST['add_users']='none';
-
         create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, TRUE);
 
         $course_code = $GLOBALS['currentCourseCode'];
