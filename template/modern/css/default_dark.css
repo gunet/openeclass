@@ -1097,10 +1097,10 @@
   .menu-popover .list-group-item .fa{ 
     color:#ffffff;
   }
-  .menu-popover .list-group-item .fa-xmark,
+  /* .menu-popover .list-group-item .fa-xmark,
   .menu-popover .list-group-item .fa-trash{ 
     color:#C44601;
-  }
+  } */
   
   .menu-popover .list-group-item:hover{ 
     background-color: #4F6893;
@@ -1111,7 +1111,7 @@
     color:#ffffff;
   }
   
-  .menu-popover .delete.confirmAction, 
+  /* .menu-popover .delete.confirmAction, 
   .menu-popover .delete.delete_btn{
     border-bottom: solid 1px #4F6893;
     background-color: #2B3944;
@@ -1136,7 +1136,7 @@
   .menu-popover .delete.delete_btn:hover .fa-xmark,
   .menu-popover .delete.delete_btn:hover .fa-trash{
     color: #C44601;
-  }
+  } */
 
 
   .bootbox.show .modal-header .modal-title, .modal.show .modal-header .modal-title{

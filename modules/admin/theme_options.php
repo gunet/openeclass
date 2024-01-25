@@ -32,22 +32,22 @@ $defaults = array(
                                                     'BgMenuPopover', 'BgMenuPopoverOption'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 
                                                     'BgColorWrapperBriefProfilePortfolio'),
-                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes'),
+                'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
-                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda'),
+                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 
-                                                    'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables'),
+                                                    'clHoveredListMenu', 'bgHoveredListMenu', 'BgBorderColorAgenda', 'BgBorderBottomRowTables', 'clBorderBottomMenuPopoverOption', 'BgHoveredMenuPopoverOption'),
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
                 "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda'),
-                "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal'),
+                "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
@@ -1428,8 +1428,28 @@ $tool_content .= "
                         <input name='BgMenuPopover' type='text' class='form-control colorpicker' id='BgMenuPopover' value='$theme_options_styles[BgMenuPopover]'>
                     </div>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBorderMenuPopover' class='control-label-notes mb-2 me-2'>$langBgBorderMenuPopover:</label>
+                        <input name='BgBorderMenuPopover' type='text' class='form-control colorpicker' id='BgBorderMenuPopover' value='$theme_options_styles[BgBorderMenuPopover]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langBgMenuPopoverOption:</label>
                         <input name='BgMenuPopoverOption' type='text' class='form-control colorpicker' id='BgMenuPopoverOption' value='$theme_options_styles[BgMenuPopoverOption]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langclMenuPopoverOption:</label>
+                        <input name='clMenuPopoverOption' type='text' class='form-control colorpicker' id='clMenuPopoverOption' value='$theme_options_styles[clMenuPopoverOption]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clBorderBottomMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langclBorderBottomMenuPopoverOption:</label>
+                        <input name='clBorderBottomMenuPopoverOption' type='text' class='form-control colorpicker' id='clBorderBottomMenuPopoverOption' value='$theme_options_styles[clBorderBottomMenuPopoverOption]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgHoveredMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langBgHoveredMenuPopoverOption:</label>
+                        <input name='BgHoveredMenuPopoverOption' type='text' class='form-control colorpicker' id='BgHoveredMenuPopoverOption' value='$theme_options_styles[BgHoveredMenuPopoverOption]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='clHoveredMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langclHoveredMenuPopoverOption:</label>
+                        <input name='clHoveredMenuPopoverOption' type='text' class='form-control colorpicker' id='clHoveredMenuPopoverOption' value='$theme_options_styles[clHoveredMenuPopoverOption]'>
                     </div>
                 </div>
             </div>

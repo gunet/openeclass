@@ -5726,6 +5726,7 @@ $langSubMenuLinkColorActive = "Χρώμα Συνδέσμου Ενεργού Συ
 $langBgColor = 'Χρώμα Φόντου';
 $langBgColorConfig = 'Ρυθμίσεις Φόντου';
 $langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
+
 $langLinksHeaderFooterCongiguration = 'Ρυθμίσεις Συνδέσμων Header - Footer';
 $langBgHeaderCongiguration = "Χρώμα Φόντου Header";
 $langBgFooterCongiguration = "Χρώμα Φόντου Footer";
@@ -5756,10 +5757,10 @@ $langActiveLinkColorHeader = "Χρώμα Ενεργού Συνδέσμου Heade
 $langLinkColorFooter = 'Χρώμα Συνδέσμων Footer';
 $langHoverLinkColorFooter = 'Χρώμα hovered συνδέσμων Footer';
 $langPortFolioProfileContainer = "Χρώμα φόντου σύντομου προφίλ";
-$langBgColorWrapperJumbotron = "Gradient φόντου στο περιτύλιγμα της οθόνης σύνδεσης";
-$langBgColorWrapperHeader= "Χρώμα φόντου στο περιτύλιγμα του Header";
-$langBgColorWrapperFooter= "Χρώμα φόντου στο περιτύλιγμα του Footer";
-$langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στο περιτύλιγμα του σύντομου προφίλ";
+$langBgColorWrapperJumbotron = "Gradient φόντου στον container της οθόνης σύνδεσης";
+$langBgColorWrapperHeader= "Χρώμα φόντου στον container του Header";
+$langBgColorWrapperFooter= "Χρώμα φόντου στον container του Footer";
+$langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στον container του σύντομου προφίλ";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
 
 $langShadowHeader = "Shadow στο κάτω μέρος της επικεφαλίδας";
@@ -5868,7 +5869,12 @@ $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, 
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Ρυθμίσεις Menu Popover";
 $langBgMenuPopover = "Χρώμα φόντου";
+$langBgBorderMenuPopover = "Χρώμα border στο menu-popover";
 $langBgMenuPopoverOption = "Χρώμα φόντου μενού επιλογών";
+$langclMenuPopoverOption = "Χρώμα κειμένου συνδέσμου επιλογής";
+$langclBorderBottomMenuPopoverOption = "Χρώμα border στο κάτω μέρος του συνδέσμου επιλογής";
+$langBgHoveredMenuPopoverOption = "Χρώμα Hovered φόντου συνδέσμου επιλογών";
+$langclHoveredMenuPopoverOption = "Χρώμα Hovered κειμένου συνδέσμου επιλογών";
 
 /* * ***********************************************************
  * Validation
