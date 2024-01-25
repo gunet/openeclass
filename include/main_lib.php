@@ -45,7 +45,7 @@ require_once 'lib/file_cache.class.php';
 // Shortcut for htmlspecialchars()
 function q($s) {
     if (is_null($s)) {
-        return null;
+        return '';
     } else {
         return htmlspecialchars($s, ENT_QUOTES);
     }
@@ -554,11 +554,11 @@ function selection($entries, $name, $default = '', $extra = '') {
     $retString .= "\n<select class='form-control' name='$name' $extra>\n";
     foreach ($entries as $value => $label) {
         if (isset($default) && ($value == $default)) {
-            $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-                    htmlspecialchars($label) . "</option>\n";
+            $retString .= "<option selected value='" . q($value) . "'>" .
+                    q($label) . "</option>\n";
         } else {
-            $retString .= "<option value='" . htmlspecialchars($value) . "'>" .
-                    htmlspecialchars($label) . "</option>\n";
+            $retString .= "<option value='" . q($value) . "'>" .
+                    q($label) . "</option>\n";
         }
     }
     $retString .= "</select>\n";
@@ -578,42 +578,16 @@ function multiselection($entries, $name, $defaults = array(), $extra = '') {
     $retString .= "\n<select name='$name' $extra>\n";
     foreach ($entries as $value => $label) {
         if (is_array($defaults) && (in_array($value, $defaults))) {
-            $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-                    htmlspecialchars($label) . "</option>\n";
+            $retString .= "<option selected value='" . q($value) . "'>" .
+                    q($label) . "</option>\n";
         } else {
-            $retString .= "<option value='" . htmlspecialchars($value) . "'>" .
-                    htmlspecialchars($label) . "</option>\n";
+            $retString .= "<option value='" . q($value) . "'>" .
+                    q($label) . "</option>\n";
         }
     }
     $retString .= "</select>\n";
     return $retString;
 }
-
-/* * ******************************************************************
-  Show a selection box. Taken from main.lib.php
-  Difference: the return value and not just echo the select box
-
-  $entries: an array of (value => label)
-  $name: the name of the selection element
-  $default: if it matches one of the values, specifies the default entry
- * ********************************************************************* */
-
-function selection3($entries, $name, $default = '') {
-    $select_box = "<select name='$name'>\n";
-    foreach ($entries as $value => $label) {
-        if ($value == $default) {
-            $select_box .= "<option selected value='" . htmlspecialchars($value) . "'>" .
-                    htmlspecialchars($label) . "</option>\n";
-        } else {
-            $select_box .= "<option value='" . htmlspecialchars($value) . "'>" .
-                    htmlspecialchars($label) . "</option>\n";
-        }
-    }
-    $select_box .= "</select>\n";
-
-    return $select_box;
-}
-
 
 /**
  * @brief function to check if user is a guest user

@@ -861,7 +861,6 @@ function module_path($path) {
         }
     }
     if (strpos($path, 'listreq.php') !== false or
-        strpos($path, 'newuseradmin.php') !== false or
         strpos($path, 'ldapnewprofadmin.php') !== false) {
         if (strpos($path, '?type=user') !== false) {
             return 'listreq-user';

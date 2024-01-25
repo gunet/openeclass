@@ -337,11 +337,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         switch ($myrow->status) {
             case USER_TEACHER:
                 $icon = 'fa-university';
-                $tip = $langUsersWithRightsS;
+                $tip = $langWithRights;
                 break;
             case USER_STUDENT:
                 $icon = 'fa-graduation-cap';
-                $tip = $langUsersWithNoRightsS;
+                $tip = '';
                 break;
             case USER_GUEST:
                 $icon = 'fa-male';

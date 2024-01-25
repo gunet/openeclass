@@ -236,30 +236,31 @@ if ($u) {
         }
         $head_content .= $js;
         $tool_content .= $html;
-        $tool_content .= "</div></div>
-        <div class='form-group'>
-          <label class='col-sm-2 control-label'>$langProperty:</label>
-          <div class='col-sm-10'>";
-        if ($info->status == USER_GUEST) { // if we are guest user do not display selection
-            $tool_content .= selection(array(USER_GUEST => $langGuest), 'newstatus', intval($info->status), "class='form-control'");
-        } else {
-            $tool_content .= selection(array(USER_TEACHER => $langTeacher,
-                USER_STUDENT => $langStudent), 'newstatus', intval($info->status), "class='form-control'");
-        }
         $tool_content .= "</div></div>";
-
-        $checked = (!$info->disable_course_registration) ? 'checked' : '';
-        $tool_content .= "
-                <div class='form-group'>
+        if ($info->status == USER_GUEST) { // if we are guest user do not display selection
+            $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langProperty:</label>
+                                <div class='col-sm-10'><p class='form-control-static'>$langGuest</p></div>
+                            </div>";
+        } else {
+            $checked = (!$info->disable_course_registration) ? 'checked' : '';
+            $user_selected = ($info->status == USER_STUDENT) ? 'checked' : '';
+            $prof_selected = ($info->status == USER_TEACHER) ? 'checked' : '';
+            $tool_content .= "
+                <div class='col-sm-12 form-group'>                    
                     <label class='col-sm-2 control-label'>$langUserPermissions:</label>
                     <div class='col-sm-10'>
-                        <div class='col-sm-10'>
-                            <div class='checkbox'>
-                                <input type='checkbox' name='enable_course_registration' value='1' $checked>$langInfoEnableCourseRegistration
-                            </div>
+                        <div class='radio'>
+                            <input type='radio' name='newstatus' value='" . USER_STUDENT . "' $user_selected>$langWithNoCourseCreationRights
                         </div>
-                    </div>
+                        <div class='radio'>
+                            <input type='radio' name='newstatus' value='" . USER_TEACHER . "' $prof_selected>$langWithCourseCreationRights
+                        </div>
+                        <div class='checkbox'>
+                            <input type='checkbox' name='enable_course_registration' value='1' $checked>$langInfoEnableCourseRegistration
+                        </div>
+                    </div>                    
                 </div>";
+        }
 
         $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $reg_date_format = $reg_date? $reg_date->format("d-m-Y H:i"): '-';

@@ -419,27 +419,13 @@ function adminMenu() {
     $sideMenuLink[] = '../admin/search_user.php';
     $sideMenuImg[] = 'fa-caret-right';
 
-    // link to prof requests if enabled, else directly to new prof page
-    if (get_config('eclass_prof_reg') == 1 or get_config('alt_auth_prof_reg') == 1) {
-        $sideMenuText[] = $GLOBALS['langProfOpen'];
-        $sideMenuLink[] = '../admin/listreq.php';
-        $sideMenuImg[] = 'fa-caret-right';
-    } else {
-        $sideMenuText[] = $GLOBALS['langProfReg'];
-        $sideMenuLink[] = '../admin/newuseradmin.php';
-        $sideMenuImg[] = 'fa-caret-right';
-    }
+    $sideMenuText[] = $GLOBALS['langNewAccount'];
+    $sideMenuLink[] = '../admin/newuseradmin.php';
+    $sideMenuImg[] = 'fa-caret-right';
 
-    // link to user requests if enabled, else directly to new user page
-    if (get_config('eclass_stud_reg') == 1 or get_config('alt_auth_stud_reg') == 1) {
-        $sideMenuText[] = $GLOBALS['langUserOpen'];
-        $sideMenuLink[] = '../admin/listreq.php?type=user';
-        $sideMenuImg[] = 'fa-caret-right';
-    } else {
-        $sideMenuText[] = $GLOBALS['langUserDetails'];
-        $sideMenuLink[] = '../admin/newuseradmin.php?type=user';
-        $sideMenuImg[] = 'fa-caret-right';
-    }
+    $sideMenuText[] = $GLOBALS['langUserRequests'];
+    $sideMenuLink[] = '../admin/listreq.php';
+    $sideMenuImg[] = 'fa-caret-right';
 
     if (isset($is_admin) and $is_admin) {
         $sideMenuText[] = $GLOBALS['langUserAuthentication'];

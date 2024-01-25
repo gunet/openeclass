@@ -130,25 +130,21 @@ if (isset($_POST['submit'])) {
         }
 
         if ($pstatus == 1) {
-            $message = $profsuccess;
             $reqtype = '';
-            $type_message = $langAsProf;
         } else {
-            $message = $usersuccess;
             $reqtype = '?type=user';
-            $type_message = '';
         }
 
         // send email
         $telephone = get_config('phone');
-        $emailsubject = "$langYourReg $siteName $type_message";
+        $emailsubject = "$langYourReg $siteName";
 
         $emailheader = "
             <!-- Header Section -->
             <div id='mail-header'>
                 <br>
                 <div>
-                    <div id='header-title'>$langYouAreReg $siteName $type_message $langWithSuccess</div>
+                    <div id='header-title'>$langYouAreReg $siteName $langWithSuccess</div>
                 </div>
             </div>";
 
@@ -182,7 +178,7 @@ if (isset($_POST['submit'])) {
 
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody);
 
-        Session::Messages(array($message, "$langTheU \"$givenname_form $surname_form\" $langAddedU"), 'alert-success');
+        Session::Messages(array($langWithSuccess, "$langTheU \"$givenname_form $surname_form\" $langAddedU"), 'alert-success');
         if ($rid) {
             $req_type = Database::get()->querySingle('SELECT status FROM user_request WHERE id = ?d', $rid)->status;
             redirect_to_home_page('modules/admin/listreq.php' .
@@ -194,6 +190,7 @@ if (isset($_POST['submit'])) {
 }
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$toolName = $langCreateAccount;
 
 // javascript
 load_js('jstree3');
@@ -263,11 +260,12 @@ if (isset($_GET['id'])) {
     if (isset($rid) and $rid) {
         $backlink = "$_SERVER[SCRIPT_NAME]?id=$rid";
     } else {
-        $backlink = $_SERVER['SCRIPT_NAME'];
+        $backlink = 'index.php';
     }
 
     $tool_content .= action_bar(array(
         array('title' => $langBack,
+              'url' => $backlink,
               'class' => 'back_btn',
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
@@ -282,7 +280,7 @@ if (isset($_GET['id'])) { // if we come from prof request
     $id = intval($_GET['id']);
 
     $res = Database::get()->querySingle("SELECT givenname, surname, username, email, faculty_id, phone, am,
-                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id =?d", $id);
+                        comment, lang, date_open, status, verified_mail FROM user_request WHERE id = ?d", $id);
     if ($res) {
         $ext_uid = Database::get()->querySingle('SELECT *
             FROM user_request_ext_uid WHERE user_request_id = ?d', $id);
@@ -297,6 +295,19 @@ if (isset($_GET['id'])) { // if we come from prof request
         $pcom = $res->comment;
         $language = $res->lang;
         $pstatus = intval($res->status);
+        if ($pstatus == USER_TEACHER) {
+            $cpf_context = array('origin' => 'teacher_register');
+            $params = "?type=prof";
+            $prof_selected = 'checked';
+            $user_selected = '';
+        } else {
+            $pstatus = USER_STUDENT;
+            $cpf_context = array('origin' => 'student_register');
+            $pageName = $langCreateAccount;
+            $params = '';
+            $prof_selected = '';
+            $user_selected = 'checked';
+        }
         $pdate = format_locale_date(strtotime($res->date_open), 'short', false);
         // faculty id validation
         if ($res->faculty_id) {
@@ -307,26 +318,13 @@ if (isset($_GET['id'])) { // if we come from prof request
         $cpf_context = array('origin' => 'teacher_register');
     }
     $params = '';
-    $prof_selected = 'checked';
-    $user_selected = '';
-} elseif (@$_GET['type'] == 'user') {
+} else { // new user
     $pstatus = USER_STUDENT;
     $cpf_context = array('origin' => 'student_register');
-    $pageName = $langCreateAccount;
-    $title = $langInsertUserInfo;
-    $params = "?type=user";
+    $params = '';
     $prof_selected = '';
     $user_selected = 'checked';
-} else {
-    $pstatus = USER_TEACHER;
-    $cpf_context = array('origin' => 'teacher_register');
-    $pageName = $langCreateAccount;
-    $title = $langNewProf;
-    $params = "?type=";
-    $prof_selected = 'checked';
-    $user_selected = '';
 }
-
 $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$params' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>";
@@ -388,10 +386,10 @@ formGroup('faculty', $langFaculty, $tree_html);
 formGroup('user_rights_form', $langUserPermissions,
     "<div class='col-sm-10'>
         <div class='radio'>
-            <input type='radio' name='pstatus' value='" . USER_STUDENT . "' id='norights-option' $user_selected>$langUserWithNoRights
+            <input type='radio' name='pstatus' value='" . USER_STUDENT . "' id='norights-option' $user_selected>$langWithNoCourseCreationRights
         </div>
         <div class='radio'>
-            <input type='radio' name='pstatus' value='" . USER_TEACHER . "' id='rights-option' $prof_selected>$langUserWithRights
+            <input type='radio' name='pstatus' value='" . USER_TEACHER . "' id='rights-option' $prof_selected>$langWithCourseCreationRights
         </div>
         <div class='checkbox'>
             <input type='checkbox' name='enable_course_registration' value='1' checked>$langInfoEnableCourseRegistration
