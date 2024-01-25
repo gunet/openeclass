@@ -6,6 +6,23 @@ $(document).ready(function(){
     })
 
 
+
+    // Sticky Header
+    var header = $("#bgr-cheat-header");
+    var header_icon = header.find("img.eclass-nav-icon");
+
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 0) {
+            header.addClass("fixed");
+            header_icon.addClass("fixed");
+        } else {
+            header.removeClass("fixed");
+            header_icon.removeClass("fixed");
+        }
+    });
+    // Sticky Header END
+
+
     //////////////////////////////////////////////////////////////////////////////
 
     // var action_bar = $('.action_bar').length;

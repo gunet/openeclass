@@ -1,34 +1,3 @@
-<style>
-    #bgr-cheat-header {
-        transition: background-color 0.3s, height 0.3s;
-    }
-
-    #bgr-cheat-header.fixed {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        height: 40px;
-        z-index: 1000;
-    }
-
-    #bgr-cheat-header.fixed .header-container {
-        height: 40px;
-    }
-
-    #bgr-cheat-header img.eclass-nav-icon {
-        transition: width 0.3s, height 0.3s;
-    }
-
-    #bgr-cheat-header.fixed img.eclass-nav-icon {
-        width: 100px;
-        height: 25px;
-    }
-
-    #bgr-cheat-header.fixed .dropdown-menu {
-        top: 75%;
-    }
-</style>
-
 <nav id="bgr-cheat-header" class="navbar navbar-eclass py-0 fixed-top">
     <div class='{{ $container }} header-container py-0'>
     <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
@@ -362,26 +331,6 @@
                 $('.container-items').removeClass('d-none');
             }, 500);
 
-        });
-    });
-</script>
-
-
-
-<script>
-    // Sticky Header
-    $(document).ready(function () {
-        var header = $("#bgr-cheat-header");
-        var icon = header.find("img.eclass-nav-icon");
-
-        $(window).scroll(function () {
-            if ($(this).scrollTop() > 0) {
-                header.addClass("fixed");
-                icon.addClass("fixed");
-            } else {
-                header.removeClass("fixed");
-                icon.removeClass("fixed");
-            }
         });
     });
 </script>
