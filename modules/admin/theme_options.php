@@ -29,7 +29,7 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
-                                                    'BgMenuPopover'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 
                                                     'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes'),
@@ -1427,7 +1427,10 @@ $tool_content .= "
                         <label for='BgMenuPopover' class='control-label-notes mb-2 me-2'>$langBgMenuPopover:</label>
                         <input name='BgMenuPopover' type='text' class='form-control colorpicker' id='BgMenuPopover' value='$theme_options_styles[BgMenuPopover]'>
                     </div>
-                   
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgMenuPopoverOption' class='control-label-notes mb-2 me-2'>$langBgMenuPopoverOption:</label>
+                        <input name='BgMenuPopoverOption' type='text' class='form-control colorpicker' id='BgMenuPopoverOption' value='$theme_options_styles[BgMenuPopoverOption]'>
+                    </div>
                 </div>
             </div>
 

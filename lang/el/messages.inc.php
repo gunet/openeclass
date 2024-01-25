@@ -5868,6 +5868,7 @@ $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, 
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Ρυθμίσεις Menu Popover";
 $langBgMenuPopover = "Χρώμα φόντου";
+$langBgMenuPopoverOption = "Χρώμα φόντου μενού επιλογών";
 
 /* * ***********************************************************
  * Validation

@@ -2229,6 +2229,16 @@ body .form-action-button-mydropdowns{
   border: solid 1px #CDD4E0;
 }
 
+.contextual-menu .form-action-button-mydropdowns .confirmAction,
+.contextual-menu .form-action-button-mydropdowns .fa::before,
+.contextual-menu .delete_all_in .list-group-item,
+.contextual-menu .delete_all_in .fa::before,
+.contextual-menu .delete_in_inner .list-group-item,
+.contextual-menu .delete_in_inner .fa::before{
+  color: #C44601 !important;
+}
+
+
 
 
 /**********************************************************************************************************************/
@@ -2298,11 +2308,14 @@ body .form-action-button-mydropdowns{
   display: flex;
   justify-content: start;
   align-items: start;
-  gap: 8px;
+  gap: 5px;
   font-size: 14px;
-  min-height: 40px;
+  min-height: 38px;
   padding: 10px;
   color: #2B3944;
+}
+.menu-popover .list-group-item:last-child{
+  border-bottom: none !important;
 }
 
 .menu-popover .list-group-item .fa{
@@ -2335,10 +2348,10 @@ body .form-action-button-mydropdowns{
   display: flex;
   justify-content: start;
   align-items: start;
-  gap: 10px;
+  gap: 5px;
   color: #C44601;
   font-size: 14px;
-  min-height: 40px;
+  min-height: 38px;
   padding: 10px;
   height: auto;
 }
