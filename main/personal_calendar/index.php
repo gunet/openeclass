@@ -1251,19 +1251,19 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
                                    
                                         <div class="btn-group">
-                                                <button class="btn bg-transparent text-white" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
-                                                <button class="btn bg-transparent text-white" data-calendar-nav="today">' . $langToday . '</button>
-                                                <button class="btn bg-transparent text-white" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                         </div>
 
                                         <div class="btn-group">
-                                                <button class="btn bg-transparent text-white" data-calendar-view="year">' . $langYear . '</button>
-                                                <button class="btn bg-transparent active text-white" data-calendar-view="month">' . $langMonth . '</button>
-                                                <button class="btn bg-transparent text-white" data-calendar-view="week">' . $langWeek . '</button>
-                                                <button class="btn bg-transparent text-white" data-calendar-view="day">' . $langDay . '</button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-view="year">' . $langYear . '</button>
+                                                <button class="btn bg-transparent active text-agenda-title" data-calendar-view="month">' . $langMonth . '</button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-view="week">' . $langWeek . '</button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
                                         </div>
 
-                                        <h6 class="text-white d-none"></h6>
+                                        
                                     
                                         
                                 </div>

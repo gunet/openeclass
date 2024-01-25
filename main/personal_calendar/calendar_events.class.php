@@ -1490,7 +1490,7 @@ class Calendar_Events {
        }
        
 
-       $calendar .= '<div class="panel-body-calendar border-card pt-2 pb-3"><div id="bootstrapcalendar"></div></div>';
+       $calendar .= '<div class="panel-body-calendar panel-border-calendar pt-2 pb-3"><div id="bootstrapcalendar"></div></div>';
 
         return $calendar;
    }

@@ -1282,6 +1282,7 @@
 }
 .panel-admin-calendar>.panel-body-calendar{
     background-color: #212D37;
+    border: solid 1px #4F6893;
 }
 .panel-admin-calendar> .panel-body-calendar .cal-row-fluid:hover{
   background-color: #212D37;
@@ -2632,33 +2633,69 @@ tr.warning:hover{
 /*************************************** this is datepicker-calendar *************************************/
 /****************************************************************************************************/
 
-
- .datepicker-days .table-condensed{ 
+.datepicker-centuries .table-condensed,
+.datepicker-decades .table-condensed,
+.datepicker-years .table-condensed,
+.datepicker-months .table-condensed,
+.datepicker-days .table-condensed{ 
   background-color: #212D37;
   color:#687DA3;
 }
 
+.datepicker-centuries .table-condensed thead,
+.datepicker-centuries .table-condensed thead tr th,
+.datepicker-decades .table-condensed thead,
+.datepicker-decades .table-condensed thead tr th,
+.datepicker-years .table-condensed thead,
+.datepicker-years .table-condensed thead tr th,
+.datepicker-months .table-condensed thead,
+.datepicker-months .table-condensed thead tr th,
 .datepicker-days .table-condensed thead,
 .datepicker-days .table-condensed thead tr th{ 
   background-color: #212D37;
   color:#687DA3;
 }
 
+.datepicker-centuries .table-condensed thead tr th.prev::before,
+.datepicker-centuries .table-condensed thead tr th.next::after,
+.datepicker-decades .table-condensed thead tr th.prev::before,
+.datepicker-decades .table-condensed thead tr th.next::after,
+.datepicker-years .table-condensed thead tr th.prev::before,
+.datepicker-years .table-condensed thead tr th.next::after,
+.datepicker-months .table-condensed thead tr th.prev::before,
+.datepicker-months .table-condensed thead tr th.next::after,
 .datepicker-days .table-condensed thead tr th.prev::before,
-.datepicker-days .table-condensed thead tr th.next::after{
+.datepicker-days .table-condensed thead tr th.next::after,
+.datepicker-centuries .table-condensed thead tr th.datepicker-switch,
+.datepicker-decades .table-condensed thead tr th.datepicker-switch,
+.datepicker-years .table-condensed thead tr th.datepicker-switch,
+.datepicker-months .table-condensed thead tr th.datepicker-switch,
+.datepicker-days .table-condensed thead tr th.datepicker-switch{
   color:#687DA3;
 }
 
+.datepicker-centuries .table-condensed tbody,
+.datepicker-decades .table-condensed tbody,
+.datepicker-years .table-condensed tbody,
+.datepicker-months .table-condensed tbody,
 .datepicker-days .table-condensed tbody{ 
   background-color: #212D37;
   color:#687DA3;
 }
 
+.datepicker-centuries .table-condensed tfoot,
+.datepicker-decades .table-condensed tfoot,
+.datepicker-years .table-condensed tfoot,
+.datepicker-months .table-condensed tfoot,
 .datepicker-days .table-condensed tfoot{ 
   background-color: #212D37;
   color:#687DA3;
 }
 
+.datepicker-centuries .table-condensed span,
+.datepicker-decades .table-condensed span,
+.datepicker-years .table-condensed span,
+.datepicker-months .table-condensed span,
 .datepicker-days .table-condensed span{
  color:#687DA3;
 }
@@ -2667,6 +2704,15 @@ tr.warning:hover{
   color:#687DA3;
 }
 
+
+.datepicker-centuries .table-condensed tbody tr td.active,
+.datepicker-centuries .table-condensed tbody tr td span.active,
+.datepicker-decades .table-condensed tbody tr td.active,
+.datepicker-decades .table-condensed tbody tr td span.active,
+.datepicker-years .table-condensed tbody tr td.active,
+.datepicker-years .table-condensed tbody tr td span.active,
+.datepicker-months .table-condensed tbody tr td.active,
+.datepicker-months .table-condensed tbody tr td span.active,
 .datepicker-days .table-condensed tbody tr td.active,
 .datepicker-days .table-condensed tbody tr td span.active{
   background-color: #74AFE9;

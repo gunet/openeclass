@@ -31,6 +31,11 @@
   color:#ffffff; 
 }
 
+.text-agenda-title,
+.text-agenda-title:hover{
+  color:#ffffff; 
+}
+
 .number-day-cal{ 
   font-size: 14px; 
   color: #687DA3;
@@ -339,8 +344,21 @@
 
  .datepicker-days .table-condensed thead > tr , .datepicker-days .table-condensed tbody > tr , .datepicker-days .table-condensed tbody , .datepicker-days .table-condensed tfoot > tr {border:0;}
 
- .datepicker-days .table-condensed thead tr th.next::after{ content: '\f178'; font-size: 15px; font-weight: 700; color:black;}
+ .datepicker-days .table-condensed thead tr th.next::after,
+ .datepicker-months .table-condensed thead tr th.next::after,
+ .datepicker-years .table-condensed thead tr th.next::after,
+ .datepicker-decades .table-condensed thead tr th.next::after,
+ .datepicker-centuries .table-condensed thead tr th.next::after{ content: '\f178'; font-size: 15px; font-weight: 700; color:black;}
 
- .datepicker-days .table-condensed thead tr th.switch{ font-size: 14px; padding: 5px; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal; color:black;}
+ .datepicker-days .table-condensed thead tr th.datepicker-switch,
+ .datepicker-months .table-condensed thead tr th.datepicker-switch,
+ .datepicker-years .table-condensed thead tr th.datepicker-switch,
+ .datepicker-years .table-condensed thead tr th.datepicker-switch,
+ .datepicker-centuries .table-condensed thead tr th.datepicker-switch{ font-size: 14px; padding: 5px; font-family: 'Manrope' , sans-serif; font-weight: 700; font-style: normal; color:black;}
 
- .datepicker-days .table-condensed thead tr th.prev::before{ content: '\f177'; font-size: 15px; font-weight: 700; color:black;}
+ .datepicker-days .table-condensed thead tr th.prev::before,
+ .datepicker-months .table-condensed thead tr th.prev::before,
+ .datepicker-years .table-condensed thead tr th.prev::before,
+ .datepicker-decades .table-condensed thead tr th.prev::before,
+ .datepicker-centuries .table-condensed thead tr th.prev::before{ content: '\f177'; font-size: 15px; font-weight: 700; color:black;}
+ 

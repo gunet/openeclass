@@ -5853,7 +5853,11 @@ $langNavBody = "Body";
 $langNavSettingsAgenda = "Agenda";
 $langAgendaSettings = "Ρυθμίσεις στα ημερολόγια";
 $langBgColorAgenda = "Χρώμα φόντου στο ημερολόγιο";
+$langBgBorderColorAgenda = "Χρώμα border στο ημερολόγιο";
 $langBgColorHeaderAgenda = "Χρώμα φόντου επικεφαλίδας ημερολογίου";
+$langclColorHeaderAgenda = "Χρώμα κειμένων επικεφαλίδας ημερολογίου";
+$langclColorBodyAgenda = "Χρώμα κειμένων (ημέρες, ώρες, λεπτά)";
+$langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, ώρες, λεπτά)";
 
 /* * ***********************************************************
  * Validation

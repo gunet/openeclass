@@ -5139,6 +5139,7 @@ div[role="progressbar"]::before {
 }
 .panel-admin-calendar>.panel-body-calendar{
   background-color: #ffffff;
+  border: solid 1px #EFF6FF;
 }
 
 .panel-admin-calendar>.panel-footer{

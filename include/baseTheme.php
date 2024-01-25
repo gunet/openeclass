@@ -1932,6 +1932,14 @@ function view($view_file, $view_data = array()) {
                 .add-on2{
                     background-color: $theme_options_styles[BgInput] !important;
                 }
+
+                .input-group-text.bg-default{
+                    background-color: $theme_options_styles[BgInput];
+                }
+
+                .form-control:disabled {
+                    background-color: $theme_options_styles[BgInput];
+                }
                 
 
             ";
@@ -2016,6 +2024,11 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[clBorderInput] ;
                 }
 
+                .form-control:disabled {
+                    border-color: $theme_options_styles[clBorderInput] ;
+                }
+                
+
             ";
         }
 
@@ -2098,6 +2111,10 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper .form-control:focus,
                 .dataTables_wrapper .uneditable-input:focus {   
                     color: $theme_options_styles[clInputText] !important;
+                }
+
+                .input-group-text .fa-calendar{
+                    color: $theme_options_styles[clInputText];
                 }
 
             ";
@@ -2475,11 +2492,76 @@ function view($view_file, $view_data = array()) {
                 }
                 .myCalendarEvents table tr td{
                     background-color: $theme_options_styles[bgAgenda];
+                    opacity: 0.8;
                 }
+                .myCalendarEvents .fc-widget-content table tbody td {
+                    border: solid 1px rgba(79, 104, 147, 0.3)
+                }
+                
                 .myCalendarEvents .fc-head-container.fc-widget-header,
                 .myCalendarEvents .fc-head-container thead{
                     background: $theme_options_styles[bgAgenda];
                 }
+                .myPersonalCalendar .cal-row-fluid.cal-row-head {
+                    background: $theme_options_styles[bgAgenda];
+                }
+                #cal-day-box .cal-day-hour:nth-child(odd) {
+                    background-color: $theme_options_styles[bgAgenda] !important;
+                }
+
+
+                .datepicker-centuries .table-condensed,
+                .datepicker-centuries .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datepicker-decades .table-condensed,
+                .datepicker-decades .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datepicker-years .table-condensed,
+                .datepicker-years .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datepicker-months .table-condensed,
+                .datepicker-months .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datepicker-days .table-condensed,
+                .datepicker-days .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                
+
+
+
+
+                .datetimepicker-years .table-condensed,
+                .datetimepicker-years .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datetimepicker-months .table-condensed,
+                .datetimepicker-months .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datetimepicker-days .table-condensed,
+                .datetimepicker-days .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datetimepicker-hours .table-condensed,
+                .datetimepicker-hours .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                .datetimepicker-minutes .table-condensed,
+                .datetimepicker-minutes .table-condensed .dow{ 
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+                
+
+                
+                .cal-day-today {
+                    background-color: $theme_options_styles[bgAgenda] !important;
+                }
+                 
             ";
         }
 
@@ -2501,11 +2583,341 @@ function view($view_file, $view_data = array()) {
                 .myCalendarEvents .fc-header-toolbar {
                     background: $theme_options_styles[BgColorHeaderAgenda];
                 }
+
+
+
+                .datepicker-centuries .table-condensed thead .prev,
+                .datepicker-centuries .table-condensed thead .next,
+                .datepicker-centuries .table-condensed thead .datepicker-switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datepicker-decades .table-condensed thead .prev,
+                .datepicker-decades .table-condensed thead .next,
+                .datepicker-decades .table-condensed thead .datepicker-switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datepicker-years .table-condensed thead .prev,
+                .datepicker-years .table-condensed thead .next,
+                .datepicker-years .table-condensed thead .datepicker-switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datepicker-months .table-condensed thead .prev,
+                .datepicker-months .table-condensed thead .next,
+                .datepicker-months .table-condensed thead .datepicker-switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datepicker-days .table-condensed thead .prev,
+                .datepicker-days .table-condensed thead .next,
+                .datepicker-days .table-condensed thead .datepicker-switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                
+
+
+
+                .datetimepicker-years .table-condensed thead .prev,
+                .datetimepicker-years .table-condensed thead .next,
+                .datetimepicker-years .table-condensed thead .switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datetimepicker-months .table-condensed thead .prev,
+                .datetimepicker-months .table-condensed thead .next,
+                .datetimepicker-months .table-condensed thead .switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datetimepicker-days .table-condensed thead .prev,
+                .datetimepicker-days .table-condensed thead .next,
+                .datetimepicker-days .table-condensed thead .switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datetimepicker-hours .table-condensed thead .prev,
+                .datetimepicker-hours .table-condensed thead .next,
+                .datetimepicker-hours .table-condensed thead .switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+                .datetimepicker-minutes .table-condensed thead .prev,
+                .datetimepicker-minutes .table-condensed thead .next,
+                .datetimepicker-minutes .table-condensed thead .switch{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// TEXT COLOR OF AGENDA'S HEADER //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clColorHeaderAgenda'])){
+            $styles_str .= "
+                .panel-admin-calendar .panel-heading, #cal-header {
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+                #current-month,
+                #cal-header .fa-chevron-left,
+                #cal-header .fa-chevron-right {
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+                .text-agenda-title,
+                .text-agenda-title:hover{
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+                .myCalendarEvents .fc-today-button {
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+                .myCalendarEvents .fc-header-toolbar .fc-next-button .fc-icon-right-single-arrow,
+                .myCalendarEvents .fc-header-toolbar .fc-prev-button .fc-icon-left-single-arrow,
+                .myCalendarEvents .fc-header-toolbar .fc-center h2,
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaDay-button,
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button.fc-state-active,
+                .myCalendarEvents .fc-header-toolbar .fc-right .fc-agendaWeek-button {
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+
+
+                .datepicker-centuries .table-condensed thead tr th.next::after,
+                .datepicker-decades .table-condensed thead tr th.next::after,
+                .datepicker-years .table-condensed thead tr th.next::after,
+                .datepicker-months .table-condensed thead tr th.next::after,
+                .datepicker-days .table-condensed thead tr th.next::after{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+                .datepicker-centuries .table-condensed thead tr th.datepicker-switch,
+                .datepicker-decades .table-condensed thead tr th.datepicker-switch,
+                .datepicker-years .table-condensed thead tr th.datepicker-switch,
+                .datepicker-months .table-condensed thead tr th.datepicker-switch,
+                .datepicker-days .table-condensed thead tr th.datepicker-switch{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+                .datepicker-centuries .table-condensed thead tr th.prev::before,
+                .datepicker-decades .table-condensed thead tr th.prev::before,
+                .datepicker-years .table-condensed thead tr th.prev::before,
+                .datepicker-months .table-condensed thead tr th.prev::before,
+                .datepicker-days .table-condensed thead tr th.prev::before{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+
+
+
+                .datetimepicker-years .table-condensed thead .prev::before,
+                .datetimepicker-years .table-condensed thead .next::after,
+                .datetimepicker-years .table-condensed thead .switch{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+                .datetimepicker-months .table-condensed thead .prev::before,
+                .datetimepicker-months .table-condensed thead .next::after,
+                .datetimepicker-months .table-condensed thead .switch{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+                .datetimepicker-days .table-condensed thead .prev::before,
+                .datetimepicker-days .table-condensed thead .next::after,
+                .datetimepicker-days .table-condensed thead .switch{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+                .datetimepicker-hours .table-condensed thead .prev::before,
+                .datetimepicker-hours .table-condensed thead .next::after,
+                .datetimepicker-hours .table-condensed thead .switch{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+                .datetimepicker-minutes .table-condensed thead .prev::before,
+                .datetimepicker-minutes .table-condensed thead .next::after,
+                .datetimepicker-minutes .table-condensed thead .switch{ 
+                    color: $theme_options_styles[clColorHeaderAgenda] !important;
+                }
+
+     
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////// TEXT COLOR OF AGENDA'S BODY ///////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['clColorBodyAgenda'])){
+            $styles_str .= "
+            
+                .cal-row-fluid.cal-row-head .cal-cell1,
+                .number-day-cal {
+                    color: $theme_options_styles[clColorBodyAgenda];
+                }
+
+                .myPersonalCalendar .cal-row-fluid.cal-row-head .cal-cell1,
+                .myPersonalCalendar .number-day-cal,
+                .myPersonalCalendar .cal-day-hour div,
+                #cal-day-box div,
+                .cal-year-box div,
+                .cal-month-box div,
+                .cal-week-box div {
+                    color: $theme_options_styles[clColorBodyAgenda];
+                }
+
+                .myCalendarEvents .fc-widget-header table thead span {
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+                .myCalendarEvents .fc-widget-content table tbody span {
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+
+
+                .datepicker-centuries .table-condensed thead tr th.dow,
+                .datepicker-decades .table-condensed thead tr th.dow,
+                .datepicker-years .table-condensed thead tr th.dow,
+                .datepicker-months .table-condensed thead tr th.dow,
+                .datepicker-days .table-condensed thead tr th.dow{ 
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+                .datepicker-centuries .table-condensed tbody tr td,
+                .datepicker-decades .table-condensed tbody tr td,
+                .datepicker-years .table-condensed tbody tr td,
+                .datepicker-months .table-condensed tbody tr td,
+                .datepicker-days .table-condensed tbody tr td{ 
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+                
+
+
+
+
+                .datetimepicker-years .table-condensed thead tr th.dow,
+                .datetimepicker-months .table-condensed thead tr th.dow,
+                .datetimepicker-days .table-condensed thead tr th.dow,
+                .datetimepicker-hours .table-condensed thead tr th.dow,
+                .datetimepicker-minutes .table-condensed thead tr th.dow{ 
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+                .datetimepicker-years .table-condensed tbody tr td,
+                .datetimepicker-months .table-condensed tbody tr td,
+                .datetimepicker-days .table-condensed tbody tr td,
+                .datetimepicker-hours .table-condensed tbody tr td,
+                .datetimepicker-minutes .table-condensed tbody tr td{ 
+                    color: $theme_options_styles[clColorBodyAgenda] !important;
+                }
+
+
             ";
         }
 
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BORDER COLOR TO AGENDA COMPONENT ////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['BgBorderColorAgenda'])){
+            $styles_str .= "
+                .panel-admin-calendar>.panel-body-calendar {
+                    border: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                }
+                #calendar_wrapper{
+                    border: 0px;
+                }
+                .myPersonalCalendar{
+                    border: solid 1px $theme_options_styles[BgBorderColorAgenda];
+                }
 
+                .fc-unthemed .fc-content, 
+                .fc-unthemed .fc-divider, 
+                .fc-unthemed .fc-list-heading td, 
+                .fc-unthemed .fc-list-view, 
+                .fc-unthemed .fc-popover, 
+                .fc-unthemed .fc-row, 
+                .fc-unthemed tbody, 
+                .fc-unthemed td, 
+                .fc-unthemed th, 
+                .fc-unthemed thead {
+                    border-color: $theme_options_styles[BgBorderColorAgenda];
+                }
+
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// BACKGROUND HOVERED COLOR TO AGENDA COMPONENT /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['bgColorHoveredBodyAgenda'])){
+            $styles_str .= "
+                .datetimepicker-years .table-condensed thead tr th:hover,
+                .datetimepicker-years .table-condensed tbody tr td .year:hover,
+                .datetimepicker-months .table-condensed thead tr th:hover,
+                .datetimepicker-months .table-condensed tbody tr td .month:hover,
+                .datetimepicker-days .table-condensed thead tr th:hover,
+                .datetimepicker-days .table-condensed tbody tr td:hover,
+                .datetimepicker-hours .table-condensed thead tr th:hover,
+                .datetimepicker-hours .table-condensed tbody tr td .hour:hover,
+                .datetimepicker-minutes .table-condensed thead tr th:hover,
+                .datetimepicker-minutes .table-condensed tbody tr td .minute:hover{
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+
+
+                .datepicker-centuries .table-condensed thead tr th:hover,
+                .datepicker-decades .table-condensed thead tr th:hover,
+                .datepicker-years .table-condensed thead tr th:hover,
+                .datepicker-months .table-condensed thead tr th:hover,
+                .datepicker-days .table-condensed thead tr th:hover{ 
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+                .datepicker-centuries .table-condensed tbody tr td .century:hover,
+                .datepicker-decades .table-condensed tbody tr td .decade:hover,
+                .datepicker-years .table-condensed tbody tr td .year:hover,
+                .datepicker-months .table-condensed tbody tr td .month:hover,
+                .datepicker-days .table-condensed tbody tr td:hover{ 
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+
+                .panel-body-calendar .cal-row-head:hover{
+                    background-color: transparent !important;
+                }
+                .panel-body-calendar .cal-row-head .cal-cell1:hover{
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+
+                .panel-body-calendar .cal-row-fluid:hover{
+                    background-color: transparent !important;
+                }
+                .panel-body-calendar .cal-row-fluid .cal-cell1:hover{
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+                .myPersonalCalendar .cal-month-box .cal-row-fluid:hover{
+                    background-color: transparent !important;
+                }
+                .myPersonalCalendar .cal-month-box .cal-row-fluid .cal-cell1:hover{
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+                .myPersonalCalendar .cal-year-box .row-fluid:hover,
+                .myPersonalCalendar .cal-week-box .row-fluid:hover,
+                #cal-day-box .row-fluid:hover{
+                    background-color: transparent !important;
+                }
+                .myPersonalCalendar .cal-year-box .row-fluid div:hover,
+                .myPersonalCalendar .cal-week-box .row-fluid div:hover,
+                #cal-day-box .row-fluid div:hover{
+                    background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+
+
+            ";
+        }
 
 
 
