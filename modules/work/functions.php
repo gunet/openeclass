@@ -375,7 +375,7 @@ function show_submission_details($id) {
             <div class='card-body'>
             <ul class='list-group list-group-flush'>
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>".$m['SubmissionStatusWorkInfo']."</div>
                         </div>
@@ -383,7 +383,7 @@ function show_submission_details($id) {
                     </div>
                 </li>
                 <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>" . $langGradebookGrade . "</div>
                     </div>
@@ -426,7 +426,7 @@ function show_submission_details($id) {
                 </div>
                 </li>
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>" . $m['gradecomments'] . "</div>
                         </div>
@@ -435,7 +435,7 @@ function show_submission_details($id) {
                     </div>
                 </li>
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>" . $m['sub_date'] . "</div>
                         </div>
@@ -459,7 +459,7 @@ function show_submission_details($id) {
                     $sub->assignment_id, $sub->uid, $sub->group_id)));
         $tool_content .= "
         <li class='list-group-item element'>
-            <div class='row row-cols-1 row-cols-2'>
+            <div class='row row-cols-1 row-cols-md-2 g-1'>
                 <div class='col-md-3 col-12'>
                     <div class='title-default'>$langOpenCoursesFiles</div>
                 </div>
@@ -478,7 +478,7 @@ function show_submission_details($id) {
         $filelink = MultimediaHelper::chooseMediaAhrefRaw($url, $url, $sub->file_name, $sub->file_name);
         $tool_content .= "
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langFileName</div>
                     </div>
@@ -491,7 +491,7 @@ function show_submission_details($id) {
         // online text
         $tool_content .= "
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langWorkOnlineText</div>
                     </div>
@@ -507,7 +507,7 @@ function show_submission_details($id) {
         $reportlink = $urlServer."modules/work/work_result_rpt.php?course=$course_code&amp;assignment=$sub->assignment_id&amp;submission=$sub->id";
         $tool_content .= "
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>" . $langAutoJudgeEnable . "</div>
                         </div>

@@ -95,7 +95,7 @@ if (isset($_GET['mid'])) {
                                     <div class='card-body'>
                                         <ul class='list-group list-group-flush'>
                                             <li class='list-group-item element'>
-                                                <div class='row row-cols-1 row-cols-2'>
+                                                <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                     <div class='col-md-3 col-12'>
                                                         <div class='title-default'>$langSubject</div>
                                                     </div>
@@ -107,7 +107,7 @@ if (isset($_GET['mid'])) {
                                         if ($msg->course_id != 0 && $course_id == 0) {
                                             $out .= "
                                             <li class='list-group-item element'>
-                                                <div class='row row-cols-1 row-cols-2'>
+                                                <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                     <div class='col-md-3 col-12'>
                                                         <div class='title-default'>$langCourse</div>
                                                     </div>
@@ -119,7 +119,7 @@ if (isset($_GET['mid'])) {
                                         }
                                         $out .= "
                                             <li class='list-group-item element'>
-                                                <div class='row row-cols-1 row-cols-2'>
+                                                <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                     <div class='col-md-3 col-12'>
                                                         <div class='title-default'>$langDate</div>
                                                     </div>
@@ -129,7 +129,7 @@ if (isset($_GET['mid'])) {
                                                 </div>
                                             </li>
                                             <li class='list-group-item element'>
-                                                <div class='row row-cols-1 row-cols-2'>
+                                                <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                     <div class='col-md-3 col-12'>
                                                         <div class='title-default'>$langSender</div>
                                                     </div>
@@ -139,7 +139,7 @@ if (isset($_GET['mid'])) {
                                                 </div>
                                             </li>
                                             <li class='list-group-item element'>
-                                                <div class='row row-cols-1 row-cols-2'>
+                                                <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                     <div class='col-md-3 col-12'>
                                                         <div class='title-default'>$langRecipients</div>
                                                     </div>

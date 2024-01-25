@@ -160,16 +160,16 @@ Class Blog {
         }
         $posts = $this->getPopularBlogPostsDB($num);
         $out = "<h6><strong>$langBlogPopular</strong></h6>
-                    <div class='list-group'>";
+                    <ul class='list-group list-group-flush'>";
         foreach ($posts as $post) {
             if (!$post->getVisible()) {
                 $style = 'not_visible';
             } else {
                 $style = '';
             }
-            $out .= "<a class='list-group-item $style' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
+            $out .= "<li class='list-group-item element'><a class=' $style' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a></li>";
         }
-        $out .= "</div>";
+        $out .= "</ul>";
         return $out;
     }
 

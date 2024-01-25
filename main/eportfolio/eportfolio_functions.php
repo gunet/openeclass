@@ -58,14 +58,14 @@ function render_eportfolio_fields_content($uid) {
         if (count($res) > 0) {
     
             $cat_return_string['panels'] .= '
-            <div class="col-lg-6 col-12">
+            <div class="col">
             <div class="card panelCard border-card-left-default px-3 py-2 h-100" id="IndexPortfolio'.$c->id.'">
                                                 <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">
                                                     <h3>'.$c->name.'</h3>
                                                 </div>
                                                  <div class="card-body">
                                                      
-                                                     <fieldset class="row p-2 fieldset-eportfolio">';
+                                                     <ul class="list-group list-group-flush">';
             if ($j == 0) {
                 $active = " class='active'";
             } else {
@@ -88,36 +88,41 @@ function render_eportfolio_fields_content($uid) {
                 if ($fdata_res AND (($f->datatype != EPF_MENU AND $fdata_res->data != '') OR ($f->datatype == EPF_MENU AND $fdata_res->data != 0))) {
                     $showCat = true;
                     $showAll = true;
-                    $cat_return_string['panels'] .= '<div class="profile-pers-info form-group">';
-                    $cat_return_string['panels'] .= '<div class="row p-2 profile-pers-info-row"><div class="col-lg-6 col-12 px-0"><span class="tag"><div class="form-label mb-0 mt-1">'.q($f->name).': </div></span></div>';
-                    $cat_return_string['panels'] .= '<div class="col-lg-6 col-12 px-0"><span>';
+                    $cat_return_string['panels'] .= '<li class="list-group-item element">';
+                    $cat_return_string['panels'] .= '<div class="row row-cols-1 row-cols-md-2 g-1">
+                                                        <div class="col-md-3 col-12">
+                                                            <div class="title-default">'.q($f->name).': </div>
+                                                        </div>';
+                    $cat_return_string['panels'] .= '   <div class="col-md-9 col-12 title-default-line-height">';
                     
                     switch ($f->datatype) {
                         case EPF_TEXTBOX:
-                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                            $cat_return_string['panels'] .= "".q($fdata_res->data)."";
                             break;
                         case EPF_TEXTAREA:
-                            $cat_return_string['panels'] .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
+                            $cat_return_string['panels'] .= "".standard_text_escape($fdata_res->data)."";
                             break;
                         case EPF_DATE:
-                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                            $cat_return_string['panels'] .= "".q($fdata_res->data)."";
                             break;
                         case EPF_MENU:
                             $options = unserialize($f->data);
                             $options = array_combine(range(1, count($options)), array_values($options));
                             $options[0] = "";
                             ksort($options);
-                            $cat_return_string['panels'] .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
+                            $cat_return_string['panels'] .= "".q($options[$fdata_res->data])."";
                             break;
                         case EPF_LINK:
-                            $cat_return_string['panels'] .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
+                            $cat_return_string['panels'] .= "<a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a>";
                             break;
                     }
-                    $cat_return_string['panels'] .= "</div></div></div>";
+                    $cat_return_string['panels'] .= "  </div>
+                                                     </div>
+                                                     </li>";
                 }
             }
     
-            $cat_return_string['panels'] .= '</fieldset>
+            $cat_return_string['panels'] .= '</ul>
                        </div>
                    </div>
                 </div>';

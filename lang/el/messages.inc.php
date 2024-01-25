@@ -5774,13 +5774,19 @@ $langBgColorConfigRightColumn = "Ρυθμίσεις Φόντου (<small>Δεξ�
 $langHelpCourseUI = "(<small>Αριστερή στήλη με τα εργαλεία του μαθήματος</small>)";
 $langNavHyperTexts = "Τυπογραφία";
 $langPHyperTextColor = "Χρώμα επικεφαλίδων - κειμένων";
+
 $langBgPanels = "Χρώμα φόντου";
 $langPanels = "Card";
+
 $langForms = "Φόρμες";
 $langBgForms = "Χρώμα φόντου";
 $langColorLabel = "Χρώμα Ετικέτας";
+
 $langTables = "Table";
 $langBgTables = "Χρώμα φόντου";
+$langBgBorderBottomHeadTables = "Χρώμα border στο κάτω μέρος της επικεφαλίδας (thead) του πίνακα";
+$langBgBorderBottomRowTables = "Χρώμα border στο κάτω μέρος των γραμμών (tr) του πίνακα";
+
 $langTabs = "Tabs";
 $langHoverTextColor = "Χρώμα Hovered Κειμένου";
 $langActiveTextColor = "Χρώμα Ενεργού Κειμένου";
@@ -5858,6 +5864,10 @@ $langBgColorHeaderAgenda = "Χρώμα φόντου επικεφαλίδας η�
 $langclColorHeaderAgenda = "Χρώμα κειμένων επικεφαλίδας ημερολογίου";
 $langclColorBodyAgenda = "Χρώμα κειμένων (ημέρες, ώρες, λεπτά)";
 $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, ώρες, λεπτά)";
+
+$langMPopover = "Menu Popover";
+$langMenuPopover = "Ρυθμίσεις Menu Popover";
+$langBgMenuPopover = "Χρώμα φόντου";
 
 /* * ***********************************************************
  * Validation

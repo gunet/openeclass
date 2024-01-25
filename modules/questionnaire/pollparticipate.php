@@ -244,8 +244,8 @@ function printPollForm() {
             $qtype = $theQuestion->qtype;
             if($qtype==QTYPE_LABEL) {
                 $tool_content .= "
-                <div class='col-12 mb-0 text-center'>
-                   <p style='border:solid 1px #E8EDF8;' class='text-wrap p-3 Borders bg-light questionnaire-panel Neutral-900-cl text-uppercase TextBold fs-6 mb-0'>" . standard_text_escape($theQuestion->question_text) . "</p>
+                <div class='col-12'>
+                   <div class='alert alert-info m-0 TextBold text-uppercase text-center'>" . standard_text_escape($theQuestion->question_text) . "</div>
                 </div>";
             } else {
                 $columnPanel = 'col';

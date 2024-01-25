@@ -197,7 +197,7 @@ $tool_content .=
         <div class='card-body'>
         <ul class='list-group list-group-flush'>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                 <div class='col-md-3 col-12'>
                     <div class='title-default'>$langTitle</div>
                 </div>
@@ -245,7 +245,7 @@ if ($module->contentType != CTLABEL_) { //
 
         $tool_content .= "
                     <li class='list-group-item element'>
-                        <div class='row row-cols-1 row-cols-2'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
                             <div class='col-md-3 col-12'>
                                 <div class='title-default'>$langTypeOfModule</div>
                             </div>
@@ -260,7 +260,7 @@ if ($module->contentType != CTLABEL_) { //
 
         $tool_content .= "
                     <li class='list-group-item element'>
-                        <div class='row row-cols-1 row-cols-2'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
                             <div class='col-md-3 col-12'>
                                 <div class='title-default'>$langTotalTimeSpent</div>
                             </div>
@@ -275,7 +275,7 @@ if ($module->contentType != CTLABEL_) { //
 
         $tool_content .= "
                     <li class='list-group-item element'>
-                        <div class='row row-cols-1 row-cols-2'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
                             <div class='col-md-3 col-12'>
                                 <div class='title-default'>$langLastSessionTimeSpent</div>
                             </div>
@@ -320,7 +320,7 @@ if ($module->contentType != CTLABEL_) { //
 
         $tool_content .= "
                     <li class='list-group-item element'>
-                        <div class='row row-cols-1 row-cols-2'>
+                        <div class='row row-cols-1 row-cols-md-2 g-1'>
                             <div class='col-md-3 col-12'>
                                 <div class='title-default'>$langLessonStatus</div>
                             </div>
@@ -342,7 +342,7 @@ if ($module->contentType != CTLABEL_) { //
 
     $tool_content .="
     <li class='list-group-item element'>
-        <div class='row row-cols-1 row-cols-2'>
+        <div class='row row-cols-1 row-cols-md-2 g-1'>
             <div class='col-md-3 col-12'>
                 <div class='title-default'>$langPreview</div>
             </div>

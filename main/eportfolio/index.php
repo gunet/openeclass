@@ -237,7 +237,7 @@ if ($userdata) {
     } else {
         $tool_content .= "
                             <div class='col-sm-12'>
-                            <div class='row row-cols-1 row-cols-md-2 g-4'>".$ret_str['panels']."</div>";
+                            <div class='row row-cols-1 g-4'>".$ret_str['panels']."</div>";
     }
 
 

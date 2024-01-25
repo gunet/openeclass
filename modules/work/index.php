@@ -4774,7 +4774,7 @@ function assignment_details($id, $row, $x =false) {
         <div class='card-body'>
         <ul class='list-group list-group-flush'>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langTitle</div>
                     </div>
@@ -4785,7 +4785,7 @@ function assignment_details($id, $row, $x =false) {
             </li>";
         if (!empty($row->description)) {
             $tool_content .= "<li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langDescription</div>
                     </div>
@@ -4797,7 +4797,7 @@ function assignment_details($id, $row, $x =false) {
         }
         if (!empty($row->comments)) {
             $tool_content .= "<li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$m[comments]</div>
                     </div>
@@ -4817,7 +4817,7 @@ function assignment_details($id, $row, $x =false) {
             $filelink = MultimediaHelper::chooseMediaAhrefRaw($fileUrl, $fileUrl, $row->file_name, $row->file_name);
             $tool_content .= "
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langWorkFile</div>
                     </div>
@@ -4829,7 +4829,7 @@ function assignment_details($id, $row, $x =false) {
         }
         $tool_content .= "
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$m[max_grade]</div>
                     </div>
@@ -4839,7 +4839,7 @@ function assignment_details($id, $row, $x =false) {
                 </div>
             </li>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default mb-1'>$langGradeType</div>
                     </div>
@@ -4873,7 +4873,7 @@ function assignment_details($id, $row, $x =false) {
                     }
         $tool_content .= "</li>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$m[start_date]</div>
                     </div>
@@ -4883,7 +4883,7 @@ function assignment_details($id, $row, $x =false) {
                 </div>
             </li>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langGroupWorkDeadline_of_Submission</div>
                     </div>
@@ -4893,7 +4893,7 @@ function assignment_details($id, $row, $x =false) {
                 </div>
             </li>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$m[group_or_user]</div>
                     </div>
@@ -4903,7 +4903,7 @@ function assignment_details($id, $row, $x =false) {
                 </div>
             </li>
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$m[WorkAssignTo]</div>
                     </div>
@@ -4917,7 +4917,7 @@ function assignment_details($id, $row, $x =false) {
         if ($tags_list) {
             $tool_content .= "
             <li class='list-group-item element'>
-                <div class='row row-cols-1 row-cols-2'>
+                <div class='row row-cols-1 row-cols-md-2 g-1'>
                     <div class='col-md-3 col-12'>
                         <div class='title-default'>$langTags</div>
                     </div>
@@ -4931,7 +4931,7 @@ function assignment_details($id, $row, $x =false) {
 		if ($grade_type == 3 && !$x){
 			$tool_content .= "
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langReviewStart</div>
                         </div>
@@ -4941,7 +4941,7 @@ function assignment_details($id, $row, $x =false) {
                     </div>
                 </li>
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langReviewEnd:</div>
                         </div>
@@ -5084,7 +5084,7 @@ function show_assignment($id) {
         $tool_content .= "<form action='{$urlServer}modules/work/index.php?course=$course_code' method='post' class='form-inline'>
             <input type='hidden' name='grades_id' value='$id' />
             <br>
-            <div class='margin-bottom-thin Success-100-bg p-2 rounded-2'>
+            <div class='alert alert-success'>
                 <strong>$langSubmissions:</strong>&nbsp; $count_of_assignments";
             // button for transferring student peer review grades to teacher grades
             if ($assign->grading_type == ASSIGNMENT_PEER_REVIEW_GRADE && ($count_of_ass > 0) && $is_editor) {

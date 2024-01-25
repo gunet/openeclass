@@ -1641,20 +1641,6 @@ function view($view_file, $view_data = array()) {
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////// BACKGROUND COLOR TO RADIO COMPONENT /////////////////////////
@@ -2640,6 +2626,10 @@ function view($view_file, $view_data = array()) {
                 .datetimepicker-minutes .table-condensed thead .switch{ 
                     background-color: $theme_options_styles[BgColorHeaderAgenda];
                 }
+
+                .datepicker table tr td span.focused {
+                    background: $theme_options_styles[BgColorHeaderAgenda] !important;
+                }
             ";
         }
 
@@ -2914,126 +2904,8 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
                 }
 
-
-
             ";
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -3063,6 +2935,246 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BACKGROUND COLOR TO TABLE COMPONENT //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgTables'])){
+            $styles_str .= "
+
+                #portfolio_lessons tbody tr{
+                    background-color: $theme_options_styles[BgTables];
+                }
+
+                .table-default tbody tr td, 
+                .announcements_table tbody tr td, 
+                table.dataTable tbody tr td, 
+                .table-default tbody tr th, 
+                .announcements_table tbody tr th, 
+                table.dataTable tbody tr th {
+                    background-color: $theme_options_styles[BgTables];
+                }
+
+                thead,
+                .title1 {
+                    background-color: $theme_options_styles[BgTables];
+                }
+
+                .row-course:hover td:first-child, .row-course:hover td:last-child{
+                    background-color: $theme_options_styles[BgTables];
+                }
+
+                table.dataTable.display tbody tr.odd, 
+                table.dataTable.display tbody tr.odd > .sorting_1, 
+                table.dataTable.order-column.stripe tbody tr.odd > .sorting_1, 
+                table.dataTable.display tbody tr.even > .sorting_1, 
+                table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
+                    background-color: $theme_options_styles[BgTables] !important;
+                }
+
+                table.dataTable tbody tr {
+                    background-color: $theme_options_styles[BgTables] !important;
+                }
+
+                .table-exercise-secondary {
+                    background-color: $theme_options_styles[BgTables] ;
+                }
+                .table-exercise td, .table-exercise th {
+                    background-color: transparent;
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BORDER BOTTOM COLOR TO TABLE'S THEAD /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgBorderBottomHeadTables'])){
+            $styles_str .= "
+                thead, tbody .list-header {
+                    border-bottom: solid 2px $theme_options_styles[BgBorderBottomHeadTables];
+                }
+                table.dataTable thead th, 
+                table.dataTable thead td {
+                    border-bottom: 2px solid $theme_options_styles[BgBorderBottomHeadTables];
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BORDER BOTTOM COLOR TO TABLE'S ROWS /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgBorderBottomRowTables'])){
+            $styles_str .= "
+                .table-default tbody tr{
+                    border-bottom: solid 1px $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
+                table.dataTable tbody td{
+                    border-bottom: solid 1px $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
+                table.dataTable.no-footer {
+                    border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
+                }  
+                .dataTables_wrapper.no-footer .dataTables_scrollBody {
+                    border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// BACKGROUND COLOR TO MENU-POPOVER COMPONENT /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgMenuPopover'])){
+            $styles_str .= "
+                .menu-popover{ 
+                    background: $theme_options_styles[BgMenuPopover];
+                    
+                }
+            ";
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////// LINKS COLOR OF PLATFORM ///////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -3084,28 +3196,7 @@ function view($view_file, $view_data = array()) {
                     color:  $theme_options_styles[linkColor] !important;
                 }
 
-                .menu-popover .list-group-item:hover{ 
-                    color: $theme_options_styles[linkColor];
-                }
-                
-                .menu-popover .list-group-item:hover .fa{ 
-                    color: $theme_options_styles[linkColor];
-                }
-
-                .menu-popover .list-group-item:hover .fa-xmark,
-                .menu-popover .list-group-item:hover .fa-trash{ 
-                    color:#C44601;
-                }
-
-                thead, tbody .list-header {
-                    border-bottom: solid 2px $theme_options_styles[linkColor];
-                }
-
-                .showCoursesBars.active, 
-                .showCoursesPics.active {
-                    color: $theme_options_styles[linkColor];
-                }
-
+                .Primary-600-cl,
                 .Primary-500-cl {
                     color: $theme_options_styles[linkColor];
                 }
@@ -3118,8 +3209,6 @@ function view($view_file, $view_data = array()) {
                 .menu-item.active2{
                     color:  $theme_options_styles[linkColor];
                 }
-
-                
                   
                 .portfolio-tools a{
                     color: $theme_options_styles[linkColor];
@@ -3130,11 +3219,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor] !important;
                 }
 
-                .menu-popover.submitAdminBtn, 
-                .btn-group-default .submitAdminBtn {
-                    color: $theme_options_styles[linkColor];
-                }
-
                 .nav-link-adminTools{
                     color: $theme_options_styles[linkColor];
                 }
@@ -3143,7 +3227,12 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor] !important;
                 }
                 
-                
+                .btn.showCoursesBars,
+                .btn.showCoursesPics{
+                    color: $theme_options_styles[linkColor];
+                }
+
+            
             ";
         }
 
@@ -3168,16 +3257,17 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkHoverColor];
                 }
 
-                .contextual-sidebar .list-group-item:hover {
-                    color: $theme_options_styles[linkHoverColor];
-                }
-
                 .portfolio-tools a:hover{
                     color: $theme_options_styles[linkHoverColor];
                 }
 
                 .nav-link-adminTools:hover{
                     color: $theme_options_styles[linkHoverColor];
+                }
+
+                .btn.showCoursesBars:hover,
+                .btn.showCoursesPics:hover{
+                    color: $theme_options_styles[linkColor];
                 }
 
             ";
@@ -3466,46 +3556,7 @@ function view($view_file, $view_data = array()) {
 
         
 
-        if(!empty($theme_options_styles['BgTables'])){
-            $styles_str .= "
-
-                #portfolio_lessons tbody tr,
-                rgb(33, 45, 55){
-                    background-color: $theme_options_styles[BgTables];
-                }
-
-                .table-default tbody tr td, 
-                .announcements_table tbody tr td, 
-                table.dataTable tbody tr td, 
-                .table-default tbody tr th, 
-                .announcements_table tbody tr th, 
-                table.dataTable tbody tr th {
-                    background-color: $theme_options_styles[BgTables];
-                }
-
-                thead,
-                .title1 {
-                    background-color: $theme_options_styles[BgTables];
-                }
-
-                .row-course:hover td:first-child, .row-course:hover td:last-child{
-                    background-color: $theme_options_styles[BgTables];
-                }
-
-                table.dataTable.display tbody tr.odd, 
-                table.dataTable.display tbody tr.odd > .sorting_1, 
-                table.dataTable.order-column.stripe tbody tr.odd > .sorting_1, 
-                table.dataTable.display tbody tr.even > .sorting_1, 
-                table.dataTable.order-column.stripe tbody tr.even > .sorting_1 {
-                    background-color: $theme_options_styles[BgTables] !important;
-                }
-
-                table.dataTable tbody tr {
-                    background-color: $theme_options_styles[BgTables] !important;
-                }
-
-            ";
-        }
+       
 
         
 

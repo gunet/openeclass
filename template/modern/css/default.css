@@ -366,7 +366,9 @@ a:hover,button:hover{
   line-height: 16px;
 }
 
-.title-default-line-height{
+.title-default-line-height,
+.title-default-line-height p,
+.title-default-line-height span{
   line-height: 16px;
 }
 
@@ -5213,10 +5215,12 @@ table.dataTable tbody tr th{
 
 .table-default tbody .warning td{
   background-color: #FFF4D1;
+  color: #2B3944;
 }
 
 .table-default tbody .danger td{
   background-color: #FDEFE9;
+  color: #2B3944;
 }
 
 
@@ -5280,7 +5284,6 @@ table.dataTable tbody tr th{
 
 /*************************************************** ASSIGNMENTS ******************************************************/
 
-.margin-bottom-thin.Success-100-bg strong,
 .sub_title1.Warning-100-bg{
   color: #2b3944;
   font-weight: 700;

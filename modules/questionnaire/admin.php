@@ -975,7 +975,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
           <div class='card-body'>
             <ul class='list-group list-group-flush'>
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langTitle</div>
                         </div>
@@ -986,7 +986,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langPollStart</div>
                         </div>
@@ -997,7 +997,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langPollEnd</div>
                         </div>
@@ -1008,7 +1008,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$m[WorkAssignTo]</div>
                         </div>
@@ -1019,7 +1019,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langResults</div>
                         </div>
@@ -1031,7 +1031,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langType</div>
                         </div>
@@ -1042,7 +1042,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2 margin-bottom-fat ".($poll->type == POLL_QUICK ? "" : "hide")."'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1 margin-bottom-fat ".($poll->type == POLL_QUICK ? "" : "hide")."'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langShowFront</div>
                         </div>
@@ -1053,7 +1053,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langDescription</div>
                         </div>
@@ -1064,7 +1064,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </li>
 
                 <li class='list-group-item element'>
-                    <div class='row row-cols-1 row-cols-2'>
+                    <div class='row row-cols-1 row-cols-md-2 g-1'>
                         <div class='col-md-3 col-12'>
                             <div class='title-default'>$langPollEndMessage</div>
                         </div>

@@ -2254,7 +2254,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                                 <div class='flex-grow-1'>
                                     <ul class='list-group list-group-flush'>
                                         <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-2'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
                                                     <div class='pn-info-title-sct title-default'>$langTitle</div>
                                                 </div>
@@ -2265,7 +2265,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                                         </li>
 
                                         <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-2'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
                                                     <div class='pn-info-title-sct title-default'>$langDescription</div>
                                                 </div>
@@ -2276,7 +2276,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                                         </li>
 
                                         <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-2'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
                                                     <div class='pn-info-title-sct title-default'>$langMessage</div>
                                                 </div>
@@ -2287,7 +2287,7 @@ function display_settings($element, $element_id, $unit_id = 0): void
                                         </li>
 
                                         <li class='list-group-item element'>
-                                            <div class='row row-cols-1 row-cols-2'>
+                                            <div class='row row-cols-1 row-cols-md-2 g-1'>
                                                 <div class='col-md-3 col-12'>
                                                     <div class='pn-info-title-sct title-default'>$langpublisher</div>
                                                 </div>
