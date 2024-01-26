@@ -521,7 +521,7 @@ $langMultiRegUserInfo = "<p>Ανεβάστε ένα αρχείο τύπου Exce
 <li><tt>phone</tt>: Τηλέφωνο</li>
 <li><tt>username</tt>: Όνομα χρήστη</li>
 <li><tt>password</tt>: Κωδικός χρήστη</li>
-</ul> 
+</ul>
 </p>
 Οι υπόλοιπες γραμμές πρέπει να περιέχουν τα αντίστοιχα στοιχεία των χρηστών που επιθυμείτε να δημιουργηθούν.
 </p
@@ -1974,8 +1974,8 @@ $langAikenFormatExample = "Υπόδειγμα Ερώτησης
 $langAikenFormatNote = "Συμπληρώστε τις ερωτήσεις σε μορφή Aiken. Σημειώστε ότι υποστηρίζονται <strong>μόνο</strong> οι ερωτήσεις πολλαπλής επιλογής με <strong>μοναδική απάντηση</strong>.";
 $langAikenFormatExplain = "
 <ul>
-<li>Η ερώτηση πρέπει να έχει έναν αριθμό ακολουθούμενο από μιά τελεία ή παρένθεση.</li> 
-<li>Αν θέλετε να καθορίσετε τη βαθμολογία της γράψτε τη έκφραση <em>(μονάδες: χχ)</em>. Μπορείτε να χρησιμοποιήσετε αντί για τη λέξη <em>μονάδες</em> μία από τις λέξεις: 
+<li>Η ερώτηση πρέπει να έχει έναν αριθμό ακολουθούμενο από μιά τελεία ή παρένθεση.</li>
+<li>Αν θέλετε να καθορίσετε τη βαθμολογία της γράψτε τη έκφραση <em>(μονάδες: χχ)</em>. Μπορείτε να χρησιμοποιήσετε αντί για τη λέξη <em>μονάδες</em> μία από τις λέξεις:
 <em>score</em>, <em>βαθμός</em>, <em>points</em>, <em>weight</em>. Διαφορετικά, σαν βαθμός θα θεωρηθούν οι 'Μονάδες' που δηλώνονται στο πεδίο της φόρμας πάνω από το κουμπί 'Έλεγχος'.</li>
 <li>Η απάντηση πρέπει να ξεκινάει με γράμμα ελληνικό ή λατινικό και μετά παρένθεση ή τελεία. Η σωστή απάντηση πρέπει να έχει μπροστά ένα αστεράκι.</li>
 <li>Οι κενές γραμμές αγνοούνται</li>
@@ -1983,7 +1983,7 @@ $langAikenFormatExplain = "
 <li>Όταν όλα είναι σωστά, πατάμε το κουμπί 'Εισαγωγή'.</li>
 </ul>
 ";
-$langQtiImportNote = "Μπορείτε να ανεβάσετε το αρχείο των ερωτήσεων σε μορφή <strong>QTI</strong>. 
+$langQtiImportNote = "Μπορείτε να ανεβάσετε το αρχείο των ερωτήσεων σε μορφή <strong>QTI</strong>.
 <br><br>Σημειώστε ότι υποστηρίζονται <strong>μόνο</strong>
 <ul>
 <li>οι ερωτήσεις πολλαπλής επιλογής με <strong>μοναδική απάντηση</strong>.</li>
@@ -3558,7 +3558,7 @@ $langGiveRightTutor = "Δικαίωμα υπεύθυνου ομάδας";
 $langGiveRightEditor = "Δικαίωμα $langsOfEditor";
 $langGiveRightAdmin = "Δικαίωμα $langsOfTeacher";
 $langGiveRightCourseReviewer = "Δικαίωμα $langsOfCourseReviewer";
-$langGiveRightReviewer = "Δικαίωμα δικαιώματος OpenCourses Reviewer";
+$langGiveRightReviewer = "Δικαίωμα OpenCourses Reviewer";
 $langRemoveRightTutor = "Αφαίρεση δικαιώματος υπεύθυνου ομάδας";
 $langRemoveRightEditor = "Αφαίρεση δικαιώματος $langsOfEditor";
 $langRemoveRightAdmin = "Αφαίρεση δικαιώματος $langsOfTeacher";
@@ -5904,7 +5904,7 @@ $langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το
 $langUnknownSetting = 'Άγνωστη ρύθμιση';
 $langAPITokenExists = "Έχει δημιουργηθεί ήδη ένα token. Αν θέλετε να δημιουργήσετε νέο, κάντε κλικ στο 'Δημιουργία νέου token'";
 $langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API.";
-$langAPITokenLongDesc = "Λεπτομέρειες σχετικά με τις υποστηριζόμενες κλήσεις του API μπορείτε να βρείτε 
+$langAPITokenLongDesc = "Λεπτομέρειες σχετικά με τις υποστηριζόμενες κλήσεις του API μπορείτε να βρείτε
 <a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>εδώ</a>.";
 $langCreateAPIToken = 'Δημιουργία νέου Token';
 $langAPITokenCreated = "Το token δημιουργήθηκε. Αντιγράψτε το έτσι ώστε να το χρησιμοποιήσετε στην εφαρμογή σας.";
