@@ -154,26 +154,85 @@
                     </div>
                     @endif
 
-                    @if ($previousLink or $nextLink)
+
+
+                    @if(count($units) > 0)
                         <div class='col-12'>
-                            <div class='card panelCard px-lg-0 py-lg-0 border-0'>
-                                <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders gap-3 flex-wrap">
-                                    @if ($previousLink)
-                                        <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
-                                            <span class='fa fa-arrow-left space-after-icon'></span>
-                                            {{ ellipsize($previousTitle, 30) }}
-                                        </a>
-                                    @endif
-                                    @if ($nextLink)
-                                        <a class='float-end' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
-                                            {{ ellipsize($nextTitle, 30) }}
-                                            <span class='fa fa-arrow-right space-before-icon'></span>
-                                        </a>
-                                    @endif
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                    <h3 class='mb-0'>{{ trans('langUnits')}}</h3>
+                                </div>
+                                <div class='card-body'>
+                                    <div id='UnitsControls' class='carousel slide' data-bs-ride='carousel'>
+
+                                        <div class='carousel-indicators h-auto mb-1'>
+                                            @php $counterIndicator = 0; @endphp
+                                            <div class='carousel-indicators h-auto mb-1'>
+                                                @foreach ($units as $cu)
+                                                    @if($counterIndicator == 0)
+                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' class='active' aria-current='true'></button>
+                                                    @else
+                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' aria-current='true'></button>
+                                                    @endif
+                                                    @php $counterIndicator++; @endphp
+                                                @endforeach
+                                            </div>
+                                        </div>
+
+                                        <div class='carousel-inner'>
+                                            @php $counterUnits = 0; @endphp
+                                            @foreach ($units as $cu)
+                                                @if($counterUnits == 0)
+                                                    <div class='carousel-item active'>
+                                                @else
+                                                    <div class='carousel-item'>
+                                                @endif
+                                                        <div id='unit_{{ $cu->id }}' class='col-12'>
+                                                            <div class='panel clearfix'>
+                                                                <div class='col-12'>
+                                                                    <div class='item-content'>
+                                                                        <div class='item-header clearfix'>
+                                                                            <div class='item-title h4'>
+                                                                                <a class='TextBold' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
+                                                                                    {{ $cu->title }}
+                                                                                </a>
+                                                                                <br>
+                                                                                <small>
+                                                                                    <span class='help-block'>
+                                                                                        {!! format_locale_date(strtotime($cu->start_week), 'short', false) !!}
+                                                                                    </span>
+                                                                                </small>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class='item-body'>
+                                                                            <div style='height:1px;' class='Neutral-300-bg mt-1 mb-3'></div>
+                                                                            <div class='col-sm-12 bg-transparent'>
+
+                                                                                <button class='carousel-prev-btn' type='button' data-bs-target='#UnitsControls' data-bs-slide='prev'>
+                                                                                    <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
+                                                                                </button>
+
+                                                                                <button class='carousel-next-btn float-end' type='button' data-bs-target='#UnitsControls' data-bs-slide='next'>
+                                                                                    <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
+                                                                                </button>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @php $counterUnits++; @endphp
+                                            @endforeach
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @endif
+
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
@@ -182,6 +241,26 @@
                                 @if($course_start_week or $course_finish_week)
                                     <div class='form-value'>
                                         <small>{{ $course_start_week }}&nbsp;{{ $course_finish_week }}</small>
+                                    </div>
+                                @endif
+                                @if ($previousLink or $nextLink)
+                                    <div class='col-12'>
+                                        <div class='card panelCard px-lg-0 py-lg-0 border-0'>
+                                            <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders gap-3 flex-wrap">
+                                                @if ($previousLink)
+                                                    <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
+                                                        <span class='fa fa-arrow-left space-after-icon'></span>
+                                                        {{ ellipsize($previousTitle, 30) }}
+                                                    </a>
+                                                @endif
+                                                @if ($nextLink)
+                                                    <a class='float-end' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
+                                                        {{ ellipsize($nextTitle, 30) }}
+                                                        <span class='fa fa-arrow-right space-before-icon'></span>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
                                 @endif
                             </div>
@@ -247,7 +326,7 @@
                                                     $act_indirect = $in_home->ID;
                                                 @endphp
 
-                                                <td><span class='col-sm-12 {{$class_vis}} text-secondary fs-6'>{!! $act_title !!}</span></td>
+                                                <td><span class='col-sm-12 {{$class_vis}} '>{!! $act_title !!}</span></td>
                                                 <td class='text-center'>
                                                     {!! action_button(array(
                                                         array('title' => trans('langAdd') . ' ' . trans('langInsertExercise'),
@@ -397,7 +476,7 @@
                                                     $act_indirect = $in_class->activity_id;
                                                 @endphp
 
-                                                <td><span class='col-sm-12  {!! $class_vis !!} text-secondary fs-6'>{!! $act_title !!}</span></td>
+                                                <td><span class='col-sm-12  {!! $class_vis !!} '>{!! $act_title !!}</span></td>
                                                 @if($is_editor)
                                                     <td class='text-center'>
                                                     {!! action_button(array(
@@ -557,7 +636,7 @@
                                                 @endphp
 
 
-                                                <td><span class='col-sm-12 {!! $class_vis !!} text-secondary fs-6'>{!! $act_title !!}</span></td>
+                                                <td><span class='col-sm-12 {!! $class_vis !!} '>{!! $act_title !!}</span></td>
                                                 <td class='text-center'> {!! action_button(array(
                                                     array('title' => trans('langAdd').' '.trans('langInsertExercise'),
                                                         'url' => $base_url . 'exercise&fc_type=2&act_name='. $act_title,
@@ -706,82 +785,7 @@
                     @endif
 
 
-                    @if(count($units) > 0)
-                        <div class='col-12 mt-4'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
-                                    <h3 class='mb-0'>{{ trans('langUnits')}}</h3>
-                                </div>
-                                <div class='card-body'>
-                                    <div id='UnitsControls' class='carousel slide' data-bs-ride='carousel'>
-
-                                        <div class='carousel-indicators h-auto mb-1'>
-                                            @php $counterIndicator = 0; @endphp
-                                            <div class='carousel-indicators h-auto mb-1'>
-                                                @foreach ($units as $cu)
-                                                    @if($counterIndicator == 0)
-                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' class='active' aria-current='true'></button>
-                                                    @else
-                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' aria-current='true'></button>
-                                                    @endif
-                                                    @php $counterIndicator++; @endphp
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                        <div class='carousel-inner'>
-                                            @php $counterUnits = 0; @endphp
-                                            @foreach ($units as $cu)
-                                                @if($counterUnits == 0)
-                                                    <div class='carousel-item active'>
-                                                @else
-                                                    <div class='carousel-item'>
-                                                @endif
-                                                        <div id='unit_{{ $cu->id }}' class='col-12'>
-                                                            <div class='panel clearfix'>
-                                                                <div class='col-12'>
-                                                                    <div class='item-content'>
-                                                                        <div class='item-header clearfix'>
-                                                                            <div class='item-title h4'>
-                                                                                <a class='TextBold' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
-                                                                                    {{ $cu->title }}
-                                                                                </a>
-                                                                                <br>
-                                                                                <small>
-                                                                                    <span class='help-block'>
-                                                                                        {!! format_locale_date(strtotime($cu->start_week), 'short', false) !!}
-                                                                                    </span>
-                                                                                </small>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class='item-body'>
-                                                                            <div style='height:1px;' class='Neutral-300-bg mt-1 mb-3'></div>
-                                                                            <div class='col-sm-12 bg-transparent'>
-
-                                                                                <button class='carousel-prev-btn' type='button' data-bs-target='#UnitsControls' data-bs-slide='prev'>
-                                                                                    <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
-                                                                                </button>
-
-                                                                                <button class='carousel-next-btn float-end' type='button' data-bs-target='#UnitsControls' data-bs-slide='next'>
-                                                                                    <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
-                                                                                </button>
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @php $counterUnits++; @endphp
-                                            @endforeach
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
+                    
 
                 </div>
             </div>

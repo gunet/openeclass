@@ -5877,6 +5877,11 @@ $langclBorderBottomMenuPopoverOption = "Χρώμα border στο κάτω μέρ
 $langBgHoveredMenuPopoverOption = "Χρώμα Hovered φόντου συνδέσμου επιλογών";
 $langclHoveredMenuPopoverOption = "Χρώμα Hovered κειμένου συνδέσμου επιλογών";
 
+$langInputTextEditor = "Text Editor";
+$langBgTextEditor = "Χρώμα φόντου";
+$langBgBorderTextEditor = "Χρώμα border";
+$langClTextEditor = "Χρώμα εργαλείων";
+
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

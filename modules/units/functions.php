@@ -381,7 +381,7 @@ function show_resources($unit_id)
                             </div>
             ";
             $html .= "<div class='table-responsive'>";
-            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources_1'>";
+            $html .= "<table class='table table-striped table-hover table-default'><tbody id='unitResources_1'>";
 
 
             foreach ($req_in_home as $info_home) {
@@ -405,7 +405,7 @@ function show_resources($unit_id)
             </div>
             ";
             $html .= "<div class='table-responsive'>";
-            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources_2'>";
+            $html .= "<table class='table table-striped table-hover table-default'><tbody id='unitResources_2'>";
             foreach ($req_in_class as $info_class) {
                 if (!is_null($info_class->comments)) {
                     $info_class->comments = standard_text_escape($info_class->comments);
@@ -425,7 +425,7 @@ function show_resources($unit_id)
             </div>
             ";
             $html .= "<div class='table-responsive'>";
-            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources_3'>";
+            $html .= "<table class='table table-striped table-hover table-default'><tbody id='unitResources_3'>";
             foreach ($req_after_class as $info_after_class) {
                 if (!is_null($info_after_class->comments)) {
                     $info_after_class->comments = standard_text_escape($info_after_class->comments);
@@ -528,7 +528,7 @@ function show_resources($unit_id)
             $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
             $html .= "<div class='table-responsive'>";
-            $html .= "<table class='table table-striped table-hover'><tbody id='unitResources'>";
+            $html .= "<table class='table table-striped table-hover table-default'><tbody id='unitResources'>";
             foreach ($req as $info) {
                 if (!is_null($info->comments)) {
                     $info->comments = standard_text_escape($info->comments);

@@ -29,12 +29,12 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
-                                                    'BgMenuPopover', 'BgMenuPopoverOption'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 
                                                     'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
-                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption'),
+                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables'),
@@ -46,7 +46,7 @@ $defaults = array(
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
-                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda'),
+                "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda', 'BgBorderTextEditor'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
@@ -442,6 +442,10 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles = unserialize($theme_options->styles);
     }
     initialize_settings();
+
+
+
+
     $activate_class = isset($preview_theme) ? '' : ' hidden';
     $activate_btn = "<a href='#' class='theme_enable btn submitAdminBtn $activate_class me-2 mb-2' id='theme_enable'>$langActivate</a>";
     $preview_class = ' hidden';
@@ -603,7 +607,6 @@ if (isset($_POST['optionsSave'])) {
     $dir_login_images = scandir($dirname2);
 
 
-
     @$tool_content .= "
     <div class='col-sm-12 mb-4'>
     <div class='form-wrapper form-edit theme-option-wrapper Borders'>
@@ -647,6 +650,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navRadios' aria-controls='navRadios' role='tab' data-bs-toggle='tab'>$langRadio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navCheckboxes' aria-controls='navCheckboxes' role='tab' data-bs-toggle='tab'>$langCheckbox</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navInputText' aria-controls='navInputText' role='tab' data-bs-toggle='tab'>$langInputText</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navTextEditor' aria-controls='navTextEditor' role='tab' data-bs-toggle='tab'>$langInputTextEditor</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navSelect' aria-controls='navSelect' role='tab' data-bs-toggle='tab'>$langSelectOption</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navModal' aria-controls='navModal' role='tab' data-bs-toggle='tab'>$langModals</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navTables' aria-controls='navTables' role='tab' data-bs-toggle='tab'>$langTables</a></li>
@@ -1302,6 +1306,114 @@ $tool_content .= "
             </div>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navTextEditor'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langTextEditor</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgTextEditor' class='control-label-notes mb-2 me-2'>$langBgTextEditor:</label>
+                        <input name='BgTextEditor' type='text' class='form-control colorpicker' id='BgTextEditor' value='$theme_options_styles[BgTextEditor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgBorderTextEditor' class='control-label-notes mb-2 me-2'>$langBgBorderTextEditor:</label>
+                        <input name='BgBorderTextEditor' type='text' class='form-control colorpicker' id='BgBorderTextEditor' value='$theme_options_styles[BgBorderTextEditor]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='ClTextEditor' class='control-label-notes mb-2 me-2'>$langClTextEditor:</label>
+                        <input name='ClTextEditor' type='text' class='form-control colorpicker' id='ClTextEditor' value='$theme_options_styles[ClTextEditor]'>
+                    </div>
+                </div>
+            </div>
 
 
 

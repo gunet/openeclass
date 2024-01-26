@@ -572,6 +572,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['ColorHyperTexts'])){
             $styles_str .= "
+                body,
                 h1,h2,h3,h4,h5,h6,
                 p,strong,.li-indented,li,small,
                 .Neutral-900-cl,
@@ -2376,6 +2377,11 @@ function view($view_file, $view_data = array()) {
         
         if(!empty($theme_options_styles['clLabelForms'])){
             $styles_str .= "
+                form label,
+                form .form-label{
+                    color:$theme_options_styles[clLabelForms];
+                }
+
                 .form-wrapper.form-edit .control-label-notes,
                 .form-group .control-label-notes{ 
                     color:$theme_options_styles[clLabelForms];
@@ -2994,7 +3000,9 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgBorderBottomHeadTables'])){
             $styles_str .= "
-                thead, tbody .list-header {
+                thead, 
+                tbody .list-header,
+                .border-bottom-table-head {
                     border-bottom: solid 2px $theme_options_styles[BgBorderBottomHeadTables];
                 }
                 table.dataTable thead th, 
@@ -3125,8 +3133,67 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////// BACKGROUND COLOR TO THE TEXT EDITOR /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
+        if(!empty($theme_options_styles['BgTextEditor'])){
+            $styles_str .= "
+                .mce-container, 
+                
+                .mce-widget, 
+                .mce-widget *, 
+                .mce-reset {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                }
+            ";
+        }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////// BORDER COLOR TO THE TEXT EDITOR //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgBorderTextEditor'])){
+            $styles_str .= "
+                .mce-panel {
+                    border: solid 1px $theme_options_styles[BgBorderTextEditor] !important;
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// TEXT COLOR TO THE TEXT EDITOR ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['ClTextEditor'])){
+            $styles_str .= "
+                .mce-toolbar .mce-btn i {
+                    color: $theme_options_styles[ClTextEditor] !important;
+                }
+                
+                .mce-menubtn span {
+                    color: $theme_options_styles[ClTextEditor] !important;
+                }
+                .mce-btn i {
+                    text-shadow: 0px 0px $theme_options_styles[ClTextEditor] !important;
+                }
+
+                .mce-container, .mce-container *, .mce-widget, .mce-widget *, .mce-reset {
+                    color: $theme_options_styles[ClTextEditor] !important;
+                }
+
+                .mce-caret {
+                    border-top: 4px solid $theme_options_styles[ClTextEditor] !important;
+                }
+                
+            ";
+        }
 
 
 

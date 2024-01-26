@@ -230,10 +230,6 @@ img {
   border-right: none;
   border-bottom: none;
 }
-
-.border-bottom-table-head{
-  border-bottom: solid 2px #0073E6;
-}
   
 .li-unstyled{
   list-style:none !important;
@@ -5201,7 +5197,7 @@ div[role="progressbar"]::before {
 
 .border-bottom-table-head {
   border-bottom: solid 2px #0073E6;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
 /*************************************************** PANELS ***********************************************************/

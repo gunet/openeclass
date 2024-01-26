@@ -84,7 +84,7 @@ foreach ($items as $item) {
     if ($resources) {
         $tool_content .= "
                     <div class='table-responsive'>
-                        <table class='table table-striped table-hover'>
+                        <table class='table table-striped table-hover table-default'>
                             <tbody>";
         foreach ($resources as $info) {
             $info->comments = standard_text_escape($info->comments);

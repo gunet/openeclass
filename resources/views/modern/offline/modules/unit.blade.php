@@ -67,7 +67,7 @@
 
                                 <div class='unit-resources'>
                                     <div class='table-responsive'>
-                                        <table class='table table-striped table-hover'>
+                                        <table class='table table-striped table-hover table-default'>
                                         <tbody>
                                             @foreach ($unit_resources as $r)
                                                 <tr>

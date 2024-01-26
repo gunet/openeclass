@@ -56,7 +56,7 @@
                             <fieldset>
                                 <div class='form-group'>
                                     <label class='col-sm-12 control-label-notes'>{{ trans('langNodeCode1') }}</label>
-                                    <div class='col-sm-6'>
+                                    <div class='col-sm-12'>
                                         <input class='form-control' placeholder="{{ trans('langNodeCode1') }}" type='text' name='code' value='{{ isset($mynode) ? $mynode->code : "" }}' maxlength="30">
                                         &nbsp;<i>{{ trans('langCodeFaculte2') }}</i>
                                     </div>

@@ -450,7 +450,7 @@ if (isset($_GET['modifyAnswers'])) {
                 <input type='hidden' name='nbrAnswers' value='$nbrAnswers'>
                 <fieldset>
                 <div class='table-responsive'>
-                <table class='table table-striped table-hover'>";
+                <table class='table table-striped table-hover table-default'>";
             $tool_content .= "<tr>
                           <th></th>
                           <th>$langCorrect</th>
