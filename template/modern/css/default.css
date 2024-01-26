@@ -164,15 +164,6 @@ iframe{
   }
 }
 
-
-
-
-  
-
-  
-textarea {
-  width:100%;
-}
   
 .panel-phpinfo{ 
   overflow-y: auto; 
@@ -1673,6 +1664,10 @@ input[type="radio"]:disabled{
 
 /**************************************************************/
 
+textarea {
+  width:100%;
+}
+
 input::placeholder , .form-select, .form-control{ 
   font-size: 14px; 
   background-color: #ffffff; 
@@ -1800,7 +1795,8 @@ label:has(input[type="checkbox"]:disabled){
 .successAdminBtn,
 .deleteAdminBtn,
 .warningAdminBtn,
-.helpAdminBtn{
+.helpAdminBtn,
+.secodandary-submit{
   transition: 0.3s ease;
 }
 

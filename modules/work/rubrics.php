@@ -64,11 +64,11 @@ $head_content .= "<script type='text/javascript'>
                     buttons: {
                         cancel: {
                             label: '" . js_escape($langCancel) . "',
-                            className: 'btn-default'
+                            className: 'btn cancelAdminBtn position-centern'
                         },
                         success: {
                             label: '" . js_escape($langCreateDuplicate) . "',
-                            className: 'btn-success',
+                            className: 'btn submitAdminBtn position-center',
                             callback: function (d) {
                                 $('#clone_form').attr('action', 'rubrics.php?course=$course_code&clone=true&rubric_id=' + rubric_id);
                                 $('#clone_form').submit();
@@ -322,7 +322,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                 <div id='critDiv$crit'>
                 <div class='form-group'>
                     <label for='title[$crit]' class='col-12 control-label-notes mb-1 mt-4'>$langRubricCrit:</label>
-                    <div class='col-8'>
+                    <div class='col-12'>
                         <input type='text' name='title[$crit]' class='form-control' value='".q($title['title_name'])."' required>                    
                         <label for='weight[$crit]' class='col-12 control-label-notes mb-1 mt-4'>$langGradebookWeight (%):</label>                    
                         <input name='weight[$crit]' class='form-control' id='weight' value='".q($title['crit_weight'])."' type='number'>
@@ -377,21 +377,21 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
     } else {
         if (isset($_GET['new_rubric']) or !is_rubric_used_in_grading($_GET['rubric_id'], $course_id)) {
             @$tool_content .= "<div id='critDiv0'>
-                <div class='form-group" . (Session::getError('title') ? " has-error" : "") . "'>
-                    <label for='title' class='col-sm-2 control-label'>$langRubricCrit:</label>
-                    <div class='col-sm-3'>
+                <div class='form-group mt-4" . (Session::getError('title') ? " has-error" : "") . "'>
+                    <label for='title' class='col-sm-12 control-label-notes'>$langRubricCrit:</label>
+                    <div class='col-sm-12'>
                       <input name='title[]' type='text' class='form-control' id='title' value='$title'>
                       " . (Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "") . "
                     </div>
-                    <label for='weight' class='col-sm-3 control-label'>$langGradebookWeight (%):</label>
-                    <div class='col-sm-2'>
+                    <label for='weight' class='col-sm-12 control-label-notes mt-4'>$langGradebookWeight (%):</label>
+                    <div class='col-sm-12'>
                         <input name='weight[]' class='form-control' id='weight' value='" . q($title['crit_weight']) . "' type='number'>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langScales:</label>
-                    <div class='col-sm-10'>
-                        <div class='table-responsive'>
+                <div class='form-group mt-4'>
+                    <label class='col-sm-12 control-label-notes'>$langScales:</label>
+                    <div class='col-sm-12'>
+                        <div class='table-responsive mt-0'>
                             <table class='table-default' id='scale_table0'>
                                 <thead>
                                     <tr>
@@ -442,7 +442,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
                     <div class='row form-group mt-4'>
                         <label for='rubric_options' class='col-12 control-label-notes mb-1'>$langConfig</label>
                         <div class='col-12'>
-                            <div class='table-responsive mt-1'>
+                            <div class='table-responsive mt-0'>
                                 <table class='table-default' id='rubric_opts'>
                                     <tr>
                                         <td colspan='2'>
@@ -592,7 +592,7 @@ if (isset($_GET['rubric_id']) or isset($_GET['new_rubric'])) { // edit rubric or
             </table>
         </div>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoGradeRubrics</div>";
+            $tool_content .= "<div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoGradeRubrics</span></div>";
         }
     }
 }

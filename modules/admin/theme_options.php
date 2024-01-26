@@ -639,7 +639,8 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsBody' aria-controls='navsettingsBody' role='tab' data-bs-toggle='tab'>$langNavBody</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsHeader' aria-controls='navsettingsHeader' role='tab' data-bs-toggle='tab'>$langNavSettingsHeader</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsFooter' aria-controls='navsettingsFooter' role='tab' data-bs-toggle='tab'>$langNavSettingsFooter</a></li>
-    <li role='presentation' class='nav-item'><a class='nav-link' href='#navlinksButtons' aria-controls='navlinksButtons' role='tab' data-bs-toggle='tab'>$langNavLinksButtons</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navLinks' aria-controls='navLinks' role='tab' data-bs-toggle='tab'>$langNavLinks</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navButtons' aria-controls='navButtons' role='tab' data-bs-toggle='tab'>$langNavButtons</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navHyperTexts' aria-controls='navHyperTexts' role='tab' data-bs-toggle='tab'>$langNavHyperTexts</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navPanels' aria-controls='navPanels' role='tab' data-bs-toggle='tab'>$langPanels</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navForms' aria-controls='navForms' role='tab' data-bs-toggle='tab'>$langForms</a></li>
@@ -1082,7 +1083,7 @@ $tool_content .= "
 
 
 
-            <div role='tabpanel' class='tab-pane fade' id='navlinksButtons'>
+            <div role='tabpanel' class='tab-pane fade' id='navButtons'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langButtonsColorCongiguration</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -1117,9 +1118,13 @@ $tool_content .= "
                         <label for='whiteButtonHoveredBgColor' class='control-label-notes mb-2 me-2'>$langHoverWhiteColorButton:</label>
                         <input name='whiteButtonHoveredBgColor' type='text' class='form-control colorpicker' id='whiteButtonHoveredBgColor' value='$theme_options_styles[whiteButtonHoveredBgColor]'>
                     </div>
+                </div>
+            </div>
 
-                    <hr>
 
+
+            <div role='tabpanel' class='tab-pane fade' id='navLinks'>
+                <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLinksCongiguration ($langEclass)</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='linkColor' class='control-label-notes mb-2 me-2'>$langLinkColor:</label>
@@ -1131,6 +1136,7 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
+
 
 
 
