@@ -344,7 +344,7 @@ function display_activities($element, $id, $unit_id = 0) {
     $tool_content .= display_settings($element, $id, $unit_id);
     $addActivityBtn = action_button(array(
         array('title' => $unit_id ? $langOfUnitCompletion : $langOfCourseCompletion,
-            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". $unit_id ? "unitcompletion" : "coursecompletion",
+            'url' => "$_SERVER[SCRIPT_NAME]?$link_id&amp;add=true&amp;act=". ($unit_id ? "unitcompletion" : "coursecompletion"),
             'icon' => 'fa fa-trophy',
             'show' => !$cc_enable),
         array('title' => $langOfAssignment,
