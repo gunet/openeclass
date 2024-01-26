@@ -383,15 +383,11 @@ function add_course_completion_to_certificate($element_id) {
                                    SELECT ?d, activity_type, module, resource, threshold, operator
                                    FROM badge_criterion WHERE badge = ?d", $element_id, $badge_id);
     // mapping badge_criterion_ids --->  cert_criterion_ids
-    $d1 = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d ORDER BY id", $element_id);
-    foreach ($d1 as $cert_criterion_ids) {
-        $cc_ids[] = $cert_criterion_ids->id;
-    }
-    $d2 = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d ORDER BY id", $badge_id);
-    foreach ($d2 as $badge_criterion_ids) {
-        $b_ids[] = $badge_criterion_ids->id;
-    }
-    $ids = array_combine($b_ids, $cc_ids);
+    $cert_criterion_ids = Database::get()->queryArray("SELECT id FROM certificate_criterion WHERE certificate = ?d ORDER BY id", $element_id);
+    $badge_criterion_ids = Database::get()->queryArray("SELECT id FROM badge_criterion WHERE badge = ?d ORDER BY id", $badge_id);
+    $ids = array_map(function ($item) {
+        return $item->id;
+    }, array_combine($badge_criterion_ids, $cert_criterion_ids));
 
     // get user progress (if exists)
     Database::get()->querySingle("INSERT INTO user_certificate (user, certificate, completed, completed_criteria, total_criteria, updated, assigned)
