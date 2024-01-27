@@ -562,7 +562,7 @@ function show_resources($post_id) {
     $req = Database::get()->queryArray("SELECT * FROM wall_post_resources WHERE post_id = ?d", $post_id);
     if (count($req) > 0) {
         $ret_str .= '<div class="table-responsive">';
-        $ret_str .= '<table class="table">';
+        $ret_str .= '<table class="table table-default">';
         $ret_str .= '<thead><tr><th colspan="2"><span style="font-size:12px">'.$langWallAttachedResources.'</span></th></tr></thead>';
         foreach ($req as $info) {
             $ret_str .= show_resource($info);
