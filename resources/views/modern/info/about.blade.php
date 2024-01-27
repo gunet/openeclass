@@ -24,7 +24,7 @@
                             <div class='col-md-6 col-12 mt-md-0 mt-5'>
                                 <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-address-card text-white'></i></div></div>
                                 <div class='col-12 d-flex justify-content-center mb-0'><strong class='form-label'>{{ trans('langCampusName') }}:</strong></div>
-                                <div class='col-12 d-flex justify-content-center form-value'>{{ $siteName }}</div>
+                                <div class='col-12 d-flex justify-content-center'>{{ $siteName }}</div>
                             </div>
                         </div>
                         <div class='row mt-5'>
@@ -36,7 +36,7 @@
                             <div class='col-md-6 col-12 mt-md-0 mt-5'>
                                 <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-address-card text-white'></i></div></div>
                                 <div class='col-12 d-flex justify-content-center mb-0'><strong class='form-label'>{{ trans('langSupportUser') }}:</strong></div>
-                                <div class='col-12 d-flex justify-content-center form-value'>{{ $admin_name }}</div>
+                                <div class='col-12 d-flex justify-content-center'>{{ $admin_name }}</div>
                             </div>
                         </div>
                     </div>

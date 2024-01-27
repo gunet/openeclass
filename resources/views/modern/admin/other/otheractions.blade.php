@@ -68,7 +68,7 @@
                                         <tr>
                                             <td colspan='2'>
                                                 <b>
-                                                    <span class='form-value'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -97,7 +97,7 @@
                                         <tr>
                                             <td colspan='2'>
                                                 <b>
-                                                    <span class='form-value'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -128,7 +128,7 @@
                                         <tr>
                                             <td class='text-end' colspan='2'>
                                                 <b>
-                                                    <span class='form-value'>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
+                                                    <span>{{ trans('langExist') }} @php print_r(count($loginDouble)); @endphp</span>
                                                 </b>
                                             </td>
                                         </tr>
@@ -193,12 +193,12 @@
                                 <table class='table-default'>
                                     <thead><tr class="list-header">
                                         <th>{{ trans('langPopularCourses') }}</th>
-                                        <th>{{ trans('langUsers') }}</th>
+                                        <th class='text-center'>{{ trans('langUsers') }}</th>
                                     </tr></thead>
                                     @foreach ($popularcourses as $data)
                                         <tr class = '{{ ($data->visible == COURSE_INACTIVE)? 'not_visible': ''  }}'>
                                             <td><a href='{{ $urlServer }}courses/{{ $data->code }}/'>{{ $data->title }}</a> <small>({{ $data->public_code }})</small> <br> <em>{{ $data->prof_names }}</em></td>
-                                            <td>{{ $data->num_of_users }}</td>
+                                            <td class='text-center'>{{ $data->num_of_users }}</td>
                                         </tr>
                                     @endforeach
                                 </table>

@@ -1,5 +1,5 @@
 
-<div class="dropdown h-40px" style='z-index:1;'>
+<div class="dropdown h-40px" style='z-index:2;'>
     <button class="btn submitAdminBtnDefault manageCourseBtn float-end d-flex justify-content-center align-items-center gap-2" type="button" id="dropdownManageCourse" data-bs-toggle="dropdown" data-bs-display='static' aria-expanded="false" aria-haspopup="true" aria-expanded="false">
             <i class="fa-solid fa-gear"></i>
             <span class='hidden-lg hidden-md hidden-xs TextBold'>{{trans('langModifyInfo')}}</span>

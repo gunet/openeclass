@@ -205,12 +205,12 @@ class CourseXMLElement extends SimpleXMLElement {
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mt-5'>
                 <div class='panel panel-admin'>
-                    <div class='panel-heading'>
+                    <div class='panel-heading rounded-0'>
                         
                         <div class='panel-title'>
                             
-                                <a class='metadataCourseCollapseBtn form-value collapsed' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
-                                    <span class='fas fa-arrow-down'></span>
+                                <a class='metadataCourseCollapseBtn collapsed' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                                    <i class='fa-solid fa-arrow-down'></i>
                                 </a>
                             
                         </div>
@@ -410,13 +410,13 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mb-3 mt-3'>
-                <div class='panel panel-admin'>
+                <div class='panel panel-admin rounded-0'>
                     <div class='panel-heading'>
                         
                         
                             <div class='panel-title'>
-                                <a class='metadataCourseCollapseBtn form-value' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
-                                   <span class='fa fa-arrow-down'></span>
+                                <a class='metadataCourseCollapseBtn' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                                   <i class='fa-solid fa-arrow-down'></i>
                                 </a>
                             </div>
                        

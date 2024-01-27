@@ -405,7 +405,7 @@ function generate_infinite_container_html($posts, $next_page) {
                       </div>
 
                       <div class="card-body bubble overflow-auto Borders">
-                        <p class="form-value">'.$datetime.'</p>
+                        <p class="TextBold">'.$datetime.'</p>
 
                         <div class="margin-top-thin" style="padding:20px">' .
                           $extvideo_block . '

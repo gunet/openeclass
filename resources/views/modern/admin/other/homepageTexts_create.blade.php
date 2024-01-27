@@ -228,7 +228,7 @@
                                                         
                                                         <h3>
                                                             {!! $text->title !!}
-                                                            @if($text->type == 2) <span class='badge Primary-200-bg form-value'>Testimonial</span> @endif
+                                                            @if($text->type == 2) <span class='Accent-200-cl'>(Testimonial)</span> @endif
                                                         </h3>
                                                         
                                                         <div class='d-flex gap-2'>

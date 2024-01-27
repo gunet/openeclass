@@ -615,30 +615,25 @@ input[type="submit"].warningAdminBtn:hover {
   filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
 }
 
-
-.contextual-menu-user{
-  border: solid 1px #CDD4E0;
-}
-.contextual-menu-user h4{
+.contextual-menu-user .username-text{
   color:#2B3944; 
 }
 
-@media(min-width:992px){
-  .contextual-menu-user::-webkit-scrollbar-track {
-    background-color: #ffffff;
-  }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-  }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-  }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border: 6px solid transparent;
-  }
+.contextual-menu::-webkit-scrollbar-track {
+  background-color: #ffffff;
 }
+.contextual-menu::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+}
+.contextual-menu::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border-radius: 20px;
+}
+.contextual-menu::-webkit-scrollbar-thumb {
+  background-color: #B4BED1;
+  border: 6px solid transparent;
+}
+
 
 
 .contextual-menu .list-group-item,
@@ -1113,6 +1108,10 @@ tr.danger{
   text-decoration: none;
   background-color: #867F72;
   color: #ffffff;
+}
+.showCoursesBars.active:hover,
+.showCoursesPics.active:hover{
+    color: #ffffff;
 }
 
 .portfolio-tools a{

@@ -239,7 +239,7 @@ if(isset($_POST['group_id'])){
         $maxStudents = $_POST[$maxStudent_group_id];
         if($maxStudents != 0 && $maxStudents < $memberCount){
             $maxStudents = $memberCount;
-            $message .= "<p class='TextBold fs-6 form-value mb-1'>$result->name</p><p>$langGroupMembersUnchanged</p>";
+            $message .= "<p class='TextBold fs-6 mb-0'>$result->name</p></br><p>$langGroupMembersUnchanged</p>";
         }
         $category_id = intval($_POST[$selectcategory_group_id]);
         Database::get()->query("UPDATE `group`

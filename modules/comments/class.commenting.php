@@ -102,7 +102,7 @@ Class Commenting {
                           </div>
                           <div class='modal-body px-0' id='comments-$this->rid'>";
         } else {
-            $comments_title = "<h5 id='comments_title' class='badge Primary-200-bg form-value'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h5>";
+            $comments_title = "<h3 id='comments_title'>$langComments (<span class='fs-5' id='commentsNum-$this->rid'>$commentsNum</span>)</h3>";
             $out = "<div class='commenting pt-3 pb-3 mt-3'>
                         $comments_title
                     <div class='commentArea' id='commentArea-$this->rid'>
@@ -162,7 +162,7 @@ Class Commenting {
                                     ".$post_actions."
                                 </div>
                                 <div class='card-body'>
-                                    <p class='form-value'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
+                                    <p class='TextBold'>".format_locale_date(strtotime($comment->getTime())).'</p>'.
                                     "<div class='margin-top-thin overflow-auto mt-3' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
                                 </div>
                             </div>

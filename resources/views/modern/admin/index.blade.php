@@ -160,7 +160,7 @@
                                             <div class='form-label'>{{ trans('langWebServerVersion') }}</div>
                                         </div>
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>{{ $_SERVER['SERVER_SOFTWARE'] }}</div>
+                                            <div>{{ $_SERVER['SERVER_SOFTWARE'] }}</div>
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
@@ -168,7 +168,7 @@
                                             <div class='form-label'>{{ trans('langPHPVersion') }}</div>
                                         </div>
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>{{ PHP_VERSION }}</div>
+                                            <div>{{ PHP_VERSION }}</div>
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
@@ -176,7 +176,7 @@
                                             <div class='form-label'>{{ trans('langMySqlVersion') }}</div>
                                         </div>
                                         <div class='col-6'>
-                                            <div class='form-value'>{{ $serverVersion }}</div>
+                                            <div>{{ $serverVersion }}</div>
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
@@ -184,7 +184,7 @@
                                             <div class='form-label'>{{ trans('langVersion') }}</div>
                                         </div>
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>{{ $siteName }} {{ ECLASS_VERSION }}</div>
+                                            <div>{{ $siteName }} {{ ECLASS_VERSION }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +199,7 @@
                                             <div class='form-label'>{{ trans('langIndexNumDocs') }}</div>
                                         </div>
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>{{ $numDocs }}</div>
+                                            <div>{{ $numDocs }}</div>
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
@@ -207,7 +207,7 @@
                                             <div class='form-label'>{{ trans('langIndexIsOptimized') }}</div>
                                         </div>
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>{{ $isOpt }}</div>
+                                            <div>{{ $isOpt }}</div>
                                         </div>
                                     </div>
                                     <div class='row p-2 margin-bottom-thin'>
@@ -249,7 +249,7 @@
                                         <div class='form-label'>{{ trans('langLastLesson') }}</div>
                                     </div>
                                     <div class='col-lg-6 col-12'>
-                                        <div class='form-value'>
+                                        <div>
                                             @if ($lastCreatedCourse)
                                                 <b>{{ $lastCreatedCourse->title }}</b>
                                                 ({{ $lastCreatedCourse->code }}, {{ $lastCreatedCourse->prof_names }})
@@ -264,7 +264,7 @@
                                         <div class='form-label'>{{ trans('langLastProf') }}</div>
                                     </div>
                                     <div class='col-lg-6 col-12'>
-                                        <div class='form-value'>
+                                        <div>
                                             <b>{{ $lastProfReg->givenname . " " . $lastProfReg->surname }}</b>
                                             ({{ $lastProfReg->username }}, {{ date("j/n/Y H:i", strtotime($lastProfReg->registered_at)) }})
                                         </div>
@@ -275,7 +275,7 @@
                                         <div class='form-label'>{{ trans('langLastStud') }}</div>
                                     </div>
                                     <div class='col-lg-6 col-12'>
-                                        <div class='form-value'>
+                                        <div>
                                             @if ($lastStudReg)
                                                 <b>{{ $lastStudReg->givenname . " " . $lastStudReg->surname }}</b>
                                                 ({{ $lastStudReg->username . ", " . date("j/n/Y H:i", strtotime($lastStudReg->registered_at)) }})
@@ -290,7 +290,7 @@
                                         <div class='form-label'>{{ trans('langAfterLastLoginInfo') }}</div>
                                     </div>
                                     <div class='col-lg-6 col-12'>
-                                        <div class='form-value'>
+                                        <div>
                                             {{ trans('langAfterLastLogin') }}
                                             <ul class='custom_list'>
                                                 <li>
@@ -319,13 +319,13 @@
                                     </div>
                                     @if ($ts)
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>
+                                            <div>
                                                 <a href='h5pconf.php'>{{ trans('langlastUpdated') }}: {{ $ts }}</a>
                                             </div>
                                         </div>
                                     @else
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>
+                                            <div>
                                                 <a style='color:red; font-weight: bold;' href='h5pconf.php'>{{ trans('langUpdateRequired') }} !</a>
                                             </div>
                                         </div>
@@ -338,7 +338,7 @@
                                             <div class='form-label'>{{ trans('langCronName') }}</div>
                                         </div>
                                         <div class='col-lg-6 col-12'>
-                                            <div class='form-value'>
+                                            <div>
                                                 {{ trans('langCronLastRun') }}
                                                 <div class='row p-2'>
                                                     @foreach ($cronParams as $cronParam)

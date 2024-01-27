@@ -2114,11 +2114,7 @@ input[type="submit"].warningAdminBtn:hover {
   list-style-type:none;
   border: solid 1px #CDD4E0;
   filter: drop-shadow(1px 2px 6px rgba(43,57,68,0.04));
-}
-@media(max-width:991px){
-  .action_bar .contextual-menu{
-    z-index: 1;
-  }
+  z-index: 2;
 }
 
 .contextual-menu-manage-course{
@@ -2140,24 +2136,24 @@ input[type="submit"].warningAdminBtn:hover {
 }
 
 @media(min-width:992px){
-  .contextual-menu-user{
+  .contextual-menu{
     overflow-y: auto;
-    max-height: calc(100vh - 80px - 80px);
+    max-height: calc(100vh - 80px - 80px + 16px);
   }
-  .contextual-menu-user::-webkit-scrollbar {
+  .contextual-menu::-webkit-scrollbar {
     width: 15px;
   }
-  .contextual-menu-user::-webkit-scrollbar-track {
+  .contextual-menu::-webkit-scrollbar-track {
     background-color: #ffffff;
   }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
+  .contextual-menu::-webkit-scrollbar-thumb {
     background-color: #B4BED1;
   }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
+  .contextual-menu::-webkit-scrollbar-thumb {
     background-color: #B4BED1;
     border-radius: 20px;
   }
-  .contextual-menu-user::-webkit-scrollbar-thumb {
+  .contextual-menu::-webkit-scrollbar-thumb {
     background-color: #B4BED1;
     border-radius: 20px;
     border: 6px solid transparent;
@@ -3987,7 +3983,7 @@ body .delThemeBtn{
 
 .user-details-collapse-less{ display: none; cursor: pointer; float:right; }
 
-.user-detals-photo { width: 80px; height: 80px; border-radius: 50%;}
+.user-detals-photo { width: 80px; height: 80px; border-radius: 50%; object-fit: cover;}
 @media(min-width:768px) and (max-width:991px){
   .user-detals-photo { max-width: 120px; }
 }
@@ -4183,6 +4179,9 @@ div[role="progressbar"]::before {
   padding: 0;
   background-color: transparent;
 }
+.carousel-indicators {
+  z-index: 1;
+}
 
 .descCoursePanel{ 
   border-radius: 35px 0px 35px 0px; 
@@ -4376,11 +4375,9 @@ div[role="progressbar"]::before {
 /**********************************************************************************************************************/
 
 .img-public-profile{ 
-  width: 200px !important;
-  height: 200px !important;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  width: 120px !important;
+  height: 120px !important;
+  object-fit: cover;
   margin: auto;
   display: block;
   border: solid 1px #e8e8e8;

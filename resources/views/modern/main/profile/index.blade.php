@@ -101,67 +101,111 @@
                             </div>
                             <div class="card-body">
 
-                                @if (!empty($userdata->email) and allow_access($userdata->email_public))
-                                    <div class='profile-pers-info-data mb-3'>
-                                        <p class='form-label'>{{ trans('langEmail') }}</p>
-                                        <p class='form-value'>{!! mailto($userdata->email) !!}</p>
-                                    </div>
-                                @endif
+                                <ul class='list-group list-group-flush'>
+                                    @if (!empty($userdata->email) and allow_access($userdata->email_public))
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                                <div class='col-lg-4 col-12'>
+                                                    <div class='title-default'>{{ trans('langEmail') }}</div>
+                                                </div>
+                                                <div class='col-lg-8 col-12 title-default-line-height'>
+                                                    {!! mailto($userdata->email) !!}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endif
 
 
-                                @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
-                                    <div class='profile-pers-info-data mb-3'>
-                                        <p class='form-label'>{{ trans('langPhone') }}</p>
-                                        <p class='form-value'>{{ q($userdata->phone) }}</p>
-                                    </div>
-                                @endif
+                                    @if (!empty($userdata->phone) and allow_access($userdata->phone_public))
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                                <div class='col-lg-4 col-12'>
+                                                    <div class='title-default'>{{ trans('langPhone') }}</div>
+                                                </div>
+                                                <div class='col-lg-8 col-12 title-default-line-height'>
+                                                    {{ q($userdata->phone) }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endif
 
-                                <div class='profile-pers-info-data mb-3'>
-                                    <p class='form-label'>{{ trans('langStatus') }}</p>
-                                    <p class='form-value'>{{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}</p>
-                                </div>
-
-
-                                @if (!empty($userdata->am) and allow_access($userdata->am_public))
-                                    <div class='profile-pers-info-data mb-3'>
-                                        <p class='form-label'>{{ trans('langAm') }}:</p>
-                                        <p class='form-value'>{{ q($userdata->am) }}</p>
-                                    </div>
-                                @endif
-
-
-                                @if($id == $uid && !empty($extAuthList))
-                                    <div class='profile-pers-info-data mb-3'>
-                                        @foreach ($extAuthList as $item)
-                                            <p class='form-label'>{{ trans('langProviderConnectWith') }}</p>
-                                            <p class='form-value'>
-                                                <img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''>
-                                                {{ $authFullName[$item->auth_id] }}
-                                            </p>
-                                        @endforeach
-                                    </div>
-                                @endif
+                                    <li class='list-group-item element'>
+                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                            <div class='col-lg-4 col-12'>
+                                                <div class='title-default'>{{ trans('langStatus') }}</div>
+                                            </div>
+                                            <div class='col-lg-8 col-12 title-default-line-height'>
+                                                {{ $userdata->status==1 ? trans('langTeacher'): trans('langStudent') }}
+                                            </div>
+                                        </div>
+                                    </li>
 
 
-                                <div class='profile-pers-info-data mb-3'>
-                                    <p class='form-label'>{{ trans('langFaculty') }}</p>
-                                    <p class='form-value'>
-                                        @foreach ($user->getDepartmentIds($id) as $i=>$dep)
-                                            {!! $tree->getFullPath($dep) !!}
-                                            @if($i+1 < count($user->getDepartmentIds($id)))
-                                                <br/>
-                                            @endif
-                                        @endforeach
-                                    </p>
-                                </div>
+                                    @if (!empty($userdata->am) and allow_access($userdata->am_public))
+                                        <li class='list-group-item element'>
+                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                                <div class='col-lg-4 col-12'>
+                                                    <div class='title-default'>{{ trans('langAm') }}</div>
+                                                </div>
+                                                <div class='col-lg-8 col-12 title-default-line-height'>
+                                                    {{ q($userdata->am) }}
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endif
 
 
-                                <div class='profile-pers-info-data mb-3'>
-                                    <p class='form-label'>{{ trans('langProfileMemberSince') }}</p>
-                                    <p class='form-value'>{{ format_locale_date(strtotime($userdata->registered_at)) }}</p>
-                                </div>
+                                    @if($id == $uid && !empty($extAuthList))
+                                        
+                                            @foreach ($extAuthList as $item)
+                                                <li class='list-group-item element'>
+                                                    <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                                        <div class='col-lg-4 col-12'>
+                                                            <div class='title-default'>{{ trans('langProviderConnectWith') }}</div>
+                                                        </div>
+                                                        <div class='col-lg-8 col-12 title-default-line-height'>
+                                                            <img src='{{ $themeimg }}/{{ $item->auth_name }}.png' alt=''>
+                                                            {{ $authFullName[$item->auth_id] }}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforeach
+                                        
+                                    @endif
 
-                                <div class='panel-group group-section' id='accordion' role='tablist' aria-multiselectable='true'>
+
+                                    <li class='list-group-item element'>
+                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                            <div class='col-lg-4 col-12'>
+                                                <div class='title-default'>{{ trans('langFaculty') }}</div>
+                                            </div>
+                                            <div class='col-lg-8 col-12 title-default-line-height'>
+                                                @foreach ($user->getDepartmentIds($id) as $i=>$dep)
+                                                    {!! $tree->getFullPath($dep) !!}
+                                                    @if($i+1 < count($user->getDepartmentIds($id)))
+                                                        <br/>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </li>
+                               
+
+
+                                    <li class='list-group-item element'>
+                                        <div class='row row-cols-1 row-cols-lg-2 g-1'>
+                                            <div class='col-lg-4 col-12'>
+                                                <div class='title-default'>{{ trans('langProfileMemberSince') }}</div>
+                                            </div>
+                                            <div class='col-lg-8 col-12 title-default-line-height'>
+                                                {{ format_locale_date(strtotime($userdata->registered_at)) }}
+                                            </div>
+                                        </div>
+                                    </li> 
+                                    
+                                </ul>
+
+                                <div class='panel-group group-section mt-4' id='accordion' role='tablist' aria-multiselectable='true'>
                                     <ul class="list-group list-group-flush">
                                         <li class="list-group-item px-0 mb-4 bg-transparent">
                                             <a class="accordion-btn d-flex justify-content-start align-items-start" role="button" data-bs-toggle="collapse" href="#AboutMe" aria-expanded="false">

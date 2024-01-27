@@ -702,11 +702,13 @@ function show_text($comments, $resource_id, $visibility, $act_name) {
     $class_vis = ($visibility == 0) ? ' class="not_visible"' : ' ';
     $comments = mathfilter($comments, 12, "../../courses/mathimg/");
     $content .= "
-        <tr$class_vis data-id='$resource_id'>
-        <td class='text-start'>$act_name</td>
-          <td colspan='2'>$comments</td>" .
-            actions('text', $resource_id, $visibility) .
-            "</tr>";
+        <tr$class_vis data-id='$resource_id'>";
+        if(!empty($act_name)){
+            $content .= " <td class='text-start'>$act_name</td> ";
+        }
+    $content .= "<td colspan='3'>$comments</td>" .
+                    actions('text', $resource_id, $visibility) .
+                "</tr>";
 
     return $content;
 }

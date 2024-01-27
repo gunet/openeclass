@@ -1970,10 +1970,10 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card h-100'>
+                                        <div class='card panelCard h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/jumbotron_images/$image' alt='image jumbotron'/>
                                             <div class='card-body'>
-                                                <p class='form-value'>$image</p>
+                                                <p>$image</p>
 
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseJumbotronImage mt-3' value='$langSelect'>
                                             </div>
@@ -2008,10 +2008,10 @@ $tool_content .= "
                             if(in_array($extension, $imgExtArr)){
                                 $tool_content .= "
                                     <div class='col'>
-                                        <div class='card h-100'>
+                                        <div class='card panelCard h-100'>
                                             <img style='height:200px;' class='card-img-top' src='{$urlAppend}template/modern/images/login_images/$image' alt='image login'/>
                                             <div class='card-body'>
-                                                <p class='form-value'>$image</p>
+                                                <p>$image</p>
 
                                                 <input id='$image' type='button' class='btn submitAdminBtnDefault w-100 chooseLoginImage mt-3' value='$langSelect'>
                                             </div>

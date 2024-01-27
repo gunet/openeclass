@@ -37,7 +37,7 @@ function getUserCourseInfo($uid) {
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
-           $langThisCourseDescriptionIsEmpty;
+           $langThisCourseDescriptionIsEmpty, $langMoreCourseInfo;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -61,6 +61,12 @@ function getUserCourseInfo($uid) {
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $visclass = '';
+
+            //Get syllabus for course
+            $syllabus = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
+                                    LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
+                                    WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $data->course_id);
+
             if ($data->visible == COURSE_INACTIVE) {
                 $visclass = "not_visible";
             }
@@ -106,26 +112,59 @@ function getUserCourseInfo($uid) {
                                             <p class='course-professor-code'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</p>
                                         </div>
                                         <div>
-                                            <button type='button' class='close border-0 bg-default mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                            <button type='button' class='close border-0 bg-transparent mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                         </div>
                                     </div>
                                     <div class='course-content mt-4'>
                                         <div class='col-12 d-flex justify-content-center align-items-start'>";
             if($data->course_image == NULL) {
-                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
+                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}template/modern/img/ph1.jpg' alt='{$data->course_image}' /></a>";
             } else {
-                $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
+                            $lesson_content .= "<img class='openCourseImg' src='{$urlServer}courses/{$data->code}/image/{$data->course_image}' alt='{$data->course_image}' /></a>";
             }
-            $lesson_content .= "</div>
-                <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
+                    $lesson_content .= "</div>
+                                        <div class='col-12 openCourseDes mt-3 Neutral-900-cl pb-3'> ";
             if(empty($data->description)) {
-                $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
+                            $lesson_content .= "<p class='text-center'>$langThisCourseDescriptionIsEmpty</p>";
             } else {
-                $lesson_content .= "{$data->description}";
+                            $lesson_content .= "{$data->description}";
             }
+                    $lesson_content .= "</div>";
+                if(count($syllabus) > 0){
+                     $lesson_content .= "<div class='col-12 mt-4'>
+                                            <div class='row m-auto'>
+                                                <div class='panel px-0'>
+                                                    <div class='panel-group group-section mt-2 px-0' id='accordionCourseSyllabus{$data->course_id}'>
+                                                        <ul class='list-group list-group-flush'>
+                                                            <li class='list-group-item px-0 mb-4 bg-transparent'>
+    
+                                                                <div class='d-flex justify-content-between border-bottom-default'>
+                                                                    <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#courseSyllabus{$data->course_id}' aria-expanded='true' aria-controls='courseSyllabus{$data->course_id}'>
+                                                                        <i class='fa-solid fa-chevron-down settings-icon'></i>
+                                                                        $langMoreCourseInfo
+                                                                    </a>
+                                                                </div>
+                                                                <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='courseSyllabus{$data->course_id}' data-bs-parent='#accordionCourseSyllabus{$data->course_id}'>";
+                                                                    foreach ($syllabus as $row){
+                                                $lesson_content .= "    <div class='col-12 mb-4'>
+                                                                            <p class='form-label text-start'>" .q($row->title) ."</p>
+                                                                            " . standard_text_escape($row->comments) . "
+                                                                        </div>";
+                                                                    }
+                                        $lesson_content .= "    </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>";
+                    }
+
+                $lesson_content .= "</div>";
+
+            
+
             $lesson_content .= "</div>
-                                    </div>
-                                </div>
                             </div>";
 
             $lesson_content .= icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $data->code . "&amp;fav=$fav_status");

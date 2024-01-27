@@ -386,51 +386,56 @@ function render_profile_fields_content($context) {
                                                             <div class='card-body'>";
 
                                                                 if (count($res) > 0) { //category start
-                                                                    
+                                                    $return_str .= "<ul class='list-group list-group-flush'> ";
                                                                     foreach ($res as $f) { //get user data for each field
 
                                                                         $return_str .= "
-                                                                        <div class='profile-pers-info-data mb-3'>";
+                                                                        <li class='list-group-item element'>
+                                                                            <div class='row row-cols-1 row-cols-lg-2 g-1'>";
 
                                                                             $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                                                                                     WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
 
                                                                             $return_str .= "
-                                                                                                <p class='form-label'>".$f->name."</p>
+                                                                                                <div class='col-lg-4 col-12'>
+                                                                                                    <div class='title-default'>".$f->name."</div>
+                                                                                                </div>
+
+                                                                                                <div class='col-lg-8 col-12 title-default-line-height'>
                                                                                             ";
 
                                                                                                 if (!$fdata_res || $fdata_res->data == '') {
-                                                                                                    $return_str .= " <p class='tag-value not_visible form-value'> $langProfileNotAvailable </p>";
+                                                                                                    $return_str .= " <p class='title-default-line-height'> $langProfileNotAvailable </p>";
                                                                                                 } else {
                                                                                                     $return_str .= "";
                                                                                                     switch ($f->datatype) {
                                                                                                         case CPF_TEXTBOX:
-                                                                                                            $return_str .= "<p class='tag-value form-value'>".q($fdata_res->data)."</p>";
+                                                                                                            $return_str .= "<p class='title-default-line-height'>".q($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_TEXTAREA:
-                                                                                                            $return_str .= "<p class='tag-value form-value'>".standard_text_escape($fdata_res->data)."</p>";
+                                                                                                            $return_str .= "<p class='title-default-line-height'>".standard_text_escape($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_DATE:
-                                                                                                            $return_str .= "<p class='tag-value form-value'>".q($fdata_res->data)."</p>";
+                                                                                                            $return_str .= "<p class='title-default-line-height'>".q($fdata_res->data)."</p>";
                                                                                                             break;
                                                                                                         case CPF_MENU:
                                                                                                             $options = unserialize($f->data);
                                                                                                             $options = array_combine(range(1, count($options)), array_values($options));
                                                                                                             $options[0] = "";
                                                                                                             ksort($options);
-                                                                                                            $return_str .= "<p class='tag-value form-value'>".q($options[$fdata_res->data])."</p>";
+                                                                                                            $return_str .= "<p class='title-default-line-height'>".q($options[$fdata_res->data])."</p>";
                                                                                                             break;
                                                                                                         case CPF_LINK:
-                                                                                                            $return_str .= "<p class='tag-value form-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></p>";
+                                                                                                            $return_str .= "<p class='title-default-line-height'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></p>";
                                                                                                             break;
                                                                                                     }
                                                                                                 }
-                                                                            $return_str .= "
-
-                                                                        </div>";
+                                                                            $return_str .= "    </div>
+                                                                            </div>
+                                                                        </li>";
 
                                                                     }
-                                                                            
+                                                    $return_str .= "</ul>";  
                                                                 }else{
                                                                     $return_str .= "<p class='card-text'>$langNoInfoAvailable</p>";
                                                                 }

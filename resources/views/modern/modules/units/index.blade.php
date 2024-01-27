@@ -239,7 +239,7 @@
                             <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
-                                    <div class='form-value'>
+                                    <div>
                                         <small>{{ $course_start_week }}&nbsp;{{ $course_finish_week }}</small>
                                     </div>
                                 @endif

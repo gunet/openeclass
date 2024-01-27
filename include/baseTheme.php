@@ -1423,6 +1423,14 @@ function view($view_file, $view_data = array()) {
                 .form-horizontal:has(.submitAdminBtn) .submitAdminBtn:hover {
                     color: $theme_options_styles[buttonTextColor];
                 }
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn .fa-solid::before,
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn .fa-solid::before,
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn .fa-regular::before,
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn .fa-regular::before,
+                .form-wrapper:has(.submitAdminBtn) .submitAdminBtn .fa-brands::before,
+                .form-horizontal:has(.submitAdminBtn) .submitAdminBtn .fa-brands::before{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
 
                 .pagination-glossary .page-item.active .page-link,
                 .pagination-glossary .page-item.active .page-link:hover {
@@ -1458,6 +1466,8 @@ function view($view_file, $view_data = array()) {
                 .submitAdminBtnDefault .fa-brands::before:hover{
                     color: $theme_options_styles[buttonTextColor] ;
                 }
+
+                
             ";
         }
 
@@ -3142,12 +3152,26 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['BgTextEditor'])){
             $styles_str .= "
                 .mce-container, 
-                
                 .mce-widget, 
                 .mce-widget *, 
                 .mce-reset {
                     background: $theme_options_styles[BgTextEditor] !important;
                 }
+                .mce-window .mce-container-body {
+                    background:  $theme_options_styles[BgTextEditor] !important;
+                  }
+                  .mce-tab.mce-active {
+                    background: $theme_options_styles[BgTextEditor] !important;
+                  }
+                  .mce-tab {
+                    background:  $theme_options_styles[BgTextEditor] !important;
+                  }
+                  .mce-textbox {
+                    background:  $theme_options_styles[BgTextEditor] !important;
+                  }
+                  i.mce-i-checkbox {
+                    background-image: -webkit-linear-gradient(top,#fff,$theme_options_styles[BgTextEditor]) !important;
+                  }
             ";
         }
 
@@ -3396,8 +3420,7 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['linkHoverColor'])){
             $styles_str .= "
-                a:hover, a:focus, 
-                #bgr-cheat-header .form-value:hover, #bgr-cheat-header .form-value:focus{
+                a:hover, a:focus{
                     color: $theme_options_styles[linkHoverColor];
                 } 
 
@@ -3419,7 +3442,7 @@ function view($view_file, $view_data = array()) {
 
                 .btn.showCoursesBars:hover,
                 .btn.showCoursesPics:hover{
-                    color: $theme_options_styles[linkColor];
+                    color: $theme_options_styles[linkHoverColor];
                 }
 
             ";
@@ -3944,7 +3967,7 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="form-value d-flex justify-content-end align-items-center lang-select" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="d-flex justify-content-end align-items-center lang-select" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>

@@ -327,7 +327,7 @@
                                               <input class='form-control' id='coursepassword' type='text' name='password' value='{{ q($password) }}' autocomplete='off'>
                                         </div>
                                         <div class='col-sm-12 text-center padding-thin'>
-                                            <span id='result' class='form-value'></span>
+                                            <span id='result'></span>
                                         </div>
                                     </div>
 

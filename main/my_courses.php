@@ -137,12 +137,12 @@ if(isset($_GET['term'])){
                             <div class='card-body pt-0'>
                                 <img src='{$courseImage}' class='card-img-top cardImgCourse rounded-0 $invisibleCourse' alt='course image'>
                                 <div class='card-text mt-3'>
-                                    <p class='d-inline form-value $invisibleCourse mb-0 vsmall-text'>$langCode:</p>
-                                    &nbsp;<p class='d-inline form-value $invisibleCourse vsmall-text'>".q($course->public_code)."</p>
+                                    <p class='d-inline $invisibleCourse mb-0 TextBold'>$langCode:</p>
+                                    &nbsp;<p class='d-inline $invisibleCourse'>".q($course->public_code)."</p>
                                 </div>
                                 <div class='card-text'>
-                                    <p class='d-inline form-value $invisibleCourse mb-0'>$langTeacher:</p>
-                                    &nbsp;<p class='d-inline form-value $invisibleCourse vsmall-text'>".q($course->professor)."</p>
+                                    <p class='d-inline $invisibleCourse mb-0 TextBold'>$langTeacher:</p>
+                                    &nbsp;<p class='d-inline $invisibleCourse'>".q($course->professor)."</p>
                                 </div>
 
                             </div>

@@ -157,7 +157,7 @@
                                                                         <p class='course-professor-code'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</p>
                                                                     </div>
                                                                     <div>
-                                                                        <button type='button' class="close border-0 bg-default mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                                                        <button type='button' class="close border-0 bg-transparent mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                                                     </div>
                                                                 </div>
 

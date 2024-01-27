@@ -2234,7 +2234,7 @@ tinymce.init({
         '{$urlAppend}template/modern/css/font-awesome-4.7.0/css/font-awesome.css',
         '{$urlAppend}template/modern/css/default.css',
     ],
-    content_style: 'body { margin: 8px; background: none !important; }',
+    content_style: 'body { margin: 8px; background: none !important; color: #6c757d;  }',
     extended_valid_elements: 'span[*]',
     noneditable_noneditable_class: 'fa',
     language: '$language',
