@@ -780,7 +780,7 @@ function display_gradebook($gradebook) {
     global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1,
            $langTitle, $langViewShow, $langScore, $langAdd, $langHere,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType,
-           $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete,
+           $langGradebookAutoGrade, $langGradebookNoAutoGrade, $langAttendanceActivity, $langDelete, $langConfirmDelete,
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langGradebookAddActivity, $langInsertWorkCap, $langExercise, $langLearnPath,
@@ -922,9 +922,9 @@ function display_gradebook($gradebook) {
                 }
 
                 if ($details->auto) {
-                    $tool_content .= "<small class='help-block'>($langGradebookInsAut)</small>";
+                    $tool_content .= " <small class='help-block'> ($langGradebookAutoGrade)</small>";
                 } else {
-                    $tool_content .= "<small class='help-block'>($langGradebookInsMan)</small>";
+                    $tool_content .= " <small class='help-block'> ($langGradebookNoAutoGrade)</small>";
                     }
                 $tool_content .= "</td>";
             } else {
@@ -1481,7 +1481,7 @@ function add_gradebook_other_activity($gradebook_id) {
 
     global $tool_content, $course_code, $visible,
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityWeight, $langBBB,
-           $langGradeVisible, $langComments, $langGradebookInsAut, $langAssignment,
+           $langGradeVisible, $langComments, $langGradebookAutoGrade, $langAssignment,
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs, $langExercise,
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, $langLearnPath,
            $langGradebookRemainingGrade, $langSave, $head_content, $language, $urlAppend;
@@ -1626,7 +1626,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             }
                             $tool_content .= "/>
                             <span class='checkmark'></span>
-                            $langGradebookInsAut
+                            $langGradebookAutoGrade
                             </label></div></div>";
                         }
                         $tool_content .= "<div class='form-group mt-5'>

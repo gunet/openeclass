@@ -90,7 +90,7 @@ if ($can_post) {
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success')
-                
+
                 ));
 }
 
@@ -237,7 +237,7 @@ if (($is_editor) and isset($_GET['topicdel'])) {
                                 AND course_id = ?d", $num_topics, $last_post, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
     //Session::Messages($langTopicDeleted, 'alert-success');
-    Session::flash('message',$langTopicDeleted); 
+    Session::flash('message',$langTopicDeleted);
     Session::flash('alert-class', 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 }
@@ -330,7 +330,11 @@ if (count($result) > 0) { // topics found
         $tool_content .= "<td>$replies</td>";
         $tool_content .= "<td>" . q(uid_to_name($myrow->topic_poster_id)) . "</td>";
         $tool_content .= "<td>$myrow->num_views</td>";
-        $tool_content .= "<td>" . q(uid_to_name($myrow->poster_id)) . "<br />".format_locale_date(strtotime($last_post_datetime), 'short')."</td>";
+        $tool_content .= "<td>";
+        if (!is_null($last_post_datetime)) {
+            $tool_content .= "<br>" . format_locale_date(strtotime($last_post_datetime), 'short');
+        }
+        $tool_content .= "</td>";
         $sql = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
 			WHERE user_id = ?d AND topic_id = ?d AND course_id = ?d", $uid, $myrow->id, $course_id);
         if ($sql) {

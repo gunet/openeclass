@@ -197,11 +197,13 @@
                                                                                     {{ $cu->title }}
                                                                                 </a>
                                                                                 <br>
-                                                                                <small>
-                                                                                    <span class='help-block'>
-                                                                                        {!! format_locale_date(strtotime($cu->start_week), 'short', false) !!}
-                                                                                    </span>
-                                                                                </small>
+                                                                                @if (!is_null($cu->start_week))
+                                                                                    <small>
+                                                                                        <span class='help-block'>
+                                                                                            {!! format_locale_date(strtotime($cu->start_week), 'short', false) !!}
+                                                                                        </span>
+                                                                                    </small>
+                                                                                @endif
                                                                             </div>
                                                                         </div>
                                                                         <div class='item-body'>
@@ -785,7 +787,7 @@
                     @endif
 
 
-                    
+
 
                 </div>
             </div>
