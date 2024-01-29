@@ -2591,7 +2591,9 @@ function student_view_progress() {
     $course_completion_id = is_course_completion_active(); // is course completion active?
     if (isset($course_completion_id) and $course_completion_id > 0) {
         $found = true;
-        $percentage = get_cert_percentage_completion('badge', $course_completion_id);
+
+        $percentage = get_cert_percentage_completion('badge', $course_completion_id) . "%";
+    	$percentage_num = intval($percentage);
 
         $tool_content .= "
                 <div class='col-12'>
@@ -2606,11 +2608,14 @@ function student_view_progress() {
                                         <i class='fa fa-trophy fa-4x' aria-hidden='true'></i>
                                     </div>
                                     <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>
-                                      
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&badge_id=$course_completion_id&u=$uid'>$langCourseCompletion</a>                                      
                                     </div>
                                     <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                      <div role='progressbar' aria-valuenow='$percentage' aria-valuemin='0' aria-valuemax='100' style='--value: $percentage; --size: 6rem;'></div>
+                                      <div role='progressbar' aria-valuenow='$percentage_num' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage_num;'>
+                                        <p class='progress-bar active from-control-static' role='progressbar'
+                                                aria-valuenow='$percentage_num'
+                                                aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage_num%;'>$percentage
+                                        </p>                                      
                                     </div>
                                 </div>
                             </div>
@@ -2658,8 +2663,12 @@ function student_view_progress() {
                                                          (SELECT icon FROM badge WHERE id = ?d)", $badge->id)->filename;
 
                 $faded = ($badge->completed != 1) ? "faded" : '';
-                // $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0) . "%";
-                $badge_percentage = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
+                if ($badge->total_criteria) {
+                    $badge_percentage_num = round($badge->completed_criteria / $badge->total_criteria * 100, 0);
+                } else {
+                    $badge_percentage_num = 0;
+                }
+                $badge_percentage = $badge_percentage_num . '%';
 
                 $tool_content .= "<div class='res-table-wrapper'>
                                     <div class='row res-table-row border-0 p-3'>
@@ -2683,7 +2692,10 @@ function student_view_progress() {
                                             <a href='index.php?course=$course_code&amp;badge_id=$badge->badge&amp;u=$badge->user'>" . ellipsize($badge->title, 40) . "</a>
                                         </div>
                                         <div class='col-md-4 col-12 d-flex justify-content-center align-items-center mt-md-0 mt-3'>
-                                            <div role='progressbar' aria-valuenow='" .$badge_percentage. "' aria-valuemin='0' aria-valuemax='100' style='--value: ".$badge_percentage."; --size: 6rem;'></div>
+                                            <p class='progress-bar active from-control-static' role='progressbar'
+                                                    aria-valuenow='$badge_percentage_num'
+                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $badge_percentage;'>$badge_percentage
+                                            </p>
                                         </div>
                                     </div>
                                 </div>";
@@ -2737,7 +2749,7 @@ function student_view_progress() {
                     $angle = round($certificate->completed_criteria / $certificate->total_criteria * 360, 2);
                     if(get_config('theme_options_id') > 0){
                         $tool_content .= "<div class='mt-3 ms-auto me-auto' role='progressbar' aria-valuenow='{$score}' aria-valuemin='0' aria-valuemax='100' style='--value: {$angle}; --size: 9rem;'></div>";
-                    }else{  
+                    }else{
                         $tool_content .= "<div id='progress_circle' class='mt-3 ms-auto me-auto' data-progress='$score' style='--progress: {$angle}deg;'>$score%</div>";
                     }
                     $tool_content .= "</div></a>";
@@ -2765,7 +2777,7 @@ function display_users_progress($element, $element_id) {
            $langAmShort, $langID, $langProgress, $langDetails, $langUsersCertResults, $langCompletedIn;
 
     if ($element == 'certificate') {
-        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria, assigned
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user.am, user, completed, completed_criteria, total_criteria, assigned
                                             FROM user_certificate
                                             JOIN course_user ON user_certificate.user=course_user.user_id
                                              JOIN user ON user.id = user_certificate.user
@@ -2784,7 +2796,7 @@ function display_users_progress($element, $element_id) {
                                                 AND certificate = ?d", $course_id,$element_id)->t;
         $param_name = 'certificate_id';
     } else {
-        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user, completed, completed_criteria, total_criteria, assigned
+        $sql = Database::get()->queryArray("SELECT user.surname, user.givenname, user.am, user, completed, completed_criteria, total_criteria, assigned
                                             FROM user_badge
                                             JOIN course_user ON user_badge.user=course_user.user_id
                                             JOIN user ON user.id = user_badge.user
@@ -2826,20 +2838,19 @@ function display_users_progress($element, $element_id) {
             } else {
                 $icon = icon('fa-hourglass-2');
             }
-            $user_am = uid_to_am($user_data->user);
+	    $user_am = q($user_data->am);
+	    $user_percentage = $user_data->total_criteria?
+		    (round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . '&'): '';
             $tool_content .= "<tr>
-                    <td class='count-col'>". $cnt++ . "</td>
-                    <td>" . display_user($user_data->user). "<br>";
-                    if ($user_am) {
-                        $tool_content .= "($langAmShort: $user_am)";
-                    }
-            $tool_content .= "</td>
-                    <td class='text-center'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%&nbsp;$icon&nbsp;"
+                <td>". $cnt++ . "</td>
+                <td>" . display_user($user_data->user) .
+                ($user_am? "<br>($langAmShort: $user_am)": '') . "
+                        </td>
+                        <td class='text-center'>$user_percentage&nbsp;$icon&nbsp;"
                           . "<small><a href='index.php?course=$course_code&amp;$param_name=$element_id&amp;u=$user_data->user'>$langDetails</a></small>";
             if (!is_null($user_data->assigned)) {
                 $tool_content .= "<div><small>$langCompletedIn: " . format_locale_date(strtotime($user_data->assigned), 'short') . "</small></div>";
             }
-
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</tbody></table></div></div>";
@@ -2917,10 +2928,18 @@ function display_user_progress_details($element, $element_id, $user_id) {
                                         <div class='pn-info-title-sct title-default'>$langTotalPercentCompleteness:</div></div>";
                                         $tool_content .= "<div class='col-md-6 col-12'>";
                                         if ($user_data) {
-                                            $tool_content .= "<div class='pn-info-text-sct text-md-end'>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</div>";
+                                            $percentage_value = $user_data->total_criteria?
+                                                round($user_data->completed_criteria / $user_data->total_criteria * 100, 0): 0;
                                         } else {
-                                            $tool_content .= "<div class='pn-info-text-sct text-md-end'>0%</div>";
+                                            $percentage_value = 0;
                                         }
+                                        $percentage = $percentage_value . '%';
+                                        $tool_content .= "<div class='pn-info-text-sct text-md-end'>
+                                            <p class='progress-bar active from-control-static' role='progressbar'
+                                                    aria-valuenow='$percentage_value'
+                                                    aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $percentage;'>$percentage
+                                            </p>
+                                        </div>";
                             $tool_content .="</div></div>";
                             $cert_desc = get_cert_desc($element, $element_id);
                             if (!empty($cert_desc)) {
@@ -3021,14 +3040,16 @@ function display_user_progress_details($element, $element_id, $user_id) {
                 <td>$op_content&nbsp;" . $threshold . "</td>
             </tr>";
 	}
-	$tool_content .= "   
+
+	$tool_content .= "
         </table>
         </div>
-
         <div class='col-12 mt-4 d-flex gap-2 flex-wrap justify-content-start align-items-center'>
             <div class='title-default'>$langTotalPercentCompleteness:</div>";
             if ($user_data) {
-                $tool_content .= "<div class='text-md-center'><em>" . round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%</em></div>";
+                $percentage = $user_data->total_criteria?
+                        (round($user_data->completed_criteria / $user_data->total_criteria * 100, 0) . "%"): '-';
+                $tool_content .= "<div class='text-md-center'><em>$percentage</em></div>";
             } else {
                 $tool_content .= "<div class='text-md-center'><em>0%</em></div>";
             }
