@@ -195,15 +195,15 @@ if (!$nbrReports) {
             }
 
             $options = action_button(array(
+                         array('title' => $langVisitReportedResource,
+                                 'url' => $visiturl,
+                                 'icon' => 'fa-external-link'),
                            array('title' => $langAbuseReportClose,
                                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
-                                 'icon' => 'fa-archive',
+                                 'icon' => 'fa-xmark',
                                  'confirm' => $langConfirmAbuseReportClose,
                                  'confirm_title' => $langAbuseReportClose,
                                  'confirm_button' => $langClose),
-                           array('title' => $langVisitReportedResource,
-                                 'url' => $visiturl,
-                                 'icon' => 'fa-external-link'),
                        ));
         } elseif ($report->rtype == 'forum_post') {
             $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $report->rid);

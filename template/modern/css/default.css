@@ -2314,11 +2314,29 @@ body .form-action-button-mydropdowns{
   display: flex;
   justify-content: start;
   align-items: start;
+  gap: 8px;
+  font-size: 14px;
+  min-height: 40px;
+  line-height: 16px;
+  padding: 11px 10px 10px 10px;
+  color: #2B3944;
+}
+.menu-popover .list-group-item-action{
+  padding: 0px !important;
+}
+.menu-popover .list-group-item-action .list-group-item{
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  border-radius: 0px;
+  border: 0px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
   gap: 5px;
   font-size: 14px;
-  min-height: 38px;
-  padding: 10px;
-  color: #2B3944;
+  height: auto;
+  line-height: 16px;
+  padding: 11px 10px 10px 10px;
 }
 .menu-popover .list-group-item:last-child{
   border-bottom: none !important;

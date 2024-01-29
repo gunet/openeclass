@@ -3845,7 +3845,7 @@ function action_button($options, $secondary_menu_options = array(), $fc=false) {
         if (isset($option['confirm'])) {
             $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $form_begin = "<form class='form-action-button-popover list-group-item p-0 mb-0' method=post action='$option[url]'>";
+            $form_begin = "<form class='form-action-button-popover list-group-item-action list-group-item' method=post action='$option[url]'>";
             $form_end = '</form>';
             if ($level == 'primary-label' or $level == 'primary') {
                 $primary_form_begin = $form_begin;

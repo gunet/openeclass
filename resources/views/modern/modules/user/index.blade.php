@@ -113,7 +113,7 @@
             ],
             sPaginationType: 'full_numbers',
             aoColumnDefs: [
-                { sClass: 'option-btn-cell text-center', aTargets: [ -1 ] },
+                { sClass: 'option-btn-cell text-end', aTargets: [ -1 ] },
                 { bSortable: true, aTargets: [ 0 ] },
                 { bSortable: false, aTargets: [ 1 ] },
                 { sClass:'text-center', bSortable: false, aTargets: [ 2 ] },
@@ -308,11 +308,11 @@
                             <table id='users_table_{{ $course_code }}' class='table-default'>
                                 <thead>
                                     <tr class="list-header">
-                                        <th>{{ trans('langSurnameName') }}</th>
-                                        <th>{{ trans('langRole') }}</th>
-                                        <th>{{ trans('langGroup') }}</th>
-                                        <th width='80'>{{ trans('langRegistrationDate') }}</th>
-                                        <th class='text-center'>{!! icon('fa-cogs') !!}</th>
+                                        <th style='width:40%;'>{{ trans('langSurnameName') }}</th>
+                                        <th style='width:20%;'>{{ trans('langRole') }}</th>
+                                        <th style='width:20%;'>{{ trans('langGroup') }}</th>
+                                        <th style='width:10%;'>{{ trans('langRegistrationDate') }}</th>
+                                        <th class='text-end' style='width:10%;'>{!! icon('fa-cogs') !!}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

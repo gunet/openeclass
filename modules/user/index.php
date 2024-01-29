@@ -259,7 +259,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             '0' => $nameColumn,
             '1' => $roleColumn,
             '2' => user_groups($course_id, $myrow->id),
-            '3' => "<div class='text-center text-muted'>$date_field</div>",
+            '3' => "<div class='text-start text-muted'>$date_field</div>",
             '4' => $user_role_controls,
             '5' => $inactive_user
         );
