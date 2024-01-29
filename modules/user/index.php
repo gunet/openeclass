@@ -136,7 +136,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['aaData'] = array();
     foreach ($result as $myrow) {
         $full_name = q(sanitize_utf8($myrow->givenname . " " . $myrow->surname));
-        $am = q(sanitize_utf8(trim($myrow->am)));
+        $am = trim(q(sanitize_utf8($myrow->am)));
         $am_message = ($am !== '') ? "<div class='right'>$am</div>": '';
         $stats_icon = icon('fa-bar-chart', $langUserStats, "../usage/userduration.php?course=$course_code&amp;u=$myrow->id");
         // create date field with unregister button

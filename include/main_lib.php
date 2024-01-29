@@ -1194,7 +1194,11 @@ function invalid_utf8($s) {
 
 // Remove invalid bytes from UTF-8 string
 function sanitize_utf8($s) {
-    return mb_convert_encoding($s, 'UTF-8', 'UTF-8');
+    if (is_null($s)) {
+        return '';
+    } else {
+        return mb_convert_encoding($s, 'UTF-8', 'UTF-8');
+    }
 }
 
 function utf8_to_cp1253($s) {
