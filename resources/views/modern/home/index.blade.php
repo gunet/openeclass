@@ -94,6 +94,7 @@
                                     <div class='card-header bg-transparent border-0'>
                                         <h2>{{ trans('langUserLogin') }}</h2>
                                     </div>
+                                    @if($auth_enabled_method == 1)
                                     <div class='card-body'>
                                         <form class='mt-0' action="{{ $urlAppend }}" method="post">
                                             <div>
@@ -113,6 +114,16 @@
                                             <a class="vsmall-text TextBold Primary-500-cl" href="{{$urlAppend}}main/login_form.php">{{ trans('langMoreLogin') }}</a>
                                         </div>
                                     </div>
+                                    @else
+                                        <div class='card-body d-flex justify-content-center align-items-center'>
+                                            <a class="more-enabled-login-methods d-flex justify-content-center align-items-center text-decoration-none" href="{{$urlAppend}}main/login_form.php">
+                                                <div class='d-flex flex-column align-items-center gap-4'>
+                                                    <i class="fa-solid fa-right-to-bracket fa-xl"></i>
+                                                    {{ trans('langMoreLogin') }}
+                                                </div>
+                                            </a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             @if(!get_config('show_only_loginScreen'))
@@ -349,7 +360,7 @@
                     @if(get_config('opencourses_enable'))
                         <div class='col-12 mb-5 order-{{ $open_courses_priority }}'>
                             <div class='row row-cols-1'>
-                                <div class='col-md-6 col-12'>
+                                <div class='col-12'>
                                     <div class='row row-cols-1'>
 
                                         @if ($openCoursesExtraHTML)

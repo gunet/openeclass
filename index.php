@@ -245,6 +245,9 @@ if (!$upgrade_begin and $uid) {
     $data['texts'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,1);
     $data['testimonials'] = Database::get()->queryArray("SELECT * FROM `homepageTexts` WHERE `lang` = ?s AND `type` = ?d ORDER BY `order` ASC",$language,2);
 
+    $active_method = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name = ?s",'eclass');
+    $data['auth_enabled_method'] = $active_method->auth_default;
+
     //priotities
     $priority_order = 0;
     $priorities = Database::get()->queryArray("SELECT `title` FROM `homepagePriorities` ORDER BY `order` ASC");

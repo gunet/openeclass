@@ -3959,29 +3959,33 @@ function setOpenCoursesExtraHTML() {
             <div class='col-12 ms-auto me-auto banner_openCourses'>
                 <div class='card border-card h-100'>
                     <div class='card-body'>
-                        
+                        <div class='row row-cols-1 row-cols-md-2 g-4'>
 
-                            <div class='d-flex justify-content-center align-items-center w-100'>
-                                <img style='max-height:100px;' class='openCoursesImg' src='$themeimg/banner-open-courses.png' alt='".q($langListOpenCourses)."'>
+                            <div class='col d-flex justify-content-center align-items-center'>
+                                <img style='width:650px;' class='openCoursesImg' src='$themeimg/openCoursesImg.png' alt='".q($langListOpenCourses)."'>
                             </div>
 
-                            <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                <a class='d-flex gap-1 align-items-center text-dark' target='_blank' href='$openFacultiesUrl'>
-                                    <span class='fa-solid fa-book-open fa-xl'></span>
-                                    <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
-                                    <span class='text-uppercase TextBold Primary-500-cl fs-5'>
-                                        " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
-                                    </span>
-                                </a>
-                            </div>
+                            <div class='col d-flex justify-content-center align-items-center'>
+                                <div>
+                                    <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
+                                        <a class='d-flex gap-1 align-items-center text-dark' target='_blank' href='$openFacultiesUrl'>
+                                            <span class='fa-solid fa-book-open fa-xl'></span>
+                                            <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
+                                            <span class='text-uppercase TextBold Primary-500-cl fs-5'>
+                                                " .(($openCoursesNum == 1)? $langCourses: $langCourse) . "
+                                            </span>
+                                        </a>
+                                    </div>
 
-                            <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
-                                    $langNationalOpenCourses
-                                    <span class='fa-solid fa-chevron-right ms-2'></span>
-                                </a>
+                                    <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
+                                        <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank'>
+                                            $langNationalOpenCourses
+                                            <span class='fa-solid fa-chevron-right ms-2'></span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        
+                        </div>
                     </div>
                 </div>
             </div>
