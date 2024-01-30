@@ -33,7 +33,7 @@
 
                                     <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;-&nbsp;{!! $c->prof_names !!}</p>
 
-                                    
+
                                     @if(empty($c->description))
                                         <ul class='list-group list-group-flush'>
                                             <li class='list-group-item list-group-item-action'>{{ trans('langCourseProgram')}}</li>
@@ -69,13 +69,13 @@
                                     <div class='d-flex justify-content-between border-bottom-default'>
                                         <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescriptionc' aria-expanded='true' aria-controls='collapseDescriptionc'>
                                             <i class='fa-solid fa-chevron-down settings-icon'></i>
-                                            {{ trans('langMoreCourseInfo') }}
+                                            {{ trans('langSyllabus') }}
                                         </a>
                                     </div>
                                     <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='collapseDescriptionc' data-bs-parent='#accordionDesC'>
                                         @if(count($course_descriptions) == 0)
                                             <div class='col-12 mb-4'>
-                                                <p>{{ trans('langNoInfoAvailable')}}</p>
+                                                <p>{{ trans('langNoSyllabus')}}</p>
                                             </div>
                                         @else
                                             @foreach ($course_descriptions as $row)

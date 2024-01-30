@@ -429,14 +429,17 @@ $tool_content .= action_bar(array(
     array('title' => $langRandomQuestionsWithCriteria,
           'class' => 'randomWithCriteria',
           'url' => "#",
+          'level' => 'primary-label',
           'icon' => 'fa-random',
           'show' => !$randomQuestions),
     array('title' => $langWithoutCriteria,
           'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
+          'level' => 'primary-label',
           'icon' => 'fa-bank'),
     array('title' => $langWithCriteria,
-          'class' => 'questionSelection',
           'url' => "#",
+          'class' => 'questionSelection',
+          'level' => 'primary-label',
           'icon' => 'fa-bank')),
     false);
 

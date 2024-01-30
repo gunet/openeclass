@@ -367,7 +367,7 @@
                                                 <div class='d-flex justify-content-between border-bottom-default'>
                                                     <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseDescription' aria-expanded='false' aria-controls='collapseDescription'>
                                                         <i class='fa-solid fa-chevron-down settings-icon'></i>
-                                                        {{ trans('langCourseDescription') }}
+                                                        {{ trans('langSyllabus') }}
                                                     </a>
                                                     @if($is_editor)
                                                         {!! $edit_course_desc_link !!}
@@ -376,7 +376,7 @@
                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseDescription' data-bs-parent='#accordionDes'>
                                                     @if(count($course_descriptions) == 0)
                                                         <div class='col-12 mb-4'>
-                                                            <p>{{ trans('langNoInfoAvailable')}}</p>
+                                                            <p>{{ trans('langNoSyllabus')}}</p>
                                                         </div>
                                                     @else
                                                         @foreach ($course_descriptions as $row)
@@ -536,7 +536,7 @@
                     </div>
 
 
-                    
+
                     <div>
                         <div class="panel panel-admin panel-admin-calendar p-0 border-0 sticky-column-course-home">
                             <h3 class='mt-1 mb-4'>{{ trans('langAgenda') }}</h3>

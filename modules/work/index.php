@@ -5283,7 +5283,7 @@ function show_assignment($id) {
             }
             $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
             $am_field = '';
-            if (trim($stud_am) != '') {
+            if (!is_null($stud_am)) {
                 $am_field = "<h6>$langAmShort: " . q($stud_am) . "</h6>";
             }
             $tool_content .= "<tr>

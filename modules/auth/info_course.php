@@ -26,7 +26,7 @@ $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 
 $data['courseId'] = $courseId = course_code_to_id($_GET['c']);
 
-$data['infoCourse'] = $infoCourse = Database::get()->queryArray("SELECT *FROM course WHERE id = ?d",$courseId);
+$data['infoCourse'] = $infoCourse = Database::get()->queryArray("SELECT * FROM course WHERE id = ?d",$courseId);
 
 $data['course_descriptions'] = $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type, cdt.icon FROM course_description cd
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)

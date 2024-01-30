@@ -1099,6 +1099,7 @@ $langConfEnableMailNotification = "Θέλετε να ενεργοποιήσετ�
 $langConfDisableMailNotification = "Θέλετε να απενεργοποιήσετε τη λήψη ειδοποιήσεων του $langsOfCourse μέσω email;";
 $langOfNotifications = "ειδοποιήσεων";
 $langSyllabus = "Περίγραμμα";
+$langNoSyllabus = "Δεν υπάρχει περίγραμμα";
 
 
 /* * *******************************************
