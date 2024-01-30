@@ -18,11 +18,12 @@ $userValue = isset($_GET['user'])? (" value='" . q($_GET['user']) . "' readonly"
 $authLink = array();
 $loginFormEnabled = false;
 $hybridLinkId = null;
-$q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
+$q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title, auth_instructions
     FROM auth WHERE auth_default > 0
     ORDER BY auth_default DESC, auth_id");
 foreach ($q as $l) {
     $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": getSerializedMessage($l->auth_title);
+    $authInstructions = empty($l->auth_instructions) ? "" : getSerializedMessage($l->auth_instructions);
     if (in_array($l->auth_name, $extAuthMethods)) {
         $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');
         if (isset($_GET['next'])) {
@@ -31,7 +32,7 @@ foreach ($q as $l) {
         $authLink[] = array(false, "
 
               <div class='col-12'><a class='btn w-100 login-form-submit d-flex justify-content-center align-items-center mt-4' href='$authUrl'>$langEnter</a></div>
-            ", $authTitle);
+            ", $authTitle, $authInstructions);
     } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
         $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlServer}template/modern/css/bootstrap-social.css'>";
         $providerClass = $l->auth_name;
@@ -65,7 +66,7 @@ foreach ($q as $l) {
             <div class='col-12 text-center mt-4'>
                 <a class='text-decoration-underline' href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
             </div>
-        </div>", $authTitle);
+        </div>", $authTitle, $authInstructions);
     }
 }
 
@@ -131,6 +132,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
 
         $counter = 0;
         $active = '';
+
         foreach ($authLink as $authInfo) {
 
           if($counter == 0) {
@@ -139,18 +141,29 @@ $tool_content .= "<div class='col-12 mt-5'>";
             $active = '';
           }
 
+          
 
           if($counter == 0) {
-            $tool_content .= "<div class='col-lg-6 tab-content cardLogin p-4 ms-auto me-auto mt-5'>";
+            $tool_content .= "<div class='col-lg-6 ms-auto me-auto tab-content mt-5'>";
           }
 
           if($counter >= 0) {
             $tool_content .= "
-                                <div class='tab-pane fade $active' id='regStudent$counter' role='tabpanel' aria-labelledby='reg-student$counter'>
-                                  <h2 class='mb-4'>" . q($authInfo[2]) . "</h2>
-                                  " . $authInfo[1] . "
-                                </div>
-                              ";
+                                <div class='tab-pane fade $active' id='regStudent$counter' role='tabpanel' aria-labelledby='reg-student$counter'>";
+
+
+                $tool_content .= " <h2 class='mb-4'>" . q($authInfo[2]) . "</h2>";
+                if(!empty($authInfo[3])){
+                  $tool_content .= " <div class='alert alert-info mt-0 mb-4'>
+                                         <i class='fa-solid fa-circle-info fa-lg'></i>
+                                         <span><strong>$langInstructionsAuth</strong></br>" .q($authInfo[3]). "</span>
+                                     </div>";
+                                    }
+
+
+                $tool_content .="  " . $authInfo[1] . "
+                                  
+                                </div>";
           }
 
           if($counter == count($authLink) - 1){

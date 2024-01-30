@@ -42,7 +42,7 @@ if(isset($_GET['eventID']) and isset($_GET['course_id'])){
     $eventArr = array();
 
 
-    $result_events = Database::get()->queryArray("SELECT *FROM agenda WHERE id = ?d AND course_id = ?d",$eventId,$courseId);
+    $result_events = Database::get()->queryArray("SELECT * FROM agenda WHERE id = ?d AND course_id = ?d",$eventId,$courseId);
 
     if($result_events){
         foreach($result_events as $row){

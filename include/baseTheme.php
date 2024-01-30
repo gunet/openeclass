@@ -2052,6 +2052,7 @@ function view($view_file, $view_data = array()) {
                 }
                 
                 textarea,
+                textarea::placeholder,
                 textarea.form-control{
                     color: $theme_options_styles[clInputText];
                 }
@@ -2135,11 +2136,11 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select {
-                    background-color: $theme_options_styles[BgSelect];
+                    background-color: $theme_options_styles[BgSelect] !important;;
                 }
 
                 .dataTables_wrapper select:focus {
-                    background-color: $theme_options_styles[BgSelect];
+                    background-color: $theme_options_styles[BgSelect] !important;;
                 }
 
 
@@ -2176,11 +2177,11 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select {
-                    border-color: $theme_options_styles[clBorderSelect];
+                    border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
                 .dataTables_wrapper select:focus {
-                    border-color: $theme_options_styles[clBorderSelect];
+                    border-color: $theme_options_styles[clBorderSelect] !important;;
                 }
 
                 .select2-selection.select2-selection--multiple{ 
@@ -2231,15 +2232,15 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select {
-                    color: $theme_options_styles[clOptionSelect];
+                    color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
                 .dataTables_wrapper select:focus {
-                    color: $theme_options_styles[clOptionSelect];
+                    color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
                 .dataTables_wrapper select option:not(:checked) {
-                    color: $theme_options_styles[clOptionSelect];
+                    color: $theme_options_styles[clOptionSelect] !important;;
                 }
 
                 .select2-selection.select2-selection--multiple{ 
@@ -2276,7 +2277,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select option:hover{
-                    background-color: $theme_options_styles[bgHoveredSelectOption];
+                    background-color: $theme_options_styles[bgHoveredSelectOption] !important;;
                 }
 
                 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
@@ -2300,7 +2301,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select option:hover{
-                    color: $theme_options_styles[clHoveredSelectOption];
+                    color: $theme_options_styles[clHoveredSelectOption] !important;;
                 }
 
                 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
@@ -2324,7 +2325,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select option:checked{
-                    background-color: $theme_options_styles[bgOptionSelected];
+                    background-color: $theme_options_styles[bgOptionSelected] !important;;
                 }
 
 
@@ -2350,7 +2351,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .dataTables_wrapper select option:checked{
-                    color: $theme_options_styles[clOptionSelected];
+                    color: $theme_options_styles[clOptionSelected] !important;;
                 }
 
 
@@ -2562,6 +2563,14 @@ function view($view_file, $view_data = array()) {
                 
                 .cal-day-today {
                     background-color: $theme_options_styles[bgAgenda] !important;
+                }
+
+                .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-top {
+                    background-color: $theme_options_styles[bgAgenda];
+                }
+
+                .datetimepicker.datetimepicker-dropdown-bottom-right.dropdown-menu {
+                    background-color: $theme_options_styles[bgAgenda];
                 }
                  
             ";

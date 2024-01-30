@@ -231,7 +231,7 @@ if (!$upgrade_begin and $uid) {
     }
 
 
-    $data['popular_courses'] = Database::get()->queryArray('SELECT *FROM `course` 
+    $data['popular_courses'] = Database::get()->queryArray('SELECT * FROM `course` 
                                                 WHERE `popular_course` = ?d AND `visible` != ?d AND lang=?s', 1, 3, $language);
 
 
