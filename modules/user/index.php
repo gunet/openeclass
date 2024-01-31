@@ -185,25 +185,28 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             array(
                 'title' => $langCourseReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->course_reviewer == '0' ? "give" : "remove")."CourseReviewer=". getIndirectReference($myrow->id),
-                'icon' => $myrow->course_reviewer == '0' ? "fa-square-o" : "fa-check-square-o"
+                'icon' => $myrow->course_reviewer == '0' ? "fa-square-o" : "fa-check-square-o",
+                'show' => $myrow->status != USER_GUEST,
             ),
             array(
                 'title' => $langTeacher,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=". getIndirectReference($myrow->id),
-                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
+                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o",
+                'show' => $myrow->status != USER_GUEST,
             ),
             array(
                 'title' => $langCourseAdminTeacher,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=". getIndirectReference($myrow->id),
                 'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
-                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
+                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1'),
+                'show' => $myrow->status != USER_GUEST,
             ),
             array(
                 'title' => $langGiveRightReviewer,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=". getIndirectReference($myrow->id),
                 'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
                 'disabled' => $myrow->id == $_SESSION["uid"],
-                'show' => get_config('opencourses_enable') &&
+                'show' => get_config('opencourses_enable') && $myrow->status != USER_GUEST &&
                             (
                                 ($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1') ||
                                 ($myrow->id != $_SESSION["uid"] && $is_opencourses_reviewer && $is_admin)
