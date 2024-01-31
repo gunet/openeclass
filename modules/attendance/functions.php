@@ -1306,10 +1306,10 @@ function student_view_attendance($attendance_id) {
 
         $tool_content .= " <div class='col-12'>
         <div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<thead><tr class='list-header'><th>$langTitle</th>
-                              <th>$langDate</th>
-                              <th>$langDescription</th>
-                              <th>$langAttendanceAbsencesYes</th>
+        $tool_content .= "<thead><tr class='list-header'><th style='width:30%;'>$langTitle</th>
+                              <th style='width:15%;'>$langDate</th>
+                              <th style='width:45%;'>$langDescription</th>
+                              <th style='width:10%;' class='text-center'>$langAttendanceAbsencesYes</th>
                           </tr></thead>";
     }
     if ($result) {
@@ -1323,7 +1323,7 @@ function student_view_attendance($attendance_id) {
             $tool_content .= "</td>"
                     . "<td><div class='smaller'>" . format_locale_date(strtotime($details->date), 'short', false) . "</div></td>"
                     . "<td>" . $content . "</td>";
-            $tool_content .= "<td>";
+            $tool_content .= "<td class='text-center'>";
             //check user grade for this activity
             $sql = Database::get()->querySingle("SELECT attend FROM attendance_book
                                                             WHERE attendance_activity_id = ?d

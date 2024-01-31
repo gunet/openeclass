@@ -1070,13 +1070,17 @@
 
   /* button menu-popover */
   .menu-popover{ 
-    background: #2B3944; 
+    background: #212D37; 
     color: #74AFE9;
     border: solid 1px #74AFE9;
+  }
+  .menu-popover:hover{
+    background: #212D37; 
   }
   /* fade menu-popover */
   .menu-popover.fade.show{
     border: solid 1px #4F6893;
+    background: #2B3944; 
   }
 
   .menu-popover .list-group-item{ 

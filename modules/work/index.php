@@ -5601,7 +5601,7 @@ function show_student_assignments() {
         if (get_config('eportfolio_enable')) {
             $add_eportfolio_res_th = "<th style='width:10%;'>".icon('fa-gears')."</th>";
         } else {
-            $add_eportfolio_res_th = "";
+            $add_eportfolio_res_th = "<th></th>";
         }
 
 
@@ -5713,7 +5713,7 @@ function show_student_assignments() {
                     $tool_content .= "<td class='text-end' style='width:10%;'>" .
                         action_button($eportfolio_action_array) . "</td>";
                 } else {
-                    $tool_content .= '';
+                    $tool_content .= '<td></td>';
                 }
             }
             $tool_content .= "</tr>";
