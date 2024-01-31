@@ -104,9 +104,9 @@ $tool_content .= "
 <div id='layout' class='mt-3'>
 	<div id='jsmiin-nav-horizontal' class='d-flex justify-content-end'>
 		<div class='btn-group btn-group-justified gap-2 mb-4' role='group' style=''>
-			<div class='btn-group' role='group'>
+		    <div class='btn-group' role='group'>
 				<button id='Open' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langOpenMind</span> 
+                    <span class='TextBold hidden-xs pe-2'>$langOpenMind</span>
                     <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
                 </button>
                 <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Open'>
@@ -118,7 +118,7 @@ $tool_content .= "
 			</div>
 			<div class='btn-group' role='group'>
 				<button id='Alter' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langEditMind</span>  
+                    <span class='TextBold hidden-xs pe-2'>$langEditMind</span>
                     <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
                 </button>
                 <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Alter'>
@@ -132,7 +132,7 @@ $tool_content .= "
 			</div>
 			<div class='btn-group' role='group'>
 				<button id='ChooseTheme' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langThemes</span> 
+                    <span class='TextBold hidden-xs pe-2'>$langThemes</span>
                     <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
                 </button>
                 <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='ChooseTheme'>
@@ -158,7 +158,7 @@ $tool_content .= "
 			</div>
 			<div class='btn-group' role='group'>
 				<button id='Save' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langSave</span> 
+                    <span class='TextBold hidden-xs pe-2'>$langSave</span>
                     <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
                 </button>
                 <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Save'>
@@ -176,7 +176,6 @@ $tool_content .= "
                 </div>
 			</div>
 		</div>
-	</div>
 
     <div id='jsmind_container'></div>
 </div>";
@@ -184,24 +183,41 @@ $tool_content .= "
 
 $tool_content .= '
 	<script type="text/javascript" src="jsmind.js"></script>
-	<script type="text/javascript" src="jsmind.draggable.js"></script>
+	<script type="text/javascript" src="jsmind.draggable-node.js"></script>
 	<script type="text/javascript" src="jsmind.screenshot.js"></script>
 	<script type="text/javascript">
     var _jm = null;
 	new_node=1;
-    function open_empty(){
+    function open_empty() {
         var options = {
-            container:"jsmind_container",
-            theme:"greensea",
-            editable:true,
-            support_html:false
+            container: "jsmind_container",
+            theme: "greensea",
+            editable: true,
+            support_html:false          
+        };
+        var mind = {
+            "meta":{
+              //  "name":"jsMind remote",
+              //  "author":"hizzgdev@163.com",
+              //  "version":"0.2"
+            },
+            "format":"node_tree",
+            "data":{"id":"root","topic":"Κεντρική ιδέα","children":[
+                {"id":"easy","topic":"Κόμβος 1","direction":"left","children":[
+                    {"id":"easy1","topic":"Χαρακτηριστικό 1"},
+                    {"id":"easy2","topic":"Χαρακτηριστικό 2"},
+                    {"id":"easy3","topic":"Χαρακτηριστικό 3"}                    
+                ]},
+                {"id":"open","topic":"Κόμβος 2","direction":"right","children":[
+                    {"id":"open1","topic":"Χαρακτηριστικό 1"},
+                    {"id":"open2","topic":"Χαρακτηριστικό 2"}
+                ]}                
+            ]}
         }
-        _jm = jsMind.show(options);
-        // _jm = jsMind.show(options,mind);
-
-		var x = '.$arr.';
-		//console.log(jQuery.isEmptyObject(x));
-		if ( !jQuery.isEmptyObject(x)) {
+        _jm = new jsMind(options);
+        _jm.show(mind);                
+		var x = '.$arr.';		
+		if (!jQuery.isEmptyObject(x)) {
 			_jm.show(x);
 		}
     }
@@ -311,17 +327,17 @@ $tool_content .= '
     function open_file(){
         var file_input = document.getElementById("file_input");
         var files = file_input.files;
-        if(files.length > 0){
+        if (files.length > 0) {
             var file_data = files[0];
             jsMind.util.file.read(file_data,function(jsmind_data, jsmind_name){
                 var mind = jsMind.util.json.string2json(jsmind_data);
-                if(!!mind){
+                if (!!mind) {
                     _jm.show(mind);
-                }else{
+                } else {
                     prompt_info("can not open this file as mindmap");
                 }
             });
-        }else{
+        } else {
             prompt_info("'.$langPleaseChooseFile.'")
         }
     }
@@ -342,7 +358,9 @@ $tool_content .= '
 
     function toggle_node(){
         var selected_id = get_selected_nodeid();
-        if(!selected_id){prompt_info("'.$langPleaseSelectNode.'");}
+        if (!selected_id) { 
+            prompt_info("' . $langPleaseSelectNode . '");
+        }
 
         _jm.toggle_node(selected_id);
     }
@@ -358,7 +376,9 @@ $tool_content .= '
 
     function add_node(){
         var selected_node = _jm.get_selected_node(); // as parent of new node
-        if(!selected_node){prompt_info("'.$langPleaseSelectNode.'");}
+        if(!selected_node) {
+            prompt_info("'.$langPleaseSelectNode.'");
+        }
         var nodeid = jsMind.util.uuid.newid();
 		var topic = "Node "+new_node+"";
         var node = _jm.add_node(selected_node, nodeid, topic);
