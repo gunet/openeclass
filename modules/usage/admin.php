@@ -69,15 +69,13 @@ $tool_content .= "
                     </ul>
                 </div>
                 <div class='col-sm-12'>
-                    <ul class='list-group'>                        
-                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=failurelogin'>$langLoginFailures</a><small> ($langLast15Days)</small></li>
+                    <ul class='list-group'>                                                
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=musers'>$langMultipleUsers</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=memail'>$langMultipleAddr e-mail</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=popularcourses'>$langPopularCourses</a><small> ($langLast30Entries)</small></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=mlogins'>$langMultiplePairs LOGIN - PASS</a></li>
                         <li class='list-group-item'><a href='../admin/otheractions.php?stats=cusers'>$langMultipleCourseUsers</a><small> ($langLast30Entries)</small></li>
-                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a></li>
-                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=unregusers'>$langUnregUsers</a><small> ($langLastMonth)</small></li>
+                        <li class='list-group-item'><a href='../admin/otheractions.php?stats=vmusers'>$langMailVerification</a></li>                        
                     </ul>
                 </div>
             </div>

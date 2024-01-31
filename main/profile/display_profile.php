@@ -183,16 +183,11 @@ if ($userdata) {
                                                     </span>";
                                             $tool_content .= q($userdata->phone);$tool_content .= "</div>";
                                         }
-                                        $tool_content .= "<div style='line-height:26px;'>
-                                        <span style='font-weight: bold; color: #888;'>
-                                            $langStatus:
-                                        </span>";
                                         if ($userdata->status == USER_TEACHER) {
-                                            $tool_content .= $langTeacher;
-                                        } else {
-                                            $tool_content .= $langStudent;
+                                            $tool_content .= "<div style='line-height:26px;'>
+                                                                <span style='font-weight: bold; color: #888;'>$langUserPermissions: </span>$langWithCourseCreationRights
+                                                            </div>";
                                         }
-                                        $tool_content .= "</div>";
                                         // user 'am'
                                         if (!empty($userdata->am) and allow_access($userdata->am_public)) {
                                             $tool_content .= "<div style='line-height:26px;'>

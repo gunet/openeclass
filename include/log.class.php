@@ -42,7 +42,7 @@ class Log {
      * @param type $module_id
      * @param type $action_type
      * @param type $details
-     * @return none;
+     * @return void;
      */
     public static function record($course_id, $module_id, $action_type, $details) {
 
@@ -82,8 +82,8 @@ class Log {
      * @param type $logtype (-1 means logtypes)
      * @param type $date_from
      * @param type $date_now
-     * @param type script_page
-     * @return none
+     * @param type $script_page script_page
+     * @return void
      */
     public function display($course_id, $user_id, $module_id, $logtype, $date_from, $date_now, $script_page) {
 
@@ -208,7 +208,7 @@ class Log {
 
     /**
      * @brief move logs from table `log` to table `log_archive`
-     * @return none
+     * @return void
      */
     public static function rotate() {
 
@@ -222,19 +222,17 @@ class Log {
         if ($sql) {
             Database::get()->query("DELETE FROM log WHERE date_sub(CURDATE(),interval $date month) > ts");
         }
-        return;
     }
 
     /**
      * @brief purge logs from table `logs_archive`
-     * @return none
+     * @return void
      */
     public static function purge() {
 
         $date = get_config('log_purge_interval');
         $sql = Database::get()->query("DELETE FROM log_archive WHERE DATE_SUB(CURDATE(),interval $date month) > ts");
 
-        return;
     }
 
     /**
@@ -913,7 +911,6 @@ class Log {
 
     /**
      * display action details in external links
-     * @global type $langLinkName
      * @param type $details
      * @return string
      */
@@ -921,7 +918,6 @@ class Log {
         global $course_code, $urlAppend, $langLinkName, $langActivate, $langDeactivate, $langCoursePages;
 
         $details = unserialize($details);
-        $content = '';
 
         if (isset($details['page_path'])) {
             return "$langCoursePages: <a target='_blank' href='{$urlAppend}modules/course_home/page.php?course={$course_code}&amp;id=$details[id]'>" . q($details['title']) . '</a>';

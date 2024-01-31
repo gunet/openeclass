@@ -95,7 +95,7 @@ if (isset($_GET['from_other'])) {
     $navigation[] = array('url' => '../usage/index.php?t=a', 'name' => $langUsage);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "../admin/index.php",
+            'url' => "../usage/index.php?t=a",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
         ),false);
@@ -225,7 +225,9 @@ $tool_content .= '<div class="form-group">
 
 if (isset($_GET['from_other'])) {   // system actions
     $log_types = array(LOG_CREATE_COURSE => $langCourseCreate,
-                       LOG_DELETE_COURSE => $langCourseDel);
+                       LOG_DELETE_COURSE => $langCourseDel,
+                       LOG_LOGIN_FAILURE => $langLoginFailures,
+                       LOG_DELETE_USER => $langUnregUsers);
 } else {    // course actions
     $log_types = array(0 => $langAllActions,
                     LOG_INSERT => $langInsert,
