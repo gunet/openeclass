@@ -20,18 +20,18 @@
                     </div>
                     <div class='col-12 d-inline-flex'>
                         <!-- toolName -->
-                        <h4>{{ $toolName }}</h4>
+                        <h3>{{ $toolName }}</h3>
                     </div>
                 @else
                     <div class='col-12 mb-2'>
-                        <div class='d-md-flex align-content-md-start gap-1 mt-auto'>
+                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
                             <h2 class='mb-0'>{{ $currentCourseName }}</h2>
-                            <span class=" px-0 pt-1">{!! course_access_icon($course_info->visible) !!}</span>
+                            {!! course_access_icon($course_info->visible) !!}
                             @if($courseLicense > 0)
                                 {!! copyright_info($course_id) !!}
                             @endif
                         </div>
-                        <div class='d-flex justify-content-start align-items-center gap-2'>
+                        <div class='d-flex justify-content-start align-items-center gap-2 mt-2'>
                             <p>{{ course_id_to_public_code($course_id) }}&nbsp; - &nbsp;{{ course_id_to_prof($course_id) }}</p>
                         </div>
                     </div>

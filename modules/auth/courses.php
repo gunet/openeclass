@@ -218,7 +218,7 @@ function getdepnumcourses($fac) {
  */
 function expanded_faculte($facid, $uid) {
     global $m, $langTutor, $langRegistration, $langCourseCode, $langLabelCourseUserRequest,
-    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user;
+    $langTeacher, $langType, $themeimg, $tree, $is_power_user, $is_departmentmanage_user, $langGroupAccess;
 
     $retString = '';
 
@@ -249,7 +249,7 @@ function expanded_faculte($facid, $uid) {
     $retString .= "<th style='width:10%'>$langRegistration</th>";
     $retString .= "<th>$langCourseCode</th>";
     $retString .= "<th>$langTeacher</th>";
-    $retString .= "<th class='text-end'>$langType</th>";
+    $retString .= "<th class='text-end'>$langGroupAccess</th>";
     $retString .= "</tr></thead>";
 
     Database::get()->queryFunc("SELECT
@@ -337,7 +337,7 @@ function expanded_faculte($facid, $uid) {
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid'>
                    <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$course_request_access_link $requirepassword $coursePrerequisites</td>
                    <td>" . q($mycours->t) . "</td>
-                   <td class='text-end'>" . course_access_icon($mycours->visible) . "</td></tr>";
+                   <td class='text-end pe-4'>" . course_access_icon($mycours->visible) . "</td></tr>";
     }, intval($facid), COURSE_INACTIVE);
     $retString .= "</table></div>";
 

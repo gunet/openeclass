@@ -14,43 +14,49 @@
 
             <div class="col-12">
                 @foreach($infoCourse as $c)
-                    <div class="card border-0 px-0 mb-3">
-                        <div class="row g-3">
-                            <div class="col-lg-4 col-md-5 d-flex justify-content-center justify-content-md-start">
+                    <div class="card border-0 card-course-info px-lg-4 py-lg-4 p-3 mb-3">
+                        <div class="row row-cols-1 row-cols-md-2 g-3">
+                            <div class="col-md-4 col d-flex justify-content-center justify-content-md-start">
                                 @if($c->course_image == NULL)
                                     <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $c->title }}" /></a>
                                 @else
                                     <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}courses/{{ $c->code }}/image/{{ $c->course_image }}" alt="{{ $c->course_image }}" /></a>
                                 @endif
                             </div>
-                            <div class="col-lg-8 col-md-7 ps-md-3">
-                                <div class="card-body px-0 pt-md-0">
+                            <div class="col-md-8 col">
+                                <div class="card-body py-0">
 
-                                    <h2 class="card-title d-flex justify-content-start align-items-center gap-2 flex-wrap">
-                                        {!! $c->title !!}
-                                        <span class='settings-icons Neutral-600-cl'>{!! course_access_icon($c->visible) !!}</span>
-                                    </h2>
+                                    <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                        <h2 class="mb-0">{!! $c->title !!}</h2>
+                                        {!! course_access_icon($c->visible) !!}
+                                        @if($c->course_license > 0)
+                                            {!! copyright_info($c->id) !!}
+                                        @endif
+                                    </div>
+                                    
 
-                                    <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;-&nbsp;{!! $c->prof_names !!}</p>
+                                    <p class="card-text mt-2 mb-4">({!! $c->public_code !!})&nbsp;- &nbsp;{!! $c->prof_names !!}</p>
+
+                                    
 
 
                                     @if(empty($c->description))
-                                        <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item list-group-item-action'>{{ trans('langCourseProgram')}}</li>
-                                            <li class='list-group-item element'>{{ trans('langThisCourseDescriptionIsEmpty') }}</li>
-                                        </ul>
+                                        <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
+                                        <p>{{ trans('langThisCourseDescriptionIsEmpty') }}</p>
                                     @else
-                                        <ul class='list-group list-group-flush'>
-                                            <li class='list-group-item list-group-item-action'>{{ trans('langCourseProgram')}}</li>
-                                            <li class='list-group-item element'>{!! $c->description !!}</li>
-                                        </ul>
+                                        <p class='form-label mb-1'>{{ trans('langCourseProgram')}}</p>
+                                        <p>{!! $c->description !!}</p>
                                     @endif
 
-                                    <ul class='list-group list-group-flush mt-3'>
-                                        <li class='list-group-item list-group-item-action'>{{ trans('langCreationDate')}}</li>
-                                        <li class='list-group-item element'>{!! format_locale_date(strtotime($c->created), null, false) !!}</li>
-                                    </ul>
+                                    <p class='form-label mb-1 mt-4'>{{ trans('langCreationDate')}}</p>
+                                    <p>{!! format_locale_date(strtotime($c->created), null, false) !!}</p>
 
+                                    <div class='col-12 mt-4 d-flex justify-content-md-end justify-content-center'>
+                                        <a class='btn submitAdminBtnDefault d-flex jystify-content-start align-items-center gap-2' href='{{ $urlServer }}courses/{{ $c->code }}/index.php'>
+                                            {{ trans('langNavSettings')}}
+                                            <i class="fa-solid fa-circle-right"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>

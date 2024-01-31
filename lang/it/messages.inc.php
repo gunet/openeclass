@@ -939,6 +939,7 @@ $langInvalidAuth = "Modo di certificazione sbagliato";
 $langContact = "Contatto";
 $lang_forgot_pass = "Hai dimenticato la password?";
 $langMoreLogin = 'Più opzioni di connessione';
+$langViewMoreLogin = "View more connection options";
 $langNewAnnounce = "Nuovo!";
 $langUnregUser = "Eliminare conto";
 $langListCourses = "Lista di corsi";

@@ -956,6 +956,7 @@ $langInvalidAuth = "Invalid auth method";
 $langContact = 'Contact';
 $lang_forgot_pass = 'Forgot your password?';
 $langMoreLogin = 'More connection options';
+$langViewMoreLogin = "View more connection options";
 $langNewAnnounce = "New !";
 $langUnregUser = "Unregister User";
 $langListCourses = "Courses List";

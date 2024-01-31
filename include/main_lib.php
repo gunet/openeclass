@@ -1420,7 +1420,7 @@ function course_access_icon($visibility) {
             break;
         }
         case COURSE_REGISTRATION: {
-            $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
+            $access_icon = "<div class='d-inline-flex align-items-center'><span class='fa fa-lock fa-lg fa-fw access' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration'></span>
             <span class='fa fa-pencil text-danger fa-custom-lock mt-0' data-bs-toggle='tooltip' data-bs-placement='top' title='$langTypeRegistration' style='margin-left:-5px;'></span></div>";
             break;
         }
@@ -3246,16 +3246,18 @@ function copyright_info($cid, $noImg = 1) {
     $lic = Database::get()->querySingle("SELECT course_license FROM course WHERE id = ?d", $cid)->course_license;
     if ($noImg == 1) {
         if (($lic == 0) or ($lic >= 10)) {
-            $link = "<a class='btn' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($langCopyrightedNotFree) . "'>
-                    <span class='fa-regular fa-copyright fa-lg'></span></a>";
+            $link = "<a data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($langCopyrightedNotFree) . "'>
+                        <span class='fa-regular fa-copyright fa-lg'></span>
+                    </a>";
         } else {
             if ($language != 'en') {
                 $link_suffix = 'deed.' . $lang;
             } else {
                 $link_suffix = '';
             }
-            $link = "<a class='btn px-0 pt-1' href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
-                    <span class='fa-brands fa-creative-commons fa-lg'></span></a>";
+            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
+                        <span class='fa-brands fa-creative-commons fa-lg'></span>
+                    </a>";
         }
     }
     return $link;

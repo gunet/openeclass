@@ -131,6 +131,7 @@ if ($runQuery) {
                                course.public_code c,
                                course.title i,
                                course.visible visible,
+                               course.course_license cls,
                                course.prof_names t,
                                course.description de,
                                course.course_image img,

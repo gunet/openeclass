@@ -596,9 +596,9 @@ require_once 'include/lib/references.class.php';
             }
             $eventlist .= "<tr $classvis>";
             if ($is_editor or $type == 'personal' or ($is_admin and $type == 'admin')) {
-                $eventlist .= "<td style='padding:15px;'>";
+                $eventlist .= "<td>";
             } else {
-                $eventlist .= "<td style='padding:15px;' colspan='2'>";
+                $eventlist .= "<td colspan='2'>";
             }
             if (($myrow->duration != '00:00:00') and ($myrow->duration != '')) {
                 if ($myrow->duration == 1) {

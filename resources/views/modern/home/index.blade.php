@@ -89,10 +89,14 @@
                 @if(!(get_config('upgrade_begin') || get_config('dont_display_login_form')))
                     <div class='col-12 mb-5 order-first'>
                         <div class='row row-cols-1 row-cols-lg-2 g-lg-5'>
-                            <div class="col-lg-6 col-12 @if($PositionFormLogin or get_config('show_only_loginScreen')) ms-auto me-auto @endif">
-                                <div class='card cardLogin p-3'>
+                            <div class="col @if($PositionFormLogin or get_config('show_only_loginScreen')) ms-auto me-auto @endif">
+                                <div class='card cardLogin h-100 @if($auth_enabled_method == 0) cardLogin-secondary @endif p-3'>
                                     <div class='card-header bg-transparent border-0'>
-                                        <h2>{{ trans('langUserLogin') }}</h2>
+                                        @if($auth_enabled_method == 1)
+                                            <h2>{{ trans('langUserLogin') }}</h2>
+                                        @else
+                                            <h3> {{ trans('langMoreLogin') }}</h3>
+                                        @endif
                                     </div>
                                     @if($auth_enabled_method == 1)
                                     <div class='card-body'>
@@ -115,20 +119,24 @@
                                         </div>
                                     </div>
                                     @else
-                                        <div class='card-body d-flex justify-content-center align-items-center'>
-                                            <a class="more-enabled-login-methods d-flex justify-content-center align-items-center text-decoration-none" href="{{$urlAppend}}main/login_form.php">
-                                                <div class='d-flex flex-column align-items-center gap-4'>
-                                                    <i class="fa-solid fa-right-to-bracket fa-xl"></i>
-                                                    {{ trans('langMoreLogin') }}
-                                                </div>
-                                            </a>
-                                        </div>
+                                    <div class='card-body d-flex justify-content-center align-items-center'>
+                                        <a class="more-enabled-login-methods d-flex justify-content-center align-items-center text-decoration-none" href="{{$urlAppend}}main/login_form.php">
+                                            <div class='d-flex flex-column align-items-center gap-4'>
+                                                <i class="fa-sharp fa-solid fa-circle-right fa-2xl pb-2"></i>
+                                                {{ trans('langViewMoreLogin') }}
+                                            </div>
+                                        </a>
+                                    </div>
                                     @endif
                                 </div>
                             </div>
                             @if(!get_config('show_only_loginScreen'))
-                                <div class='col-lg-6 col-12 d-none @if($PositionFormLogin) d-lg-none @else d-lg-block d-flex justify-content-end align-items-center @endif'>
-                                    <img class='jumbotron-image-default' src='{{ $loginIMG }}'>
+                                <div class='col d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
+                                    <div class='card cardLogin h-100 p-3 border-0'>
+                                        <div class='card-body d-flex justify-content-center align-items-center p-0'>
+                                            <img class='jumbotron-image-default' src='{{ $loginIMG }}' alt=''>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                         </div>

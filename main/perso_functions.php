@@ -37,7 +37,7 @@ function getUserCourseInfo($uid) {
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
            $langWelcomeSelect, $langPreview, $langOfCourse,
-           $langThisCourseDescriptionIsEmpty, $langMoreCourseInfo;
+           $langThisCourseDescriptionIsEmpty, $langSyllabus;
 
     $lesson_content = '';
     $lesson_ids = array();
@@ -79,6 +79,10 @@ function getUserCourseInfo($uid) {
                 $fav_status = 1;
                 $fav_message = $langFavorite;
             }
+            $license = '';
+            if($data->course_license > 0){
+                $license = copyright_info($data->id);
+            }
             $lesson_content .= "
                 <tr class='$visclass row-course'>
 			        <td class='border-top-0 border-start-0 border-end-0'>
@@ -105,15 +109,17 @@ function getUserCourseInfo($uid) {
                                 <div class='modal-content modal-content-opencourses px-lg-5 py-lg-5'>
                                     <div class='col-12 d-flex justify-content-between align-items-start'>
                                         <div>
-                                            <h2 class='d-flex justify-content-start align-items-start gap-3 TextBold mb-0'>
-                                                <span class='settings-icons mt-1 Neutral-600-cl'>" . course_access_icon($data->visible) . "</span>" .
-                                                q($data->title) . "
-                                            </h2>
-                                            <p class='course-professor-code'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</p>
+                                            <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                <h2 class='mb-0'>". q($data->title) . "</h2>
+                                                " . course_access_icon($data->visible) . "
+                                                $license
+                                            </div>  
+                                            <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                         </div>
                                         <div>
                                             <button type='button' class='close border-0 bg-transparent mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                         </div>
+
                                     </div>
                                     <div class='course-content mt-4'>
                                         <div class='col-12 d-flex justify-content-center align-items-start'>";
@@ -141,7 +147,7 @@ function getUserCourseInfo($uid) {
                                                                 <div class='d-flex justify-content-between border-bottom-default'>
                                                                     <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' data-bs-toggle='collapse' href='#courseSyllabus{$data->course_id}' aria-expanded='true' aria-controls='courseSyllabus{$data->course_id}'>
                                                                         <i class='fa-solid fa-chevron-down settings-icon'></i>
-                                                                        $langMoreCourseInfo
+                                                                        $langSyllabus
                                                                     </a>
                                                                 </div>
                                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='courseSyllabus{$data->course_id}' data-bs-parent='#accordionCourseSyllabus{$data->course_id}'>";
@@ -399,6 +405,7 @@ function getUserCourses($uid)
                              course.public_code,
                              course.title title,
                              course.prof_names professor,
+                             course.course_license course_license,
                              course.lang,
                              course.visible visible,
                              course.description description,

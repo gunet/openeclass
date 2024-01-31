@@ -207,7 +207,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class='item-body'>
-                                                                            <div style='height:1px;' class='Neutral-300-bg mt-1 mb-3'></div>
+                                                                            <div style='height:1px;' class='border-top-default mt-1 mb-3'></div>
                                                                             <div class='col-sm-12 bg-transparent'>
 
                                                                                 <button class='carousel-prev-btn' type='button' data-bs-target='#UnitsControls' data-bs-slide='prev'>

@@ -925,7 +925,7 @@ if ($action == "showBlog") {
                                     <p class='TextBold mb-2'>" . format_locale_date(strtotime($post->getTime())) . "</p><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".ellipsize_html(standard_text_escape($post->getContent()), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>")."
                                     $comment_content
                                 </div>
-                                <div class='card-footer bg-default d-flex justify-content-between align-items-center pt-lg-3'>
+                                <div class='card-footer bg-default d-flex justify-content-between align-items-center border-top-default pt-lg-3'>
 
                                         <div>$rating_content</div>
                                         <div>$sharing_content</div>

@@ -2476,6 +2476,7 @@ $langInvalidAuth = "Λάθος τρόπος πιστοποίησης";
 $langContact = 'Επικοινωνία';
 $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
 $langMoreLogin = 'Περισσότερες επιλογές σύνδεσης';
+$langViewMoreLogin = "Δείτε όλες τις επιλογές";
 $langNewAnnounce = "Νέα!";
 $langUnregUser = "Διαγραφή λογαριασμού";
 $langListCourses = "$langCourses";

@@ -319,10 +319,6 @@ function view($view_file, $view_data = array()) {
             .form-wrapper.form-edit.form-create-theme{
                 border: 0px;
             }
-           
-            .forum-category-tools{
-                background-color: transparent;
-            }
 
         "
         ;
@@ -1105,6 +1101,10 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .menu-popover{
+                    background: $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -1148,6 +1148,11 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .quickLink{
+                    border: solid 1px $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
+                }
+
+                .menu-popover{
                     border: solid 1px $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
                 }
@@ -1196,6 +1201,12 @@ function view($view_file, $view_data = array()) {
                 .quickLink:hover .fa-solid{
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .menu-popover:hover,
+                .menu-popover:focus{
+                    border: solid 1px $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -1233,6 +1244,11 @@ function view($view_file, $view_data = array()) {
 
                 .quickLink:hover,
                 .quickLink:hover .fa-solid{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .menu-popover:hover,
+                .menu-popover:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
             ";
@@ -1306,6 +1322,8 @@ function view($view_file, $view_data = array()) {
                 .nav-link-adminTools.Neutral-900-cl.active{
                     background-color: $theme_options_styles[buttonBgColor];
                 }
+
+                
 
             ";
         }
@@ -3051,6 +3069,9 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper.no-footer .dataTables_scrollBody {
                     border-bottom: 1px solid $theme_options_styles[BgBorderBottomRowTables] !important;
                 }
+                table.dataTable tfoot th, table.dataTable tfoot td {
+                    border-top: 1px solid  $theme_options_styles[BgBorderBottomRowTables] !important;
+                }
             ";
         }
 
@@ -3062,7 +3083,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgMenuPopover'])){
             $styles_str .= "
-                .menu-popover{ 
+                .menu-popover.fade.show{ 
                     background: $theme_options_styles[BgMenuPopover];
                 }
             ";
@@ -3076,7 +3097,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['BgBorderMenuPopover'])){
             $styles_str .= "
-                .menu-popover{ 
+                .menu-popover.fade.show{ 
                     border: solid 1px $theme_options_styles[BgBorderMenuPopover];
                 }
             ";
@@ -3680,6 +3701,18 @@ function view($view_file, $view_data = array()) {
                 #lti_label{
                     background-color: $theme_options_styles[BgPanels] ;
                 }
+
+                #jsmind_container {
+                    background: $theme_options_styles[BgPanels] !important;
+                }
+
+                .cardLogin-secondary{
+                    background-color: $theme_options_styles[BgPanels] !important; 
+                }
+
+                .card-course-info{
+                    background-color: $theme_options_styles[BgPanels] ; 
+                }
             ";
         }
 
@@ -3703,6 +3736,13 @@ function view($view_file, $view_data = array()) {
 
                 .panelCard.border-card-left-default {
                     border-left: solid 7px $theme_options_styles[clBorderPanels];
+                }
+
+                .border-top-default{
+                    border-top: solid 1px $theme_options_styles[clBorderPanels];
+                    border-left: none;
+                    border-right: none;
+                    border-bottom: none;
                 }
 
                 .BorderSolidDes{
@@ -3732,6 +3772,19 @@ function view($view_file, $view_data = array()) {
 
                 .wrapper-lostpass{
                     border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                #jsmind_container {
+                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .cardLogin-secondary{
+                    
+                    border: solid 1px $theme_options_styles[clBorderPanels];
+                }
+
+                .card-course-info{
+                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
                 }
 
             ";
@@ -3987,7 +4040,6 @@ function lang_selections_Desktop() {
                                 $lang_select .=
                                     "<li role='presentation'$class>
                                         <a class='list-group-item py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                                            <i class='fa-solid fa-earth-europe'></i>
                                             " .q($native_language_names_init[$code]) . "
                                         </a>
                                     </li>";

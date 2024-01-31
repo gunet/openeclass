@@ -69,115 +69,131 @@ $head_content .= '
 
         #jsmind_container{
             width:100%;
-            height:800px;
-            border:solid 1px #e8e8e8;
-            background:#ffffff;
+            height:650px;
         }
 
         .jsmind-inner::-webkit-scrollbar {
             width: 8px;
-          }
+        }
         .jsmind-inner::-webkit-scrollbar-track {
             background-color: transparent;
-          }
+        }
         .jsmind-inner::-webkit-scrollbar-thumb {
             background-color: #B4BED1;
-          }
+        }
         .jsmind-inner::-webkit-scrollbar-thumb {
             background-color: #B4BED1;
             border-radius: 20px;
-          }
+        }
         .jsmind-inner::-webkit-scrollbar-thumb {
             background-color: #B4BED1;
             border-radius: 20px;
             border: 6px solid transparent;
             background-clip: content-box;
-          }
+        }
 
         jmnodes.theme-greensea jmnode.selected{
-        	color: black ;
+            color: black ;
+        }
+
+        canvas.jsmind {
+            z-index: 0;
+        }
+
+        jmnodes {
+            z-index: 0;
         }
 
     </style>';
 
 $tool_content .= "
-<div id='layout' class='mt-3'>
-	<div id='jsmiin-nav-horizontal' class='d-flex justify-content-end'>
-		<div class='btn-group btn-group-justified gap-2 mb-4' role='group' style=''>
-		    <div class='btn-group' role='group'>
-				<button id='Open' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langOpenMind</span>
-                    <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
-                </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Open'>
-                    <ul class='list-group list-group-flush'>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
-                        <li><input class='py-3' id='file_input' type='file' onchange='open_file();'/></li>
-                    </ul>
-                </div>
-			</div>
-			<div class='btn-group' role='group'>
-				<button id='Alter' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langEditMind</span>
-                    <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
-                </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Alter'>
-                    <ul class='list-group list-group-flush'>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='remove_node();'>$langRemoveNode</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='reset();'>$langResetMap</a></li>
-                    </ul>
-                </div>
-			</div>
-			<div class='btn-group' role='group'>
-				<button id='ChooseTheme' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langThemes</span>
-                    <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
-                </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='ChooseTheme'>
-                    <ul class='list-group list-group-flush'>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='warning' role='button' onclick='set_theme(this);'>Warning</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='danger' role='button' onclick='set_theme(this);'>Danger</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='success' role='button' onclick='set_theme(this);'>Success</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='info' role='button' onclick='set_theme(this);'>Info</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='greensea' role='button' onclick='set_theme(this);'>Greensea</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='nephrite' role='button' onclick='set_theme(this);'>Nephrite</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='belizehole' role='button' onclick='set_theme(this);'>Belizehole</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='wisteria' role='button' onclick='set_theme(this);'>Wisteria</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='asphalt' role='button' onclick='set_theme(this);'>Asphalt</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='orange' role='button' onclick='set_theme(this);'>Orange</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='pumpkin' role='button' onclick='set_theme(this);'>Pumpkin</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='pomegranate' role='button' onclick='set_theme(this);'>Pomegranate</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='clouds' role='button' onclick='set_theme(this);'>Clouds</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='asbestos' role='button' onclick='set_theme(this);'>Asbestos</a></li>
-                    </ul>
-                </div>
-			</div>
-			<div class='btn-group' role='group'>
-				<button id='Save' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
-                    <span class='TextBold hidden-xs pe-2'>$langSave</span>
-                    <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
-                </button>
-                <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Save'>
-                    <ul class='list-group list-group-flush'>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
-                        <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";
-                        //<li><button role='button' onclick='show_data();'>show data</button></li>
+<div id='layout'>
+	<div id='jsmiin-nav-horizontal'>
+        <div class='col-12 d-flex justify-content-end align-items-center'>
+            <div class='btn-group btn-group-justified gap-2' role='group'>
 
-    if($is_editor)	{
-        $tool_content .="<li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
-    }
-
-    $tool_content .="
-                    </ul>
+                <div class='btn-group' role='group'>
+                    <button id='Open' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span class='TextBold hidden-xs pe-2'>$langOpenMind</span>
+                        <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
+                    </button>
+                    <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Open'>
+                        <ul class='list-group list-group-flush'>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='open_json();'>$langOpenEx</a></li>
+                            <li><input class='py-3' id='file_input' type='file' onchange='open_file();'/></li>
+                        </ul>
+                    </div>
                 </div>
-			</div>
-		</div>
 
-    <div id='jsmind_container'></div>
+                <div class='btn-group' role='group'>
+                    <button id='Alter' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span class='TextBold hidden-xs pe-2'>$langEditMind</span>
+                        <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
+                    </button>
+                    <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Alter'>
+                        <ul class='list-group list-group-flush'>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='toggle_editable(this);'>$langEditDis</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='add_node();'>$langAddNode</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='remove_node();'>$langRemoveNode</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='reset();'>$langResetMap</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class='btn-group' role='group'>
+                    <button id='ChooseTheme' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span class='TextBold hidden-xs pe-2'>$langThemes</span>
+                        <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
+                    </button>
+                    <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='ChooseTheme'>
+                        <ul class='list-group list-group-flush'>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='' role='button' onclick='set_theme(this);'>Default</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='primary' role='button' onclick='set_theme(this);'>Primary</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='warning' role='button' onclick='set_theme(this);'>Warning</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='danger' role='button' onclick='set_theme(this);'>Danger</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='success' role='button' onclick='set_theme(this);'>Success</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='info' role='button' onclick='set_theme(this);'>Info</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='greensea' role='button' onclick='set_theme(this);'>Greensea</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='nephrite' role='button' onclick='set_theme(this);'>Nephrite</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='belizehole' role='button' onclick='set_theme(this);'>Belizehole</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='wisteria' role='button' onclick='set_theme(this);'>Wisteria</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='asphalt' role='button' onclick='set_theme(this);'>Asphalt</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='orange' role='button' onclick='set_theme(this);'>Orange</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='pumpkin' role='button' onclick='set_theme(this);'>Pumpkin</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='pomegranate' role='button' onclick='set_theme(this);'>Pomegranate</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='clouds' role='button' onclick='set_theme(this);'>Clouds</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' data-theme='asbestos' role='button' onclick='set_theme(this);'>Asbestos</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class='btn-group' role='group'>
+                    <button id='Save' type='button' class='btn submitAdminBtn rounded-2' data-bs-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <span class='TextBold hidden-xs pe-2'>$langSave</span>
+                        <span class='fa-solid fa-chevron-down fa-lg mt-3'></span>
+                    </button>
+                    <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Save'>
+                        <ul class='list-group list-group-flush'>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";
+
+        if($is_editor)	{
+            $tool_content .="<li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
+        }
+
+        $tool_content .="
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <div class='col-12 mt-4'>
+            <div id='jsmind_container'></div>
+        </div>
+    </div>
 </div>";
 
 

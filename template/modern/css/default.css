@@ -217,6 +217,14 @@ img {
   border-bottom: solid 1px #B3D1FF;
 }
 
+
+.border-top-default{
+  border-top: solid 1px #EFF2FB;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
 .border-bottom-default{
   border-top: none;
   border-left: none;
@@ -1873,6 +1881,7 @@ input[type="submit"].deleteAdminBtn:hover {
   border-color: #B70A0A;
   background-color: #B70A0A;
   color: #ffffff;
+  text-decoration: none;
 }
 
 .successAdminBtn,
@@ -1900,6 +1909,7 @@ input[type="submit"].successAdminBtn:hover {
   background-color: #19680C;
   border-color: #19680C;
   color: #ffffff;
+  text-decoration: none;
 }
 
 .warningAdminBtn,
@@ -1927,6 +1937,7 @@ input[type="submit"].warningAdminBtn:hover {
   background-color: #ece1bc;
   border-color: #ece1bc;
   color: #2B3944;
+  text-decoration: none;
 }
 
 .helpAdminBtn {
@@ -1950,6 +1961,7 @@ input[type="submit"].warningAdminBtn:hover {
   background-color: #8e9bb0;
   border-color: #8e9bb0;
   color: #ffffff;
+  text-decoration: none;
 }
 
 .submitAdminBtn span, .cancelAdminBtn span, .deleteAdminBtn span{ 
@@ -1973,6 +1985,13 @@ input[type="submit"].warningAdminBtn:hover {
   margin-top: 1px;
 }
 
+/* These buttons don't change their background color . For this reason their icons always will have white color. */
+.successAdminBtn .fa-solid::before, .successAdminBtn .fa-regular::before, .successAdminBtn .fa-brands::before, .successAdminBtn .fa::before,
+.deleteAdminBtn .fa-solid::before, .deleteAdminBtn .fa-regular::before, .deleteAdminBtn .fa-brands::before, .deleteAdminBtn .fa::before,
+.warningAdminBtn .fa-solid::before, .warningAdminBtn .fa-regular::before, .warningAdminBtn .fa-brands::before, .warningAdminBtn .fa::before,
+.helpAdminBtn .fa-solid::before, .helpAdminBtn .fa-regular::before, .helpAdminBtn .fa-brands::before, .helpAdminBtn .fa::before{
+  color: #ffffff !important;
+}
 
 /**********************************************************************************************************************/
 /******************************************************** BASIC BUTTON ************************************************/
@@ -2046,6 +2065,7 @@ input[type="submit"].warningAdminBtn:hover {
   border-color: #B70A0A;
   color: #ffffff;
   background-color: #B70A0A;
+  text-decoration: none;
 }
 
 
@@ -2217,15 +2237,6 @@ body .form-action-button-mydropdowns{
   border: solid 1px #CDD4E0;
 }
 
-/* .contextual-menu .form-action-button-mydropdowns .confirmAction,
-.contextual-menu .form-action-button-mydropdowns .fa::before,
-.contextual-menu .delete_all_in .list-group-item,
-.contextual-menu .delete_all_in .fa::before,
-.contextual-menu .delete_in_inner .list-group-item,
-.contextual-menu .delete_in_inner .fa::before{
-  color: #C44601 !important;
-} */
-
 .contextual-menu .list-group-item:has(.fa-xmark),
 .contextual-menu .list-group-item:has(.fa-trash),
 .contextual-menu .list-group-item:has(.fa-eraser),
@@ -2273,37 +2284,28 @@ body .form-action-button-mydropdowns{
   justify-content: center; 
 }
 
+
+
+
+
+
+.btn-group-default a{
+  border-radius: 4px !important;
+}
+
+/* button menu-popover */
 .menu-popover{ 
   background: #FFFFFF; 
-  border-radius: 5px; 
+  border-radius: 4px; 
+  border: solid 1px #0073E6;
+}
+/* fade menu-popover */
+.menu-popover.fade.show{
   border: solid 1px #E8EDF8;
 }
-
-.menu-popover.submitAdminBtn,
-.btn-group-default .submitAdminBtn{
-  border: 0px;
-  color: #9BA9C1;
-  background-color: transparent;
-}
-.menu-popover.submitAdminBtn:hover,
-.btn-group-default .submitAdminBtn:hover{
-  background-color: transparent;
-}
-
-.btn-group-default .deleteAdminBtn{
-  border: 0px;
-  color: #B70A0A;
-  background-color: transparent;
-  text-decoration: none;
-}
-.btn-group-default .deleteAdminBtn:hover{
-  background-color: transparent;
-}
-
 .menu-popover .hidden-xs{
   padding: 0px;
 }
-
 .menu-popover .list-group-item{ 
   background-color: #ffffff;
   font-family: 'Manrope', sans-serif;
@@ -2341,12 +2343,10 @@ body .form-action-button-mydropdowns{
 .menu-popover .list-group-item:last-child{
   border-bottom: none !important;
 }
-
 .menu-popover .list-group-item .fa{
   width: 16px;
   height: 16px;
 }
-
 .menu-popover .list-group-item:hover{ 
   background-color: #EFF6FF;
   color:#0073E6;
@@ -2355,37 +2355,10 @@ body .form-action-button-mydropdowns{
   font-weight: 700;
   font-size: 14px;
 }
-
 .menu-popover .list-group-item.disabled{ 
   opacity: 0.4;
   cursor: not-allowed;
 }
-
-/* .menu-popover .delete.confirmAction, 
-.menu-popover .delete.delete_btn{
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  border-radius: 0px;
-  border: 0px;
-  border-bottom: solid 1px #EFF6FF;
-  background-color: #ffffff;
-  display: flex;
-  justify-content: start;
-  align-items: start;
-  gap: 5px;
-  color: #C44601;
-  font-size: 14px;
-  min-height: 38px;
-  padding: 10px;
-  height: auto;
-}
-
-.menu-popover .delete.confirmAction:hover, 
-.menu-popover .delete.delete_btn:hover{
-  background-color: #EFF6FF;
-  color: #C44601;
-} */
-
 
 /* About deleting tool of menu popover */
 .menu-popover .list-group-item:has(.fa-xmark),
@@ -2405,18 +2378,9 @@ body .form-action-button-mydropdowns{
   margin-top: 1px;
 }
 
-
 /* after closing modal , display none from body and block inside popover for form-action-button */
 body .form-action-button-popover{ 
   display: none; 
-}
-
-.forum-category-tools{
-  background-color: #EFF2FB;
-}
-
-.forum-category-tools .form-action-button-popover{
-  display: block; 
 }
 
 .menu-popover .form-action-button-popover{ 
@@ -2578,10 +2542,6 @@ body .form-action-button-popover{
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
-}
-
-.course-professor-code{
-  margin-left: 32px;
 }
 
 
@@ -3347,6 +3307,10 @@ thead tr th{
   padding: 10px 10px 10px 10px;
 }
 
+tbody tr td a{
+  font-weight: 700;
+}
+
 tbody tr td a:hover{
   text-decoration: underline;
 }
@@ -3359,8 +3323,13 @@ tbody tr td a:hover{
   cursor:  url(../images/pointer.png), auto;
 }
 
-thead, tbody .list-header {
+thead, 
+tbody .list-header {
   border-bottom: solid 2px #0073E6 ;
+}
+thead a,
+tbody .listheader a{
+  font-weight: 700;
 }
 
 th .fa-cogs,
@@ -3563,20 +3532,24 @@ body .delThemeBtn{
 }
 
 .cardLogin{
-  max-width: 720px;
-  max-height: 425px;
+  max-height: 425px !important;
   background-color: #ffffff !important; 
   border: solid 1px #EFF2FB;
+}
+.cardLogin-secondary{
+  background-color: #EFF6FF !important; 
+  border: solid 1px #B3D1FF;
 }
 @media(max-width:991px){
   .cardLogin{
       max-width: 100%;
   }
 }
+
 .jumbotron-image-default{
- max-height: 425px;
  width: 100%;
  object-fit: cover;
+ max-height: 410px;
 }
 
 
@@ -3972,7 +3945,7 @@ body .delThemeBtn{
   color: #2546F0;
   font-weight: 700;
   font-size: 18px;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 .more-enabled-login-methods i::before{
   width:40px;
@@ -4793,6 +4766,21 @@ div[role="progressbar"]::before {
   object-fit: cover;
 }
 
+.card-course-info{
+  background-color: #F7F9FE;
+  border-radius: 4px;
+
+}
+
+/**********************************************************************************************************************/
+/*************************************************** MINDMAP **********************************************************/
+/**********************************************************************************************************************/
+
+
+  #jsmind_container{
+    border:solid 1px #E8EDF8 !important;
+    background:transparent !important;
+  }
 /**********************************************************************************************************************/
 /*************************************************** ADMIN ************************************************************/
 /**********************************************************************************************************************/

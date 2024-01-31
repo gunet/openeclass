@@ -102,6 +102,8 @@ if ($total_categories > 0) {
             WHERE f.course_id = ?d
             ORDER BY f.cat_id, f.id", $course_id);
 
+    $tool_content .= "<div class='col-12'>
+                        <div class='row row-cols-1 g-4'>";
     foreach ($categories as $cat_row) {
         $cat_title = q($cat_row->cat_title);
         $catNum = $cat_row->id;
@@ -119,56 +121,59 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
         }
 
-        $tool_content .= "<div class='col-12 border-card mb-4'><caption>";
-        $tool_content .= "<div class='col-12 forum-category-tools d-flex justify-content-between align-items-center border-card px-0 py-0 mb-0'>
-                          <div style='padding-left:10px;'><strong>$langCategory :</strong> $cat_title</div>";
-        $tool_content .= "<div>";
-        $tool_content .= action_button(
-                array(
-                    array(
-                        'title' => $langEditChange,
-                        'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
-                        'icon' => 'fa-edit',
-                        'level' => 'primary',
-                        'show' => $is_editor,
-                        'btn_class' => 'submitAdminBtn'
-                    ),
-                    array(
-                        'title' => $langNewForum,
-                        'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
-                        'icon' => 'fa-plus-circle',
-                        'level' => 'primary',
-                        'show' => $is_editor,
-                        'btn_class' => 'submitAdminBtn'
-                    ),
-                    array(
-                        'title' => $action_notify ? $langStopNotify : $langNotify,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
-                        'icon' => $action_notify ? 'fa-envelope-open' : 'fa-envelope',
-                        'level' => 'primary',
-                        'btn_class' => $action_notify ? 'submitAdminBtn' : 'submitAdminBtn',
-                        'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)),
-                    ),
-                    array('title' => $langDelete,
-                        'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
-                        'icon' => 'fa-xmark',
-                        'class' => 'delete',
-                        'btn_class' => 'deleteAdminBtn',
-                        'level' => 'primary',
-                        'confirm' => $langConfirmDelete,
-                        'show' => $is_editor
-                        
-                    )
-                )
-            );
-        $tool_content .= "</div></div></caption>";
+        $tool_content .= "<div class='col'>";
+
+        $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
+        $tool_content .= "
+                                <div>
+                                        <strong>$langCategory :</strong> $cat_title
+                                </div>";
+                
+                            $tool_content .= action_button(
+                                    array(
+                                        array(
+                                            'title' => $langEditChange,
+                                            'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
+                                            'icon' => 'fa-edit',
+                                            'show' => $is_editor,
+                                            'btn_class' => 'submitAdminBtn'
+                                        ),
+                                        array(
+                                            'title' => $langNewForum,
+                                            'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
+                                            'icon' => 'fa-plus-circle',
+                                            'show' => $is_editor,
+                                            'btn_class' => 'submitAdminBtn'
+                                        ),
+                                        array(
+                                            'title' => $action_notify ? $langStopNotify : $langNotify,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
+                                            'icon' => $action_notify ? 'fa-envelope-open' : 'fa-envelope',
+                                            'btn_class' => $action_notify ? 'submitAdminBtn' : 'submitAdminBtn',
+                                            'show' => (!setting_get(SETTING_COURSE_FORUM_NOTIFICATIONS)),
+                                        ),
+                                        array('title' => $langDelete,
+                                            'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
+                                            'icon' => 'fa-xmark',
+                                            'class' => 'delete',
+                                            'btn_class' => 'deleteAdminBtn',
+                                            'confirm' => $langConfirmDelete,
+                                            'show' => $is_editor
+                                            
+                                        )
+                                    )
+                                );
+             $tool_content .= " 
+                            </div>
+        <div class='card-body'>";
 
         $tool_content .= "<div class='table-responsive mt-0'><table class='table-default '>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr class='list-header'>
             <th>$toolName</th>
-            <th>$langTopics</th>
-            <th>$langPosts</th>
+            <th class='text-center'>$langTopics</th>
+            <th class='text-center'>$langPosts</th>
             <th>$langLastPost</th>
             <th></th>
           </tr>";
@@ -243,8 +248,8 @@ if ($total_categories > 0) {
                         }
                         $tool_content .= "<div class='smaller'>$desc</div>" .
                             "</td>" .
-                            "<td>$total_topics</td>" .
-                            "<td>$total_posts</td>" .
+                            "<td class='text-center'>$total_topics</td>" .
+                            "<td class='text-center'>$total_posts</td>" .
                             "<td>";
                         if ($total_topics > 0 && $total_posts > 0) {
                             $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;";
@@ -302,12 +307,16 @@ if ($total_categories > 0) {
         } else {
             $tool_content .= "<tr><td colspan='8'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
         }
-        $tool_content .= "</tbody></table></div></div>";
+        $tool_content .= "</tbody></table></div></div></div>";
 
 
-       
+        $tool_content .= "</div>";
 
     }
+
+    $tool_content .= "</div>
+                    </div>";
+
 } else {
     $tool_content .= "<div class='col-12'><div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langNoForums</span></div></div>";
 }

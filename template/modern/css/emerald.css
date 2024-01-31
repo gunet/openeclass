@@ -715,29 +715,20 @@ input[type="submit"].warningAdminBtn:hover {
   color: #ffffff;
 }
 
+
+
+
+
+/* button menu-popover */
 .menu-popover{ 
-  background: #FFFFFF; 
-  border: solid 1px #E8EDF8;
-}
-
-.menu-popover.submitAdminBtn,
-.btn-group-default .submitAdminBtn{
+  background: #ffffff; 
   color: #1E7E0E;
-  background-color: transparent;
+  border: solid 1px #1E7E0E;
 }
-.menu-popover.submitAdminBtn:hover,
-.btn-group-default .submitAdminBtn:hover{
-  background-color: transparent;
+/* fade menu-popover */
+.menu-popover.fade.show{
+  border: solid 1px #CDD4E0;
 }
-
-.btn-group-default .deleteAdminBtn{
-  color: #1E7E0E;
-  background-color: transparent;
-}
-.btn-group-default .deleteAdminBtn:hover{
-  background-color: transparent;
-}
-
 
 .menu-popover .list-group-item{ 
   border-bottom: solid 1px #EFF6FF;
@@ -1126,6 +1117,10 @@ tr.danger{
     background-color: #ffffff !important;
     border: solid 1px #EFF6FF;
 }
+.cardLogin-secondary{
+  background-color: transparent !important; 
+  border: solid 1px #EFF6FF;
+}
 
 .announce-link-homepage {
     color: #1E7E0E;
@@ -1171,6 +1166,11 @@ tr.danger{
 
 .banner-body{
   background-color: #ffffff !important;
+}
+
+.more-enabled-login-methods {
+  color: #1E7E0E;
+  background-color: #ffffff;
 }
 
 /**********************************************************************************************************************/
@@ -1498,6 +1498,14 @@ color: #2b3944;
 
 .prev-next-learningPath{
   color: #1E7E0E;
+}
+
+/**********************************************************************************************************************/
+/*********************************************** COURSE INFO **********************************************************/
+/**********************************************************************************************************************/
+
+.card-course-info{
+  background-color: #E8F2E7;
 }
 
 

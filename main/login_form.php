@@ -144,7 +144,7 @@ $tool_content .= "<div class='col-12 mt-5'>";
           
 
           if($counter == 0) {
-            $tool_content .= "<div class='col-lg-6 ms-auto me-auto tab-content mt-5'>";
+            $tool_content .= "<div class='col-lg-5 col-md-6 col-12 ms-auto me-auto tab-content mt-5'>";
           }
 
           if($counter >= 0) {

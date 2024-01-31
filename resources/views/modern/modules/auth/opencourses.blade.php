@@ -97,10 +97,10 @@
                                             <th>{!! trans('langCourseCode') !!}</th>
                                         @if (isset($isInOpenCoursesMode))
                                             <th>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-end'>{!! trans('langOpenCoursesLevel') !!}</th>
+                                            <th class='text-end'>{!! trans('langGroupAccess') !!}</th>
                                         @else
                                             <th>{!! trans('langTeacher') !!}</th>
-                                            <th class='text-end'>{!! trans('langType') !!}</th>
+                                            <th class='text-end'>{!! trans('langGroupAccess') !!}</th>
                                         @endif
                                         </tr>
                                     </thead>
@@ -113,34 +113,17 @@
                                                     @else
                                                         <span class='TextBold'>{!! $mycourse->i !!}</span>&nbsp;<small>({!! $mycourse->c !!})</small>
                                                     @endif
-                                                    @if ($displayGuestLoginLinks)
-                                                        @if ($course_data[$mycourse->id]['userguest'])
-                                                            <div class='float-end ps-3'>
-                                                            @if ($course_data[$mycourse->id]['userguest']->password === '')
-                                                                    <form method='post' action='{{ $urlAppend }}'>
-                                                                        <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
-                                                                        <input type='hidden' name='pass' value=''>
-                                                                        <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
-                                                                        <button type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top'><span class='fa fa-plane'></span></button>
-                                                                    </form>
-                                                            @else
-                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-bs-placement='top' data-bs-toggle='tooltip'>
-                                                                        <span class='fa fa-plane'></span>
-                                                                    </a>
-                                                            @endif
-                                                            </div>
-                                                        @endif
-                                                    @endif
+    
 
                                                     @if(!get_config('show_modal_openCourses'))
                                                         <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                            <i class="fa-solid fa-circle-info Primary-500-cl fa-lg"></i>
+                                                            <i class="fa-solid fa-display Primary-500-cl fa-lg"></i>
                                                         </a>
                                                     @endif
 
                                                     @if(get_config('show_modal_openCourses'))
                                                         <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                            <i class='fa-solid fa-display Primary-500-cl'></i>
+                                                            <i class='fa-solid fa-display Primary-500-cl fa-lg'></i>
                                                         </button>
 
                                                         <!-- The Modal -->
@@ -150,11 +133,14 @@
                                                             <div class="modal-content modal-content-opencourses px-lg-5 py-lg-5">
                                                                 <div class='col-12 d-flex justify-content-between align-items-start'>
                                                                     <div>
-                                                                        <h2 class='d-flex justify-content-start align-items-start gap-3 TextBold mb-0'>
-                                                                            <span class='settings-icons mt-1 Neutral-600-cl'>{!! course_access_icon($mycourse->visible) !!}</span>
-                                                                            {{$mycourse->i}}
-                                                                        </h2>
-                                                                        <p class='course-professor-code'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</p>
+                                                                        <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                                                            <h2 class='mb-0'>{{$mycourse->i}}</h2>
+                                                                            {!! course_access_icon($mycourse->visible) !!}
+                                                                            @if($mycourse->cls > 0)
+                                                                                {!! copyright_info($mycourse->id) !!}
+                                                                            @endif
+                                                                        </div>
+                                                                        <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
                                                                     </div>
                                                                     <div>
                                                                         <button type='button' class="close border-0 bg-transparent mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
@@ -183,11 +169,32 @@
                                                         </div>
                                                     @endif
 
+                                                    @if ($displayGuestLoginLinks)
+                                                        @if ($course_data[$mycourse->id]['userguest'])
+                                                            <div class='float-end pe-3'>
+                                                            @if ($course_data[$mycourse->id]['userguest']->password === '')
+                                                                    <form method='post' action='{{ $urlAppend }}'>
+                                                                        <input type='hidden' name='uname' value='{{ $course_data[$mycourse->id]['userguest']->username }}'>
+                                                                        <input type='hidden' name='pass' value=''>
+                                                                        <input type='hidden' name='next' value='/courses/{{ $mycourse->k }}/'>
+                                                                        <button style='width:20px; height:25px;' type='submit' title='{!! trans('langGuestLogin') !!}' name='submit' data-bs-toggle='tooltip' data-bs-placement='top'>
+                                                                            <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                                                        </button>
+                                                                    </form>
+                                                            @else
+                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-bs-placement='top' data-bs-toggle='tooltip'>
+                                                                        <i class="fa-solid fa-right-to-bracket fa-lg"></i>
+                                                                    </a>
+                                                            @endif
+                                                            </div>
+                                                        @endif
+                                                    @endif
+
                                                 </td>
                                                 <td>
                                                     {!! $mycourse->t !!}
                                                 </td>
-                                                <td class='text-end'>
+                                                <td class='text-end pe-4'>
                                                 @if ($isInOpenCoursesMode)
                                                     {!! CourseXMLElement::getLevel($mycourse->level) !!}&nbsp;
                                                     <a href='javascript:showMetadata("{!! $mycourse->k !!}");'><img src='{{ $themeimg }}/lom.png'/></a>

@@ -40,6 +40,13 @@
   .border-default-card{
     border: solid 1px #4F6893;
   }
+
+  .border-top-default{
+    border-top: solid 1px #4F6893;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
     
   .border-bottom-card-header{
     border-top: none;
@@ -798,9 +805,9 @@
     color: #ffffff;
     background-color: #C44601;
   }
-  .deleteAdminBtn .fa-xmark{
+  /* .deleteAdminBtn .fa-xmark{
     color:#C44601;
-  }
+  } */
   
   .deleteAdminBtn:hover,
   button[type="submit"].deleteAdminBtn:hover,
@@ -1060,30 +1067,18 @@
     color: #ffffff;
   }
   
+
+  /* button menu-popover */
   .menu-popover{ 
     background: #2B3944; 
+    color: #74AFE9;
+    border: solid 1px #74AFE9;
+  }
+  /* fade menu-popover */
+  .menu-popover.fade.show{
     border: solid 1px #4F6893;
   }
-  
-  .menu-popover.submitAdminBtn,
-  .btn-group-default .submitAdminBtn{
-    color: #74AFE9;
-    background-color: transparent;
-  }
-  .menu-popover.submitAdminBtn:hover,
-  .btn-group-default .submitAdminBtn:hover{
-    background-color: transparent;
-  }
-  
-  .btn-group-default .deleteAdminBtn{
-    color: #B70A0A;
-    background-color: transparent;
-  }
-  .btn-group-default .deleteAdminBtn:hover{
-    background-color: transparent;
-  }
-  
-  
+
   .menu-popover .list-group-item{ 
     background-color: #2B3944;
     color: #ffffff;
@@ -1093,10 +1088,6 @@
   .menu-popover .list-group-item .fa{ 
     color:#ffffff;
   }
-  /* .menu-popover .list-group-item .fa-xmark,
-  .menu-popover .list-group-item .fa-trash{ 
-    color:#C44601;
-  } */
   
   .menu-popover .list-group-item:hover{ 
     background-color: #4F6893;
@@ -1107,34 +1098,6 @@
     color:#ffffff;
   }
   
-  /* .menu-popover .delete.confirmAction, 
-  .menu-popover .delete.delete_btn{
-    border-bottom: solid 1px #4F6893;
-    background-color: #2B3944;
-    color: #C44601;
-  }
-  
-  .menu-popover .delete.confirmAction:hover, 
-  .menu-popover .delete.delete_btn:hover{
-    background-color: #4F6893;
-    color: #C44601;
-  }
-
-  .menu-popover .delete.confirmAction .fa-xmark,
-  .menu-popover .delete.confirmAction .fa-trash,
-  .menu-popover .delete.delete_btn .fa-xmark,
-  .menu-popover .delete.delete_btn .fa-trash{
-    color: #C44601;
-    margin-top: 1px;
-  }
-  .menu-popover .delete.confirmAction:hover .fa-xmark,
-  .menu-popover .delete.confirmAction:hover .fa-trash,
-  .menu-popover .delete.delete_btn:hover .fa-xmark,
-  .menu-popover .delete.delete_btn:hover .fa-trash{
-    color: #C44601;
-  } */
-
-
   .bootbox.show .modal-header .modal-title, .modal.show .modal-header .modal-title{
     color: #ffffff;
   }
@@ -1184,11 +1147,6 @@
 
   .modal-content .form-wrapper.form-edit{
     background-color: #2B3944;
-  }
-
-
-  .forum-category-tools{
-    background-color: #4F6893;
   }
  
   /**********************************************************************************************************************/
@@ -1908,6 +1866,10 @@ table.dataTable tfoot th, table.dataTable tfoot td {
       background-color: #212D37 !important;
       border: solid 1px #4F6893;
   }
+  .cardLogin-secondary{
+    background-color: transparent !important; 
+    border: solid 1px #4F6893;
+  }
 
   .announce-link-homepage {
       color: #74AFE9;
@@ -1953,6 +1915,11 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .banner-body{
     background-color: #ffffff !important;
+  }
+
+  .more-enabled-login-methods {
+    color: #74AFE9;
+    background-color: #212D37;
   }
 
 /**********************************************************************************************************************/
@@ -2338,6 +2305,24 @@ tr.warning:hover{
 /**********************************************************************************************************************/
 .diffEqual {
   background-color: #212D37 !important;
+}
+
+/**********************************************************************************************************************/
+/*********************************************** COURSE INFO **********************************************************/
+/**********************************************************************************************************************/
+
+.card-course-info{
+  background-color: #000000;
+}
+
+/**********************************************************************************************************************/
+/*************************************************** MINDMAP **********************************************************/
+/**********************************************************************************************************************/
+
+
+#jsmind_container{
+  border:solid 1px #4F6893 !important;
+  background: #212D37 !important;
 }
 
 /**********************************************************************************************************************/
@@ -2820,6 +2805,10 @@ i.mce-i-checkbox {
 
 .mce-panel {
   border: solid 1px #4F6893 !important;
+}
+
+.mce-btn {
+  background: #212D37 !important;
 }
 
 .mce-toolbar .mce-btn i {

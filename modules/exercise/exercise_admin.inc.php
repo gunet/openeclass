@@ -574,11 +574,14 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     </div>
                 </div>
 
-                <div class='course-info-title clearfix bg-light mt-4'>
-                    <a role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
-                        <h6 class='panel-heading'>
-                            <span class='fa fa-chevron-down fa-fw'></span> $langCheckAccess
-                        </h6>
+                <div class='course-info-title clearfix mt-4'>
+                    <a class='TextBold text-decoration-none'role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
+                        <div class='card panelCard px-0 py-1 h-100'>
+                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                $langCheckAccess
+                                <span class='fa fa-chevron-down fa-fw'></span> 
+                            </div>
+                        </div>
                     </a>
                 </div>
 
@@ -691,7 +694,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
     $exerciseDescription = trim($exerciseDescription);
     if ($exerciseDescription !== '') {
-        $exerciseDescription = "<div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>" .
+        $exerciseDescription = "<div class='col-sm-12'>" .
             standard_text_escape($exerciseDescription) . '</div><hr>';
     }
 
@@ -716,62 +719,53 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     } else {
         $periodLabel = null;
     }
-    $period = $periodLabel? "<div class='col-12 ps-3 pe-3 pt-3 pb-3'>$periodLabel <b>$periodInfo</b></div>": '';
+    $period = $periodLabel? "<div class='col-12'>$periodLabel <b>$periodInfo</b></div>": '';
 
     $tool_content .= "
-    <div class='col-12 mb-3'>
-        <div class='panel panel-default'>
-            <div class='panel-heading collapsed' data-bs-toggle='collapse' href='#exerciseInfoPanel' aria-expanded='false' aria-controls='#exerciseInfoPanel' style='cursor: pointer'>
-                <span class='fa-solid fa-chevron-right' id='exerciseInfoPanelIndicator'></span> " . q($exerciseTitle) . "
+    <div class='col-12 mb-4'>
+        <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
+            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                <h3>" . q($exerciseTitle) . "</h3>
             </div>
-            <div class='panel-body collapse' id='exerciseInfoPanel'>
-                <div class='row p-2'>
+            <div class='card-body'>
+                <div class='row row-cols-1 g-3'>
                     $exerciseDescription
                     $period
-                    <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>
+                    <div class='col-sm-12'>
                         $exerciseType
                     </div>";
 
     if ($exerciseTempSave == 1) {
-        $tool_content .= "<div class='col-12 ps-3 pe-3 pt-3 pb-3'><b>$langTemporarySave:</b> $langYes</div>";
+        $tool_content .= "<div class='col-12 '><b>$langTemporarySave:</b> $langYes</div>";
     }
     if ($exerciseTimeConstraint > 0) {
         if ($exerciseTimeConstraint == 1) {
             $langExerciseConstrainUnit = $langminute;
         }
-        $tool_content .= "<div class='col-12 ps-3 pe-3 pt-3 pb-3'>$langExerciseConstrain: <b>$exerciseTimeConstraint $langExerciseConstrainUnit</b></div>";
+        $tool_content .= "<div class='col-12 '>$langExerciseConstrain: <b>$exerciseTimeConstraint $langExerciseConstrainUnit</b></div>";
     }
     if ($exerciseAttemptsAllowed > 0) {
-        $tool_content .= "<div class='col-12 ps-3 pe-3 pt-3 pb-3'>$langExerciseAttemptsAllowed: <b>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</b></div>";
+        $tool_content .= "<div class='col-12 '>$langExerciseAttemptsAllowed: <b>$exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit</b></div>";
     }
 
     $tool_content .= "
-                    <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>$disp_results_message</div>
-                    <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>$disp_score_message</div>";
+                    <div class='col-sm-12 '>$disp_results_message</div>
+                    <div class='col-sm-12 '>$disp_score_message</div>";
 
     if ($exerciseAssignToSpecific > 0) {
-        $tool_content .= "<div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
+        $tool_content .= "<div class='col-sm-12 '>$m[WorkAssignTo]: <b>$assign_to_users_message</b></div>";
     }
 
     $tags_list = $moduleTag->showTags();
     if ($tags_list) {
         $tool_content .= "
-                    <div class='col-sm-12 ps-3 pe-3 pt-3 pb-3'>
+                    <div class='col-sm-12 '>
                         $langTags: $tags_list
                     </div>";
     }
     $tool_content .= "
                 </div>
             </div>
-        </div></div>
-        <script>$(function () {
-            $('#exerciseInfoPanel')
-                .on('show.bs.collapse', function () {
-                    $('#exerciseInfoPanelIndicator').addClass('fa-rotate-90');
-                })
-                .on('hidden.bs.collapse', function () {
-                    $('#exerciseInfoPanelIndicator').removeClass('fa-rotate-90');
-                });
-        });</script>";
+        </div></div>";
 
 }
