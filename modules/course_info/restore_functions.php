@@ -669,7 +669,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         Database::get()->query("UPDATE forum
             SET num_topics = (SELECT COUNT(*) FROM forum_topic WHERE forum_id = forum.id),
                 num_posts = (SELECT COUNT(*) FROM forum_topic, forum_post WHERE topic_id = forum_topic.id AND forum_id = forum.id),
-                last_post_id = (SELECT forum_post.id FROM forum_topic, forum_post WHERE topic_id = forum_topic.id AND forum_id = forum.id ORDER BY post_time LIMIT 1)
+                last_post_id = COALESCE((SELECT forum_post.id FROM forum_topic, forum_post WHERE topic_id = forum_topic.id AND forum_id = forum.id ORDER BY post_time LIMIT 1), 0)
             WHERE forum.id IN $forum_ids");
         Database::get()->query("UPDATE forum_topic
             SET last_post_id = (SELECT id FROM forum_post WHERE topic_id = forum_topic.id ORDER BY post_time LIMIT 1)
@@ -960,14 +960,30 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $url_prefix_map, $backupData, $restoreHelper);
         }
 
+
+        // Rubrics - Scales
+        $rubric_map = restore_table($restoreThis, 'rubric', array(
+                        'return_mapping' => 'id',
+                        'set' => array('course_id' => $new_course_id)
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        $rubric_map[0] = 0;
+
+        $grading_scale_map = restore_table($restoreThis, 'grading_scale', array(
+                        'return_mapping' => 'id',
+                        'set' => array('course_id' => $new_course_id)
+        ), $url_prefix_map, $backupData, $restoreHelper);
+        $grading_scale_map[0] = 0;
+
         // Assignments
         if (!isset($group_map[0])) {
             $group_map[0] = 0;
         }
         $assignments_map = restore_table($restoreThis, 'assignment',
             array('set' => array('course_id' => $new_course_id),
-                  'return_mapping' => 'id',
-                  'init' => array('max_grade' => 10)),
+                                  'map_function' => 'rubric_scaling_map_function',
+                                  'map_function_data' => array($rubric_map, $grading_scale_map),
+                                  'return_mapping' => 'id',
+                                  'init' => array('max_grade' => 10)),
             $url_prefix_map, $backupData, $restoreHelper);
         $assignments_map[0] = 0;
         $assignment_to_specific_map = restore_table($restoreThis, 'assignment_to_specific', array('map' => array('assignment_id' => $assignments_map)),
@@ -1387,22 +1403,25 @@ function fix_media_links($oldcode, $newcode, $new_course_id, $video_map) {
         foreach ($all as $entry) {
             $field = $fix['field'];
             $table = $fix['table'];
-            $newcontents = preg_replace_callback('<(/video/(?:file|play).php\?course=\w+&amp;id=)(\d+)>',
-                function ($match) use ($video_map, $oldcode, $newcode) {
-                    $new_id = getid($video_map, $match[2]);
-                    if ($new_id) {
-                        // $fix[table]: $match[2] => $new_id
-                        $base = str_replace("course=$oldcode", "course=$newcode", $match[1]);
-                        return $base . $new_id;
-                    } else {
-                        // $fix[table]: $match[2] not found
-                        return $match[1] . $match[2];
-                    }
-                }, $entry->$field);
-            if ($entry->$field != $newcontents) {
-                Database::get()->query("UPDATE `$table`
-                    SET `$field` = ?s WHERE id = ?d",
-                    $newcontents, $entry->id);
+            if (!is_null($entry->$field)) {
+                $newcontents = preg_replace_callback('<(/video/(?:file|play).php\?course=\w+&amp;id=)(\d+)>',
+                    function ($match) use ($video_map, $oldcode, $newcode) {
+                        $new_id = getid($video_map, $match[2]);
+                        if ($new_id) {
+                            // $fix[table]: $match[2] => $new_id
+                            $base = str_replace("course=$oldcode", "course=$newcode", $match[1]);
+                            return $base . $new_id;
+                        } else {
+                            // $fix[table]: $match[2] not found
+                            return $match[1] . $match[2];
+                        }
+                    }, $entry->$field);
+
+                if ($entry->$field != $newcontents) {
+                    Database::get()->query("UPDATE `$table`
+                SET `$field` = ?s WHERE id = ?d",
+                        $newcontents, $entry->id);
+                }
             }
         }
     }
@@ -1817,6 +1836,17 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = @$forum_topic_map[$data['res_id']];
     } elseif ($type == 'poll') {
         $data['res_id'] = @$poll_map[$data['res_id']];
+    }
+    return true;
+}
+
+
+function rubric_scaling_map_function(&$data, $maps) {
+    list($rubric_map, $grading_scale_map) = $maps;
+    if ($data['grading_type'] == ASSIGNMENT_SCALING_GRADE) {
+        $data['grading_scale_id'] = $grading_scale_map[$data['grading_scale_id']];
+    } elseif ($data['grading_type'] == ASSIGNMENT_RUBRIC_GRADE) {
+        $data['grading_scale_id'] = $rubric_map[$data['grading_scale_id']];
     }
     return true;
 }

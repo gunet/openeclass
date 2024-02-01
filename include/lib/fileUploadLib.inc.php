@@ -489,9 +489,7 @@ function isWhitelistAllowed($filename) {
     $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';
 
     $wh3 = fetchUserWhitelist($uid);
-    if (!is_null($wh3)) {
-        $wh .= (strlen($wh3) > 0) ? ', ' . $wh3 : '';
-    }
+    $wh .= (!is_null($wh3)) ? ', ' . $wh3 : '';
 
     $whitelist = explode(',', preg_replace('/\s+/', '', $wh)); // strip any whitespace
 

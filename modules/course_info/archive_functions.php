@@ -101,6 +101,8 @@ function archiveTables($course_id, $course_code, $archivedir) {
         'assignment_to_specific' => "assignment_id IN (SELECT id FROM assignment WHERE course_id = $course_id)",
         'assignment_submit' => "assignment_id IN (SELECT id FROM assignment
                                                              WHERE course_id = $course_id)",
+        'rubric' => $sql_course,
+        'grading_scale' => $sql_course,
         'gradebook' => $sql_course,
         'gradebook_activities' => "gradebook_id IN (SELECT id FROM gradebook
                                                              WHERE course_id = $course_id)",
