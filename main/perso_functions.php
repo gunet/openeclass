@@ -32,7 +32,8 @@ require_once 'modules/message/class.msg.php';
  * @param integer $uid
  * @return string
  */
-function getUserCourseInfo($uid) {
+function getUserCourseInfo($uid): string
+{
     global $teacher_courses_count, $student_courses_count, $langCourse, $langActions,
            $session, $lesson_ids, $courses, $urlServer, $langUnregCourse, $langAdm, $langFavorite,
            $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso,
@@ -59,7 +60,7 @@ function getUserCourseInfo($uid) {
         $lesson_content .= "<table id='portfolio_lessons' class='table portfolio-courses-table'>";
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
-            array_push($lesson_ids, $data->course_id);
+            $lesson_ids[] = $data->course_id;
             $visclass = '';
 
             //Get syllabus for course
@@ -81,7 +82,7 @@ function getUserCourseInfo($uid) {
             }
             $license = '';
             if($data->course_license > 0){
-                $license = copyright_info($data->id);
+                $license = copyright_info($data->course_id);
             }
             $lesson_content .= "
                 <tr class='$visclass row-course'>
@@ -151,12 +152,12 @@ function getUserCourseInfo($uid) {
                                                                     </a>
                                                                 </div>
                                                                 <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3 show' id='courseSyllabus{$data->course_id}' data-bs-parent='#accordionCourseSyllabus{$data->course_id}'>";
-                                                                    foreach ($syllabus as $row){
-                                                $lesson_content .= "    <div class='col-12 mb-4'>
-                                                                            <p class='form-label text-start'>" .q($row->title) ."</p>
-                                                                            " . standard_text_escape($row->comments) . "
-                                                                        </div>";
-                                                                    }
+                                                                foreach ($syllabus as $row) {
+                                                                    $lesson_content .= "<div class='col-12 mb-4'>
+                                                                        <p class='form-label text-start'>" .q($row->title) ."</p>
+                                                                        " . standard_text_escape($row->comments) . "
+                                                                    </div>";
+                                                                }
                                         $lesson_content .= "    </div>
                                                             </li>
                                                         </ul>
@@ -168,7 +169,7 @@ function getUserCourseInfo($uid) {
 
                 $lesson_content .= "</div>";
 
-            
+
 
             $lesson_content .= "</div>
                             </div>";
