@@ -772,10 +772,10 @@ if ($exerciseType != SINGLE_PAGE_TYPE) {
     //     </style>";
 }
 
-$tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center' style='margin-top:100px;'>";
+$tool_content .= "<div class='col-12 d-flex justify-content-center align-items-center gap-2 flex-wrap' style='margin-top:100px;'>";
 
 // "Cancel" button
-$tool_content .= "<input class='btn cancelAdminBtn me-2' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
+$tool_content .= "<input class='btn cancelAdminBtn' type='submit' name='buttonCancel' id='cancelButton' value='$langCancel'>";
 
 // "Submit" button
 $tool_content .= "<input class='btn successAdminBtn blockUI' type='submit' name='buttonFinish' value='$langExerciseFinalSubmit'>";

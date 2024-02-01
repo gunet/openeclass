@@ -2305,6 +2305,9 @@ body .form-action-button-mydropdowns{
   border-radius: 4px; 
   border: solid 1px #0073E6;
 }
+.menu-popover:hover{
+  background: #ffffff; 
+}
 /* fade menu-popover */
 .menu-popover.fade.show{
   border: solid 1px #E8EDF8;
@@ -5414,9 +5417,4 @@ table.dataTable tbody tr th{
   .module-container{
     background-color: #ffffff;
   }
-}
-
-.alert-info a{
-  color: #0073E6;
-  text-decoration: underline;
 }

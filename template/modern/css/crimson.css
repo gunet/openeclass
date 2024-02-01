@@ -723,6 +723,9 @@
     color: #C44601;
     border: solid 1px #C44601;
   }
+  .menu-popover:hover{
+    background: #ffffff; 
+  }
   /* fade menu-popover */
   .menu-popover.fade.show{
     border: solid 1px #CDD4E0;

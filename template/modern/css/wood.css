@@ -721,6 +721,9 @@ input[type="submit"].warningAdminBtn:hover {
   color: #867F72;
   border: solid 1px #867F72;
 }
+.menu-popover:hover{
+  background: #ffffff; 
+}
 /* fade menu-popover */
 .menu-popover.fade.show{
   border: solid 1px #CDD4E0;

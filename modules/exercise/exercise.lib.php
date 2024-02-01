@@ -112,7 +112,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                     static $id = 0;
                     $id++;
                     $value = (isset($exerciseResult[$questionId][$id])) ? ('value = "'.q($exerciseResult[$questionId][$id]) .'"') : '';
-                    return "<input class='form-control' type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
+                    return "<input class='form-control mb-4' type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value onChange='questionUpdateListener(". $question_number . ",". $questionId .");'>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer));
             $tool_content .= $answer;
@@ -128,7 +128,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
                 $selection_text = explode("|", str_replace(array('[',']'), ' ', q($blank[0])));
                 array_unshift($selection_text, "--- $langSelect ---");
                 $value = (isset($exerciseResult[$questionId][$id])) ? ($exerciseResult[$questionId][$id]) : '';
-                return selection($selection_text, "choice[$questionId][$id]", $value,"class='form-control' onChange='questionUpdateListener($question_number, $questionId)'");
+                return selection($selection_text, "choice[$questionId][$id]", $value,"class='form-select' onChange='questionUpdateListener($question_number, $questionId)'");
             };
             $answer_string = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape($answer_string));
             $tool_content .= $answer_string;
@@ -137,7 +137,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         elseif ($answerType == UNIQUE_ANSWER) {
             $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
             $tool_content .= "
-                        <div class='radio'>
+                        <div class='radio mb-1'>
                           <label>
                             <input type='radio' name='choice[$questionId]' value='$answerId' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
                             " . standard_text_escape($answer) . "
@@ -148,7 +148,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         elseif ($answerType == MULTIPLE_ANSWER) {
             $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
             $tool_content .= "
-                        <div class='checkbox'>
+                        <div class='checkbox mb-1'>
                             <label class='label-container'>
                                 <input type='checkbox' name='choice[$questionId][$answerId]' value='1' $checked onClick='updateQuestionNavButton(". $question_number . ");'>
                                 <span class='checkmark'></span>
@@ -199,7 +199,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
         } elseif ($answerType == TRUE_FALSE) {
             $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
             $tool_content .= "
-                        <div class='radio'>
+                        <div class='radio mb-1'>
                           <label>
                             <input type='radio' name='choice[$questionId]' value='$answerId' $checked onClick='updateQuestionNavButton($question_number);'>
                             " . standard_text_escape($answer) . "
@@ -517,6 +517,11 @@ function display_exercise($exercise_id) {
         }
     }
     if (!$hasRandomQuestions) {
-        $tool_content .= "<div class='col-12 mt-5 text-center fs-5 TextBold Neutral-900-cl'>$langTotalScore: $totalWeighting</div>";
+        $tool_content .= "<div class='col-12 mt-4'>
+                            <div class='alert alert-info'>
+                                <i class='fa-solid fa-circle-info fa-lg'></i>
+                                <span><strong>$langTotalScore</strong>: $totalWeighting</span>
+                            </div>
+                          </div>";
     }
 }

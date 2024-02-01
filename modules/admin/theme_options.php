@@ -844,32 +844,6 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navsettingsFooter'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langBgFooterCongiguration</h3>
@@ -904,42 +878,6 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navsettingsScrollBar'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSettingsScrollBar</h3>
@@ -957,24 +895,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1293,43 +1213,6 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navCheckboxes'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langCheckboxes</h3>
@@ -1368,94 +1251,6 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navTextEditor'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langTextEditor</h3>
@@ -1473,59 +1268,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1561,36 +1303,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1636,17 +1348,6 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navForms'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langForms</h3>
@@ -1660,9 +1361,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
 
 
 
@@ -1688,17 +1386,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1739,36 +1426,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1926,20 +1583,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -282,35 +282,37 @@ $head_content .= "
     $('.randomWithCriteria').click(function(e) {
         e.preventDefault();
         bootbox.dialog({
-            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px; color:grey\"></span>".js_escape($langRandomQuestionsWithCriteria)."',
+            title: '<span class=\"fa fa-random\" style=\"margin-right: 10px;\"></span>".js_escape($langRandomQuestionsWithCriteria)."',
             message: '<div class=\"row\">' +
-                        '<div class=\"col-md-12\">' +
+                        
                             '<form class=\"form-horizontal\">' +
-                                '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
-                                '<span class=\"col-5\">".js_escape($langQuestionDiffGrade)."</span>' +
-                                '<span class=\"col-5\">".js_escape($langQuestionCats)."</span>' +
-                                '<span class=\"col-2\">".js_escape($langNumQuestions)."</span>' +
-                                '</div>'+
-                                '<div class=\"row form-group\">' +
-                                    '<div class=\"col-5\">' +
-                                        '<select id=\"difficultyId\" class=\"form-select\">' +
-                                            '<option value=\"0\">  ----  </option>' +
-                                            '<option value=\"1\">".js_escape($langQuestionVeryEasy)."</option>' +
-                                            '<option value=\"2\">".js_escape($langQuestionEasy)."</option>' +
-                                            '<option value=\"3\">".js_escape($langQuestionModerate)."</option>' +
-                                            '<option value=\"4\">".js_escape($langQuestionDifficult)."</option>' +
-                                            '<option value=\"5\">".js_escape($langQuestionVeryDifficult)."</option>' +
-                                        '</select>' +
-                                    '</div>' +
-                                    '<div class=\"col-5\">' +
-                                        '<select id=\"categoryId\" class=\"form-control\">$cat_options_2</select>' +
-                                    '</div>' +
-                                    '<div class=\"col-2\">' +
-                                        '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
+                                '<div class=\"col-12\">' +
+                                    '<div class=\"row\" style=\"margin-bottom: 10px;\">' +
+                                        '<div class=\"col-4 control-label-notes\">".js_escape($langQuestionDiffGrade)."</div>' +
+                                        '<div class=\"col-4 control-label-notes\">".js_escape($langQuestionCats)."</div>' +
+                                        '<div class=\"col-4 control-label-notes\">".js_escape($langNumQuestions)."</div>' +
+                                    '</div>'+
+                                    '<div class=\"row form-group\">' +
+                                        '<div class=\"col-4\">' +
+                                            '<select id=\"difficultyId\" class=\"form-select\">' +
+                                                '<option value=\"0\">  ----  </option>' +
+                                                '<option value=\"1\">".js_escape($langQuestionVeryEasy)."</option>' +
+                                                '<option value=\"2\">".js_escape($langQuestionEasy)."</option>' +
+                                                '<option value=\"3\">".js_escape($langQuestionModerate)."</option>' +
+                                                '<option value=\"4\">".js_escape($langQuestionDifficult)."</option>' +
+                                                '<option value=\"5\">".js_escape($langQuestionVeryDifficult)."</option>' +
+                                            '</select>' +
+                                        '</div>' +
+                                        '<div class=\"col-4\">' +
+                                            '<select id=\"categoryId\" class=\"form-select\">$cat_options_2</select>' +
+                                        '</div>' +
+                                        '<div class=\"col-4\">' +
+                                            '<input class=\"form-control\" type=\"text\" id=\"questionRandomDrawn\" value=\"\">' +
+                                        '</div>' +
                                     '</div>' +
                                 '</div>' +
                             '</form>' +
-                        '</div>' +
+                        
                       '</div>',
             buttons: {
                 success: {
@@ -342,7 +344,7 @@ $head_content .= "
                     }
                 }
             }
-        });
+        }).find('div.modal-dialog').addClass('modal-lg');
     });
     $('.menu-popover').on('shown.bs.popover', function () {
         $('.warnLink').on('click', function(e){
@@ -420,28 +422,40 @@ if ($objExercise->hasQuestionListWithRandomCriteria()) {
     $disabled = ' disabled';
 }
 
-$tool_content .= action_bar(array(
-    array('title' => $langNewQu,
-          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes",
-          'icon' => 'fa-plus-circle',
-          'level' => 'primary-label',
-          'button-class' => 'btn-success'),
-    array('title' => $langRandomQuestionsWithCriteria,
-          'class' => 'randomWithCriteria',
-          'url' => "#",
-          'level' => 'primary-label',
-          'icon' => 'fa-random',
-          'show' => !$randomQuestions),
-    array('title' => $langWithoutCriteria,
-          'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
-          'level' => 'primary-label',
-          'icon' => 'fa-bank'),
-    array('title' => $langWithCriteria,
-          'url' => "#",
-          'class' => 'questionSelection',
-          'level' => 'primary-label',
-          'icon' => 'fa-bank')),
-    false);
+
+
+
+
+
+$tool_content .= "<div class='col-12 d-flex justify-content-between align-items-start gap-3 flex-wrap mt-5'>";
+
+$tool_content .= "<h2>$langEditQuestions</h2>";
+
+$tool_content .= "<div>";
+    $tool_content .= action_bar(array(
+        array('title' => $langNewQu,
+            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;newQuestion=yes",
+            'icon' => 'fa-plus-circle',
+            'level' => 'primary-label',
+            'button-class' => 'btn-success'),
+        array('title' => $langRandomQuestionsWithCriteria,
+            'class' => 'randomWithCriteria',
+            'url' => "#",
+            'level' => 'primary-label',
+            'icon' => 'fa-random',
+            'show' => !$randomQuestions),
+        array('title' => $langWithoutCriteria,
+            'url' => "question_pool.php?course=$course_code&amp;fromExercise=$exerciseId",
+            'level' => 'primary-label',
+            'icon' => 'fa-bank'),
+        array('title' => $langWithCriteria,
+            'url' => "#",
+            'class' => 'questionSelection',
+            'level' => 'primary-label',
+            'icon' => 'fa-bank')),
+        false);
+$tool_content .= "</div>";
+$tool_content .= "</div>";
 
 if ($nbrQuestions) {
     $info_random_text = '';
@@ -464,13 +478,15 @@ if ($nbrQuestions) {
                      <div class='col-sm-12'>
                         <div class='checkbox' id='divcheckboxRandomQuestions'>
                             <label class='form-control-static label-container'>
-                             <input id='checkboxRandomQuestions'type='checkbox' name='enableRandomQuestions' value='1' ".(($randomQuestions > 0)? 'checked' : '').">
-                             <span class='checkmark'></span>
-                             $langChooseRandomQuestions
-                             <span class='col-1'><input id='inputRandomQuestions' class='form-control' type='text' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '')."></span>
-                             <span class='col-1'><strong>$langsQuestions</strong></span>                                                          
-                             </label>
-                         </div>
+                                <input id='checkboxRandomQuestions'type='checkbox' name='enableRandomQuestions' value='1' ".(($randomQuestions > 0)? 'checked' : '').">
+                                <span class='checkmark'></span>
+                                $langChooseRandomQuestions                                                     
+                            </label>
+                        </div>
+                        <label class='col-12 control-label-notes mt-2' for='inputRandomQuestions'>$langsQuestions</label>
+                        <div class='col-md-6 col-12'>
+                            <input id='inputRandomQuestions' class='form-control' type='text' name='numberOfRandomQuestions' value=".(($randomQuestions > 0)? $randomQuestions : '').">
+                        </div>
                     </div>
                 </div>
                 <div class='form-group mt-4'>
