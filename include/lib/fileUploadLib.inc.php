@@ -534,10 +534,10 @@ function isWhitelistAllowed($filename) {
 
     $wh = get_config('student_upload_whitelist');
     $wh2 = ($is_editor) ? get_config('teacher_upload_whitelist') : '';
-    $wh3 = fetchUserWhitelist($uid);
-
     $wh .= (strlen($wh2) > 0) ? ', ' . $wh2 : '';
-    $wh .= (strlen($wh3) > 0) ? ', ' . $wh3 : '';
+
+    $wh3 = fetchUserWhitelist($uid);
+    $wh .= (!is_null($wh3)) ? ', ' . $wh3 : '';
 
     $whitelist = explode(',', preg_replace('/\s+/', '', $wh)); // strip any whitespace
 
