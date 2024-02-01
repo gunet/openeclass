@@ -22,12 +22,19 @@ iframe{
   padding: 0;
 }
 
+.padding-default.container{
+  padding: 32px 16px 32px 16px;
+}
+.padding-default.container-fluid{
+  padding: 32px 24px 32px 24px;
+}
+
 /* whole-height - header - footer */
 @media(min-width:992px){
   .main-section{
     max-width: 100%;
     padding: 0;
-    min-height: calc(100vh - 80px - 80px);
+    min-height: calc(100vh - 80px - 80px + 80px);
     padding-top: 80px;
   }
 }
@@ -62,10 +69,6 @@ iframe{
   .module-container{
     padding: 24px 0px 24px 0px;
   }
-  .jumbotron-container{
-    padding: 24px 8px 24px 8px;
-    background-color: #F7F9FE;
-  }
   .homepage-container{
     padding: 24px 8px 24px 8px;
     background-color: #ffffff;
@@ -87,6 +90,11 @@ iframe{
   .onlyLoginContainer{
     min-height: calc(100vh - 56px - 134px);
   }
+  .onlyLoginContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 @media(min-width:992px){
 
@@ -97,29 +105,12 @@ iframe{
     padding: 24px 16px 24px 16px;
   }
 
-
   .container.module-container{
     padding: 24px 0px 24px 0px;
   }
   .container-fluid.module-container{
     padding: 24px 0px 24px 0px;
   }
-
-
-  .jumbotron-container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #F7F9FE;
-    min-height: 315px;
-  }
-  .container.jumbotron-container{
-    padding: 24px 8px 24px 8px;
-  }
-  .container-fluid.jumbotron-container{
-    padding: 24px 16px 24px 16px;
-  }
-
 
   .homepage-container{
     background-color: #ffffff;
@@ -161,6 +152,11 @@ iframe{
   .module-container,
   .onlyLoginContainer{
     min-height: calc(100vh - 80px - 80px);
+  }
+  .onlyLoginContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 
@@ -772,7 +768,7 @@ a:hover{
 
 #bgr-cheat-header.fixed img.eclass-nav-icon {
   width: 100px;
-  height: 25px;
+  height: 35px;
 }
 
 #bgr-cheat-header.fixed .dropdown-menu {
@@ -1425,7 +1421,7 @@ a:hover{
 }
 
 .testimonials {
-  background-color: #ffffff;
+  background-color: transparent;
   padding: 0px 25px 0px 25px;
   position: relative;
   height: 170px;
@@ -1699,10 +1695,9 @@ input:-webkit-autofill:active {
 }
 
 .form-wrapper.form-edit { 
-  /* border:solid 1px #E8EDF8;  */
-  /* padding: 15px 20px 25px 20px; */
   padding: 15px 0px 25px 0px;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
+  background-color: transparent;
 }
 
 input[type="text"], 
@@ -3501,9 +3496,9 @@ body .delThemeBtn{
   }
 }
 
-.jumbotron.jumbotron-login{ 
+.jumbotron.jumbotron-login,
+.homepage-annnouncements-container{ 
   background-color: #F7F9FE;
-  height:auto;
 }
 
 
@@ -3764,13 +3759,6 @@ body .delThemeBtn{
   color: #2546F0;
   border-color: #2546F0;
   text-decoration: none;
-}
-
-@media(max-width:991px){
-  .banner_openCourses{
-    padding-left: 15px;
-    padding-right: 15px;
-  }
 }
 
 

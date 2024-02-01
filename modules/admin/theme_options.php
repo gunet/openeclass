@@ -25,13 +25,13 @@ require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
                 'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter',
-                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 'BgColorWrapperHomepage', 
+                                                    'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
                                                     'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar'),
-                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 
-                                                    'BgColorWrapperBriefProfilePortfolio'),
+                'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron', 
+                                                    'BgColorWrapperBriefProfilePortfolio', 'BgColorAnnouncementHomepage'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor'),
@@ -902,12 +902,6 @@ $tool_content .= "
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-2'>$langLoginConfiguration</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='bgColorWrapperJumbotron' class='control-label-notes mb-2 me-2'>$langBgColorWrapperJumbotron (jumbotron):</label>
-                        <input name='bgColorWrapperJumbotron' type='text' class='form-control colorpicker' id='bgColorWrapperJumbotron' value='$theme_options_styles[bgColorWrapperJumbotron]'>
-                        <i class='fa fa-arrow-right ms-3 me-3'></i>
-                        <input name='bgRadialWrapperJumbotron' type='text' class='form-control colorpicker' id='bgRadialWrapperJumbotron' value='$theme_options_styles[bgRadialWrapperJumbotron]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='loginJumbotronBgColor' class='control-label-notes mb-2 me-2'>$langLoginBgGradient (jumbotron):</label>
                         <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
                         <i class='fa fa-arrow-right ms-3 me-3'></i>
@@ -971,8 +965,8 @@ $tool_content .= "
                     <hr>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHomepageContainer</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgColorWrapperHomepage' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
-                        <input name='BgColorWrapperHomepage' type='text' class='form-control colorpicker' id='BgColorWrapperHomepage' value='$theme_options_styles[BgColorWrapperHomepage]'>
+                        <label for='BgColorAnnouncementHomepage' class='control-label-notes mb-2 me-2'>$langBgColor:</label>
+                        <input name='BgColorAnnouncementHomepage' type='text' class='form-control colorpicker' id='BgColorAnnouncementHomepage' value='$theme_options_styles[BgColorAnnouncementHomepage]'>
                     </div>
                 </div>
             </div>

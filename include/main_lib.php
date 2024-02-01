@@ -3951,15 +3951,20 @@ function make_dir($dir) {
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,
         $langOpenCoursesShort, $langListOpenCoursesShort,$langCourses,$langCourse,$langNationalOpenCourses,
-        $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg;
+        $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg, $langOpenCourses;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
 
 
-            <div class='col-12 ms-auto me-auto banner_openCourses'>
-                <div class='card border-card h-100'>
+ 
+                <div class='card border-0 bg-transparent h-100'>
+                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
+                        <div class='d-flex justify-content-start align-items-center'>
+                            <h3>$langOpenCourses</h3>
+                        </div>
+                    </div>
                     <div class='card-body'>
                         <div class='row row-cols-1 row-cols-md-2 g-4'>
 
@@ -3990,7 +3995,7 @@ function setOpenCoursesExtraHTML() {
                         </div>
                     </div>
                 </div>
-            </div>
+
 
 
 

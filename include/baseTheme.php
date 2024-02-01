@@ -402,23 +402,8 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) {
             $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
             $styles_str .= "
-                .jumbotron-container{
-                    background: $gradient_str;
-                }
-            ";
-        }
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////// BACKGROUND COLOR OF WRAPPER UMBOTRON /////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        if (!empty($theme_options_styles['bgColorWrapperJumbotron']) && !empty($theme_options_styles['bgRadialWrapperJumbotron'])) {
-            $gradient_str_wrapper = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[bgRadialWrapperJumbotron], $theme_options_styles[bgColorWrapperJumbotron])";
-            $styles_str .= "
                 .jumbotron.jumbotron-login{
-                    background: $gradient_str_wrapper;
+                    background: $gradient_str;
                 }
             ";
         }
@@ -431,7 +416,7 @@ function view($view_file, $view_data = array()) {
 
         if (isset($theme_options_styles['loginImg'])){
                 $styles_str .= "
-                    .jumbotron-container{
+                    .jumbotron.jumbotron-login{
                         background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str; 
                         border:0px; no-repeat center center fixed; 
                         -webkit-background-size: cover; 
@@ -461,8 +446,8 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['loginTextColor'])){
             $styles_str .= "
-                .eclass-title, .eclassInfo{
-                    color: $theme_options_styles[loginTextColor];
+                .jumbotron-intro-text *{
+                    color: $theme_options_styles[loginTextColor] !important;
                 }
             ";
         }
@@ -475,7 +460,7 @@ function view($view_file, $view_data = array()) {
 
         if(!empty($theme_options_styles['loginTextBgColor'])){
             $styles_str .= "
-                .intro-content{
+                .jumbotron-intro-text{
                     border-radius:8px;
                     padding: 5px 15px 15px 15px;
                     background-color: $theme_options_styles[loginTextBgColor];
@@ -3746,25 +3731,16 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
-        //////////////////// BACKGROUND COLOR OF HOMEPAGE CONTAINER /////////////////////////
+        //////////////// BACKGROUND COLOR OF HOMEPAGE ANNOUNCEMENTS /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
 
-        if(!empty($theme_options_styles['BgColorWrapperHomepage'])){
+        if(!empty($theme_options_styles['BgColorAnnouncementHomepage'])){
             $styles_str .= "
-                @media(max-width:991px){
-                    .homepage-container{
-                      background-color: $theme_options_styles[BgColorWrapperHomepage];
-                    }
+                .homepage-annnouncements-container{
+                    background-color: $theme_options_styles[BgColorAnnouncementHomepage];
                 }
-                @media(min-width:992px){
-                    .homepage-container{
-                      background-color:$theme_options_styles[BgColorWrapperHomepage];
-                    }
-                }
-                .testimonials{
-                    background-color: $theme_options_styles[BgColorWrapperHomepage];
-                }
+                
             ";
         }
 
@@ -3799,7 +3775,11 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ///////////////////// BACKGROUND COLOR TO THE PANEL'S BODY //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
         if(!empty($theme_options_styles['BgPanels'])){
             $styles_str .= "
@@ -3871,6 +3851,12 @@ function view($view_file, $view_data = array()) {
                 }
             ";
         }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////// BORDER COLOR TO THE PANELS //////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
         if(!empty($theme_options_styles['clBorderPanels'])){
             $styles_str .= "

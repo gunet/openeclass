@@ -12,26 +12,15 @@
     background-color: #212D37;
   }
   @media(max-width:991px){
-  
-    .jumbotron-container{
-      background-color: #212D37;
-    }
     .homepage-container{
       background-color: #212D37;
     }
-  
   }
   @media(min-width:992px){
-
-    .jumbotron-container{
-      background-color: #212D37;
-    }
     .homepage-container{
       background-color: #212D37;
     }
-  
   }
-
     
   .border-card{
     border: solid 1px #4F6893;
@@ -1862,7 +1851,8 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 /**********************************************************************************************************************/
 
 
-  .jumbotron.jumbotron-login {
+  .jumbotron.jumbotron-login,
+  .homepage-annnouncements-container {
       background-color: #212D37;
   }
 

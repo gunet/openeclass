@@ -175,7 +175,7 @@ a.list-group-item:hover{
 
 
 .testimonials {
-  background-color: #ffffff;
+  background-color: transparent;
 }
 
 .testimonials .testimonial {
@@ -1129,10 +1129,6 @@ tr.danger{
 
 .announce-link-homepage {
     color: #867F72;
-}
-
-.testimonials{
-    background-color: #ffffff;
 }
 
 .statistics-card .card-body{
