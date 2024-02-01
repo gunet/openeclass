@@ -64,7 +64,6 @@ if (isset($_GET['jmpath'])) {
 $head_content .= '
 
 <link type="text/css" rel="stylesheet" href="jsmind.css" />
-
     <style type="text/css">
 
         #jsmind_container{
@@ -72,36 +71,16 @@ $head_content .= '
             height:650px;
         }
 
-        .jsmind-inner::-webkit-scrollbar {
-            width: 8px;
-        }
-        .jsmind-inner::-webkit-scrollbar-track {
-            background-color: transparent;
-        }
-        .jsmind-inner::-webkit-scrollbar-thumb {
-            background-color: #B4BED1;
-        }
-        .jsmind-inner::-webkit-scrollbar-thumb {
-            background-color: #B4BED1;
-            border-radius: 20px;
-        }
-        .jsmind-inner::-webkit-scrollbar-thumb {
-            background-color: #B4BED1;
-            border-radius: 20px;
-            border: 6px solid transparent;
-            background-clip: content-box;
-        }
-
         jmnodes.theme-greensea jmnode.selected{
             color: black ;
         }
 
         canvas.jsmind {
-            z-index: 0;
+            z-index: 1;
         }
 
         jmnodes {
-            z-index: 0;
+            z-index: 1;
         }
 
     </style>';

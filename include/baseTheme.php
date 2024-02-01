@@ -3249,6 +3249,163 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// BACKGROUND CONTAINER OF SCROLLBAR //////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgScrollBar'])){
+            $styles_str .= "
+              .container-items::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .container-items-footer::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .contextual-menu::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .course-content::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .panel-body::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+              
+              .table-responsive::-webkit-scrollbar-track,
+              .dataTables_wrapper::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+              
+              .cardTestimonial > .card-body::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .bodyChat::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+
+              .jsmind-inner::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+              
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// BACKGROUND COLOR TO THE SCROLLBAR COMPONENT //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgColorScrollBar'])){
+            $styles_str .= "
+
+              .container-items::-webkit-scrollbar-thumb{
+                background: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .container-items-footer::-webkit-scrollbar-thumb{
+                background: $theme_options_styles[BgColorScrollBar];
+              }
+            
+              .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+              
+              .contextual-menu::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .course-content::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+ 
+              .panel-body::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+             
+              .table-responsive::-webkit-scrollbar-thumb,
+              .dataTables_wrapper::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .cardTestimonial > .card-body::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+              
+              .bodyChat::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+
+              .jsmind-inner::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+              
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////// BACKGROUND HOVERED COLOR TO THE SCROLLBAR COMPONENT //////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BgHoveredColorScrollBar'])){
+            $styles_str .= "
+
+              .container-items::-webkit-scrollbar-thumb:hover{
+                background: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .container-items-footer::-webkit-scrollbar-thumb:hover{
+                background: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+            
+              .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+              
+              .contextual-menu::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .course-content::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+ 
+              .panel-body::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+             
+              .table-responsive::-webkit-scrollbar-thumb:hover,
+              .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .cardTestimonial > .card-body::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+              
+              .bodyChat::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .jsmind-inner::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+              
+            ";
+        }
 
 
 
@@ -3655,8 +3812,7 @@ function view($view_file, $view_data = array()) {
                     background-color:$theme_options_styles[BgPanels];
                 }
 
-                .panelCard,
-                .poll-panel{
+                .panelCard{
                     background-color:$theme_options_styles[BgPanels] !important;
                 }
                   

@@ -29,7 +29,7 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
-                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgColorWrapperJumbotron','bgRadialWrapperJumbotron', 
                                                     'BgColorWrapperBriefProfilePortfolio'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
@@ -45,6 +45,7 @@ $defaults = array(
                 "rgba(35,82,124,1)" => array('linkHoverColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "rgba(0,0,0,0)" => array('loginTextBgColor'),
+                "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
                 "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda', 'BgBorderTextEditor'),
                 "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover'),
@@ -660,6 +661,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navContextualMenu' aria-controls='navContextualMenu' role='tab' data-bs-toggle='tab'>$langContextualMenu</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navMenuPopover' aria-controls='navMenuPopover' role='tab' data-bs-toggle='tab'>$langMPopover</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAgenda' aria-controls='navsettingsAgenda' role='tab' data-bs-toggle='tab'>$langNavSettingsAgenda</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsScrollBar' aria-controls='navsettingsScrollBar' role='tab' data-bs-toggle='tab'>$langNavSettingsScrollBar</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
@@ -895,6 +897,63 @@ $tool_content .= "
                         <div class='col-sm-12 d-inline-flex justify-content-start align-items-center'>
                             $image_footer_field
                         </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsScrollBar'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSettingsScrollBar</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgScrollBar' class='control-label-notes mb-2 me-2'>$BgScrollBar:</label>
+                        <input name='BgScrollBar' type='text' class='form-control colorpicker' id='BgScrollBar' value='$theme_options_styles[BgScrollBar]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgColorScrollBar' class='control-label-notes mb-2 me-2'>$langBgColorScrollBar:</label>
+                        <input name='BgColorScrollBar' type='text' class='form-control colorpicker' id='BgColorScrollBar' value='$theme_options_styles[BgColorScrollBar]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgHoveredColorScrollBar' class='control-label-notes mb-2 me-2'>$langBgHoveredColorScrollBar:</label>
+                        <input name='BgHoveredColorScrollBar' type='text' class='form-control colorpicker' id='BgHoveredColorScrollBar' value='$theme_options_styles[BgHoveredColorScrollBar]'>
                     </div>
                 </div>
             </div>

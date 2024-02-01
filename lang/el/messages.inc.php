@@ -5882,6 +5882,12 @@ $langBgTextEditor = "Χρώμα φόντου";
 $langBgBorderTextEditor = "Χρώμα border";
 $langClTextEditor = "Χρώμα εργαλείων";
 
+$langNavSettingsScrollBar = "ScrollBar";
+$langSettingsScrollBar = "Ρυθμίσεις ScrollBar";
+$BgScrollBar = "Χρώμα φόντου";
+$langBgColorScrollBar = "Χρώμα φόντου μπάρας";
+$langBgHoveredColorScrollBar = "Χρώμα hovered φόντου μπάρας";
+
 /* * ***********************************************************
  * Validation
  * ************************************************************ */

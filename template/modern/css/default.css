@@ -821,13 +821,19 @@ a:hover{
   }
 }
 .container-items::-webkit-scrollbar{
-  height: 4px;
-  width: 4px;
-  background: #e8e8e8;
+  height: 6px; 
 }
-.container-items::-webkit-scrollbar-thumb:horizontal{
+.container-items::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+.container-items::-webkit-scrollbar-thumb{
   background: #B4BED1;
-  border-radius: 10px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+.container-items::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
 .container-items .menu-item{
   white-space: nowrap;
@@ -958,13 +964,19 @@ a:hover{
   }
 }
 .container-items-footer::-webkit-scrollbar{
-  height: 4px;
-  width: 4px;
-  background: #e8e8e8;
+  height: 6px;
 }
-.container-items-footer::-webkit-scrollbar-thumb:horizontal{
+.container-items-footer::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+.container-items-footer::-webkit-scrollbar-thumb{
   background: #B4BED1;
-  border-radius: 10px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+    background-clip: content-box;
+}
+.container-items-footer::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
 .container-items-footer .menu-item{
   white-space: nowrap;
@@ -1468,23 +1480,20 @@ a:hover{
 }
 .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar {
   display: block; 
-  width: 15px;
+  width:8px;
+  height: 8px;
 }
 .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: #ffffff;
 }
 .testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb {
-  background-color: #d1d6e1;
-}
-.testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb {
-  background-color: #d1d6e1;
+  background-color: #B4BED1;
   border-radius: 20px;
-}
-.testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb {
-  background-color: #d1d6e1;
-  border-radius: 20px;
-  border: 6px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
+}
+.testimonial.slick-slide.slick-current.slick-active.slick-center .testimonial-body::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
 
 .testimonial.slick-slide .testimonial-person .form-label{
@@ -2161,23 +2170,20 @@ input[type="submit"].warningAdminBtn:hover {
     max-height: calc(100vh - 80px - 80px + 16px);
   }
   .contextual-menu::-webkit-scrollbar {
-    width: 15px;
+    width: 8px;
+    height: 8px;
   }
   .contextual-menu::-webkit-scrollbar-track {
     background-color: #ffffff;
   }
   .contextual-menu::-webkit-scrollbar-thumb {
     background-color: #B4BED1;
-  }
-  .contextual-menu::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
     border-radius: 20px;
-  }
-  .contextual-menu::-webkit-scrollbar-thumb {
-    background-color: #B4BED1;
-    border-radius: 20px;
-    border: 6px solid transparent;
+    border: 1px solid transparent;
     background-clip: content-box;
+  }
+  .contextual-menu::-webkit-scrollbar-thumb:hover{
+    background: #B4BED1;
   }
 }
 
@@ -2525,23 +2531,20 @@ body .form-action-button-popover{
   overflow-y: auto;
 }
 .course-content::-webkit-scrollbar {
-  width: 15px;
+  width: 8px;
+  height: 8px;
 }
 .course-content::-webkit-scrollbar-track {
   background-color: #ffffff;
 }
 .course-content::-webkit-scrollbar-thumb {
   background-color: #B4BED1;
-}
-.course-content::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
   border-radius: 20px;
-}
-.course-content::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-  border: 6px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
+}
+.course-content::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
 
 
@@ -3030,32 +3033,25 @@ body .form-action-button-popover{
 
 
 .panel-body::-webkit-scrollbar {
-  width: 15px;
+  width: 8px;
+  height: 8px;
 }
-
 .panel-body::-webkit-scrollbar-track {
   background-color: #ffffff;
 }
-
-.panel-body::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-}
-
-.panel-body::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-  border-radius: 20px;
-}
-
 .panel-body::-webkit-scrollbar-thumb {
   background-color: #B4BED1;
   border-radius: 20px;
-  border: 6px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
 }
-
-.panel-body::-webkit-scrollbar-thumb:hover {
-  background-color: #B4BED1;
+.panel-body::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
+
+/* .panel-body::-webkit-scrollbar-thumb:hover {
+  background-color: #B4BED1;
+} */
 
 .panel-body-calendar { 
   padding: 0px 15px 0px 15px;
@@ -3243,7 +3239,8 @@ body .form-action-button-popover{
 
 .table-responsive::-webkit-scrollbar,
 .dataTables_wrapper::-webkit-scrollbar {
-  width: 15px;
+  width: 8px;
+  height: 8px;
 }
 
 .table-responsive::-webkit-scrollbar-track,
@@ -3253,27 +3250,20 @@ body .form-action-button-popover{
 
 .table-responsive::-webkit-scrollbar-thumb,
 .dataTables_wrapper::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-}
-
-.table-responsive::-webkit-scrollbar-thumb,
-.dataTables_wrapper::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-  border-radius: 20px;
-}
-
-.table-responsive::-webkit-scrollbar-thumb,
-.dataTables_wrapper::-webkit-scrollbar-thumb {
   background-color: #B4BED1;
   border-radius: 20px;
-  border: 6px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
 }
-
 .table-responsive::-webkit-scrollbar-thumb:hover,
+.dataTables_wrapper::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
+}
+
+/* .table-responsive::-webkit-scrollbar-thumb:hover,
 .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
   background-color: #B4BED1;
-}
+} */
 
 
 
@@ -3875,23 +3865,20 @@ body .delThemeBtn{
 }
 
 .cardTestimonial > .card-body::-webkit-scrollbar {
-  width: 15px;
+  width: 8px;
+  height: 8px;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-track {
-  background-color: transparent;
+  background-color: #ffffff;
 }
 .cardTestimonial > .card-body::-webkit-scrollbar-thumb {
-  background-color: #d1d6e1;
-}
-.cardTestimonial > .card-body::-webkit-scrollbar-thumb {
-  background-color: #d1d6e1;
+  background-color: #B4BED1;
   border-radius: 20px;
-}
-.cardTestimonial > .card-body::-webkit-scrollbar-thumb {
-  background-color: #d1d6e1;
-  border-radius: 20px;
-  border: 6px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
+}
+.cardTestimonial > .card-body::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
 
 
@@ -4445,12 +4432,6 @@ div[role="progressbar"]::before {
 /*************************************************** QUESTIONAIRE *****************************************************/
 /**********************************************************************************************************************/
 
-.panel-body-questionaire{ 
-  padding-left:15px;  
-  padding-top:10px; 
-  padding-bottom:10px; 
-}
-
 .radio label:has(.input-Questionnaire) .fa {
   font-size: 14px;
   position: absolute;
@@ -4550,7 +4531,8 @@ div[role="progressbar"]::before {
 }
 
 .bodyChat::-webkit-scrollbar {
-  width: 15px;
+  width: 8px;
+  height: 8px;
 }
 
 .bodyChat::-webkit-scrollbar-track {
@@ -4558,24 +4540,18 @@ div[role="progressbar"]::before {
 }
 
 .bodyChat::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-  border-radius: 20px;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
   background-color: #B4BED1;
   border-radius: 20px;
-  border: 6px solid transparent;
+  border: 1px solid transparent;
   background-clip: content-box;
 }
-
-.bodyChat::-webkit-scrollbar-thumb:hover {
-  background-color: #B4BED1;
+.bodyChat::-webkit-scrollbar-thumb:hover{
+  background: #B4BED1;
 }
+
+/* .bodyChat::-webkit-scrollbar-thumb:hover {
+  background-color: #B4BED1;
+} */
 
 
 /**********************************************************************************************************************/
@@ -4685,17 +4661,17 @@ div[role="progressbar"]::before {
 }
 
 .mycourses-pagination .page-item-pages{
-  background-color: #ffffff;
+  background-color: transparent;
   box-shadow: slategrey;
 }
 .mycourses-pagination .page-item-previous{
-  background-color: #ffffff;
+  background-color: transparent;
   border-top-left-radius:10px;
   border-bottom-left-radius:10px;
   border: none !important;
 }
 .mycourses-pagination .page-item-next{
-  background-color: #ffffff;
+  background-color: transparent;
   border-top-right-radius:10px;
   border-bottom-right-radius:10px;
 }
@@ -4780,6 +4756,23 @@ div[role="progressbar"]::before {
   #jsmind_container{
     border:solid 1px #E8EDF8 !important;
     background:transparent !important;
+  }
+
+  .jsmind-inner::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  .jsmind-inner::-webkit-scrollbar-track {
+      background-color: transparent;
+  }
+  .jsmind-inner::-webkit-scrollbar-thumb {
+      background-color: #B4BED1;
+      border-radius: 20px;
+      border: 1px solid transparent;
+      background-clip: content-box;
+  }
+  .jsmind-inner::-webkit-scrollbar-thumb:hover {
+    background-color: #B4BED1;
   }
 /**********************************************************************************************************************/
 /*************************************************** ADMIN ************************************************************/
@@ -5031,24 +5024,21 @@ div[role="progressbar"]::before {
     display: block; 
   }
 
-  .dropdown_menu_user{ 
-    max-height:435px; 
-    overflow-x: auto; 
+  /* .dropdown_menu_user{ 
+    max-height:calc(100vh - 80px - 80px); 
   }
-
   .dropdown_menu_user::-webkit-scrollbar { 
-    -webkit-appearance: none; 
-    appearance: none; 
     width: 5px; 
-    background-color: #e8e8e8; 
   }
-
+  .dropdown_menu_user::-webkit-scrollbar-track {
+    background-color: #ffffff;
+  }
   .dropdown_menu_user::-webkit-scrollbar-thumb {
-    height: 12px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: #B4BED1;
-  }
+    background-color: #B4BED1;
+    border-radius: 20px;
+    border: 6px solid transparent;
+    background-clip: content-box;
+  } */
 
   select,.dataTables_wrapper{ 
     overflow-y: auto !important; 
@@ -5395,17 +5385,6 @@ table.dataTable tbody tr th{
 
 .optgroup-1 .text{
   color: #2b3944;
-}
-
-
-/**************************************** QUESTIONNAIER **************************************************************/
-
-.questionnaire-panel{
-  background-color: #ffffff !important;
-}
-
-.poll-panel{
-  background-color: #ffffff;
 }
 
 /**************************************** OTHER CLASSES **************************************************************/

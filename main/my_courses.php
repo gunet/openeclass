@@ -258,7 +258,7 @@ function GroupCardsPagination($allCourses,$pagesPag){
   $pagination .= "<input type='hidden' id='KeyallCourse' value='$allCourses'>
             <input type='hidden' id='KeypagesCourse' value='$pagesPag'>
 
-            <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-default solidPanel mt-4'>
+            <div class='col-12 d-flex justify-content-center Borders p-0 overflow-auto bg-transparent mt-4'>
                 <nav aria-label='Page navigation example w-100'>
                     <ul class='pagination mycourses-pagination w-100 mb-0'>
                         <li class='page-item page-item-previous'>
