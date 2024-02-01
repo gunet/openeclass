@@ -27,8 +27,11 @@ if (isset($_GET['language']) and $_GET['language'] == 'el') {
 }
 
 $siteName = '';
+
 include "../../lang/$language/common.inc.php";
-include '../../include/constants.php';
+include '../../include/main_lib.php';
+
+$shortVer = preg_replace('/^(\d\.\d+).*$/', '\1', ECLASS_VERSION);
 
 $topic = $subtopic = '';
 if (isset($_GET['topic'])) {
@@ -38,7 +41,7 @@ if (isset($_GET['subtopic'])) {
     $subtopic = '/' . htmlspecialchars($_GET['subtopic'], ENT_QUOTES);
 }
 $user_status = (isset($_SESSION['status']) and  $_SESSION['status'] == USER_TEACHER)? 'teacher' : 'student';
-$link = "https://docs.openeclass.org/$language/$user_status/$topic$subtopic?do=export_xhtml";
+$link = "https://docs.openeclass.org/$language/$shortVer/$user_status/$topic$subtopic?do=export_xhtml";
 header('Content-Type: text/html; charset=UTF-8');
 
 ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
