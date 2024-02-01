@@ -466,6 +466,24 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[loginTextBgColor];
                 }
             ";
+            // If jumbotron-intro-text has rgba which contains zero at the end (a) then change padding(left-right) to zero 
+            preg_match_all('!\d+!', $theme_options_styles['loginTextBgColor'], $matches); 
+            if(count($matches) > 0){
+                $counterRgb = 0;
+                foreach($matches as $match){
+                    foreach($match as $value){
+                        if(count($match) == 4 && $counterRgb == 3 && $value == 0){
+                            $styles_str .= "
+                                .jumbotron-intro-text{
+                                    padding: 5px 0px 15px 0px;
+                                }
+                            ";
+                        }
+                        $counterRgb++;
+                    }
+                }
+            }
+             
         }
 
 
