@@ -5,7 +5,7 @@
     @if($image_footer)
         <div class='col-12 d-flex justify-content-center align-items-center pt-4 gap-3'>
             <img style='max-width:350px; max-height:150px; ' src='{{ $image_footer }}?<?php echo time(); ?>' alt="Available footer image">
-            <button class='footer-back-to-top' onclick="topFunction()"><i class='fa-solid fa-chevron-up'></i></button>
+            <button class='footer-back-to-top' onclick="topFunction()" aria-label='Back to the top'><i class='fa-solid fa-chevron-up'></i></button>
         </div>
         <div class='col-12 d-flex d-flex justify-content-center align-items-center gap-3 flex-wrap'>
             @if (!get_config('dont_display_about_menu'))

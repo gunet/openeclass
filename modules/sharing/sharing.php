@@ -35,16 +35,16 @@ function print_sharing_links ($url, $text) {
 
     //facebook
     $sharer = "https://www.facebook.com/sharer/sharer.php?u=".rawurlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa-brands fa-facebook-f'></i></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank' aria-label='Facebook'><i class='fa-brands fa-facebook-f'></i></a></li>";
     //twitter
     $sharer = "https://twitter.com/intent/tweet?url=".rawurlencode($url)."&text=".rawurlencode($text);
-    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa-brands fa-twitter'></i></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank' aria-label='Twitter'><i class='fa-brands fa-twitter'></i></a></li>";
     //linkedin
     $sharer = "http://www.linkedin.com/shareArticle?mini=true&url=".rawurlencode($url)."&title=".rawurlencode($text);
-    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa-brands fa-linkedin-in'></i></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank' aria-label='Linkedin'><i class='fa-brands fa-linkedin-in'></i></a></li>";
     //email
     $sharer = "mailto:?subject=".rawurlencode($text)."&body=".rawurlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa-solid fa-envelope'></i></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank' aria-label='Email'><i class='fa-solid fa-envelope'></i></a></li>";
     
     $out .= "</ul>";
     $out .= "</span>";

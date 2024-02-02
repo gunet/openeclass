@@ -118,7 +118,7 @@ function getUserCourseInfo($uid): string
                                             <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                         </div>
                                         <div>
-                                            <button type='button' class='close border-0 bg-transparent mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                            <button aria-label='Close' type='button' class='close border-0 bg-transparent mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
                                         </div>
 
                                     </div>

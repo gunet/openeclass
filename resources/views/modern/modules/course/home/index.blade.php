@@ -303,7 +303,7 @@
                                 <div class='row m-auto'>
                                     @if($course_info->home_layout == 1)
                                         <div class='col-12 px-0'>
-                                            <figure>
+                                            <figure role="none">
                                                 <picture>
                                                     @if($course_info->course_image)
                                                         <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='This is the image of course'/>

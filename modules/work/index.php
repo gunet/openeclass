@@ -4436,7 +4436,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                 $maxFiles = $assignment->max_submissions;
                 $inputName = 'userfile[]';
                 $moreButton = "<div>
-                                 <button class='btn submitAdminBtn btn-sm moreFiles'>
+                                 <button class='btn submitAdminBtn btn-sm moreFiles' aria-label='Add'>
                                    <span class='fa fa-plus'></span>
                                  </button>
                                </div>";

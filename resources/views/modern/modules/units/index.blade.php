@@ -170,9 +170,9 @@
                                             <div class='carousel-indicators h-auto mb-1'>
                                                 @foreach ($units as $cu)
                                                     @if($counterIndicator == 0)
-                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' class='active' aria-current='true'></button>
+                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' class='active' aria-current='true' aria-label='Carousel'></button>
                                                     @else
-                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' aria-current='true'></button>
+                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' aria-current='true' aria-label='Carousel'></button>
                                                     @endif
                                                     @php $counterIndicator++; @endphp
                                                 @endforeach
@@ -210,11 +210,11 @@
                                                                             <div style='height:1px;' class='border-top-default mt-1 mb-3'></div>
                                                                             <div class='col-sm-12 bg-transparent'>
 
-                                                                                <button class='carousel-prev-btn' type='button' data-bs-target='#UnitsControls' data-bs-slide='prev'>
+                                                                                <button class='carousel-prev-btn' type='button' data-bs-target='#UnitsControls' data-bs-slide='prev' aria-label='Carousel previous'>
                                                                                     <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
                                                                                 </button>
 
-                                                                                <button class='carousel-next-btn float-end' type='button' data-bs-target='#UnitsControls' data-bs-slide='next'>
+                                                                                <button class='carousel-next-btn float-end' type='button' data-bs-target='#UnitsControls' data-bs-slide='next' aria-label='Carousel next'>
                                                                                     <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
                                                                                 </button>
 

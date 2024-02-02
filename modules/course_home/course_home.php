@@ -662,9 +662,9 @@ if ($total_cunits > 0) {
         $cunits_content .=  "<div class='carousel-indicators h-auto mb-1'>";
         foreach ($all_units as $cu) {
             if($counterIndicator == 0){
-                $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active' aria-current='true'></button>";
+                $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' class='active' aria-current='true' aria-label='Carousel'></button>";
             }else{
-                $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' aria-current='true'></button>";
+                $cunits_content .=  "<button type='button' data-bs-target='#carouselUnitsControls' data-bs-slide-to='$counterIndicator' aria-current='true' aria-label='Carousel'></button>";
             }
             $counterIndicator++;
         }
@@ -767,11 +767,11 @@ if ($total_cunits > 0) {
                         <div style='height:1px;' class='border-top-default mt-3 mb-3'></div>
                         <div class='col-sm-12 bg-transparent'>
 
-                            <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev'>
+                            <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev' aria-label='Carousel previous'>
                                 <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
                             </button>";
 
-            $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next'>
+            $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next' aria-label='Carousel next'>
                                     <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
                             </button>
 

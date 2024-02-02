@@ -14,7 +14,7 @@
                                 <form action="{{ $urlAppend }}modules/search/search.php" class='d-flex justify-content-center align-items-end w-100'>
                             @endif
                                     <input type="text" class="inputMobileSearch rounded-0 w-100 basic-value-cl" placeholder="{{ trans('langSearch')}}..." name="search_terms">
-                                    <button class="btn d-flex justify-content-center align-items-center rounded-0" type="submit" name="quickSearch">
+                                    <button class="btn d-flex justify-content-center align-items-center rounded-0" type="submit" name="quickSearch" aria-label='Quick search'>
                                         <i class='fa fa-search small-text'></i>
                                     </button>
                                 </form>
