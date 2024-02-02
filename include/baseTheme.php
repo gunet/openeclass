@@ -4125,10 +4125,11 @@ function lang_selections_Mobile() {
     }
 
     $lang_select = "
-      <a class='small-basic-size d-flex justify-content-center align-items-center link-selection-language' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+    <div class='dropdown'>
+      <a id='dropdownMenuLink' class='small-basic-size d-flex justify-content-center align-items-center link-selection-language' href='#' role='button' aria-expanded='false' data-bs-toggle='dropdown'>
           <i class='fa-solid fa-earth-europe fa-lg'></i>
       </a>
-      <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='dropdownMenuLang'>
+      <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' role='menu' aria-labelledby='dropdownMenuLink'>
       <ul class='list-group list-group-flush'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
@@ -4140,7 +4141,7 @@ function lang_selections_Mobile() {
                 </a>
             </li>";
     }
-    $lang_select .= "</ul></div>";
+    $lang_select .= "</ul></div></div>";
     return $lang_select;
 }
 
@@ -4169,7 +4170,7 @@ function lang_selections_Desktop() {
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>
-                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">
+                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="Dropdown">
                             <ul class="list-group list-group-flush">';
                             foreach ($session->active_ui_languages as $code) {
                                 $class = ($code == $session->language)? ' class="active"': '';

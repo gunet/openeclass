@@ -51,10 +51,10 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 @if(get_config('enable_mobileapi'))
                                                     <div class='d-flex gap-3 pe-3'>
-                                                        <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target=_blank>
+                                                        <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id1398319489' target='_blank' aria-label='App Store'>
                                                             <img style='width:150px;' src='template/modern/img/GooglePlay.svg' class='img-responsive center-block m-auto d-block' alt='Available on the App Store'>
                                                         </a>
-                                                        <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank>
+                                                        <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target='_blank' aria-label='Play Store'>
                                                             <img style='width:150px;' src='template/modern/img/AppStore.svg' class='img-responsive center-block m-auto d-block' alt='Available on the Play Store'>
                                                         </a>
                                                     </div>
@@ -63,7 +63,7 @@
                                                     <div>
                                                         <div class='card border-0 border-radius-default'>
                                                             <div class='card-body banner-body border-0 bg-default border-radius-default py-lg-2 py-1'>
-                                                                <a href="http://www.openeclass.org/" target="_blank">
+                                                                <a href="http://www.openeclass.org/" target="_blank" aria-label='Banner'>
                                                                     <img style='width:150px;' src="{{ $themeimg }}/Open-Eclass-Banner.svg" alt="Open eClass Banner">
                                                                 </a>
                                                             </div>
@@ -154,7 +154,7 @@
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
-                                            <a href='{{ $urlServer }}rss.php'><i class="fa-solid fa-rss"></i></a>
+                                            <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
                                         </div>
                                         <div class='d-flex justify-content-end align-items-center'>
                                             <a class='TextRegular text-decoration-underline msmall-text' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
@@ -323,8 +323,8 @@
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-book-open fa-xl mt-4"></i>
-                                                                    <h1 class='mb-0 ms-2'>{{ get_config('total_courses') }}</h1>
+                                                                    <i class="fa-solid fa-book-open fa-xl mt-4 pt-1"></i>
+                                                                    <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('total_courses') }}</div>
                                                                 </div>
                                                                 <p class='form-label text-center'>{{ trans('langCourses') }}</p>
                                                             </div>
@@ -336,8 +336,8 @@
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-globe fa-xl mt-4"></i>
-                                                                    <h1 class='mb-0 ms-2'>{{ get_config('visits_per_week')}}K+</h1>
+                                                                    <i class="fa-solid fa-globe fa-xl mt-4 pt-1"></i>
+                                                                    <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('visits_per_week')}}K+</div>
                                                                 </div>
                                                                 <p class='form-label text-center'>{{trans('langUserLogins')}}/</br>{{trans('langWeek')}}</p>
                                                             </div>
@@ -349,8 +349,8 @@
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-user fa-xl mt-4"></i>
-                                                                    <h1 class='mb-0 ms-2'>{{ getOnlineUsers() }}</h1>
+                                                                    <i class="fa-solid fa-user fa-xl mt-4 pt-1"></i>
+                                                                    <div class='TextBold largest-text mb-0 ms-2'>{{ getOnlineUsers() }}</div>
                                                                 </div>
                                                                 <p class='form-label text-center'>{{trans('langOnlineUsers')}}</p>
                                                             </div>

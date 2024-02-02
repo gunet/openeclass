@@ -80,9 +80,9 @@
             <div class='d-flex justify-content-start align-items-center'>
                 <a class="copyright px-2" href='{{ $urlAppend }}info/copyright.php'>Copyright © 2024 All rights reserved</a>
                 @if(get_config('enable_social_sharing_links'))
-                    <a class="a_tools_site_footer px-2" href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f social-icon-tool"></i></a>
-                    <a class="a_tools_site_footer px-2" href="https://twitter.com/" target="_blank"><i class="fab fa-twitter social-icon-tool"></i></a>
-                    <a class="a_tools_site_footer px-2" href="https://linkedin.com/" target="_blank"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
+                    <a class="a_tools_site_footer px-2" href="https://www.facebook.com/" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f social-icon-tool"></i></a>
+                    <a class="a_tools_site_footer px-2" href="https://twitter.com/" target="_blank" aria-label="Twitter"><i class="fab fa-twitter social-icon-tool"></i></a>
+                    <a class="a_tools_site_footer px-2" href="https://linkedin.com/" target="_blank" aria-label="Linkedin"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
                 @endif
             </div>
         </div>

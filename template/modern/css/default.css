@@ -610,6 +610,9 @@ a:hover{
   font-style: normal;
 }
 
+.largest-text{
+  font-size: 32px;
+}
 .msmall-text { 
   font-size: 14px; 
   line-height: 16px;
