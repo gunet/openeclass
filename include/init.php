@@ -480,7 +480,6 @@ $modules = array(
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'fa-solid fa-clipboard-user'),
     MODULE_ID_TC => array('title' => $langBBB, 'link' => 'tc', 'image' => 'fa-solid fa-users-rectangle'),
     MODULE_ID_PROGRESS => array('title' => $langProgress, 'link' => 'progress', 'image' => 'fa-solid fa-arrow-trend-up'),
-    MODULE_ID_MINDMAP => array('title' => $langMindmap, 'link' => 'mindmap', 'image' => 'fa-solid fa-sitemap'),
     MODULE_ID_REQUEST => array('title' => $langRequests, 'link' => 'request', 'image' => 'fa-regular fa-clipboard'),
     MODULE_ID_H5P => array('title' => $langH5p, 'link' => 'h5p', 'image' => 'fa-solid fa-arrow-pointer')
 
@@ -673,8 +672,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_GRADEBOOK . ",
-                                                " . MODULE_ID_ATTENDANCE . ",
-                                                " . MODULE_ID_MINDMAP . ",
+                                                " . MODULE_ID_ATTENDANCE . ",                                                
                                                 " . MODULE_ID_REQUEST . ",
                                                 " . MODULE_ID_PROGRESS . ",
                                                 " . MODULE_ID_LP . ")", $course_id);

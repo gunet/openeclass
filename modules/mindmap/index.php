@@ -154,11 +154,8 @@ $tool_content .= "
                     <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='Save'>
                         <ul class='list-group list-group-flush'>
                             <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='screen_shot();'>$langScreenshot</a></li>
-                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li>";
-
-        if($is_editor)	{
-            $tool_content .="<li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
-        }
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button'  onclick='save_file();'>$langSaveFile</a></li> 
+                            <li><a class='list-group-item d-flex justify-content-start align-items-start py-3' href='javascript:void(0)' role='button' onclick='save_file_in_doc();'>$langSaveInDoc</a></li>";
 
         $tool_content .="
                         </ul>
