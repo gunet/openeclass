@@ -114,7 +114,7 @@ if ($course->visible == COURSE_CLOSED) {
             <div class='form-group mt-4'>
                 <label class='col-sm-12 control-label-notes'>$langRegistration:</label>
                 <div class='col-sm-12'>
-                    <p class='form-control-static form-value'>
+                    <p class='form-control-static'>
                         <em><a class='TextBold text-decoration-underline' href='{$urlAppend}modules/contact/index.php?course_id=$course_id'>$langLabelCourseUserRequest</a></em>
                     </p>
                 </div>
@@ -174,13 +174,13 @@ $tool_content .= action_bar(array(
                         <div class='form-group'>
                             <label class='col-sm-12 control-label-notes'>$langCode</label>
                             <div class='col-sm-12'>
-                                <p class='form-control-static form-value'>" . q($course->public_code) . "</p>
+                                <p class='form-control-static'>" . q($course->public_code) . "</p>
                             </div>
                         </div>
                         <div class='form-group mt-4'>
                             <label class='col-sm-12 control-label-notes'>$langFaculty</label>
                             <div class='col-sm-12'>
-                                <p class='form-control-static form-value'>$departments</p>
+                                <p class='form-control-static'>$departments</p>
                             </div>
                         </div>
                         <div class='form-group mt-4'>

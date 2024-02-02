@@ -30,7 +30,7 @@
 
                         </div>
                         <div class='card-footer bg-default border-0 d-flex justify-content-start align-items-center'>
-                            <div class='announcement-date info-date small-text'>{!! format_locale_date(strtotime($announcementsID->date)) !!}</div>
+                            <div class='announcement-date small-text'>{!! format_locale_date(strtotime($announcementsID->date)) !!}</div>
                         </div>
                     </div>
                 </div>

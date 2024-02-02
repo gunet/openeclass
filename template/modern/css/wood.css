@@ -69,17 +69,6 @@ a.list-group-item:hover{
 }
 
 
-
-
-/**********************************************************************************************************************/
-/************************************************* TYPOGRAPHY *********************************************************/
-/**********************************************************************************************************************/
-
-
-
-
-
-
 /**********************************************************************************************************************/
 /************************************************* HEADER *************************************************************/
 /**********************************************************************************************************************/
@@ -103,9 +92,6 @@ a.list-group-item:hover{
 /************************************************* FOOTER *************************************************************/
 /**********************************************************************************************************************/
 
- /* #bgr-cheat-footer {
-  background-color: #ffffff;
-} */
 
 @media(min-width:992px){ 
   .footer-container{
@@ -145,7 +131,6 @@ a.list-group-item:hover{
 /**********************************************************************************************************************/
 
 
-
 .group-section .list-group-item{
   border-bottom: solid 1px #E8EDF8 ;
 }
@@ -159,14 +144,6 @@ a.list-group-item:hover{
 .group-section .list-group-item .accordion-btn[aria-expanded="true"], .group-section .list-group-item .accordion-btn.showAll{
   color: #867F72;
 }
-
-
-/**********************************************************************************************************************/
-/************************************************* BREADCRUMBS ********************************************************/
-/**********************************************************************************************************************/
-
-
-
 
 
 /**********************************************************************************************************************/
@@ -235,8 +212,6 @@ label:has(input[type="radio"]:disabled){
 }
 
 
-/*******************************************************************/
-
 .label-container {
   color: #2B3944;
 }
@@ -262,131 +237,6 @@ label:has(input[type="radio"]:disabled){
 .label-container:has(input[type="checkbox"]:disabled){
   color: #687DA3;
 }
-
-/**************************************************************/
-
-/* .add-on,
-.add-on1,
-.add-on2{
-  background-color: #212D37 !important;
-}
-
-input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  border: 1px solid #ffffff;
-  -webkit-text-fill-color: #ffffff;
-  -webkit-box-shadow: 0 0 0px 1000px #2B3944 inset;
-  transition: background-color 5000s ease-in-out 0s;
-  font-size: 14px;
-}
-
-input::placeholder{ 
-  background-color: #212D37; 
-  color:#787e89 !important; 
-}
-
-.form-wrapper.form-edit { 
-  border:solid 1px #212D37; 
-  background-color: #212D37;
-}
-
-input[type="text"], 
-input[type="password"], 
-input[type="number"],
-input[type="search"],
-input[type="url"],
-input[type="email"]{
-  border-color: #ffffff;
-  background-color: #212D37;
-  color: #ffffff;
-}
-
-textarea,
-textarea.form-control{
-  border-color: #ffffff;
-  background-color: #212D37;
-  color: #ffffff;
-}
-
-input[type="text"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="time"]:focus,
-input[type="week"]:focus,
-input[type="number"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-input[type="tel"]:focus,
-input[type="color"]:focus,
-.form-control:focus,
-.uneditable-input:focus,
-textarea:focus {   
-  border-color:#ffffff;
-  background-color: #212D37;
-  color:#ffffff;
-}
-
-input[type="text"]:active,
-input[type="datetime"]:active,
-input[type="datetime-local"]:active,
-input[type="date"]:active,
-input[type="month"]:active,
-input[type="time"]:active,
-input[type="week"]:active,
-input[type="number"]:active,
-input[type="email"]:active,
-input[type="url"]:active,
-input[type="search"]:active,
-input[type="tel"]:active,
-input[type="color"]:active,
-.form-control:active,
-.uneditable-input:active,
-textarea:active {   
-  border-color:#ffffff;
-  background-color: #212D37;
-  color:#ffffff;
-}
-
-.form-control:disabled{
-  border-color: #ffffff;
-  background-color: #212D37 ;
-}
-
-
-
-select.form-select {
-  background-color: #212D37;
-  border-color:#ffffff;
-  color:#ffffff;
-  background: url(../images/chevron_down_select.svg) no-repeat right #212D37;
-  -webkit-appearance: none;
-  background-position-x: 97.5%;
-}
-
-select.form-select:focus {
-  background-color: #212D37;
-  border-color: #ffffff;
-}
-
-select.form-select option{
-  color: #9BA9C1; 
-}
-
-select.form-select:disabled{
-  border-bottom: solid 2px #f9f8fa;
-  background-color: #DCDCDC;
-}
- */
 
 
  input[type="text"]:focus,
@@ -916,14 +766,6 @@ background-color: #867F72;
 
 
 /**********************************************************************************************************************/
-/*********************************************** DATEPICHER-DATETIMEPICHER ********************************************/
-/**********************************************************************************************************************/
-
-
-
-
-
-/**********************************************************************************************************************/
 /**************************************************** TABLES **********************************************************/
 /**********************************************************************************************************************/
 
@@ -932,11 +774,7 @@ thead{
   min-height: 40px;
 }
 
-/* thead tr th,
-thead tr td{
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-} */
+
 .table-default thead tr th,
 .announcements_table thead tr th,
 table.dataTable thead tr th,
@@ -951,10 +789,7 @@ thead, tbody .list-header {
   border-bottom: solid 2px #867F72;
 }
 
-/* tbody tr td,
-tbody tr th{
-  background-color: #ffffff;
-} */
+
 .table-default tbody tr td,
 .announcements_table tbody tr td,
 table.dataTable tbody tr td,
@@ -971,26 +806,6 @@ tr.warning{
 tr.danger{
   background-color: #FDEFE9;
 }
-
-/* -------------------------------------------- ALL DATATABLES FROM OVERRIDE FILE  -----------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-/********************************************************* form-select **********************************************************************/
-
-
-
-/************************************************ pagination buttons next-prev ***************************************************************/
-
-
-/************************************************** portfolio-table **********************************************************************/
-
-
-
 
 
 /**********************************************************************************************************************/
@@ -1125,10 +940,6 @@ tr.danger{
 .cardLogin-secondary{
   background-color: transparent !important; 
   border: solid 1px #EFF6FF;
-}
-
-.announce-link-homepage {
-    color: #867F72;
 }
 
 .statistics-card .card-body{
@@ -1271,12 +1082,6 @@ tr.danger{
 .list-group-item.list-header{  
   color: #2b3944; 
 }
-
-/* .openCoursesFormWrapper{
-  background-color: transparent !important;
-  border: solid 1px #E8F2E7 !important;
-} */
-
 
 /**********************************************************************************************************************/
 /************************************************** ANNOUNCEMENTS *****************************************************/
@@ -1588,13 +1393,6 @@ color: #ffffff;
 .select2.select2-container{background: transparent; }
 
 .select2-dropdown--below{ background-color: #ffffff !important; }
-
-
-
-/****************************************************************************************************/
-/***************** this is portfolio-calendar , courseHome-calendar *********************************/
-/****************************************************************************************************/
-
 
 
 /************************************rgba(255, 255, 255, 0.5)**********************************************/

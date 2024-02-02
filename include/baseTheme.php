@@ -683,9 +683,11 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkColorHeader'])){
             $styles_str .= "
 
+
+                .link-selection-language,
+                .link-bars-options,
                 .user-menu-btn .user-name,
-                .user-menu-btn .fa-chevron-down,
-                .loginText{
+                .user-menu-btn .fa-chevron-down{
                     color: $theme_options_styles[linkColorHeader];
                 }
 
@@ -702,9 +704,6 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
-                .lang-select{
-                    color:$theme_options_styles[linkColorHeader];
-                }
 
             ";
         }
@@ -747,7 +746,8 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['linkHoverColorHeader'])){
             $styles_str .= "
-
+                .link-selection-language:hover,
+                .link-bars-options:hover,
                 .container-items .menu-item:hover,
                 .container-items .menu-item:focus{
                     color: $theme_options_styles[linkHoverColorHeader];
@@ -779,10 +779,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
-                .lang-select:hover,
-                .lang-select:focus{
-                    color: $theme_options_styles[linkHoverColorHeader];
-                }
                 
             ";
         }
@@ -1015,10 +1011,6 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.element a span{
                     color: $theme_options_styles[clLists];
                 }
-
-                .announce-link-homepage{
-                    color: $theme_options_styles[clLists];
-                }
                 
             ";
         }
@@ -1040,10 +1032,6 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.list-group-item-action a span:hover,
                 .list-group-item.element a span:hover{
                     color: $theme_options_styles[clHoveredLists];
-                }
-
-                .announce-link-homepage:hover{
-                    color: $theme_options_styles[clLists];
                 }
                 
             ";
@@ -3288,10 +3276,6 @@ function view($view_file, $view_data = array()) {
               .dataTables_wrapper::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
-              
-              .cardTestimonial > .card-body::-webkit-scrollbar-track {
-                background-color: $theme_options_styles[BgScrollBar];
-              }
 
               .bodyChat::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
@@ -3341,10 +3325,6 @@ function view($view_file, $view_data = array()) {
               .dataTables_wrapper::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
-
-              .cardTestimonial > .card-body::-webkit-scrollbar-thumb {
-                background-color: $theme_options_styles[BgColorScrollBar];
-              }
               
               .bodyChat::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
@@ -3392,10 +3372,6 @@ function view($view_file, $view_data = array()) {
              
               .table-responsive::-webkit-scrollbar-thumb:hover,
               .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
-                background-color: $theme_options_styles[BgHoveredColorScrollBar];
-              }
-
-              .cardTestimonial > .card-body::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
               
@@ -3548,7 +3524,7 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkColor'])){
             $styles_str .= "
 
-                a, .toolAdminText, .announce-link-homepage{
+                a, .toolAdminText{
                     color: $theme_options_styles[linkColor];
                 }
 
@@ -4149,10 +4125,11 @@ function lang_selections_Mobile() {
     }
 
     $lang_select = "
-      <a class='btn small-basic-size mobile-btn bg-default d-flex justify-content-center align-items-center' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <i class='fa-solid fa-earth-europe'></i>
+    <div class='dropdown'>
+      <a id='dropdownMenuLink' class='small-basic-size d-flex justify-content-center align-items-center link-selection-language' href='#' role='button' aria-expanded='false' data-bs-toggle='dropdown'>
+          <i class='fa-solid fa-earth-europe fa-lg'></i>
       </a>
-      <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='dropdownMenuLang'>
+      <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' role='menu' aria-labelledby='dropdownMenuLink'>
       <ul class='list-group list-group-flush'>";
     foreach ($session->active_ui_languages as $code) {
         $class = ($code == $session->language)? ' class="active"': '';
@@ -4164,7 +4141,7 @@ function lang_selections_Mobile() {
                 </a>
             </li>";
     }
-    $lang_select .= "</ul></div>";
+    $lang_select .= "</ul></div></div>";
     return $lang_select;
 }
 
@@ -4189,11 +4166,11 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="d-flex justify-content-end align-items-center lang-select" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="d-flex justify-content-end align-items-center link-selection-language" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>
-                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="dropdownMenuLang">
+                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="Dropdown">
                             <ul class="list-group list-group-flush">';
                             foreach ($session->active_ui_languages as $code) {
                                 $class = ($code == $session->language)? ' class="active"': '';

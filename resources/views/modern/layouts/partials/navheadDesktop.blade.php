@@ -5,7 +5,7 @@
         <div class='d-flex justify-content-start align-items-center h-100'>
 
             <a class='ms-lg-2 me-lg-4 me-xl-5' href="{{ $urlAppend }}">
-                <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}"/>
+                <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="Logo"/>
             </a>
 
             @if(!get_config('show_only_loginScreen'))
@@ -48,13 +48,13 @@
             @if(get_config('enable_search'))
                 <div class='h-100 d-flex justify-content-start align-items-center'>
                     <div class='h-40px pe-2'>
-                        <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post'>
+                        <form id='submitSearch' class="d-flex justify-content-start align-items-center h-40px" action='{{ $urlAppend }}modules/search/{{ $search_action }}' method='post' role='search'>
                             <div>
-                                <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch">
+                                <button id="btn-search" class="btn d-flex justify-content-center align-items-center bg-transparent border-0 p-0 rounded-0" type="button" name="quickSearch" aria-label="Quick search">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </div>
-                            <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-describedby="basic-inputSearch"/>
+                            <input id="search_terms" type="text" class="inputSearch form-control rounded-0" placeholder='{{ trans('langSearch') }}...' name="search_terms" aria-label="Search terms"/>
                         </form>
                     </div>
                     <div class='split-left h-40px ps-0 pe-3'></div>
@@ -76,9 +76,9 @@
                 <div class='d-flex justify-content-start align-items-center h-80px'>
 
                     @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
-                        <a class='d-flex align-items-center text-uppercase TextBold userLoginMobile ms-0' href="{{$urlAppend}}main/login_form.php">
-                            <i class="fa-solid fa-user loginText pe-1"></i>
-                            <span class='loginText small-text hidden-lg text-capitalize'>{{ trans('langUserLogin') }}</span>
+                        <a class='d-flex justify-content-start align-items-center text-uppercase TextBold ms-0 gap-1' href="{{$urlAppend}}main/login_form.php">
+                            <span class=' small-text hidden-lg text-capitalize'>{{ trans('langUserLogin') }}</span>
+                            <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
                     @endif
 
