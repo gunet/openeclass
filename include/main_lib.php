@@ -3255,7 +3255,7 @@ function copyright_info($cid, $noImg = 1) {
             } else {
                 $link_suffix = '';
             }
-            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "'>
+            $link = "<a href='" . $license[$lic]['link'] . "$link_suffix' target='_blank' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title='" . q($license[$lic]['title']) . "' aria-label='(opens in a new tab)'>
                         <span class='fa-brands fa-creative-commons fa-lg'></span>
                     </a>";
         }
@@ -3975,7 +3975,7 @@ function setOpenCoursesExtraHTML() {
                             <div class='col d-flex justify-content-center align-items-center'>
                                 <div>
                                     <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                        <a class='d-flex gap-1 align-items-center text-dark' target='_blank' href='$openFacultiesUrl' aria-label='Open courses'>
+                                        <a class='d-flex gap-1 align-items-center text-dark' target='_blank' href='$openFacultiesUrl' aria-label='Open courses(opens in a new tab)'>
                                             <span class='fa-solid fa-book-open fa-xl'></span>
                                             <span class='text-uppercase TextBold Primary-500-cl fs-5'>$openCoursesNum</span>
                                             <span class='text-uppercase TextBold Primary-500-cl fs-5'>
@@ -3985,7 +3985,7 @@ function setOpenCoursesExtraHTML() {
                                     </div>
 
                                     <div class='d-flex justify-content-center align-items-center w-100 mt-4'>
-                                        <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank' aria-label='Open courses'>
+                                        <a class='btn opencourses_btn d-inline-flex justify-content-center align-items-center' href='http://opencourses.gr' target='_blank' aria-label='Open courses(opens in a new tab)'>
                                             $langNationalOpenCourses
                                             <span class='fa-solid fa-chevron-right ms-2'></span>
                                         </a>

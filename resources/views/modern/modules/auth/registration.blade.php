@@ -144,7 +144,7 @@
                             </div>
                         </div>
                         <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
-                            <img class='form-image' src='{{ $urlAppend }}template/modern/img/RegImg.png' />
+                            <img class='form-image' src='{{ $urlAppend }}template/modern/img/RegImg.png' alt='Registration'/>
                         </div>
                     </div>
                 </div>

@@ -306,9 +306,9 @@
                                             <figure>
                                                 <picture>
                                                     @if($course_info->course_image)
-                                                        <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='Course Banner'/>
+                                                        <img class='uploadImageCourse' src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_info->course_image}}' alt='This is the image of course'/>
                                                     @else
-                                                        <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                        <img class='uploadImageCourse' src='{{$urlAppend}}template/modern/img/ph1.jpg' alt='No available'/>
                                                     @endif
                                                 </picture>
                                             </figure>

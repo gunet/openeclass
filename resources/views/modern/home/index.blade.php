@@ -64,7 +64,7 @@
                                                         <div class='card border-0 border-radius-default'>
                                                             <div class='card-body banner-body border-0 bg-default border-radius-default py-lg-2 py-1'>
                                                                 <a href="http://www.openeclass.org/" target="_blank" aria-label='Banner'>
-                                                                    <img style='width:150px;' src="{{ $themeimg }}/Open-Eclass-Banner.svg" alt="Open eClass Banner">
+                                                                    <img style='width:150px;' src="{{ $themeimg }}/Open-Eclass-Banner.svg" alt="This is the banner of platform">
                                                                 </a>
                                                             </div>
                                                         </div>
@@ -133,7 +133,7 @@
                                 <div class='col d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
                                     <div class='card cardLogin h-100 p-3 border-0'>
                                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                            <img class='jumbotron-image-default' src='{{ $loginIMG }}' alt=''>
+                                            <img class='jumbotron-image-default' src='{{ $loginIMG }}' alt='This is a background image'>
                                         </div>
                                     </div>
                                 </div>
@@ -213,9 +213,9 @@
                                                         <div class='card border-card h-100'>
                                                             <a href='{{$urlAppend}}courses/{{$pop_course->code}}/index.php'>
                                                                 @if($pop_course->course_image)
-                                                                    <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='Course Banner'/>
+                                                                    <img class='card-img-top popular_course_img' src='{{$urlAppend}}courses/{{$pop_course->code}}/image/{{$pop_course->course_image}}' alt='This is the images of popular course'/>
                                                                 @else
-                                                                    <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg'/>
+                                                                    <img class='card-img-top popular_course_img' src='{{$urlAppend}}template/modern/img/ph1.jpg' alt='This is the images of popular course'/>
                                                                 @endif
                                                             </a>
                                                             <div class='card-body'>
@@ -323,7 +323,7 @@
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-book-open fa-xl mt-4 pt-1"></i>
+                                                                    <i class="fa-solid fa-book-open fa-xl mt-4 pt-1" role="presentation"></i>
                                                                     <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('total_courses') }}</div>
                                                                 </div>
                                                                 <p class='form-label text-center'>{{ trans('langCourses') }}</p>
@@ -336,7 +336,7 @@
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-globe fa-xl mt-4 pt-1"></i>
+                                                                    <i class="fa-solid fa-globe fa-xl mt-4 pt-1" role="presentation"></i>
                                                                     <div class='TextBold largest-text mb-0 ms-2'>{{ get_config('visits_per_week')}}K+</div>
                                                                 </div>
                                                                 <p class='form-label text-center'>{{trans('langUserLogins')}}/</br>{{trans('langWeek')}}</p>
@@ -349,7 +349,7 @@
                                                         <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
-                                                                    <i class="fa-solid fa-user fa-xl mt-4 pt-1"></i>
+                                                                    <i class="fa-solid fa-user fa-xl mt-4 pt-1" role="presentation"></i>
                                                                     <div class='TextBold largest-text mb-0 ms-2'>{{ getOnlineUsers() }}</div>
                                                                 </div>
                                                                 <p class='form-label text-center'>{{trans('langOnlineUsers')}}</p>

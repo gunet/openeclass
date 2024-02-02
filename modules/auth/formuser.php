@@ -370,7 +370,7 @@ $tool_content .= "
                         $tool_content .= "<p class='form-control-static'>" . q($givenname) . "</p>";
                         $tool_content .= "<input type='hidden' name='givenname' value = '" . $givenname . "'>";
                     } else {
-                        $tool_content .= "<input class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
+                        $tool_content .= "<input id='Name' class='form-control' type='text' name='givenname' value='' size='30' maxlength='60' placeholder='$langName'></td>";
                     }
                     $tool_content .= "</div>
                 </div>
@@ -385,7 +385,7 @@ $tool_content .= "
                         $tool_content .= "<p class='form-control-static'>" . q($surname) . "</p>";
                         $tool_content .= "<input type='hidden' name='surname' value='$surname'>";
                     } else {
-                        $tool_content .= "<input class='form-control' type='text' name='surname' value='' size='30' maxlength='60' placeholder='$langSurname'>";
+                        $tool_content .= "<input id='SurName' class='form-control' type='text' name='surname' value='' size='30' maxlength='60' placeholder='$langSurname'>";
                     }
 
                     $tool_content .= "</div>
@@ -404,7 +404,7 @@ $tool_content .= "
                         $tool_content .= "<p class='form-control-static'>" . q($username) . "</p>";
                         $tool_content .= "<input type='hidden' name='username' value='$username'>";
                     } else {
-                        $tool_content .= "<input class='form-control' placeholder='$langUsername' type='text' name='username' size='30' maxlength='50' value=''>";
+                        $tool_content .= "<input id='UserName' class='form-control' placeholder='$langUsername' type='text' name='username' size='30' maxlength='50' value=''>";
                     }
 
                     $tool_content .= "</div>
@@ -419,7 +419,7 @@ $tool_content .= "
                     } else {
                         $usermail = '';
                     }
-                    $tool_content .= "<input class='form-control' type='text' name='usermail' value='$usermail' size='30' maxlength='100' placeholder='$langCompulsory'>";
+                    $tool_content .= "<input id='ProfEmail' class='form-control' type='text' name='usermail' value='$usermail' size='30' maxlength='100' placeholder='$langCompulsory'>";
                     $tool_content .= "</div>
                 </div>
             </div>
@@ -436,7 +436,7 @@ $tool_content .= "
                     } else {
                         $userphone = '';
                     }
-                    $tool_content .= "<input class='form-control' type='text' name='userphone' value='$userphone' size='20' maxlength='20' placeholder='$phone_star'>
+                    $tool_content .= "<input id='UserPhone' class='form-control' type='text' name='userphone' value='$userphone' size='20' maxlength='20' placeholder='$phone_star'>
                     </div>
                 </div>
             </div>
@@ -446,9 +446,9 @@ $tool_content .= "
             <div class='row'>
                 <div class='col-12 px-3'>
                     <div class='form-group mt-4'>
-                        <label for='ProfEmail' class='col-sm-6 control-label-notes'>$langAm:</label>
+                        <label for='UserAM' class='col-sm-6 control-label-notes'>$langAm:</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
+                            <input id='UserAM' class='form-control' type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
                         </div>
                     </div>
                 </div>
@@ -542,7 +542,7 @@ $tool_content .= "
         </div>
     </div>
     <div class='col-lg-6 col-12'>
-        <img class='form-image' src='{$urlAppend}template/modern/img/RegImg.png' />
+        <img class='form-image' src='{$urlAppend}template/modern/img/RegImg.png' alt='Registration'/>
     </div>
 </div>
 </div>";
