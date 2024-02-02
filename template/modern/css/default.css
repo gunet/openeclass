@@ -823,6 +823,15 @@ b a {
   border-radius: 4px;
 }
 
+.link-selection-language,
+.link-bars-options{
+  color: #2B3944;
+}
+.link-selection-language:hover,
+.link-bars-options:hover{
+  color: #0073E6;
+}
+
 .inputSearch{ 
   width:100px;
   background-color: #ffffff;

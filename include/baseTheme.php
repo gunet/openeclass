@@ -683,6 +683,9 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkColorHeader'])){
             $styles_str .= "
 
+
+                .link-selection-language,
+                .link-bars-options,
                 .user-menu-btn .user-name,
                 .user-menu-btn .fa-chevron-down{
                     color: $theme_options_styles[linkColorHeader];
@@ -701,9 +704,6 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
-                .lang-select{
-                    color:$theme_options_styles[linkColorHeader];
-                }
 
             ";
         }
@@ -746,7 +746,8 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['linkHoverColorHeader'])){
             $styles_str .= "
-
+                .link-selection-language:hover,
+                .link-bars-options:hover,
                 .container-items .menu-item:hover,
                 .container-items .menu-item:focus{
                     color: $theme_options_styles[linkHoverColorHeader];
@@ -778,10 +779,6 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
-                .lang-select:hover,
-                .lang-select:focus{
-                    color: $theme_options_styles[linkHoverColorHeader];
-                }
                 
             ";
         }
@@ -4128,8 +4125,8 @@ function lang_selections_Mobile() {
     }
 
     $lang_select = "
-      <a class='btn small-basic-size mobile-btn bg-default d-flex justify-content-center align-items-center' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
-          <i class='fa-solid fa-earth-europe'></i>
+      <a class='small-basic-size d-flex justify-content-center align-items-center link-selection-language' type='button' aria-expanded='false' href='#dropdownMenuLang' data-bs-toggle='dropdown'>
+          <i class='fa-solid fa-earth-europe fa-lg'></i>
       </a>
       <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' aria-labelledby='dropdownMenuLang'>
       <ul class='list-group list-group-flush'>";
@@ -4168,7 +4165,7 @@ function lang_selections_Desktop() {
         }
     }
     $lang_select = '<div class="dropdown d-flex justify-content-center align-items-end">
-                        <a class="d-flex justify-content-end align-items-center lang-select" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="d-flex justify-content-end align-items-center link-selection-language" href="#" id="Dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down ps-2"></i> 
                         </a>

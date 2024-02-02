@@ -4,12 +4,12 @@
 
             <div class='d-flex justify-content-start align-items-center gap-2'>
 
-                <button class="btn small-basic-size mobile-btn bg-default d-flex justify-content-center align-items-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
-                    <i class='fa-solid fa-bars'></i>
-                </button>
+                <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
+                    <i class='fa-solid fa-bars fa-lg'></i>
+                </a>
 
                 <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}">
-                    <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}">
+                    <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}" alt="logo">
                 </a>
             </div>
 
