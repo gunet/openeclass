@@ -25,10 +25,6 @@ $(document).ready(function(){
 
     //////////////////////////////////////////////////////////////////////////////
 
-    // var action_bar = $('.action_bar').length;
-    // if (!action_bar) {
-    //     $('div.title-row').css('margin-bottom', '24px');
-    // 
 
 	$(".menu-popover").popover({
 		html: true,
@@ -99,30 +95,8 @@ $(document).ready(function(){
     });
 
 
-
-
-
-
 });
 
-
-
-
-// portfolio //////////////////////////////////////////////////////////////////////////////////////////////////////////
-// portfolio //////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-function switch_user_details_toggle() {
-		
-	if( $('.user-details-collapse-more').is(":visible") ) 
-	{
-		$('.user-details-collapse-more').hide();
-		$('.user-details-collapse-less').show();
-	} else {
-		$('.user-details-collapse-more').show();
-		$('.user-details-collapse-less').hide();
-	}
-}
 
 function switch_cources_toggle(id) 
 {

@@ -76,9 +76,9 @@
                 <div class='d-flex justify-content-start align-items-center h-80px'>
 
                     @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
-                        <a class='d-flex align-items-center text-uppercase TextBold userLoginMobile ms-0' href="{{$urlAppend}}main/login_form.php">
-                            <i class="fa-solid fa-user loginText pe-1"></i>
-                            <span class='loginText small-text hidden-lg text-capitalize'>{{ trans('langUserLogin') }}</span>
+                        <a class='d-flex justify-content-start align-items-center text-uppercase TextBold ms-0 gap-1' href="{{$urlAppend}}main/login_form.php">
+                            <span class=' small-text hidden-lg text-capitalize'>{{ trans('langUserLogin') }}</span>
+                            <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
                     @endif
 

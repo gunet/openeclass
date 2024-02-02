@@ -16,9 +16,9 @@
             @if (!isset($_SESSION['uid']))
                 <div class='d-flex justify-content-start align-items-center'>
                     @if(get_config('dont_display_login_form'))
-                        <a class='d-flex align-items-center text-uppercase TextBold small-text me-2' href="{{ $urlAppend }}main/login_form.php">
-                            <i class="fa-solid fa-user loginText"></i>
-                            <span class='ms-2 loginText TextMedium hidden-xs'>{{ trans('langUserLogin') }}</span>
+                        <a class='d-flex align-items-center text-uppercase TextBold small-text me-2 gap-1' href="{{ $urlAppend }}main/login_form.php">
+                            <span class='TextMedium hidden-xs'>{{ trans('langUserLogin') }}</span>
+                            <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
                     @endif
                     {!! lang_selections_Mobile() !!}

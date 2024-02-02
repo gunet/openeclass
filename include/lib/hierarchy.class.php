@@ -1233,7 +1233,7 @@ jContent;
         global $langSelectFac;
 
         $ret = "<div class='col-12'>";
-        $ret .= "<div class='form-wrapper form-edit border-0 openCoursesFormWrapper'>
+        $ret .= "<div class='form-wrapper form-edit border-0'>
                     <form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
         $ret .= "<div class='form-group'>";
         $ret .= "<label class='col-12 form-label mb-0'>$langSelectFac</label>";

@@ -684,8 +684,7 @@ function view($view_file, $view_data = array()) {
             $styles_str .= "
 
                 .user-menu-btn .user-name,
-                .user-menu-btn .fa-chevron-down,
-                .loginText{
+                .user-menu-btn .fa-chevron-down{
                     color: $theme_options_styles[linkColorHeader];
                 }
 
@@ -1015,10 +1014,6 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.element a span{
                     color: $theme_options_styles[clLists];
                 }
-
-                .announce-link-homepage{
-                    color: $theme_options_styles[clLists];
-                }
                 
             ";
         }
@@ -1040,10 +1035,6 @@ function view($view_file, $view_data = array()) {
                 .list-group-item.list-group-item-action a span:hover,
                 .list-group-item.element a span:hover{
                     color: $theme_options_styles[clHoveredLists];
-                }
-
-                .announce-link-homepage:hover{
-                    color: $theme_options_styles[clLists];
                 }
                 
             ";
@@ -3288,10 +3279,6 @@ function view($view_file, $view_data = array()) {
               .dataTables_wrapper::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
-              
-              .cardTestimonial > .card-body::-webkit-scrollbar-track {
-                background-color: $theme_options_styles[BgScrollBar];
-              }
 
               .bodyChat::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
@@ -3341,10 +3328,6 @@ function view($view_file, $view_data = array()) {
               .dataTables_wrapper::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
-
-              .cardTestimonial > .card-body::-webkit-scrollbar-thumb {
-                background-color: $theme_options_styles[BgColorScrollBar];
-              }
               
               .bodyChat::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
@@ -3392,10 +3375,6 @@ function view($view_file, $view_data = array()) {
              
               .table-responsive::-webkit-scrollbar-thumb:hover,
               .dataTables_wrapper::-webkit-scrollbar-thumb:hover {
-                background-color: $theme_options_styles[BgHoveredColorScrollBar];
-              }
-
-              .cardTestimonial > .card-body::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
               
@@ -3548,7 +3527,7 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkColor'])){
             $styles_str .= "
 
-                a, .toolAdminText, .announce-link-homepage{
+                a, .toolAdminText{
                     color: $theme_options_styles[linkColor];
                 }
 

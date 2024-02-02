@@ -63,10 +63,6 @@
     background-color: transparent;
   }
     
-  .input-bg-color{
-    background-color: #687DA3;
-  }
-    
   .input-border-color{
     border-color: #ffffff;
   }
@@ -75,25 +71,12 @@
     color: #687DA3;
   }
     
-  .info-date{ 
-    color:#E8EDF8; 
-  }
-    
   .help-block{ 
     color:#E8EDF8; 
   }
   
   .split-left{
     border-left: solid 1px #e8e8e8 ;
-  }
-  
-  .borderBoxPanel{
-    background-clip: border-box; border: 1px solid rgba(0,0,0,.125);
-    box-shadow: 0px 0px 3px 1px rgb(0 0 0 / 8%); 
-  }
-  
-  .borderBoxPanelNoShadow{
-    background-clip: border-box; border: 1px solid rgba(0,0,0,.125);
   }
 
   .list-group-flush>.list-group-item {
@@ -175,7 +158,6 @@
   }
   
   .Neutral-300-bg{
-    /* background-color: #E8EDF8; */
     background-color: #4F6893;
   }
   .Neutral-300-cl{
@@ -335,9 +317,6 @@
     color: #ffffff;
   }
   
-  .form-value{
-    color: #E8EDF8;
-  }
   
 /**********************************************************************************************************************/
 /************************************************* HEADER *************************************************************/
@@ -421,10 +400,6 @@
   .user-menu-btn:focus .fa-chevron-down{
       color: #74AFE9;
       margin-top: -4px;
-  }
-
-  .loginText{
-      color: #ffffff;
   }
 
   .div_social {
@@ -794,9 +769,6 @@
     color: #ffffff;
     background-color: #C44601;
   }
-  /* .deleteAdminBtn .fa-xmark{
-    color:#C44601;
-  } */
   
   .deleteAdminBtn:hover,
   button[type="submit"].deleteAdminBtn:hover,
@@ -1865,10 +1837,6 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     border: solid 1px #4F6893;
   }
 
-  .announce-link-homepage {
-      color: #74AFE9;
-  }
-
   .testimonials{
       background-color: #212D37;
   }
@@ -1998,12 +1966,6 @@ table.dataTable tfoot th, table.dataTable tfoot td {
     color: #ffffff; 
   }
   
-  /* .openCoursesFormWrapper{
-    background-color: #212D37 !important;
-    border: solid 1px #4F6893 !important;
-  } */
-  
-
   /**********************************************************************************************************************/
   /************************************************** ANNOUNCEMENTS *****************************************************/
   /**********************************************************************************************************************/
@@ -2705,24 +2667,6 @@ tr.warning:hover{
   background-image: -webkit-linear-gradient(top, #74AFE9, #74AFE9);
   color:#ffffff;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
