@@ -91,7 +91,7 @@
                                                             <i class="fa fa-warning"></i>
                                                         </button>
                                                     @endif
-                                                    <a href="{{ $urlAppend . $app->getConfigUrl() }}" class="btn submitAdminBtn">
+                                                    <a href="{{ $urlAppend . $app->getConfigUrl() }}" class="btn submitAdminBtn" aria-label="Exterior app">
                                                         <i class="fa fa-sliders fw"></i>
                                                     </a>
                                                 </div>

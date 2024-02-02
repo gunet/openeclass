@@ -86,8 +86,8 @@
                                                 <label for='course_image' class='col-sm-6 control-label-notes'>{{$langCourseImage}}:</label>
                                                 <div class='col-sm-12'>
                                                     @if(!$course_image == NULL)
-                                                        <img style="max-height:100px;max-width:150px;" src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_image}}'> &nbsp;&nbsp;
-                                                        <a class='btn btn-xs btn-danger' href='{{$urlAppend}}modules/course_home/editdesc.php?deleteImageCourse={{$course_id}}&delete_image=true&{!! $generate_csrf_token_link_parameter !!}'>Διαγραφή</a>
+                                                        <img style="max-height:100px;max-width:150px;" src='{{$urlAppend}}courses/{{$course_code}}/image/{{$course_image}}' alt="Course image"> &nbsp;&nbsp;
+                                                        <a class='btn btn-xs btn-danger' href='{{$urlAppend}}modules/course_home/editdesc.php?deleteImageCourse={{$course_id}}&delete_image=true&{!! $generate_csrf_token_link_parameter !!}'>{{ trans('langDelete')}}</a>
                                                         <input type='hidden' name='course_image' value='{{$course_image}}'>
                                                     @else
                                                         {!! $enableCheckFileSize !!}
@@ -106,7 +106,7 @@
                                             <div class='form-group'>
                                                 <div class='col-sm-12 col-sm-offset-2'>
                                                     <input class='btn submitAdminBtn' type='submit' name='submit' value='{{$langSubmit}}'>
-                                                    <a href='{{$urlServer}}courses/{{$course_code}}/index.php' class='btn btn-secondary'>Ακύρωση</a>
+                                                    <a href='{{$urlServer}}courses/{{$course_code}}/index.php' class='btn btn-secondary'>{{ trans('langCancel')}}</a>
                                                 </div>
                                             </div>
                                         </fieldset>

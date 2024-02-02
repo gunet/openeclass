@@ -227,7 +227,7 @@
                                             </h3>
                                                 
                                             <div>
-                                                <a href='javascript:void(0);'><span class='fa fa-arrows pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
+                                                <a href='javascript:void(0);' aria-label="{{ trans('langReorder') }}"><span class='fa fa-arrows pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
                                             </div>
                                         </div>
                                     </div>

@@ -43,13 +43,13 @@
                                 <img src="template/modern/img/delete.png" border="0" alt="browser not supported"> 
                                 {{ trans('langBrowserNotSupported') }}:
                                 <br><br>
-                                <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx" target="_blank">Internet Explorer</a>
+                                <a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx" target="_blank" aria-label="(opens new window)">Internet Explorer</a>
                                 <br>
-                                <a href="http://www.mozilla.org" target="_blank">Mozilla Firefox</a>
+                                <a href="http://www.mozilla.org" target="_blank" aria-label="(opens new window)">Mozilla Firefox</a>
                                 <br>
-                                <a href="http://www.apple.com/safari/" target="_blank">Safari</a>
+                                <a href="http://www.apple.com/safari/" target="_blank" aria-label="(opens new window)">Safari</a>
                                 <br>
-                                <a href="http://www.google.com/chrome/eula.html" target="_blank">Chrome</a>
+                                <a href="http://www.google.com/chrome/eula.html" target="_blank" aria-label="(opens new window)">Chrome</a>
                             </p>
                         </td>
                     </tr>
@@ -72,7 +72,7 @@
                             <p id="acrobatreadernotinstalled" style="display: none; color: red; font-size: 11px;">
                                 <img src="template/modern/img/delete.png" border="0" alt="acrobat reader not installed"> 
                                 {{ trans('langAcrobatReaderNotInstalled') }}
-                                <a href="http://get.adobe.com/reader/" target="_blank">{{ trans('langHere') }}</a>.
+                                <a href="http://get.adobe.com/reader/" target="_blank" aria-label="(opens new window)">{{ trans('langHere') }}</a>.
                                 {{ trans('langAgreeAndInstall') }}
                             </p>
                         </td>
@@ -96,7 +96,7 @@
                             <p id="flashplayernotinstalled" style="display: none; color: red; font-size: 11px;">
                                 <img src="template/modern/img/delete.png" border="0" alt="flash player not installed"> 
                                 {{ trans('langFlashPlayerNotInstalled') }} 
-                                <a href="http://get.adobe.com/flashplayer/" target="_blank">{{ trans('langHere') }}</a>.
+                                <a href="http://get.adobe.com/flashplayer/" target="_blank" aria-label="(opens new window)">{{ trans('langHere') }}</a>.
                                 {{ trans('langAgreeAndInstall') }}
                             </p>
                         </td>
@@ -120,7 +120,7 @@
                             <p id="shocknotinstalled" style="display: none; color: red; font-size: 11px;">
                                     <img src="template/modern/img/delete.png" border="0" alt="shockwave not installed"> 
                                     {{ trans('langShockNotInstalled') }}
-                                    <a href="http://get.adobe.com/shockwave/" target="_blank">{{ trans('langHere') }}</a>.
+                                    <a href="http://get.adobe.com/shockwave/" target="_blank" aria-label="(opens new window)">{{ trans('langHere') }}</a>.
                                     {{ trans('langAgreeAndInstall') }}
                             </p>
                         </td>

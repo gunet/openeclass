@@ -18,9 +18,9 @@
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="col-md-4 col d-flex justify-content-center justify-content-md-start">
                                 @if($c->course_image == NULL)
-                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="{{ $c->title }}" /></a>
+                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}template/modern/img/ph1.jpg" alt="No image available" />
                                 @else
-                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}courses/{{ $c->code }}/image/{{ $c->course_image }}" alt="{{ $c->course_image }}" /></a>
+                                    <img class='img-fluid rounded-start course_info_img' src="{{ $urlAppend }}courses/{{ $c->code }}/image/{{ $c->course_image }}" alt="Course image" />
                                 @endif
                             </div>
                             <div class="col-md-8 col">

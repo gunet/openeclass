@@ -232,11 +232,11 @@
                                                         </h3>
                                                         
                                                         <div class='d-flex gap-2'>
-                                                            <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}'>
-                                                                <span class='fa fa-edit pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
+                                                            <a href='{{$urlAppend}}modules/admin/homepageTexts_create.php?homepageText=modify&id={{$text->id}}' aria-label="{{trans('langEdit')}}">
+                                                                <span class='fa fa-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='{{trans('langEdit')}}'></span>
                                                             </a>
-                                                            <a href='javascript:void(0);'><span class='fa fa-arrows pe-1' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
-                                                            <a class='forDelete' href='javascript:void(0);' data-id='{{ $text->id }}' data-order='{{ $text->order }}'><span class='fa-solid fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
+                                                            <a href='javascript:void(0);' aria-label='{{ trans('langReorder') }}'><span class='fa fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
+                                                            <a class='forDelete' href='javascript:void(0);' data-id='{{ $text->id }}' data-order='{{ $text->order }}' aria-label='{{ trans('langDelete') }}'><span class='fa-solid fa-xmark text-danger' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
                                                         </div>
                                                     
                                                     

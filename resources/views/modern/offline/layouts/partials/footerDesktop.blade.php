@@ -12,11 +12,11 @@
             @endif
         </ul>
         <div class='d-flex justify-content-start align-items-center'>
-            <a class="copyright px-2" href='#'>Open eClass - 2023 All rights reserved</a>
+            <a class="copyright px-2" href='#'>Open eClass - {{ date('Y') }} All rights reserved</a>
             @if(get_config('enable_social_sharing_links'))
-                <a class="a_tools_site_footer px-2" href="#" target="_blank"><i class="fab fa-facebook-f social-icon-tool"></i></a>
-                <a class="a_tools_site_footer px-2" href="#" target="_blank"><i class="fab fa-twitter social-icon-tool"></i></a>
-                <a class="a_tools_site_footer px-2" href="#" target="_blank"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
+                <a class="a_tools_site_footer px-2" href="#" target="_blank" aria-label="Facebook (opens new window)"><i class="fab fa-facebook-f social-icon-tool"></i></a>
+                <a class="a_tools_site_footer px-2" href="#" target="_blank" aria-label="Twitter (opens new window)"><i class="fab fa-twitter social-icon-tool"></i></a>
+                <a class="a_tools_site_footer px-2" href="#" target="_blank" aria-label="Linkedin (opens new window)"><i class="fab fa-linkedin-in social-icon-tool"></i></a>
             @endif
         </div>
     </div>
