@@ -48,7 +48,7 @@ $dateNow = date("j-n-Y / H:i", time());
 $toolName = $langAgenda;
 
 if (isset($_GET['v'])) {
-    $v = intval($_GET['v']); // get agenda view    
+    $v = intval($_GET['v']); // get agenda view
     if ($v == 1) {
         $view = EVENT_LIST_VIEW; // list view
     } else {
@@ -60,10 +60,10 @@ if (isset($_GET['v'])) {
 } else {
     $view = EVENT_CALENDAR_VIEW; // default is calendar view
 }
- 
-// list view if we want a specific event 
 
-        
+// list view if we want a specific event
+
+
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('bootstrap-timepicker');
@@ -73,7 +73,7 @@ if (!empty($langLanguageCode)) {
 }
 load_js('bootstrap-calendar-master/js/calendar.js');
 load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
- 
+
 $head_content .= "
 <link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar.css' />
 <script type='text/javascript'>
@@ -116,8 +116,8 @@ var dialogDeleteOptions = {
 
 $(document).ready(function(){
     $('#enddatecal').hide();
-    
-    $('#submitbtn').on('click', 
+
+    $('#submitbtn').on('click',
             function(e){
                 e.preventDefault();
                 checkrequired($('#agendaform'));
@@ -126,7 +126,7 @@ $(document).ready(function(){
     $('#frequencynumber').change(function(){checkenableenddate();});
     $('#frequencyperiod').change(function(){checkenableenddate();});
 
-    
+
 });
 
 function checkenableenddate(){
@@ -154,7 +154,7 @@ $(function() {
 if ($is_editor and (isset($_GET['addEvent']) or isset($_GET['id']))) {
 
     //--if add event
-    $head_content .= 
+    $head_content .=
 "<script type='text/javascript'>
 function checkrequired(thisform) {
     if ($('#event_title').val()=='' || $('#startdate').val()=='') {
@@ -169,7 +169,7 @@ function checkrequired(thisform) {
 }
 </script>";
 }
-    
+
 if ($is_editor) {
     $agdx = new AgendaIndexer();
     // modify visibility
@@ -190,7 +190,7 @@ if ($is_editor) {
             $recursion = null;
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
-            }            
+            }
             if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
                 $resp = update_recursive_event($id, $event_title, $startdate, $duration, $content, $recursion);
             } else {
@@ -198,13 +198,13 @@ if ($is_editor) {
             }
             $agdx->store($id);
         } else { // add new event
-            $recursion = null;            
+            $recursion = null;
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
-            }            
-            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);                                   
+            }
+            $ev = add_event($event_title, $content, $startdate, $duration, $recursion);
             foreach($ev['event'] as $id) {
-                $agdx->store($id);                
+                $agdx->store($id);
             }
         }
         Session::Messages($langStoredOK, 'alert-success');
@@ -214,9 +214,9 @@ if ($is_editor) {
         $agdx->remove($id);
         $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
         $alerttype = ($resp['success'])? 'alert-success' : 'alert-error';
-        
+
         Session::Messages($msgresp, $alerttype);
-        redirect_to_home_page("modules/agenda/index.php?course=$course_code");              
+        redirect_to_home_page("modules/agenda/index.php?course=$course_code");
     }
     $is_recursive_event = false;
 
@@ -227,7 +227,7 @@ if ($is_editor) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label',
-                      'show' => $is_editor)));        
+                      'show' => $is_editor)));
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
         $applytogroup = '';
         if (isset($id) && $id) {
@@ -255,7 +255,7 @@ if ($is_editor) {
             $duration = "0:00";
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = '';
-        } 
+        }
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' id = 'id' name='id' value='$id'>"
@@ -298,8 +298,8 @@ if ($is_editor) {
                 }
                 $tool_content .= ">$i</option>";
             }
-            
-            $tool_content .= "</select></div>";            
+
+            $tool_content .= "</select></div>";
             $selected = array('D'=>'', 'W'=>'','M'=>'');
             if($is_recursive_event){
                 $selected[$repeatperiod] = ' selected';
@@ -327,7 +327,7 @@ if ($is_editor) {
          $tool_content .= "<div class='form-group'>
                         <label for='Detail' class='col-sm-2 control-label'>$langDetail :</label>
                         <div class='col-sm-10'>" . rich_text_editor('content', 4, 20, $content) . "</div>
-                      </div>            
+                      </div>
                       <div class='form-group'>
                         <div class='col-sm-offset-2 col-sm-10'>".
                             form_buttons(array(
@@ -343,7 +343,7 @@ if ($is_editor) {
                             ))
                             ."
                         </div>
-                      </div>                
+                      </div>
             </form></div>";
     }
 }
@@ -351,7 +351,7 @@ if ($is_editor) {
      *  End  of  prof only
      * ------------------------------------------- */
 // display action bar
-if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {        
+if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
     $tool_content .= action_bar(array(
             array('title' => $langAddEvent,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
@@ -375,7 +375,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'url' => "icalendar.php?c=$course_id",
                   'icon' => 'fa-calendar',
                   'level' => 'primary')
-        ));    
+        ));
     if (isset($_GET['id'])) {
        $cal_content_list = event_list_view($id);
     } else {
@@ -411,11 +411,11 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 . '</div></div>';
 
         $tool_content .= "<script type='text/javascript'>" .
-        '$(document).ready(function(){        
+        '$(document).ready(function(){
             var calendar = $("#bootstrapcalendar").calendar(
             {
                 tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
-                events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
+                events_source: "' . $urlAppend . 'main/calendar_data.php?course='.$course_code.'",
                 language: "el-GR",
                 onAfterViewLoad: function(view) {
                             $(".calendar-header h4").text(this.getTitle());
@@ -428,7 +428,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
-                calendar.navigate($this.data("calendar-nav"));                
+                calendar.navigate($this.data("calendar-nav"));
                 $("#bootstrapcalendar").show();
             });
         });
@@ -436,14 +436,14 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $(".btn-group button[data-calendar-view]").each(function() {
             var $this = $(this);
             $this.click(function() {
-                calendar.view($this.data("calendar-view"));                
+                calendar.view($this.data("calendar-view"));
                 $("#bootstrapcalendar").show();
-            });       
-    });    
+            });
+    });
     });
 
     </script>';
-}   
+}
 }
 add_units_navigation(TRUE);
 
