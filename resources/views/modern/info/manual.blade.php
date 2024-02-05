@@ -20,7 +20,7 @@
                                     
                                     @foreach ($general_tutorials['links'] as $gt)
                                         <li class="list-group-item element">
-                                            <a class='TextBold' href='{{ $gt['url'] }}' target='_blank' class='mainpage'>{!! $gt['desc'] !!}</a>
+                                            <a class='TextBold' href='{{ $gt['url'] }}' target='_blank' class='mainpage' aria-label='(opens new window)'>{!! $gt['desc'] !!}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -33,7 +33,7 @@
                                     </li>
                                     @foreach ($teacher_tutorials['links'] as $tt)
                                         <li class="list-group-item element">
-                                            <a class='TextBold' href='{{ $tt['url'] }}' target='_blank' class='mainpage'>{!! $tt['desc'] !!}</a>
+                                            <a class='TextBold' href='{{ $tt['url'] }}' target='_blank' class='mainpage' aria-label='(opens new window)'>{!! $tt['desc'] !!}</a>
                                         </li>
                                     @endforeach
                                 </ul>
@@ -48,7 +48,7 @@
                                     </li>
                                     @foreach ($student_tutorials['links'] as $st)
                                         <li class="list-group-item element">
-                                            <a class='TextBold' href='{{ $st['url'] }}' target='_blank' class='mainpage'>{!! $st['desc'] !!}</a>
+                                            <a class='TextBold' href='{{ $st['url'] }}' target='_blank' class='mainpage' aria-label='(opens new window)'>{!! $st['desc'] !!}</a>
                                         </li>
                                     @endforeach
 

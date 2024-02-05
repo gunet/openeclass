@@ -12,7 +12,7 @@
             </div>
             <div class='card-body'>
                 {!! sprintf( trans('langNewEclassVersionInfo'), "<strong>" . q($release_info->release) . "</strong>",
-                            "<a href='https://www.openeclass.org/' target='_blank'>www.openeclass.org</a>") !!}
+                            "<a href='https://www.openeclass.org/' aria-label='New version' target='_blank'>www.openeclass.org</a>") !!}
             </div>
         </div>
     </div>

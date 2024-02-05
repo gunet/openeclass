@@ -389,38 +389,11 @@
         
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
 
 
 
 <script>
-
-    $('.basic-content').removeClass('container');
 
     $('.testimonials').slick({
 		autoplay:true,

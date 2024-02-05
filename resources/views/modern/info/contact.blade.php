@@ -15,7 +15,7 @@
                     <div class='card-body'>
                         <div class='row'>
                             <div class='col-lg-4 col-12 d-flex justify-content-center align-items-center mb-lg-0 mb-5'>
-                                <img class='contactImage' src="{{ $urlAppend }}template/modern/img/indexlogo.png">
+                                <img class='contactImage' src="{{ $urlAppend }}template/modern/img/indexlogo.png" alt="Contact with us">
                             </div>
                             <div class='col-lg-8 col-12'>
 
