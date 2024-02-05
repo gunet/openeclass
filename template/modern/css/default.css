@@ -490,10 +490,6 @@ a:hover,button:hover{
   color: #FFF4D1;
 }
 
-.basic-value-cl{
-  color: #687DA3;
-}
-
 .default-value{
   color: #ffffff;
 }
@@ -859,29 +855,6 @@ b a {
   width: 500px;
   top: 0;
   right: 100%;
-}
-
-
-@media(max-width:991px){
-  .inputMobileSearch, .submitMobileSearch{
-    height:30px;
-    background-color: transparent;
-    color: #687DA3;
-    border: solid 0.2px #e8e8e8;
-
-  }
-  .inputMobileSearch::placeholder{
-    text-align: center;
-    color: #687DA3;
-  }
-  .inputMobileSearch:focus,.inputMobileSearch:hover,.inputMobileSearch:active{
-    outline: none;
-  }
-  .submitMobileSearch:focus,.submitMobileSearch:hover,.submitMobileSearch:active{
-    outline: none;
-    background-color: #ffffff;
-    color:#000000;
-  }
 }
 
 .user-menu-btn:hover,

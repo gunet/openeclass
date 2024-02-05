@@ -116,35 +116,6 @@
 
 .breadcrumb li{ white-space:nowrap; }
 
-@media(max-width: 425px){ 
-
-  .btn-close.text-reset{ background-color:white; }
-
-  .offcanvas-start.d-lg-none.show{ width:280px; overflow-y: scroll; }
-
-  .active-nav{ opacity:1; }
-}
-
-/* mobile L */
-
-@media (min-width: 426px) and (max-width: 767px){ 
-
-  .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; }
-}
-
-/* tablet */
-@media (min-width: 768px) and (max-width: 1023px){ 
-
-  .btn-close.text-reset{ background-color:white; }
-
-  .offcanvas-start.d-lg-none.show{ width:285px; overflow-y: scroll; }
-
-  .active-nav{ opacity:1; }
-  
-}
-
-
-
 /* Style sidebar when toogle button is clicked */
 @media(min-width:992px) and (max-width:1023px){
 
@@ -740,7 +711,7 @@
 }
 @media(max-width:991px){
   .switch-sidebar{
-    width: 160px;
+    width: 200px;
   }
 }
 @media(min-width:992px) and (max-width:1199px){
@@ -764,7 +735,7 @@
 } */
 @media(max-width:991px){
   .slider-btn-on{ 
-    width:160px; 
+    width:200px; 
   }
 }
 @media(min-width:992px) and (max-width:1199px){
@@ -832,9 +803,9 @@ input:focus + .slider-round {
 
 @media(max-width:991px){
   input:checked + .slider-round:before { 
-    -webkit-transform: translateX(124px); 
-    -ms-transform: translateX(124px);
-    transform: translateX(124px); 
+    -webkit-transform: translateX(161px); 
+    -ms-transform: translateX(161px);
+    transform: translateX(161px); 
   }
 }
 
@@ -903,3 +874,20 @@ input:checked + .slider-round .off {
 
 
 
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+/*********************************************************** OFF CANVAS ******************************************************************/
+/* ************************************************************************************************************************************* */
+/* ************************************************************************************************************************************* */
+
+.offcanvas.show{
+  max-width: 300px;
+  overflow-x: auto;
+}
+.offcanvas .btn-close {
+  background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath fill='rgb(196, 70, 1)' d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 16px;
+  opacity: 1;
+}

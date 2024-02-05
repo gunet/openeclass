@@ -114,11 +114,7 @@
         <!-- Desktop navbar -->
         @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
 
-        <!-- Mobile navbar -->
-        <div class="d-block d-lg-none">
-            @include('layouts.partials.off-canvas-mobile-header')
-        </div>
-
+        
         @yield('content')
 
         <!-- Desktop navbar -->

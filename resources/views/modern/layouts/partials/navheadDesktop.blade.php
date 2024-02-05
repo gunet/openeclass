@@ -5,7 +5,7 @@
     <div class='d-none d-lg-block w-100 header-large-screen'>
         <div class='col-12 h-100 d-flex justify-content-between align-items-center'>
             <div class='d-flex justify-content-start align-items-center h-100'>
-                <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}">
+                <a class='me-lg-4 me-xl-5' href="{{ $urlAppend }}" aria-label='Homepage'>
                     <img class="eclass-nav-icon m-auto d-block" src="{{ $logo_img }}" alt="Logo"/>
                 </a>
                 @if(!get_config('show_only_loginScreen'))
@@ -240,10 +240,10 @@
             <div class='d-flex justify-content-start align-items-center gap-2'>
 
                 <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
-                    <i class='fa-solid fa-bars fa-lg'></i>
+                    <i class="fa-solid fa-ellipsis-vertical fa-lg"></i>
                 </a>
 
-                <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}">
+                <a class='d-flex justify-content-start align-items-center' type="button" href="{{ $urlServer }}" aria-label='Homepage'>
                     <img class="eclass-nav-icon px-2 bg-transparent" src="{{ $logo_img_small }}" alt="logo">
                 </a>
             </div>
@@ -352,6 +352,73 @@
                     </div>
                 </div>
             @endif
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="offcanvas offcanvas-start d-lg-none offCanvas-Tools" tabindex="-1" id="offcanvasScrollingTools">
+        <div class="offcanvas-header">
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body px-4">
+            <div class='col-12 d-flex justify-content-center align-items-center' aria-label='Logo'>
+                <img src="{{ $logo_img_small }}">
+            </div>
+            @if(get_config('enable_search'))
+                <div class='col-12 mt-5'>
+                    @if(isset($course_code) and $course_code)
+                        <form action="{{ $urlAppend }}modules/search/search_incourse.php?all=true">
+                    @else
+                        <form action="{{ $urlAppend }}modules/search/search.php">
+                    @endif
+                            <label for='search-mobile' class='form-label'>{{ trans('langSearch') }}</label>
+                            <input id='search-mobile' type="text" class="form-control w-100" placeholder="{{ trans('langGiveText')}}..." name="search_terms">
+                            <button class="btn submitAdminBtnDefault mt-3 ms-auto me-auto" type="submit" name="quickSearch" aria-label='Quick search'>
+                                {{ trans('langSubmit') }}
+                            </button>
+                        </form>
+                </div>
+            @endif
+            <div class='col-12 mt-5'>
+                <ul class="list-group list-group-flush">
+                    @if(!get_config('hide_login_link'))
+                        <li class="list-group-item element">
+                            <a id='homeId' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}" aria-label='Homepage'>
+                                <i class="fa-solid fa-home"></i>{{ trans('langHome') }}
+                            </a>
+                        </li>
+                    @endif
+                    @if (!isset($_SESSION['uid']))
+                        @if(get_config('registration_link')!='hide')
+                            <li class="list-group-item element">
+                                <a id='registrationId' type="button" class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label='Registration'>
+                                    <i class="fa-solid fa-pencil"></i>{{ trans('langRegistration') }}
+                                </a>
+                            </li>
+                        @endif
+                    @endif
+
+                    @if (!get_config('dont_display_courses_menu'))
+                        <li class="list-group-item element">
+                            <a id='coursesId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label='List of courses'>
+                                <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
+                            </a>
+                        </li>
+                    @endif
+                    
+                    <li class="list-group-item element">
+                        <a id='faqId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label='Frequent questions'>
+                            <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
 
         </div>
     </div>
