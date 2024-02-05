@@ -94,7 +94,12 @@
         var modal_portfolio = '';
         $("#portfolio_lessons, #cources-pics").on('click','.ClickCoursePortfolio',function() {
             // Get the btn id
-            idCoursePortfolio = this.id;
+            idCourse = this.id;
+            if(idCourse.includes('CourseTable_')){
+                idCoursePortfolio = idCourse.replace('CourseTable_', '');
+            }else if(idCourse.includes('CoursePic_')){
+                idCoursePortfolio = idCourse.replace('CoursePic_', '');
+            }
 
             // Get the modal
             modal_portfolio = document.getElementById("PortfolioModal"+idCoursePortfolio);
@@ -690,7 +695,7 @@
                                                     </div>
 
                                                     <div class='card-footer bg-default border-0'>
-                                                        <a class='ClickCoursePortfolio me-3' href='#' id='{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
+                                                        <a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                             <i class='fa-solid fa-display'></i>
                                                         </a>
                                                        {!! icon($favorite_icon, $fav_message, "course_favorite.php?course=" . $course->code . "&amp;fav=$fav_status") !!}
@@ -726,7 +731,7 @@
                                         <nav aria-label='Page navigation example w-100'>
                                             <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                 <li class='page-item page-item-previous'>
-                                                    <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-left'></span></a>
+                                                    <a class='page-link bg-default' href='javascript:void(0);'><span class='fa-solid fa-chevron-left'></span></a>
                                                 </li>
                                                 @if($pagesPag >=12 )
                                                     @for($i=1; $i<=$pagesPag; $i++)
@@ -734,7 +739,7 @@
                                                         @if($i>=1 && $i<=5)
                                                             @if($i==1)
                                                                 <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                    <a id='Keypage{{$i}}' class='page-link' href='#'>{{$i}}</a>
+                                                                    <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                                 </li>
 
                                                                 <li id='KeystartLi' class='page-item page-item-pages d-flex justify-content-center align-items-end d-none'>
@@ -743,7 +748,7 @@
                                                             @else
                                                                 @if($i<$pagesPag)
                                                                     <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                        <a id='Keypage{{$i}}' class='page-link' href='#'>{{$i}}</a>
+                                                                        <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                                     </li>
                                                                 @endif
                                                             @endif
@@ -751,7 +756,7 @@
 
                                                         @if($i>=6 && $i<=$pagesPag-1)
                                                             <li id='KeypageCenter{{$i}}' class='page-item page-item-pages d-none'>
-                                                                <a id='Keypage{{$i}}' class='page-link' href='#'>{{$i}}</a>
+                                                                <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                             </li>
 
                                                             @if($i==$pagesPag-1)
@@ -763,7 +768,7 @@
 
                                                         @if($i==$pagesPag)
                                                             <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                                <a id='Keypage{{$i}}' class='page-link' href='#'>{{$i}}</a>
+                                                                <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                             </li>
                                                         @endif
                                                     @endfor
@@ -771,7 +776,7 @@
                                                 @else
                                                     @for($i=1; $i<=$pagesPag; $i++)
                                                         <li id='KeypageCenter{{$i}}' class='page-item page-item-pages'>
-                                                            <a id='Keypage{{$i}}' class='page-link' href='#'>{{$i}}</a>
+                                                            <a id='Keypage{{$i}}' class='page-link' href='javascript:void(0);'>{{$i}}</a>
                                                         </li>
                                                     @endfor
                                                 @endif

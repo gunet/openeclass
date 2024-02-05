@@ -327,7 +327,6 @@ function GroupCardsPagination($allCourses,$pagesPag){
                 // init page1
                 if(arrayLeftRight.length == 0){
                     var totalCourses = $('#KeyallCourse').val();
-                    console.log(totalCourses);
                     for(j=1; j<=totalCourses; j++){
                         if(j!=1){
                             $('.cardCourse'+j).removeClass('d-block');
