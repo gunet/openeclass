@@ -116,8 +116,8 @@ var dialogDeleteOptions = {
 
 $(document).ready(function(){
     $('#enddatecal').hide();
-    
-    $('#submitbtn').on('click', 
+
+    $('#submitbtn').on('click',
             function(e){
                 e.preventDefault();
                 checkrequired($('#agendaform'));
@@ -126,7 +126,7 @@ $(document).ready(function(){
     $('#frequencynumber').change(function(){checkenableenddate();});
     $('#frequencyperiod').change(function(){checkenableenddate();});
 
-    
+
 });
 
 function checkenableenddate(){
@@ -393,7 +393,7 @@ if ($is_editor) {
                                             <!-- Modal content-->
                                             <div class='modal-content'>
                                                 <div class='modal-header border-0'>
-                                                    <h2 class='mb-0'>$langAddEvent</h2> 
+                                                    <h2 class='mb-0'>$langAddEvent</h2>
                                                     <button type='button' class='bg-default border-0' data-bs-dismiss='modal' aria-label='Close'>
                                                         <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                                                     </button>
@@ -426,7 +426,7 @@ if ($is_editor) {
                                                             </div>
                                                         </div>
 
-                                                    
+
                                                         <div class='row form-group mt-4'>
                                                             <label for='event_title' class='col-12 control-label-notes text-capitalize mb-0'>$langTitle</label>
                                                             <div class='col-12'>
@@ -438,7 +438,7 @@ if ($is_editor) {
 
                                                         $tool_content .= "<div class='row form-group mt-4'>
                                                                                     <label class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
-                                                                                    
+
                                                                                     <div class='col-12'>
                                                                                     <div class='row'>
                                                                                 <div class='col-md-6 col-12'>
@@ -472,7 +472,7 @@ if ($is_editor) {
                                                                         <div class='input-group'>
                                                                             <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                                                             <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                                                                            
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -481,9 +481,9 @@ if ($is_editor) {
                                                         $tool_content .= "<div class='row form-group mt-4'>
                                                                                 <label class='col-12 control-label-notes text-capitalize'>$langDetail</label>
                                                                                 <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
-                                                                            </div>    
-                                                                    
-                                                                    
+                                                                            </div>
+
+
 
                                                     </div>
                                                 </div>
@@ -528,7 +528,7 @@ if ($is_editor) {
                                 }else{
                                     isOnDuration = 'false';
                                 }
-                        
+
                                 var calendar = $('#editAgendaEvents').fullCalendar({
                                     header:{
                                         left: 'prev,next today',
@@ -546,9 +546,9 @@ if ($is_editor) {
                                     selectable: true,
                                     allDaySlot: false,
                                     displayEventTime: true,
-                                    events: '{$urlServer}modules/agenda/test_edit_event.php?eventID={$eventID}&course_id={$course_id}',    
+                                    events: '{$urlServer}modules/agenda/test_edit_event.php?eventID={$eventID}&course_id={$course_id}',
 
-                                    
+
                                     eventRender: function( event, element, view ) {
                                         var title = element.find( '.fc-title' );
                                         title.html( title.text() );
@@ -561,7 +561,7 @@ if ($is_editor) {
                                     eventClick:  function(event) {
 
                                         var eventStart = event.start;
-                                        var eventEnd = event.end;  
+                                        var eventEnd = event.end;
 
                                         startDay =  moment(eventStart).format('DD');
                                         endDay = moment(eventEnd).format('DD');
@@ -570,62 +570,62 @@ if ($is_editor) {
 
                                             startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
                                             endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-    
+
                                             $('#editAgendaEventModal #fromNewDate').text(startS);
                                             $('#editAgendaEventModal #startdate').val(startS);
                                             $('#editAgendaEventModal #enddateEvent').val(endS);
-    
+
                                             //duration time
                                             var duration_start = moment(eventStart).format('HH:mm');
                                             var duration_end = moment(eventEnd).format('HH:mm');
                                             var value_start = duration_start.split(':');
                                             var value_end = duration_end.split(':');
-    
+
                                             var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
                                             var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
                                             var diff = endDate.getTime() - startDate.getTime();
                                             var hours = Math.floor(diff / 1000 / 60 / 60);
                                             diff -= hours * 1000 * 60 * 60;
                                             var minutes = Math.floor(diff / 1000 / 60);
-        
+
                                             if (hours < 0){
                                                 hours = hours + 24;
                                             }
-                                            
+
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
-    
-                                            
-    
+
+
+
                                             if(isOnDuration == 'true'){
                                                 $('#editAgendaEventModal #duration').val(duration);
                                             }else{
                                                 $('#editAgendaEventModal #duration').val('00:00:00');
                                             }
-                                            
+
                                             $('#OnOffDuration').on('click',function(){
                                                 if($('#OnOffDuration').is(':checked')){
                                                     $('#editAgendaEventModal #duration').val(duration);
                                                 }else{
                                                     $('#editAgendaEventModal #duration').val('00:00:00');
                                                 }
-                                            }); 
-        
-                                            
+                                            });
+
+
                                             $('#editAgendaEventModal #idNewDuration').text(duration);
-    
-                                            $('#editAgendaEventModal').modal('toggle');    
+
+                                            $('#editAgendaEventModal').modal('toggle');
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
                                         }
 
-                                                                   
+
                                     },
 
-                                    eventDrop: function(event){                                    
+                                    eventDrop: function(event){
 
                                         var eventStart = event.start;
-                                        var eventEnd = event.end;  
+                                        var eventEnd = event.end;
 
                                         startDay =  moment(eventStart).format('DD');
                                         endDay = moment(eventEnd).format('DD');
@@ -650,33 +650,33 @@ if ($is_editor) {
                                             var hours = Math.floor(diff / 1000 / 60 / 60);
                                             diff -= hours * 1000 * 60 * 60;
                                             var minutes = Math.floor(diff / 1000 / 60);
-        
+
                                             if (hours < 0){
                                                 hours = hours + 24;
                                             }
-                                            
+
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                                            
+
 
                                             if(isOnDuration == 'true'){
                                                 $('#editAgendaEventModal #duration').val(duration);
                                             }else{
                                                 $('#editAgendaEventModal #duration').val('00:00:00');
                                             }
-                                            
+
                                             $('#OnOffDuration').on('click',function(){
                                                 if($('#OnOffDuration').is(':checked')){
                                                     $('#editAgendaEventModal #duration').val(duration);
                                                 }else{
                                                     $('#editAgendaEventModal #duration').val('00:00:00');
                                                 }
-                                            }); 
-        
-                                            
+                                            });
+
+
                                             $('#editAgendaEventModal #idNewDuration').text(duration);
 
-                                            $('#editAgendaEventModal').modal('toggle');  
+                                            $('#editAgendaEventModal').modal('toggle');
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
@@ -686,9 +686,9 @@ if ($is_editor) {
 
                                     eventResize: function(event) {
 
-                                        
+
                                         var eventStart = event.start;
-                                        var eventEnd = event.end;  
+                                        var eventEnd = event.end;
 
 
                                         startDay =  moment(eventStart).format('DD');
@@ -697,7 +697,7 @@ if ($is_editor) {
                                         if(parseInt(startDay)==parseInt(endDay)){
                                             startS = moment(eventStart).format('DD-MM-YYYY HH:mm');
                                             endS = moment(eventEnd).format('DD-MM-YYYY HH:mm');
-                                            
+
 
                                             $('#editAgendaEventModal #fromNewDate').text(startS);
                                             $('#editAgendaEventModal #startdate').val(startS);
@@ -708,50 +708,50 @@ if ($is_editor) {
                                             var duration_end = moment(eventEnd).format('HH:mm');
                                             var value_start = duration_start.split(':');
                                             var value_end = duration_end.split(':');
-                                            
+
                                             var startDate = new Date(0, 0, 0, value_start[0], value_start[1], 0);
                                             var endDate = new Date(0, 0, 0, value_end[0], value_end[1], 0);
                                             var diff = endDate.getTime() - startDate.getTime();
                                             var hours = Math.floor(diff / 1000 / 60 / 60);
                                             diff -= hours * 1000 * 60 * 60;
                                             var minutes = Math.floor(diff / 1000 / 60);
-        
+
                                             if (hours < 0){
                                                 hours = hours + 24;
                                             }
-                                            
+
                                             duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
-                    
+
 
                                             if(isOnDuration == 'true'){
                                                 $('#editAgendaEventModal #duration').val(duration);
                                             }else{
                                                 $('#editAgendaEventModal #duration').val('00:00:00');
                                             }
-                                            
+
                                             $('#OnOffDuration').on('click',function(){
                                                 if($('#OnOffDuration').is(':checked')){
                                                     $('#editAgendaEventModal #duration').val(duration);
                                                 }else{
                                                     $('#editAgendaEventModal #duration').val('00:00:00');
                                                 }
-                                            }); 
-        
-                                            
+                                            });
+
+
                                             $('#editAgendaEventModal #idNewDuration').text(duration);
 
-                                            $('#editAgendaEventModal').modal('toggle');  
+                                            $('#editAgendaEventModal').modal('toggle');
                                         }else{
                                             alert('$langChooseDayAgain');
                                             window.location.reload();
                                         }
                                     }
-                                    
+
                                 });
 
 
-                               
+
 
                             });
 
@@ -779,7 +779,7 @@ if ($is_editor) {
                             <!-- Modal content-->
                                 <div class='modal-content'>
                                     <div class='modal-header border-0'>
-                                        <h2 class='mb-0'>$langAddEvent</h2> 
+                                        <h2 class='mb-0'>$langAddEvent</h2>
                                         <button type='button' class='bg-default border-0' data-bs-dismiss='modal' aria-label='Close'>
                                             <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
                                         </button>
@@ -802,18 +802,18 @@ if ($is_editor) {
                                                     </label>
                                                 </div>
                                             </div>
-                                                  
+
                                             <input type='hidden' name='startdate' id='startdate'>
                                             <input type='hidden' name='enddateEvent' id='enddateEvent'>
                                             <input type='hidden' name='duration' id='durationcal'>
-                                                      
+
                                             <div class='form-group mt-4'>
                                                 <label for='event_title' class='col-12 control-label-notes text-capitalize'>$langTitle</label>
                                                 <div class='col-12'>
                                                     <input type='text' class='form-control' id='event_title' name='event_title' placeholder='$langTitle' value='" . q($event_title) . "'>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class='row form-group mt-4'>
                                                 <label class='col-12 control-label-notes text-capitalize'>$langDetail</label>
                                                 <div class='col-12'>" . rich_text_editor('content', 4, 20, $content) . "</div>
@@ -822,7 +822,7 @@ if ($is_editor) {
                                             /**** Recursion parameters *****/
                                             $tool_content .= "<div class='row form-group mt-4'>
                                                                     <label class='col-12 control-label-notes text-capitalize'>$langRepeat $langEvery</label>
-                                                                    
+
                                                                     <div class='col-12'>
                                                                     <div class='row'>
                                                                 <div class='col-md-6 col-12'>
@@ -856,7 +856,7 @@ if ($is_editor) {
                                                     <div class='input-group'>
                                                         <span class='add-on input-group-text h-40px bg-default input-border-color border-end-0'><i class='fa-regular fa-calendar Neutral-600-cl'></i></span>
                                                         <input class='form-control mt-0 border-start-0' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
-                                                        
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -901,7 +901,7 @@ if ($is_editor) {
                         }else{
                             isOnDuration = 'false';
                         }
-                
+
                         var calendar = $('#AgendaEvents').fullCalendar({
                             header:{
                                 left: 'prev,next today',
@@ -917,14 +917,14 @@ if ($is_editor) {
                             selectable: true,
                             allDaySlot: false,
                             displayEventTime: true,
-                            
+
 
                             eventClick:  function(event) {
 
                                 var id = event.id;
-                                
+
                             },
-                                
+
                             //header and other values
                             select: function(start, end) {
 
@@ -932,14 +932,14 @@ if ($is_editor) {
                                 endDay = moment(end).format('DD');
 
                                 if(parseInt(startDay)==parseInt(endDay)){
-                                
+
                                     var max_start = $.fullCalendar.moment(start).format('h:mm:ss');
                                     var max_end = $.fullCalendar.moment(end).format('h:mm:ss');
-        
+
                                     endtime = $.fullCalendar.moment(end).format('h:mm');
                                     starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
                                     var mywhen = starttime + ' - ' + endtime;
-                                    
+
                                     startS = moment(start).format('DD-MM-YYYY HH:mm');
                                     endS = moment(end).format('DD-MM-YYYY HH:mm');
 
@@ -959,7 +959,7 @@ if ($is_editor) {
                                     if (hours < 0){
                                         hours = hours + 24;
                                     }
-                                    
+
                                     duration = (hours <= 9 ? '0' : '') + hours + ':' + (minutes <= 9 ? '0' : '') + minutes +':00';
 
                                     $('#createAgendaEventModal #from').text(mywhen);
@@ -971,14 +971,14 @@ if ($is_editor) {
                                     }else{
                                         $('#createAgendaEventModal #durationcal').val('00:00:00');
                                     }
-                                    
+
                                     $('#OnOffDuration').on('click',function(){
                                         if($('#OnOffDuration').is(':checked')){
                                             $('#createAgendaEventModal #durationcal').val(duration);
                                         }else{
                                             $('#createAgendaEventModal #durationcal').val('00:00:00');
                                         }
-                                    });                                         
+                                    });
                                     $('#createAgendaEventModal #idDuration').text(duration);
                                     $('#createAgendaEventModal').modal('toggle');
                                 }else{
@@ -988,17 +988,17 @@ if ($is_editor) {
                             },
 
                             eventDrop: function(event){
-                                                                    
+
                             },
 
                             eventResize: function(event) {
-                                
+
                             }
-                            
+
                         });
 
                     });
-                </script>                
+                </script>
             ";
         }
     }
@@ -1039,11 +1039,11 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                  . '
                  <div class="col-12 overflow-auto">
                     <div id="calendar_wrapper" class="border-card">
-                        
+
                             <div class="calendar-header">
-                                
+
                                     <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
-                                        
+
                                             <div class="btn-group">
                                                     <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
                                                     <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
@@ -1055,10 +1055,10 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                                                     <button class="btn bg-transparent text-agenda-title" data-calendar-view="week">' . $langWeek . '</button>
                                                     <button class="btn bg-transparent text-agenda-title" data-calendar-view="day">' . $langDay . '</button>
                                             </div>
-                                       
+
                                         <h6 class="d-none"></h6>
                                     </div>
-                                
+
                             </div>'
                           . '
                                 <div class="myPersonalCalendar" id="bootstrapcalendar" class="col-md-12"></div>
@@ -1068,11 +1068,11 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 </div>';
 
         $tool_content .= "<script type='text/javascript'>" .
-        '$(document).ready(function(){        
+        '$(document).ready(function(){
             var calendar = $("#bootstrapcalendar").calendar(
             {
                 tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
-                events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
+                events_source: "' . $urlAppend . 'main/calendar_data.php?course='.$course_code.'",
                 language: "el-GR",
                 onAfterViewLoad: function(view) {
                             $(".calendar-header h6").text(this.getTitle());
@@ -1085,7 +1085,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
-                calendar.navigate($this.data("calendar-nav"));                
+                calendar.navigate($this.data("calendar-nav"));
                 $("#bootstrapcalendar").show();
             });
         });
@@ -1093,10 +1093,10 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $(".btn-group button[data-calendar-view]").each(function() {
             var $this = $(this);
             $this.click(function() {
-                calendar.view($this.data("calendar-view"));                
+                calendar.view($this.data("calendar-view"));
                 $("#bootstrapcalendar").show();
-            });       
-    });    
+            });
+    });
     });
 
     </script>';
