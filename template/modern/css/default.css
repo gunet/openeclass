@@ -706,33 +706,36 @@ b a {
 
 
 /*Sticky Header css*/
-#bgr-cheat-header {
-  transition: background-color 0.3s, height 0.3s;
-}
+@media(min-width:992px){
+  #bgr-cheat-header {
+    transition: background-color 0.3s, height 0.3s;
+  }
 
-#bgr-cheat-header.fixed {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 40px;
-  z-index: 1000;
-}
+  #bgr-cheat-header.fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 40px;
+    z-index: 1000;
+  }
 
-#bgr-cheat-header.fixed .header-container {
-  height: 40px;
-}
+  #bgr-cheat-header.fixed .header-container,
+  #bgr-cheat-header.fixed .header-large-screen {
+    height: 40px;
+  }
 
-#bgr-cheat-header img.eclass-nav-icon {
-  transition: width 0.3s, height 0.3s;
-}
+  #bgr-cheat-header img.eclass-nav-icon {
+    transition: width 0.3s, height 0.3s;
+  }
 
-#bgr-cheat-header.fixed img.eclass-nav-icon {
-  width: 100px;
-  height: 35px;
-}
+  #bgr-cheat-header.fixed img.eclass-nav-icon {
+    width: 100px;
+    height: 35px;
+  }
 
-#bgr-cheat-header.fixed .dropdown-menu {
-  top: 75%;
+  #bgr-cheat-header.fixed .dropdown-menu {
+    top: 75%;
+  }
 }
 /*Sticky Header css END*/
 
@@ -1020,10 +1023,10 @@ b a {
     background-color: #ffffff;
   }
   .container.footer-container{
-    padding: 24px 8px 24px 8px;
+    padding: 16px 8px 16px 8px;
   }
   .container-fluid.footer-container{
-    padding: 24px 16px 24px 16px;
+    padding: 16px 16px 16px 16px;
   }
 }
 
@@ -4629,7 +4632,7 @@ div[role="progressbar"]::before {
 
   #bgr-cheat-header{ 
     border-radius: 0px;
-    min-height: 56px; 
+    height: 56px; 
     z-index: 4;
     background-color: #ffffff;
   }

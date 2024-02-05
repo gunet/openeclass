@@ -24,7 +24,7 @@
                                 @else
 
 
-                                    <ul class="list-group list-group-flush mt-5">
+                                    <ul class="list-group list-group-flush mt-4">
                                         @foreach ($faqs as $key => $faq)
                                         
                                                 <li class="list-group-item px-0 mb-4 bg-transparent">

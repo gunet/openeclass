@@ -110,33 +110,19 @@
 </head>
 
 <body>
-
-
     <div class="ContentEclass d-flex flex-column min-vh-100">
-
         <!-- Desktop navbar -->
-        <div class="d-none d-lg-block">
-            @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
-        </div>
+        @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
 
         <!-- Mobile navbar -->
         <div class="d-block d-lg-none">
-                @include('layouts.partials.navheadMobile',['logo_img_small' => $logo_img_small])
-                @include('layouts.partials.off-canvas-mobile-header')
+            @include('layouts.partials.off-canvas-mobile-header')
         </div>
 
         @yield('content')
 
         <!-- Desktop navbar -->
-        <div class="d-none d-lg-block">
-            @include('layouts.partials.footerDesktop')
-        </div>
-
-        <!-- Mobile navbar -->
-        <div class="d-block d-lg-none">
-            @include('layouts.partials.footerMobile')
-        </div>
+        @include('layouts.partials.footerDesktop')
     </div>
-
  </body>
 </html>
