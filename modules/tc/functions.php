@@ -121,7 +121,9 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $r_group = explode(",",$row->participants);
         $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->start_date);
         $start_session = q($start_date->format('d-m-Y H:i'));
-        $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);
+        if (!is_null($row->end_date)) {
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $row->end_date);
+        }
         if (isset($row->end_date)) {
             $BBBEndDate = $end_date->format('d-m-Y H:i');
         } else {
@@ -132,7 +134,11 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         $textarea = rich_text_editor('desc', 4, 20, $row->description);
         $value_title = q($row->title);
         $value_session_users = $row->sessionUsers;
-        $data_external_users = trim($row->external_users);
+        if (!is_null($row->external_users)) {
+            $data_external_users = trim($row->external_users);
+        } else {
+            $data_external_users = $row->external_users;
+        }
         if ($data_external_users) {
             $init_external_users = 'data: ' . json_encode(array_map(function ($item) {
                     $item = trim($item);

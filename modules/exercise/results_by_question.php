@@ -119,7 +119,7 @@ $tool_content .= "<div class='panel panel-primary'>
             . "JOIN exercise_answer_record AS ear ON ear.question_id = exq.id "
             . "JOIN exercise_user_record AS eur ON eur.eurid = ear.eurid "
             . "WHERE eur.eid = ?d AND ear.weight IS NULL AND exq.type = ". FREE_TEXT . " "
-            . "GROUP BY exq.id, eur.eid ORDER BY exwq.q_position",$exerciseId);
+            . "GROUP BY exq.id, eur.eid, exwq.q_position ORDER BY exwq.q_position",$exerciseId);
 
     $questions_table = "<table id=\'my-grade-table\' class='table-default'><thead class='list-header'><tr><th>$langOpenQuestionTitle</th><th>$langChoice</th></tr></thead><tbody>";
     $i=0;
@@ -128,7 +128,7 @@ $tool_content .= "<div class='panel panel-primary'>
         $i++;
         $questions_table .= "<tr>"
              . "<td>$row->question</td>"
-                 . "<td> <input type='radio' name='question_id' value='$question_id' required><strong> $i </strong></td>"
+                 . "<td> <input type='radio' name='question_id' value='$question_id'><strong> $i </strong></td>"
              . "</tr>";
     }
 $questions_table .= "</tbody></table>";

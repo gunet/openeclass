@@ -131,7 +131,9 @@ $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
 $cur_date = new DateTime("now");
-$end_date = new DateTime($objExercise->selectEndDate());
+if (!empty($objExercise->selectEndDate())) {
+    $end_date = new DateTime($objExercise->selectEndDate());
+}
 
 $TotalExercisesUngraded = Database::get()->querySingle("SELECT COUNT(eurid) AS ungraded_answers, all_answers.answers AS exercises_done"
        ." FROM exercise_user_record,"
@@ -165,7 +167,7 @@ if (count($exercise_question_ids) > 0) {
         $question_graded = is_null($question_weight) ? FALSE : TRUE;
         $tool_content .= "<table class='table-default ".(($question_graded)? 'graded' : 'ungraded')."'>
                 <tr class='active'>
-                  <td><b>$langQuestionFreeTexτ</b></td>
+                  <td><b>$langFreeText</b></td>
                 </tr>
             <tr><td>";
         if ($is_question) {
