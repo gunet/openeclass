@@ -198,7 +198,14 @@ class Calendar_Events {
             $group_sql_template = '';
             $group_sql_template2 = '';
         }
-        //retrieve events from various tables according to user preferences on what type of events to show
+
+        $group_sql_template3 = implode(' OR ',
+            array_map(function ($group) {
+                return "participants REGEXP '\\\\b_{$group}\\\\b'";
+            }, $student_groups));
+        $group_sql_template3 .= ($group_sql_template3? ' OR ': '') .  " participants REGEXP '\\\\b{$uid}\\\\b'";
+
+        // retrieve events from various tables according to user preferences on what type of events to show
         $q = '';
         $q_args = array();
         $q_args_templ = array($user_id);
@@ -253,9 +260,10 @@ class Calendar_Events {
                 }
                 $dc = str_replace('start', 'tc.start_date', $datecond);
                 $q .= "SELECT tc.id, CONCAT(c.title,': ',tc.title), tc.start_date start, date_format(tc.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(tc.start_date, '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                        . "FROM tc_session tc JOIN course_user cu ON tc.course_id=cu.course_id "
+                        . "FROM tc_session tc JOIN course_user cu ON tc.course_id = cu.course_id "
                         . "JOIN course c ON cu.course_id=c.id "
                         . "WHERE cu.user_id = ?d AND tc.active = '1' AND c.visible != " . COURSE_INACTIVE . " "
+                        . "AND (cu.status = 1 OR cu.editor = 1 OR cu.reviewer = 1 OR $group_sql_template3) "
                         . $dc;
                 $q_args = array_merge($q_args, $q_args_templ);
 
@@ -685,15 +693,13 @@ class Calendar_Events {
         // form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
-                                 "day" => "date_format(?t".',"%Y-%m-%d") = date_format(start,"%Y-%m-%d")');
+                                "day" => "date_format(?t".',"%Y-%m-%d") = date_format(start,"%Y-%m-%d")');
         if (!is_null($startdate) && !is_null($enddate)) {
             $datecond = " AND start >= ?t AND start <= ?t";
-        }
-        elseif (!is_null($startdate)) {
+        } elseif (!is_null($startdate)) {
             $datecond = " AND ";
             $datecond .= (array_key_exists($scope, $dateconditions))? $dateconditions[$scope]: $dateconditions['month'];
-        }
-        else{
+        } else {
             $datecond = "";
         }
         $student_groups = array_map(function ($item) {
@@ -708,6 +714,12 @@ class Calendar_Events {
             $group_sql_template = '';
             $group_sql_template2 = '';
         }
+        $group_sql_template3 = implode(' OR ',
+            array_map(function ($group) {
+                return "participants REGEXP '\\\\b_{$group}\\\\b'";
+            }, $student_groups));
+        $group_sql_template3 .= ($group_sql_template3? ' OR ': '') .  " participants REGEXP '\\\\b{$uid}\\\\b'";
+
         // retrieve events from various tables according to user preferences on what type of events to show
         $q = '';
         $q_args = array();
@@ -737,8 +749,8 @@ class Calendar_Events {
         $dc = str_replace('start', 'tc.start_date', $datecond);
         $q .= "SELECT tc.id, tc.title, tc.start_date start, date_format(tc.start_date, '%Y-%m-%d') startdate, '00:00' duration, "
                 . "date_format(addtime(tc.start_date, time('00:00:01')), '%Y-%m-%d %H:%i') `end`, tc.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
-                . "FROM tc_session tc JOIN course c ON tc.course_id=c.id "
-                . "WHERE tc.course_id =?d AND tc.active = '1' "
+                . "FROM tc_session tc JOIN course c ON tc.course_id=c.id JOIN course_user cu ON cu.course_id = c.id AND cu.user_id = $uid "
+                . "WHERE tc.course_id =?d AND tc.active = '1' AND (cu.status = 1 OR cu.editor = 1 OR cu.reviewer = 1 OR $group_sql_template3) "
                 . $dc;
         $q_args = array_merge($q_args, $q_args_templ);
 
@@ -1451,14 +1463,7 @@ class Calendar_Events {
                 if ($event->event_type != 'personal' && $event->event_type != 'admin') {
                     $event->url = str_replace('thiscourse', $event->course, $event->url);
                 }
-                if ($event->event_type == 'teleconference') {
-                    $participants = Database::get()->querySingle("SELECT participants FROM tc_session WHERE id = ?d", $event->id)->participants;
-                    if (($status == USER_TEACHER) or ($participants == 0) or in_array($uid, explode(',', $participants))) {
-                        array_push($events, $event);
-                    }
-                } else {
-                    array_push($events, $event);
-                }
+                array_push($events, $event);
             }
        }
        return json_encode(array('success'=>1, 'result'=>$events, 'cid'=>$course_id));
