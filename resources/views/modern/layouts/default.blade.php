@@ -111,13 +111,13 @@
 
 <body>
     <div class="ContentEclass d-flex flex-column min-vh-100">
-        <!-- Desktop navbar -->
+        <!-- Header -->
         @include('layouts.partials.navheadDesktop',['logo_img' => $logo_img])
 
-        
+         <!-- Main content -->
         @yield('content')
 
-        <!-- Desktop navbar -->
+        <!-- Footer -->
         @include('layouts.partials.footerDesktop')
     </div>
  </body>
