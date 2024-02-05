@@ -150,19 +150,19 @@
                                                 <div>{{ trans('langUsers') }}</div>
                                             </li>
                                             <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                <a href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
+                                                <a class='TextBold' href='listusers.php?search=yes&verified_mail=1'>{{ trans('langMailVerificationYes') }}</a>
                                                 <div>{{ $verifiedEmailUserCnt }}</div>
                                             </li>
                                             <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                <a href='listusers.php?search=yes&verified_mail=2'>{{ trans('langMailVerificationNo') }}</a>
+                                                <a class='TextBold' href='listusers.php?search=yes&verified_mail=2'>{{ trans('langMailVerificationNo') }}</a>
                                                 <div>{{ $unverifiedEmailUserCnt }}</div>
                                             </li>
                                             <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                <a href='listusers.php?search=yes&verified_mail=0'>{{ trans('langMailVerificationPending') }}</a>
+                                                <a class='TextBold' href='listusers.php?search=yes&verified_mail=0'>{{ trans('langMailVerificationPending') }}</a>
                                                 <div>{{ $verificationRequiredEmailUserCnt }}</div>
                                             </li>
                                             <li class='list-group-item element d-flex justify-content-between align-items-center gap-3 flex-wrap'>
-                                                <a href='listusers.php?search=yes'>{{ trans('langTotal') }}</a>
+                                                <a class='TextBold' href='listusers.php?search=yes'>{{ trans('langTotal') }}</a>
                                                 <div>{{ $totalUserCnt }}</div>
                                             </li>
                                         </ul>

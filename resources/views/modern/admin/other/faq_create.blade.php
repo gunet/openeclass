@@ -253,19 +253,27 @@
                                 @else
                                     @foreach ($faqs as $key => $faq)
                                         <div class='bg-default mb-4 p-3 border-bottom-default' data-id='{{ $faq->id }}'>
-                                            <div class='d-flex justify-content-between align-items-center' role='tab' id='heading-{{ $faq->id }}'>
+                                            <div class='d-flex justify-content-between align-items-center flex-wrap' role='tab' id='heading-{{ $faq->id }}'>
                                                 <div>
-                                                    <a data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
+                                                    <a class='TextBold' data-bs-toggle='collapse' href='#faq-{{ $faq->id }}' aria-expanded='true' aria-controls='#{{ $faq->id }}'>
                                                         {{ $key+1 }}. {!! $faq->title !!}
                                                     </a>
                                                 </div>
-                                                <div>
-                                                    <a class='forDelete' href='javascript:void(0);' data-id='{{ $faq->id }}' data-order='{{ $faq->order }}'><span class='fa-solid fa-xmark text-danger float-end p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></span></a>
-                                                    <a href='javascript:void(0);'><span class='fa fa-arrows float-end p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></span></a>
-                                                    <a href='{{ $_SERVER['SCRIPT_NAME'] }}?faq=modify&id={{ $faq->id }}'><span class='fa fa-pencil-square Primary-500-cl float-end p-2' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEdit') }}'></span></a>
+                                                <div class='d-flex gap-3 flex-wrap'>
+                                                    <a href="{{ $_SERVER['SCRIPT_NAME'] }}?faq=modify&id={{ $faq->id }}" aria-label='{{ trans('langEdit') }}'>
+                                                        <i class='fa-solid fa-edit' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langEdit') }}'></i>
+                                                    </a>
+                                                    <a href='javascript:void(0);' aria-label='{{ trans('langReorder') }}'>
+                                                        <i class='fa-solid fa-arrows' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langReorder') }}'></i>
+                                                    </a>
+                                                    <a class='forDelete' href='javascript:void(0);' data-id='{{ $faq->id }}' data-order='{{ $faq->order }}' aria-label='{{ trans('langDelete') }}'>
+                                                        <i class='fa-solid fa-xmark Accent-200-cl' data-bs-toggle='tooltip' data-bs-placement='top' title='{{ trans('langDelete') }}'></i>
+                                                    </a>
+                                                    
+                                                    
                                                 </div>
                                             </div>
-                                            <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' data-bs-parent='#accordion' aria-labelledby='heading{{ $faq->id }}'>
+                                            <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse' role='tabpanel' data-bs-parent='#accordion'>
                                                 <div class='accordion-body'>
                                                     <p><strong><u>{{ trans('langFaqAnswer') }}:</u></strong></p>
                                                     {!! $faq->body !!}

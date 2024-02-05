@@ -1139,7 +1139,7 @@ jContent;
                     $ret .= "<li class='list-group-item element'>
                                 <div class='table_td_header d-flex justify-content-between align-items-center flex-wrap'>
                                     <div>
-                                        <a class='text-decoration-underline' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
+                                        <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                                 $ret .= (!empty($code)) ? "&nbsp;<span>(" . q($code) . ")</span>" : '';
                             $ret.="</div>";
                             $ret .= "<div class='vsmall-text Neutral-700-cl text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>

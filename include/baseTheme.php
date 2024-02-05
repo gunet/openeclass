@@ -4111,40 +4111,6 @@ function array2html($TheArray) {
     return $str;
 }
 
-/*
- * Function lang_selections
- *
- * Returns the HTML code for a language selection tool form
- *
- */
-
-function lang_selections_Mobile() {
-    global $session, $native_language_names_init, $langDropdown;
-    if (count($session->active_ui_languages) < 2) {
-        return ('&nbsp;');
-    }
-
-    $lang_select = "
-    <div class='dropdown'>
-      <a id='Dropdown' class='small-basic-size d-flex justify-content-center align-items-center link-selection-language' href='#' role='button' aria-expanded='false' data-bs-toggle='dropdown'>
-          <i class='fa-solid fa-earth-europe fa-lg'></i>
-      </a>
-      <div class='m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border' role='menu' aria-labelledby='Dropdown'>
-      <ul class='list-group list-group-flush'>";
-    foreach ($session->active_ui_languages as $code) {
-        $class = ($code == $session->language)? ' class="active"': '';
-        $lang_select .=
-            "<li role='presentation'$class>
-                <a class='list-group-item d-flex justify-content-start align-items-start py-3' role='menuitem' tabindex='-1' href='$_SERVER[SCRIPT_NAME]?localize=$code'>
-                    
-                    " .q($native_language_names_init[$code]) . "
-                </a>
-            </li>";
-    }
-    $lang_select .= "</ul></div></div>";
-    return $lang_select;
-}
-
 /**
  * @brief displays lang selection box
  * @return string|void

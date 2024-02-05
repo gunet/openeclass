@@ -73,21 +73,21 @@
                                             <div class="col-12">
                                                 <ul class="list-group list-group-flush">
                                                     @if ($eclass_stud_reg == 2) <!--  allow student registration via eclass -->
-                                                        <li class="list-group-item element"><a href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a></li>
+                                                        <li class="list-group-item element"><a class='TextBold' href='newuser.php{{ $provider }}{{$provider_user_data}}'>{{ trans('langUserAccountInfo2') }}</a></li>
                                                     @else ($eclass_stud_reg == 1) <!-- allow student registration via request -->
-                                                        <li class="list-group-item element"><a href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a></li>
+                                                        <li class="list-group-item element"><a class='TextBold' href='formuser.php{{ $provider }}{{ $provider_user_data }}'>{{ trans('langUserAccountInfo1') }}</a></li>
                                                     @endif
                                                     @if (count($auth) > 1 and $alt_auth_stud_reg != FALSE) <!-- allow user registration via alt auth methods -->
                                                         @foreach ($auth as $k => $v)
                                                             @if ($v != 1)  <!--  bypass the eclass auth method -->
                                                                 <!-- hybridauth registration is performed in newuser.php of formuser.php rather than altnewuser.php -->
                                                                 @if ($v < 8)
-                                                                    <li class="list-group-item element"><a href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                    <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                 @else
                                                                     @if($eclass_stud_reg == 1)
-                                                                        <li class="list-group-item element"><a href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                        <li class="list-group-item element"><a class='TextBold' href='formuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                     @else
-                                                                        <li class="list-group-item element"><a href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                        <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                     @endif
                                                                 @endif
                                                             @endif
@@ -107,9 +107,9 @@
                                                 <ul class="list-group list-group-flush">
                                                     @if ($eclass_prof_reg)
                                                         @if (empty($provider))
-                                                            <li class="list-group-item element"><a href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a></li>
+                                                            <li class="list-group-item element"><a class='TextBold' href='formuser.php?p=1'>{{ trans('langUserAccountInfo1') }} </a></li>
                                                         @else
-                                                            <li class="list-group-item element"><a href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a></li>
+                                                            <li class="list-group-item element"><a class='TextBold' href='formuser.php{{ $provider }}{{ $provider_user_data}}&p=1'>{{ trans('langUserAccountInfo1') }}</a></li>
                                                         @endif
                                                     @endif
                                                     @if (count($auth) > 1 and $alt_auth_prof_reg)
@@ -118,15 +118,15 @@
                                                                 <!-- hybridauth registration is performed in newuser.php rather than altnewuser -->
                                                                 @if ($v < 8)
                                                                     @if ($alt_auth_prof_reg)
-                                                                    <li class="list-group-item element"><a href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                                    <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
                                                                     @else
-                                                                    <li class="list-group-item element"><a href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
+                                                                    <li class="list-group-item element"><a class='TextBold' href='altnewuser.php?auth={{ $v }}'>{{ get_auth_info($v) }}</a></li>
                                                                     @endif
                                                                 @else
                                                                     @if ($alt_auth_prof_reg)
-                                                                        <li class="list-group-item element"><a href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                                        <li class="list-group-item element"><a class='TextBold' href='formuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
                                                                     @else
-                                                                        <li class="list-group-item element"><a href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
+                                                                        <li class="list-group-item element"><a class='TextBold' href='newuser.php?auth={{ $v }}&p=1'>{{ get_auth_info($v) }}</a></li>
                                                                     @endif
                                                                 @endif
                                                             @endif

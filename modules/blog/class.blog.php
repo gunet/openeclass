@@ -167,7 +167,7 @@ Class Blog {
             } else {
                 $style = '';
             }
-            $out .= "<li class='list-group-item element'><a class=' $style' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a></li>";
+            $out .= "<li class='list-group-item element'><a class=' $style TextBold' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a></li>";
         }
         $out .= "</ul>";
         return $out;

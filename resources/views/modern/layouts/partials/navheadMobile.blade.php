@@ -21,7 +21,7 @@
                             <i class="fa-solid fa-right-to-bracket"></i>
                         </a>
                     @endif
-                    {!! lang_selections_Mobile() !!}
+                    {!! lang_selections_Desktop() !!}
                 </div>
             @endif
 

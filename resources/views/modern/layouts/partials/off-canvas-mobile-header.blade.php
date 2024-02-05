@@ -24,7 +24,7 @@
                         <ul class="list-group list-group-flush">
                             @if(!get_config('hide_login_link'))
                                 <li class="list-group-item element">
-                                    <a id='homeId' class='d-flex justify-content-start align-items-start gap-2 flex-wrap' type='button' href="{{ $urlServer }}">
+                                    <a id='homeId' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}">
                                         <i class="fa-solid fa-home"></i>{{ trans('langHome') }}
                                     </a>
                                 </li>
@@ -32,7 +32,7 @@
                             @if (!isset($_SESSION['uid']))
                                 @if(get_config('registration_link')!='hide')
                                     <li class="list-group-item element">
-                                        <a id='registrationId' type="button" class='d-flex justify-content-start align-items-start gap-2 flex-wrap' href="{{ $urlAppend }}modules/auth/registration.php">
+                                        <a id='registrationId' type="button" class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php">
                                             <i class="fa-solid fa-pencil"></i>{{ trans('langRegistration') }}
                                         </a>
                                     </li>
@@ -41,14 +41,14 @@
 
                             @if (!get_config('dont_display_courses_menu'))
                                 <li class="list-group-item element">
-                                    <a id='coursesId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap' href="{{ $urlAppend }}modules/auth/listfaculte.php">
+                                    <a id='coursesId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php">
                                         <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                                     </a>
                                 </li>
                             @endif
                            
                             <li class="list-group-item element">
-                                <a id='faqId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap' href="{{ $urlAppend }}info/faq.php">
+                                <a id='faqId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php">
                                     <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
                                 </a>
                             </li>

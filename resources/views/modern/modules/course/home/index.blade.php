@@ -492,7 +492,7 @@
 
                                                             </a>
 
-                                                            <div id='item-{{ $item->id }}' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
+                                                            <div id='item-{{ $item->id }}' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
                                                                 <div class='panel-body bg-transparent Neutral-900-cl px-4'>
                                                                     {!! standard_text_escape($item->content) !!}
 

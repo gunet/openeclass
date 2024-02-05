@@ -451,48 +451,6 @@
                                     <input type="hidden" id="selectedcbids" name="selectedcbids" value="">
                                 </form>
                             </div>
-
-{{--                            <div class='panel'>--}}
-{{--                                <div class='panel-group group-section mt-2 px-0' id='accordionBulkAnnouncement'>--}}
-{{--                                    --}}
-{{--                                    <ul class="list-group list-group-flush">--}}
-{{--                                        <li class="list-group-item px-0 mb-4 bg-transparent">--}}
-
-{{--                                            <div class='d-flex justify-content-between border-bottom-default'>--}}
-{{--                                                <a class='accordion-btn d-flex justify-content-start align-items-start gap-2 py-2' role='button' id='btn-syllabus' data-bs-toggle='collapse' href='#collapseProcessing' aria-expanded='false' aria-controls='collapseProcessing'>--}}
-{{--                                                    <i class='fa-solid fa-chevron-down settings-icon'></i>--}}
-{{--                                                    {{ trans('langBulkProcessing') }}--}}
-{{--                                                </a>--}}
-{{--                                            </div>--}}
-{{--                                            <div class='panel-collapse accordion-collapse collapse border-0 rounded-0 mt-3' id='collapseProcessing' data-bs-parent='#accordionBulkAnnouncement'>--}}
-{{--                                                --}}
-{{--                                                <div class='d-lg-flex gap-4'>--}}
-{{--                                                    <div class='flex-grow-1'>--}}
-{{--                                                        <div class='alert alert-info m-0'><i class='fa-solid fa-circle-info fa-lg'></i><span>{{ trans('langInfoBulkProcessing') }}</span></div>--}}
-{{--                                                        <div class='form-wrapper form-edit border-0 px-0'>--}}
-{{--                                                            <form method='post' action='{{ $_SERVER['SCRIPT_NAME'] }}' class="form-horizontal">--}}
-{{--                                                                <select class='form-select' name="bulk_action" class="px-3">--}}
-{{--                                                                    <option value="delete">{{ trans('langDelete') }}</option>--}}
-{{--                                                                    <option value="visible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langVisible') }}</option>--}}
-{{--                                                                    <option value="invisible">{{ trans('langNewBBBSessionStatus') }}: {{ trans('langInvisible') }}</option>--}}
-{{--                                                                </select>--}}
-{{--                                                                <input type="submit" class="btn submitAdminBtn px-3 mt-3" name="bulk_submit" value="{{ trans('langSubmit') }}">--}}
-{{--                                                                <input type="hidden" id="selectedcbids" name="selectedcbids" value="">--}}
-{{--                                                            </form>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                    <div class='form-content-modules d-none d-lg-block'>--}}
-{{--                                                        <img class='form-image-modules' src='{{ $urlAppend }}template/modern/img/form-image.png' alt='form-image'>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </li>--}}
-{{--                                    </ul>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-
-
-
                         @endif
 
                         <div class="table-responsive">

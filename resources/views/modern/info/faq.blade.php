@@ -34,7 +34,7 @@
                                                         
                                                     </a>
 
-                                                    <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' aria-labelledby='heading{{ $faq->id }}' data-bs-parent='#accordion'>
+                                                    <div id='faq-{{ $faq->id }}' class='panel-collapse accordion-collapse collapse border-0 rounded-0' role='tabpanel' data-bs-parent='#accordion'>
                                                         <div class='panel-body bg-transparent Neutral-900-cl px-4'>
                                                             {!! $faq->body !!}
                                                         </div>
