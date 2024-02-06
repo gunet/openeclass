@@ -737,9 +737,6 @@ b a {
   z-index:0;
 }
 
-.header-container{
-  background-color: #ffffff;
-}
 .container.header-container{
   padding: 24px 8px 24px 8px;
 }

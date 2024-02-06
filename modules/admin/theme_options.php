@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 //Default Styles
 $defaults = array(
-                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','bgColorHeader','buttonTextColor','bgColorFooter',
+                'rgba(255, 255, 255, 1)' => array('leftNavBgColor','bgColor','buttonTextColor','bgColorFooter',
                                                     'whiteButtonHoveredBgColor','BgColorWrapperHeader', 'bgColorWrapperFooter', 
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
@@ -793,12 +793,8 @@ $tool_content .= "
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend mt-2 text-decoration-underline'>$langBgHeaderCongiguration</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='BgColorWrapperHeader' class='control-label-notes mb-2 me-2'>$langBgColorWrapperHeader:</label>
+                        <label for='BgColorWrapperHeader' class='control-label-notes mb-2 me-2'>$langBgColor Header:</label>
                         <input name='BgColorWrapperHeader' type='text' class='form-control colorpicker' id='BgColorWrapperHeader' value='$theme_options_styles[BgColorWrapperHeader]'>
-                    </div>
-                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
-                        <label for='bgColorHeader' class='control-label-notes mb-2 me-2'>$langBgColor Header:</label>
-                        <input name='bgColorHeader' type='text' class='form-control colorpicker' id='bgColorHeader' value='$theme_options_styles[bgColorHeader]'>
                     </div>
                     <hr>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langLinkColorHeader</h3>

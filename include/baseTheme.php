@@ -591,25 +591,6 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        //////////////////////////// BACKGROUND-COLOR HEADER ////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        if (!empty($theme_options_styles['bgColorHeader'])) {
-            $styles_str .= "
-
-                .header-container {
-                    background-color: $theme_options_styles[bgColorHeader];
-                }
-
-                .offCanvas-Tools{
-                    background: $theme_options_styles[bgColorHeader];
-                }
-
-            ";
-        }
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -622,6 +603,10 @@ function view($view_file, $view_data = array()) {
 
                 #bgr-cheat-header{ 
                     background-color: $theme_options_styles[BgColorWrapperHeader];
+                }
+
+                .offCanvas-Tools{
+                    background: $theme_options_styles[BgColorWrapperHeader];
                 }
 
             ";
