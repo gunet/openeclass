@@ -32,6 +32,7 @@ define('LOG_CREATE_COURSE', 5);
 define('LOG_DELETE_COURSE', 6);
 define('LOG_MODIFY_COURSE', 7);
 define('LOG_LOGIN_FAILURE', 8);
+define('LOG_LOGIN_DOUBLE', 10);
 define('LOG_DELETE_USER', 9);
 
 class Log {

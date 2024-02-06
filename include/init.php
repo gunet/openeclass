@@ -216,6 +216,7 @@ if ($uid and !isset($_GET['logout']) and !$is_admin and get_config('double_login
     $sessions = Database::get()->queryArray('SELECT session_id FROM login_lock
         WHERE user_id = ?d ORDER BY ts DESC', $uid);
     if ($sessions and count($sessions) > 1 and $sessions[0]->session_id != session_id()) {
+        require_once 'include/log.class.php';
         Database::get()->queryArray('DELETE FROM login_lock
             WHERE user_id = ?d AND session_id = ?s',
             $uid, session_id());
@@ -225,6 +226,7 @@ if ($uid and !isset($_GET['logout']) and !$is_admin and get_config('double_login
         Database::get()->query("INSERT INTO loginout (loginout.id_user,
                     loginout.ip, loginout.when, loginout.action)
                     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
+        Log::record(0, $uid, LOG_LOGIN_DOUBLE, []);
         Session::messages($langDoubleLoginLock, 'alert-warning');
         redirect_to_home_page();
     }
