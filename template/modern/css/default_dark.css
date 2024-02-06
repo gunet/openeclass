@@ -1913,12 +1913,12 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   
 
   .showSettings{
-    background-color: #ffffff !important;
+    background-color: #212D37 !important;
     border-color: #74AFE9;
     color: #74AFE9 !important;
   }
   .showSettings:hover{
-    background-color: #ffffff !important;
+    background-color: #212D37 !important;
     border-color: #74AFE9;
     color: #74AFE9 !important;
   }
