@@ -1990,6 +1990,10 @@ function view($view_file, $view_data = array()) {
                 }
                 
 
+                .wallWrapper textarea:focus{
+                    border-color: $theme_options_styles[clBorderInput] ;
+                }
+
             ";
         }
 
@@ -3632,6 +3636,11 @@ function view($view_file, $view_data = array()) {
                 .mycourses-pagination .page-item-previous .page-link:hover,
                 .mentors-pagination .page-item-previous .page-link:hover{
                     background-color: transparent !important;
+                }
+
+
+                .commentPress:hover{
+                    color: $theme_options_styles[linkColor];
                 }
             
             ";

@@ -62,7 +62,7 @@
                                                 <div class="panel-body text-muted NoBorders">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
-                                                <div class="panel-footer bg-default BordersBottom">
+                                                <div class="panel-footer BordersBottom">
                                                     <div class="d-flex justify-content-end">
                                                         <form class='mt-0 mb-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>
