@@ -2346,7 +2346,7 @@ body .form-action-button-popover{
   width: 16px;
   height: 16px;
   font-size: 32px;
-  color: #687DA3;
+  color: #C44601;
 }
 .modal.show .close{
   border:0px;
@@ -2357,7 +2357,7 @@ body .form-action-button-popover{
   margin-top: 3px;
 }
 .modal.show .close span{
-  color: #687DA3;
+  color: #C44601;
 }
 .bootbox.show .modal-body, .modal.show .modal-body{
   border: 0;

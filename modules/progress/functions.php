@@ -2714,7 +2714,7 @@ function student_view_progress() {
                 $tool_content .= "<div class='res-table-wrapper'>";
                 $tool_content .= "<div class='col-12'>";
                 $tool_content .= "<a style='display:inline-block; width: 100%' href='index.php?course=$course_code&amp;certificate_id=$certificate->certificate&amp;u=$certificate->user'>";
-                $tool_content .= "<div class='col-12 certificate_panel border-card m-auto d-block bg-light p-3'>
+                $tool_content .= "<div class='col-12 certificate_panel border-card m-auto d-block p-3'>
                         <h4 class='text-center'>$certificate->title</h4>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>

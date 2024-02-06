@@ -1052,6 +1052,17 @@
     color: #B70A0A !important;
   }
   
+
+
+  .card-transparent,
+  .card-transparent .card-header,
+  .card-transparent .card-body,
+  .card-transparent .card-footer,
+  .card-transparent .panel-heading,
+  .card-transparent .panel-body,
+  .card-transparent .panel-footer{
+      background-color: transparent !important;
+  }
   
   
   /**********************************************************************************************************************/

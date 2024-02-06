@@ -143,7 +143,7 @@
                                                                         <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
                                                                     </div>
                                                                     <div>
-                                                                        <button type='button' class="close border-0 bg-transparent mt-2"><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                                                        <button type='button' class="close border-0 bg-transparent mt-2"><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
                                                                     </div>
                                                                 </div>
 

@@ -268,7 +268,7 @@ if (count($res) > 0) {
                                     <div class='modal-content'>
                                         <div class='modal-header'>
                                         <div class='modal-title' id='myModalLabel_$key'>" . q($row->title) . "</div>
-                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                        <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
                                       
                                     </div>
                                     <div class='modal-body' style='max-height: calc(100vh - 210px); overflow-y: auto;'>".
@@ -989,7 +989,7 @@ function course_announcements() {
                 $ann_date = format_locale_date(strtotime($ann->date));
                 $ann_content .= "<li class='list-group-item element'>
                                     <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a>
-                                    <div class='TextRegular Neutral-800-cl'>$ann_date</div>
+                                    <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                                 </li>";
                 }
                 $counter_ann++;

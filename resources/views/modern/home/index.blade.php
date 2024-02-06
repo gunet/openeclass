@@ -170,7 +170,7 @@
                                                             <a class='TextBold' href='modules/announcements/main_ann.php?aid={{ $announcement->id }}'>
                                                                 {{$announcement->title}}
                                                             </a>
-                                                            <div class='TextRegular msmall-text Neutral-800-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
+                                                            <div class='TextRegular msmall-text Neutral-900-cl mt-1'>{{ format_locale_date(strtotime($announcement->date)) }}</div>
                                                         </li>
                                                     @endif
                                                     @php $counterAn++; @endphp
@@ -224,7 +224,7 @@
                                                                         {{$pop_course->title}} ({{$pop_course->public_code}})
 
                                                                     </a>
-                                                                    <p class='TextRegular msmall-text Neutral-800-cl mt-1'>{{$pop_course->prof_names}}</p>
+                                                                    <p class='TextRegular msmall-text Neutral-900-cl mt-1'>{{$pop_course->prof_names}}</p>
                                                                 </div>
                                                             </div>
                                                         </div>

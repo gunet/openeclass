@@ -108,7 +108,7 @@
                                                     <div class='modal-header'>
                                                         <h4 class='modal-title' id='treeCourseModalLabel'>{{ trans('langNodeAdd') }}</h4>
                                                         <button type='button' class='close treeCourseModalClose'>
-                                                            <span class='fa-solid fa-xmark fa-lg Neutral-700-cl' aria-hidden='true'></span>
+                                                            <span class='fa-solid fa-xmark fa-lg Accent-200-cl' aria-hidden='true'></span>
                                                             <span class='sr-only'>{{ trans('langCancel') }}</span>
                                                         </button>
                                                         

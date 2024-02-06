@@ -109,7 +109,7 @@
                                 <div class='modal-header'>
                                     <h4 class='modal-title' id='myModalLabel'>{{ trans('langNotConfigured') }}</h4>
                                     <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-                                        <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                                     </button>
                                     
                                 </div>

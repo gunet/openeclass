@@ -118,7 +118,7 @@ function getUserCourseInfo($uid): string
                                             <div class='mt-2'>" . q($data->public_code) . "&nbsp; - &nbsp;" . q($data->professor) . "</div>
                                         </div>
                                         <div>
-                                            <button aria-label='Close' type='button' class='close border-0 bg-transparent mt-2'><i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i></button>
+                                            <button aria-label='Close' type='button' class='close border-0 bg-transparent mt-2'><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
                                         </div>
 
                                     </div>
@@ -297,7 +297,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                         <li class='list-group-item element'>
                             <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                             <p class='TextBold mb-0'>$course_title</p>
-                            <div class='TextRegular Neutral-800-cl'>$ann_date</div>
+                            <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                         </li>";
                 } else {
                     $ann_url = $urlAppend . 'main/system_announcements.php?an_id=' . $ann->id;
@@ -306,7 +306,7 @@ function getUserAnnouncements($lesson_id, $type='', $to_ajax=false, $filter='') 
                     <li class='list-group-item element'>
                         <a class='TextBold' href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                         <p class='TextBold mb-0'>$langAdminAn&nbsp; <span class='fa fa-user Success-200-cl'></span></p>
-                        <div class='TextRegular Neutral-800-cl'>$ann_date</div>
+                        <div class='TextRegular Neutral-900-cl'>$ann_date</div>
                     </li>";
                 }
             }
@@ -353,7 +353,7 @@ function getUserMessages() {
                                         <a class='TextBold mt-2' href='{$urlServer}modules/message/index.php?mid=$message->id'>" .q($message->subject)."</a>
 
                                         <p class='TextBold mb-0'>$course_title</p>
-                                        <div class='TextRegular Neutral-800-cl'>$message_date</div>
+                                        <div class='TextRegular Neutral-900-cl'>$message_date</div>
                                 </li>";
         }
         $counterMs++;

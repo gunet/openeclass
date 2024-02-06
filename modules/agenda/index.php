@@ -395,7 +395,7 @@ if ($is_editor) {
                                                 <div class='modal-header border-0'>
                                                     <h2 class='mb-0'>$langAddEvent</h2>
                                                     <button type='button' class='bg-default border-0' data-bs-dismiss='modal' aria-label='Close'>
-                                                        <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                                        <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                                                     </button>
                                                 </div>
                                                 <div class='modal-body'>
@@ -781,7 +781,7 @@ if ($is_editor) {
                                     <div class='modal-header border-0'>
                                         <h2 class='mb-0'>$langAddEvent</h2>
                                         <button type='button' class='bg-default border-0' data-bs-dismiss='modal' aria-label='Close'>
-                                            <i class='fa-solid fa-xmark fa-lg Neutral-700-cl'></i>
+                                            <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                                         </button>
                                     </div>
                                     <div class='modal-body'>

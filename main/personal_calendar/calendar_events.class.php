@@ -1473,7 +1473,7 @@ class Calendar_Events {
        global $langNextMonth, $langPreviousMonth, $course_code;
 
        if($course_code){
-            $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center'>
+            $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
                             <div id='cal-header' class='cal-header-course d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
                                     <button type='button' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='prev'><div class='btn-calendar-prev d-flex justify-content-start align-items-center'><i class='fa-solid fa-chevron-left fa-lg'></i></div><span class='sr-only'>$langPreviousMonth</span></button>
@@ -1483,7 +1483,7 @@ class Calendar_Events {
                             </div>
                         </div>";
        }else{
-            $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center'>
+            $calendar = "<div class='panel-heading p-0 d-flex justify-content-center align-items-center' style='min-height:39px;'>
                             <div id='cal-header' class='cal-header-Portfolio d-flex justify-content-center align-items-center w-100'>
                                 <div class='btn-group w-100' role='group'>
                                     <button type='button' class='btn btn-transparent d-flex justify-content-center align-items-center' data-calendar-nav='prev'><div class='btn-calendar-prev d-flex justify-content-start align-items-center'><i class='fa-solid fa-chevron-left fa-lg'></i></div><span class='sr-only'>$langPreviousMonth</span></button>

@@ -526,7 +526,7 @@
                                             {{ trans('langStudent') }}
                                         @endif
                                     </p>
-                                    <p class='vsmall-text Neutral-800-cl mb-0 portofolio-text-intro'>
+                                    <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
                                     </p>
                                 </div>
