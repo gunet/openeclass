@@ -222,6 +222,9 @@ if ($uid and !isset($_GET['logout']) and !$is_admin and get_config('double_login
         session_destroy();
         session_start();
         session_regenerate_id(true);
+        Database::get()->query("INSERT INTO loginout (loginout.id_user,
+                    loginout.ip, loginout.when, loginout.action)
+                    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", 'LOGOUT')", $uid, Log::get_client_ip());
         Session::messages($langDoubleLoginLock, 'alert-warning');
         redirect_to_home_page();
     }
