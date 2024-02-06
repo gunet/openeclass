@@ -94,7 +94,7 @@
 <div class='col-12 mt-4'>
     <div class="row row-cols-1 row-cols-lg-{{ $col_size }} g-3 g-lg-4">
         <div class='col'>
-            <div class='card panelCard p-0 bg-default m-auto h-100 border-0'>
+            <div class='card panelCard p-0 card-transparent m-auto h-100 border-0'>
                 <div class='card-body px-0'>
                     <ul class='list-group list-group-flush'>
                         <li class="list-group-item list-group-item-action border-0 pb-3">
@@ -181,7 +181,7 @@
         </div>
         @if ($is_power_user or $is_departmentmanage_user)
             <div class='col'>
-                <div class='card panelCard p-0 bg-default m-auto h-100 border-0'>
+                <div class='card panelCard p-0 card-transparent m-auto h-100 border-0'>
                     <div class='card-body px-0'>
                         <ul class='list-group list-group-flush'>
                             <li class="list-group-item list-group-item-action border-0 pb-3">
@@ -232,7 +232,7 @@
         @endif
         @if ($is_admin)
             <div class='col'>
-                <div class='card panelCard p-0 border-0 bg-default h-100'>
+                <div class='card panelCard p-0 border-0 card-transparent h-100'>
                     <div class='card-body px-0'>
                         <ul class='list-group list-group-flush'>
                             <li class="list-group-item list-group-item-action border-0 pb-3">
@@ -314,7 +314,7 @@
     <div class='col-12 mt-4'>
         <div class="row row-cols-1 row-cols-lg-3 g-3 g-lg-4">
             <div class='col'>
-                <div class='card panelCard p-0 border-0 bg-default h-100'>
+                <div class='card panelCard p-0 border-0 card-transparent h-100'>
                     <div class='card-body px-0'>
                         <ul class='list-group list-group-flush'>
                             <li class="list-group-item list-group-item-action border-0 pb-3">
@@ -347,7 +347,7 @@
             </div>
             <div class='col'>
                 @if($is_admin)
-                    <div class='card panelCard p-0 border-0 bg-default h-100'>
+                    <div class='card panelCard p-0 border-0 card-transparent h-100'>
                         <div class='card-body px-0'>
                             <ul class='list-group list-group-flush'>
                                 <li class="list-group-item list-group-item-action border-0 pb-3">
@@ -366,7 +366,7 @@
             </div>
             <div class='col'>
                 @if($is_admin)
-                    <div class='card panelCard p-0 border-0 bg-default h-100'>
+                    <div class='card panelCard p-0 border-0 card-transparent h-100'>
                         <div class='card-body px-0'>
                             <ul class='list-group list-group-flush'>
                                 <li class="list-group-item list-group-item-action border-0 pb-3">

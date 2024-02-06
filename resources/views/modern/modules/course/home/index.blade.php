@@ -289,7 +289,7 @@
                 <div class='d-xl-flex gap-5 mt-0'>
 
                     <div class='flex-grow-1'>
-                        <div class='card panelCard panelCardDefault border-0'>
+                        <div class='card panelCard card-transparent border-0'>
 
                             <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <div>
@@ -396,7 +396,7 @@
 
 
                         @if($course_info->view_type == 'units')
-                            <div class='card panelCard panelCardDefault px-0 py-0 mt-4 border-0 mb-5'>
+                            <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
 
                                 <div class='card-header card-header-default border-0 bg-default d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>
@@ -538,7 +538,7 @@
 
 
                     <div>
-                        <div class="panel panel-admin panel-admin-calendar p-0 border-0 sticky-column-course-home">
+                        <div class="panel panel-admin panel-admin-calendar card-transparent p-0 border-0 sticky-column-course-home">
                             <h3 class='mt-1 mb-4'>{{ trans('langAgenda') }}</h3>
                             {!! $user_personal_calendar !!}
                             <div class='panel-footer d-flex justify-content-start align-items-center flex-wrap px-0 py-3'>
@@ -565,7 +565,7 @@
                             @include('modules.course_home.quickpoll')
                         @endif
 
-                        <div class="card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home">
+                        <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                             <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
                                 <a class='Course-home-ellipsis-announcements TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
@@ -579,7 +579,7 @@
 
                         @if ($uid)
                             @if(isset($course_completion_id) and $course_completion_id > 0)
-                                <div class="card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home">
+                                <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
                                     <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <h3 class='mb-0'>{{ trans('langCourseCompletion') }}</h3>
                                         @if ($is_editor)
@@ -629,7 +629,7 @@
                         @endif
 
                         @if (isset($level) && !empty($level))
-                            <div class='card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home'>
+                            <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                 <div class='card-header px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langOpenCourseShort') }}</h3>
                                 </div>
@@ -643,7 +643,7 @@
                         @endif
 
                         @if($course_home_main_area_widgets)
-                            <div class='card panelCard panelCardDefault border-0 mt-5 sticky-column-course-home'>
+                            <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                 <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langWidgets') }}</h3>
                                 </div>

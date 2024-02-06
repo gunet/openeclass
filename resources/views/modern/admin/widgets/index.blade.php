@@ -122,7 +122,7 @@
                                                     <input type="hidden" name='widgetClassName' value='{{ get_class($uninstalled_widget) }}'>
                                                     <input type="hidden" name='widgetAction' value='install'>
                                                 </form>
-                                                <a class='btn submitAdminBtn submitAdminBtnDefault' href="#" onclick="$('#installForm{{ $key }}').submit();">
+                                                <a class='btn submitAdminBtn' href="#" onclick="$('#installForm{{ $key }}').submit();">
                                                     {{ trans('langWidgetInstall') }}
                                                 </a>
                                             </div>

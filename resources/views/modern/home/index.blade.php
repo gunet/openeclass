@@ -30,7 +30,7 @@
                     <div class='{{ $container }} padding-default'>
                         <div class='row row-cols-1 g-4'>
                             <div class='col'>
-                                <div class='card bg-transparent border-0'>
+                                <div class='card bg-transparent card-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
                                         <div class='jumbotron-intro-text'>
                                             @if(get_config('homepage_title'))
@@ -150,7 +150,7 @@
                     <div class='{{ $container }} padding-default'>
                         <div class='row row-cols-1 g-4'>
                             <div class='col'>
-                                <div class='card bg-transparent border-0'>
+                                <div class='card card-transparent bg-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
@@ -198,7 +198,7 @@
                         <div class='{{ $container }} padding-default'>
                             <div class="row row-cols-1 g-4">
                                 <div class='col'>
-                                    <div class='card bg-transparent border-0'>
+                                    <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 mb-3'>
                                             <div class='d-flex justify-content-start align-items-center'>
                                                 <h3 class='pe-2'>
@@ -248,7 +248,7 @@
                             <div class="row row-cols-1 @if(count($texts) > 1) row-cols-lg-2 @endif g-4">
                                 @foreach($texts as $text)
                                     <div class='col'>
-                                        <div class='card bg-transparent border-0'>
+                                        <div class='card card-transparent bg-transparent border-0'>
                                             <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                                 <div class='d-flex justify-content-start align-items-center'>
                                                     <h3 class='pe-2'>
@@ -274,7 +274,7 @@
                         <div class='{{ $container }} padding-default'>
                             <div class="row row-cols-1 g-4">
                                 <div class='col'>
-                                    <div class='card bg-transparent border-0'>
+                                    <div class='card card-transparent bg-transparent border-0'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                             <h3>{{ trans('langSaidForUs') }}</h3>
                                         </div>
@@ -309,7 +309,7 @@
                     <div class='{{ $container }} padding-default'>
                         <div class="row row-cols-1 g-4">
                             <div class='col'>
-                                <div class='card bg-transparent border-0'>
+                                <div class='card card-transparent bg-transparent border-0'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <h3 class='pe-2'>{{ trans('langViewStatics') }}</h3>

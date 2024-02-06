@@ -536,7 +536,7 @@
                             </a>
                         </div>
                         <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
-                            <div class='card user-info-card h-100 px-3 py-0 border-card'>
+                            <div class='card user-info-card card-transparent h-100 px-3 py-0'>
                                 <div class='card-body d-flex justify-content-center align-items-center p-0'>
                                     <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro py-1'>
                                         <i class='fa-solid fa-book-open fa-xs portofolio-text-intro'></i>
@@ -546,7 +546,7 @@
                                     
                                 </div>
                             </div>
-                            <div class='card user-info-card h-100 px-3 py-0 border-card'>
+                            <div class='card user-info-card card-transparent h-100 px-3 py-0'>
                                 <div class='card-body d-flex justify-content-center align-items-center p-0'>
                                     <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro py-1'>
                                         <i class='fa-solid fa-book-reader fa-xs portofolio-text-intro'></i>
@@ -572,7 +572,7 @@
                     <div class='col portfolio-content'>
                         <div class='d-xl-flex gap-5'>
                             <div class='flex-grow-1'>
-                                <div class='card border-0 bg-transparent'>
+                                <div class='card card-transparent border-0 bg-transparent'>
                                     <div class='card-header d-md-flex justify-content-md-between align-items-md-center px-0 bg-transparent border-0'>
                                         @php $totalCourses = $student_courses_count + $teacher_courses_count; @endphp
                                         <h2>{{ trans('langMyCoursesSide') }}&nbsp;({{ $totalCourses }})</h2>
@@ -801,7 +801,7 @@
                                 <div class='col-12 mb-4 mt-1 d-flex justify-content-xl-start justify-content-center'><h3 class='mb-0'>{{ trans('langAgenda') }}</h3></div>
                                 @include('portfolio.portfolio-calendar')
 
-                                <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
+                                <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                                         <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
                                         <a class='Course-home-ellipsis-announcements text-decoration-underline vsmall-text' href="{{$urlAppend}}modules/announcements/myannouncements.php">
@@ -817,7 +817,7 @@
                                     </div>
                                 </div>
 
-                                <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
+                                <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
 
                                         <h3 class='mb-0'>{{ trans('langMessages') }}</h3>
@@ -836,7 +836,7 @@
                                 </div>
 
                                 @if($portfolio_page_sidebar_widgets)
-                                    <div class='card bg-transparent border-0 mt-5 sticky-column-course-home'>
+                                    <div class='card bg-transparent card-transparent border-0 mt-5 sticky-column-course-home'>
                                         <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
 
                                                 <h3>{{ trans('langMyWidgets') }}</h3>

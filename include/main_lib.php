@@ -3959,7 +3959,7 @@ function setOpenCoursesExtraHTML() {
 
 
  
-                <div class='card border-0 bg-transparent h-100'>
+                <div class='card card-transparent border-0 bg-transparent h-100'>
                     <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0'>
                         <div class='d-flex justify-content-start align-items-center'>
                             <h3>$langOpenCourses</h3>

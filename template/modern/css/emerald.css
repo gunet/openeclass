@@ -882,6 +882,9 @@ tr.danger{
   color: #1E7E0E;
 }
 
+.user-info-card{
+  border: solid 1px #1E7E0E;
+}
 
 .profile-pers-info-row{
   border-bottom: solid 1px #EFF2FB;
@@ -1022,22 +1025,6 @@ tr.danger{
 
 .panelCard .card-footer{
   background-color: #ffffff !important;
-}
-
-.panelCardDefault{
-  background-color: transparent !important;
-}
-
-.panelCardDefault .card-header-default{
-  background-color: transparent !important;
-}
-
-.panelCardDefault .card-body-default{
-  background-color: transparent !important;
-}
-
-.panelCardDefault .card-footer-default{
-  background-color: transparent !important;
 }
 
 .panelCard.border-card-left-default{

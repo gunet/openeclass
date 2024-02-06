@@ -878,7 +878,10 @@
     color: #B70A0A;
   }
 
-
+  .user-info-card{
+    border: solid 1px #B70A0A;
+  }
+  
   .profile-pers-info-row{
     border-bottom: solid 1px #EFF2FB;
   }
@@ -1017,22 +1020,6 @@
 
   .panelCard .card-footer{
     background-color: #ffffff !important;
-  }
-
-  .panelCardDefault{
-    background-color: transparent !important;
-  }
-
-  .panelCardDefault .card-header-default{
-    background-color: transparent !important;
-  }
-
-  .panelCardDefault .card-body-default{
-    background-color: transparent !important;
-  }
-
-  .panelCardDefault .card-footer-default{
-    background-color: transparent !important;
   }
   
   .panelCard.border-card-left-default{

@@ -2533,7 +2533,7 @@ body .form-action-button-popover{
   border: solid 1px #E8EDF8;
 }
 .panel-admin .panel-heading{
-  background: #0073E6;
+  background: #2B3944;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
@@ -3691,6 +3691,9 @@ body .delThemeBtn{
     height: 64px;
     width: auto;
   }
+}
+.user-info-card{
+  border: solid 1px #d1e5ff;
 }
 
 
@@ -4851,26 +4854,19 @@ table.dataTable tbody tr th{
   background-color: #ffffff !important;
 }
 
-.panelCardDefault{
-  background-color: transparent !important;
-}
-
-.panelCardDefault .card-header-default{
-  background-color: transparent !important;
-}
-
-.panelCardDefault .card-body-default{
-  background-color: transparent !important;
-}
-
-.panelCardDefault .card-footer-default{
-  background-color: transparent !important;
-}
-
 .panelCard.border-card-left-default{
   border-left: solid 7px #EFF6FF;
 }
 
+.card-transparent,
+.card-transparent .card-header,
+.card-transparent .card-body,
+.card-transparent .card-footer,
+.card-transparent .panel-heading,
+.card-transparent .panel-body,
+.card-transparent .panel-footer{
+  background-color: transparent !important;
+}
 
 /****************************************** AUTH REGISTER COURSES *****************************************************/
 

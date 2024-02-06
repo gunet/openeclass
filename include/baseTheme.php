@@ -3837,6 +3837,13 @@ function view($view_file, $view_data = array()) {
         if(!empty($theme_options_styles['BgPanels'])){
             $styles_str .= "
 
+                .panel-action-btn-default,
+                .panel-primary,
+                .panel-success,
+                .panel-default,
+                .panel-info,
+                .panel-danger,
+                .panel-admin,
                 .card,
                 .user-info-card,
                 .card-body,
@@ -3902,6 +3909,17 @@ function view($view_file, $view_data = array()) {
                 .card-course-info{
                     background-color: $theme_options_styles[BgPanels] ; 
                 }
+
+                .card-transparent,
+                .card-transparent .card-header,
+                .card-transparent .card-body,
+                .card-transparent .card-footer,
+                .card-transparent .panel-heading,
+                .card-transparent .panel-body,
+                .card-transparent .panel-footer{
+                    background-color: transparent !important;
+                }
+               
             ";
         }
 
