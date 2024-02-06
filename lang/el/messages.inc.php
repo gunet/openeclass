@@ -1136,6 +1136,10 @@ $langByDel = "Διαγράφοντας το $langsCourse θα διαγράψετ
 $langByDel_A = "Θέλετε πράγματι να διαγράψετε το $langsCourse:";
 $langTipLang = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται τα μηνύματα του $langsOfCourse.";
 $langTipLang2 = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται τα μηνύματα της πλατφόρμας.";
+$langCourseDeleted = "Διαγραφή του $langsOfCourse";
+$langCourseDeletedBy = "Πραγματοποιήθηκε η διαγραφή από τον";
+$langNoticeCourseDeleted = "Αν η διαγραφή του $langsOfCourse έγινε από εσάς, τότε αγνοήστε το παρόν email. Αν η διαγραφή έγινε κατά λάθος και 
+		θέλετε να επαναφέρετε το $langsCourse σας, τότε επικοινωνήστε με τους διαχειριστές της πλατφόρμας.";
 
 // deluser_course.php
 $langConfirmDel = "Επιβεβαίωση διαγραφής $langsOfCourse";
