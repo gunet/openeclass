@@ -3529,6 +3529,110 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkColor];
                 }
 
+
+
+
+
+                .dataTables_paginate.paging_simple_numbers span .paginate_button, 
+                .dataTables_paginate.paging_full_numbers span .paginate_button{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+                    color: $theme_options_styles[linkColor] !important;
+                    background: transparent !important; 
+                }
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+                    color: $theme_options_styles[linkColor] !important;
+                }
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+                    color: $theme_options_styles[linkColor] !important;
+                    background: transparent !important;
+                }
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+                    background: transparent !important;
+                }
+                  
+                .dataTables_wrapper .dataTables_paginate .paginate_button.next:hover, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.last:hover{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                  
+                .dataTables_wrapper .dataTables_paginate .paginate_button.next.disabled:hover, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.last.disabled:hover{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                  
+                .dataTables_wrapper .dataTables_paginate .paginate_button.previous:hover, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.first:hover{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                  
+                .dataTables_wrapper .dataTables_paginate .paginate_button.previous.disabled:hover, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.first.disabled:hover{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                  
+                .dataTables_wrapper .dataTables_paginate .paginate_button.previous, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.first {
+                    color: $theme_options_styles[linkColor] !important;
+                }
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.next, 
+                .dataTables_wrapper .dataTables_paginate .paginate_button.last{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+
+                .dataTables_wrapper .dataTables_paginate .paginate_button.disabled{
+                    color: $theme_options_styles[linkColor] !important;
+                }
+
+                .mycourses-pagination .page-item{
+                    background-color: transparent !important;
+                }
+                
+                .mycourses-pagination .page-item .page-link{
+                    color: $theme_options_styles[linkColor] !important;
+                    background-color: transparent !important;
+                }
+                
+                .mycourses-pagination .page-item .page-link:hover{
+                    background-color: transparent !important;
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                .mycourses-pagination .page-item .page-link.active:hover{
+                    background-color: transparent !important;
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                .mycourses-pagination .page-item .page-link.active{
+                    background-color: transparent !important;
+                    color: $theme_options_styles[linkColor] !important;
+                }
+                
+                .mycourses-pagination .page-item-pages{
+                    background-color: transparent !important;
+                }
+                .mycourses-pagination .page-item-previous{
+                    background-color: transparent !important;
+                }
+                .mycourses-pagination .page-item-next{
+                    background-color: transparent !important;
+                }
+
+                .mycourses-pagination .page-item-next .page-link:hover,
+                .mentors-pagination .page-item-previous .page-link:hover{
+                    background-color: transparent !important;
+                }
+                .mycourses-pagination .page-item-previous .page-link:hover,
+                .mentors-pagination .page-item-previous .page-link:hover{
+                    background-color: transparent !important;
+                }
             
             ";
         }

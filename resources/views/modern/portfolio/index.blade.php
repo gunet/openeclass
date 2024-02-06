@@ -778,7 +778,7 @@
                                                         @endif
 
                                                         <li class='page-item page-item-next'>
-                                                            <a class='page-link bg-default' href='#'><span class='fa-solid fa-chevron-right'></span></a>
+                                                            <a class='page-link bg-default' href='javascript:void(0);'><span class='fa-solid fa-chevron-right'></span></a>
                                                         </li>
                                                     </ul>
                                                 </nav>
