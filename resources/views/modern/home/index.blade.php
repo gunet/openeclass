@@ -151,13 +151,13 @@
                         <div class='row row-cols-1 g-4'>
                             <div class='col'>
                                 <div class='card bg-transparent border-0'>
-                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-3 flex-wrap'>
+                                    <div class='card-header border-0 bg-transparent d-flex justify-content-between align-items-center px-0 py-0 gap-2 flex-wrap'>
                                         <div class='d-flex justify-content-start align-items-center'>
                                             <h3 class='pe-2'>{{ trans('langAnnouncements') }}</h3>
                                             <a href='{{ $urlServer }}rss.php' aria-label='Rss'><i class="fa-solid fa-rss"></i></a>
                                         </div>
                                         <div class='d-flex justify-content-end align-items-center'>
-                                            <a class='TextRegular text-decoration-underline msmall-text' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
+                                            <a class='TextRegular text-decoration-underline msmall-text mb-2' href="{{ $urlServer }}main/system_announcements.php">{{ trans('langAllAnnouncements') }}...</a>
                                         </div>
                                     </div>
                                     <div class='card-body px-0 py-0'>

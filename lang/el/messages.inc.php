@@ -5762,7 +5762,6 @@ $langPortFolioProfileContainer = "Χρώμα φόντου σύντομου πρ�
 $langBgColorWrapperJumbotron = "Gradient φόντου στον container της οθόνης σύνδεσης";
 $langBgColorWrapperHeader= "Χρώμα φόντου στον container του Header";
 $langBgColorWrapperFooter= "Χρώμα φόντου στον container του Footer";
-$langBgColorWrapperBriefProfilePortfolio = "Χρώμα Φόντου στον container του σύντομου προφίλ";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
 
 $langShadowHeader = "Shadow στο κάτω μέρος της επικεφαλίδας";

@@ -69,11 +69,7 @@ iframe{
   .module-container{
     padding: 24px 0px 24px 0px;
   }
-  .homepage-container{
-    padding: 24px 8px 24px 8px;
-    background-color: #ffffff;
-    min-height: calc(100vh - 56px - 134px + 56px - 233px);
-  }
+
   .portfolio-profile-container{
     min-height: 96px;
     padding: 16px 8px 16px 8px;
@@ -105,6 +101,8 @@ iframe{
     padding: 24px 16px 24px 16px;
   }
 
+
+
   .container.module-container{
     padding: 24px 0px 24px 0px;
   }
@@ -112,17 +110,15 @@ iframe{
     padding: 24px 0px 24px 0px;
   }
 
-  .homepage-container{
-    background-color: #ffffff;
-    min-height: calc(100vh - 80px - 80px - 315px);
-  }
-  .container.homepage-container{
-    padding: 24px 8px 24px 8px;
-  }
-  .container-fluid.homepage-container{
-    padding: 24px 16px 24px 16px;
-  }
 
+  .container .portfolio-content{
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .container-fluid .portfolio-content{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 
   .portfolio-profile-container{
     min-height: 96px;
@@ -3625,10 +3621,6 @@ body .delThemeBtn{
 /**********************************************************************************************************************/
 /************************************************* PORTFOLIO **********************************************************/
 /**********************************************************************************************************************/
-
-.portfolio-profile{
-  background-color:#F7F9FE;
-}
 
 @media(min-width:426px) and (max-width:767px){
   .lesson {min-height: 314px;}

@@ -11,17 +11,7 @@
   .module-container{
     background-color: #212D37;
   }
-  @media(max-width:991px){
-    .homepage-container{
-      background-color: #212D37;
-    }
-  }
-  @media(min-width:992px){
-    .homepage-container{
-      background-color: #212D37;
-    }
-  }
-    
+
   .border-card{
     border: solid 1px #4F6893;
   }
@@ -510,8 +500,8 @@
   
   /* active testimonial */
   .testimonial.slick-slide.slick-current.slick-active.slick-center{
-    background-color: #B4BED1;
-    color: #4F6893;
+    background-color: #212D37;
+    color: #ffffff;
     border: solid 1px #4F6893;
   }
   .testimonial.slick-slide.slick-current.slick-active.slick-center span,
@@ -519,7 +509,7 @@
   .testimonial.slick-slide.slick-current.slick-active.slick-center p,
   .testimonial.slick-slide.slick-current.slick-active.slick-center b,
   .testimonial.slick-slide.slick-current.slick-active.slick-center .form-label{
-    color: #4F6893;
+    color: #ffffff;
   }
 
   
@@ -1753,10 +1743,6 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 
   .profile-pers-info-row{
     border-bottom: solid 1px #EFF2FB;
-  }
-
-  .portfolio-profile {
-    background-color: #212D37;
   }
 
   .portfolio-profile-container {

@@ -3755,7 +3755,6 @@ $langPortFolioProfileContainer = "Short Profile Background Color In User Portfol
 $langBgColorWrapperJumbotron = "Gradient background on login screen wrapper";
 $langBgColorWrapperHeader= "Background color in the Header wrapper";
 $langBgColorWrapperFooter= "Footer wrapper background color";
-$langBgColorWrapperBriefProfilePortfolio = "Background color on the short profile wrapper in the user portfolio";
 $langFooterUploadImage = "Upload image to Footer";
 $langMyCoursesSide = "My $langsCourses";
 $langMyMessagesSide = 'My Messages';
