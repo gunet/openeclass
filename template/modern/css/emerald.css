@@ -93,20 +93,11 @@ a.list-group-item:hover{
 /**********************************************************************************************************************/
 
 
-@media(min-width:992px){ 
-  .footer-container{
+#bgr-cheat-footer{
     background-color: #ffffff;
-  }
 }
 
-@media(max-width:991px){
-  #bgr-cheat-footer,
-  .footer-container {
-    background-color: #FAFBFC;
-  }
-}
-
- .social-icon-tool {
+.social-icon-tool {
     color: #1E7E0E;
 }
 

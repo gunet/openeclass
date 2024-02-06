@@ -421,13 +421,6 @@
   
   #bgr-cheat-footer {
     background-color: #2B3944;
-    color: #ffffff;
-  }
-
-  @media(min-width:992px){ 
-    .footer-container{
-      background-color: #2B3944;
-    }
   }
   
 

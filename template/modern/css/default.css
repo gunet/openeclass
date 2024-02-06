@@ -963,31 +963,20 @@ b a {
 
 #bgr-cheat-footer {
   background-color: #ffffff;
-  color: #fff;
-  font-size: 14px;
-  width:auto;
 }
-@media(max-width:991px){
-  #bgr-cheat-footer {
-    background-color: #F7F9FE;
-  }
-}
+
 @media(max-width:991px){
   #bgr-cheat-footer, .footer-container{
     min-height: 134px; 
   }
   .footer-container{
     padding: 24px 20px 24px 20px;
-    background-color: #F7F9FE;
   }
 }
 @media(min-width:992px){ 
   #bgr-cheat-footer, .footer-container { 
     min-height: 80px; 
   } 
-  .footer-container{
-    background-color: #ffffff;
-  }
   .container.footer-container{
     padding: 16px 8px 16px 8px;
   }

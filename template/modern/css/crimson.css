@@ -88,27 +88,17 @@
       color: #B70A0A;
   }
 
-  #bgr-cheat-footer {
-    background-color: #ffffff;
-  }
+ 
 
 /**********************************************************************************************************************/
 /************************************************* FOOTER *************************************************************/
 /**********************************************************************************************************************/
 
-
-  .footer-container{
-    background-color: transparent;
+  #bgr-cheat-footer {
+    background-color: #ffffff;
   }
 
-  @media(max-width:991px){
-    #bgr-cheat-footer,
-    .footer-container {
-      background-color: #FAFBFC;
-    }
-  }
-
-   .social-icon-tool {
+  .social-icon-tool {
       color: #B70A0A;
   }
 
