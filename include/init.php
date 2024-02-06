@@ -130,6 +130,7 @@ if (!isset($session)) {
     $session = new Session();
 }
 $uid = $session->user_id;
+
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
 // HTML Purifier
@@ -179,8 +180,6 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
-
-
 if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = generate_csrf_token();
 }
@@ -211,6 +210,21 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_power_user = false;
     $is_usermanage_user = false;
     $is_departmentmanage_user = false;
+}
+
+if ($uid and !isset($_GET['logout']) and !$is_admin and get_config('double_login_lock')) {
+    $sessions = Database::get()->queryArray('SELECT session_id FROM login_lock
+        WHERE user_id = ?d ORDER BY ts DESC', $uid);
+    if ($sessions and count($sessions) > 1 and $sessions[0]->session_id != session_id()) {
+        Database::get()->queryArray('DELETE FROM login_lock
+            WHERE user_id = ?d AND session_id = ?s',
+            $uid, session_id());
+        session_destroy();
+        session_start();
+        session_regenerate_id(true);
+        Session::messages($langDoubleLoginLock, 'alert-warning');
+        redirect_to_home_page();
+    }
 }
 
 if (($upgrade_begin = get_config('upgrade_begin'))) {

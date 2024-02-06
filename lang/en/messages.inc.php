@@ -5749,3 +5749,7 @@ $langLoginAndRegister = 'Login and Register';
 $langInviteEclassLoginCreate = 'Please enter the required information below to register to the platform.';
 $langInviteEclassLoginAlt = "Alternatively, if you <strong>don't have a Central Authentication Service account</strong>, please enter below the details needed to create a guest account on the platform.";
 $langSameAsYourEmail = 'same as your e-mail address';
+$langDoubleLoginLock = 'You have logged into the platform from another device
+    with the same account. Double logins are disabled, so your current login has
+    been disconnected.';
+$langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';

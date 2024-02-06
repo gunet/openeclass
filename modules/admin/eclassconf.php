@@ -454,6 +454,7 @@ if (isset($_POST['submit'])) {
         'enable_social_sharing_links' => true,
         'enable_strong_passwords' => true,
         'disable_student_unregister_cours' => true,
+        'double_login_lock' => true,
         'login_fail_check' => true,
         'login_fail_threshold' => true,
         'login_fail_deny_interval' => true,
@@ -1175,6 +1176,7 @@ else {
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_enable_strong_passwords = get_config('enable_strong_passwords') ? 'checked' : '';
     $cbox_disable_student_unregister_cours = get_config('disable_student_unregister_cours') ? 'checked' : '';
+    $cbox_double_login_lock = get_config('double_login_lock') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
     $cbox_maintenance = get_config('maintenance') ? 'checked' : '';
 
@@ -1325,6 +1327,12 @@ else {
                                     <label>
                                         <input id='disable_student_unregister_cours' type='checkbox' name='disable_student_unregister_cours' value='1' $cbox_disable_student_unregister_cours>
                                         $langUnsubscribeCourse
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='double_login_lock' type='checkbox' name='double_login_lock' value='1' $cbox_double_login_lock>
+                                        $langDoubleLoginLockOption
                                     </label>
                                 </div>
                            </div>

@@ -55,6 +55,10 @@ if ($uid and isset($_POST['token']) and validate_csrf_token($_POST['token'])) {
         );
     }
 
+    Database::get()->query('DELETE FROM login_lock
+        WHERE user_id = ?d AND session_id = ?s',
+        $uid, session_id());
+
     session_destroy();
 
     $cas = ($login_method == 'cas')? get_auth_settings(7): false;

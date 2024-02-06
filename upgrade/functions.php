@@ -2575,6 +2575,24 @@ function upgrade_to_3_15($tbl_options) : void
 }
 
 /**
+ * @brief upgrade queries to 3.16
+ * @param $tbl_options
+ * @return void
+ */
+function upgrade_to_3_16($tbl_options) : void
+{
+    if (!DBHelper::tableExists('login_lock')) {
+        Database::get()->query('CREATE TABLE `login_lock` (
+           `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+           `user_id` INT(11) NOT NULL,
+           `session_id` VARCHAR(48) NOT NULL COLLATE ascii_bin,
+           `ts` DATETIME NOT NULL,
+           FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+           UNIQUE KEY (session_id)) CHARACTER SET ascii ENGINE=InnoDB');
+    }
+}
+
+/**
  * @brief Create Indexes
  */
 
