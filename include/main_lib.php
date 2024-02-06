@@ -2095,7 +2095,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @param type $extra
  * @return type
  */
-function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
+function rich_text_editor($name, $rows, $cols, $text, $onFocus = false, $options = []) {
     global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
     static $init_done = false;
     if (!$init_done) {
@@ -2180,6 +2180,20 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
         } else {
             $rich_text_editor_style = 'body { margin: 8px; background: none !important; }';
         }
+        if (in_array('prevent_copy_paste', $options)) {
+            $copy_paste = '';
+            $paste_plugin = ' paste';
+            $paste_preprocess = '
+                paste_preprocess: (plugin, args) => {
+                    args.stopImmediatePropagation();
+                    args.stopPropagation();
+                    args.preventDefault();
+                },';
+
+        } else {
+            $copy_paste = '| pastetext cut copy paste ';
+            $paste_plugin = $paste_preprocess = '';
+        }
         $head_content .= "
 <script type='text/javascript'>
 
@@ -2250,7 +2264,8 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome',
+    plugins: 'fullscreen pagebreak save image link media eclmedia print contextmenu paste noneditable visualchars nonbreaking wordcount emoticons preview searchreplace table code textcolor colorpicker lists advlist charmap fontawesome$paste_plugin',
+    $paste_preprocess
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -2262,7 +2277,7 @@ tinymce.init({
     menu: true,
     // Toolbar options
     toolbar1: 'toggle bold italic underline | forecolor backcolor | link image media eclmedia | alignleft aligncenter alignright alignjustify | bullist numlist | fullscreen preview',
-    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome strikethrough superscript subscript table | pastetext cut copy paste | removeformat | searchreplace undo redo | code'
+    toolbar2: 'formatselect | fontselect fontsizeselect | outdent indent | emoticons fontawesome strikethrough superscript subscript table $copy_paste| removeformat | searchreplace undo redo | code'
     $focus_init
 });
 </script>";

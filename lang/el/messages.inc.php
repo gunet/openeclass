@@ -2008,7 +2008,7 @@ $langClear = 'Εκκαθάριση';
 $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
 $langExercisePreventCopy = 'Αποτροπή αντιγραφής κεμένου';
-$langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
+$langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

@@ -5754,4 +5754,4 @@ $langDoubleLoginLock = 'You have logged into the platform from another device
     been disconnected.';
 $langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
 $langExercisePreventCopy = 'Prevent Text Copying';
-$langExercisePreventCopyExplanation = 'Prevent copying text from the screen during execution of the exercise';
+$langExercisePreventCopyExplanation = 'Prevent copying and pasting text during execution of the exercise';

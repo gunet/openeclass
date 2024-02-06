@@ -75,7 +75,7 @@ function showQuestion(&$objQuestionTmp, $question_number, $exerciseResult = arra
 
     if ($answerType == FREE_TEXT) {
             $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
-            $tool_content .= rich_text_editor('choice['.$questionId.']', 14, 90, $text);
+            $tool_content .= rich_text_editor("choice[$questionId]", 14, 90, $text, options: ['prevent_copy_paste']);
     }
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
          $tool_content .= "<input type='hidden' name='choice[$questionId]' value='0' />";
@@ -325,7 +325,7 @@ function display_exercise($exercise_id) {
               <span class='fa fa-edit' data-toggle='tooltip' data-original-title='$langModify'></span>
             </a>";
         }
-        $tool_content .= "     
+        $tool_content .= "
           </h3>
         </div>
         <div class='panel-body'>" . standard_text_escape($exercise->selectDescription()) . "</div>

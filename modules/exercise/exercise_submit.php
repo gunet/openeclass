@@ -250,7 +250,7 @@ $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = (int) $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
-$exercisePreventCopy = $objExercise->getOption('jsPreventCopy');
+$exercisePreventCopy = $objExercise->getOption('jsPreventCopy')? 1: 0;
 
 $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
@@ -823,16 +823,24 @@ if ($questionList) {
                 panel.removeClass('panel-default').addClass('panel-info');
                 $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
             });
-        });
-        " . ($exercisePreventCopy? "
-        document.addEventListener('contextmenu', e => e.preventDefault(), false);
-        document.addEventListener('keydown', e => {
-            if (e.ctrlKey || e.code == 85 || e.code == 123) {
-                e.stopPropagation();
-                e.preventDefault();
+            if ($exercisePreventCopy) {
+                document.addEventListener('contextmenu', e => e.preventDefault(), false);
+                document.addEventListener('keydown', e => {
+                    if (e.ctrlKey || e.code == 85 || e.code == 123) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                    }
+                });
+                $('.exercise input').on('select', function () {
+                    this.selectionStart = this.selectionEnd;
+                });
             }
-        });": '') . "
-</script>";
+        });
+</script>" . ($exercisePreventCopy? "
+<style>
+    .exercise { user-select: none; }
+    .exercise input[type=text]::selection { background-color:transparent }
+</style>": '');
 }
 
 draw($tool_content, 2, null, $head_content);
