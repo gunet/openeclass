@@ -5753,3 +5753,5 @@ $langDoubleLoginLock = 'You have logged into the platform from another device
     with the same account. Double logins are disabled, so your current login has
     been disconnected.';
 $langDoubleLoginLockOption = 'Forbid simultaneous logins with the same account.';
+$langExercisePreventCopy = 'Prevent Text Copying';
+$langExercisePreventCopyExplanation = 'Prevent copying text from the screen during execution of the exercise';

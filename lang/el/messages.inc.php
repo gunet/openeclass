@@ -1133,7 +1133,7 @@ $langTipLang = "Επιλέξτε την γλώσσα στην οποία θα ε
 $langTipLang2 = "Επιλέξτε την γλώσσα στην οποία θα εμφανίζονται τα μηνύματα της πλατφόρμας.";
 $langCourseDeleted = "Διαγραφή του $langsOfCourse";
 $langCourseDeletedBy = "Πραγματοποιήθηκε η διαγραφή από τον";
-$langNoticeCourseDeleted = "Αν η διαγραφή του $langsOfCourse έγινε από εσάς, τότε αγνοήστε το παρόν email. Αν η διαγραφή έγινε κατά λάθος και 
+$langNoticeCourseDeleted = "Αν η διαγραφή του $langsOfCourse έγινε από εσάς, τότε αγνοήστε το παρόν email. Αν η διαγραφή έγινε κατά λάθος και
 		θέλετε να επαναφέρετε το $langsCourse σας, τότε επικοινωνήστε με τους διαχειριστές της πλατφόρμας.";
 
 // deluser_course.php
@@ -2007,6 +2007,8 @@ $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langClear = 'Εκκαθάριση';
 $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
+$langExercisePreventCopy = 'Αποτροπή αντιγραφής κεμένου';
+$langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";

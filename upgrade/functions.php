@@ -2535,7 +2535,7 @@ function upgrade_to_3_15($tbl_options) : void
     }
 
     if (!DBHelper::fieldExists('user', 'disable_course_registration')) {
-        Database::get()->query("ALTER TABLE `user`ADD `disable_course_registration` tinyint NULL DEFAULT 0");
+        Database::get()->query("ALTER TABLE `user` ADD `disable_course_registration` tinyint NULL DEFAULT 0");
     }
 
     Database::get()->query("ALTER TABLE course CHANGE code code VARCHAR(40) NOT NULL");
@@ -2590,6 +2590,10 @@ function upgrade_to_3_16($tbl_options) : void
            FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
            UNIQUE KEY (session_id)) CHARACTER SET ascii ENGINE=InnoDB');
     }
+    if (!DBHelper::fieldExists('exercise', 'options')) {
+        Database::get()->query("ALTER TABLE `exercise` ADD `options` text NOT NULL DEFAULT ''");
+    }
+
 }
 
 /**

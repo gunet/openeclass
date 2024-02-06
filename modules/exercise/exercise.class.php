@@ -65,6 +65,7 @@ if (!class_exists('Exercise')) {
         private $public;
         private $continueTimeLimit;
         private $totalweight;
+        private $options;
 
         /**
          * constructor of the class
@@ -96,6 +97,7 @@ if (!class_exists('Exercise')) {
             $this->questionList = array();
             $this->continueTimeLimit = 5; // minutes
             $this->calc_grade_method = 1;
+            $this->options = [];
         }
 
         /**
@@ -111,7 +113,7 @@ if (!class_exists('Exercise')) {
 
             $object = Database::get()->querySingle("SELECT title, description, general_feedback, type, `range`, start_date, end_date, temp_save, time_constraint,
                                                     attempts_allowed, random, shuffle, active, public, results, score, ip_lock, password_lock,
-                                                    assign_to_specific, calc_grade_method, continue_time_limit
+                                                    assign_to_specific, calc_grade_method, continue_time_limit, options
                                                 FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -138,6 +140,7 @@ if (!class_exists('Exercise')) {
                 $this->assign_to_specific = $object->assign_to_specific;
                 $this->calc_grade_method = $object->calc_grade_method;
                 $this->continueTimeLimit = $object->continue_time_limit;
+                $this->options = unserialize($object->options);
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position, random_criteria
                     FROM `exercise_with_questions`
@@ -708,6 +711,19 @@ if (!class_exists('Exercise')) {
             $this->public = 0;
         }
 
+        public function getOption($option)
+        {
+            if (isset($this->options[$option])) {
+                return $this->options[$option];
+            } else {
+                return null;
+            }
+        }
+        public function setOption($option, $value)
+        {
+            $this->options[$option] = $value;
+        }
+
         /**
          * @brief updates the exercise in the database
          *
@@ -746,14 +762,14 @@ if (!class_exists('Exercise')) {
                         attempts_allowed = ?d, random = ?d, shuffle = ?d, active = ?d, public = ?d,
                         results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s,
                         assign_to_specific = ?d, continue_time_limit = ?d, calc_grade_method = ?d,
-                        general_feedback = ?s
+                        general_feedback = ?s, options = ?s
                     WHERE course_id = ?d AND id = ?d",
                     $exercise, $description, $type, $range,
                     $startDate, $endDate, $tempSave, $timeConstraint,
                     $attemptsAllowed, $random, $shuffle, $active, $public,
                     $results, $score, $ip_lock, $password_lock,
                     $assign_to_specific, $this->continueTimeLimit,
-                    $calc_grade_method, $general_feedback,
+                    $calc_grade_method, $general_feedback, serialize($this->options),
                     $course_id, $id)->affectedRows;
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY,
                         array('id' => $id,
@@ -764,12 +780,13 @@ if (!class_exists('Exercise')) {
                     (course_id, title, description, type, `range`, start_date, end_date,
                      temp_save, time_constraint, attempts_allowed,
                      random, shuffle, active, results, score, ip_lock, password_lock,
-                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback)
-                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s)",
+                     assign_to_specific, continue_time_limit, calc_grade_method, general_feedback, options)
+                    VALUES (?d, ?s, ?s, ?d, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s, ?d, ?d, ?d, ?s, ?s)",
                     $course_id, $exercise, $description, $type, $range, $startDate, $endDate,
                     $tempSave, $timeConstraint, $attemptsAllowed,
                     $random, $shuffle, $active, $results, $score, $ip_lock, $password_lock,
-                    $assign_to_specific, $this->continueTimeLimit, $calc_grade_method, $general_feedback)->lastInsertID;
+                    $assign_to_specific, $this->continueTimeLimit, $calc_grade_method, $general_feedback,
+                    serialize($this->options))->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                                                                               'title' => $exercise,

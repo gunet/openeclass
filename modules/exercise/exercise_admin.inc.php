@@ -98,6 +98,11 @@ if (isset($_POST['submitExercise'])) {
         } else {
             $objExercise->updateContinueTimeLimit($_POST['continueTimeLimit']);
         }
+        if (!isset($_POST['jsPreventCopy'])) {
+            $objExercise->setOption('jsPreventCopy', false);
+        } else {
+            $objExercise->setOption('jsPreventCopy', true);
+        }
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
@@ -160,6 +165,7 @@ if (isset($_POST['submitExercise'])) {
     } else {
         $exerciseIPLockOptions = '';
     }
+    $exercisePreventCopy = Session::has('jsPreventCopy') ? Session::get('jsPreventCopy') : $objExercise->getOption('jsPreventCopy');
 
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
     $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
@@ -170,7 +176,7 @@ if (isset($_POST['submitExercise'])) {
         if ($objExercise->selectAssignToSpecific() == 2) {
             $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
                 FROM exercise_to_specific, `group`
-                WHERE `group`.id = exercise_to_specific.group_id                    
+                WHERE `group`.id = exercise_to_specific.group_id
                     AND exercise_to_specific.exercise_id = ?d", $exerciseId);
             $all_groups = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d AND visible = 1", $course_id);
             foreach ($assignees as $assignee_row) {
@@ -551,6 +557,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                         </div>
                         <div id='continueTimeField' class='form-inline' style='margin-top: 15px; " .
                             ($continueTimeLimit? '': 'display: none') . "'>$continueTimeField</div>
+                    </div>
+                </div>
+
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langExercisePreventCopy:</label>
+                    <div class='col-sm-10'>
+                        <div class='checkbox'>
+                            <label>
+                                <input id='jsPreventCopy' name='jsPreventCopy' type='checkbox' " . ($exercisePreventCopy? 'checked' : '') . ">
+                                $langExercisePreventCopyExplanation
+                            </label>
+                        </div>
                     </div>
                 </div>
 

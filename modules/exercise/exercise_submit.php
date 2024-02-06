@@ -250,12 +250,14 @@ $exerciseTempSave = $objExercise->selectTempSave();
 $exerciseTimeConstraint = (int) $objExercise->selectTimeConstraint();
 $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
+$exercisePreventCopy = $objExercise->getOption('jsPreventCopy');
 
 $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
 $exercise_EndDate = $objExercise->selectEndDate();
 $exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
 $choice = isset($_POST['choice']) ? $_POST['choice'] : '';
+
 
 // If there are answers in the session get them
 if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
@@ -822,6 +824,14 @@ if ($questionList) {
                 $('html').animate({ scrollTop: ($(panel).offset().top - 20) + 'px' });
             });
         });
+        " . ($exercisePreventCopy? "
+        document.addEventListener('contextmenu', e => e.preventDefault(), false);
+        document.addEventListener('keydown', e => {
+            if (e.ctrlKey || e.code == 85 || e.code == 123) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        });": '') . "
 </script>";
 }
 
