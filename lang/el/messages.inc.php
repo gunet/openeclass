@@ -2010,7 +2010,7 @@ $langShuffleQuestions = "Ανακάτεμα όλων των ερωτήσεων";
 $langClear = 'Εκκαθάριση';
 $langExerciseFeedback = "Κείμενο Ολοκλήρωσης";
 $langExerciseFeedbackInfo = "εμφανίζεται μετά την ολοκλήρωση της άσκησης";
-$langExercisePreventCopy = 'Αποτροπή αντιγραφής κεμένου';
+$langExercisePreventCopy = 'Αποτροπή αντιγραφής κειμένου';
 $langExercisePreventCopyExplanation = 'Αποτροπή αντιγραφής και επικόλλησης κειμένου από την οθόνη κατά την εκτέλεση της άσκησης';
 
 // admin.php
