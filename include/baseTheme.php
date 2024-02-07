@@ -1051,6 +1051,10 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[bgWhiteButtonColor];
                 }
 
+                .bs-placeholder.submitAdminBtn{
+                    background: $theme_options_styles[bgWhiteButtonColor] !important;
+                }
+
             ";
         }
 
@@ -1101,6 +1105,10 @@ function view($view_file, $view_data = array()) {
                 .menu-popover{
                     border: solid 1px $theme_options_styles[whiteButtonTextColor];
                     color: $theme_options_styles[whiteButtonTextColor];
+                }
+
+                .bs-placeholder .filter-option .filter-option-inner-inner {
+                    color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
 
             ";
@@ -1154,6 +1162,10 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor];
                 }
+
+                .bs-placeholder:hover .filter-option .filter-option-inner-inner {
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
             ";
         }
 
@@ -1197,6 +1209,10 @@ function view($view_file, $view_data = array()) {
                 .menu-popover:hover,
                 .menu-popover:focus{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
+                }
+
+                .bs-placeholder.submitAdminBtn:hover{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
                 }
             ";
         }
@@ -1271,6 +1287,15 @@ function view($view_file, $view_data = array()) {
                 }
 
                 
+                .searchGroupBtn{
+                    background-color: $theme_options_styles[buttonBgColor];
+                }
+
+                .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
+                    background-color: $theme_options_styles[buttonBgColor];
+                    border-color: $theme_options_styles[buttonBgColor];
+                }
+                  
 
             ";
         }
@@ -1344,6 +1369,15 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonHoverBgColor];
                 }
 
+                .searchGroupBtn:hover{
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+
+                .wallWrapper:has(.submitAdminBtn) .submitAdminBtn:hover{
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                    border-color: $theme_options_styles[buttonHoverBgColor];
+                }
 
             ";
         }
@@ -1432,6 +1466,13 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[buttonTextColor] ;
                 }
 
+                .searchGroupBtn span{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
                 
             ";
         }
@@ -3663,10 +3704,6 @@ function view($view_file, $view_data = array()) {
 
                 #btn-search:hover, #btn-search:focus{
                     color: $theme_options_styles[linkHoverColor];
-                }
-
-                .searchGroupBtn:hover span{
-                    color:$theme_options_styles[linkHoverColor];
                 }
 
                 .portfolio-tools a:hover{

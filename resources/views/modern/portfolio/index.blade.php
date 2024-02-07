@@ -538,20 +538,20 @@
                         <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
                             <div class='card user-info-card h-100 px-3 py-0'>
                                 <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                    <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro py-1'>
-                                        <i class='fa-solid fa-book-open fa-xs portofolio-text-intro'></i>
+                                    <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 py-1'>
+                                        <i class='fa-solid fa-book-open fa-xs'></i>
                                         {{ $student_courses_count }}
-                                        <div class='form-label mb-0 portofolio-text-intro'>{!! trans('langSumCoursesEnrolled') !!}</div>
+                                        <div class='form-label mb-0'>{!! trans('langSumCoursesEnrolled') !!}</div>
                                     </h2>
                                     
                                 </div>
                             </div>
                             <div class='card user-info-card h-100 px-3 py-0'>
                                 <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                    <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro py-1'>
-                                        <i class='fa-solid fa-book-reader fa-xs portofolio-text-intro'></i>
+                                    <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 py-1'>
+                                        <i class='fa-solid fa-book-reader fa-xs'></i>
                                         {{ $teacher_courses_count }}
-                                        <div class='form-label mb-0 portofolio-text-intro'>{!! trans('langSumCoursesSupport') !!}</div>
+                                        <div class='form-label mb-0'>{!! trans('langSumCoursesSupport') !!}</div>
                                     </h2>
                                     
                                 </div>

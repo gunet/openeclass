@@ -3699,9 +3699,9 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $subMenu = '<div class="m-0 p-3 dropdown-menu dropdown-menu-end contextual-menu contextual-border">
                             <ul class="list-group list-group-flush">';
                 foreach ($option['options'] as $subOption) {
-                    $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="' . $subOption['url'] . '"><div class="d-inline-flex align-items-start gap-2">';
+                    $subMenu .= '<li><a class="'.$subOption['class'].' list-group-item d-flex justify-content-start align-items-start gap-2 py-3" href="' . $subOption['url'] . '">';
                     $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].' settings-icons"></span>' : '';
-                    $subMenu .= q($subOption['title']) . '</div></a></li>';
+                    $subMenu .= q($subOption['title']) . '</a></li>';
                 }
                 $subMenu .= '</ul>
                         </div>';
