@@ -414,7 +414,7 @@ if (isset($_GET['modifyAnswers'])) {
         }
     }
     $tool_content .= "<div class='col-12'><div class='card panelCard px-lg-4 py-lg-3'>
-                      <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                      <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                         <h3>$langQuestion &nbsp;" .
                             icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . "?course=$course_code".(isset($exerciseId) ? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyQuestion=" . $questionId)."
                         </h3>
@@ -429,7 +429,7 @@ if (isset($_GET['modifyAnswers'])) {
    if ($answerType != FREE_TEXT) {
 
         $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'>
-                           <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                           <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                              <h3>$langQuestionAnswers";
                              if ($answerType == MULTIPLE_ANSWER) {
                                  $tool_content .= "<br><small>$langNegativeScoreLegend</small>";

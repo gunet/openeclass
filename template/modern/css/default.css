@@ -1669,6 +1669,12 @@ textarea:focus {
   font-weight: 400; font-style: normal;
 }
 
+
+/* richTextEDITOR */
+.mce-panel {
+  border: solid 1px #687DA3 !important;
+}
+
 .form-control:disabled{
   border-color: #687DA3;
   background-color: #E8EDF8 ;
@@ -2531,6 +2537,7 @@ body .form-action-button-popover{
 .panel-admin{
   border-radius:4px;
   border: solid 1px #E8EDF8;
+  background-color: #ffffff;
 }
 .panel-admin .panel-heading{
   background: #2B3944;
@@ -2561,8 +2568,6 @@ body .form-action-button-popover{
   padding:10px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  background-color: white;
-  background-color: #ffffff;
 }
 .panel-admin:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
   border-top-left-radius: 4px;
@@ -2623,13 +2628,16 @@ body .form-action-button-popover{
   max-width: auto;
   margin-left: auto;
   margin-right: auto;
+  background-color: #ffffff;
 }
-.panel-admin-calendar .panel-heading{
+.panel-admin-calendar .panel-heading,
+#cal-header{
   background: #2B3944;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
-  font-weight: 700; font-style: normal;
+  font-weight: 700; 
+  font-style: normal;
 }
 .panel-admin-calendar .panel-heading .panel-title{
   color:#ffffff;
@@ -2637,8 +2645,11 @@ body .form-action-button-popover{
   padding:0px;
   font-weight: 700; font-style: normal;
 }
-.panel-admin-calendar:has(.panel-footer) .panel-body{ 
+/* .panel-admin-calendar:has(.panel-footer) .panel-body{ 
   border:0px; 
+} */
+.panel-admin-calendar>.panel-body-calendar {
+  border: solid 1px #E8EDF8;
 }
 
 .panel-admin-calendar:not(:has(.panel-footer)) .panel-body{
@@ -2653,8 +2664,6 @@ body .form-action-button-popover{
   padding:10px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  background-color: white;
-  background-color: #ffffff;
 }
 .panel-admin-calendar:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
   border-top-left-radius: 4px;
@@ -2669,19 +2678,22 @@ body .form-action-button-popover{
 .panel-primary,.panel-action-btn-primary{
   border-radius:4px;
   border: solid 1px #E8EDF8;
+  background-color: #ffffff;
 }
 .panel-primary .panel-heading, .panel-action-btn-primary .panel-heading{
   background: #0073E6;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
   color:#ffffff;
-  font-weight: 700; font-style: normal;
+  font-weight: 700; 
+  font-style: normal;
 }
 .panel-primary .panel-heading .panel-title, .panel-action-btn-primary .panel-heading .panel-title{
   margin-bottom:0px;
   padding:0px;
   color:#ffffff;
-  font-weight: 700; font-style: normal;
+  font-weight: 700; 
+  font-style: normal;
 }
 .panel-primary:has(.panel-footer) .panel-body{
   border:0px;
@@ -2722,6 +2734,7 @@ body .form-action-button-popover{
 .panel-success{
   border-radius:4px;
   border: solid 1px #E8EDF8;
+  background-color: #ffffff;
 }
 .panel-success .panel-heading{
   background: #1E7E0E;
@@ -2772,6 +2785,7 @@ body .form-action-button-popover{
 .panel-default,.panel-action-btn-default{
   border-radius: 4px;
   border: solid 1px #EFF2FB;
+  background-color: #ffffff;
 }
 .panel-default:not(:has(.panel-heading)){
   border: solid 1px #EFF2FB;
@@ -2825,7 +2839,6 @@ body .form-action-button-popover{
   padding:10px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  background-color: #ffffff;
 }
 .panel-default:not(:has(.panel-heading)):has(.panel-footer) .panel-body, .panel-action-btn-default:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
   border-top-left-radius: 4px;
@@ -2841,6 +2854,7 @@ body .form-action-button-popover{
 .panel-info{
   border-radius:4px;
   border:solid 1px #e8e8e8;
+  background-color: #ffffff;
 }
 .panel-info>.panel-heading{
   background: #B3D1FF;
@@ -2881,6 +2895,7 @@ body .form-action-button-popover{
 .panel-danger{
   border-radius:4px;
   border:solid 1px #e8e8e8;
+  background-color: #ffffff;
 }
 .panel-danger .panel-heading{
   background:#C44601;
@@ -2909,7 +2924,6 @@ body .form-action-button-popover{
   padding:10px;
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
-  background-color: #ffffff;
 }
 .panel-danger:not(:has(.panel-heading)):has(.panel-footer) .panel-body{
   border-top-left-radius: 4px;
@@ -2921,6 +2935,7 @@ body .form-action-button-popover{
 .media{ 
   border-radius: 4px; 
   border: solid 1px #e8e8e8;
+  background-color: #ffffff;
 }
 
 .panel-heading,.media-left{ 
@@ -2944,7 +2959,6 @@ body .form-action-button-popover{
 
 .panel-body,.media-body{ 
   padding:15px; 
-  background-color:white; 
   height:auto; 
   overflow-y: auto;
   border-radius: 4px;
@@ -2968,17 +2982,18 @@ body .form-action-button-popover{
   background: #B4BED1;
 }
 
-/* .panel-body::-webkit-scrollbar-thumb:hover {
-  background-color: #B4BED1;
-} */
-
 .panel-body-calendar { 
   padding: 0px 15px 0px 15px;
-  background-color:white; 
   height:auto;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
-@media(max-width:991px){.panel-body{overflow-y: auto;}}
+@media(max-width:991px){
+  .panel-body{
+    overflow-y: auto;
+  }
+}
 
 .panel-title{ 
   font-weight: 700; font-style: normal; font-size: 14px; 
@@ -3429,12 +3444,12 @@ body .delThemeBtn{
 }
 
 .cardLogin{
-  max-height: 425px !important;
-  background-color: #ffffff !important; 
+  max-height: 425px ;
+  background-color: #ffffff ; 
   border: solid 1px #EFF2FB;
 }
 .cardLogin-secondary{
-  background-color: #EFF6FF !important; 
+  background-color: #EFF6FF ; 
   border: solid 1px #B3D1FF;
 }
 @media(max-width:991px){
@@ -3849,20 +3864,29 @@ div[role="progressbar"]::before {
 /************************************************* GROUPS *************************************************************/
 /**********************************************************************************************************************/
 
-.panelCard.not_visible .card-body, .panelCard.not_visible .card-footer, .panelCard.not_visible .ViewGroup{
+.panelCard.not_visible .card-body, 
+.panelCard.not_visible .card-footer, 
+.panelCard.not_visible .ViewGroup{
   opacity: 0.3;
 }
 
-.panelCard{
+.panelCard, 
+.card{
   border-radius: 4px ;
-  border: solid 1px #EFF2FB;
+  background-color: #ffffff;
+  border: solid 1px #EFF6FF;
 }
 
-.panelCard .card-header{
+.panelCard .card-header, 
+.card .card-header{
   border-top-left-radius: 4px ;
   border-top-right-radius: 4px ;
+  background-color: #ffffff;
+  border-bottom:none;
 }
-.panelCard .card-header .submitAdminBtn, .panelCard .card-header .submitAdminBtn span, .panelCard .card-header .submitAdminBtn .fa{
+.panelCard .card-header .submitAdminBtn, 
+.panelCard .card-header .submitAdminBtn span, 
+.panelCard .card-header .submitAdminBtn .fa{
   font-weight: 700;
   font-style: normal;
 }
@@ -3875,16 +3899,20 @@ div[role="progressbar"]::before {
     overflow: auto !important;
   }
 }
-.panelCard .card-footer{
+.panelCard .card-footer,
+.card .card-footer{
   border-bottom-left-radius: 4px ;
   border-bottom-right-radius: 4px ;
+  background-color: #ffffff;
 }
 
 .panelCard.border-card-left-default{
-  border-left: solid 7px #EFF2FB;
+  border-left: solid 7px #EFF6FF;
 }
 
-.searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
+.searchGroupInput:focus, 
+.searchGroupInput:active, 
+.searchGroupInput:hover{
   outline: none !important;
   box-shadow: none; 
   background-color: #e8e8e8;
@@ -3926,6 +3954,16 @@ div[role="progressbar"]::before {
   list-style-type: none;
 }
 
+.card-transparent,
+.card-transparent .card-header,
+.card-transparent .card-body,
+.card-transparent .card-footer,
+.card-transparent .panel-heading,
+.card-transparent .panel-body,
+.card-transparent .panel-footer{
+  background-color: transparent ;
+}
+
 /**********************************************************************************************************************/
 /****************************************** AUTH REGISTER COURSES *****************************************************/
 /**********************************************************************************************************************/
@@ -3934,48 +3972,6 @@ div[role="progressbar"]::before {
   height:auto; 
   color:#ffffff; 
 }
-
-/* #mycoursesregister_table th{ 
-  padding-left:15px; 
-}
-
-.table_register_to_course tbody tr{ 
-  height: 54px; 
-  white-space: nowrap; 
-}
-@media(max-width:1199px){
-  .table_register_to_course tbody tr{
-    overflow:auto !important;
-  }
-}
-@media(min-width:1200px){
-  .table_register_to_course tbody tr{
-    overflow:hidden !important;
-  }
-} */
-
-/* .info_reg_course{ 
-  text-decoration: none; 
-  color:black;
-}
-
-.info_reg_course:hover{ 
-  color: #C44601; 
-} */
-
-/* .list_grouping{ 
-  margin-top:-25px; 
-} */
-
-/* .table_register_to_course{ 
-  width:100%; 
-}  */
-
-/* .types-cols{ 
-  margin-left:-10px; 
-} */
-
-
 
 /**********************************************************************************************************************/
 /************************************************** ANNOUNCEMENTS *****************************************************/
@@ -4348,11 +4344,6 @@ div[role="progressbar"]::before {
   object-fit: cover;
 }
 
-.card-course-info{
-  background-color: #F7F9FE;
-  border-radius: 4px;
-
-}
 
 /**********************************************************************************************************************/
 /*************************************************** MINDMAP **********************************************************/
@@ -4749,7 +4740,7 @@ div[role="progressbar"]::before {
 
 /************************************************* TEMP CLASSES *******************************************************/
 
-.border-card {
+/* .border-card {
   border: solid 1px #EFF6FF;
 }
 
@@ -4770,11 +4761,11 @@ div[role="progressbar"]::before {
 .border-bottom-table-head {
   border-bottom: solid 2px #0073E6;
   background-color: transparent;
-}
+} */
 
 /*************************************************** PANELS ***********************************************************/
 
-.panel-admin-calendar{
+/* .panel-admin-calendar{
   border: solid 1px #EFF6FF;
 }
 .panel-admin-calendar .panel-heading,#cal-header{
@@ -4785,17 +4776,16 @@ div[role="progressbar"]::before {
   color:#ffffff;
 }
 .panel-admin-calendar>.panel-body-calendar{
-  background-color: #ffffff;
   border: solid 1px #EFF6FF;
 }
 
 .panel-admin-calendar>.panel-footer{
   background-color: transparent;
-}
+} */
 
 /**************************************************** TABLES **********************************************************/
 
-thead{
+/* thead{
   background-color: #ffffff;
   min-height: 40px;
 }
@@ -4832,12 +4822,12 @@ table.dataTable tbody tr th{
 .table-default tbody .danger td{
   background-color: #FDEFE9;
   color: #2B3944;
-}
+} */
 
 
 /************************************************* GROUPS *************************************************************/
 
-.panelCard{
+/* .panelCard{
   background-color: #ffffff !important;
   border: solid 1px #EFF6FF;
 }
@@ -4866,34 +4856,34 @@ table.dataTable tbody tr th{
 .card-transparent .panel-body,
 .card-transparent .panel-footer{
   background-color: transparent !important;
-}
+} */
 
 /****************************************** AUTH REGISTER COURSES *****************************************************/
 
-.list-group-item.list-header{  
+/* .list-group-item.list-header{  
   color: #2b3944; 
-}
+} */
 
 /************************************************** ANNOUNCEMENTS *****************************************************/
 
-.title1{ 
+/* .title1{ 
   background-color: #ffffff; 
-}
+} */
 
 /*************************************************** ASSIGNMENTS ******************************************************/
 
-.sub_title1.Warning-100-bg{
+/* .sub_title1.Warning-100-bg{
   color: #2b3944;
   font-weight: 700;
 }
 .container-fluid.form-group{
   border: solid 1px #ffffff !important;
   background-color: #ffffff;
-}
+} */
 
 /*************************************************** DOCUMENTS ********************************************************/
 
-.metadataCourseCollapseBtn,
+/* .metadataCourseCollapseBtn,
 .metadataCourseCollapseBtn:hover,
 .metadataCourseCollapseBtn:focus{
   color: #ffffff;
@@ -4907,49 +4897,49 @@ table.dataTable tbody tr th{
 .docPanel{ 
   padding: 0px ;
   background-color: transparent !important;
-}
+} */
 
 
 /*************************************************** WALL *************************************************************/
 
-.wallWrapper{
+/* .wallWrapper{
   background-clip: border-box !important; border: 1px solid #EFF6FF !important ; background-color: #ffffff !important;
-}
+} */
 
 /*************************************************** EXERCISE *********************************************************/
 
-.table-exercise td, .table-exercise th{
+/* .table-exercise td, .table-exercise th{
   background-color: #ffffff;
-}
+} */
 
 /*************************************************** WORK *******************************************************/
 
-.moreFiles .fa::before{
+/* .moreFiles .fa::before{
   color: #ffffff !important;
-}
+} */
 
 
 /*************************************************** H5P **************************************************************/
 
-.bs-placeholder:hover .filter-option .filter-option-inner-inner{
+/* .bs-placeholder:hover .filter-option .filter-option-inner-inner{
   color: #ffffff;
 }
 
 .optgroup-1 .text{
   color: #2b3944;
-}
+} */
 
 /**************************************** OTHER CLASSES **************************************************************/
 
-#collapse-left-menu-icon path{
+/* #collapse-left-menu-icon path{
   fill: #2b3944 !important;
-}
+} */
 
 /* left menu and main content */
-.col_maincontent_active{
+/* .col_maincontent_active{
   background-color: #ffffff;
-}
-@media(min-width:992px){
+} */
+/* @media(min-width:992px){
   .col_maincontent_active{
     border-left: solid 1px #E8EDF8;
   }
@@ -4966,4 +4956,4 @@ table.dataTable tbody tr th{
   .module-container{
     background-color: #ffffff;
   }
-}
+} */

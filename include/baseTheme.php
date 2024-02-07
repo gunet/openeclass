@@ -2455,7 +2455,7 @@ function view($view_file, $view_data = array()) {
         
         if(!empty($theme_options_styles['bgAgenda'])){
             $styles_str .= "
-                .panel-admin-calendar>.panel-body-calendar {
+                .panel-admin-calendar {
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .myPersonalCalendar {
@@ -2798,6 +2798,7 @@ function view($view_file, $view_data = array()) {
         
         if(!empty($theme_options_styles['BgBorderColorAgenda'])){
             $styles_str .= "
+                .panel-admin-calendar,
                 .panel-admin-calendar>.panel-body-calendar {
                     border: solid 1px $theme_options_styles[BgBorderColorAgenda];
                 }
@@ -3855,43 +3856,11 @@ function view($view_file, $view_data = array()) {
                 .panel-admin,
                 .card,
                 .user-info-card,
-                .card-body,
-                .panel-body,
-                .media-body{
-                    background-color:$theme_options_styles[BgPanels];
-                }
-
-                .panelCard{
-                    background-color:$theme_options_styles[BgPanels] !important;
-                }
-                  
-                .panelCard .card-header,
-                .card .card-header{
-                    background-color:$theme_options_styles[BgPanels] !important;
-                }
-                  
-                .panelCard .card-body{
-                    background-color:$theme_options_styles[BgPanels] !important;
-                }
-                  
-                .panelCard .card-footer{
-                    background-color:$theme_options_styles[BgPanels] !important;
-                }
-
-                .cardLogin{
-                    background-color:$theme_options_styles[BgPanels] !important;
-                }
-
-                .banner-body{
-                    background-color: #ffffff !important;
-                }
-
-                .card .card-footer{
-                    background-color:$theme_options_styles[BgPanels] !important;
-                }
-
-                .panel-copyright{
-                    background-color: $theme_options_styles[BgPanels] ;
+                .panelCard,
+                .cardLogin,
+                .statistics-card,
+                .cardLogin-secondary{
+                    background-color:$theme_options_styles[BgPanels] ;
                 }
 
                 .testimonials .testimonial {
@@ -3911,14 +3880,6 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[BgPanels] !important;
                 }
 
-                .cardLogin-secondary{
-                    background-color: $theme_options_styles[BgPanels] !important; 
-                }
-
-                .card-course-info{
-                    background-color: $theme_options_styles[BgPanels] ; 
-                }
-
                 .card-transparent,
                 .card-transparent .card-header,
                 .card-transparent .card-body,
@@ -3926,7 +3887,7 @@ function view($view_file, $view_data = array()) {
                 .card-transparent .panel-heading,
                 .card-transparent .panel-body,
                 .card-transparent .panel-footer{
-                    background-color: transparent !important;
+                    background-color: transparent ;
                 }
                
             ";
@@ -3952,7 +3913,8 @@ function view($view_file, $view_data = array()) {
                 .panel-danger,
                 .panel-primary,
                 .panel-info,
-                .panel-action-btn-default{
+                .panel-action-btn-default,
+                .cardLogin-secondary{
                     border: solid 1px $theme_options_styles[clBorderPanels];
                 }
 
@@ -3975,10 +3937,6 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
                 }
 
-                .panel-copyright{
-                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
-                }
-
                 .testimonials .testimonial {
                     border: solid 1px $theme_options_styles[clBorderPanels] ;
                 }
@@ -3997,15 +3955,6 @@ function view($view_file, $view_data = array()) {
                 }
 
                 #jsmind_container {
-                    border: solid 1px $theme_options_styles[clBorderPanels] !important;
-                }
-
-                .cardLogin-secondary{
-                    
-                    border: solid 1px $theme_options_styles[clBorderPanels];
-                }
-
-                .card-course-info{
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
                 }
 

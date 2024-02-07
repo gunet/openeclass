@@ -14,7 +14,7 @@
 
             <div class="col-12">
                 @foreach($infoCourse as $c)
-                    <div class="card border-0 card-course-info px-lg-4 py-lg-4 p-3 mb-3">
+                    <div class="card border-card px-lg-4 py-lg-4 p-3 mb-3">
                         <div class="row row-cols-1 row-cols-md-2 g-3">
                             <div class="col-md-4 col d-flex justify-content-center justify-content-md-start">
                                 @if($c->course_image == NULL)

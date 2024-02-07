@@ -291,7 +291,7 @@
                     <div class='flex-grow-1'>
                         <div class='card panelCard card-transparent border-0'>
 
-                            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <div>
                                     <h3 class='mb-0'>{{ trans('langCourseProgram') }}</h3>
                                 </div>
@@ -338,7 +338,7 @@
                             </div>
 
                             @if(isset($rating_content) || isset($comment_content))
-                                <div class='card-footer card-footer-default d-md-flex justify-content-md-between align-items-md-start bg-default border-0 mt-0 mb-0 p-0'>
+                                <div class='card-footer card-footer-default d-md-flex justify-content-md-between align-items-md-start border-0 mt-0 mb-0 p-0'>
                                     @if(isset($rating_content))
                                         <div>{!! $rating_content !!}</div>
                                     @endif
@@ -398,7 +398,7 @@
                         @if($course_info->view_type == 'units')
                             <div class='card panelCard card-transparent px-0 py-0 mt-4 border-0 mb-5'>
 
-                                <div class='card-header card-header-default border-0 bg-default d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
+                                <div class='card-header card-header-default border-0 d-flex justify-content-between align-items-center px-0 py-0 mb-2'>
                                     <h3>
                                         <div class='d-flex gap-2'>
                                             {{ trans('langCourseUnits') }}
@@ -566,7 +566,7 @@
                         @endif
 
                         <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
-                            <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3 class='mb-0'>{{ trans('langAnnouncements') }}</h3>
                                 <a class='Course-home-ellipsis-announcements TextRegular text-decoration-underline vsmall-text' href="{{ $urlAppend }}modules/announcements/index.php?course={{ $course_code }}">{{ trans('langAllAnnouncements') }}...</a>
                             </div>
@@ -580,7 +580,7 @@
                         @if ($uid)
                             @if(isset($course_completion_id) and $course_completion_id > 0)
                                 <div class="card panelCard card-transparent border-0 mt-5 sticky-column-course-home">
-                                    <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                    <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                         <h3 class='mb-0'>{{ trans('langCourseCompletion') }}</h3>
                                         @if ($is_editor)
                                             <a class='Course-home-ellipsis TextRegular text-decoration-underline vsmall-text' href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
@@ -597,7 +597,7 @@
                                             <div class='col-12 h-100'>
                                                 @if ($is_editor)
                                                     <div class='card statistics-card border-default-card drop-shadow'>
-                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                        <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
                                                                 @if ($percentage_t == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
@@ -610,7 +610,7 @@
 
                                                 @else
                                                     <div class='card statistics-card border-default-card drop-shadow'>
-                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                        <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
                                                                 @if ($percentage == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
@@ -630,7 +630,7 @@
 
                         @if (isset($level) && !empty($level))
                             <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
-                                <div class='card-header px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
+                                <div class='card-header px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langOpenCourseShort') }}</h3>
                                 </div>
                                 <div class='card-body card-body-default px-0 py-0'>
@@ -644,7 +644,7 @@
 
                         @if($course_home_main_area_widgets)
                             <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
-                                <div class='card-header card-header-default px-0 py-0 border-0 bg-default d-flex justify-content-between align-items-center'>
+                                <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langWidgets') }}</h3>
                                 </div>
                                 <div class='card-body card-body-default px-0 py-0'>

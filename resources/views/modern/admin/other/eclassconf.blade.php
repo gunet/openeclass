@@ -111,7 +111,7 @@
                             <form class='form-horizontal' role='form' action='{{ $_SERVER['SCRIPT_NAME'] }}' method='post'>
                                 <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
                                     <div class='card panelCard px-lg-4 py-lg-3' id='one'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langBasicCfgSetting') }}</h3>
 
                                         </div>
@@ -194,7 +194,7 @@
 
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='two'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langUpgReg') }}</h3>
 
@@ -404,7 +404,7 @@
 
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='three'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{ trans('langSupportedLanguages') }}</h3>
 
@@ -437,7 +437,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='four'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{trans('langHomePageSettings')}}</h3>
 
@@ -551,7 +551,7 @@
 
                                     @if(!$install)
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='five'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langEmailSettings') }}</h3>
 
@@ -656,7 +656,7 @@
 
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='six'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{ trans('langCourseSettings') }}</h3>
                                         </div>
@@ -738,7 +738,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='seven'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                               <h3>{{ trans('langMetaCommentary') }}</h3>
 
@@ -778,7 +778,7 @@
 
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='eight'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{ trans('langOtherOptions') }}</h3>
 
@@ -969,7 +969,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='nine'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{ trans('langDocumentSettings') }}</h3>
 
@@ -1039,7 +1039,7 @@
                                     </div>
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='ten'>
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langDefaultQuota') }}</h3>
 
@@ -1077,7 +1077,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='eleven'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langUploadWhitelist') }}</h3>
 
@@ -1107,7 +1107,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='twelve'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                <h3>{{ trans('langLogActions') }}</h3>
 
@@ -1164,7 +1164,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='thirteen'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
 
                                                 <h3>{{ trans('langLoginFailCheck') }}</h3>
 
@@ -1216,7 +1216,7 @@
 
                                     <div class='card panelCard px-lg-4 py-lg-3 mt-4' id='fourteen'>
 
-                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                        <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                             <h3>{{ trans('langMaintenance') }}</h3>
                                         </div>
                                         <div class='card-body'>

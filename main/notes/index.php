@@ -213,7 +213,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     $tool_content .= "
     <div class='col-12'>
         <div class='card panelCard px-lg-4 py-lg-3'>
-            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                 <h3>".q($note->title)."</h3>
                 <div>
                 ".
@@ -233,7 +233,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='card-body'> 
                 <div class='col-12'>$note->content</div>
             </div>
-            <div class='card-footer bg-default border-0'>
+            <div class='card-footer border-0'>
                 <p class='small-text'>". format_locale_date(strtotime($note->date_time)). "</p>
             </div>
         </div></div>";

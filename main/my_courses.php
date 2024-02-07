@@ -103,7 +103,7 @@ if(isset($_GET['term'])){
                                     $courseImage = "{$urlServer}template/modern/img/ph1.jpg";
                                 }
 
-                      $html .= "<div class='card-header border-0 bg-default'>
+                      $html .= "<div class='card-header border-0'>
                                 <div class='card-title d-flex justify-content-start align-items-start gap-2 mb-0'>";
                                     if($course->visible == 1){
                                         $html .= "<button type='button' class='btn btn-transparent p-0' data-bs-toggle='tooltip' data-bs-placement='bottom' title='$langRegCourse'>
@@ -146,7 +146,7 @@ if(isset($_GET['term'])){
                                 </div>
 
                             </div>
-                            <div class='card-footer d-flex justify-content-center align-items-center bg-default border-0 mb-2'>";
+                            <div class='card-footer d-flex justify-content-center align-items-center border-0 mb-2'>";
                                 // check if uid is editor of course or student
                                 $is_course_teacher = check_editor($uid,$course->course_id);
 

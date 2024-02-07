@@ -124,7 +124,7 @@ if ($total_categories > 0) {
         $tool_content .= "<div class='col'>";
 
         $tool_content .= "<div class='card panelCard px-lg-4 py-lg-3 h-100'>
-                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>";
         $tool_content .= "
                                 <div>
                                         <strong>$langCategory :</strong> $cat_title

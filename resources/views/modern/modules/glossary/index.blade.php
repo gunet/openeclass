@@ -96,7 +96,7 @@
 
                                                 <div class="col">
                                                     <div class="card panelCard px-lg-4 py-lg-3 h-100">
-                                                        <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                                                        <div class="card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
 
 
                                                                 <a class='ViewGroup TextBold' href='{{ $base_url."&amp;id=" . $glossary_term->id }}'>
@@ -171,7 +171,7 @@
 
 
                                                         </div>
-                                                        <div class='card-footer d-flex justify-content-center align-items-center bg-default border-0 mb-2'>
+                                                        <div class='card-footer d-flex justify-content-center align-items-center border-0 mb-2'>
 
                                                         </div>
                                                     </div>

@@ -1180,7 +1180,6 @@
   color:#ffffff;
 }
 .panel-admin-calendar>.panel-body-calendar{
-    background-color: #212D37;
     border: solid 1px #4F6893;
 }
 .panel-admin-calendar> .panel-body-calendar .cal-row-fluid:hover{
@@ -1876,27 +1875,26 @@ table.dataTable tfoot th, table.dataTable tfoot td {
   /************************************************* GROUPS *************************************************************/
   /**********************************************************************************************************************/
   
-  .panelCard{
-    background-color: #212D37 !important;
+  .panelCard,
+  .card{
+    background-color: #212D37;
     border: solid 1px #4F6893;
   }
   
-  .panelCard .card-header{
-    background-color: #212D37 !important;
-  }
-
-  .panelCard .card-body{
-    background-color: #212D37 !important;
-  }
-
-  .panelCard .card-footer{
-    background-color: #212D37 !important;
+  .panelCard .card-header,
+  .card .card-header{
+    background-color: #212D37;
   }
   
   .panelCard.border-card-left-default{
     border-left: solid 7px #4F6893;
   }
   
+  .panelCard .card-footer,
+  .card .card-footer{
+    background-color: #212D37;
+  }
+
   .searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
     background-color: #e8e8e8;
   }
@@ -2226,14 +2224,6 @@ tr.warning:hover{
 /**********************************************************************************************************************/
 .diffEqual {
   background-color: #212D37 !important;
-}
-
-/**********************************************************************************************************************/
-/*********************************************** COURSE INFO **********************************************************/
-/**********************************************************************************************************************/
-
-.card-course-info{
-  background-color: #000000;
 }
 
 /**********************************************************************************************************************/
@@ -2683,7 +2673,7 @@ tr.warning:hover{
 /******************************************** RICH TEXT EDITOR ********************************************************/
 /**********************************************************************************************************************/
 
-.mce-container, 
+/* .mce-container, 
 .mce-widget, 
 .mce-widget *, 
 .mce-reset {
@@ -2731,4 +2721,4 @@ i.mce-i-checkbox {
 
 .mce-caret {
   border-top: 4px solid #ffffff !important;
-}
+} */

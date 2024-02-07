@@ -60,7 +60,7 @@ function render_eportfolio_fields_content($uid) {
             $cat_return_string['panels'] .= '
             <div class="col">
             <div class="card panelCard border-card-left-default px-3 py-2 h-100" id="IndexPortfolio'.$c->id.'">
-                                                <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">
+                                                <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                                     <h3>'.$c->name.'</h3>
                                                 </div>
                                                  <div class="card-body">
@@ -176,7 +176,7 @@ function render_eportfolio_fields_form() {
             $return_string['panels'] .= '
            
             <div class="card panelCard px-lg-4 py-lg-3 mb-4" id="EditPortfolio'.$c->id.'">
-                                       <div class="card-header border-0 bg-default d-flex justify-content-between align-items-center">
+                                       <div class="card-header border-0 d-flex justify-content-between align-items-center">
                                            <h3>'.$c->name.'</h3>
                                        </div>
                                        <div class="card-body">

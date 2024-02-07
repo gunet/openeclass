@@ -60,10 +60,10 @@
                                                 </a>
                                             </div>
                                             <div id="widget_desc_{{ $key }}" class="panel-collapse collapse">
-                                                <div class="panel-body text-muted NoBorders">
+                                                <div class="panel-body NoBorders">
                                                     {{ $installed_widget->getDesc() }}
                                                 </div>
-                                                <div class="panel-footer clearfix bg-default BordersBottom">
+                                                <div class="panel-footer clearfix BordersBottom">
                                                     <div class="float-end">
                                                         <form class='mb-0 mt-0' action='{{ $_SERVER['SCRIPT_NAME'] }}' id="uninstallForm{{ $key }}" method="post">
                                                             <input type="hidden" name='widgetClassName' value='{{ get_class($installed_widget) }}'>

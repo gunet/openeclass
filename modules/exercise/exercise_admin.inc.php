@@ -577,7 +577,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='course-info-title clearfix mt-4'>
                     <a class='TextBold text-decoration-none'role='button' data-bs-toggle='collapse' href='#CheckAccess' aria-expanded='false' aria-controls='CheckAccess'>
                         <div class='card panelCard px-0 py-1 h-100'>
-                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 $langCheckAccess
                                 <span class='fa fa-chevron-down fa-fw'></span> 
                             </div>
@@ -731,7 +731,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $tool_content .= "
     <div class='col-12 mb-4'>
         <div class='card panelCard border-card-left-default px-3 py-2 h-100'>
-            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                 <h3>" . q($exerciseTitle) . "</h3>
             </div>
             <div class='card-body'>

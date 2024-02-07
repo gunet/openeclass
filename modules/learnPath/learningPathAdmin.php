@@ -480,7 +480,7 @@ $lp_action_button = action_button(array(
 
 $tool_content .= "<div class='col-12 mt-4'>
                     <div class='card panelCard px-lg-4 py-lg-3'>                     
-                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>                           
+                        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>                           
                            <h3>
                                $langLearningPathStructure
                            </h3> 

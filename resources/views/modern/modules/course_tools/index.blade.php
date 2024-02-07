@@ -75,7 +75,7 @@
 
                     <div class='col-12'>
                         <div class="card panelCard px-lg-4 py-lg-3">
-                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 <h3>{{ trans('langActivateCourseTools') }}</h3>
                             </div>
                             <div class='card-body'>
@@ -122,7 +122,7 @@
 
                     <div class='col-12 mt-5'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 
                                 <h3>
                                     {{ trans('langOperations') }}
@@ -161,7 +161,7 @@
 
                     <div class='col-12 mt-5'>
                         <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                 
                                 <h3>
                                     {{ trans('langLtiConsumer') }}

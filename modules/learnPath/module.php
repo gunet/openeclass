@@ -191,7 +191,7 @@ $tool_content .=
                 'icon' => 'fa-reply',
                 'level' => 'primary')),false) . "
     <div class='card panelCard border-card-left-default px-lg-4 py-lg-3'>
-        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+        <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
             <h3 class='mb-0'>$langLearningObjectData</h3>
         </div>
         <div class='card-body'>

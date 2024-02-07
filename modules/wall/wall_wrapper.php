@@ -145,7 +145,7 @@ function show_post_form() {
         $tool_content .= '
             <div class="col-12">
                 <div class="card panelCard px-lg-4 py-lg-3 wallWrapper">
-                    <div class="card-header border-0 bg-default">
+                    <div class="card-header border-0">
 
                             <h3>'.$langWall.'&nbsp;'.$langOfCourse.'</h3>
 

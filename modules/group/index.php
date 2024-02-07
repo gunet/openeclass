@@ -604,7 +604,7 @@ if ($is_editor) {
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                         <div class='card panelCard $link_class card$pagesPag px-lg-4 py-lg-3 h-100'>
-                                                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                                 <a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a>
                                                                 <div>
                                                                     " .
@@ -648,7 +648,7 @@ if ($is_editor) {
                                                                     $tool_content .= "<small><a href = 'javascirpt:void(0);' data-bs-toggle = 'modal' data-content='".q($user_group_description)."' data-bs-target = '#userFeedbacks' ><span class='fa fa-comments' ></span > $langCommentsUser</a ></small>";
                                                                 }
                                         $tool_content .= "</div>
-                                                            <div class='card-footer d-flex justify-content-end align-items-center border-0 bg-default pb-3'>";
+                                                            <div class='card-footer d-flex justify-content-end align-items-center border-0 pb-3'>";
                                                             if ($max_members > 0) {
                                                                 $tool_content .= " <span class='badge bg-info text-white'>$langGroupMembersNum:&nbsp;$member_count/$max_members</span>";
                                                             } else {
@@ -879,7 +879,7 @@ if ($is_editor) {
                                     }
                                     $tool_content .= "<div class='col cardGroup$pagesPag'>
                                                       <div class='card panelCard card$pagesPag px-lg-4 py-lg-3 h-100'>
-                                                        <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center flex-wrap gap-3'>";
+                                                        <div class='card-header border-0 d-flex justify-content-between align-items-center flex-wrap gap-3'>";
                                                                 if ($is_member or $is_tutor) {
                                                                 $tool_content .= "<a class='ViewGroup TextBold' href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
                                                                                     "</a> 
@@ -919,7 +919,7 @@ if ($is_editor) {
                                                                 }
 
                                         $tool_content .= "</div>
-                                                        <div class='card-footer d-flex bg-default border-0 justify-content-between align-items-center flex-wrap gap-3'>";
+                                                        <div class='card-footer d-flex border-0 justify-content-between align-items-center flex-wrap gap-3'>";
                                                                 $group_id_indirect = getIndirectReference($group_id);
                                                                 $control = '';
 

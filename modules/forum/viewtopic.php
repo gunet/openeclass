@@ -663,10 +663,10 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
 
     if ($count > 1) { // for all posts except first
         $content .= "<div id='$myrow->id' class='post-message card panelCard px-lg-4 py-lg-3 col-sm-offset-$offset mt-3'>";
-        $content .= "<div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'><div class='panel-title w-100'>$langMsgRe " . q($topic_subject);
+        $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'><div class='panel-title w-100'>$langMsgRe " . q($topic_subject);
     } else {
         $content .= "<div id='$myrow->id' class='parent-post-message card panelCard px-lg-4 py-lg-3 mt-3'>";
-        $content .= "<div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'><div class='panel-title w-100'>". q($topic_subject);
+        $content .= "<div class='card-header border-0 d-flex justify-content-between align-items-center'><div class='panel-title w-100'>". q($topic_subject);
     }
 
     if ($is_editor) {
@@ -734,7 +734,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         </div>";
     if ($rate_str or $parent_post_link or $reply_button) {
         $content .= "
-        <div class='card-footer bg-default border-0'>
+        <div class='card-footer border-0'>
             <div class='row'>
                 <div class='col-12 d-flex justify-content-between align-items-center'>
                    

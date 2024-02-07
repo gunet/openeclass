@@ -153,7 +153,7 @@
                     <div class='row row-cols-1 row-cols-lg-2 g-3 g-lg-4'>
 
                         <div class='col'>
-                            <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 bg-default h-100'>
+                            <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                 <div class='card-body'>
                                     <div class='row p-2 margin-bottom-thin'>
                                         <div class='col-lg-6 col-12'>
@@ -192,7 +192,7 @@
                         </div>
 
                         <div class='col'>
-                            <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 bg-default h-100'>
+                            <div class='card panelCard border-card-left-default px-lg-4 py-lg-3 h-100'>
                                 <div class='card-body'>
                                     <div class='row p-2 margin-bottom-thin'>
                                         <div class='col-lg-6 col-12'>

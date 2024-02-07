@@ -536,7 +536,7 @@
                             </a>
                         </div>
                         <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
-                            <div class='card user-info-card card-transparent h-100 px-3 py-0'>
+                            <div class='card user-info-card h-100 px-3 py-0'>
                                 <div class='card-body d-flex justify-content-center align-items-center p-0'>
                                     <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro py-1'>
                                         <i class='fa-solid fa-book-open fa-xs portofolio-text-intro'></i>
@@ -546,7 +546,7 @@
                                     
                                 </div>
                             </div>
-                            <div class='card user-info-card card-transparent h-100 px-3 py-0'>
+                            <div class='card user-info-card h-100 px-3 py-0'>
                                 <div class='card-body d-flex justify-content-center align-items-center p-0'>
                                     <h2 class='d-flex justify-content-center align-items-center mb-0 gap-1 portofolio-text-intro py-1'>
                                         <i class='fa-solid fa-book-reader fa-xs portofolio-text-intro'></i>
@@ -690,7 +690,7 @@
                                                                 <div class="vsmall-text Neutral-900-cl TextRegular mt-1">{{ $course->professor }}</div>
                                                             </div>
 
-                                                            <div class='card-footer bg-default border-0'>
+                                                            <div class='card-footer border-0'>
                                                                 <a class='ClickCoursePortfolio me-3' href='javascript:void(0);' id='CoursePic_{{ $course->code }}' type="button" class='btn btn-secondary' data-bs-toggle='tooltip' data-bs-placement='top' title="{{ trans('langPreview')}}&nbsp;{{ trans('langOfCourse') }}">
                                                                     <i class='fa-solid fa-display'></i>
                                                                 </a>

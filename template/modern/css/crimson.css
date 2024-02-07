@@ -706,9 +706,7 @@
 .panel-admin-calendar .panel-heading .panel-title{
   color:#ffffff;
 }
-.panel-admin-calendar>.panel-body-calendar{
-    background-color: #ffffff;
-}
+
 
 .panel-admin-calendar>.panel-footer{
   background-color: transparent;
@@ -1005,25 +1003,24 @@
   /************************************************* GROUPS *************************************************************/
   /**********************************************************************************************************************/
   
-  .panelCard{
-    background-color: #ffffff !important;
+  .panelCard,
+  .card{
+    background-color: #ffffff;
     border: solid 1px #EFF6FF;
   }
   
-  .panelCard .card-header{
-    background-color: #ffffff !important;
-  }
-
-  .panelCard .card-body{
-    background-color: #ffffff !important;
-  }
-
-  .panelCard .card-footer{
-    background-color: #ffffff !important;
+  .panelCard .card-header,
+  .card .card-header{
+    background-color: #ffffff;
   }
   
   .panelCard.border-card-left-default{
     border-left: solid 7px #EFF6FF;
+  }
+
+  .panelCard .card-footer,
+  .card .card-footer{
+    background-color: #ffffff;
   }
   
   .searchGroupInput:focus, .searchGroupInput:active, .searchGroupInput:hover{
@@ -1292,14 +1289,6 @@
 
 .prev-next-learningPath{
   color: #B70A0A;
-}
-
-/**********************************************************************************************************************/
-/*********************************************** COURSE INFO **********************************************************/
-/**********************************************************************************************************************/
-
-.card-course-info{
-  background-color: #FDEFE9;
 }
 
 

@@ -159,7 +159,7 @@
                     @if(count($units) > 0)
                         <div class='col-12'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                     <h3 class='mb-0'>{{ trans('langUnits')}}</h3>
                                 </div>
                                 <div class='card-body'>
@@ -238,7 +238,7 @@
 
                     <div class='col-12 mt-4'>
                         <div class="card panelCard px-lg-4 py-lg-3">
-                            <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                 <h3>{{ $pageName }}</h3>
                                 @if($course_start_week or $course_finish_week)
                                     <div>
@@ -275,7 +275,7 @@
                                 </div>
                             </div>
                             @if ($tags_list)
-                                <div class='card-footer small-text bg-default border-0'>
+                                <div class='card-footer small-text border-0'>
                                     <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
                                 </div>
                             @endif
@@ -305,7 +305,7 @@
                     @if ($is_editor and $q->flipped_flag == 2)
                         <div class='col-12 mt-4'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                     <h3>
                                         <div class='d-inline-flex align-items-top gap-3 flex-wrap'>
                                             {{ trans('langActivities')}}

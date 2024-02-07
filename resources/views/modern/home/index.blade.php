@@ -61,13 +61,9 @@
                                                 @endif
                                                 @if($eclass_banner_value == 1)
                                                     <div>
-                                                        <div class='card border-0 border-radius-default'>
-                                                            <div class='card-body banner-body border-0 bg-default border-radius-default py-lg-2 py-1'>
-                                                                <a href="http://www.openeclass.org/" target="_blank" aria-label='Banner'>
-                                                                    <img style='width:150px;' src="{{ $themeimg }}/Open-Eclass-Banner.svg" alt="This is the banner of platform">
-                                                                </a>
-                                                            </div>
-                                                        </div>
+                                                        <a href="http://www.openeclass.org/" target="_blank" aria-label='Banner'>
+                                                            <img style='width:150px;' src="{{ $logo_img }}" alt="This is the banner of platform">
+                                                        </a>
                                                     </div>
                                                 @endif
                                             </div>
@@ -320,7 +316,7 @@
                                             <div class='row row-cols-1 row-cols-md-3 g-lg-5 g-3'>
                                                 <div class='col mb-lg-0 mb-4'>
                                                     <div class='card statistics-card border-default-card drop-shadow'>
-                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                        <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
                                                                     <i class="fa-solid fa-book-open fa-xl mt-4 pt-1" role="presentation"></i>
@@ -333,7 +329,7 @@
                                                 </div>
                                                 <div class='col mb-lg-0 mb-4'>
                                                     <div class='card statistics-card border-default-card drop-shadow'>
-                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                        <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
                                                                     <i class="fa-solid fa-globe fa-xl mt-4 pt-1" role="presentation"></i>
@@ -346,7 +342,7 @@
                                                 </div>
                                                 <div class='col mb-lg-0 mb-4'>
                                                     <div class='card statistics-card border-default-card drop-shadow'>
-                                                        <div class='card-body Primary-200-bg d-flex justify-content-center align-items-center'>
+                                                        <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <div>
                                                                 <div class='d-flex justify-content-center'>
                                                                     <i class="fa-solid fa-user fa-xl mt-4 pt-1" role="presentation"></i>

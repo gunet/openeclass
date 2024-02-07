@@ -129,7 +129,7 @@ if ($is_editor) {
     $export_box .= "
         <div class='col-12 mb-4'>
             <div class='card panelCard px-lg-4 py-lg-3'>
-                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>                   
+                <div class='card-header border-0 d-flex justify-content-between align-items-center'>                   
                     <h3>$langDumpUserDurationToFile</h3>
                 </div>
                 <div class='card-body'>
@@ -155,7 +155,7 @@ $tool_content .= action_bar(array(
 $export_box
 <div class='col-12 mb-4'>
 <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$langInfoPoll</h3>
     </div>
     <div class='card-body'>
@@ -337,7 +337,7 @@ $this_chart_data = array();
 $tool_content .= "
 <div class='col-12 mt-4'>
 <div class='card panelCard px-lg-4 py-lg-3'>
-    <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+    <div class='card-header border-0 d-flex justify-content-between align-items-center'>
         <h3>$lang_result_summary</h3>
     </div>
     <div class='card-body'>

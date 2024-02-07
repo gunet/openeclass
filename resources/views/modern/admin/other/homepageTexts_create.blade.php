@@ -223,7 +223,7 @@
                                     <div id='orderTexts'>
                                         @foreach($texts as $text)
                                             <div class='card panelCard px-lg-4 py-lg-3 mb-4' data-id='{{ $text->id }}'>
-                                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
                                                     
                                                         
                                                         <h3>

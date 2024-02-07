@@ -42,7 +42,7 @@ if(isset($ann_id)){
                     
                         <div class='col-12'>
                             <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 bg-default d-flex justify-content-between align-items-center'>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                                     <h3>
                                             ".standard_text_escape($announcement->title)."
                                     </h3>
@@ -54,7 +54,7 @@ if(isset($ann_id)){
                                         </div>
                                     </div>
                                 </div>
-                                <div class='card-footer bg-default border-0 d-flex justify-content-start align-items-center'>
+                                <div class='card-footer border-0 d-flex justify-content-start align-items-center'>
                                     <div class='announcement-date small-text'>
                                         " . format_locale_date(strtotime($announcement->date)) . "
                                     </div>
