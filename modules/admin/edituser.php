@@ -288,7 +288,7 @@ if ($u) {
             </div>
             <div class='form-group'>
                 <label class='col-sm-2 control-label'>$langLastLogin:</label>
-                <div class='col-sm-10'><p class='form-control-static'>$last_login_date</p></div>
+                <div class='col-sm-10'><p class='form-control-static'>$last_login_date&nbsp;&mdash;&nbsp; <small><a href='user_last_logins.php?u=$u'>$langUserLastLogins</a></small></p></div>
             </div>";
         // user consent
         if (get_config('activate_privacy_policy_consent')) {

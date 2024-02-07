@@ -219,6 +219,8 @@ $langNewEclassVersionInfo = 'Μια νέα έκδοση της πλατφόρμ�
 είναι διαθέσιμη. Παρακαλούμε επισκεφθείτε την ιστοσελίδα %s για πληροφορίες
 αναβάθμισης.';
 $langUnlockPlatform = 'Ξεκλείδωμα πλατφόρμας';
+$langUserLastLogins = "Ιστορικό συνδέσεων";
+$langNoUserLastLogins = "Ο χρήστης δεν έχει συνδεθεί ποτέ στην πλατφόρμα.";
 
 // FAQ
 $langAdminCreateFaq = "Δημιουργία FAQ";
@@ -243,6 +245,7 @@ $langNbVisitors = "Αριθμός επισκεπτών";
 $langToday = "Σήμερα";
 $langLast7Days = "Τελευταίες 7 μέρες";
 $langLast30Days = "Τελευταίες 30 μέρες";
+$langLastYear = "Τελευταίος χρόνος";
 $langNbAnnoucement = "Αριθμός ανακοινώσεων";
 $langNbUsers = "Αριθμός χρηστών";
 $langCoursVisible = "Ορατότητα";

@@ -2591,7 +2591,7 @@ function upgrade_to_3_16($tbl_options) : void
            UNIQUE KEY (session_id)) CHARACTER SET ascii ENGINE=InnoDB');
     }
     if (!DBHelper::fieldExists('exercise', 'options')) {
-        Database::get()->query("ALTER TABLE `exercise` ADD `options` text NOT NULL DEFAULT ''");
+        Database::get()->query("ALTER TABLE `exercise` ADD `options` text");
     }
 
 }
