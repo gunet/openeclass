@@ -1145,6 +1145,7 @@ function view($view_file, $view_data = array()) {
 
                 .quickLink:hover,
                 .quickLink:hover .fa-solid{
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
 
@@ -2455,7 +2456,8 @@ function view($view_file, $view_data = array()) {
         
         if(!empty($theme_options_styles['bgAgenda'])){
             $styles_str .= "
-                .panel-admin-calendar {
+                .panel-admin-calendar,
+                .panel-admin-calendar>.panel-body-calendar {
                     background-color: $theme_options_styles[bgAgenda];
                 }
                 .myPersonalCalendar {
