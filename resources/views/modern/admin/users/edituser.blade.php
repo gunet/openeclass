@@ -158,6 +158,11 @@
                                             </div>
                                         </div>
                                         <div class='form-group mt-4'>
+                                            <label class='col-sm-12 control-label-notes'>{{ trans('langLastLogin') }}</label>
+                                            <div class='col-sm-10'><p class='form-control-static'>{{ $last_login_date }}&nbsp;&mdash;&nbsp; <small><a href='user_last_logins.php?u={{ $u }}'>{{ trans('langUserLastLogins') }}</a></small></p></div>
+                                        </div>
+
+                                        <div class='form-group mt-4'>
                                             <label class='col-sm-12 control-label-notes'>{{ trans('langUserID') }}</label>
                                             <div class='col-sm-12'>
                                                 <p class='form-control-static'>{{ $u }}</p>
@@ -173,7 +178,7 @@
 
                                         @if ($ext_uid)
                                             <div class='form-group mt-4'>
-                                                <label class='col-sm-12 control-label-notes'>{{trans('langProviderConnectWith')}}</label>
+                                                <label class='col-sm-12 control-label-notes'>{{ trans('langProviderConnectWith') }}</label>
                                                 <div class='col-sm-12'>
                                                     <div class='row'>
                                                     @foreach ($ext_uid as $ext_uid_item)

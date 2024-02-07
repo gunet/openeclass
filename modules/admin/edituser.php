@@ -175,7 +175,14 @@ if ($u) {
         $data['html'] = $html;
         $data['reg_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $data['exp_date'] = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
-
+        $last_login = Database::get()->querySingle('SELECT `when` FROM loginout
+            WHERE id_user = ?d ORDER BY idLog DESC LIMIT 1', $u);
+        if ($last_login) {
+            $last_login_date = DateTime::createFromFormat("Y-m-d H:i:s", $last_login->when)->format("d-m-Y H:i");
+        } else {
+            $last_login_date = '-';
+        }
+        $data['last_login_date'] = $last_login_date;
         $data['checked'] = (!$info->disable_course_registration) ? 'checked' : '';
         // Show HybridAuth provider data
         $data['ext_uid'] = Database::get()->queryArray('SELECT * FROM user_ext_uid WHERE user_id = ?d', $u);
