@@ -66,13 +66,6 @@ if (isset($_GET['exerciseId'])) {
     $shuffleQuestions = $objExercise->selectShuffle();
 }
 
-if ($is_course_reviewer) {
-    if (isset($_GET['preview'])) { // exercise preview
-        $pageName = $langSee;
-        display_exercise($exerciseId);
-    }
-}
-
 if ($is_editor) {
 // initializes the Question object
     if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion']) || isset($_GET['modifyAnswers'])) {
@@ -161,6 +154,9 @@ if ($is_editor) {
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
         );
         include 'import_aiken.php';
+    } elseif (isset($_GET['preview'])) { // exercise preview
+            $pageName = $langSee;
+            display_exercise($exerciseId);
     } else {
         if (isset($_GET['NewExercise'])) {
             $pageName = $langNewEx;
@@ -174,6 +170,11 @@ if ($is_editor) {
         if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {
             include 'question_list_admin.inc.php';
         }
+    }
+} else if ($is_course_reviewer) {
+    if (isset($_GET['preview'])) { // exercise preview
+        $pageName = $langSee;
+        display_exercise($exerciseId);
     }
 }
 
