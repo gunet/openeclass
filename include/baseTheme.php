@@ -659,6 +659,9 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
+                .header-login-text{
+                    color:$theme_options_styles[linkColorHeader];
+                }
 
             ";
         }
@@ -734,6 +737,10 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
+                .header-login-text:hover,
+                .header-login-text:focus{
+                    color:$theme_options_styles[linkColorHeader];
+                }
                 
             ";
         }
@@ -2584,6 +2591,12 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgAgenda];
                 }
                  
+
+
+                #cal-slide-content {
+                    background: $theme_options_styles[bgAgenda] !important;
+                }
+
             ";
         }
 
@@ -3537,10 +3550,6 @@ function view($view_file, $view_data = array()) {
                     background:$theme_options_styles[linkColor] !important;
                 }
 
-                .Help-text-panel-heading {
-                    color:  $theme_options_styles[linkColor] !important;
-                }
-
                 .Primary-600-cl,
                 .Primary-500-cl {
                     color: $theme_options_styles[linkColor];
@@ -3684,6 +3693,11 @@ function view($view_file, $view_data = array()) {
 
 
                 .commentPress:hover{
+                    color: $theme_options_styles[linkColor];
+                }
+
+
+                #cal-slide-content a.event-item {
                     color: $theme_options_styles[linkColor];
                 }
             
@@ -4215,7 +4229,7 @@ function lang_selections_Desktop() {
                             '. $Selected_Language .'
                             <i class="fa-solid fa-chevron-down" role="presentation"></i> 
                         </a>
-                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3 me-lg-0 me-md-5 me-0" role="menu" aria-labelledby="Dropdown">
+                        <div class="m-0 dropdown-menu dropdown-menu-end contextual-menu p-3" role="menu" aria-labelledby="Dropdown">
                             <ul class="list-group list-group-flush">';
                             foreach ($session->active_ui_languages as $code) {
                                 $class = ($code == $session->language)? ' class="active"': '';

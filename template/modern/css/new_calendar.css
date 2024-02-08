@@ -56,16 +56,16 @@
 }
 
 #cal-slide-content {
-  -webkit-box-shadow:none !important ;
-  box-shadow: none !important ;
+  -webkit-box-shadow:none  ;
+  box-shadow: none  ;
   background: #ffffff ;
-  background-image: none !important;
+  background-image: none ;
 }
 
 
 #cal-slide-content a.event-item {
-  color: #005ad9 !important;
-  font-weight: normal;
+  color: #005ad9;
+  font-weight: bold;
   line-height: 22px;
 }
 

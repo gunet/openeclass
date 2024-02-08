@@ -783,7 +783,13 @@ b a {
   white-space: nowrap;
 }
 
-
+.header-login-text{
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0px;
+  line-height: 16px;
+  color: #2B3944;
+}
 
 #btn-search{
   color: #687DA3;
@@ -3011,15 +3017,6 @@ body .form-action-button-popover{
   border-radius: 4px; 
 }
 
-.Help-panel-heading {
-  border-bottom:solid 1px #003e87;
-}
-
-.Help-text-panel-heading {
-  color: #003e87 !important; 
-  font-weight: 800; 
-  font-style: normal;
-}
 
 .panel-default .panel-heading .submitAdminBtn,
 .panel-admin .panel-heading .submitAdminBtn,
@@ -3430,7 +3427,7 @@ body .delThemeBtn{
   background-color: #F7F9FE;
 }
 .homepage-annnouncements-container{ 
-  background-color: #F7F9FE;
+  background-color: #fcfcf5;
 }
 
 

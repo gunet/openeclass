@@ -69,9 +69,8 @@
                 <div class='user-menu-content h-100 d-flex justify-content-start align-items-center'>
                     <div class='d-flex justify-content-start align-items-center h-80px'>
                         @if(!isset($_SESSION['uid']) and get_config('dont_display_login_form'))
-                            <a class='d-flex justify-content-start align-items-center text-uppercase TextBold ms-0 gap-1' href="{{$urlAppend}}main/login_form.php">
-                                <span class=' small-text hidden-lg text-capitalize'>{{ trans('langUserLogin') }}</span>
-                                <i class="fa-solid fa-right-to-bracket"></i>
+                            <a class='header-login-text' href="{{$urlAppend}}main/login_form.php">
+                                {{ trans('langUserLogin') }}
                             </a>
                         @endif
                         @if(isset($_SESSION['uid']))
@@ -249,14 +248,13 @@
             </div>
 
             @if (!isset($_SESSION['uid']))
-                <div class='d-flex justify-content-start align-items-center'>
+                <div class='d-flex justify-content-start align-items-center gap-3'>
+                    {!! lang_selections_Desktop() !!}
                     @if(get_config('dont_display_login_form'))
-                        <a class='d-flex align-items-center text-uppercase TextBold small-text me-2 gap-1' href="{{ $urlAppend }}main/login_form.php">
-                            <span class='TextMedium hidden-xs'>{{ trans('langUserLogin') }}</span>
-                            <i class="fa-solid fa-right-to-bracket"></i>
+                        <a class='header-login-text' href="{{ $urlAppend }}main/login_form.php">
+                            {{ trans('langUserLogin') }}
                         </a>
                     @endif
-                    {!! lang_selections_Desktop() !!}
                 </div>
             @endif
 

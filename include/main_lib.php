@@ -202,7 +202,8 @@ function load_js($file, $init='') {
                     default: break;
                 }
             }
-            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
+            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css') . 
+            css_link('../template/modern/css/new_calendar.css');
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
             js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');

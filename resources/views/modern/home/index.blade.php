@@ -142,7 +142,7 @@
 
            
             @if(!get_config('show_only_loginScreen'))
-                <div class='col-12 order-{{ $announcements_priority }} homepage-annnouncements-container'>
+                <div class="col-12 order-{{ $announcements_priority }} homepage-annnouncements-container @if(get_config('dont_display_login_form')) drop-shadow @endif">
                     <div class='{{ $container }} padding-default'>
                         <div class='row row-cols-1 g-4'>
                             <div class='col'>

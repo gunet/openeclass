@@ -1313,14 +1313,6 @@
 }
 
 
-.Help-panel-heading {
-  border-bottom:solid 1px #74AFE9;
-}
-
-.Help-text-panel-heading {
-  color: #74AFE9 !important; 
-}
-
 .panel-default .panel-heading .submitAdminBtn,
 .panel-admin .panel-heading .submitAdminBtn,
 .panel-action-btn-default .panel-heading .submitAdminBtn,
@@ -2298,9 +2290,6 @@ tr.warning:hover{
   background: #212D37 !important;
 }
 
-#cal-slide-content a.event-item {
-  color: #74AFE9 !important;
-}
 
 .cal-day-today {
   background-color: #212D37 !important;

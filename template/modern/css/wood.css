@@ -712,13 +712,6 @@ background-color: transparent;
 }
 
 
-.Help-panel-heading {
-border-bottom:solid 1px #867F72;
-}
-
-.Help-text-panel-heading {
-color: #867F72 !important; 
-}
 
 .panel-default .panel-heading .submitAdminBtn,
 .panel-admin .panel-heading .submitAdminBtn,
