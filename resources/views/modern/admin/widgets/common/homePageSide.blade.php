@@ -1,12 +1,12 @@
-                <div class="panel panel-admin mt-3">
-                    <div class="panel-heading">
-                        <div class="panel-title text-white TextMedium">                
+                <div class="panel panelCard px-lg-4 py-lg-3 mt-3">
+                    <div class="panel-heading border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
+                        <h3 class='mb-0'>
                             {{ trans('langHomePageSidebarContent') }}
-                        </div>
+                        </h3>
                     </div>
-                    <div class="panel-body BordersBottom" id="home_widget_sidebar" data-widget-area-id="2">
+                    <div class="panel-body" id="home_widget_sidebar" data-widget-area-id="2">
                         @foreach ($home_sidebar_widgets as $key => $home_sidebar_widget)
-                        <div class="panel panel-success widget mt-3" data-widget-id="{{ $home_sidebar_widget->widget_id }}" data-widget-widget-area-id="{{ $key }}">
+                        <div class="panel panel-success widget mb-3" data-widget-id="{{ $home_sidebar_widget->widget_id }}" data-widget-widget-area-id="{{ $key }}">
                             <div class="panel-heading">                   
                                 <a class='text-white' data-bs-toggle="collapse" data-bs-target="#widget_desc_{{ $key }}" 
                                    href="#widget_desc_{{ $key }}" class="widget_title">

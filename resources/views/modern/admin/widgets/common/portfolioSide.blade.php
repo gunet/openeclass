@@ -1,10 +1,10 @@
-<div class="panel panel-admin mt-3">
-    <div class="panel-heading">
-        <div class="panel-title">
+<div class="panel panelCard px-lg-4 py-lg-3 mt-3">
+    <div class="panel-heading border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap">
+        <h3 class='mb-0'>
             {{ trans('langPortfolioSidebarContent') }}
-        </div>
+        </h3>
     </div>
-    <div class="panel-body BordersBottom" id="portfolio_widget_sidebar" data-widget-area-id="4">
+    <div class="panel-body" id="portfolio_widget_sidebar" data-widget-area-id="4">
         @php $countWidgets = 0; @endphp
         @foreach ($portfolio_sidebar_widgets as $key => $portfolio_sidebar_widget)
         <div class="panel panel-success widget @if($countWidgets < (count($portfolio_sidebar_widgets) -1)) mb-3 @endif" data-widget-id="{{ $portfolio_sidebar_widget->id }}" data-widget-widget-area-id="{{ $key }}">

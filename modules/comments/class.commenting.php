@@ -90,7 +90,7 @@ Class Commenting {
                                 </a>";
             $out = "$comments_title
                     <div class='modal fade text-start' id='commentArea-$this->rid' role='dialog'>
-                      <div class='modal-dialog'>
+                      <div class='modal-dialog modal-md'>
                         <div class='modal-content'>
                           <div class='modal-header'>
                             <div class='modal-title'>

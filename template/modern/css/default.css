@@ -197,10 +197,6 @@ img {
 .border-card{
   border: solid 1px #EFF2FB;
 }
-
-.border-default-card{
-  border: solid 1px #B3D1FF;
-}
   
 .border-bottom-card-header{
   border-top: none;
@@ -850,27 +846,31 @@ b a {
   right: 100%;
 }
 
-.user-menu-btn:hover,
-.user-menu-btn:focus{
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover,
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus{
   border-top: solid 4px #0073E6;
   cursor:  url(../images/pointer.png), auto;
 }
 
-.user-menu-btn:hover .user-icon-filename,
-.user-menu-btn:focus .user-icon-filename{
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .user-icon-filename,
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus .user-icon-filename{
   margin-top: -4px;
 }
 
-.user-menu-btn:hover .user-name,
-.user-menu-btn:focus .user-name{
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .user-name,
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus .user-name{
   margin-top: -4px;
 }
 
 .user-menu-btn:hover .fa-chevron-down,
 .user-menu-btn:focus .fa-chevron-down{
   color: #0073E6;
+}
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover .fa-chevron-down,
+#bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus .fa-chevron-down{
   margin-top: -4px;
 }
+
 
 
 /**********************************************************************************************************************/
@@ -4129,31 +4129,6 @@ div[role="progressbar"]::before {
   width:100%;
 }
 
-.bodyChat{
-  background-color: #E8EDF8;
-  border: solid 1px #E8EDF8;
-}
-
-.bodyChat::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.bodyChat::-webkit-scrollbar-track {
-  background-color: #ffffff;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-  border: 1px solid transparent;
-  background-clip: content-box;
-}
-.bodyChat::-webkit-scrollbar-thumb:hover{
-  background: #B4BED1;
-}
-
-
 /**********************************************************************************************************************/
 /*************************************************** LTI *************************************************************/
 /**********************************************************************************************************************/
@@ -4161,24 +4136,6 @@ div[role="progressbar"]::before {
 .iframeLti{ 
   height: 500px !important; 
   border-radius:4px !important;
-}
-
-/**********************************************************************************************************************/
-/*************************************************** WIDGETS **********************************************************/
-/**********************************************************************************************************************/
-
-.nav-link-widgets:not(:has(.active)){
-  color: #0073E6 !important;
-  font-weight: 700;
-}
-
-.nav-link-widgets.active{
-  border-radius: 0px;
-  border: 0px;
-  border-bottom: solid 2px #0073E6;
-  background-color: transparent !important;
-  color: #0073E6 !important;
-  font-weight: 700;
 }
 
 
@@ -4743,10 +4700,6 @@ div[role="progressbar"]::before {
   border: solid 1px #EFF6FF;
 }
 
-.border-default-card{
-  border: solid 1px #EFF6FF;
-}
-
 .statistics-card{
   border: solid 1px #B3D1FF;
 }
@@ -4882,11 +4835,6 @@ table.dataTable tbody tr th{
 
 /*************************************************** DOCUMENTS ********************************************************/
 
-/* .metadataCourseCollapseBtn,
-.metadataCourseCollapseBtn:hover,
-.metadataCourseCollapseBtn:focus{
-  color: #ffffff;
-}
 
 
 .visibleFile{ 
@@ -4896,7 +4844,7 @@ table.dataTable tbody tr th{
 .docPanel{ 
   padding: 0px ;
   background-color: transparent !important;
-} */
+} 
 
 
 /*************************************************** WALL *************************************************************/

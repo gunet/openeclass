@@ -221,8 +221,8 @@ if ($uid) {
     $surname = q($q->surname);
     $eclass_login = "
         <div class='row m-auto'>
-            <div class='panel panel-admin mt-4'>
-                <div class='panel-body'>
+            <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+                <div class='card-body'>
                     <fieldset>
                         <div class='form-group'>
                             <div class='col-12'>
@@ -280,8 +280,8 @@ $tool_content .= "
     <form id='register_form' class='form-horizontal' method='post' action='invite.php?id=$id'>" .
         generate_csrf_token_form_field() . "
         <div class='row m-auto'>
-            <div class='panel panel-admin'>
-                <div class='panel-body'>
+            <div class=' card panelCard px-lg-4 py-lg-3'>
+                <div class='card-body'>
                     <fieldset>
                         <div class='form-group'>
                             <label class='col-sm-12 control-label-notes'>$langFaculty:</label>

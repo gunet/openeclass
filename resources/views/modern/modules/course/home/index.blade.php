@@ -532,6 +532,10 @@
                             @include('layouts.partials.course_wall_functions',['is_editor' => $is_editor])
                         @endif
 
+                        @if($course_home_main_area_widgets)
+                            {!! $course_home_main_area_widgets !!}
+                        @endif
+
 
                     </div>
 
@@ -596,7 +600,7 @@
                                         <div class='text-center'>
                                             <div class='col-12 h-100'>
                                                 @if ($is_editor)
-                                                    <div class='card statistics-card border-default-card drop-shadow'>
+                                                    <div class='card statistics-card drop-shadow'>
                                                         <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id }}&progressall=true'>
                                                                 @if ($percentage_t == '100')
@@ -609,7 +613,7 @@
                                                     </div>
 
                                                 @else
-                                                    <div class='card statistics-card border-default-card drop-shadow'>
+                                                    <div class='card statistics-card drop-shadow'>
                                                         <div class='card-body d-flex justify-content-center align-items-center'>
                                                             <a href='{{ $urlServer }}modules/progress/index.php?course={{ $course_code }}&badge_id={{ $course_completion_id}}&u={{ $uid }}'>
                                                                 @if ($percentage == '100')
@@ -642,13 +646,13 @@
                             </div>
                         @endif
 
-                        @if($course_home_main_area_widgets)
+                        @if($course_home_sidebar_widgets)
                             <div class='card panelCard card-transparent border-0 mt-5 sticky-column-course-home'>
                                 <div class='card-header card-header-default px-0 py-0 border-0 d-flex justify-content-between align-items-center'>
                                     <h3>{{ trans('langWidgets') }}</h3>
                                 </div>
                                 <div class='card-body card-body-default px-0 py-0'>
-                                    {!! $course_home_main_area_widgets !!}
+                                    {!! $course_home_sidebar_widgets !!}
                                 </div>
                             </div>
                         @endif
