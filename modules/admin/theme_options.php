@@ -36,7 +36,7 @@ $defaults = array(
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
-                                                'bgOptionSelected', 'BgBorderBottomHeadTables'),
+                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 
@@ -819,6 +819,11 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='linkActiveColorHeader' class='control-label-notes mb-2 me-2'>$langActiveLinkColorHeader:</label>
                         <input name='linkActiveColorHeader' type='text' class='form-control colorpicker' id='linkActiveColorHeader' value='$theme_options_styles[linkActiveColorHeader]'>
+                    </div>
+                    <h3 class='theme_options_legend text-decoration-underline mt-4'>$langHoveredActiveLinkColorHeader</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='HoveredActiveLinkColorHeader' class='control-label-notes mb-2 me-2'>$langHoveredActiveLinkColorHeader:</label>
+                        <input name='HoveredActiveLinkColorHeader' type='text' class='form-control colorpicker' id='HoveredActiveLinkColorHeader' value='$theme_options_styles[HoveredActiveLinkColorHeader]'>
                     </div>
                     <hr>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langShadowHeader</h3>

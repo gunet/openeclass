@@ -588,6 +588,10 @@ function view($view_file, $view_data = array()) {
                 .dataTables_wrapper .dataTables_paginate {
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
+
+                .circle-img-contant{
+                    border: solid 1px $theme_options_styles[ColorHyperTexts];
+                }
             ";
         }
 
@@ -747,6 +751,24 @@ function view($view_file, $view_data = array()) {
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// HOVERED COLOR TO ACTIVE LINK IN HEADER ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if (!empty($theme_options_styles['HoveredActiveLinkColorHeader'])){
+            $styles_str .= "
+
+                .container-items .menu-item.active:hover,
+                .container-items .menu-item.active:focus,
+                .container-items .menu-item.active2:hover,
+                .container-items .menu-item.active2:focus{
+                    color: $theme_options_styles[HoveredActiveLinkColorHeader];
+                } 
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
         ///////////////////// SHADOW TO THE BOTTOM SIDE INTO HEADER /////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -879,6 +901,12 @@ function view($view_file, $view_data = array()) {
 
                 .border-bottom-default{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
+                }
+
+                @media(min-width:992px){
+                    .col_maincontent_active {
+                        border-left: solid 1px $theme_options_styles[clBorderBottomAccordions];
+                    }
                 }
             ";
         }
@@ -3233,7 +3261,9 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
 
         if(!empty($theme_options_styles['ClTextEditor'])){
+            
             $styles_str .= "
+
                 .mce-toolbar .mce-btn i {
                     color: $theme_options_styles[ClTextEditor] !important;
                 }
@@ -3251,6 +3281,10 @@ function view($view_file, $view_data = array()) {
 
                 .mce-caret {
                     border-top: 4px solid $theme_options_styles[ClTextEditor] !important;
+                }
+
+                .mce-toolbar .mce-btn i.mce-i-none{
+                    background-image: url('../../js/tinymce/skins/light/img/toggle.png') !important;
                 }
                 
             ";

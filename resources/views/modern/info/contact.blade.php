@@ -21,7 +21,7 @@
 
                                 <div class='row'>
                                     <div class='col-md-6 col-12 mt-md-0 mt-3'>
-                                        <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-address-card text-white'></i></div></div>
+                                        <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div></div>
                                         <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langInstitutePostAddress') !!}:</strong></div>
                                         <div class='col-12 d-flex justify-content-center'>
                                             @if(!empty($postaddress))
@@ -35,7 +35,7 @@
 
                                 <div class='row'>
                                     <div class='col-md-6 col-12 mt-md-3 mt-3'>
-                                        <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-phone text-white'></i></div></div>
+                                        <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div></div>
                                         <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langPhone') !!}:</strong></div>
                                         <div class='col-12 d-flex justify-content-center'>
                                             @if(!empty($phone))
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class='row'>
                                     <div class='col-md-6 col-12 mt-md-3 mt-3'>
-                                        <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class='fa fa-envelope text-white'></i></div></div>
+                                        <div class='col-12 d-flex justify-content-center mb-2'><div class='circle-img-contant'><i class="fa-solid fa-address-card fa-lg"></i></div></div>
                                         <div class='col-12 d-flex justify-content-center mb-0'><strong>{!! trans('langEmail') !!}:</strong></div>
                                         <div class='col-12 d-flex justify-content-center'>
                                             @if(!empty($emailhelpdesk))

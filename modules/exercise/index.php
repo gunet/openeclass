@@ -435,7 +435,7 @@ if (!$nbrExercises) {
                 $tool_content .= "<td>"
                         . "<div><a href='results.php?course=$course_code&amp;exerciseId=$eid'>$langViewShow</a></div>
                            <button class='d-flex justify-content-start align-items-start border-0 rounded-2 Success-200-bg text-white pe-none mt-2'>
-                                <small>$submissionCount</small>
+                                <span class='small-text'>$submissionCount</span>
                            </button>"
                         . "</td>";
             } else {

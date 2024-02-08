@@ -5765,6 +5765,7 @@ $langLinkColorHeader = 'Χρώμα Συνδέσμων Header';
 $langHoverLinkColorHeader = 'Χρώμα Hovered Συνδέσμων Header';
 $langActiveLinkBgColorHeader = "Χρώμα Φόντου Ενεργού Συνδέσμου Header";
 $langActiveLinkColorHeader = "Χρώμα Ενεργού Συνδέσμου Header";
+$langHoveredActiveLinkColorHeader = "Χρώμα hovered ενεργού συνδέσμου";
 $langLinkColorFooter = 'Χρώμα Συνδέσμων Footer';
 $langHoverLinkColorFooter = 'Χρώμα hovered συνδέσμων Footer';
 $langPortFolioProfileContainer = "Χρώμα φόντου σύντομου προφίλ";
