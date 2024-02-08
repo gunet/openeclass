@@ -2594,6 +2594,10 @@ function upgrade_to_3_16($tbl_options) : void
         Database::get()->query("ALTER TABLE `exercise` ADD `options` text");
     }
 
+    // Fix incorrect dates in course_user table
+    Database::get()->query('UPDATE course_user
+        SET document_timestamp = reg_date
+        WHERE document_timestamp < reg_date');
 }
 
 /**
