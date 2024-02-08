@@ -6,10 +6,6 @@
     border: solid 1px #EFF6FF;
 }
 
-.border-default-card {
-    border: solid 1px #EFF6FF;
-}
-
 @media (min-width: 992px){
   .BorderSolidDes {
       border: solid 1px #EFF6FF;
@@ -1109,12 +1105,6 @@ tr.danger{
 /*************************************************** DOCUMENTS ********************************************************/
 /**********************************************************************************************************************/
 
-.metadataCourseCollapseBtn,
-.metadataCourseCollapseBtn:hover,
-.metadataCourseCollapseBtn:focus{
-  color: #ffffff;
-}
-
 
 .visibleFile{ 
   color: #2B3944; 
@@ -1189,49 +1179,8 @@ color: #1E7E0E;
 }
 
 
-/**********************************************************************************************************************/
-/*************************************************** CHAT *************************************************************/
-/**********************************************************************************************************************/
-
-.bodyChat::-webkit-scrollbar-track {
-background-color: #2b3944;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-background-color: #2b3944;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-background-color: #d6dee1;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-background-color: #B4BED1;
-border-radius: 20px;
-border: 6px solid transparent;
-background-clip: content-box;
-}
-
-.bodyChat::-webkit-scrollbar-thumb:hover {
-background-color: #B4BED1;
-}
 
 
-/**********************************************************************************************************************/
-/*************************************************** WIDGETS **********************************************************/
-/**********************************************************************************************************************/
-.nav-link-widgets:not(:has(.active)){
-  color: #1E7E0E !important;
-  font-weight: 700;
-}
-.nav-link-widgets.active{
-  border-radius: 0px;
-  border: 0px;
-  border-bottom: solid 2px #1E7E0E;
-  background-color: transparent !important;
-  color: #1E7E0E !important;
-  font-weight: 700;
-}
 
 
 /**********************************************************************************************************************/

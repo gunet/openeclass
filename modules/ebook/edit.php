@@ -282,17 +282,16 @@ if (isset($_GET['delete'])) {
                              'level' => 'primary')
                         ));
         $tool_content .= "
-        <div class='col-sm-12 mb-3'>
-            <div class='panel panel-admin'>
-                <div class='panel-heading'>
-                    <div class='panel-title'>$langEBookInfo &nbsp;
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
-                            <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
-                        </a>
-                    </div>
+        <div class='col-12 mb-3'>
+            <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                    <h3>$langEBookInfo</h3>
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
+                        <i class='fa-solid fa-edit fa-lg' title='$langEdit' data-bs-toggle='tooltip'></i>
+                    </a>
                 </div>
-                <div class='panel-body panel-body-electronicBook'>
-                    <div class='row p-2 margin-bottom-fat'>
+                <div class='card-body'>
+                    <div class='row px-0 py-2 margin-bottom-fat'>
                         <div class='col-sm-2'>
                             <strong class='control-label-notes'>$langTitle:</strong>
                         </div>
@@ -300,7 +299,7 @@ if (isset($_GET['delete'])) {
                             " . q($info->title) . "
                         </div>
                     </div>
-                    <div class='row p-2 margin-bottom-fat'>
+                    <div class='row px-0 py-2 margin-bottom-fat'>
                         <div class='col-sm-2'>
                             <strong class='control-label-notes'>$langSections:</strong>
                         </div>

@@ -15,10 +15,7 @@
   .border-card{
     border: solid 1px #4F6893;
   }
-  
-  .border-default-card{
-    border: solid 1px #4F6893;
-  }
+
 
   .border-top-default{
     border-top: solid 1px #4F6893;
@@ -2041,51 +2038,8 @@ table.dataTable tfoot th, table.dataTable tfoot td {
 }
 
 
-/**********************************************************************************************************************/
-/*************************************************** CHAT *************************************************************/
-/**********************************************************************************************************************/
-
-.bodyChat::-webkit-scrollbar-track {
-  background-color: #212D37;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-  background-color: #212D37;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-  background-color: #d6dee1;
-}
-
-.bodyChat::-webkit-scrollbar-thumb {
-  background-color: #B4BED1;
-  border-radius: 20px;
-  border: 6px solid transparent;
-  background-clip: content-box;
-}
-
-.bodyChat::-webkit-scrollbar-thumb:hover {
-  background-color: #B4BED1;
-}
 
 
-/**********************************************************************************************************************/
-/*************************************************** WIDGETS **********************************************************/
-/**********************************************************************************************************************/
-
-
-.nav-link-widgets:not(:has(.active)){
-  color: #74AFE9 !important;
-  font-weight: 700;
-}
-.nav-link-widgets.active{
-  border-radius: 0px;
-  border: 0px;
-  border-bottom: solid 2px #74AFE9;
-  background-color: transparent !important;
-  color: #74AFE9 !important;
-  font-weight: 700;
-}
 
 
 /**********************************************************************************************************************/

@@ -245,28 +245,28 @@
                                         <small>{{ $course_start_week }}&nbsp;{{ $course_finish_week }}</small>
                                     </div>
                                 @endif
-                                @if ($previousLink or $nextLink)
-                                    <div class='col-12'>
-                                        <div class='card panelCard px-lg-0 py-lg-0 border-0'>
-                                            <div class="card-body d-flex justify-content-between align-items-center p-3 bg-light Borders gap-3 flex-wrap">
-                                                @if ($previousLink)
-                                                    <a class='pull-left' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
-                                                        <span class='fa fa-arrow-left space-after-icon'></span>
-                                                        {{ ellipsize($previousTitle, 30) }}
-                                                    </a>
-                                                @endif
-                                                @if ($nextLink)
-                                                    <a class='float-end' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
-                                                        {{ ellipsize($nextTitle, 30) }}
-                                                        <span class='fa fa-arrow-right space-before-icon'></span>
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                             <div class="card-body">
+
+                                @if ($previousLink or $nextLink)
+                                    <div class='col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap mb-4'>
+                                        @if ($previousLink)
+                                            <a class='TextBold' title='{{ $previousTitle }}' href='{{ $previousLink}}'>
+                                                <i class='fa fa-arrow-left space-after-icon'></i>
+                                                {{ ellipsize($previousTitle, 30) }}
+                                            </a>
+                                        @endif
+                                        @if ($nextLink)
+                                            <a class='TextBold' title='{{ $nextTitle }}' href='{{ $nextLink}}'>
+                                                {{ ellipsize($nextTitle, 30) }}
+                                                <i class='fa fa-arrow-right space-before-icon'></i>
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endif
+
+
+
                                 <div>
                                     {!! $comments !!}
                                 </div>
@@ -275,8 +275,8 @@
                                 </div>
                             </div>
                             @if ($tags_list)
-                                <div class='card-footer small-text border-0'>
-                                    <small><span class='text-muted'>{{ trans('langTags') }}:</span> {!! $tags_list !!}</small>
+                                <div class='card-footer border-0'>
+                                    <p class='TextBold'>{{ trans('langTags') }}: {!! $tags_list !!}</p>
                                 </div>
                             @endif
                         </div>

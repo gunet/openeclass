@@ -708,8 +708,8 @@ function view($view_file, $view_data = array()) {
                     color: $theme_options_styles[linkHoverColorHeader];
                 }
 
-                .user-menu-btn:hover,
-                .user-menu-btn:focus{
+                #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:hover,
+                #bgr-cheat-header:not(:has(.fixed)) .user-menu-btn:focus{
                     border-top: solid 4px $theme_options_styles[linkHoverColorHeader];
                 }
 
@@ -3873,6 +3873,11 @@ function view($view_file, $view_data = array()) {
                 }
                 .user-details-exec{
                     background-color:$theme_options_styles[RightColumnCourseBgColor];
+                }
+                @media(max-width:991px){
+                    .module-container:has(.course-wrapper){
+                        background-color:$theme_options_styles[RightColumnCourseBgColor];
+                    }
                 }
             ";
         }

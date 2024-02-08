@@ -203,18 +203,14 @@ class CourseXMLElement extends SimpleXMLElement {
         // proper divs initializations
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
-            $fieldStart .= "<div class='panel-group mt-5'>
-                <div class='panel panel-admin'>
-                    <div class='panel-heading rounded-0'>
-                        
-                        <div class='panel-title'>
-                            
-                                <a class='metadataCourseCollapseBtn collapsed' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
-                                    <i class='fa-solid fa-arrow-down'></i>
-                                </a>
-                            
-                        </div>
-                    </div>
+            $fieldStart .= "<div class='col-12 mt-5'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+
+                        <a class=' collapsed TextBold' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                            <i class='fa-solid fa-arrow-down'></i>
+                        </a>
+
+                    
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
                         <div class='panel-body'>";
         }
@@ -410,18 +406,10 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mb-3 mt-3'>
-                <div class='panel panel-admin rounded-0'>
-                    <div class='panel-heading'>
-                        
-                        
-                            <div class='panel-title'>
-                                <a class='metadataCourseCollapseBtn' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
-                                   <i class='fa-solid fa-arrow-down'></i>
-                                </a>
-                            </div>
-                       
-
-                    </div>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <a class='collapsed TextBold' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
+                        <i class='fa-solid fa-arrow-down'></i>
+                    </a>
                     <div id='metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "' class='panel-collapse collapse'>
                         <div class='panel-body'>";
         }

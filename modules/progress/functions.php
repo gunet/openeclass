@@ -2306,8 +2306,8 @@ function display_settings($element, $element_id, $unit_id = 0): void
         if (!$unit_id) {
             $tool_content .= "
             <div class='col-12'>
-                <div class='panel panel-admin'>
-                    <div class='panel-body'>
+                <div class='card panelCard px-lg-4 py-lg-3'>
+                    <div class='card-body'>
 
                         <h3 class='mb-0 text-center'>$langCourseCompletion</h3>
 

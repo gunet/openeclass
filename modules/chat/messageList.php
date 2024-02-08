@@ -206,34 +206,33 @@ if (isset($_GET['store']) && $is_editor) {
                 }
                 $token = token_generate($user_id, true);
                 echo "
-                    <div class='col-12 ps-3 pe-3'>
-                        <div class='panel panel-admin border-0 BorderSolid bg-default mt-lg-3 mt-3 py-md-4 px-md-4 py-3 px-3 shadow-none'>
-                            <div class='panel-heading bg-body p-0'>
-                                <div class='col-12 Help-panel-heading pb-1'>
-                                    <span class='panel-title text-capitalize Help-text-panel-heading'>
-                                        <a class='text-start' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
-                                            ". profile_image($user_id, IMAGESIZE_SMALL) ."
-                                        </a>
-                                        <small>$langBlogPostUser ". display_user($user_id, false, false) ."</small>
-                                    </span>
+                    <div class='col-12 p-3'>
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 d-flex justify-content-start align-items-center'>
+                                <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                    
+                                    <a href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
+                                        ". profile_image($user_id, IMAGESIZE_SMALL, 'rounded-circle') ."
+                                    </a>
+                                    <p>". display_user($user_id, false, false) ."</p>
+                                    
                                 </div>
                             </div>
-                            <div class='panel-body'>
-                                
-                                <div class='margin-top-thin'>
+                            <div class='card-body'>
+                                <div>
                                     " . $usertext . "
                                 </div>
                             </div>
-                            <div class='panel-footer d-flex justify-content-end'>
-                                <p class='TextBold'>$datetime</p>
+                            <div class='card-footer border-0'>
+                                <p>$datetime</p>
                             </div>
                         </div>
                     </div>\n";
             }
         } else { //prior to version 3.0 generated conferences
                 echo "
-                            <div class='col-12 mt-4 mb-3 ps-3 pe-3'>
-                                <div class='alert alert-default'>
+                            <div class='col-12 mt-4 mb-3 p-3'>
+                                <div class='alert alert-info'>
                                     $str_1[0]
                                 </div>
                             </div>\n";
