@@ -85,8 +85,8 @@ if (isset($_POST['register'])) {
             }
         }
 
-        Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-            VALUES (?d, ?d, " . USER_STUDENT . ", NOW())", $course_id, $uid);
+        Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`, `document_timestamp`)
+            VALUES (?d, ?d, " . USER_STUDENT . ", NOW(), NOW())", $course_id, $uid);
         Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => USER_STUDENT));
         //Session::Messages($langNotifyRegUser1, 'alert-success');
         Session::flash('message',$langNotifyRegUser1);
@@ -202,4 +202,3 @@ $tool_content .= action_bar(array(
 
 
 draw($tool_content, 1, null, $head_content);
-
