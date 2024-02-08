@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class='col-lg-6 col-12 mt-lg-0 mt-4'>
+                    <div class='col-lg-6 col-12 mt-lg-0 mt-4 d-none d-lg-block'>
                         <img class='form-image' src='{{ $urlAppend }}template/modern/img/faqImg.png' />
                     </div>
                 </div>

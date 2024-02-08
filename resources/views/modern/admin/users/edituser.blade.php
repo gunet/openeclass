@@ -134,9 +134,12 @@
 
                                         <div class='form-group mt-4'>
                                             <label class='label-container'>
-                                                <div class='checkbox mb-2 d-flex justify-content-start align-items-center'>
-                                                    <input type='checkbox' name='enable_course_registration' value='1' {!! $checked !!}>
-                                                    <span class='checkmark'></span>&nbsp;{{ trans('langInfoEnableCourseRegistration') }}
+                                                <div class='checkbox'>
+                                                    <label class='label-container'>
+                                                        <input type='checkbox' name='enable_course_registration' value='1' {!! $checked !!}>
+                                                        <span class='checkmark'></span>
+                                                        {{ trans('langInfoEnableCourseRegistration') }}
+                                                    </label>
                                                 </div>
                                             </label>
                                         </div>

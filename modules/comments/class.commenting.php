@@ -126,7 +126,7 @@ Class Commenting {
                     }
                 } else {
                     if ($comment->permEdit($isEditor, $uid)) {
-                        $post_actions = '<div class="d-flex flex-wrap gap-2">';
+                        $post_actions = '<div class="d-flex flex-wrap gap-3">';
 
                         if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
                             $head_content .= abuse_report_add_js();
@@ -135,9 +135,9 @@ Class Commenting {
 
                         
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
-                        $post_actions .= '<i class="fa-solid fa-edit pe-2 pb-2" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
+                        $post_actions .= '<i class="fa-solid fa-edit" data-bs-original-title="'.$langModify.'" title="" data-bs-toggle="tooltip"></i></a>';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                        $post_actions .= '<i class="fa-solid fa-xmark text-danger pb-2 pe-2" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
+                        $post_actions .= '<i class="fa-solid fa-xmark text-danger" data-bs-original-title="'.$langDelete.'" title="" data-bs-toggle="tooltip"></i></a>';
 
                         $post_actions .='</div>';
                     } else {

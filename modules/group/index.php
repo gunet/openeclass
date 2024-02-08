@@ -675,7 +675,7 @@ if ($is_editor) {
                                 $tool_content .= "<input type='hidden' id='KeyallGroup' value='$allGroups'>
                                         <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
                                         <div class='col-12'>
-                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-transparent rounded-pill mt-2 mb-3 shadow-sm'>
+                                        <div class='col-12 d-flex justify-content-center overflow-auto mt-2 mb-3'>
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
@@ -964,7 +964,7 @@ if ($is_editor) {
                                 $tool_content .= "<input type='hidden' id='KeyallGroup' value='$allGroups'>
                                         <input type='hidden' id='KeypagesGroup' value='$pagesPag'>
                                         <div class='col-12'>
-                                        <div class='col-12 d-flex justify-content-center p-0 overflow-auto bg-transparent rounded-pill mt-2 mb-3 shadow-sm'>
+                                        <div class='col-12 d-flex justify-content-center overflow-auto mt-2 mb-3'>
                                             <nav aria-label='Page navigation example w-100'>
                                                 <ul class='pagination mycourses-pagination w-100 mb-0'>
                                                     <li class='page-item page-item-previous'>
