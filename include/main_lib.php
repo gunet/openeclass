@@ -108,7 +108,7 @@ function widget_css_link($file, $folder) {
  */
 function load_js($file, $init='') {
     global $head_content, $theme_settings, $language,
-            $langReadMore, $langReadLess, $langViewHide, $langViewShow;
+            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend;
     static $loaded;
 
     if (isset($loaded[$file])) {
@@ -202,8 +202,8 @@ function load_js($file, $init='') {
                     default: break;
                 }
             }
-            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css') . 
-            css_link('../template/modern/css/new_calendar.css');
+            $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
+            $head_content .= "<link href='{$urlAppend}template/modern/css/new_calendar.css' rel='stylesheet' type='text/css'>";
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
             js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
