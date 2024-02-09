@@ -29,14 +29,14 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
-                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar', 'AboutCourseInfoContainer'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar', 'AboutCourseInfoContainer' ,'BackProgressBar'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
                                                 'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
-                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader'),
+                                                'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText'),
                 'rgba(0, 115, 230, 0.6)' => array('buttonHoverBgColor'),
                 "rgba(77,161,228,1)" => array('leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
                 "rgba(239, 246, 255, 1)" => array('leftSubMenuHoverBgColor','leftMenuSelectedBgColor','linkActiveBgColorHeader', 'clBorderPanels', 'clBorderBottomListMenu', 
@@ -53,6 +53,7 @@ $defaults = array(
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
                 "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
+                "rgba(232, 232, 232, 1)" => array('BgProgressBar'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -663,6 +664,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navMenuPopover' aria-controls='navMenuPopover' role='tab' data-bs-toggle='tab'>$langMPopover</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAgenda' aria-controls='navsettingsAgenda' role='tab' data-bs-toggle='tab'>$langNavSettingsAgenda</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsScrollBar' aria-controls='navsettingsScrollBar' role='tab' data-bs-toggle='tab'>$langNavSettingsScrollBar</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsProgressBar' aria-controls='navsettingsProgressBar' role='tab' data-bs-toggle='tab'>$langNavSettingsProgressBar</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
@@ -894,6 +896,25 @@ $tool_content .= "
                 </div>
             </div>
 
+
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsProgressBar'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSettingsProgressBar</h3>
+                    <h5>($langInfoProgressBar)</h5>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BackProgressBar' class='control-label-notes mb-2 me-2'>$langBackProgressBar:</label>
+                        <input name='BackProgressBar' type='text' class='form-control colorpicker' id='BackProgressBar' value='$theme_options_styles[BackProgressBar]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgProgressBar' class='control-label-notes mb-2 me-2'>$langBgProgressBar:</label>
+                        <input name='BgProgressBar' type='text' class='form-control colorpicker' id='BgProgressBar' value='$theme_options_styles[BgProgressBar]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BgColorProgressBarAndText' class='control-label-notes mb-2 me-2'>$langBgColorProgressBarAndText:</label>
+                        <input name='BgColorProgressBarAndText' type='text' class='form-control colorpicker' id='BgColorProgressBarAndText' value='$theme_options_styles[BgColorProgressBarAndText]'>
+                    </div>
+                </div>
+            </div>
 
 
             <div role='tabpanel' class='tab-pane fade' id='navsettingsLoginHomepage'>
@@ -1503,13 +1524,6 @@ $tool_content .= "
 
 
 
-
-
-
-
-
-
-
             <div role='tabpanel' class='tab-pane fade' id='navAccordions'>
                 <div class='form-wrapper form-edit rounded'>
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langAccordions</h3>
@@ -1531,15 +1545,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1579,8 +1584,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
 
 
 
@@ -1629,49 +1632,6 @@ $tool_content .= "
                     </div>
                 </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

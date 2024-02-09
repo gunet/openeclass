@@ -3522,9 +3522,41 @@ function view($view_file, $view_data = array()) {
         }
 
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////// PROGRESSBAR COMPONENT ////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
 
+        if(!empty($theme_options_styles['BackProgressBar']) && !empty($theme_options_styles['BgProgressBar']) && 
+                            !empty($theme_options_styles['BgColorProgressBarAndText'])){
 
+            $styles_str .= "
+                div[role='progressbar'] {
+                    --size: 9rem;
+                    --fg: $theme_options_styles[BgColorProgressBarAndText];
+                    --bg: $theme_options_styles[BgProgressBar];
+                    --pgPercentage: var(--value);
+                    animation: growProgressBar 3s 1 forwards;
+                    width: var(--size);
+                    height: var(--size);
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background: 
+                        radial-gradient(closest-side, $theme_options_styles[BackProgressBar] 80%, transparent 0 99.9%, $theme_options_styles[BackProgressBar] 0),
+                        conic-gradient(var(--fg) calc(var(--pgPercentage) * 1%), var(--bg) 0)
+                        ;
+                    font-weight: 700; font-style: normal;
+                    font-size: calc(var(--size) / 5);
+                    color: var(--fg);
 
+                }
+            ";
+        }
+
+        
 
 
 
@@ -3818,6 +3850,14 @@ function view($view_file, $view_data = array()) {
 
                 .tree-units summary::before {
                     background: $theme_options_styles[linkColor] url(../../template/modern/img/units-expand-collapse.svg) 0 0;
+                }
+
+                .prev-next-learningPath{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                #leftTOCtoggler{
+                    color: $theme_options_styles[linkColor];
                 }
             
             ";

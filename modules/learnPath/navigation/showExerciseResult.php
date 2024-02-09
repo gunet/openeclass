@@ -42,20 +42,8 @@ ModalBoxHelper::loadModalBox();
 $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
 $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
 $cssFile = '';
-if($theme_options->name == 'Default Dark'){
-    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default_dark.css?".time()."'/>";
-}
-
-if($theme_options->name == 'Crimson'){
-    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/crimson.css?".time()."'/>";
-}
-
-if($theme_options->name == 'Emerald'){
-    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/emerald.css?".time()."'/>";
-}
-
-if($theme_options->name == 'Wood'){
-    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/wood.css?".time()."'/>";
+if($theme_id > 0){
+    $cssFile = "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
 }
 
 echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">'

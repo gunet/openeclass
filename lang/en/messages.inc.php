@@ -3878,7 +3878,12 @@ $langBorderContainerBgColor = "Border color";
 $langAboutChatContainer = "Container settings in the course chat";
 $langAboutCourseInfoContainer = "Container settings in the presentation/view of the course";
 $langAboutUnitsContainer = "Container settings in the thematic sections of the course";
-
+$langNavSettingsProgressBar = "ProgressBar";
+$langInfoProgressBar = "All 3 options should be completed so that the progress bar changes its appearance";
+$langSettingsProgressBar = "ProgressBar settings";
+$langBackProgressBar = "Background color behind the bar text";
+$langBgProgressBar = "Bar background color (not filled)";
+$langBgColorProgressBarAndText = "Bar background color and text color (filled bar)";
 
 
 

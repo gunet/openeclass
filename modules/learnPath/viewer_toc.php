@@ -217,21 +217,8 @@ echo "<!DOCTYPE HTML>
     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/sidebar.css?".time()."'>
     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/new_calendar.css?".time()."'>
     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".time()."'>";
-
-    if($theme_options->name == 'Default Dark'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".time()."'/>";
-    }
-
-    if($theme_options->name == 'Crimson'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".time()."'/>";
-    }
-
-    if($theme_options->name == 'Emerald'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".time()."'/>";
-    }
-
-    if($theme_options->name == 'Wood'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".time()."'/>";
+    if($theme_id > 0){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
     }
 
     echo " <script type='text/javascript'>

@@ -60,31 +60,16 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <link href='{$urlAppend}template/modern/css/lp.css?".time()."' rel='stylesheet' type='text/css' />
 
     <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default.css?".time()."'>";
-
-
-    if($theme_options->name == 'Default Dark'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".time()."'/>";
-     }
-
-    if($theme_options->name == 'Crimson'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".time()."'/>";
+    if($theme_id > 0){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
     }
-
-    if($theme_options->name == 'Emerald'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".time()."'/>";
-    }
-
-    if($theme_options->name == 'Wood'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".time()."'/>";
-    }
-
     
     echo "<script>
     
 </script>
 </head>
 <body>
-<div class='menu_left'>";
+<div class=' menu_left_learningPath'>";
 
 if ($uid) {
     $uidCheckString = "AND UMP.`user_id` = " . intval($uid);

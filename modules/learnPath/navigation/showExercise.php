@@ -227,22 +227,9 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN' 'http://www.w3.
 
      <link href='{$urlAppend}template/$theme/css/font-awesome-6.4.0/css/all.css' rel='stylesheet'>
      <link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default.css?".time()."'>";
-
-     if($theme_options->name == 'Default Dark'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/default_dark.css?".time()."'/>";
+     if($theme_id > 0){
+        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}courses/theme_data/$theme_id/style_str.css?".time()."'/>";
      }
-
-    if($theme_options->name == 'Crimson'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/crimson.css?".time()."'/>";
-    }
-
-    if($theme_options->name == 'Emerald'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/emerald.css?".time()."'/>";
-    }
-
-    if($theme_options->name == 'Wood'){
-        echo "<link rel='stylesheet' type='text/css' href='{$urlAppend}template/$theme/css/wood.css?".time()."'/>";
-    }
 
     echo "
      <script type='text/javascript' src='{$urlAppend}js/jquery-3.6.0.min.js'></script>

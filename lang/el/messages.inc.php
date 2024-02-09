@@ -5737,7 +5737,6 @@ $langSubMenuLinkColorActive = "Χρώμα Συνδέσμου Ενεργού Συ
 $langBgColor = 'Χρώμα Φόντου';
 $langBgColorConfig = 'Ρυθμίσεις Φόντου';
 $langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
-
 $langBgHeaderCongiguration = "Χρώμα Φόντου Header";
 $langBgFooterCongiguration = "Χρώμα Φόντου Footer";
 $langButtonsColorCongiguration = "Ρυθμίσεις Κουμπιών Με Χρώμα";
@@ -5772,7 +5771,6 @@ $langBgColorWrapperJumbotron = "Gradient φόντου στον container της 
 $langBgColorWrapperHeader= "Χρώμα φόντου στον container του Header";
 $langBgColorWrapperFooter= "Χρώμα φόντου στον container του Footer";
 $langFooterUploadImage = "Ανέβασμα εικόνας στο Footer";
-
 $langShadowHeader = "Shadow στο κάτω μέρος της επικεφαλίδας";
 $langNavContainer = "Containers";
 $langNavSettingsHeader = "Header";
@@ -5787,19 +5785,15 @@ $langBgBorderLeftColor = "Χρώμα border στο αριστερό άκρο τ�
 $langHelpCourseUI = "(<small>Αριστερή στήλη με τα εργαλεία του μαθήματος</small>)";
 $langNavHyperTexts = "Τυπογραφία";
 $langPHyperTextColor = "Χρώμα επικεφαλίδων - κειμένων";
-
 $langBgPanels = "Χρώμα φόντου";
 $langPanels = "Card";
-
 $langForms = "Φόρμες";
 $langBgForms = "Χρώμα φόντου";
 $langColorLabel = "Χρώμα Ετικέτας";
-
 $langTables = "Table";
 $langBgTables = "Χρώμα φόντου";
 $langBgBorderBottomHeadTables = "Χρώμα border στο κάτω μέρος της επικεφαλίδας (thead) του πίνακα";
 $langBgBorderBottomRowTables = "Χρώμα border στο κάτω μέρος των γραμμών (tr) του πίνακα";
-
 $langTabs = "Tabs";
 $langHoverTextColor = "Χρώμα Hovered Κειμένου";
 $langActiveTextColor = "Χρώμα Ενεργού Κειμένου";
@@ -5826,7 +5820,6 @@ $langButtonColorWhiteCongiguration = "Χρώμα φόντου κουμπιού";
 $langBgBorderForms = "Χρώμα border φόρμας";
 $langSubmitComment = "Υποβολή σχόλιου";
 $langBriefProfilePortfolioTextColor = "Χρώμα κειμένων σύντομου προφίλ";
-
 $langRadio = "Radio";
 $langRadios = "Ρυθμίσεις radio κουμπιού";
 $langBgRadios = "Χρώμα φόντου radio κουμπιού";
@@ -5835,7 +5828,6 @@ $langClRadios = "Χρώμα κειμένου radio κουμπιού";
 $langBgClRadios = "Χρώμα φόντου και κειμένου ενεργού radio κουμπιού";
 $langClIconRadios = "Χρώμα icon ενεργού radio κουμπιού";
 $langClInactiveRadios = "Χρώμα κειμένου ανενεργού radio κουμπιού";
-
 $langCheckbox = "Checkboxes";
 $langCheckboxes = "Ρυθμίσεις checkbox κουμπιού";
 $langBgCheckboxes = "Χρώμα φόντου checkbox κουμπιού";
@@ -5845,12 +5837,10 @@ $langBgActiveCheckboxes = "Χρώμα φόντου ενεργού checkbox κο�
 $langClActiveCheckboxes = "Χρώμα κειμένου ενεργού checkbox κουμπιού";
 $langClIconCheckboxes = "Χρώμα icon ενεργού checkbox κουμπιού";
 $langClInactiveCheckboxes = "Χρώμα κειμένου ανενεργού checkbox κουμπιού";
-
 $langInputText = "Input-TextArea";
 $langBgInput = "Χρώμα φόντου περιοχής κειμένου";
 $langclBorderInput = "Χρώμα border περιοχής κειμένου";
 $langclInputText = "Χρώμα κειμένου";
-
 $langSelectOption = "Select";
 $langSettingSelect = "Ρυθμίσεις επιλογής";
 $langBgSelect = "Χρώμα φόντου επιλογής";
@@ -5860,15 +5850,12 @@ $langbgHoveredSelectOption = "Χρώμα hovered φόντου επιλογής";
 $langclHoveredSelectOption = "Χρώμα hovered κειμένου επολογής";
 $langbgOptionSelected = "Χρώμα φόντου ενεργής επιλογής";
 $langclOptionSelected = "Χρώμα κειμένου ενεργής επιλογής";
-
 $langModals = "Modal";
 $langSettingModals = "Ρυθμίσεις Modal";
 $langBgModal = "Χρώμα φόντου modal";
 $langclBorderModal = "Χρώμα border modal";
 $langclTextModal = "Χρώμα κειμένων στα modals";
-
 $langNavBody = "Body";
-
 $langNavSettingsAgenda = "Agenda";
 $langAgendaSettings = "Ρυθμίσεις στα ημερολόγια";
 $langBgColorAgenda = "Χρώμα φόντου στο ημερολόγιο";
@@ -5878,7 +5865,6 @@ $langclColorHeaderAgenda = "Χρώμα κειμένων επικεφαλίδας
 $langclColorBodyAgenda = "Χρώμα κειμένων (ημέρες, ώρες, λεπτά)";
 $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, ώρες, λεπτά)";
 $langbgColorActiveDateTime = "Χρώμα φόντου ενεργού slot (μικρό ημερολόγιο)";
-
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Ρυθμίσεις Menu Popover";
 $langBgMenuPopover = "Χρώμα φόντου";
@@ -5888,24 +5874,27 @@ $langclMenuPopoverOption = "Χρώμα κειμένου συνδέσμου επ�
 $langclBorderBottomMenuPopoverOption = "Χρώμα border στο κάτω μέρος του συνδέσμου επιλογής";
 $langBgHoveredMenuPopoverOption = "Χρώμα Hovered φόντου συνδέσμου επιλογών";
 $langclHoveredMenuPopoverOption = "Χρώμα Hovered κειμένου συνδέσμου επιλογών";
-
 $langInputTextEditor = "Text Editor";
 $langBgTextEditor = "Χρώμα φόντου";
 $langBgBorderTextEditor = "Χρώμα border";
 $langClTextEditor = "Χρώμα εργαλείων";
-
 $langNavSettingsScrollBar = "ScrollBar";
 $langSettingsScrollBar = "Ρυθμίσεις ScrollBar";
 $BgScrollBar = "Χρώμα φόντου";
 $langBgColorScrollBar = "Χρώμα φόντου μπάρας";
 $langBgHoveredColorScrollBar = "Χρώμα hovered φόντου μπάρας";
-
 $langNavMoreOptions = "Περισσότερες επιλογές";
 $langContainerBgColor = "Χρώμα φόντου";
 $langBorderContainerBgColor = "Χρώμα border";
 $langAboutChatContainer = "Ρυθμίσεις container στην συνομιλία του μαθήματος";
 $langAboutCourseInfoContainer = "Ρυθμίσεις container στην παρουσίαση/προβολή του μαθήματος";
 $langAboutUnitsContainer = "Ρυθμίσεις container στις θεματικές ενότητες του μαθήματος";
+$langNavSettingsProgressBar = "ProgressBar";
+$langInfoProgressBar = "Θα πρέπει να συμπληρωθούν και οι 3 επιλογές ώστε να αλλάξει όψη το progress bar";
+$langSettingsProgressBar = "Ρυθμίσεις ProgressBar";
+$langBackProgressBar = "Χρώμα φόντου στο πίσω μέρος του κειμένου της μπάρας";
+$langBgProgressBar = "Χρώμα φόντου μπάρας (όχι γεμισμένη)";
+$langBgColorProgressBarAndText = "Χρώμα φόντου μπάρας και χρώμα κειμένου (γεμισμένη μπάρα)";
 
 /* * ***********************************************************
  * Validation
