@@ -2090,7 +2090,11 @@ input[type="submit"].warningAdminBtn:hover {
     overflow-y: auto;
     max-height: calc(100vh - 56px - 134px);
   }
-
+}
+@media(min-width:768px) and (max-width:991px){
+  .contextual-menu-user{
+    max-height: calc(100vh - 56px);
+  }
 }
 
 @media(min-width:992px){
@@ -3418,6 +3422,26 @@ body .delThemeBtn{
   border-bottom: none;
 }
 
+.myProfileBtn{
+    height: 24px;
+    border-radius: 16px;
+    background-color: #0073E6;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    line-height: 19.68px;
+    transition: 0.3s ease;
+    font-size: 12px;
+    font-weight: 700;
+    border: solid 1px #0073E6;
+}
+.myProfileBtn:hover{
+  background-color: rgb(1, 99, 198);
+  text-decoration: none;
+  color: #ffffff; 
+}
+
 
 /**********************************************************************************************************************/
 /************************************************* HOMEPAGE ***********************************************************/
@@ -3872,6 +3896,9 @@ div[role="progressbar"]::before {
   border-radius: 4px ;
   background-color: #ffffff;
   border: solid 1px #EFF6FF;
+}
+.card-course-info{
+  background-color: #EFF6FF;
 }
 
 .panelCard .card-header, 

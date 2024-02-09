@@ -529,11 +529,11 @@
                                     <p class='vsmall-text Neutral-900-cl mb-0 portofolio-text-intro'>
                                         {{ trans('langProfileLastVisit') }}&nbsp;:&nbsp;{{ format_locale_date(strtotime($lastVisit->when)) }}
                                     </p>
+                                    <a class='btn myProfileBtn mt-1' type='button' href='{{ $urlAppend }}main/profile/display_profile.php'>
+                                        {{ trans('langMyProfile') }}
+                                    </a>
                                 </div>
                             </div>
-                            <a class='btn submitAdminBtn myProfileBtn ms-auto me-auto' href='{{ $urlAppend }}main/profile/display_profile.php'>
-                                <i class='fa-solid fa-user'></i>&nbsp;&nbsp;{{ trans('langMyProfile') }}
-                            </a>
                         </div>
                         <div class='d-flex justify-content-md-start justify-content-center align-items-center gap-3 flex-wrap'>
                             <div class='card user-info-card h-100 px-3 py-0'>

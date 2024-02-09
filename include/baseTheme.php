@@ -1072,10 +1072,6 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgWhiteButtonColor] !important;
                 }
 
-                .myProfileBtn{
-                    background-color: $theme_options_styles[bgWhiteButtonColor];
-                }
-
                 .btn-outline-primary {
                     background-color: $theme_options_styles[bgWhiteButtonColor];
                 }
@@ -1118,12 +1114,6 @@ function view($view_file, $view_data = array()) {
                 .form-horizontal:has(.submitAdminBtnClassic) .submitAdminBtnClassic {
                     border-color: $theme_options_styles[whiteButtonTextColor] !important;
                     color: $theme_options_styles[whiteButtonTextColor] !important;
-                }
-
-                .myProfileBtn,
-                .myProfileBtn:hover{
-                    border-color: $theme_options_styles[whiteButtonTextColor];
-                    color: $theme_options_styles[whiteButtonTextColor];
                 }
 
                 .btn-outline-primary {
@@ -1246,11 +1236,6 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
 
-                .myProfileBtn:hover,
-                .myProfileBtn:focus{
-                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
-                }
-
                 .quickLink:hover,
                 .quickLink:hover .fa-solid{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor];
@@ -1349,6 +1334,11 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[buttonBgColor];
                     border-color: $theme_options_styles[buttonBgColor];
                 }
+
+                .myProfileBtn{
+                    background-color: $theme_options_styles[buttonBgColor];
+                    border-color: $theme_options_styles[buttonBgColor];
+                }
                   
 
             ";
@@ -1429,6 +1419,12 @@ function view($view_file, $view_data = array()) {
 
 
                 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn:hover{
+                    background-color: $theme_options_styles[buttonHoverBgColor];
+                    border-color: $theme_options_styles[buttonHoverBgColor];
+                }
+
+                .myProfileBtn:hover,
+                .myProfileBtn:focus{
                     background-color: $theme_options_styles[buttonHoverBgColor];
                     border-color: $theme_options_styles[buttonHoverBgColor];
                 }
@@ -1525,6 +1521,12 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .wallWrapper:has(.submitAdminBtn) .submitAdminBtn{
+                    color: $theme_options_styles[buttonTextColor] ;
+                }
+
+                .myProfileBtn,
+                .myProfileBtn:hover,
+                .myProfileBtn:focus{
                     color: $theme_options_styles[buttonTextColor] ;
                 }
                 
@@ -2676,28 +2678,43 @@ function view($view_file, $view_data = array()) {
 
                 .datepicker-centuries .table-condensed thead .prev,
                 .datepicker-centuries .table-condensed thead .next,
-                .datepicker-centuries .table-condensed thead .datepicker-switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datepicker-centuries .table-condensed thead .datepicker-switch,
+                .datepicker-centuries .table-condensed thead .prev:hover,
+                .datepicker-centuries .table-condensed thead .next:hover,
+                .datepicker-centuries .table-condensed thead .datepicker-switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-decades .table-condensed thead .prev,
                 .datepicker-decades .table-condensed thead .next,
-                .datepicker-decades .table-condensed thead .datepicker-switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datepicker-decades .table-condensed thead .datepicker-switch,
+                .datepicker-decades .table-condensed thead .prev:hover,
+                .datepicker-decades .table-condensed thead .next:hover,
+                .datepicker-decades .table-condensed thead .datepicker-switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-years .table-condensed thead .prev,
                 .datepicker-years .table-condensed thead .next,
-                .datepicker-years .table-condensed thead .datepicker-switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datepicker-years .table-condensed thead .datepicker-switch,
+                .datepicker-years .table-condensed thead .prev:hover,
+                .datepicker-years .table-condensed thead .next:hover,
+                .datepicker-years .table-condensed thead .datepicker-switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-months .table-condensed thead .prev,
                 .datepicker-months .table-condensed thead .next,
-                .datepicker-months .table-condensed thead .datepicker-switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datepicker-months .table-condensed thead .datepicker-switch,
+                .datepicker-months .table-condensed thead .prev:hover,
+                .datepicker-months .table-condensed thead .next:hover,
+                .datepicker-months .table-condensed thead .datepicker-switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datepicker-days .table-condensed thead .prev,
                 .datepicker-days .table-condensed thead .next,
-                .datepicker-days .table-condensed thead .datepicker-switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datepicker-days .table-condensed thead .datepicker-switch,
+                .datepicker-days .table-condensed thead .prev:hover,
+                .datepicker-days .table-condensed thead .next:hover,
+                .datepicker-days .table-condensed thead .datepicker-switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 
 
@@ -2705,28 +2722,43 @@ function view($view_file, $view_data = array()) {
 
                 .datetimepicker-years .table-condensed thead .prev,
                 .datetimepicker-years .table-condensed thead .next,
-                .datetimepicker-years .table-condensed thead .switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datetimepicker-years .table-condensed thead .switch,
+                .datetimepicker-years .table-condensed thead .prev:hover,
+                .datetimepicker-years .table-condensed thead .next:hover,
+                .datetimepicker-years .table-condensed thead .switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-months .table-condensed thead .prev,
                 .datetimepicker-months .table-condensed thead .next,
-                .datetimepicker-months .table-condensed thead .switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datetimepicker-months .table-condensed thead .switch,
+                .datetimepicker-months .table-condensed thead .prev:hover,
+                .datetimepicker-months .table-condensed thead .next:hover,
+                .datetimepicker-months .table-condensed thead .switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-days .table-condensed thead .prev,
                 .datetimepicker-days .table-condensed thead .next,
-                .datetimepicker-days .table-condensed thead .switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datetimepicker-days .table-condensed thead .switch,
+                .datetimepicker-days .table-condensed thead .prev:hover,
+                .datetimepicker-days .table-condensed thead .next:hover,
+                .datetimepicker-days .table-condensed thead .switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-hours .table-condensed thead .prev,
                 .datetimepicker-hours .table-condensed thead .next,
-                .datetimepicker-hours .table-condensed thead .switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datetimepicker-hours .table-condensed thead .switch,
+                .datetimepicker-hours .table-condensed thead .prev:hover,
+                .datetimepicker-hours .table-condensed thead .next:hover,
+                .datetimepicker-hours .table-condensed thead .switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
                 .datetimepicker-minutes .table-condensed thead .prev,
                 .datetimepicker-minutes .table-condensed thead .next,
-                .datetimepicker-minutes .table-condensed thead .switch{ 
-                    background-color: $theme_options_styles[BgColorHeaderAgenda];
+                .datetimepicker-minutes .table-condensed thead .switch,
+                .datetimepicker-minutes .table-condensed thead .prev:hover,
+                .datetimepicker-minutes .table-condensed thead .next:hover,
+                .datetimepicker-minutes .table-condensed thead .switch:hover{ 
+                    background-color: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
 
                 .datepicker table tr td span.focused {
@@ -3130,6 +3162,10 @@ function view($view_file, $view_data = array()) {
                 }
                 .table-exercise td, .table-exercise th {
                     background-color: transparent;
+                }
+
+                user-details-exec{
+                    background-color: $theme_options_styles[BgTables];
                 }
 
             ";
@@ -4044,9 +4080,7 @@ function view($view_file, $view_data = array()) {
                 .col_maincontent_active {
                     background-color:$theme_options_styles[RightColumnCourseBgColor];
                 }
-                .user-details-exec{
-                    background-color:$theme_options_styles[RightColumnCourseBgColor];
-                }
+
                 @media(max-width:991px){
                     .module-container:has(.course-wrapper){
                         background-color:$theme_options_styles[RightColumnCourseBgColor];
