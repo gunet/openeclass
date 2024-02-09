@@ -141,6 +141,44 @@ class ZoomUserRepository
         return true;
     }
 
+    public function changeUserType(string $id, string $email, int $type)
+    {
+        $accessToken = $this->zoomRepository->getAccessToken();
+
+        $headers = [
+            'Authorization' => 'Bearer ' . $accessToken,
+            'Content-Type' => 'application/json',
+        ];
+
+        $body = '{
+          "feature_type": "user_type",
+          "feature_value": "'.$type.'",
+          "users": [
+            {
+              "id": "'.$id.'",
+              "email": "'.$email.'"
+            }
+          ]
+        }';
+
+        try {
+            $res = $this->client->post(
+                self::ZOOM_API_BASE_URL . '/v2/users/features',
+                [
+                    'headers' => $headers,
+                    'body' => $body
+                ]
+            );
+        } catch (ClientException $e) {
+            echo '<pre>';
+            print_r($e->getMessage());
+            exit;
+        }
+
+        $responseDataJson = $res->getBody()->getContents();
+        return json_decode($responseDataJson);
+    }
+
     private function saveInDatabase($userId, $data)
     {
         Database::get()->query("INSERT IGNORE INTO `zoom_user` 
