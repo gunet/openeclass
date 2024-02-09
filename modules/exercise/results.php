@@ -184,7 +184,7 @@ foreach ($result as $row) {
                 ORDER BY a.record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
-        $tool_content .= "<div class='col-12 mt-4'><div class='card px-lg-4 py-lg-3'><div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
+        $tool_content .= "<div class='col-12 mt-4'><div class='card panelCard px-lg-4 py-lg-3'><div class='card-body'><div class='table-responsive mt-0'><table class='table-default'>";
         $tool_content .= "<thead><tr><td colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
