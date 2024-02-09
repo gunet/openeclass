@@ -972,19 +972,24 @@ if (!class_exists('Exercise')) {
                             }
                         }
                         unset($objAnswerTmp);
-                    } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
+                    } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT || $question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
                         // construction of the Answer object
                         $objAnswerTmp = new Answer($question_id);
                         $answer = $objAnswerTmp->selectAnswer(1);
                         // construction of the Answer object
-                        list($answer, $answerWeighting) = explode('::', $answer);
-                        $answerWeighting = explode(',', $answerWeighting);
-                        $nbrAnswers = count($answerWeighting);
-                        for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-                            $value[$answerId] = '';
+                        if ($question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
+                            $value = [];
+                            foreach (unserialize($answer)[1] as $answer_key => $correct_answer) {
+                                $value[$answer_key] = 0; // mark all blanks as unanswered
+                            }
+                        } else {
+                            list($answer, $answerWeighting) = explode('::', $answer);
+                            $answerWeighting = explode(',', $answerWeighting);
+                            $nbrAnswers = count($answerWeighting);
+                            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                                $value[$answerId] = '';
+                            }
                         }
-                    } elseif ($question_type == FILL_IN_FROM_PREDEFINED_ANSWERS) {
-                        $value = [];
                     } elseif ($question_type == FREE_TEXT) {
                         $value = '';
                     } else {
