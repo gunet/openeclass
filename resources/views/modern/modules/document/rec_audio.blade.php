@@ -46,7 +46,7 @@
                     <button class='btn submitAdminBtn me-2' id='button-release-microphone' disabled>{{ trans('langReleaseMic') }}</button>
                     <button class='btn successAdminBtn me-2' id='button-download-recording' disabled>{{ trans('langSaveInDoc') }}</button>
                 </div>
-                <div class='col-12 d-flex justify-content-end p-1'>
+                <div class='col-12 d-flex justify-content-center p-1'>
                     <span class='help-block'>{{ trans('langMaxRecAudioTime') }}</span>
                 </div>
 

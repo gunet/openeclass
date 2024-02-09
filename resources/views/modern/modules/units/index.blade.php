@@ -155,81 +155,35 @@
                     @endif
 
 
-
+                  
                     @if(count($units) > 0)
                         <div class='col-12'>
-                            <div class='card panelCard px-lg-4 py-lg-3'>
-                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
-                                    <h3 class='mb-0'>{{ trans('langUnits')}}</h3>
-                                </div>
-                                <div class='card-body'>
-                                    <div id='UnitsControls' class='carousel slide' data-bs-ride='carousel'>
-
-                                        <div class='carousel-indicators h-auto mb-1'>
-                                            @php $counterIndicator = 0; @endphp
-                                            <div class='carousel-indicators h-auto mb-1'>
-                                                @foreach ($units as $cu)
-                                                    @if($counterIndicator == 0)
-                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' class='active' aria-current='true' aria-label='Carousel'></button>
-                                                    @else
-                                                        <button type='button' data-bs-target='#UnitsControls' data-bs-slide-to='{{ $counterIndicator }}' aria-current='true' aria-label='Carousel'></button>
-                                                    @endif
-                                                    @php $counterIndicator++; @endphp
-                                                @endforeach
-                                            </div>
-                                        </div>
-
-                                        <div class='carousel-inner'>
-                                            @php $counterUnits = 0; @endphp
-                                            @foreach ($units as $cu)
-                                                @if($counterUnits == 0)
-                                                    <div class='carousel-item active'>
-                                                @else
-                                                    <div class='carousel-item'>
-                                                @endif
-                                                        <div id='unit_{{ $cu->id }}' class='col-12'>
-                                                            <div class='panel clearfix'>
-                                                                <div class='col-12'>
-                                                                    <div class='item-content'>
-                                                                        <div class='item-header clearfix'>
-                                                                            <div class='item-title h4'>
-                                                                                <a class='TextBold' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
-                                                                                    {{ $cu->title }}
-                                                                                </a>
-                                                                                <br>
-                                                                                @if (!is_null($cu->start_week))
-                                                                                    <small>
-                                                                                        <span class='help-block'>
-                                                                                            {!! format_locale_date(strtotime($cu->start_week), 'short', false) !!}
-                                                                                        </span>
-                                                                                    </small>
-                                                                                @endif
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class='item-body'>
-                                                                            <div style='height:1px;' class='border-top-default mt-1 mb-3'></div>
-                                                                            <div class='col-sm-12 bg-transparent'>
-
-                                                                                <button class='carousel-prev-btn' type='button' data-bs-target='#UnitsControls' data-bs-slide='prev' aria-label='Carousel previous'>
-                                                                                    <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
-                                                                                </button>
-
-                                                                                <button class='carousel-next-btn float-end' type='button' data-bs-target='#UnitsControls' data-bs-slide='next' aria-label='Carousel next'>
-                                                                                    <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
-                                                                                </button>
-
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                @php $counterUnits++; @endphp
-                                            @endforeach
-                                        </div>
-
-                                    </div>
+                            <div class="card panelCard card-units px-lg-4 py-lg-3 p-3">
+                                <div class='card-body p-0'>
+                                    <ul class="tree-units">
+                                        <li>
+                                            <details open>
+                                                <summary><h3 class='mb-0'>{{ trans('langUnits')}}</h3></summary>
+                                                <ul>
+                                                    @foreach ($units as $cu)
+                                                        <li>
+                                                            <a class='TextBold' href='{{ $urlServer }}modules/units/index.php?course={{ $course_code }}&amp;id={{ $cu->id }}'>
+                                                                {{ $cu->title }}
+                                                            </a>
+                                                            <br>
+                                                            @if (!is_null($cu->start_week))
+                                                                <small>
+                                                                    <span class='help-block'>
+                                                                        {!! format_locale_date(strtotime($cu->start_week), 'short', false) !!}
+                                                                    </span>
+                                                                </small>
+                                                            @endif
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </details>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

@@ -41,18 +41,7 @@ ModalBoxHelper::loadModalBox();
 
 $toolName = $langForums;
 
-$head_content .= "
-  <style>
-    .panel-primary .panel-heading .panel-title { color: #fff;}
-    .panel-primary .panel-heading a { color: #fff;}
-    .panel-title a {text-decoration:none;}
 
-    .img-rounded-corners {
-      -webkit-border-radius: 15%;
-      -moz-border-radius: 15%;
-      border-radius: 15%;
-    }
-  </style>";
 
 load_js('tools.js');
 $head_content .= "
@@ -702,7 +691,7 @@ function post_content($myrow, $user_stats, $topic_subject, $topic_locked, $offse
         $content .= "        
             <div class='row'>
                 <div class='col-sm-1 col-2'>" .
-                    profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'img-rounded-corners margin-bottom-thin') . "
+                    profile_image($myrow->poster_id, IMAGESIZE_SMALL, 'rounded-circle margin-bottom-thin') . "
                 </div>
                 <div class='col-sm-11 col-10'>
                     <div class='forum-post-header'>

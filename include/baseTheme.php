@@ -320,6 +320,10 @@ function view($view_file, $view_data = array()) {
                 border: 0px;
             }
 
+            .diffEqual {
+                background-color: transparent !important;
+            }
+
         "
         ;
 
@@ -591,6 +595,10 @@ function view($view_file, $view_data = array()) {
 
                 .circle-img-contant{
                     border: solid 1px $theme_options_styles[ColorHyperTexts];
+                }
+
+                .text-muted{
+                    color:$theme_options_styles[ColorHyperTexts] !important;
                 }
             ";
         }
@@ -901,12 +909,6 @@ function view($view_file, $view_data = array()) {
 
                 .border-bottom-default{
                     border-bottom: solid 1px $theme_options_styles[clBorderBottomAccordions];
-                }
-
-                @media(min-width:992px){
-                    .col_maincontent_active {
-                        border-left: solid 1px $theme_options_styles[clBorderBottomAccordions];
-                    }
                 }
             ";
         }
@@ -2625,6 +2627,12 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[bgAgenda] !important;
                 }
 
+
+                .datetimepicker.dropdown-menu,
+                .datepicker.dropdown-menu{
+                    background: $theme_options_styles[bgAgenda] !important;
+                }
+
             ";
         }
 
@@ -2707,6 +2715,9 @@ function view($view_file, $view_data = array()) {
                 .datepicker table tr td span.focused {
                     background: $theme_options_styles[BgColorHeaderAgenda] !important;
                 }
+
+
+                
             ";
         }
 
@@ -2906,7 +2917,6 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[BgBorderColorAgenda];
                 }
 
-
             ";
         }
 
@@ -2980,6 +2990,50 @@ function view($view_file, $view_data = array()) {
                 .myPersonalCalendar .cal-week-box .row-fluid div:hover,
                 #cal-day-box .row-fluid div:hover{
                     background-color: $theme_options_styles[bgColorHoveredBodyAgenda] !important;
+                }
+
+            ";
+        }
+
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// BACKGROUND COLOR TO ACTIVE DATETIME SLOT ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['bgColorActiveDateTime'])){
+            $styles_str .= "
+                .datetimepicker table tr td span.active:active, 
+                .datetimepicker table tr td span.active:hover:active, 
+                .datetimepicker table tr td span.active.disabled:active, 
+                .datetimepicker table tr td span.active.disabled:hover:active, 
+                .datetimepicker table tr td span.active.active, 
+                .datetimepicker table tr td span.active:hover.active, 
+                .datetimepicker table tr td span.active.disabled.active, 
+                .datetimepicker table tr td span.active.disabled:hover.active{
+                    background-image: none !important;
+                    background-color: $theme_options_styles[bgColorActiveDateTime] !important;
+                }
+
+                .datepicker table tr td.active:active, 
+                .datepicker table tr td.active.highlighted:active, 
+                .datepicker table tr td.active.active, 
+                .datepicker table tr td.active.highlighted.active{
+                    background-image: none !important;
+                    background-color: $theme_options_styles[bgColorActiveDateTime] !important;
+                }
+
+                .datetimepicker table tr td.active:active, 
+                .datetimepicker table tr td.active:hover:active, 
+                .datetimepicker table tr td.active.disabled:active, 
+                .datetimepicker table tr td.active.disabled:hover:active, 
+                .datetimepicker table tr td.active.active, 
+                .datetimepicker table tr td.active:hover.active, 
+                .datetimepicker table tr td.active.disabled.active, 
+                .datetimepicker table tr td.active.disabled:hover.active{
+                    background-image: none !important;
+                    background-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
             ";
@@ -3734,6 +3788,11 @@ function view($view_file, $view_data = array()) {
                 #cal-slide-content a.event-item {
                     color: $theme_options_styles[linkColor];
                 }
+
+
+                .tree-units summary::before {
+                    background: $theme_options_styles[linkColor] url(../../template/modern/img/units-expand-collapse.svg) 0 0;
+                }
             
             ";
         }
@@ -3927,6 +3986,23 @@ function view($view_file, $view_data = array()) {
                         background-color:$theme_options_styles[RightColumnCourseBgColor];
                     }
                 }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////// BORDER COLOR TO THE LEFT SIDE OF COURSE CONTAINER  //////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['BorderLeftToRightColumnCourseBgColor'])){
+            $styles_str .= "
+                @media(min-width:992px){
+                    .col_maincontent_active {
+                        border-left: solid 1px $theme_options_styles[BorderLeftToRightColumnCourseBgColor];
+                    }
+                }
+
             ";
         }
 

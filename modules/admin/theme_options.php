@@ -47,10 +47,11 @@ $defaults = array(
                 "rgba(180, 190, 209, 1)" => array('BgColorScrollBar', 'BgHoveredColorScrollBar'),
                 "rgba(79, 104, 147, 1)" => array('clTabs'),
                 "rgba(104, 125, 163, 1)" => array('clAccordions','ClInactiveRadios', 'ClInactiveCheckboxes', 'clBorderInput', 'clInputText', 'clBorderSelect', 'clOptionSelect', 'clColorBodyAgenda', 'BgBorderTextEditor'),
-                "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover'),
+                "rgba(232, 237, 248, 1)" => array('clBorderBottomAccordions', 'clBorderModal', 'BgBorderMenuPopover', 'BorderLeftToRightColumnCourseBgColor'),
                 "rgba(239, 242, 251, 1)" => array('clBorderBottomLists'),
                 "rgba(205, 212, 224, 1)" => array('bgBorderContextualMenu'),
                 "rgba(155, 169, 193, 1)" => array('BgBorderRadios', 'BgBorderCheckboxes'),
+                "rgba(0, 51, 153, 1)" => array('bgColorActiveDateTime'),
                 "repeat" => array('bgType'),
                 "boxed" => array('containerType'),
                 "small-right" => array("loginImgPlacement"),
@@ -994,6 +995,10 @@ $tool_content .= "
                         <label for='RightColumnCourseBgColor' class='control-label-notes me-2 mb-2'>$langBgColor:</label>
                         <input name='RightColumnCourseBgColor' type='text' class='form-control colorpicker' id='RightColumnCourseBgColor' value='$theme_options_styles[RightColumnCourseBgColor]'>
                     </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='BorderLeftToRightColumnCourseBgColor' class='control-label-notes me-2 mb-2'>$langBgBorderLeftColor:</label>
+                        <input name='BorderLeftToRightColumnCourseBgColor' type='text' class='form-control colorpicker' id='BorderLeftToRightColumnCourseBgColor' value='$theme_options_styles[BorderLeftToRightColumnCourseBgColor]'>
+                    </div>
 
                     <h3 class='theme_options_legend text-decoration-underline mt-4'>$langBgColorConfig $langHelpCourseUI</h3>
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
@@ -1286,6 +1291,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColorHoveredBodyAgenda' class='control-label-notes mb-2 me-2'>$langbgColorHoveredBodyAgenda:</label>
                         <input name='bgColorHoveredBodyAgenda' type='text' class='form-control colorpicker' id='bgColorHoveredBodyAgenda' value='$theme_options_styles[bgColorHoveredBodyAgenda]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgColorActiveDateTime' class='control-label-notes mb-2 me-2'>$langbgColorActiveDateTime:</label>
+                        <input name='bgColorActiveDateTime' type='text' class='form-control colorpicker' id='bgColorActiveDateTime' value='$theme_options_styles[bgColorActiveDateTime]'>
                     </div>
                 </div>
             </div>

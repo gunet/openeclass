@@ -5784,6 +5784,7 @@ $langLoginConfigurationSettings = "Οθόνη Σύνδεσης";
 $langHomepageContainer = "Χρώμα φόντου (<small> Ανακοινώσεις </small>)";
 $langPortfolioCoursesContainer = "Χρώμα φόντου (<small>Τα μαθήματα μου, Ανακοινώσεις, Μηνύματα</small>)";
 $langBgColorConfigRightColumn = "Ρυθμίσεις Φόντου (<small>Δεξιά στήλη με το περιεχόμενο του μαθήματος</small>)";
+$langBgBorderLeftColor = "Χρώμα border στο αριστερό άκρο της στήλης περιοχομένου";
 $langHelpCourseUI = "(<small>Αριστερή στήλη με τα εργαλεία του μαθήματος</small>)";
 $langNavHyperTexts = "Τυπογραφία";
 $langPHyperTextColor = "Χρώμα επικεφαλίδων - κειμένων";
@@ -5877,6 +5878,7 @@ $langBgColorHeaderAgenda = "Χρώμα φόντου επικεφαλίδας η�
 $langclColorHeaderAgenda = "Χρώμα κειμένων επικεφαλίδας ημερολογίου";
 $langclColorBodyAgenda = "Χρώμα κειμένων (ημέρες, ώρες, λεπτά)";
 $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, ώρες, λεπτά)";
+$langbgColorActiveDateTime = "Χρώμα φόντου ενεργού slot (μικρό ημερολόγιο)";
 
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Ρυθμίσεις Menu Popover";
