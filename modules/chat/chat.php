@@ -161,15 +161,19 @@ if (!$conference_activity) {
        <input type='hidden' name='conference_id' value='$conference_id'>
        <fieldset>
         <div class='col-12'>
-            <div class='input-group'>
-              <input class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80' class='form-control'>
-              <input type='hidden' name='chatLine'>
-              <span class='input-group-text h-40px bg-default border-0 px-0'>
-                <input style='z-index:0;' class='btn submitAdminBtn' type='submit' value='$langSend'>
-              </span>
+            <div class='col-md-6 col-12 d-flex justify-content-start align-items-center gap-2'>
+                <div>
+                    <input class='form-control mt-0' type='text' placeholder='$typeyourmessage...' name='msg' size='80'>
+                    <input type='hidden' name='chatLine'>
+                </div>
+                <div>
+                    <button style='z-index:0;' class='btn submitAdminBtn' type='submit' data-bs-toogle='tooltip' title='$langSend' data-bs-placement='top'>
+                        <i class='fa-solid fa-paper-plane'></i>
+                    </button>
+                </div>
             </div>
-            <div class='embed-responsive embed-responsive-4by3 margin-top-fat mt-3'>
-              <iframe class='embed-responsive-item shadow-default Borders overflow-auto' id='iframe' src='$iframe_file' name='messageList'></iframe>
+            <div class='embed-responsive embed-responsive-4by3 chat-iframe margin-top-fat mt-3'>
+              <iframe class='embed-responsive-item' id='iframe' src='$iframe_file' name='messageList'></iframe>
             </div>
         </div>
        </fieldset>

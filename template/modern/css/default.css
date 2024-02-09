@@ -4125,6 +4125,32 @@ div[role="progressbar"]::before {
 .embed-responsive-item{ 
   height:650px; 
   width:100%;
+  border-radius: 4px;
+}
+
+.bodyChat{
+  background-color: #EFF6FF;
+  height: auto;
+}
+
+.bodyChat::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.bodyChat::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.bodyChat::-webkit-scrollbar-thumb {
+    background-color: #B4BED1;
+    border-radius: 20px ;
+    border: 1px solid transparent ;
+    background-clip: content-box;
+}
+
+.bodyChat::-webkit-scrollbar-thumb:hover {
+  background-color: #B4BED1;
 }
 
 /**********************************************************************************************************************/

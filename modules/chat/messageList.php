@@ -136,6 +136,8 @@ if (isset($_GET['store']) && $is_editor) {
             redirect_to_home_page("modules/chat/messageList.php?course=$course_code&conference_id=$conference_id");
         }
     }
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -157,8 +159,11 @@ if (isset($_GET['store']) && $is_editor) {
     <link href="<?php echo $urlServer;?>template/modern/css/font-awesome-6.4.0/css/all.css" rel="stylesheet">
 
     <link rel="stylesheet" href="<?php echo $urlServer;?>template/modern/css/default.css">
+    <?php if(get_config('theme_options_id') > 0){ $theme_id = get_config('theme_options_id'); ?>
+        <link rel="stylesheet" href="<?php echo $urlServer;?>courses/theme_data/<?php echo $theme_id; ?>/style_str.css?<?php echo time(); ?>">
+    <?php } ?>
 </head>
-<body class=' bodyChat pb-3'>
+<body class=' bodyChat p-3'>
 <?php
     // display message list
     $fileContent = file($fileChatName);
@@ -184,15 +189,16 @@ if (isset($_GET['store']) && $is_editor) {
                     $class = 'alert-info';
                     $alert_type_icon = 'fa-circle-info fa-lg';
                 }
-                echo "
-                            <div class='col-12 mt-4 mb-3 ps-3 pe-3'>
+                echo "  <div class='row m-auto g-3'>
+                            <div class='col-12'>
                                 <div class='alert $class text-center'>
                                     <i class='fa-solid $alert_type_icon'></i>
                                     <span>
                                         $str_1[0]
                                     </span>
                                 </div>
-                            </div>\n";
+                            </div>
+                        </div>\n";
             } else {
                 $user_id = intval(trim($str_1[1]));
                 $str_2 = explode(' - ', $str_1[0], 2);
@@ -205,37 +211,46 @@ if (isset($_GET['store']) && $is_editor) {
                     $usertext = '';
                 }
                 $token = token_generate($user_id, true);
+                $column_position = "";
+                if($user_id == $_SESSION['uid']){
+                    $column_position = "justify-content-md-start";
+                }else{
+                    $column_position = "justify-content-md-end";
+                }
                 echo "
-                    <div class='col-12 p-3'>
-                        <div class='card panelCard px-lg-4 py-lg-3'>
-                            <div class='card-header border-0 d-flex justify-content-start align-items-center'>
-                                <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
-                                    
-                                    <a href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
-                                        ". profile_image($user_id, IMAGESIZE_SMALL, 'rounded-circle') ."
-                                    </a>
-                                    <p>". display_user($user_id, false, false) ."</p>
-                                    
+                <div class='row m-auto d-flex $column_position align-items-center g-3'>
+
+                        <div class='col-md-6 col-12'>
+                            <h6 class='px-1'>$datetime</h6>
+                            <div class='card panelCard p-3' style='border-radius:10px;'>
+                                <div class='card-header p-0 border-0 d-flex justify-content-start align-items-center'>
+                                    <div class='d-flex justify-content-start align-items-center gap-2 flex-wrap'>
+                                        
+                                        <a href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
+                                            ". profile_image($user_id, IMAGESIZE_SMALL, 'rounded-circle') ."
+                                        </a>
+                                        <p>". display_user($user_id, false, false) ."</p>
+                                        
+                                    </div>
                                 </div>
-                            </div>
-                            <div class='card-body'>
-                                <div>
-                                    " . $usertext . "
+                                <div class='card-body px-0 pt-3 pb-0'>
+                                    <p>
+                                        " . $usertext . "
+                                    </p>
                                 </div>
-                            </div>
-                            <div class='card-footer border-0'>
-                                <p>$datetime</p>
                             </div>
                         </div>
-                    </div>\n";
+                    
+                </div>\n";
             }
         } else { //prior to version 3.0 generated conferences
-                echo "
-                            <div class='col-12 mt-4 mb-3 p-3'>
+                echo "  <div class='row m-auto g-3'>
+                            <div class='col-12'>
                                 <div class='alert alert-info'>
                                     $str_1[0]
                                 </div>
-                            </div>\n";
+                            </div>
+                        </div>\n";
         }
     }
     echo "</body></html>\n";

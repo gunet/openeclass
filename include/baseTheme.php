@@ -1092,6 +1092,10 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[bgWhiteButtonColor] !important;
                 }
 
+                .showSettings{
+                    background: $theme_options_styles[bgWhiteButtonColor] !important;
+                }
+
             ";
         }
 
@@ -1145,6 +1149,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .bs-placeholder .filter-option .filter-option-inner-inner {
+                    color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
+                .showSettings{
                     color: $theme_options_styles[whiteButtonTextColor] !important;
                 }
 
@@ -1203,6 +1211,11 @@ function view($view_file, $view_data = array()) {
                 .bs-placeholder:hover .filter-option .filter-option-inner-inner {
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .showSettings:hover{
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
+                }
             ";
         }
 
@@ -1249,6 +1262,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .bs-placeholder.submitAdminBtn:hover{
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
+                }
+
+                .showSettings:hover{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
                 }
             ";
@@ -3381,13 +3398,18 @@ function view($view_file, $view_data = array()) {
                 background-color: $theme_options_styles[BgScrollBar];
               }
 
-              .bodyChat::-webkit-scrollbar-track {
+              .chat-iframe::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
 
               .jsmind-inner::-webkit-scrollbar-track {
                 background-color: $theme_options_styles[BgScrollBar];
               }
+              
+              .bodyChat::-webkit-scrollbar-track {
+                background-color: $theme_options_styles[BgScrollBar];
+              }
+              
               
             ";
         }
@@ -3430,13 +3452,18 @@ function view($view_file, $view_data = array()) {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
               
-              .bodyChat::-webkit-scrollbar-thumb {
+              .chat-iframe::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
 
               .jsmind-inner::-webkit-scrollbar-thumb {
                 background-color: $theme_options_styles[BgColorScrollBar];
               }
+
+              .bodyChat::-webkit-scrollbar-thumb {
+                background-color: $theme_options_styles[BgColorScrollBar];
+              }
+            
               
             ";
         }
@@ -3479,11 +3506,15 @@ function view($view_file, $view_data = array()) {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
               
-              .bodyChat::-webkit-scrollbar-thumb:hover {
+              .chat-iframe::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
 
               .jsmind-inner::-webkit-scrollbar-thumb:hover {
+                background-color: $theme_options_styles[BgHoveredColorScrollBar];
+              }
+
+              .bodyChat::-webkit-scrollbar-thumb:hover {
                 background-color: $theme_options_styles[BgHoveredColorScrollBar];
               }
               
@@ -3654,11 +3685,6 @@ function view($view_file, $view_data = array()) {
                   
                 .portfolio-tools a{
                     color: $theme_options_styles[linkColor];
-                }
-
-                .showSettings,
-                .showSettings:hover{
-                    color: $theme_options_styles[linkColor] !important;
                 }
 
                 .nav-link-adminTools{
@@ -4027,7 +4053,8 @@ function view($view_file, $view_data = array()) {
                 .panelCard,
                 .cardLogin,
                 .statistics-card,
-                .cardLogin-secondary{
+                .cardLogin-secondary,
+                .bodyChat{
                     background-color:$theme_options_styles[BgPanels] ;
                 }
 
@@ -4129,9 +4156,107 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// BACKGROUND COLOR TO THE CHAT CONTAINER /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutChatContainer'])){
+            $styles_str .= "
+                .bodyChat{
+                    background-color: $theme_options_styles[AboutChatContainer];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////// BORDER COLOR TO THE CHAT CONTAINER ///////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutBorderChatContainer'])){
+            $styles_str .= "
+                .embed-responsive-item{
+                    border: solid 1px $theme_options_styles[AboutBorderChatContainer];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////// BACKGROUND COLOR TO THE COURSE INFO CONTAINER //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutCourseInfoContainer'])){
+            $styles_str .= "
+                .card-course-info{
+                    background-color: $theme_options_styles[AboutCourseInfoContainer];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// BORDER COLOR TO THE COURSE INFO CONTAINER ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutBorderCourseInfoContainer'])){
+            $styles_str .= "
+                .card-course-info{
+                    border: solid 1px $theme_options_styles[AboutBorderCourseInfoContainer];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////// BACKGROUND COLOR TO THE COURSE UNITS CONTAINER /////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutUnitsContainer'])){
+            $styles_str .= "
+                .card-units{
+                    background-color: $theme_options_styles[AboutUnitsContainer];
+                }
+            
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        ////////////////// BORDER COLOR TO THE COURSE UNITS CONTAINER ///////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['AboutBorderUnitsContainer'])){
+            $styles_str .= "
+                .card-units{
+                    border: solid 1px $theme_options_styles[AboutBorderUnitsContainer];
+                }
+            
+            ";
+        }
+
 
         
-
+        // Create .css file for the ($theme_id) in order to override the default.css file when it is necessary.
+        if (isset($styles_str) && $styles_str){
+            $fileStyleStr = $webDir . "/courses/theme_data/$theme_id/style_str.css";
+            if(!file_exists($fileStyleStr)){
+                file_put_contents($fileStyleStr,"");
+            }else{
+                file_put_contents($fileStyleStr,$styles_str);
+            }
+        }
        
 
         

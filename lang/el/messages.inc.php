@@ -5738,7 +5738,6 @@ $langBgColor = 'Χρώμα Φόντου';
 $langBgColorConfig = 'Ρυθμίσεις Φόντου';
 $langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
 
-$langLinksHeaderFooterCongiguration = 'Ρυθμίσεις Συνδέσμων Header - Footer';
 $langBgHeaderCongiguration = "Χρώμα Φόντου Header";
 $langBgFooterCongiguration = "Χρώμα Φόντου Footer";
 $langButtonsColorCongiguration = "Ρυθμίσεις Κουμπιών Με Χρώμα";
@@ -5900,6 +5899,13 @@ $langSettingsScrollBar = "Ρυθμίσεις ScrollBar";
 $BgScrollBar = "Χρώμα φόντου";
 $langBgColorScrollBar = "Χρώμα φόντου μπάρας";
 $langBgHoveredColorScrollBar = "Χρώμα hovered φόντου μπάρας";
+
+$langNavMoreOptions = "Περισσότερες επιλογές";
+$langContainerBgColor = "Χρώμα φόντου";
+$langBorderContainerBgColor = "Χρώμα border";
+$langAboutChatContainer = "Ρυθμίσεις container στην συνομιλία του μαθήματος";
+$langAboutCourseInfoContainer = "Ρυθμίσεις container στην παρουσίαση/προβολή του μαθήματος";
+$langAboutUnitsContainer = "Ρυθμίσεις container στις θεματικές ενότητες του μαθήματος";
 
 /* * ***********************************************************
  * Validation
