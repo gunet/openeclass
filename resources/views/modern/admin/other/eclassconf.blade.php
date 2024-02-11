@@ -448,7 +448,7 @@
                                                 <div class='landing-default'>
                                                     <div class='radio margin-bottom-fat'>
                                                         <label class='d-inline-flex align-items-top'>
-                                                            <input {{$defaultHomepage}} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span class='text-secondary'>{{trans('langHomePageDefault')}}</span>
+                                                            <input {{$defaultHomepage}} class='homepageSet default_checkbox' name='homepageSet' value='default' type='radio'> <span>{{trans('langHomePageDefault')}}</span>
                                                         </label>
                                                     </div>
                                                     <div id='collapse-defaultHomepage' class='collapse homepage-inputs margin-bottom-fat show'>

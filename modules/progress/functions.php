@@ -2718,7 +2718,7 @@ function student_view_progress() {
                         <h4 class='text-center'>$certificate->title</h4>
                         <div class='row'>
                             <div class='col-sm-12 certificate_panel_date text-success text-center'>$dateAssigned</div>
-                            <div class='col-sm-12 certificate_panel_issuer text-center text-secondary'>$certificate->issuer</div>
+                            <div class='col-sm-12 certificate_panel_issuer text-center'>$certificate->issuer</div>
                         </div>";
                 if ($certificate->completed == 1) {
                     $tool_content .= "</a>";
@@ -2735,7 +2735,11 @@ function student_view_progress() {
                 } else {
                     $score = round($certificate->completed_criteria / $certificate->total_criteria * 100, 0);
                     $angle = round($certificate->completed_criteria / $certificate->total_criteria * 360, 2);
-                    $tool_content .= "<div id='progress_circle' class='mt-3 ms-auto me-auto' data-progress='$score' style='--progress: {$angle}deg;'>$score%</div>";
+                    if(get_config('theme_options_id') > 0){
+                        $tool_content .= "<div class='mt-3 ms-auto me-auto' role='progressbar' aria-valuenow='{$score}' aria-valuemin='0' aria-valuemax='100' style='--value: {$angle}; --size: 9rem;'></div>";
+                    }else{  
+                        $tool_content .= "<div id='progress_circle' class='mt-3 ms-auto me-auto' data-progress='$score' style='--progress: {$angle}deg;'>$score%</div>";
+                    }
                     $tool_content .= "</div></a>";
                 }
                 $tool_content .= "</div>";

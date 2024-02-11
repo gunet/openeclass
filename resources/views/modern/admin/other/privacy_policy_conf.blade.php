@@ -36,7 +36,7 @@
                                 <div class='landing-default'>
                                     @foreach ($selectable_langs as $langCode => $langName)
                                         <div class='form-group mb-4'>
-                                            <label for='privacy_policy_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}: <span class='text-secondary'>({{ $langName }})</span></label>
+                                            <label for='privacy_policy_text_{{ $langCode }}' class='col-sm-12 control-label-notes'>{{ trans('langText') }}: <span>({{ $langName }})</span></label>
                                             <div class='col-sm-12'>
                                                 {!! rich_text_editor('privacy_policy_text_'.$langCode, 5, 20, $policyText[$langCode]) !!}
                                             </div>

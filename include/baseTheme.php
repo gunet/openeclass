@@ -2542,6 +2542,11 @@ function view($view_file, $view_data = array()) {
                 .modal-content{
                     color:  $theme_options_styles[clTextModal];
                 }
+
+                .bootbox.show .bootbox-body, 
+                .modal.show .modal-body{
+                    color: $theme_options_styles[clTextModal];
+                }
             ";
         }
 

@@ -261,7 +261,7 @@
                                                         <div class='text-center text-success'>
                                                             {!! format_locale_date(strtotime($certificate->assigned), null, false) !!}
                                                         </div>
-                                                        <div class='certificate_panel_issuer text-center text-secondary'>
+                                                        <div class='certificate_panel_issuer text-center'>
                                                             {!! $certificate->cert_issuer !!}
                                                         </div>
 
@@ -303,7 +303,7 @@
                                                         <div class='badge_date text-center text-success'>
                                                             {!! format_locale_date(strtotime($badge->assigned), null, false) !!}
                                                         </div>
-                                                        <div class='bagde_panel_issuer text-center text-secondary'>
+                                                        <div class='bagde_panel_issuer text-center'>
                                                             {!! $badge->issuer !!}
                                                         </div>
                                                     </a>

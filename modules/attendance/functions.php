@@ -1158,7 +1158,7 @@ function user_attendance_settings($attendance_id) {
             <div class='form-wrapper form-edit rounded border-0 px-0'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id&editUsers=1'>
                     <div class='form-group'>
-                        <label class='col-12 text-secondary'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
+                        <label class='col-12'><span class='help-block'>$langAttendanceInfoForUsers</span></label>
                     </div>
                     <div class='form-group mt-4'>
                     <label class='col-sm-6 control-label-notes mb-2'>$langUserDuration</label>

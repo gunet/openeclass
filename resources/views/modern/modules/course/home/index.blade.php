@@ -1,28 +1,4 @@
 @extends('layouts.default')
-@push('head_styles')
-    <style>
-        #progress_circle {
-            display: flex;
-            width: 130px;
-            height: 130px;
-            border-radius: 50%;
-            background: conic-gradient(#0073E6 var(--progress), #E8EDF8 0deg);
-            font-size: 0;
-        }
-        #progress_circle::after {
-            content: attr(data-progress) '%';
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            width: 100%;
-            margin: 10px;
-            border-radius: 50%;
-            background: white;
-            font-size: 2rem;
-            text-align: center;
-        }
-    </style>
-@endpush
 @push('head_scripts')
     <script type='text/javascript'>
         $(document).ready(function() {
@@ -606,7 +582,12 @@
                                                                 @if ($percentage_t == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else
-                                                                    <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $angle }}deg;">{{ $percentage_t }}%</div>
+                                                                    @if(get_config('theme_options_id') > 0)
+                                                                        <div role="progressbar" aria-valuenow="{{ $percentage_t }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage_t }}; --size: 9rem;"></div>
+                                                                    @else
+                                                                        <div id="progress_circle" data-progress="{{ $percentage_t }}" style="--progress: {{ $angle }}deg;">{{ $percentage_t }}%</div>
+                                                                    @endif
+                                                                    
                                                                 @endif
                                                             </a>
                                                         </div>
@@ -619,7 +600,12 @@
                                                                 @if ($percentage == '100')
                                                                     <i class='fa fa-check-circle fa-5x state_success'></i>
                                                                 @else
-                                                                    <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
+                                                                    @if(get_config('theme_options_id') > 0)
+                                                                        <div role="progressbar" aria-valuenow="{{ $percentage }}" aria-valuemin="0" aria-valuemax="100" style="--value: {{ $percentage }}; --size: 9rem;"></div>
+                                                                    @else
+                                                                        <div id="progress_circle" data-progress="{{ $percentage }}" style="--progress: {{ $percentage }}deg;">{{ $percentage }}%</div>
+                                                                    @endif
+                                                                    
                                                                 @endif
                                                             </a>
                                                         </div>

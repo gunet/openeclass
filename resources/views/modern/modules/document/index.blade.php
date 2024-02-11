@@ -165,7 +165,7 @@
                                                         @if($file->visible == 1)
                                                             <a href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @else
-                                                            <a class="opacity-50 text-secondary pe-none" href='{!! $file->url !!}'>{{ $file->filename }}</a>
+                                                            <a class="opacity-50 pe-none" href='{!! $file->url !!}'>{{ $file->filename }}</a>
                                                         @endif
                                                     @else
                                                         {!! $file->link !!}
@@ -218,7 +218,7 @@
                                                     @if($file->visible == 1)
                                                         <td style='width:20%;'>{{ format_locale_date(strtotime($file->date), 'short', false) }}</td>
                                                     @else
-                                                        <td style='width:20%;'><span class="opacity-50 text-secondary">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
+                                                        <td style='width:20%;'><span class="opacity-50">{{ format_locale_date(strtotime($file->date), 'short', false) }}</span></td>
                                                     @endif
 
                                                 @elseif ($file->format == '.meta')
