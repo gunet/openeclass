@@ -189,9 +189,9 @@ function showlinks() {
             <tr>                
             <td>";
             if (empty($myrow->title)) {
-                $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->url) . "</a>";
+                $output .= "<a href='" . q($myrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($myrow->url) . "</a>";
             } else {
-                $output .= "<a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>";
+                $output .= "<a href='" . q($myrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($myrow->title) . "</a>";
             }
             $output .= "<br><small class='comments'>" . $myrow->description . "</small></td>";
             $output .= "<td><label class='label-container'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /><span class='checkmark'></span></label></td>

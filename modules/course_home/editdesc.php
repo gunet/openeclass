@@ -126,7 +126,7 @@ $layout = $course->home_layout;
 if (isset($course->course_image)) {
     $course_image = "
         <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-            <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;' 'Course image'>
+            <img src='{$urlAppend}courses/$course_code/image/".urlencode($course->course_image)."' style='max-height:100px;max-width:150px;' alt='Course image'>
             <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?course=$course_code&delete_image=true&" .  generate_csrf_token_link_parameter() . "'>$langDelete</a>
         </div>
         <input type='hidden' name='course_image' value='".q($course->course_image)."'>

@@ -60,7 +60,7 @@ function list_links($id = NULL) {
                         $checked = 'checked';
                     }
                     $ret_string .= "<tr>";
-                    $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank'>" .
+                    $ret_string .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkcatrow->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
                         q(($linkcatrow->title == '') ? $linkcatrow->url : $linkcatrow->title) . "</a></td>";
                     $ret_string .= "<td>" . standard_text_escape($linkcatrow->description) . "</td>";
                     $ret_string .= "<td><label class='label-container'><input type='checkbox' $checked name='link[]' value='$linkcatrow->id' /><span class='checkmark'></span></label></td>";

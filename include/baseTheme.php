@@ -276,33 +276,6 @@ function view($view_file, $view_data = array()) {
 
         $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
 
-        $cl_cache = time();
-        //Get .css files in order to export more info about themes
-        if($theme_options->name == 'Default Dark'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/default_dark.css?".$cl_cache."'/>
-            ";
-        }
-
-        if($theme_options->name == 'Crimson'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/crimson.css?".$cl_cache."'/>
-            ";
-        }
-
-        if($theme_options->name == 'Emerald'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/emerald.css?".$cl_cache."'/>
-            ";
-        }
-
-        if($theme_options->name == 'Wood'){
-            $head_content .= "
-                <link rel='stylesheet' type='text/css' href='{$urlAppend}template/modern/css/wood.css?".$cl_cache."'/>
-            ";
-        }
-
-
         $styles_str .= " 
 
             #submitSearch{
@@ -322,6 +295,11 @@ function view($view_file, $view_data = array()) {
 
             .diffEqual {
                 background-color: transparent !important;
+            }
+
+            .select2-container--default .select2-selection--multiple .select2-selection__choice__remove,
+            .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{
+                color: #C44601;
             }
 
         "
@@ -3090,6 +3068,70 @@ function view($view_file, $view_data = array()) {
                     background-color: $theme_options_styles[bgColorActiveDateTime] !important;
                 }
 
+                .datepicker table tr td span.active:active, 
+                .datepicker table tr td span.active:hover:active, 
+                .datepicker table tr td span.active.disabled:active, 
+                .datepicker table tr td span.active.disabled:hover:active, 
+                .datepicker table tr td span.active.active, 
+                .datepicker table tr td span.active:hover.active, 
+                .datepicker table tr td span.active.disabled.active, 
+                .datepicker table tr td span.active.disabled:hover.active {
+                    color: #fff;
+                    background-color: $theme_options_styles[bgColorActiveDateTime] !important;
+                    border-color: $theme_options_styles[bgColorActiveDateTime] !important;
+                }
+
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// TEXT COLOR TO ACTIVE DATETIME SLOT /////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        
+        if(!empty($theme_options_styles['TextColorActiveDateTime'])){
+            $styles_str .= "
+                .datetimepicker table tr td span.active:active, 
+                .datetimepicker table tr td span.active:hover:active, 
+                .datetimepicker table tr td span.active.disabled:active, 
+                .datetimepicker table tr td span.active.disabled:hover:active, 
+                .datetimepicker table tr td span.active.active, 
+                .datetimepicker table tr td span.active:hover.active, 
+                .datetimepicker table tr td span.active.disabled.active, 
+                .datetimepicker table tr td span.active.disabled:hover.active{
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;
+                }
+
+                .datepicker table tr td.active:active, 
+                .datepicker table tr td.active.highlighted:active, 
+                .datepicker table tr td.active.active, 
+                .datepicker table tr td.active.highlighted.active{
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;
+                }
+
+                .datetimepicker table tr td.active:active, 
+                .datetimepicker table tr td.active:hover:active, 
+                .datetimepicker table tr td.active.disabled:active, 
+                .datetimepicker table tr td.active.disabled:hover:active, 
+                .datetimepicker table tr td.active.active, 
+                .datetimepicker table tr td.active:hover.active, 
+                .datetimepicker table tr td.active.disabled.active, 
+                .datetimepicker table tr td.active.disabled:hover.active{
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;
+                }
+
+                .datepicker table tr td span.active:active, 
+                .datepicker table tr td span.active:hover:active, 
+                .datepicker table tr td span.active.disabled:active, 
+                .datepicker table tr td span.active.disabled:hover:active, 
+                .datepicker table tr td span.active.active, 
+                .datepicker table tr td span.active:hover.active, 
+                .datepicker table tr td span.active.disabled.active, 
+                .datepicker table tr td span.active.disabled:hover.active {
+                    color: $theme_options_styles[TextColorActiveDateTime] !important;
+                }
+
             ";
         }
 
@@ -3373,7 +3415,7 @@ function view($view_file, $view_data = array()) {
         /////////////////////////////////////////////////////////////////////////////////////
 
         if(!empty($theme_options_styles['ClTextEditor'])){
-            
+            $togglePNG = $urlServer . "js/tinymce/skins/light/img/toggle.png";
             $styles_str .= "
 
                 .mce-toolbar .mce-btn i {
@@ -3396,7 +3438,7 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .mce-toolbar .mce-btn i.mce-i-none{
-                    background-image: url('../../js/tinymce/skins/light/img/toggle.png') !important;
+                    background-image: url('$togglePNG') !important;
                 }
                 
             ";
@@ -3597,7 +3639,37 @@ function view($view_file, $view_data = array()) {
             ";
         }
 
-        
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////// BACKGROUND COLOR TO THE TOOLTIP COMPONENT //////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['bgColorTooltip'])){
+
+            $styles_str .= "
+                .tooltip.fade.show *{
+                    background-color: $theme_options_styles[bgColorTooltip];
+
+                }
+            ";
+        }
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////// TEXT COLOR TO THE TOOLTIP COMPONENT ////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////
+
+        if(!empty($theme_options_styles['TextColorTooltip'])){
+
+            $styles_str .= "
+                .tooltip.fade.show *{
+                    color: $theme_options_styles[TextColorTooltip];
+
+                }
+            ";
+        }
 
 
 
@@ -3870,11 +3942,11 @@ function view($view_file, $view_data = array()) {
                 }
 
                 .mycourses-pagination .page-item-next .page-link:hover,
-                .mentors-pagination .page-item-previous .page-link:hover{
+                .mycourses-pagination .page-item-previous .page-link:hover{
                     background-color: transparent !important;
                 }
                 .mycourses-pagination .page-item-previous .page-link:hover,
-                .mentors-pagination .page-item-previous .page-link:hover{
+                .mycourses-pagination .page-item-previous .page-link:hover{
                     background-color: transparent !important;
                 }
 
@@ -3898,6 +3970,10 @@ function view($view_file, $view_data = array()) {
                 }
 
                 #leftTOCtoggler{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .more-enabled-login-methods div{
                     color: $theme_options_styles[linkColor];
                 }
             

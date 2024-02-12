@@ -88,7 +88,7 @@ function list_videos() {
                         }
                         $tool_content .= "<tr>";
                         $tool_content .= "<td><label class='label-container'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /><span class='checkmark'></span></label></td>";
-                        $tool_content .= "<td>" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
+                        $tool_content .= "<td>" . icon('fa-link') . "&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank' aria-label='(opens in a new tab)'>" .
                                 q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a>";
                         $tool_content .= $linkvideocat_description_text . "</td>";
                         $tool_content .= "<td>" . format_locale_date(strtotime($linkvideocat->date), 'short', false) . "</td>";

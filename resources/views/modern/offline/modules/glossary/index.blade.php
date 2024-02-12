@@ -59,7 +59,7 @@
                                             <div>
                                                 <span class='term-url'>
                                                     <small>
-                                                        <a href='{{ $data->url }}' target='_blank'>{{ $data->url }}&nbsp;&nbsp;
+                                                        <a href='{{ $data->url }}' target='_blank' aria-label='(opens in a new tab)'>{{ $data->url }}&nbsp;&nbsp;
                                                         <i class='fa fa-external-link' style='color:#444;'></i></a>
                                                     </small>
                                                 </span>

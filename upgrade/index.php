@@ -42,7 +42,7 @@ $tool_content .= "
             <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>$langExpl2Upgrade</span></div>
             <div class='alert alert-info'><i class='fa-solid fa-triangle-exclamation fa-lg'></i>
                 <p><span>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
-                    $langUpgRead <a href='$upgrade_info_file' target='_blank'>$langUpgMan</a> $langUpgLastStep
+                    $langUpgRead <a href='$upgrade_info_file' target='_blank' aria-label='(opens in a new tab)'>$langUpgMan</a> $langUpgLastStep
                 </p></span>
             </div>            
         </div>";

@@ -46,7 +46,7 @@
                       @foreach ($unit_resources as $r)
                         <tr>
                             <td width='1'><span class='{{ get_unit_resource_icon($r->type, $r->res_id) }}'></span></td>
-                            <td><a href='{{ get_unit_resource_link($r->type, $r->res_id) }}' target='_blank' aria-label="Available unit">{{ $r->title }}</a><br /><p>{!! $r->comments !!}</p></td>
+                            <td><a href='{{ get_unit_resource_link($r->type, $r->res_id) }}' target='_blank' aria-label='(opens in a new tab)'>{{ $r->title }}</a><br /><p>{!! $r->comments !!}</p></td>
                         </tr>
                       @endforeach
                   </tbody>

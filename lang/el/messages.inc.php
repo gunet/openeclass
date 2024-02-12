@@ -2532,7 +2532,7 @@ $langOtherReq = "Άλλες απαιτήσεις συστήματος";
 $langInstallBullet1 = "Μια βάση δεδομένων MySQL.";
 $langInstallBullet3 = "Δικαιώματα εγγραφής στον κατάλογο όπου το Open eClass έχει αποσυμπιεστεί.";
 $langCheckReq = "Έλεγχος προαπαιτούμενων προγραμμάτων για τη λειτουργία του Open eClass";
-$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια <a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html' target='_blank'>GNU General Public Licence (GPL). </a><br />
+$langInfoLicence = "Tο Open eClass είναι ελεύθερη εφαρμογή και διανέμεται σύμφωνα με την άδεια <a href='https://www.gnu.org/licenses/old-licenses/gpl-2.0.html' target='_blank' aria-label='(opens in a new tab)'>GNU General Public Licence (GPL). </a><br />
                 Παρακαλούμε διαβάστε την άδεια και κάνετε κλικ στο 'Αποδοχή'";
 $langAccept = "Αποδοχή";
 $langLater = 'Αργότερα';
@@ -3684,7 +3684,7 @@ $langMultiRegUserData = "Στοιχεία Λογαριασμών Χρηστών"
 $langHybridAuthSetup1 = "<br>Για οδηγίες σχετικά με τον ορισμό των πεδίων <strong>";
 $langHybridAuthSetup2 = " Id/Key</strong> και <strong>";
 $langHybridAuthSetup3 = " Secret</strong> πατήστε <a href=";
-$langHybridAuthSetup4 = " target='_blank'>εδώ</a>.";
+$langHybridAuthSetup4 = " target='_blank' aria-label='(opens in a new tab)'>εδώ</a>.";
 $langHybridAuthCallback = "<br>Ο σύνδεσμος <strong>callback</strong> της εφαρμογής είναι: ";
 $langCustomEmailBody = "Προσαρμοσμένο email";
 $langInfoEnableCourseRegistration = "Ο χρήστης μπορεί να εγγραφεί σε $langsCourses";
@@ -5865,6 +5865,7 @@ $langclColorHeaderAgenda = "Χρώμα κειμένων επικεφαλίδας
 $langclColorBodyAgenda = "Χρώμα κειμένων (ημέρες, ώρες, λεπτά)";
 $langbgColorHoveredBodyAgenda = "Χρώμα hovered φόντου (ημέρες, ώρες, λεπτά)";
 $langbgColorActiveDateTime = "Χρώμα φόντου ενεργού slot (μικρό ημερολόγιο)";
+$langtextColorActiveDateTime = "Χρώμα κειμένου ενεργού slot(μικρό ημερολόγιο)";
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Ρυθμίσεις Menu Popover";
 $langBgMenuPopover = "Χρώμα φόντου";
@@ -5895,6 +5896,10 @@ $langSettingsProgressBar = "Ρυθμίσεις ProgressBar";
 $langBackProgressBar = "Χρώμα φόντου στο πίσω μέρος του κειμένου της μπάρας";
 $langBgProgressBar = "Χρώμα φόντου μπάρας (όχι γεμισμένη)";
 $langBgColorProgressBarAndText = "Χρώμα φόντου μπάρας και χρώμα κειμένου (γεμισμένη μπάρα)";
+$langNavSettingsTooltip = "Tooltip";
+$langSettingsTooltip = "Ρυθμίσεις Tooltip";
+$langbgColorTooltip = "Χρώμα φόντου";
+$langTextColorTooltip = "Χρώμα κειμένου";
 
 /* * ***********************************************************
  * Validation
@@ -5924,7 +5929,7 @@ $langUnknownSetting = 'Άγνωστη ρύθμιση';
 $langAPITokenExists = "Έχει δημιουργηθεί ήδη ένα token. Αν θέλετε να δημιουργήσετε νέο, κάντε κλικ στο 'Δημιουργία νέου token'";
 $langAPITokenShortDesc = "Δημιουργία token για χρήση του eClass API.";
 $langAPITokenLongDesc = "Λεπτομέρειες σχετικά με τις υποστηριζόμενες κλήσεις του API μπορείτε να βρείτε
-<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>εδώ</a>.";
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='(opens in a new tab)'>εδώ</a>.";
 $langCreateAPIToken = 'Δημιουργία νέου Token';
 $langAPITokenCreated = "Το token δημιουργήθηκε. Αντιγράψτε το έτσι ώστε να το χρησιμοποιήσετε στην εφαρμογή σας.";
 
@@ -6337,7 +6342,7 @@ $langImportH5P = "Μπορείτε να εισάγετε ένα έτοιμο α�
 $langH5pInfoUpdate = "Κάντε κλικ στο 'Ενημέρωση' έτσι ώστε οι διαθέσιμοι τύποι διαδραστικού περιεχομένου H5P
                     να ενημερωθούν με τις πιο πρόσφατες αλλαγές (αν υπάρχουν). <br>
                     Δείτε περισσότερες λεπτομέρειες στο
-                    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>
+                    <a href='https://h5p.org/content-types-and-applications/' target='_blank' aria-label='(opens in a new tab)'>https://h5p.org/content-types-and-applications/</a>
                     για τους διαθέσιμους τύπους περιεχομένων.";
 $langUpdateRequired = "Χρειάζεται ενημέρωση";
 $langReuseActivate = "Ενεργοποίηση Διαμοιρασμού";

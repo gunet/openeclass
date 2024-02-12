@@ -3854,6 +3854,7 @@ $langclColorHeaderAgenda = "Calendar header text color";
 $langclColorBodyAgenda = "Text color (days, hours, minutes)";
 $langbgColorHoveredBodyAgenda = "Hovered background color (days, hours, minutes)";
 $langbgColorActiveDateTime = "Active slot background color (small calendar)";
+$langtextColorActiveDateTime = "Active slot text color (small calendar)";
 $langMPopover = "Menu Popover";
 $langMenuPopover = "Popover Menu Settings";
 $langBgMenuPopover = "Background color";
@@ -3884,6 +3885,10 @@ $langSettingsProgressBar = "ProgressBar settings";
 $langBackProgressBar = "Background color behind the bar text";
 $langBgProgressBar = "Bar background color (not filled)";
 $langBgColorProgressBarAndText = "Bar background color and text color (filled bar)";
+$langNavSettingsTooltip = "Tooltip";
+$langSettingsTooltip = "Tooltip settings";
+$langbgColorTooltip = "Tooltip background color";
+$langTextColorTooltip = "Text color";
 
 
 
@@ -4075,7 +4080,7 @@ $langHoverWhiteColorButton = "Background Color Hovered Button";
 $langTag = 'Tag';
 $langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>
 <p>The platform supports the <a href='http://ocw-project.gunet.gr/'>Open Academic $langCourses</a> project along with the <a href='http://openeclass.org/'>Open eClass platform</a> and the national $langsCourse seach portal also developed by GUnet.</p>";
-$langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
+$langBBBDescription = "<p>Operation of the <strong>Teleconference</strong> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank' aria-label='(opens in a new tab)'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between $langsTeachers and $langsStudents.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
 $langFtpShortDescription = "Link to FTP service";
 $langFtpLongDescription = "Enter the FTP link";
 $langGoogleDriveShortDescription = "Short Description about google drive";
@@ -5572,7 +5577,7 @@ $lang_am_prevent_autoset_change = "Disallow changing student ID if set automatic
 $langHybridAuthSetup1 = "<br>For instructions on filling the <strong>";
 $langHybridAuthSetup2 = " Id/Key</strong> and <strong>";
 $langHybridAuthSetup3 = " Secret</strong> fileds please <a href=";
-$langHybridAuthSetup4 = " target='_blank'>click here</a>.";
+$langHybridAuthSetup4 = " target='_blank' aria-label='(opens in a new tab)'>click here</a>.";
 $langHybridAuthCallback = "<br>The <strong>callback</strong> URL for the app is: ";
 $langMailVerificationNoticeGuest = "Guest users cannot been modified";
 $dateTimeFormatLongFull = '%A, %B %d, %Y at %I:%M %p';
@@ -5593,7 +5598,7 @@ $langTypeH5P = "H5P content type";
 $langImportH5P = "Import an H5P interactive content via the following form.";
 $langH5pInfoUpdate = "Click 'Update' in order to update H5P content types (if needed)<br>
     For further details about the available H5P content types please visit
-    <a href='https://h5p.org/content-types-and-applications/' target='_blank'>https://h5p.org/content-types-and-applications/</a>.";
+    <a href='https://h5p.org/content-types-and-applications/' target='_blank' aria-label='(opens in a new tab)'>https://h5p.org/content-types-and-applications/</a>.";
 $langMultipleCourseUsers = "Users registered to the most courses";
 $langLast30Entries = "Top 30 results";
 $langHaveCreated = "Created";
@@ -5840,7 +5845,7 @@ $langBBBCronEnableInstructions = '
 <p>Σε κάθε περίπτωση, η κλήση πρέπει να γίνεται κάθε ένα λεπτό προκειμένου τα δεδομένα καταγραφής να είναι ακριβή.</p>';
 
 $langAPITokenLongDesc = "Information for calls currently supported by the API can be found
-<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank'>here</a>.";
+<a href='https://docs.openeclass.org/el/developers/eclass_api' target='_blank' aria-label='(opens in a new tab)'>here</a>.";
 $langAPITokenCreated = "Token created. Please copy it for use in your application.";
 
 $langCreateCourseLeftForm = "Creating a course is the most important action of the user – instructor on the platform.</br></br>

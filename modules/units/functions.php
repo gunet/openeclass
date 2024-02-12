@@ -1331,7 +1331,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility, $act_
         } else {
             $title = q($title);
         }
-        $link = "<a href='" . q($l->url) . "' target='_blank'>";
+        $link = "<a href='" . q($l->url) . "' target='_blank' aria-label='(opens in a new tab)'>";
         $exlink = $link . "$title</a>";
         $imagelink = icon('fa-link');
     }
@@ -1391,7 +1391,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility,
             foreach ($sql2 as $l) {
                 $imagelink = icon('fa-link');
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
-                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";
+                $linkcontent .= "<br>$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank' aria-label='(opens in a new tab)'>$ltitle</a>";
             }
         }
         if (!empty($comments)) {

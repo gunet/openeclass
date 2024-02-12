@@ -373,7 +373,7 @@ if (isset($_GET['delete'])) {
                        }
                        $tool_content .= "
                             <tr>
-                                <td><a href='show.php?$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
+                                <td><a href='show.php?$course_code/$ebook_id/$display_id/' target='_blank' aria-label='(opens in a new tab)'>" . q($files[$id_map[$file_id]]) . "</a>$edit</td>
                                 <td><input class='form-control' type='text' name='title[$file_id]' value='" . q($r->subsection_title) . "'></td>
                                 <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
                                 <td>
@@ -389,7 +389,7 @@ if (isset($_GET['delete'])) {
                        $title = get_html_title($basedir . $path);
                        $tool_content .= "
                         <tr class='not_visible'>
-                            <td><a href='show.php?$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
+                            <td><a href='show.php?$course_code/$ebook_id/_" . q($file) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($file) . "</a></td>
                             <td><input type='text' name='title[$file_id]' value='" . q($title) . "' /></td>
                             <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
                             <td class='center'>

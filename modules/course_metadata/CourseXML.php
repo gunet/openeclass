@@ -204,7 +204,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='col-12 mt-5'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card panelCard px-lg-4 py-lg-3 p-3'>
 
                         <a class=' collapsed TextBold' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
                             <i class='fa-solid fa-arrow-down'></i>
@@ -217,7 +217,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
         $fieldStart .= "<div class='form-group mt-4'><label $helptitle class='control-label-notes col-12'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
-            $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank'>" . q($keyLbl . $lang) . "</a>";
+            $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($keyLbl . $lang) . "</a>";
         } else {
             $fieldStart .= q($keyLbl . $lang);
         }
@@ -406,7 +406,7 @@ class CourseXMLElement extends SimpleXMLElement {
         $fieldStart = "";
         if (array_key_exists($fullKey, CourseXMLConfig::$breakAccordionStartFields)) {
             $fieldStart .= "<div class='panel-group mb-3 mt-3'>
-                <div class='card panelCard px-lg-4 py-lg-3'>
+                <div class='card panelCard px-lg-4 py-lg-3 p-3'>
                     <a class='collapsed TextBold' data-bs-toggle='collapse' href='#metacollapse-" . CourseXMLConfig::$breakAccordionStartFields[$fullKey] . "'>" . $GLOBALS['langMore'] . "
                         <i class='fa-solid fa-arrow-down'></i>
                     </a>

@@ -108,13 +108,25 @@ function widget_css_link($file, $folder) {
  */
 function load_js($file, $init='') {
     global $head_content, $theme_settings, $language,
-            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend;
+            $langReadMore, $langReadLess, $langViewHide, $langViewShow, $urlAppend, $webDir;
     static $loaded;
 
     if (isset($loaded[$file])) {
         return;
     } else {
         $loaded[$file] = true;
+    }
+
+    // Utilizing the .css file for every current theme
+    $style_theme = false;
+    $current_theme = 0;
+    if(get_config('theme_options_id') > 0){
+        $current_theme = get_config('theme_options_id');
+        $sTime = time();
+        $fStyleStr = $webDir . "/courses/theme_data/$current_theme/style_str.css";
+        if(file_exists($fStyleStr)){
+            $style_theme = true;
+        }
     }
 
     // Load file only if not provided by template
@@ -144,6 +156,9 @@ function load_js($file, $init='') {
         } elseif ($file == 'datatables') {
             $head_content .= css_link('datatables/media/css/jquery.dataTables.css');
             $head_content .= css_link('datatables/media/css/override_jquery.dataTables.css?v=4.0-dev');
+            if($style_theme && $current_theme > 0){
+                $head_content .= "<link href='{$urlAppend}courses/theme_data/$current_theme/style_str.css?$sTime' rel='stylesheet' type='text/css'>";
+            }
             $file = 'datatables/media/js/jquery.dataTables.min.js';
         } elseif ($file == 'datatables_bootstrap') {
             $head_content .= css_link('datatables/media/css/dataTables.bootstrap.css');
@@ -189,6 +204,9 @@ function load_js($file, $init='') {
             css_link('select2-4.0.3/css/select2-bootstrap.min.css') .
             css_link('select2-4.0.3/css/override_select2_design.css?v=4.0-dev') .
             js_link('select2-4.0.3/js/select2.full.min.js');
+            if($style_theme && $current_theme > 0){
+                $head_content .= "<link href='{$urlAppend}courses/theme_data/$current_theme/style_str.css?$sTime' rel='stylesheet' type='text/css'>";
+            }
             $file = "select2-4.0.3/js/i18n/$language.js";
         } elseif ($file == 'bootstrap-calendar') {
             $file = 'bootstrap-calendar-master/js/calendar.js';
@@ -204,6 +222,9 @@ function load_js($file, $init='') {
             }
             $head_content .= css_link('bootstrap-calendar-master/css/calendar_small.css');
             $head_content .= "<link href='{$urlAppend}template/modern/css/new_calendar.css' rel='stylesheet' type='text/css'>";
+            if($style_theme && $current_theme > 0){
+                $head_content .= "<link href='{$urlAppend}courses/theme_data/$current_theme/style_str.css?$sTime' rel='stylesheet' type='text/css'>";
+            }
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.css') .
             js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
@@ -212,8 +233,14 @@ function load_js($file, $init='') {
             } else {
                 $file = "bootstrap-datetimepicker/js/bootstrap-datetimepicker.js";
             }
+            if($style_theme && $current_theme > 0){
+                $head_content .= "<link href='{$urlAppend}courses/theme_data/$current_theme/style_str.css?$sTime' rel='stylesheet' type='text/css'>";
+            }
         } elseif ($file == 'bootstrap-timepicker') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
+            if($style_theme && $current_theme > 0){
+                $head_content .= "<link href='{$urlAppend}courses/theme_data/$current_theme/style_str.css?$sTime' rel='stylesheet' type='text/css'>";
+            }
             $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
         } elseif ($file == 'bootstrap-datepicker') {
             $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
@@ -222,6 +249,9 @@ function load_js($file, $init='') {
                 $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language-GB.min.js";
             } else {
                 $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
+            }
+            if($style_theme && $current_theme > 0){
+                $head_content .= "<link href='{$urlAppend}courses/theme_data/$current_theme/style_str.css?$sTime' rel='stylesheet' type='text/css'>";
             }
         } elseif ($file == 'bootstrap-validator') {
             $file = "bootstrap-validator/validator.js";

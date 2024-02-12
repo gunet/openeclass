@@ -29,11 +29,11 @@ $defaults = array(
                                                     'BgColorWrapperPortfolioCourses', 'RightColumnCourseBgColor', 'BgPanels', 'BgForms', 'BgTables', 'bgLists' ,
                                                     'bgContextualMenu', 'bgColorListMenu', 'bgWhiteButtonColor', 'BgRadios', 'ClIconRadios', 'BgCheckboxes', 'ClIconCheckboxes', 
                                                     'BgInput', 'BgSelect' ,'clHoveredSelectOption' ,'clOptionSelected', 'BgModal', 'bgAgenda', 'clColorHeaderAgenda', 'bgColorHoveredBodyAgenda',
-                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar', 'AboutCourseInfoContainer' ,'BackProgressBar'),
+                                                    'BgMenuPopover', 'BgMenuPopoverOption', 'BgTextEditor', 'BgScrollBar', 'AboutCourseInfoContainer' ,'BackProgressBar', 'TextColorActiveDateTime', 'TextColorTooltip'),
                 'rgba(247, 249, 254, 1)' => array('BriefProfilePortfolioBgColor','loginJumbotronRadialBgColor','loginJumbotronBgColor','bgRadialWrapperJumbotron','BgColorAnnouncementHomepage', 'AboutUnitsContainer'),
                 'rgb(0, 115, 230, 1)' => array('leftMenuFontColor','buttonBgColor', 'whiteButtonTextColor', 'whiteButtonHoveredTextColor', 'BgClRadios', 'BgActiveCheckboxes', 'clHoveredMenuPopoverOption'),
                 'rgba(43, 57, 68, 1)' => array('linkColorHeader','linkColorFooter','loginTextColor', 'leftSubMenuFontColor','ColorHyperTexts', 'clLabelForms', 'clListMenuUsername', 
-                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor'),
+                                                'clListMenu', 'BriefProfilePortfolioTextColor', 'ClRadios', 'ClCheckboxes', 'ClActiveCheckboxes', 'clTextModal', 'BgColorHeaderAgenda', 'clMenuPopoverOption', 'ClTextEditor', 'bgColorTooltip'),
                 'rgba(0, 115, 230, 1)' => array('linkColor','linkHoverColorHeader','linkHoverColorFooter','leftSubMenuHoverFontColor','leftMenuSelectedLinkColor','linkActiveColorHeader', 
                                                 'clHoveredTabs', 'clActiveTabs', 'clHoveredAccordions', 'clActiveAccordions', 'clLists', 'clHoveredLists', 'bgHoveredSelectOption', 
                                                 'bgOptionSelected', 'BgBorderBottomHeadTables', 'HoveredActiveLinkColorHeader', 'BgColorProgressBarAndText'),
@@ -461,7 +461,7 @@ if (isset($_POST['optionsSave'])) {
     $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "
-            <img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;' alt='Image upload for large screen'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
         ";
     } else {
@@ -469,7 +469,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
-            <img src='$urlThemeData/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;' alt='Image upload for small screen'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
             <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
@@ -477,7 +477,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadFooter'])) {
         $image_footer_field = "
-            <img src='$urlThemeData/$theme_options_styles[imageUploadFooter]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFooter'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUploadFooter]' style='max-height:100px;max-width:150px;' alt='Image upload for footer'> &nbsp;&nbsp;<a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadFooter'>$langDelete</a>
             <input type='hidden' name='imageUploadFooter' value='$theme_options_styles[imageUploadFooter]'>
         ";
     } else {
@@ -486,7 +486,7 @@ if (isset($_POST['optionsSave'])) {
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'>
+                <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;' alt='Image upload for background'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
             </div>
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
@@ -497,7 +497,7 @@ if (isset($_POST['optionsSave'])) {
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'>
+                <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;' alt='Image upload for login form'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             </div>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
@@ -533,7 +533,7 @@ if (isset($_POST['optionsSave'])) {
     if (isset($theme_options_styles['loginImgL'])) {
         $login_image_fieldL = "
             <div class='col-12 d-flex justify-content-start align-items-center flex-wrap gap-2'>
-                <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;'>
+                <img src='$urlThemeData/$theme_options_styles[loginImgL]' style='max-height:100px;max-width:150px;' alt='Image upload'>
                 <a class='btn deleteAdminBtn' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImgL'>$langDelete</a>
             </div>
             <input type='hidden' name='loginImgL' value='$theme_options_styles[loginImgL]'>
@@ -665,6 +665,7 @@ $tool_content .= "
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsAgenda' aria-controls='navsettingsAgenda' role='tab' data-bs-toggle='tab'>$langNavSettingsAgenda</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsScrollBar' aria-controls='navsettingsScrollBar' role='tab' data-bs-toggle='tab'>$langNavSettingsScrollBar</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsProgressBar' aria-controls='navsettingsProgressBar' role='tab' data-bs-toggle='tab'>$langNavSettingsProgressBar</a></li>
+    <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsTooltip' aria-controls='navsettingsTooltip' role='tab' data-bs-toggle='tab'>$langNavSettingsTooltip</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettingsLoginHomepage' aria-controls='navsettingsLoginHomepage' role='tab' data-bs-toggle='tab'>$langHomePage</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navcontainer' aria-controls='navcontainer' role='tab' data-bs-toggle='tab'>$langPortfolio</a></li>
     <li role='presentation' class='nav-item'><a class='nav-link' href='#navsettings' aria-controls='navsettings' role='tab' data-bs-toggle='tab'>$langNavSettings</a></li>
@@ -912,6 +913,20 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='BgColorProgressBarAndText' class='control-label-notes mb-2 me-2'>$langBgColorProgressBarAndText:</label>
                         <input name='BgColorProgressBarAndText' type='text' class='form-control colorpicker' id='BgColorProgressBarAndText' value='$theme_options_styles[BgColorProgressBarAndText]'>
+                    </div>
+                </div>
+            </div>
+
+            <div role='tabpanel' class='tab-pane fade' id='navsettingsTooltip'>
+                <div class='form-wrapper form-edit rounded'>
+                    <h3 class='theme_options_legend text-decoration-underline mt-2'>$langSettingsTooltip</h3>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='bgColorTooltip' class='control-label-notes mb-2 me-2'>$langbgColorTooltip:</label>
+                        <input name='bgColorTooltip' type='text' class='form-control colorpicker' id='bgColorTooltip' value='$theme_options_styles[bgColorTooltip]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='TextColorTooltip' class='control-label-notes mb-2 me-2'>$langTextColorTooltip:</label>
+                        <input name='TextColorTooltip' type='text' class='form-control colorpicker' id='TextColorTooltip' value='$theme_options_styles[TextColorTooltip]'>
                     </div>
                 </div>
             </div>
@@ -1317,6 +1332,10 @@ $tool_content .= "
                     <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
                         <label for='bgColorActiveDateTime' class='control-label-notes mb-2 me-2'>$langbgColorActiveDateTime:</label>
                         <input name='bgColorActiveDateTime' type='text' class='form-control colorpicker' id='bgColorActiveDateTime' value='$theme_options_styles[bgColorActiveDateTime]'>
+                    </div>
+                    <div class='form-group mt-4 d-flex justify-content-start align-items-center'>
+                        <label for='TextColorActiveDateTime' class='control-label-notes mb-2 me-2'>$langtextColorActiveDateTime:</label>
+                        <input name='TextColorActiveDateTime' type='text' class='form-control colorpicker' id='TextColorActiveDateTime' value='$theme_options_styles[TextColorActiveDateTime]'>
                     </div>
                 </div>
             </div>

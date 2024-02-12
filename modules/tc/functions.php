@@ -240,7 +240,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'googlemeet') { // google meet
             $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToGoogleMeetLink</span></div>";
-            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank'>$langGoToGoogleMeetLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='https://meet.google.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToGoogleMeetLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
                 <label for='title' class='col-12 control-label-notes'>$langLink:</label>
@@ -252,7 +252,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
 
         if ($tc_type == 'microsoftteams') { // Microsoft Teams
             $tool_content .= "<div class='alert alert-info'>$langGoToMicrosoftTeamsLink</div>";
-            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://teams.live.com/' target='_blank'>$langGoToMicrosoftTeamsLinkText</a></div>";
+            $tool_content .= "<div class='form-group col-sm-12 text-center'><a class='btn btn-success' href='https://teams.live.com/' target='_blank' aria-label='(opens in a new tab)'>$langGoToMicrosoftTeamsLinkText</a></div>";
 
             $tool_content .= "<div class='form-group'>
                             <label for='title' class='col-sm-2 control-label'>$langLink:</label>
@@ -265,7 +265,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         if ($tc_type == 'zoom') { // zoom
             if ($hostname != 'zoom') { // zoom url supplied by end user
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToZoomLink</span></div>";
-                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank'>$langGoToZoomLinkText</a></div>";
+                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToZoomLinkText</a></div>";
             }
             $tool_content .= "<div class='form-group'>
                     <label for='title' class='col-12 control-label-notes'>$langLink:</label>
@@ -278,7 +278,7 @@ function tc_session_form($session_id = 0, $tc_type = 'bbb') {
         if ($tc_type == 'webex') { // webex
             if ($hostname != 'webex') { // webex url supplied by end user
                 $tool_content .= "<div class='alert alert-info'><i class='fa-solid fa-circle-info fa-lg'></i><span>$langGoToWebexLink</span></div>";
-                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank'>$langGoToWebexLinkText</a></div>";
+                $tool_content .= "<div class='form-group col-sm-12 d-flex justify-content-center'><a class='btn submitAdminBtn' href='$hostname' target='_blank' aria-label='(opens in a new tab)'>$langGoToWebexLinkText</a></div>";
             }
             $tool_content .= "<div class='form-group'>
                 <label for='title' class='col-sm-2 control-label-notes'>$langLink:</label>
@@ -1266,15 +1266,15 @@ function tc_session_details() {
             if ($canJoin) {
                 if($is_editor) {
                     if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom' or $tc_type == 'webex') {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
                     } else {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
                     }
                 } else {
                     if ($tc_type == 'jitsi' or $tc_type == 'googlemeet' or $tc_type == 'zoom' or $tc_type == 'webex') {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
                     } else {
-                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                        $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."' target='_blank' aria-label='(opens in a new tab)'>" . q($title) . "</a>";
                     }
                 }
             } else {

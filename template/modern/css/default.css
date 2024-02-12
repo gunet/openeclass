@@ -4284,16 +4284,16 @@ div[role="progressbar"]::before {
   border-top-right-radius:10px;
   border-bottom-right-radius:10px;
 }
-.mycourses-pagination .page-item-next .page-link,.mentors-pagination .page-item-next .page-link:hover{
+.mycourses-pagination .page-item-next .page-link,.mycourses-pagination .page-item-next .page-link:hover{
   border: none;
 }
-.mycourses-pagination .page-item-previous .page-link,.mentors-pagination .page-item-previous .page-link:hover{
+.mycourses-pagination .page-item-previous .page-link,.mycourses-pagination .page-item-previous .page-link:hover{
   border: none;
 }
-.mycourses-pagination .page-item-next .page-link:hover,.mentors-pagination .page-item-previous .page-link:hover{
+.mycourses-pagination .page-item-next .page-link:hover,.mycourses-pagination .page-item-previous .page-link:hover{
   background-color: #E8EDF8 !important;
 }
-.mycourses-pagination .page-item-previous .page-link:hover,.mentors-pagination .page-item-previous .page-link:hover{
+.mycourses-pagination .page-item-previous .page-link:hover,.mycourses-pagination .page-item-previous .page-link:hover{
   background-color: #E8EDF8 !important;
 }
 

@@ -674,7 +674,7 @@ function show_link($title, $resource_id, $link_id) {
         } else {
             $title = q($title);
         }
-        $linktitle = "<a href='" . q($row->url) . "' target='_blank'>$title</a>";
+        $linktitle = "<a href='" . q($row->url) . "' target='_blank' aria-label='(opens in a new tab)'>$title</a>";
         $imagelink = 'fa-link';
     } else {
         if (!$is_editor) {

@@ -479,7 +479,7 @@ if (empty($search_terms)) {
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank'> " . q($link->title) . "</a> $desc_text </td></tr>";
+                $search_results .= "<a href='" . $linkUrls[$link->id] . "' target='_blank' aria-label='(opens in a new tab)'> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
             $search_results .= "</table>";
