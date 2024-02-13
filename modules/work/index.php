@@ -5466,7 +5466,12 @@ function show_non_submitted($id) {
                 $num_of_submissions = sprintf("$m[more_submissions]", $num_results);
             }
                 $tool_content .= "
-                            <p class='mt-4'><div class='sub_title1 Warning-100-bg p-2 mt-4 rounded-2'>$m[WorkGroupNoSubmission]:</div><p>
+                            <p class='mt-4'>
+                                <div class='alert alert-warning'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>$m[WorkGroupNoSubmission]:</span>
+                                </div>
+                            <p>
                             <p class='text-start form-label py-3'>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>
@@ -5501,7 +5506,12 @@ function show_non_submitted($id) {
                 $num_of_submissions = sprintf("$m[more_non_submissions]", $num_results);
             }
                 $tool_content .= "
-                            <p><div class='sub_title1 Warning-100-bg p-2 mt-4 rounded-2'>$m[WorkUserNoSubmission]:</div><p>
+                            <p>
+                                <div class='alert alert-warning mt-4'>
+                                    <i class='fa-solid fa-triangle-exclamation fa-lg'></i>
+                                    <span>$m[WorkUserNoSubmission]:</span>
+                                </div>
+                            <p>
                             <p class='text-start form-label py-3'>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive mt-0'>

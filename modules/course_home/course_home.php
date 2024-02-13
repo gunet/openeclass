@@ -768,11 +768,11 @@ if ($total_cunits > 0) {
                         <div class='col-sm-12 bg-transparent'>
 
                             <button class='carousel-prev-btn' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='prev' aria-label='Carousel previous'>
-                                <i class='fa-solid fa-chevron-left Neutral-700-cl settings-icon'></i>
+                                <i class='fa-solid fa-chevron-circle-left fa-xl'></i>
                             </button>";
 
             $cunits_content .=  "<button class='carousel-next-btn float-end' type='button' data-bs-target='#carouselUnitsControls' data-bs-slide='next' aria-label='Carousel next'>
-                                    <i class='fa-solid fa-chevron-right Neutral-700-cl settings-icon'></i>
+                                    <i class='fa-solid fa-chevron-circle-right fa-xl'></i>
                             </button>
 
                         </div>";

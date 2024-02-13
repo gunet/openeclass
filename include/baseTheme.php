@@ -575,7 +575,8 @@ function view($view_file, $view_data = array()) {
                     border: solid 1px $theme_options_styles[ColorHyperTexts];
                 }
 
-                .text-muted{
+                .text-muted,
+                .input-group-text{
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
             ";
@@ -3636,6 +3637,10 @@ function view($view_file, $view_data = array()) {
                     color: var(--fg);
 
                 }
+
+                .progress-bar {
+                    background-color: $theme_options_styles[BgColorProgressBarAndText];
+                }
             ";
         }
 
@@ -3979,6 +3984,13 @@ function view($view_file, $view_data = array()) {
 
                 .ClickCourse,
                 .ClickCourse:hover{
+                    color: $theme_options_styles[linkColor];
+                }
+
+                .carousel-prev-btn,
+                .carousel-prev-btn:hover,
+                .carousel-next-btn,
+                .carousel-next-btn:hover{
                     color: $theme_options_styles[linkColor];
                 }
             

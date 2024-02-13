@@ -10,7 +10,7 @@
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content shadow-sm border-0 p-0">
                         <div class="modal-header d-flex justify-content-between align-items-center">
-                            <h5 class="modal-title">{{ trans('langError') }}</h5>
+                            <h4 class="modal-title">{{ trans('langError') }}</h4>
                             <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
                                 <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
                             </button>
@@ -129,9 +129,9 @@
                             </div>
                             @if(!get_config('show_only_loginScreen'))
                                 <div class='col d-none @if($PositionFormLogin) d-lg-none @else d-lg-block @endif'>
-                                    <div class='card cardLogin h-100 p-3 border-0'>
+                                    <div class='card h-100 border-0 p-0'>
                                         <div class='card-body d-flex justify-content-center align-items-center p-0'>
-                                            <img class='jumbotron-image-default' src='{{ $loginIMG }}' alt='This is a background image'>
+                                            <img class='jumbotron-image-default' src='{{ $loginIMG }}' alt="{{ trans('langLogin') }}" />
                                         </div>
                                     </div>
                                 </div>

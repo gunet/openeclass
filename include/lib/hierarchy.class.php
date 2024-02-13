@@ -1142,7 +1142,7 @@ jContent;
                                         <a class='TextBold' href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
                                 $ret .= (!empty($code)) ? "&nbsp;<span>(" . q($code) . ")</span>" : '';
                             $ret.="</div>";
-                            $ret .= "<div class='vsmall-text Neutral-700-cl text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
+                            $ret .= "<div class='vsmall-text text-end'>" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</div>
                                 </div>";
                     $ret .= (!empty($description)) ? "<div class='table_td_body' style='font-size:small; padding-right:10px; padding-left:10px;'>$description</div>" : '';
                     $ret .= "</li>";

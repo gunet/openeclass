@@ -1360,7 +1360,7 @@ foreach ($result as $row) {
         if($row->visible == 1){
             $info['link'] = MultimediaHelper::chooseMediaAhref($dObj);
         }else{
-            $info['link'] = '<a style="color:grey; opacity:0.5;">'.$row->filename.'</href>';
+            $info['link'] = '<a style="opacity:0.5;">'.$row->filename.'</href>';
         }
 
         if ($row->editable) {
