@@ -87,14 +87,17 @@ $tool_content .= "<div class='col-12 mt-5'>";
             if (Session::has('login_error') and $authInfo[0]) {
                 $tool_content .= "<div class='col-12'>
                                     <input id='showWarningModal2' type='hidden' value='1'>
-                                    <div class='modal fade bgLightwhite' id='WarningModal2' aria-hidden='true' tabindex='-1'>
+                                    <div class='modal fade' id='WarningModal2' aria-hidden='true' tabindex='-1'>
                                         <div class='modal-dialog modal-dialog-centered'>
                                             <div class='modal-content border-0 p-0'>
-                                                <div class='modal-header Warning-200-bg d-flex justify-content-between align-items-center'>
-                                                    <h6 class='modal-title text-white'>$langError</h6>
-                                                    <button type='button' class='btn-close btn-close-white' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                <div class='modal-header d-flex justify-content-between align-items-center'>
+                                                    <h5 class='modal-title'>$langError</h5>
+                                                    <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
+                                                      <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                                                    </button>
+
                                                 </div>
-                                                <div class='modal-body bg-default'>
+                                                <div class='modal-body'>
                                                   ".Session::get('login_error')."
                                                 </div>
                                             </div>

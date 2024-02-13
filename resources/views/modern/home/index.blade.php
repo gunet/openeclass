@@ -6,14 +6,16 @@
 
         @if($warning)
             <input id='showWarningModal' type='hidden' value='1'>
-            <div class="modal fade bg-light" id="WarningModal" aria-hidden="true" tabindex="-1">
+            <div class="modal fade" id="WarningModal" aria-hidden="true" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content shadow-sm border-0 p-0">
                         <div class="modal-header d-flex justify-content-between align-items-center">
                             <h5 class="modal-title">{{ trans('langError') }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button aria-label='Close' type='button' class='close border-0 bg-transparent' data-bs-dismiss='modal'>
+                                <i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i>
+                            </button>
                         </div>
-                        <div class="modal-body bg-default">
+                        <div class="modal-body">
                             {!! $warning !!}
                         </div>
                     </div>

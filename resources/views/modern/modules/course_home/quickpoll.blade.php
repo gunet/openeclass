@@ -101,7 +101,7 @@
                         pollChartData.push({!! json_encode($this_chart_data) !!})
                     </script>
 
-                    <div class='btn submitAdminBtn'>
+                    <div class='btn submitAdminBtn' tabindex='0'>
                         <i class='fa-solid fa-chart-bar showResults'></i> 
                         <i class='fa-regular fa-rectangle-list showPoll'></i>
                     </div>
