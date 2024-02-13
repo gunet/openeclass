@@ -3976,6 +3976,11 @@ function view($view_file, $view_data = array()) {
                 .more-enabled-login-methods div{
                     color: $theme_options_styles[linkColor];
                 }
+
+                .ClickCourse,
+                .ClickCourse:hover{
+                    color: $theme_options_styles[linkColor];
+                }
             
             ";
         }

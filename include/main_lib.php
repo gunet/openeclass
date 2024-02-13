@@ -3769,7 +3769,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-solid fa-gear";
 
     if (count($out_secondary) > 0) {
-        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false'>
+        $action_button .= "<button type='button' id='toolDropdown' class='btn submitAdminBtn' data-bs-toggle='dropdown' aria-expanded='false' aria-label='Dropdown menu'>
                                 <span class='fa $secondary_icon'></span>
                                 <span class='fa-solid fa-chevron-down ps-2'></span>
                                 <span class='hidden-xs TextBold'>$secondary_title</span>

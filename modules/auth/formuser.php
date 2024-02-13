@@ -460,7 +460,7 @@ $tool_content .= "
                     <div class='form-group mt-4'>
                         <label for='ProfComments' class='col-sm-12 control-label-notes'>$langComments</label>
                         <div class='col-sm-12'>
-                            <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason...'>" . q($usercomment) . "</textarea>
+                            <textarea id='ProfComments' class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason...'>" . q($usercomment) . "</textarea>
                         </div>
                     </div>
                 </div>
@@ -469,7 +469,7 @@ $tool_content .= "
 
 $tool_content .= "<div class='col-lg-6 col-12 px-3'>
                     <div class='form-group mt-4'>
-                        <label for='ProfComments' class='col-sm-12 control-label-notes'>$langFaculty</label>
+                        <label for='dialog-set-value' class='col-sm-12 control-label-notes'>$langFaculty</label>
                         <div class='col-sm-12'>";
                             list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
                             $head_content .= $js;

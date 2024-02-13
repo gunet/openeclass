@@ -116,14 +116,14 @@
     
 
                                                     @if(!get_config('show_modal_openCourses'))
-                                                        <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                            <i class="fa-solid fa-display Primary-500-cl fa-lg"></i>
+                                                        <a href='{{ $urlAppend }}modules/auth/info_course.php?c={{ $mycourse->k }}' class='float-end pt-1' data-bs-toggle='tooltip' data-bs-placement='top' title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}" aria-label="{{ trans('langPreview') }}&nbsp;{{ trans('langOfCourse') }}">
+                                                            <i class="fa-solid fa-display fa-lg"></i>
                                                         </a>
                                                     @endif
 
                                                     @if(get_config('show_modal_openCourses'))
-                                                        <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
-                                                            <i class='fa-solid fa-display Primary-500-cl fa-lg'></i>
+                                                        <button class="ClickCourse border-0 rounded-pill bg-transparent float-end" id="{{$mycourse->k}}" type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}" aria-label="{{trans('langPreview')}}&nbsp;{{trans('langOfCourse')}}">
+                                                            <i class='fa-solid fa-display fa-lg'></i>
                                                         </button>
 
                                                         <!-- The Modal -->
@@ -143,7 +143,7 @@
                                                                         <div class='mt-2'>{{$mycourse->c}}&nbsp; - &nbsp;{{$mycourse->t}}</div>
                                                                     </div>
                                                                     <div>
-                                                                        <button type='button' class="close border-0 bg-transparent mt-2"><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
+                                                                        <button type='button' class="close border-0 bg-transparent mt-2" aria-label="Close"><i class='fa-solid fa-xmark fa-lg Accent-200-cl'></i></button>
                                                                     </div>
                                                                 </div>
 
@@ -182,7 +182,7 @@
                                                                         </button>
                                                                     </form>
                                                             @else
-                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-bs-placement='top' data-bs-toggle='tooltip'>
+                                                                    <a role='button' href='{{ $urlAppend }}main/login_form.php?user={!! urlencode($course_data[$mycourse->id]['userguest']->username) !!}&amp;next=%2Fcourses%2F{{ $mycourse->k }}%2F' title='{!! trans('langGuestLogin') !!}' data-bs-placement='top' data-bs-toggle='tooltip' aria-label='{!! trans('langGuestLogin') !!}'>
                                                                         <i class="fa-solid fa-right-to-bracket fa-lg"></i>
                                                                     </a>
                                                             @endif

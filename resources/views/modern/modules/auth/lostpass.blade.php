@@ -72,15 +72,15 @@
                                     <input type='hidden' name='u' value='{{ $userUID }}'>
                                     <input type='hidden' name='h' value='{{ q($_REQUEST['h']) }}'>
                                     <div class="form-group">
-                                        <label  class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!}</label>
+                                        <label  for='password' class='col-sm-12 control-label-notes'>{!! trans('langNewPass1') !!}</label>
                                         <div class="col-sm-12">
                                             <input type='password' placeholder="{!! trans('langNewPass1') !!}" class='form-control' size='40' name='newpass' value='' id='password' autocomplete='off'>&nbsp;<span id='result'></span>
                                         </div>
                                     </div>
                                     <div class="form-group mt-4">
-                                        <label class="col-sm-12 control-label-notes">{!! trans('langNewPass2') !!}</label>
+                                        <label for='new_pass_word' class="col-sm-12 control-label-notes">{!! trans('langNewPass2') !!}</label>
                                         <div class="col-sm-12">
-                                            <input type='password' placeholder="{!! trans('langNewPass2') !!}" class='form-control' size='40' name='newpass1' value='' autocomplete='off'>
+                                            <input type='password' placeholder="{!! trans('langNewPass2') !!}" class='form-control' size='40' name='newpass1' value='' id='new_pass_word' autocomplete='off'>
                                         </div>
                                     </div>
                                     <div class='form-group mt-5'>
@@ -101,21 +101,29 @@
                     <div class='col-lg-6 col-12 ms-auto me-auto mt-3'>
                         <div class='form-wrapper form-edit Borders shadow-sm p-3 wrapper-lostpass'>
                             <form class='form-horizontal' role='form' method='post' action='{!! $_SERVER['SCRIPT_NAME'] !!}'>
-                                <div class='row'><div class='col-sm-8'><h4 class='control-label-notes ps-1 mt-1'>{{ trans('langUserData') }} </h4></div></div>
-                                <div class='form-group'>
+                                <div class='col-sm-12'>
+                                    <h3>{{ trans('langUserData') }} </h3>
+                                </div>
+                                <div class='form-group mt-4'>
+                                    <div class='col-12'>
+                                        <label for='userName' class='form-label'>{{ trans('lang_username') }}</label>
+                                    </div>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='{{ trans('lang_username') }}'>
                                     </div>
                                 </div>
-                                <div class='form-group mt-4'>
+                                <div class='form-group mt-3'>
+                                    <div class='col-12'>
+                                        <label for='email' class='form-label'>{{ trans('lang_email') }}</label>
+                                    </div>
                                     <div class='col-sm-12'>
                                         <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='{{ trans('lang_email') }}'>
                                     </div>
                                 </div>
                                 <div class='form-group mt-5'>
-                                    <div class='col-12 d-flex justify-content-center align-items-center gap-2'>
+                                    <div class='col-12 d-flex justify-content-end align-items-center gap-2'>
                                         <input class='btn submitAdminBtn' type='submit' name='send_link' value='{{ trans('langSend') }}'>
-                                        <a class='btn cancelAdminBtn ms-1' href='{{ $urlServer }}'>{{ trans('langCancel') }}</a>
+                                        <a class='btn cancelAdminBtn' href='{{ $urlServer }}'>{{ trans('langCancel') }}</a>
                                     </div>
                                 </div>
                             </form>

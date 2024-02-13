@@ -100,7 +100,7 @@
                                                     (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                                     (isset($is_departmentmanage_user) and $is_departmentmanage_user))
                                                     <li>
-                                                        <a id="AdminToolBtn" class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0"
+                                                        <a class="list-group-item d-flex justify-content-start align-items-center gap-2 py-0"
                                                                 href="{{ $urlAppend }}modules/admin/index.php">
                                                                 <i class="fa-solid fa-gear settings-icons"></i>
                                                                 {{ trans('langAdminTool') }}
@@ -238,7 +238,7 @@
 
             <div class='d-flex justify-content-start align-items-center gap-2'>
 
-                <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrolling">
+                <a class="p-0 small-basic-size d-flex justify-content-center align-items-center link-bars-options" type="button" data-bs-toggle="offcanvas" href="#offcanvasScrollingTools" aria-controls="offcanvasScrolling" aria-label="Registration and available courses">
                     <i class="fa-solid fa-ellipsis-vertical fa-lg"></i>
                 </a>
 
@@ -283,7 +283,7 @@
                                 (isset($is_usermanage_user) and ($is_usermanage_user)) or
                                 (isset($is_departmentmanage_user) and $is_departmentmanage_user))
                                 <li>
-                                    <a id="AdminToolBtn" type="button" class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/admin/index.php"><i class="fa-solid fa-gear settings-icons"></i>{{trans('langAdminTool')}}</a>
+                                    <a type="button" class="list-group-item d-flex justify-content-start align-items-start py-3 gap-2" href="{{ $urlAppend }}modules/admin/index.php"><i class="fa-solid fa-gear settings-icons"></i>{{trans('langAdminTool')}}</a>
                                 </li>
                             @endif
 
@@ -365,7 +365,7 @@
         </div>
         <div class="offcanvas-body px-4">
             <div class='col-12 d-flex justify-content-center align-items-center' aria-label='Logo'>
-                <img src="{{ $logo_img_small }}">
+                <img src="{{ $logo_img_small }}" alt="Logo">
             </div>
             @if(get_config('enable_search'))
                 <div class='col-12 mt-5'>

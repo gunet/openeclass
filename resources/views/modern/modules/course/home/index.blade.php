@@ -218,7 +218,7 @@
 
                     @include('layouts.common.breadcrumbs', ['breadcrumbs' => $breadcrumbs])
 
-                    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools" aria-labelledby="offcanvasExampleLabel">
+                    <div class="offcanvas offcanvas-start d-lg-none" tabindex="-1" id="collapseTools">
                         <div class="offcanvas-header">
                             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                         </div>
@@ -378,7 +378,7 @@
                                     <h3>
                                         <div class='d-flex gap-2'>
                                             {{ trans('langCourseUnits') }}
-                                            <a id='cu-help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}">
+                                            <a id='cu-help-btn' href='{{ $urlServer }}modules/help/help.php?language={{$language}}&topic=course_units' class='add-unit-btn d-flex align-items-center' data-bs-toggle='tooltip' data-bs-placement='bottom' title data-bs-original-title="{{ trans('langHelp') }}" aria-label="{{ trans('langHelp') }}">
                                                 <i class="fa-solid fa-circle-info settings-icon Neutral-600-cl pt-1"></i>
                                             </a>
                                         </div>

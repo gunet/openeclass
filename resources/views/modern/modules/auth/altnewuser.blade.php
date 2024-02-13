@@ -62,7 +62,7 @@
                                                             <div class='form-group'>
                                                                 <label for='UserName' class='col-sm-12 control-label-notes'>{{ trans('langUsername') }}</label>
                                                                 <div class='col-sm-12'>
-                                                                    <input class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>
+                                                                    <input id='UserName' class='form-control' type='text' size='30' maxlength='30' placeholder="{{ trans('langUserNotice') }}" name='uname' autocomplete='off' {{ $set_uname }}>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -72,7 +72,7 @@
                                                             <div class='form-group mt-4'>
                                                                 <label for='Pass' class='col-sm-12 control-label-notes'>{{ trans('langPass') }}</label>
                                                                 <div class='col-sm-12'>
-                                                                    <input class='form-control' type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='{{ trans('langPass') }}'>
+                                                                    <input id='Pass' class='form-control' type='password' size='30' maxlength='30' name='passwd' autocomplete='off' placeholder='{{ trans('langPass') }}'>
                                                                 </div>
                                                             </div>   
                                                         </div>

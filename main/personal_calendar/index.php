@@ -1251,9 +1251,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                                 <div id="calendar-header" class="personal-calendar-header d-flex justify-content-between align-items-center flex-wrap">
                                    
                                         <div class="btn-group">
-                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="prev" aria-label="Previous"><span class="fa fa-caret-left"></span>  ' . '' . '</button>
                                                 <button class="btn bg-transparent text-agenda-title" data-calendar-nav="today">' . $langToday . '</button>
-                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
+                                                <button class="btn bg-transparent text-agenda-title" data-calendar-nav="next" aria-label="Next">' . '' . ' <span class="fa fa-caret-right"></span> </button>
                                         </div>
 
                                         <div class="btn-group">
