@@ -1086,6 +1086,10 @@ function view($view_file, $view_data = array()) {
                     background: $theme_options_styles[bgWhiteButtonColor] !important;
                 }
 
+                .btn.btn-default {
+                    background-color: $theme_options_styles[bgWhiteButtonColor];
+                }
+
             ";
         }
 
@@ -1138,6 +1142,11 @@ function view($view_file, $view_data = array()) {
 
                 .showSettings{
                     color: $theme_options_styles[whiteButtonTextColor] !important;
+                }
+
+                .btn.btn-default {
+                    border-color: $theme_options_styles[whiteButtonTextColor];
+                    color: $theme_options_styles[whiteButtonTextColor];
                 }
 
             ";
@@ -1200,6 +1209,12 @@ function view($view_file, $view_data = array()) {
                     border-color: $theme_options_styles[whiteButtonHoveredTextColor];
                     color: $theme_options_styles[whiteButtonHoveredTextColor] !important;
                 }
+
+                .btn.btn-default:hover,
+                .btn.btn-default:focus {
+                    border-color: $theme_options_styles[whiteButtonHoveredTextColor];
+                    color: $theme_options_styles[whiteButtonHoveredTextColor];
+                }
             ";
         }
 
@@ -1246,6 +1261,11 @@ function view($view_file, $view_data = array()) {
 
                 .showSettings:hover{
                     background-color: $theme_options_styles[whiteButtonHoveredBgColor] !important;
+                }
+
+                .btn.btn-default:hover,
+                .btn.btn-default:focus {
+                    background-color: $theme_options_styles[whiteButtonHoveredBgColor];
                 }
             ";
         }
