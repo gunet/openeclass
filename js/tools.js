@@ -349,7 +349,7 @@ function exercise_init_countdown(params) {
     }
     var exerciseCheckUnanswered = function() {
         var qids = $('.qPanel').map(function () {
-            return this.id.replace('qPanel', '');
+            return parseInt(this.id.replace('qPanel', ''));
         }).get();
         if (params.unansweredIds) {
             qids = qids.concat(params.unansweredIds.filter(function (id) {
