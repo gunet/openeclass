@@ -8,7 +8,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='container-fluid py-lg-0'>
+<div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -110,9 +110,14 @@
 
                                                             <tr>
                                                                 <td width="5%" align="center">
-                                                                    <input type="checkbox" name="multiple_{{ $questionCount }}_{{ $answerId }}"
-                                                                        id="scorm_{{ $idCounter }}"
-                                                                        value="{{ $answer->selectWeighting($answerId) }}">
+                                                                    <div class='checkbox'>
+                                                                        <label class='label-container'>
+                                                                            <input type="checkbox" name="multiple_{{ $questionCount }}_{{ $answerId }}"
+                                                                                id="scorm_{{ $idCounter }}"
+                                                                                value="{{ $answer->selectWeighting($answerId) }}">
+                                                                                <span class='checkmark'></span>
+                                                                        </label>
+                                                                    </div>
                                                                 </td>
                                                                 <td width="95%"><label for="scorm_{{ $idCounter }}">{!!  strip_tags($answer->selectAnswer($answerId)) !!}</label></td>
                                                             </tr>
@@ -198,7 +203,7 @@
 
                                                                             @if ($fillType == LISTBOX_FILL)
 
-                                                                                <select name="fill_{{ $questionCount }}_{{ $acount }}" id="scorm_{{ $idCounter }}">
+                                                                                <select class='form-select' name="fill_{{ $questionCount }}_{{ $acount }}" id="scorm_{{ $idCounter }}">
                                                                                     <option value="">&nbsp;</option>
 
                                                                                     @foreach ($answerList as $answer)
@@ -207,7 +212,7 @@
 
                                                                                 </select>
                                                                             @else
-                                                                                <input type="text" name="fill_{{ $questionCount }}_{{ $acount }}" size="10" id="scorm_{{ $idCounter }}">
+                                                                                <input class='form-control' type="text" name="fill_{{ $questionCount }}_{{ $acount }}" size="10" id="scorm_{{ $idCounter }}"></br>
                                                                             @endif
 
                                                                             <?php
@@ -237,8 +242,8 @@
                                                                         <table border="0" cellpadding="0" cellspacing="0" width="99%">
                                                                             <tr>
                                                                                 <td width="40%" valign="top"><b>{{ $choiceCounter }}.</b>{!!  strip_tags($answer->selectAnswer($answerId)) !!}</td>
-                                                                                <td width="20%" valign="center">&nbsp;
-                                                                                    <select name="matching_{{ $questionCount }}_{{ $answerId }}" id="scorm_{{ $idCounter }}">
+                                                                                <td width="20%" valign="top">&nbsp;
+                                                                                    <select class='form-select' name="matching_{{ $questionCount }}_{{ $answerId }}" id="scorm_{{ $idCounter }}">
                                                                                         <option value="0">--</option>
 
                                                                                         <?php

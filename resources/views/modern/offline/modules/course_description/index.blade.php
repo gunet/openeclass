@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='container-fluid py-lg-0'>
+<div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -31,14 +31,14 @@
 
                     @if (count($course_description) > 0)
                         @foreach ($course_description as $data)
-                                <div class='panel panel-action-btn-default'>
-                                    <div class='panel-heading'>
-                                        <div class='panel-title'>{!! q($data->title) !!}</div>
-                                    </div>
-                                    <div class='panel-body'>
-                                        {!! standard_text_escape($data->comments) !!}
-                                    </div>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
+                                <div class='card-header border-0 d-flex justify-content-between align-items-center'>
+                                    <h3>{!! q($data->title) !!}</h3>
                                 </div>
+                                <div class='card-body'>
+                                    {!! standard_text_escape($data->comments) !!}
+                                </div>
+                            </div>
                         @endforeach
                     @else
                         <div class='alert alert-warning'><i class='fa-solid fa-triangle-exclamation fa-lg'></i><span>{{ trans('langThisCourseDescriptionIsEmpty') }}</span></div>

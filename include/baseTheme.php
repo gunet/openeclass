@@ -3270,7 +3270,7 @@ function view($view_file, $view_data = array()) {
                 }
                 table.dataTable thead th, 
                 table.dataTable thead td {
-                    border-bottom: 2px solid $theme_options_styles[BgBorderBottomHeadTables];
+                    border-bottom: 1px solid $theme_options_styles[BgBorderBottomHeadTables] !important;
                 }
             ";
         }

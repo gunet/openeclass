@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="col-12 main-section">
-<div class='container-fluid py-lg-0'>
+<div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -37,35 +37,32 @@
                    
 
                     
-                    <div class='col-12 mt-4'>
-                        <div class='form-wrapper course_units_pager clearfix'>
-                            @if (!empty($prev_unit_title))
-                                <a class='pull-left' title='{{ $prev_unit_title }}' href='{{ $prev_unit_link }}'><i class='fa fa-arrow-left space-after-icon'></i>{{ $prev_unit_title }}</a>
-                            @else
-                                &nbsp;
-                            @endif
-                            @if (!empty($next_unit_title))
-                                <a class='float-end' title='{{ $next_unit_title }}' href='{{ $next_unit_link }}'>{{ $next_unit_title }}<i class='fa fa-arrow-right space-before-icon'></i></a>
-                            @else
-                                &nbsp;
-                            @endif
-                        </div>
-                    </div>
+                    
                     
 
 
                     
                     <div class='col-12 mt-4'>
-                        <div class='panel panel-default'>
-                            <div class='panel-body'>
-                                <div class='inner-heading'>
-                                    {{ $course_unit_title }}
+                        <div class='card panelCard px-lg-4 py-lg-3'>
+                            <div class='card-header border-0 d-flex justify-content-between align-items-center gap-3 flex-wrap'>
+                                {{ $course_unit_title }}
+                            </div>
+                            <div class='card-body'>
+
+                                <div class='col-12 col-12 d-flex justify-content-between align-items-center gap-3 flex-wrap mb-4'>
+                                    @if (!empty($prev_unit_title))
+                                        <a title='{{ $prev_unit_title }}' href='{{ $prev_unit_link }}'><i class='fa fa-arrow-left space-after-icon'></i>{{ $prev_unit_title }}</a>
+                                    @endif
+                                    @if (!empty($next_unit_title))
+                                        <a title='{{ $next_unit_title }}' href='{{ $next_unit_link }}'>{{ $next_unit_title }}<i class='fa fa-arrow-right space-before-icon'></i></a>
+                                    @endif
                                 </div>
-                                <div>
+
+                                <div class='mt-2'>
                                     <p>{!! $course_unit_comments !!}</p>
                                 </div>
 
-                                <div class='unit-resources'>
+                                <div class='unit-resources mt-2'>
                                     <div class='table-responsive'>
                                         <table class='table table-striped table-hover table-default'>
                                         <tbody>

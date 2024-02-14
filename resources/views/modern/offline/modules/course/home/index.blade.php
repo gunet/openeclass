@@ -3,7 +3,7 @@
 @section('content')
 
 <div class="col-12 main-section">
-<div class='container-fluid py-lg-0'>
+<div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -33,9 +33,9 @@
 
 
                         <div class='col-12'>
-                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
+                            <div class='card panelCard px-lg-4 py-lg-3'>
 
-                                <div class='panel-body'>
+                                <div class='card-body'>
                                     <div id='course-title-wrapper' class='course-info-title d-flex justify-content-between align-items-start'>
                                         <h3>
                                             {{ trans('langDescription') }}
@@ -107,8 +107,8 @@
                     
                    
                         <div class='col-12 mt-5'>
-                            <div class='panel panel-default border border-secondary-4 shadow-sm'>
-                                <div class='panel-body'>
+                            <div class='card panelCard px-lg-4 py-lg-3 mt-4'>
+                                <div class='card-body'>
                                     <div class='col-12 d-flex justify-content-between align-items-start'>
                                         <h3>
                                             {{ $course_info->view_type == 'weekly' ? trans('langCourseWeeklyFormat') : trans('langCourseUnits') }}

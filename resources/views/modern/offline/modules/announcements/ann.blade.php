@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="col-12 main-section">
-<div class='container-fluid py-lg-0'>
+<div class='container module-container py-lg-0'>
         <div class="course-wrapper d-lg-flex align-items-lg-strech w-100">
 
             <div id="background-cheat-leftnav" class="col_sidebar_active d-flex justify-content-start align-items-strech ps-lg-0 pe-lg-0">
@@ -29,8 +29,8 @@
                     @include('layouts.partials.legend_view')
 
                     <div class="col-12">
-                        <div class="panel">
-                            <div class="panel-body">
+                        <div class="card panelCard px-lg-4 py-lg-3">
+                            <div class="card-body">
                                 <div class="single_announcement">
                                     <div class="announcement-title">
                                         {!! standard_text_escape($ann_title) !!}
