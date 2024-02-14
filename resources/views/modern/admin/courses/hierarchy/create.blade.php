@@ -130,7 +130,7 @@
                                     <div class='radio mb-3'>
                                         <label>
                                             <input class='input-StatusCourse' id='nodeopen' type='radio' name='visible' value='2' {{ $visibleChecked[2] }}>
-                                            <label for="nodeopen"><span class='fa fa-unlock fa-fw'></label>
+                                            <label for="nodeopen"><span class='fa fa-unlock fa-lg fa-fw'></span></label>
                                             {{ trans('langNodePublic') }}
                                         </label>
                                         <div class='help-block'>{{ trans('langNodePublic2') }}</div>
@@ -141,7 +141,7 @@
                                         <label>
                                             <input class='input-StatusCourse' id='nodeforsubscribed' type='radio' name='visible' value='1' {{ $visibleChecked[1] }}>
                                             <label for="nodeforsubscribed">
-                                                <span class='fa fa-lock fa-fw'></span>
+                                                <span class='fa fa-lock fa-lg fa-fw'></span>
                                                 <span class='fa fa-pencil text-danger fa-custom-lock pen-hierarchy'></span>
                                             </label>
                                             {{ trans('langNodeSubscribed') }}
@@ -153,7 +153,7 @@
                                     <div class='radio'>
                                         <label>
                                             <input class='input-StatusCourse' id='nodehidden' type='radio' name='visible' value='0' {{ $visibleChecked[0] }}>
-                                            <label><span class='fa fa-lock fa-fw'></span></label>
+                                            <label><span class='fa fa-lock fa-lg fa-fw'></span></label>
                                             {{ trans('langViewHide') }}
                                         </label>
                                          <div class='help-block'>{{ trans('langNodeHidden2') }}</div>

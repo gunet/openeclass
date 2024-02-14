@@ -190,7 +190,7 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "
                                 </tr></thead>
                                 <tr>
-                                    <th scope='row' style='color:#31708f; '>$langActInHome:</th>";
+                                    <th scope='row'>$langActInHome:</th>";
 
                 $end=end($mtitles_in_home);
 
@@ -221,7 +221,7 @@ if(!isset($_POST['final_submit'])){
                 $tool_content .= "
                     </tr>
                     <tr>
-                        <th scope='row' style='color:#31708f;'>$langActInClass:</th>";
+                        <th scope='row'>$langActInClass:</th>";
 
                 $end=end($mtitles_in_class);
                 foreach($mtitles_in_class as $title_class) {
@@ -251,7 +251,7 @@ if(!isset($_POST['final_submit'])){
 
                 $tool_content .= "</tr>
                 <tr>
-                    <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
+                    <th scope='row'>$langActAfterClass:</th>";
 
                 $end=end($mtitles_after_class);
                 foreach($mtitles_after_class as $title_after_class) {
@@ -382,7 +382,7 @@ if(!isset($_POST['final_submit'])){
             $tool_content .= "
                             </tr></thead>
                             <tr>
-                                <th scope='row' style='color:#31708f;'>$langActInHome:</th>";
+                                <th scope='row'>$langActInHome:</th>";
 
             $end=end($mtitles_in_home);
             foreach($mtitles_in_home as $title_home) {
@@ -402,17 +402,17 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_home == $end){
-                    $tool_content .= "</tr><tr><td style='background-color:#EFF6FF;'></td>";
+                    $tool_content .= "</tr><tr><td style='background-color:transparent;'></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
             }
-            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
-            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
+            $tool_content .="<td style='background-color:transparent;'></td>";
+            $tool_content .="<td style='background-color:transparent;'></td>";
             $tool_content .= "
                 </tr>
                 <tr>
-                    <th scope='row' style='color:#31708f;'>$langActInClass:</th>";
+                    <th scope='row'>$langActInClass:</th>";
 
             $end=end($mtitles_in_class);
             foreach($mtitles_in_class as $title_class) {
@@ -429,18 +429,18 @@ if(!isset($_POST['final_submit'])){
                 }
 
                 if ($title_class == $end) {
-                    $tool_content .= "</tr><tr><td style='background-color:#EFF6FF;'></td>";
+                    $tool_content .= "</tr><tr><td style='background-color:transparent;'></td>";
                 } else {
                     $tool_content .= "</tr><tr><td></td>";
                 }
             }
 
-            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
-            $tool_content .="<td style='background-color:#EFF6FF;'></td>";
+            $tool_content .="<td style='background-color:transparent;'></td>";
+            $tool_content .="<td style='background-color:transparent;'></td>";
             $tool_content .= "
             </tr>
             <tr>
-                <th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
+                <th scope='row'>$langActAfterClass:</th>";
 
             $end=end($mtitles_after_class);
             foreach($mtitles_after_class as $title_after_class) {

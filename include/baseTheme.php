@@ -301,9 +301,8 @@ function view($view_file, $view_data = array()) {
             .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover{
                 color: #C44601;
             }
-
-        "
-        ;
+        
+        ";
 
         /////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////
@@ -579,6 +578,11 @@ function view($view_file, $view_data = array()) {
                 .input-group-text{
                     color:$theme_options_styles[ColorHyperTexts] !important;
                 }
+
+                .c3-tooltip-container *{
+                    background-color: #ffffff;
+                    color: #2B3944;
+                }
             ";
         }
 
@@ -654,6 +658,10 @@ function view($view_file, $view_data = array()) {
                     color:$theme_options_styles[linkColorHeader];
                 }
 
+                .header-mobile-link{
+                    color:$theme_options_styles[linkColorHeader];
+                }
+
             ";
         }
 
@@ -696,7 +704,9 @@ function view($view_file, $view_data = array()) {
         if (!empty($theme_options_styles['linkHoverColorHeader'])){
             $styles_str .= "
                 .link-selection-language:hover,
+                .link-selection-language:focus,
                 .link-bars-options:hover,
+                .link-bars-options:focus,
                 .container-items .menu-item:hover,
                 .container-items .menu-item:focus{
                     color: $theme_options_styles[linkHoverColorHeader];
@@ -730,6 +740,11 @@ function view($view_file, $view_data = array()) {
 
                 .header-login-text:hover,
                 .header-login-text:focus{
+                    color:$theme_options_styles[linkHoverColorHeader];
+                }
+
+                .header-mobile-link:hover,
+                .header-mobile-link:focus{
                     color:$theme_options_styles[linkHoverColorHeader];
                 }
                 
@@ -1685,7 +1700,8 @@ function view($view_file, $view_data = array()) {
 
         if (!empty($theme_options_styles['clListMenuUsername'])) {
             $styles_str .= "
-                .contextual-menu-user .username-text{
+                .contextual-menu-user .username-text,
+                .contextual-menu-user .username-paragraph{
                     color:$theme_options_styles[clListMenuUsername];
                 } 
  
@@ -4429,10 +4445,6 @@ function view($view_file, $view_data = array()) {
                 file_put_contents($fileStyleStr,$styles_str);
             }
         }
-       
-
-        
-
     }
 
     $sidebar_courses = Database::get()->queryArray("SELECT id, code, title, prof_names, public_code

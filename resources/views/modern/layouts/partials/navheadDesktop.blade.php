@@ -90,7 +90,7 @@
                                                         <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                                         <div>
                                                             <h4 class='truncate-text username-text mb-0'>{{ $_SESSION['givenname'] }}&nbsp;{{ $_SESSION['surname'] }}</h4>
-                                                            <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
+                                                            <p class='small-text username-paragraph'>{{ $_SESSION['uname'] }}</p>
                                                         </div>
 
                                                     </a>
@@ -273,7 +273,7 @@
                                     <img class="user-icon-filename" src="{{ user_icon($_SESSION['uid'], IMAGESIZE_LARGE) }}" alt="{{ $uname }}">
                                     <div>
                                         <h4 class='truncate-text username-text mb-0'>{{ $_SESSION['givenname'] }}&nbsp;{{ $_SESSION['surname'] }}</h4>
-                                        <p class='small-text Neutral-600-cl'>{{ $_SESSION['uname'] }}</p>
+                                        <p class='small-text username-paragraph'>{{ $_SESSION['uname'] }}</p>
                                     </div>
 
                                 </a>
@@ -383,39 +383,39 @@
                 </div>
             @endif
             <div class='col-12 mt-5'>
-                <ul class="list-group list-group-flush">
+
                     @if(!get_config('hide_login_link'))
-                        <li class="list-group-item element">
-                            <a id='homeId' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}" aria-label='Homepage'>
+                        <p class='py-2 px-0'>
+                            <a id='homeId' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' type='button' href="{{ $urlServer }}" aria-label='Homepage'>
                                 <i class="fa-solid fa-home"></i>{{ trans('langHome') }}
                             </a>
-                        </li>
+                        </p>
                     @endif
                     @if (!isset($_SESSION['uid']))
                         @if(get_config('registration_link')!='hide')
-                            <li class="list-group-item element">
-                                <a id='registrationId' type="button" class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label='Registration'>
+                            <p class='py-2 px-0'>
+                                <a id='registrationId' type="button" class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/registration.php" aria-label='Registration'>
                                     <i class="fa-solid fa-pencil"></i>{{ trans('langRegistration') }}
                                 </a>
-                            </li>
+                            </p>
                         @endif
                     @endif
 
                     @if (!get_config('dont_display_courses_menu'))
-                        <li class="list-group-item element">
-                            <a id='coursesId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label='List of courses'>
+                        <p class='py-2 px-0'>
+                            <a id='coursesId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}modules/auth/listfaculte.php" aria-label='List of courses'>
                                 <i class="fa-solid fa-book"></i>{{ trans('langCourses') }}
                             </a>
-                        </li>
+                        </p>
                     @endif
                     
-                    <li class="list-group-item element">
-                        <a id='faqId' type='button' class='d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label='Frequent questions'>
+                    <p class='py-2 px-0'>
+                        <a id='faqId' type='button' class='header-mobile-link d-flex justify-content-start align-items-start gap-2 flex-wrap TextBold' href="{{ $urlAppend }}info/faq.php" aria-label='Frequent questions'>
                             <i class="fa-solid fa-question-circle"></i>{{ trans('langFaq') }}
                         </a>
-                    </li>
+                    </p>
                     
-                </ul>
+                
             </div>
 
         </div>

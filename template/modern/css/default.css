@@ -1464,13 +1464,19 @@ b a {
   margin-bottom: 5px;
 } 
 
+/***** Icons inside radios *****/
 .radio label .fa {
   font-size: 14px;
   position: absolute;
   top: 59%;
   left: 0%;
-  transform: translate(-175%, -50%); 
+  transform: translate(-175%, -30%); 
 }
+.radio:has(.input-StatusCourse) .fa::before{
+  display: block;
+  padding-top: 3px;
+}
+/******************************/
 
 .radio label p{ 
   margin-top:0px; 
@@ -2095,6 +2101,10 @@ input[type="submit"].warningAdminBtn:hover {
   .contextual-menu-user{
     max-height: calc(100vh - 56px);
   }
+}
+
+.contextual-menu-user .username-paragraph{
+  color: #9BA9C1;
 }
 
 @media(min-width:992px){
@@ -3293,12 +3303,13 @@ table{
 /**********************************************************************************************************************/
 
 .label.label-success{
-  background-color: #19680C;
-  color:white;
+  background-color: #1E7E0E;
+  color:#ffffff;
   width:188px;
   margin-top: 5px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 400;
+  padding: 5px;
 }
 
 .float-end.label.label-success{ 
@@ -3306,19 +3317,23 @@ table{
 }
 
 .label.label-danger{ 
-  color: #B70A0A;
+  background-color: #B70A0A;
+  color: #ffffff;
   width:188px;
   margin-top: 5px;
   border-radius: 4px;
-  font-weight: 600;
+  font-weight: 400;
+  padding: 5px;
 }
 
-.label.label-warning{  
-  color: #F57600;
+.label.label-warning{ 
+  background-color: #FFF4D1; 
+  color: #2B3944;
   width:188px;
   margin-top: 5px;
   border-radius: 4px; 
-  font-weight: 600;
+  font-weight: 400;
+  padding: 5px;
 }
 
 

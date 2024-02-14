@@ -481,7 +481,7 @@ if (!isset($_POST['next'])) {
                 $count_ids += 1;
             }
 
-            $tool_content .= "</tr></thead><tr><th scope='row' style='color:#31708f;'>$langActInHome:</th>";
+            $tool_content .= "</tr></thead><tr><th scope='row'>$langActInHome:</th>";
 
                 $end=end($mtitles_in_home);
                 foreach($mtitles_in_home as $title_home) {
@@ -515,7 +515,7 @@ if (!isset($_POST['next'])) {
                         $count_ids += 1;
                     }
 
-                $tool_content .= "</tr><tr><th scope='row' style='color:#31708f;'>$langActInClass:</th>";
+                $tool_content .= "</tr><tr><th scope='row'>$langActInClass:</th>";
 
                 $end=end($mtitles_in_class);
                 foreach($mtitles_in_class as $title_class) {
@@ -552,7 +552,7 @@ if (!isset($_POST['next'])) {
                         $count_ids += 1;
                     }
 
-                $tool_content .= "</tr><tr><th scope='row' style='color:#31708f;'>$langActAfterClass:</th>";
+                $tool_content .= "</tr><tr><th scope='row'>$langActAfterClass:</th>";
 
                 $end=end($mtitles_after_class);
                 foreach($mtitles_after_class as $title_after_class) {

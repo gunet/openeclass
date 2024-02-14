@@ -420,7 +420,7 @@ if (isset($_GET['modifyAnswers'])) {
                         </h3>
                       </div>
                       <div class='card-body'>
-                            <h6><small class='fw-bold'>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h6>
+                            <h5>$questionTypeWord<br>" . nl2br(q_math($questionName)) . "</h5>
                                 <p>$questionDescription</p>
                                 ".(($okPicture)? "<div class='text-center'><img src='../../$picturePath/quiz-$questionId'></div>":"")."
                       </div>
@@ -432,7 +432,7 @@ if (isset($_GET['modifyAnswers'])) {
                            <div class='card-header border-0 d-flex justify-content-between align-items-center'>
                              <h3>$langQuestionAnswers";
                              if ($answerType == MULTIPLE_ANSWER) {
-                                 $tool_content .= "<br><small>$langNegativeScoreLegend</small>";
+                                 $tool_content .= "<br><small class='msmall-text'>$langNegativeScoreLegend</small>";
                              }
                             
         $tool_content .= "   </h3>
@@ -498,9 +498,11 @@ if (isset($_GET['modifyAnswers'])) {
                 $tool_content .= "<td><input class='form-control' type='text' name='weighting[$i]' value='$thisWeighting'></td></tr>";
             }
             $tool_content .= "<tr>
-                    <td class='text-start' colspan='3'><strong>$langSurveyAddAnswer :</strong>&nbsp;
-                        <input type='submit' name='moreAnswers' value='$langMoreAnswers' />&nbsp;
-                      <input type='submit' name='lessAnswers' value='$langLessAnswers' />
+                    <td class='text-start' colspan='3'><strong>$langSurveyAddAnswer :</strong>
+                        <div class='d-flex gap-2 flex-wrap mt-2'>
+                            <input type='submit' name='moreAnswers' value='$langMoreAnswers' />
+                            <input type='submit' name='lessAnswers' value='$langLessAnswers' />
+                        </div>
                     </td>
                     <td colspan='2'>&nbsp;</td>
                   </tr>
@@ -607,8 +609,14 @@ if (isset($_GET['modifyAnswers'])) {
                  </tr>
                  <tr>
                <td>&nbsp;</td>
-               <td><b>$langColumnA:</b> <span style='valign:middle;'>$langMoreLessChoices:</span> <input type='submit' name='moreMatches' value='+' />&nbsp;
-               <input type='submit' name='lessMatches' value='-' /></td>
+               <td>
+                    <b>$langColumnA:</b> 
+                    <span style='valign:middle;'>$langMoreLessChoices:</span> 
+                    <div class='d-flex gap-2 mt-2 flex-wrap'>
+                        <input type='submit' name='moreMatches' value='+' />
+                        <input type='submit' name='lessMatches' value='-' />
+                    </div>
+                </td>
                <td><div align='text-end'>$langColumnB</div></td>
                <td>$langScore</td>
              </tr>";
@@ -628,7 +636,7 @@ if (isset($_GET['modifyAnswers'])) {
              $tool_content .= "<tr>
                <td class='text-end'><strong>$j</strong></td>
                <td><input class='form-control' type='text' name='match[$i]' value='" . q($optionText) . "'></td>
-               <td><div class='text-end'><select class='form-control' name='sel[$i]'>";
+               <td><div class='text-end'><select class='form-select' name='sel[$i]'>";
              foreach ($optionsList as $key => $val) {
                  $tool_content .= "<option value='" . q($key) . "'";
                  if ((!isset($submitAnswers) && !isset($sel[$i]) && $j == 2 && $val == 'B') || @$sel[$i] == $key) {
@@ -648,8 +656,13 @@ if (isset($_GET['modifyAnswers'])) {
          </tr>
          <tr>
            <td>&nbsp;</td>
-           <td colspan='1'><b>$langColumnB:</b> <span style='valign:middle'>$langMoreLessChoices:</span> <input type='submit' name='moreOptions' value='+' />
-           &nbsp;<input type='submit' name='lessOptions' value='-' />
+           <td colspan='1'>
+                <b>$langColumnB:</b> 
+                <span style='valign:middle'>$langMoreLessChoices:</span> 
+                <div class='d-flex gap-2 flex-wrap mt-2'>
+                    <input type='submit' name='moreOptions' value='+' />
+                    <input type='submit' name='lessOptions' value='-' />
+                </div>
            </td>
            <td>&nbsp;</td>
          </tr>";
@@ -719,7 +732,7 @@ if (isset($_GET['modifyAnswers'])) {
      $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FILL_IN_FROM_PREDEFINED_ANSWERS) && isset($setWeighting) ? "<input class='btn submitAdminBtn' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
      $tool_content .= "
                      <div class='row'>
-                         <div class='col-10 offset-2 ps-3 d-flex justify-content-center align-items-center'>
+                         <div class='col-12 d-flex justify-content-end align-items-center gap-2 flex-wrap'>
                              $back_button
                              <input class='btn submitAdminBtn' type='submit' name='submitAnswers' value='$submit_text'>
                              <a class='btn cancelAdminBtn ms-1' href='$cancel_link'>$langCancel</a>
