@@ -187,7 +187,8 @@ if (isset($_GET['all'])) {
                             FROM user u, course_user cu
                             WHERE cu.course_id = ?d AND
                                   cu.user_id = u.id AND
-                                  cu.status = " . USER_STUDENT . "
+                                  cu.status = " . USER_STUDENT . " AND
+                                  u.expires_at >= " . DBHelper::timeAfter() . "
                             GROUP BY u.id, u.surname, u.givenname, u.am
                             ORDER BY u.surname, u.givenname", $course_id);
     } else {
@@ -197,6 +198,7 @@ if (isset($_GET['all'])) {
                                                     WHERE cu.course_id = $course_id AND
                                                           cu.user_id = u.id AND
                                                           cu.status = " . USER_STUDENT . " AND
+                                                          u.expires_at >= " . DBHelper::timeAfter() . " AND
                                                           u.id NOT IN (SELECT user_id FROM group_members, `group`
                                                                         WHERE `group`.id = group_members.group_id AND
                                                                         `group`.course_id = ?d)
