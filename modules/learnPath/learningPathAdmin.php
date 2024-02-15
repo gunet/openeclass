@@ -34,7 +34,7 @@
   ==============================================================================
   @Description: This file is available only to the course admin
 
-  It allow course admin to :
+  It allows course admin to :
   - change learning path name
   - change learning path comment
   - links to
@@ -338,7 +338,6 @@ if (isset($sortDirection) && $sortDirection) {
             ORDER BY LPM.`rank` $sortDirection";
 
     $listModules = Database::get()->queryArray($sql, $thisLPMId, $_SESSION['path_id'], $course_id);
-
     // LP = learningPath
     foreach ($listModules as $module) {
         // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
