@@ -1942,6 +1942,9 @@ function attendance_gradebook_activities_map_function(&$data, $maps) {
             $data['module_auto_id'] = $exercise_map[0];
         }
     }
+    if (is_null($data['module_auto_id'])) {
+        $data['module_auto_id'] = 0;
+    }
     return true;
 }
 

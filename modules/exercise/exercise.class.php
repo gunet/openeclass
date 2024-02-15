@@ -719,7 +719,11 @@ if (!class_exists('Exercise')) {
 
             $id = $this->id;
             $exercise = $this->exercise;
-            $description = purify($this->description);
+            if (!is_null($this->description)) {
+                $description = purify($this->description);
+            } else {
+                $description = $this->description;
+            }
             $general_feedback = purify($this->general_feedback);
             $type = $this->type;
             $range = $this->range;
