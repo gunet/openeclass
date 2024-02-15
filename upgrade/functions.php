@@ -2861,6 +2861,41 @@ function upgrade_to_4_0($tbl_options): void {
         Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
     }
 
+    if (!DBHelper::tableExists('tutor_availability_group')) {
+        Database::get()->query("CREATE TABLE `tutor_availability_group` (
+                                `id` int(11) NOT NULL auto_increment,
+                                `user_id` int(11) NOT NULL default 0,
+                                `group_id` int(11) NOT NULL default 0,
+                                `start` DATETIME DEFAULT NULL,
+                                `end` DATETIME DEFAULT NULL,
+                                `lesson_id` int(11) NOT NULL DEFAULT 0,
+                                PRIMARY KEY  (`id`)) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('booking')) {
+        Database::get()->query("CREATE TABLE `booking` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                                `lesson_id` INT(11) NOT NULL,
+                                `group_id` INT(11) NOT NULL DEFAULT 0,
+                                `tutor_id` INT(11) NOT NULL,
+                                `title` VARCHAR(255) NOT NULL,
+                                `start` DATETIME NOT NULL,
+                                `end` DATETIME NOT NULL,
+                                `accepted` INT(11) NOT NULL DEFAULT 0,
+                                PRIMARY KEY(id),
+                                FOREIGN KEY (lesson_id) REFERENCES course(id) ON DELETE CASCADE,
+                                FOREIGN KEY (tutor_id) REFERENCES user(id) ON DELETE CASCADE) $tbl_options");
+    }
+
+    if (!DBHelper::tableExists('booking_user')) {
+        Database::get()->query("CREATE TABLE `booking_user` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                                `booking_id` INT(11) NOT NULL,
+                                `simple_user_id` INT(11) NOT NULL,
+                                PRIMARY KEY(id),
+                                FOREIGN KEY (booking_id) REFERENCES booking(id) ON DELETE CASCADE) $tbl_options");
+    }
+
 }
 
 

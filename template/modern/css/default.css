@@ -5113,3 +5113,83 @@ table.dataTable tbody tr th{
 
 
 
+
+/********************************************* DATES TUTOR CALENDAR VIEW **********************************************/
+
+
+
+.calendarViewDatesTutorGroup .fc-view-container *, 
+.calendarViewDatesTutorGroup .fc-view-container :after, 
+.calendarViewDatesTutorGroup .fc-view-container :before {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* table */
+.calendarViewDatesTutorGroup table,
+.calendarAddDaysCl table {
+  width: 100%;
+  box-sizing: border-box ;
+  table-layout: fixed !important;
+  border-collapse: collapse ;
+  border-spacing: 0 ;
+  border-color: solid 1px  #EFF6FF;
+}
+
+/* table header */
+.calendarViewDatesTutorGroup table .fc-head thead,
+.calendarAddDaysCl table .fc-head thead{
+  background-color: #000000;
+  height: 40px;
+  color: #ffffff;
+}
+.calendarViewDatesTutorGroup table .fc-head,
+.calendarAddDaysCl table .fc-head{
+  border-color:  #EFF6FF;
+}
+.calendarViewDatesTutorGroup table .fc-head table thead tr th,
+.calendarAddDaysCl table .fc-head table thead tr th{
+  padding-top: 7px;
+}
+
+/* table body */
+.calendarViewDatesTutorGroup table .fc-body thead,
+.calendarAddDaysCl table .fc-body thead{
+  border-color: transparent ;
+}
+/* scroll */
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content,
+.calendarAddDaysCl table .fc-body .fc-widget-content{
+  border-color:  #EFF6FF;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-track {
+  background-color: #ffffff;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+.calendarViewDatesTutorGroup table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover,
+.calendarAddDaysCl table .fc-body .fc-widget-content .fc-scroller::-webkit-scrollbar-thumb:hover{
+  background: #ffffff;
+}
+
+
+.calendarViewDatesTutorGroup table .fc-body tbody tr td,
+.calendarAddDaysCl table .fc-body tbody tr td{
+  border-color: #EFF6FF ;
+}
+
+.calendarAddDaysCl table .fc-body tbody tr{
+  height: 80px;
+}

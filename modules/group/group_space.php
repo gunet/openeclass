@@ -357,7 +357,7 @@ if (isset($_GET['group_as'])) {
                                 if($booking){
                                     if($is_editor or $is_tutor){
                                         $tool_content .= "<li>
-                                                            <a class='d-flex justify-content-start align-items-start' href='booking.php?course=$course_code&amp;group_id=$group_id'>
+                                                            <a class='d-flex justify-content-start align-items-start' href='date_available.php?course=$course_code&amp;group_id=$group_id'>
                                                                 <span class='fa-solid fa-calendar-days pt-0 pe-1'></span>$langAddAvailableDateForGroupAdmin
                                                             </a>
                                                         </li>";
