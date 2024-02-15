@@ -139,6 +139,12 @@ if ($is_editor) {
             } else {
                 $wiki = 0;
             }
+
+            if (isset($_POST['booking']) and $_POST['booking'] == 'on'){
+                $booking = 1;
+            } else {
+                $booking = 0;
+            }
             $group_num = Database::get()->querySingle("SELECT COUNT(*) AS count FROM `group` WHERE course_id = ?d", $course_id)->count;
 
             // Create a hidden category for group forums
@@ -211,14 +217,15 @@ if ($is_editor) {
                     $has_forum,
                     $private_forum,
                     $documents,
-                    $wiki
+                    $wiki,
+                    $booking
                 ];
 
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
                                                                     group_id = ?d, self_registration = ?d,
                                                                     allow_unregister = ?d,
                                                                     forum = ?d, private_forum = ?d,
-                                                                    documents = ?d, wiki = ?d,
+                                                                    documents = ?d, wiki = ?d, booking = ?d,
                                                                     agenda = 0", $query_vars);
 
                 /** ********Create Group Wiki*********** */
@@ -630,7 +637,7 @@ if ($is_editor) {
                                                             $tool_content .= "<p class='form-label'>$langGroupTutor</p>";
                                                             if(count($tutors)>0){
                                                                 foreach ($tutors as $t) {
-                                                                    $tool_content .= display_user($t->user_id) . "<br><div class='mt-2'></div>";
+                                                                    $tool_content .= display_user($t->user_id) . "</br><div class='mt-2'></div>";
                                                                 }
                                                             }else{
                                                                 $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";
@@ -897,7 +904,7 @@ if ($is_editor) {
 
                                                                 if(count($tutors) > 0){
                                                                     foreach ($tutors as $t) {
-                                                                        $tool_content .= display_user($t->user_id) . "<br>";
+                                                                        $tool_content .= display_user($t->user_id) . "</br><div class='mt-2'></div>";
                                                                     }
                                                                 }else{
                                                                     $tool_content .= "<p class='small-text'>$langNoInfoAvailable</p>";

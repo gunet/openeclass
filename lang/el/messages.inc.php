@@ -2368,6 +2368,9 @@ $langGroupFilledGroups = "Οι ομάδες χρηστών έχουν συμπλ
 $langGroupInfo = "Στοιχεία Ομάδας";
 $langGroupMembersInfo = "Μέλη Ομάδας";
 
+$langBookings = "Κρατήσεις";
+$langAddAvailableDateForGroupAdmin = "Προσθήκη διαθεσιμότητας στην ομάδα"; 
+
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
 $langTypeMessage = "Πληκτρολογήστε το μήνυμά σας παρακάτω";

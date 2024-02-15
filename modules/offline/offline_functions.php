@@ -820,6 +820,16 @@ function get_theme_options() {
                     background-color: #ffffff;
                     color: #2B3944;
                 }
+
+                .panel-default .panel-heading .panel-title, 
+                .panel-action-btn-default .panel-heading .panel-title {
+                    color:$theme_options_styles[ColorHyperTexts] ;
+                }
+
+                .panel-default .panel-heading, 
+                .panel-action-btn-default .panel-heading {
+                    color:$theme_options_styles[ColorHyperTexts] ;
+                }
             ";
         }
 
@@ -2474,6 +2484,10 @@ function get_theme_options() {
                     background-color: $theme_options_styles[BgSelect] !important;
                 }
 
+                .select2-container--default .select2-results__option[aria-selected=false]{
+                    background-color: $theme_options_styles[BgSelect] !important;
+                }
+
             ";
         }
 
@@ -2578,6 +2592,10 @@ function get_theme_options() {
                     -webkit-text-fill-color: $theme_options_styles[clOptionSelect];
                 }
 
+                .select2-container--default .select2-results__option[aria-selected=false]{
+                    color: $theme_options_styles[clOptionSelect] !important;
+                }
+
             ";
         }
 
@@ -2599,6 +2617,10 @@ function get_theme_options() {
                 }
 
                 .select2-container--default .select2-results__option--highlighted[aria-selected]:hover {
+                    background-color: $theme_options_styles[bgHoveredSelectOption] !important;
+                }
+
+                .select2-container--default .select2-results__option[aria-selected=false]:hover{
                     background-color: $theme_options_styles[bgHoveredSelectOption] !important;
                 }
 
@@ -4402,6 +4424,11 @@ function get_theme_options() {
                 .card-transparent .panel-footer{
                     background-color: transparent ;
                 }
+
+                .panel-default .panel-heading, 
+                .panel-action-btn-default .panel-heading {
+                    background: $theme_options_styles[BgPanels];
+                }
                
             ";
         }
@@ -4469,6 +4496,15 @@ function get_theme_options() {
 
                 #jsmind_container {
                     border: solid 1px $theme_options_styles[clBorderPanels] !important;
+                }
+
+                .panel-default .panel-heading, 
+                .panel-action-btn-default .panel-heading {
+                    border: none;
+                }
+
+                .panel-default:has(.panel-heading) {
+                    border: solid 1px $theme_options_styles[clBorderPanels];
                 }
 
             ";

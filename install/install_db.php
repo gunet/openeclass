@@ -435,6 +435,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
     `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
     `documents` TINYINT(4) NOT NULL DEFAULT 1,
     `wiki` TINYINT(4) NOT NULL DEFAULT 0,
+    `booking` TINYINT(4) NOT NULL DEFAULT 0,
     `agenda` TINYINT(4) NOT NULL DEFAULT 0) $tbl_options");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group` (

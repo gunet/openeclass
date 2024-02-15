@@ -70,7 +70,7 @@ if (isset($_POST['modify'])) {
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
     ));
     if($v->validate()) {
-        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = $public_users_list = 0;
+        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = $public_users_list = $booking = 0;
 
         if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
             $self_reg = 1;
@@ -90,6 +90,9 @@ if (isset($_POST['modify'])) {
         if (isset($_POST['public_users_list']) and $_POST['public_users_list'] == 'on') {
             $public_users_list = 1;
         }
+        if (isset($_POST['booking']) and $_POST['booking'] == 'on') {
+            $booking = 1;
+        }
         $private_forum = $_POST['private_forum'];
         $group_id = $_POST['group_id'];
 
@@ -100,9 +103,10 @@ if (isset($_POST['modify'])) {
                                 private_forum = ?d,
                                 documents = ?d,
                                 wiki = ?d,
-                                public_users_list = ?d
+                                public_users_list = ?d,
+                                booking = ?d
                         WHERE course_id = ?d AND group_id = ?d",
-            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $public_users_list, $course_id, $group_id);
+            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $public_users_list, $booking, $course_id, $group_id);
 
         // Update main group settings
         register_posted_variables(array('name' => true, 'description' => true), 'all');
@@ -194,6 +198,7 @@ if ($is_editor) {
     $checked['documents'] = ($group->documents?'checked':'');
     $checked['wiki'] = ($group->wiki?'checked':'');
     $checked['public_users_list'] = ($group->public_users_list? 'checked':'');
+    $checked['booking'] = ($group->booking? 'checked':'');
 
     $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-select'>\n";
     $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
@@ -202,7 +207,8 @@ if ($is_editor) {
                                                                     is_tutor = 1) AS is_tutor
                               FROM course_user, user
                               WHERE course_user.user_id = user.id AND
-                                    course_user.tutor = 1 AND
+                                    course_user.status != " . USER_GUEST . " AND
+                                    user.expires_at >= " . DBHelper::timeAfter() . " AND
                                     course_user.course_id = ?d
                               ORDER BY surname, givenname, user_id", $group_id, $course_id);
     foreach ($q as $row) {
@@ -455,6 +461,18 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                             <input type='checkbox' name='wiki' $checked[wiki]>
                             <span class='checkmark'></span>
                             $langWiki
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class='form-group mt-4'>
+                <div class='col-12'>
+                    <div class='checkbox'>
+                        <label class='label-container'>
+                            <input type='checkbox' name='wiki' $checked[booking]>
+                            <span class='checkmark'></span>
+                            $langBookings
                         </label>
                     </div>
                 </div>

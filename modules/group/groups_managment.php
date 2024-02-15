@@ -190,8 +190,9 @@ if(isset($_POST['group_id'])){
         $private_forum_group_id = "private_forum_$g";
         $selectcategory_group_id = "selectcategory_$g";
         $maxStudent_group_id = "maxStudent_$g";
+        $booking_group_id = "booking_$g";
 
-        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = $public_users_list = 0;
+        $self_reg = $allow_unreg = $has_forum = $documents = $wiki = $public_users_list = $booking = 0;
 
         if (isset($_POST[$self_reg_group_id]) and $_POST[$self_reg_group_id] == 'on') {
             $self_reg = 1;
@@ -211,6 +212,9 @@ if(isset($_POST['group_id'])){
         if (isset($_POST[$public_users_list_group_id]) and $_POST[$public_users_list_group_id] == 'on') {
             $public_users_list = 1;
         }
+        if (isset($_POST[$booking_group_id]) and $_POST[$booking_group_id] == 'on') {
+            $booking = 1;
+        }
         $private_forum = $_POST[$private_forum_group_id];
 
 
@@ -221,9 +225,10 @@ if(isset($_POST['group_id'])){
                                 private_forum = ?d,
                                 documents = ?d,
                                 wiki = ?d,
-                                public_users_list = ?d
+                                public_users_list = ?d,
+                                booking = ?d
                         WHERE course_id = ?d AND group_id = ?d",
-            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $public_users_list, $course_id, $group_id);
+            $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki, $public_users_list, $booking, $course_id, $group_id);
 
         // Update main group settings
         $result = Database::get()->querySingle("SELECT name,max_members, secret_directory, category_id
@@ -239,7 +244,7 @@ if(isset($_POST['group_id'])){
         $maxStudents = $_POST[$maxStudent_group_id];
         if($maxStudents != 0 && $maxStudents < $memberCount){
             $maxStudents = $memberCount;
-            $message .= "<p class='TextBold fs-6 mb-0'>$result->name</p></br><p>$langGroupMembersUnchanged</p>";
+            $message .= "<h5 class='TextBold mb-0'>$result->name</h5><p>$langGroupMembersUnchanged</p>";
         }
         $category_id = intval($_POST[$selectcategory_group_id]);
         Database::get()->query("UPDATE `group`
@@ -334,6 +339,9 @@ $tool_content .= "<div class='col-12'>
                                                 $public_users_list = "public_users_list_$gr->id";
                                                 $checked[$public_users_list] = ($group->public_users_list? 'checked':'');
 
+                                                $booking = "booking_$gr->id";
+                                                $checked[$booking] = ($group->booking?'checked':'');
+
 
                                                 $tool_content .= "<tr>
                                                                     <td>
@@ -360,15 +368,18 @@ $tool_content .= "<div class='col-12'>
                                                                                         <div class='col-12 form-group'>
                                                                                             <label class='control-label-notes mb-1'>$langGroupTutor</label>
                                                                                             <select name='tutor_$gr->id[]' multiple id='select-tutor_$gr->id' class='form-select'>\n";
+                                                                                            
+
                                                                                                 $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
-                                                                                                                            user.id IN (SELECT user_id FROM group_members
-                                                                                                                                                        WHERE group_id = ?d AND
-                                                                                                                                                                is_tutor = 1) AS is_tutor
-                                                                                                                        FROM course_user, user
-                                                                                                                        WHERE course_user.user_id = user.id AND
-                                                                                                                                course_user.tutor = 1 AND
-                                                                                                                                course_user.course_id = ?d
-                                                                                                                        ORDER BY surname, givenname, user_id", $gr->id, $course_id);
+                                                                                                                                            user.id IN (SELECT user_id FROM group_members
+                                                                                                                                                                    WHERE group_id = ?d AND
+                                                                                                                                                                            is_tutor = 1) AS is_tutor
+                                                                                                                                    FROM course_user, user
+                                                                                                                                    WHERE course_user.user_id = user.id AND
+                                                                                                                                            course_user.status != " . USER_GUEST . " AND
+                                                                                                                                            user.expires_at >= " . DBHelper::timeAfter() . " AND
+                                                                                                                                            course_user.course_id = ?d
+                                                                                                                                    ORDER BY surname, givenname, user_id", $gr->id, $course_id);
                                                                                                 foreach ($q as $row) {
                                                                                                     $selected = $row->is_tutor ? ' selected="selected"' : '';
                                                                                                     $tool_content .= "<option value='$row->user_id'$selected>" . q($row->surname) .
@@ -502,6 +513,17 @@ $tool_content .= "<div class='col-12'>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
+
+                                                                                        <div class='col-12 form-group mt-2'>
+                                                                                            <div class='checkbox'>
+                                                                                                <label class='label-container'>
+                                                                                                    <input type='checkbox' name='booking_$gr->id' $checked[$booking]>
+                                                                                                    <span class='checkmark'></span>
+                                                                                                    $langBookings
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
                                                                                     </div>";
 
                                                                 $tool_content .="</div>

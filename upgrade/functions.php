@@ -2857,6 +2857,10 @@ function upgrade_to_4_0($tbl_options): void {
         set_config('course_invitation', 0);
     }
 
+    if (!DBHelper::fieldExists('group_properties', 'booking')) {
+        Database::get()->query("ALTER TABLE `group_properties`ADD `booking` tinyint NOT NULL DEFAULT '0'");
+    }
+
 }
 
 

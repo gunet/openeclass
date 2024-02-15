@@ -30,9 +30,9 @@ function initialize_group_info($group_id) {
 
     global $course_id, $is_editor, $status, $self_reg, $allow_unreg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors, $group_category,
-    $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code, $public_users_list;
+    $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code, $public_users_list, $booking;
 
-    $grp_property_item = Database::get()->querySingle("SELECT self_registration, allow_unregister, forum, private_forum, documents, wiki, public_users_list
+    $grp_property_item = Database::get()->querySingle("SELECT self_registration, allow_unregister, forum, private_forum, documents, wiki, public_users_list, booking
                      FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
     $self_reg = $grp_property_item->self_registration;
     $allow_unreg = $grp_property_item->allow_unregister;
@@ -41,6 +41,7 @@ function initialize_group_info($group_id) {
     $documents = $grp_property_item->documents;
     $wiki = $grp_property_item->wiki;
     $public_users_list = $grp_property_item->public_users_list;
+    $booking = $grp_property_item->booking;
 
     // Guest users aren't allowed to register / unregister
     if ($status == USER_GUEST) {

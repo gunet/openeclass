@@ -132,9 +132,10 @@ if (isset($_GET['all'])) {
             $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname
                                                 FROM course_user, user
                                                 WHERE course_user.user_id = user.id AND
-                                                      course_user.tutor = 1 AND
-                                                      course_user.course_id = ?d
-                                                ORDER BY surname, givenname, user_id", $course_id);
+                                                      course_user.course_id = ?d AND
+                                                      course_user.status != " . USER_GUEST . " AND
+                                                      user.expires_at >= " . DBHelper::timeAfter() . "
+                                                ORDER BY course_user.status, surname, givenname, user_id", $course_id);
             foreach ($q as $row) {
                 $tool_content_tutor .= "<option value='$row->user_id'>" . q($row->surname) .
                     ' ' . q($row->givenname) . "</option>\n";
@@ -348,7 +349,22 @@ if (isset($_GET['all'])) {
                     </div>
                     
                 </div>
-            </div>";
+            </div>
+            
+            <div class='form-group mt-4'>
+                <div class='col-12'>
+                    <div class='checkbox'>
+                        <label class='label-container'>
+                            <input type='checkbox' name='booking'>
+                            <span class='checkmark'></span>
+                            $langBookings
+                        </label>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            ";
         $tool_content .= "<input type='hidden' name='group_quantity' value='1'>";
         $tool_content .= "<div class='form-group mt-5'>
             <div class='col-12 d-flex justify-content-end align-items-center'>
