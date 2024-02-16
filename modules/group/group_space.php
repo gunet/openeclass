@@ -215,7 +215,15 @@ if (isset($_GET['group_as'])) {
                     array('title' => $langDumpUser,
                         'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id",
                         'icon' => 'fa-file-zipper',
-                        'show' => $is_editor)
+                        'show' => $is_editor),
+                    array('title' => $langAddAvailableDateForGroupAdmin,
+                        'url' => "date_available.php?course=$course_code&amp;group_id=$group_id",
+                        'icon' => 'fa-solid fa-calendar-days',
+                        'show' => ($is_editor or $is_tutor)),
+                    array('title' => $langBookings,
+                        'url' => "booking.php?course=$course_code&amp;group_id=$group_id",
+                        'icon' => 'fa-solid fa-calendar-days',
+                        'show' => ($is_member && !$is_editor && !$is_tutor))
                     ));
 
     $tool_content .= "</div>";
@@ -363,7 +371,7 @@ if (isset($_GET['group_as'])) {
                                                         </li>";
                                     }else{
                                         $tool_content .= "<li>
-                                                            <a class='d-flex justify-content-start align-items-start' href='booking.php?course=$course_code&amp;group_id=$group_id'>
+                                                            <a class='d-flex justify-content-start align-items-start' href='date_available.php?course=$course_code&amp;group_id=$group_id&amp;show_tutor=1'>
                                                                 <span class='fa-solid fa-calendar-days pt-0 pe-1'></span>$langBookings
                                                             </a>
                                                         </li>";

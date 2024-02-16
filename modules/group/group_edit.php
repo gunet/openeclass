@@ -472,7 +472,7 @@ $tool_content .= " <div class='d-lg-flex gap-4 mt-4'>
                 <div class='col-12'>
                     <div class='checkbox'>
                         <label class='label-container'>
-                            <input type='checkbox' name='wiki' $checked[booking]>
+                            <input type='checkbox' name='booking' $checked[booking]>
                             <span class='checkmark'></span>
                             $langBookings
                         </label>

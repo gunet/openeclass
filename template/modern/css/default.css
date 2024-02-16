@@ -3870,6 +3870,12 @@ div[role="progressbar"]::before {
   padding: 0;
   background-color: transparent;
 }
+.carousel-prev-btn,
+  .carousel-prev-btn:hover,
+  .carousel-next-btn,
+  .carousel-next-btn:hover{
+      color: #9BA9C1;
+  }
 .carousel-indicators {
   z-index: 1;
 }
@@ -5127,6 +5133,7 @@ table.dataTable tbody tr th{
 }
 
 /* table */
+
 .calendarViewDatesTutorGroup table,
 .calendarAddDaysCl table {
   width: 100%;
@@ -5135,6 +5142,13 @@ table.dataTable tbody tr th{
   border-collapse: collapse ;
   border-spacing: 0 ;
   border-color: solid 1px  #EFF6FF;
+}
+@media(max-width:991px){
+  .calendarViewDatesTutorGroup,
+  .calendarAddDaysCl{
+    width: 768px;
+    overflow-x: auto;
+  }
 }
 
 /* table header */
@@ -5191,5 +5205,10 @@ table.dataTable tbody tr th{
 }
 
 .calendarAddDaysCl table .fc-body tbody tr{
-  height: 80px;
+  height: 100px;
+}
+
+.calendarAddDaysCl table .fc-body tbody tr td .fc-time-grid-event{
+  color:#4F6893; 
+  padding: 0px 5px 0px 5px;
 }

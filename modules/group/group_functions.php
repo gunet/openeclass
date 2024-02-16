@@ -520,3 +520,34 @@ function user_visible_groups($uid, $course_id)
     }
     return $group_ids;
 }
+
+
+function getNextAvailableDateOfTutor($editorId,$g_id,$c_id){ 
+    $end = date('Y-m-d',strtotime('now + 30days'));
+    $available_next_dates_of_tutor_id = Database::get()->queryArray("SELECT * FROM tutor_availability_group
+                                                            WHERE lesson_id = ?d
+                                                            AND user_id = ?d
+                                                            AND ((user_id NOT IN (SELECT tutor_id FROM booking)) OR (user_id IN (SELECT tutor_id FROM booking) AND start NOT IN (SELECT start FROM booking)))
+                                                            AND group_id = ?d
+                                                            AND start >= NOW()
+                                                            AND end <= ?t ORDER BY start ASC",$c_id,$editorId,$g_id,$end);
+
+    if(count($available_next_dates_of_tutor_id) > 0){
+        $counter = 0;
+        foreach($available_next_dates_of_tutor_id as $r){
+            if($counter == 0){
+                $firstDate[$r->user_id] = [
+                    'id' => $r->id,
+                    'tutor_id' => $r->user_id,
+                    'group_id' => $r->group_id,
+                    'start' => $r->start,
+                    'end' => $r->end
+                ];
+            }
+            $counter++;
+        }
+        return $firstDate;
+    }else{
+        return array();
+    }
+}

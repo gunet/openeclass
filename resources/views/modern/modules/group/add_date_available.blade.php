@@ -245,11 +245,17 @@
                 var end1 = parseFloat(result_end);
 
                 var max_1hour = end1 - start1;
+                max_1hour = max_1hour.toFixed(2);
 
                 var start_day = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY');
                 var end_day = $.fullCalendar.moment(end).format('dddd, Do MMMM YYYY');
 
-                if(max_1hour <= 1 && start_day == end_day){
+                var keepgoing = 0;
+                if((start1 == 12.3 && end1 == 1.3) || (start1 == 12.3 && end1 == 1) || (start1 == 12 && end1 == 1)){
+                    keepgoing = 1;
+                }
+
+                if((Math.abs(max_1hour) <= 1 || keepgoing == 1) && start_day == end_day){
                     if(!start.isBefore(moment())){
                         endtime = $.fullCalendar.moment(end).format('h:mm');
                         starttime = $.fullCalendar.moment(start).format('dddd, Do MMMM YYYY, h:mm');
@@ -309,11 +315,17 @@
                 var end1 = parseFloat(result_end);
 
                 var max_1hour = end1 - start1;
+                max_1hour = max_1hour.toFixed(2);
 
                 var start_day = moment(event.start).format('dddd, Do MMMM YYYY');
                 var end_day = moment(event.end).format('dddd, Do MMMM YYYY');
 
-                if(max_1hour <= 1 && start_day == end_day){
+                var keepgoing = 0;
+                if((start1 == 12.3 && end1 == 1.3) || (start1 == 12.3 && end1 == 1) || (start1 == 12 && end1 == 1)){
+                    keepgoing = 1;
+                }
+
+                if((Math.abs(max_1hour) <= 1 || keepgoing == 1) && start_day == end_day){
 
                     $.ajax({
                         url: '{{ $urlAppend }}modules/group/create_update_deleteDate.php',

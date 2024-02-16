@@ -7,7 +7,7 @@
 
         var calendar = $('#smallCalendar{{ $editorId }}').fullCalendar({
             events : "{{ $urlAppend }}modules/group/datesTutor.php?view=1&show_tutor={{ $editorId }}&show_group={{ $group_id }}&lesson_id={{ $CourseID }}",
-            eventColor : '#4682B4',
+            eventColor : '#687DA3',
             eventTextColor : 'white',
             selectable : false,
             locale: '{{ $language }}',

@@ -2389,6 +2389,10 @@ $langDateHasExpired = "Πρόβλημα! Επιλέτε μία ημερομην�
 $langAddDatesSuccess = "Η ημερομηνία προστέθηκε με επιτυχία.";
 $langDateMaxHour = "Η διαθέσιμη ώρα σας θα πρέπει να έχει διάρκεια μισής ή μίας ώρας";
 $langDeleteAvailableDate = "Θέλετε να προχωρήσετε στην διαγραφή της συγκεκριμένης ημερομηνίας;";
+$langAddAVailableDateWith ="Προσθήκη διαθέσιμης ημερομηνίας για τον χρήστη: ";
+$langAvailableDateForGroupAdmin = "Διαθέσιμη ημερομηνία υπεύθυνου ομάδας";
+$langDoBooking = "Κάντε κράτηση";
+$langNextAvailableDate = "Επόμενη διαθέσιμη ημερομηνία";
 
 // group - email
 $langEmailGroup = "Αποστολή μηνύματος στην ομάδα";
