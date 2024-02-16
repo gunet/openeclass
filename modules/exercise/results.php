@@ -145,11 +145,11 @@ $tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='st
 if ($is_course_reviewer) {
     $result = Database::get()->queryArray("(SELECT DISTINCT uid, surname, givenname FROM `exercise_user_record`
                                                             JOIN user ON exercise_user_record.uid = user.id
-                                                            WHERE eid = ?d) 
-                                                    UNION                                                    
+                                                            WHERE eid = ?d)
+                                                    UNION
                                                         (SELECT 0 as uid, '$langAnonymous' AS surname, '$langUser' AS givenname
-                                                            FROM `exercise_user_record`  
-                                                            WHERE eid = ?d                                                             
+                                                            FROM `exercise_user_record`
+                                                            WHERE eid = ?d
                                                             AND uid = 0)
                                                         ORDER BY surname, givenname", $exerciseId, $exerciseId);
 } else {
@@ -160,9 +160,9 @@ $extra_sql = ($status !== '' ) ? ' AND attempt_status = '.$status : '';
 foreach ($result as $row) {
     $sid = $row->uid;
     // check if there is exercise assigned to teacher
-    $testTheStudent = Database::get()->querySingle("SELECT assigned_to FROM `exercise_user_record` 
-                                     WHERE eid = ?d 
-                                     AND uid = ?d 
+    $testTheStudent = Database::get()->querySingle("SELECT assigned_to FROM `exercise_user_record`
+                                     WHERE eid = ?d
+                                     AND uid = ?d
                                      AND attempt_status = " . ATTEMPT_PENDING . "", $exerciseId, $sid);
     if ($testTheStudent) {
         if ($testTheStudent->assigned_to != $_SESSION['uid'] && isset($testTheStudent->assigned_to)) {
@@ -176,9 +176,13 @@ foreach ($result as $row) {
                     IF (attempt_status = 1 OR b.time_constraint = 0,
                         TIME_TO_SEC(TIMEDIFF(a.record_end_date, a.record_start_date)),
                         b.time_constraint*60-a.secs_remaining) AS time_duration,
-                    a.total_score, a.total_weighting, a.eurid, a.attempt_status, a.assigned_to                     
-                FROM `exercise_user_record` a, exercise b
-                WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id$extra_sql                
+                    a.total_score, a.total_weighting, a.eurid, a.attempt_status, a.assigned_to,
+                    MIN(exercise_answer_record.answer_record_id) AS answers_exist
+                FROM exercise b
+                    JOIN exercise_user_record a ON a.eid = b.id
+                    LEFT JOIN exercise_answer_record ON a.eurid = exercise_answer_record.eurid
+                WHERE a.uid = ?d AND a.eid = ?d $extra_sql
+                GROUP BY a.eurid
                 ORDER BY a.record_start_date ASC", $sid, $exerciseId);
 
     if (count($result2) > 0) { // if users found
@@ -285,6 +289,9 @@ foreach ($result as $row) {
             $tool_content .= "<td class='text-center'>$results_link</td>
                               <td class='text-center'>$status</td>";
             if ($is_editor) {
+                $allow_change_status = $row2->attempt_status == ATTEMPT_ACTIVE ||
+                    $row2->attempt_status == ATTEMPT_PAUSED ||
+                    ($row2->attempt_status == ATTEMPT_CANCELED && $row2->answers_exist);
                 $tool_content .= "
                     <td class='option-btn-cell'>" . action_button(array(
                         array(
@@ -298,7 +305,7 @@ foreach ($result as $row) {
                             'title' => "$langAuthChangeto $langAttemptCompleted",
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_COMPLETED . "",
                             'icon' => "fa-toggle-on",
-                            'show' => ($row2->attempt_status == ATTEMPT_ACTIVE) or ($row2->attempt_status == ATTEMPT_PAUSED),
+                            'show' => $allow_change_status,
                             'confirm' => $langConfirmModifyAttemptText,
                             'confirm_title' => $langConfirmModifyAttemptTitle,
                             'confirm_button' => $langModify
@@ -307,7 +314,8 @@ foreach ($result as $row) {
                             'title' => "$langAuthChangeto $langAttemptPaused",
                             'url' => "results.php?course=$course_code&exerciseId=$exerciseId&modifyAttempID=$row2->eurid&status=" . ATTEMPT_PAUSED . "",
                             'icon' => "fa-toggle-on",
-                            'show' => ($row2->attempt_status == ATTEMPT_ACTIVE),
+                            'show' => $row2->attempt_status == ATTEMPT_ACTIVE ||
+                                ($row2->attempt_status == ATTEMPT_CANCELED && $row2->answers_exist),
                             'confirm' => $langConfirmModifyAttemptText,
                             'confirm_title' => $langConfirmModifyAttemptTitle,
                             'confirm_button' => $langModify

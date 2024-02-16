@@ -71,7 +71,6 @@ if (isset($_POST['action']) and $_POST['action'] == 'endExerciseNoSubmit') {
     $eurid = $_POST['eurid'];
     Database::get()->query("UPDATE exercise_user_record SET record_end_date = ?t, attempt_status = ?d, secs_remaining = ?d
         WHERE eurid = ?d", $record_end_date, ATTEMPT_CANCELED, 0, $eurid);
-    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
         'title' => $_SESSION['objExercise'][$exerciseId]->selectTitle(),
         'legend' => $langCancel,
@@ -228,7 +227,6 @@ if (isset($_POST['buttonCancel'])) {
     Database::get()->query("UPDATE exercise_user_record
         SET record_end_date = " . DBHelper::timeAfter() . ", attempt_status = ?d, total_score = 0, total_weighting = 0
         WHERE eurid = ?d", ATTEMPT_CANCELED, $eurid);
-    Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
 
     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, [
         'title' => $objExercise->selectTitle(),
