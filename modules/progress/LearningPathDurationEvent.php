@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2015  Greek Universities Network - GUnet
@@ -17,40 +17,33 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 require_once 'BasicEvent.php';
 
 class LearningPathDurationEvent extends BasicEvent {
-    
+
     const ACTIVITY = 'learning path duration';
     const UPDPROGRESS = 'learning-path-accessed';
-    
+
     public function __construct() {
         parent::__construct();
-        
+
         $this->on(self::UPDPROGRESS, function($data) {
             $threshold = 0;
-            
+
             // fetch time from DB, extract hours and use it as threshold
             list($lpProgress, $lpTotalTime, $lpTotalStarted, $lpTotalAccessed, $lpTotalStatus, $lpAttemptsNb) = get_learnPath_progress_details($data->resource, $data->uid);
             list($hours, $minutes, $seconds, $primes) = extractScormTime($lpTotalTime);
             if ($hours && $minutes && intval($hours) >= 0 && intval($minutes) >= 0) {
-                $threshold = floatval($hours + round($minutes / 60, 2));
+                $threshold = floatval($hours + round($minutes / 60, 2) + round($seconds / 3600, 2));
             }
-            
+
             $this->setEventData($data);
             $this->context['threshold'] = $threshold;
             $this->emit(parent::PREPARERULES);
         });
     }
-    
-}
 
-/*
-SELECT *
-FROM lp_user_module_progress lump
-JOIN lp_learnPath lp ON (lp.learnPath_id = lump.learnPath_id)
-WHERE lump.learnPath_id = 25;
-*/
+}
